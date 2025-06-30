@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from dreamgigs.dreamstechnologies.com/html/template/seller-files.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 17:18:48 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>DreamGigs</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Theme Settings Js -->
+    <script src="assets/js/theme-script.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Tabler Icon CSS -->
+    <link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.min.css">
+
+    <!-- Daterangepikcer CSS -->
+    <link rel="stylesheet" href="assets/plugins/daterangepicker/daterangepicker.css">
+
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <header class="header dashboard-header">
+            <div class="header-user">
+                <div class="header-left-mob">
+                    <a href="seller-dashboard.html" class="logo">
+                        <img src="assets/img/logo.svg" alt="Logo">
+                    </a>
+                </div>
+
+                <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                    <span class="bar-icon">
+					<i class="ti ti-baseline-density-medium"></i>
+				</span>
+			</a>
+			<div class="nav user-menu nav-list">
+				<div class="wallet-amount wallet-amount-two">
+					<span><i class="ti ti-point-filled me-1"></i>Wallet Balance : $6658</span>
+				</div>
+			</div>
+			<div class="header-right d-flex align-items-center">
+                <a href="index.html" class="btn btn-light fs-14 rounded-pill"><i class="ti ti-world me-1"></i>Website</a>
+				<div class="dashboard-link">
+					<ul class="d-inline-flex align-items-center p-1 rounded-pill">
+						<li><a href="buyer-dashboard.html">Buyer</a></li>
+						<li><a href="seller-dashboard.html" class="active">Seller</a></li>
+					</ul>
+				</div>
+                <div class="nav-item dropdown dropdown-menu-end flag-nav nav-item-box">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+  tabIndex="0" role="button">
+                        <img src="assets/img/flags/us.svg" alt="Language" class="img-fluid">
+                    </a>
+                    <ul class="dropdown-menu p-2">
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/us.svg" alt="" height="16" class="me-2"> English
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/de.svg" alt="" height="16" class="me-2"> German
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/fr.svg" alt="" height="16" class="me-2"> French
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/ae.svg" alt="" height="16" class="me-2"> Arabic
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown flag-nav nav-item-box">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+  tabIndex="0" role="button">
+                        <i class="ti ti-sun-high"></i>
+                        <i class="ti ti-moon"></i>
+                    </a>
+                    <ul class="dropdown-menu p-2">
+                        <li class="mb-1">
+                            <a role="button"
+  tabIndex="0" class="dropdown-item active theme-toggle" id="light-mode-toggle">
+                                <i class="ti ti-sun-high me-1"></i>Light Mode
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item theme-toggle" id="dark-mode-toggle">
+                                <i class="ti ti-moon me-1"></i>Dark Mode
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+				<div class="nav-item dropdown nav-item-box">
+					<a class="nav-link dropdown-toggle" href="seller-notifications.html" data-bs-toggle="dropdown">
+						<i class="ti ti-bell"></i>
+					</a>
+                    <div class="dropdown-menu dropdown-menu-end noti-blk">
+                        <div class="topnav-dropdown-header border-bottom">
+                            <div class="d-flex align-items-center">
+                              <h6 class="mb-0">Notifications</h6>
+                              <div class="count ms-1">2</div>											
+                            </div>
+                            <a href="javascript:void(0)" class="mark-all-noti"> Mark all as read <i class="feather-check-square"></i></a>
+                        </div>
+                        <ul>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html" class="active-noti">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/profile.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Lex Murphy</a></h6>
+                                            <p class="mb-0">45 mins ago</p>
+                                        </div>	
+                                        <p class="mb-2">Notifications alert you to new messages in your Gigs  inbox.</p>										
+                                        <div class="notify-btns">
+                                            <button class="btn btn-sm btn-primary">Accept</button>														
+                                            <button class="btn btn-sm btn-light">Decline</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html" class="active-noti">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-02.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Ray Arnold</a></h6>
+                                            <p class="mb-0">17 mins ago</p>
+                                        </div>	
+                                        <p class="mb-0">Notifications inform you when someone likes, reacts</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-03.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Dennis Nedry</a></h6>
+                                            <p class="mb-0">1 Day Ago</p>
+                                        </div>	
+                                        <p>Added a comment to Dennis Nedry</p>
+                                        <p class="noti-reply-msg">“Oh, I finished de-bugging the phones, but the system's compiling for eighteen minutes, or twenty.  So, some minor systems may go on and off for a while.”</p>
+                                    </div>
+                                </div>
+                            </li>	
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-04.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">John Hammond</a></h6>
+                                            <p class="mb-0">45 mins ago</p>
+                                        </div>
+                                        <p class="mb-0">Got Message for  Project “Service Management”</p>
+                                    </div>
+                                </div>
+                            </li>												
+                        </ul>
+                        <div class="clear-all-noti">
+                            <a class="clear-notification" href="seller-notifications.html"> View all </a>
+                        </div>
+                    </div>
+				</div>
+                <div class="nav-item dropdown nav-item-box">
+                    <a href="seller-profile.html" class="dropdown-toggle d-flex align-items-center nav-link" data-bs-toggle="dropdown">
+                        <span class="avatar online avatar-sm">
+                            <img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
+                        </span>
+                    </a>
+                    <div class="dropdown-menu p-0 dropdown-profile">
+                        <div class="d-flex align-items-center border-bottom p-2 mb-0">
+                            <span class="avatar avatar-lg me-2">
+                                <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
+                                <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+                            </div>
+                        </div>
+   
+                        <div class="p-2">
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                                <i class="ti ti-user-cog me-2"></i>My Profile
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                                <i class="ti ti-settings-cog me-2"></i>Settings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
+                            <i class="ti ti-shopping-bag me-2"></i>Orders
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
+                                <i class="ti ti-moneybag me-2"></i>Earnings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                                <i class="ti ti-wallet me-2"></i>Wallet
+                            </a>
+
+                        </div>  
+                        
+                        <div class="border-top p-3">
+                          <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+                <div class="mobile-user-menu">
+                    <a role="button"
+  tabIndex="0" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                        <span class="avatar online avatar-sm">
+						<img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
+					</span>
+                    </a>
+                    <div class="dropdown-menu p-0 dropdown-profile">
+                        <div class="d-flex align-items-center border-bottom p-2 mb-0">
+                            <span class="avatar avatar-lg me-2">
+                                <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
+                                <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+                            </div>
+                        </div>
+   
+                        <div class="p-2">
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                                <i class="ti ti-user-cog me-2"></i>My Profile
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                                <i class="ti ti-settings-cog me-2"></i>Settings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
+                            <i class="ti ti-shopping-bag me-2"></i>Orders
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
+                                <i class="ti ti-moneybag me-2"></i>Earnings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                                <i class="ti ti-wallet me-2"></i>Wallet
+                            </a>
+
+                        </div>  
+                        
+                        <div class="border-top p-3">
+                          <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- /Header -->
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+				<div class="d-flex align-items-center justify-content-between">
+					<a href="seller-dashboard.html" class="logo logo-normal">
+						<img src="assets/img/logo.svg" alt="Logo">
+					</a>
+					<a href="seller-dashboard.html" class="logo-small">
+						<img src="assets/img/logo-small.svg" alt="Logo" class="img-fluid">
+					</a>
+					<a href="seller-dashboard.html" class="dark-logo">
+						<img src="assets/img/dark-logo.svg" alt="Logo" class="img-fluid">
+					</a>
+					<a id="toggle_btn" role="button"
+  tabIndex="0" class="active">
+						<i class="ti ti-arrow-bar-right"></i>
+					</a>
+				</div>	
+			</div>
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li>
+                            <ul>
+                                <li>
+                                    <a href="seller-dashboard.html">
+                                        <i class="ti ti-layout-grid me-2"></i><span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-gigs.html">
+                                        <i class="ti ti-layers-intersect me-2"></i><span>My Gigs</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-my-buyer.html">
+                                        <i class="ti ti-user-bolt me-2"></i><span>My Buyers</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-wallet.html">
+                                        <i class="ti ti-wallet me-2"></i><span>Wallet</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-files.html" class="active">
+                                        <i class="ti ti-files me-2"></i><span>Files</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-reviews.html">
+                                        <i class="ti ti-stars me-2"></i> <span> My Reviews </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-message.html">
+                                        <i class="ti ti-message me-2"></i> <span>Messages </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-notifications.html">
+                                        <i class="ti ti-bell me-2"></i> <span>Notifications </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-transactions.html">
+                                        <i class="ti ti-transition-top me-2"></i> <span>Transactions </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-payouts.html">
+                                        <i class="ti ti-pennant me-2"></i> <span>Payouts </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-earnings.html">
+                                        <i class="ti ti-moneybag me-2"></i> <span> Earnings </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="seller-settings.html">
+                                        <i class="ti ti-settings-check me-2"></i> <span> Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="sidebar-footer">
+                        <a href="signin.html" target="_blank"><i class="ti ti-logout me-2"></i><span>Logout</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Sidebar -->
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-content content bg-light">
+                <div class="container px-0">
+                    <div class="content">
+                        <!--User Files -->
+                        <div class="">
+                            <div class="main-title mb-4">
+                                <h4>Uploaded Files</h4>
+                                <div id="tableinfo"></div>
+                            </div>
+                            <div class="table-filter">
+                                <ul class="filter-item">
+                                    <li>
+                                        <div>
+                                            <div id="reportrange" class="reportrange-picker d-flex align-items-center">
+                                                <i class="ti ti-calendar text-gray-5 fs-14 me-1"></i><span class="reportrange-picker-field"></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <a role="button"
+  tabIndex="0" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                <i class="ti ti-upload me-2"></i>Uploaded For
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-lg p-2">
+                                                <li>
+                                                    <div class="mb-2">
+                                                        <div class="dropdown-add-search">
+                                                            <span class="input-icon">
+                                                                    <i class="ti ti-search"></i>
+                                                                </span>
+                                                            <input type="text" class="form-control" placeholder="Search">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li><a role="button"
+  tabIndex="0" class="dropdown-item">I will do Designing..</a></li>
+                                                <li><a role="button"
+  tabIndex="0" class="dropdown-item">Develop OpenAI...</a></li>
+                                                <li><a role="button"
+  tabIndex="0" class="dropdown-item">I will do Professional</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <a role="button"
+  tabIndex="0" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                <i class="ti ti-user-heart me-2"></i>Uploaded By
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-lg p-2 dropdown-employee">
+                                                <li>
+                                                    <div class="mb-2">
+                                                        <div class="dropdown-add-search">
+                                                            <span class="input-icon">
+                                                                    <i class="ti ti-search"></i>
+                                                                </span>
+                                                            <input type="text" class="form-control" placeholder="Search">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                        <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/user/profile.jpg" class="rounded-circle" alt="img"></span> James carter
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                        <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/user/user-02.jpg" class="rounded-circle" alt="img"></span> Mick Reynolds
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                        <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/user/user-03.jpg" class="rounded-circle" alt="img"></span> Emily Sand
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                        <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/user/user-04.jpg" class="rounded-circle" alt="img"></span> David Lawson
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                        <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/user/user-05.jpg" class="rounded-circle" alt="img"></span> Olivia Bennett
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                        <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/user/user-06.jpg" class="rounded-circle" alt="img"></span> Ryna Mitchell
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown">
+                                            <a role="button"
+  tabIndex="0" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                <i class="ti ti-file-search me-2"></i>File Type
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-lg p-2">
+                                                <li><a role="button"
+  tabIndex="0" class="dropdown-item">png</a></li>
+                                                <li><a role="button"
+  tabIndex="0" class="dropdown-item">MP4</a></li>
+                                                <li><a role="button"
+  tabIndex="0" class="dropdown-item">Completed</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div id="tablefilter"></div>
+                            </div>
+                            <div class="table-responsive custom-table">
+                                <table class="table datatable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Uploaded For</th>
+                                            <th>Uploaded On</th>
+                                            <th>Uploaded By</th>
+                                            <th>File Type</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#120</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-09.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do designing and executing targeted email campaigns</a>
+                                                </h2>
+                                            </td>
+                                            <td>22 May 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/profile.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">James Carter</a>
+                                                </h2>
+                                            </td>
+                                            <td>Jpg</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#119</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-03.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will develop openai, dalle, chat gpt app for mobile</a>
+                                                </h2>
+                                            </td>
+                                            <td>20 May 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-02.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Michael Reynolds</a>
+                                                </h2>
+                                            </td>
+                                            <td>Mp4</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#118</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-02.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do professional lifestyle and product photography</a>
+                                                </h2>
+                                            </td>
+                                            <td>15 May 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-03.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Emily Sanders</a>
+                                                </h2>
+                                            </td>
+                                            <td>Png</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#117</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-04.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">Embedded Android & AOSP customizations</a>
+                                                </h2>
+                                            </td>
+                                            <td>27 Apr 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-04.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">David Lawson</a>
+                                                </h2>
+                                            </td>
+                                            <td>Png</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#116</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-13.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do creating and promoting video content to engage audiences</a>
+                                                </h2>
+                                            </td>
+                                            <td>19 Apr 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-05.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Ryan Mitchell</a>
+                                                </h2>
+                                            </td>
+                                            <td>Png</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#115</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-05.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do implementing chatbots on websites or messaging apps</a>
+                                                </h2>
+                                            </td>
+                                            <td>03 Apr 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-06.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Jason Brooks</a>
+                                                </h2>
+                                            </td>
+                                            <td>MP4</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#120</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-03.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will develop openai, dalle, chat gpt app for mobile</a>
+                                                </h2>
+                                            </td>
+                                            <td>20 May 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-02.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Thomas Bennett</a>
+                                                </h2>
+                                            </td>
+                                            <td>Mp4</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#121</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-02.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do professional lifestyle and product photography</a>
+                                                </h2>
+                                            </td>
+                                            <td>15 May 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-03.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Sophia Collins</a>
+                                                </h2>
+                                            </td>
+                                            <td>Png</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#122</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-04.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">Embedded Android & AOSP customizations</a>
+                                                </h2>
+                                            </td>
+                                            <td>27 Apr 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-04.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Thomas Bennett</a>
+                                                </h2>
+                                            </td>
+                                            <td>Png</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#123</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-13.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do creating and promoting video content to engage audiences</a>
+                                                </h2>
+                                            </td>
+                                            <td>19 Apr 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-05.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Ryan Mitchell</a>
+                                                </h2>
+                                            </td>
+                                            <td>Png</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#124</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-05.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do implementing chatbots on websites or messaging apps</a>
+                                                </h2>
+                                            </td>
+                                            <td>03 Apr 2023</td>
+                                            <td>
+                                                <h2 class="table-avatar d-flex align-items-center">
+                                                    <a href="talent-profile.html" class="avatar">
+                                                        <img src="assets/img/user/user-06.jpg" alt="User Image">
+                                                    </a>
+                                                    <a href="talent-profile.html">Hendy</a>
+                                                </h2>
+                                            </td>
+                                            <td>MP4</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a role="button"
+  tabIndex="0"><i class="ti ti-download"></i></a>
+                                                    <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#file_view"><i class="ti ti-eye"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-bottom-footer d-sm-flex align-items-center justify-content-between mt-4">
+                                <div class="dataTables_length" id="DataTables_Table_0_length">
+                                    <label>Showing
+                                        <select name="DataTables_Table_0_length" class="form-select form-select-sm">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select> Results
+                                    </label>
+                                </div>
+                                <div class="table-footer mt-0">
+                                    <div id="tablepage"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /User Files -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Content -->
+
+        <!-- Mouse Cursor -->
+        <div class="mouse-cursor cursor-outer"></div>
+        <div class="mouse-cursor cursor-inner"></div>
+        <!-- /Mouse Cursor -->
+
+        <!-- Top Scroll -->
+        <div class="back-to-top">
+            <a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
+                <img src="assets/img/icons/arrow-badge-up.svg" alt="img">
+            </a>
+        </div>
+        <!-- /Top Scroll -->
+
+        <!-- File Details -->
+        <div class="modal new-modal fade" id="file_view" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">File Details - #124</h5>
+                        <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="file-view">
+                            <div class="file-img">
+                                <img src="assets/img/gigs/gigs-04.jpg" class="img-fluid" alt="img">
+                            </div>
+                            <div class="upload-wrap mb-0">
+                                <div class="upload-image">
+                                    <span>
+										<i class="ti ti-photo"></i>
+									</span>
+                                    <p class="mb-0">Video_gig-1.mp4</p>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <a role="button"
+  tabIndex="0" class="del-action me-2"><i class="ti ti-download text-grey"></i></a>
+                                    <a role="button"
+  tabIndex="0" class="del-action"><i class="ti ti-trash text-error"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /File Details -->
+
+    </div>
+    <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery-3.7.1.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="assets/js/bootstrap.bundle.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+    <script src="assets/js/bootstrap-scrollspy.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Feather JS -->
+    <script src="assets/js/feather.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Slimscroll JS -->
+    <script src="assets/js/jquery.slimscroll.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Sticky Sidebar JS -->
+    <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+    <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Datatables JS -->
+    <script src="assets/plugins/datatables/jquery.dataTables.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+    <script src="assets/plugins/datatables/datatables.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Daterangepikcer JS -->
+    <script src="assets/js/moment.min.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+    <script src="assets/plugins/daterangepicker/daterangepicker.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/script.js" type="fe40328e270b6056594ca41b-text/javascript"></script>
+
+<script src="../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="fe40328e270b6056594ca41b-|49" defer></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"93a9a4fb9e3b05ab","version":"2025.4.0-1-g37f21b1","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"token":"3ca157e612a14eccbb30cf6db6691c29","b":1}' crossorigin="anonymous"></script>
+</body>
+
+
+<!-- Mirrored from dreamgigs.dreamstechnologies.com/html/template/seller-files.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 17:18:48 GMT -->
+</html>

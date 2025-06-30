@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from dreamgigs.dreamstechnologies.com/html/template/seller-wallet.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 17:18:48 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>DreamGigs</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Theme Settings Js -->
+    <script src="assets/js/theme-script.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Select CSS -->
+    <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+
+    <!-- Tabler Icon CSS -->
+    <link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.min.css">
+
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <header class="header dashboard-header">
+            <div class="header-user">
+                <div class="header-left-mob">
+                    <a href="seller-dashboard.html" class="logo">
+                        <img src="assets/img/logo.svg" alt="Logo">
+                    </a>
+                </div>
+    
+                <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                    <span class="bar-icon">
+                    <i class="ti ti-baseline-density-medium"></i>
+                </span>
+            </a>
+            <div class="nav user-menu nav-list">
+                <div class="wallet-amount wallet-amount-two">
+                    <span><i class="ti ti-point-filled me-1"></i>Wallet Balance : $6658</span>
+                </div>
+            </div>
+            <div class="header-right d-flex align-items-center">
+                <a href="index.html" class="btn btn-light fs-14 rounded-pill"><i class="ti ti-world me-1"></i>Website</a>
+                <div class="dashboard-link">
+                    <ul class="d-inline-flex align-items-center p-1 rounded-pill">
+                        <li><a href="buyer-dashboard.html">Buyer</a></li>
+                        <li><a href="seller-dashboard.html" class="active">Seller</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown dropdown-menu-end flag-nav nav-item-box">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+  tabIndex="0" role="button">
+                        <img src="assets/img/flags/us.svg" alt="Language" class="img-fluid">
+                    </a>
+                    <ul class="dropdown-menu p-2">
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/us.svg" alt="" height="16" class="me-2"> English
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/de.svg" alt="" height="16" class="me-2"> German
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/fr.svg" alt="" height="16" class="me-2"> French
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/ae.svg" alt="" height="16" class="me-2"> Arabic
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown flag-nav nav-item-box">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+  tabIndex="0" role="button">
+                        <i class="ti ti-sun-high"></i>
+                        <i class="ti ti-moon"></i>
+                    </a>
+                    <ul class="dropdown-menu p-2">
+                        <li class="mb-1">
+                            <a role="button"
+  tabIndex="0" class="dropdown-item active theme-toggle" id="light-mode-toggle">
+                                <i class="ti ti-sun-high me-1"></i>Light Mode
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item theme-toggle" id="dark-mode-toggle">
+                                <i class="ti ti-moon me-1"></i>Dark Mode
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown nav-item-box">
+                    <a class="nav-link dropdown-toggle" href="seller-notifications.html" data-bs-toggle="dropdown">
+                        <i class="ti ti-bell"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end noti-blk">
+                        <div class="topnav-dropdown-header border-bottom">
+                            <div class="d-flex align-items-center">
+                              <h6 class="mb-0">Notifications</h6>
+                              <div class="count ms-1">2</div>											
+                            </div>
+                            <a href="javascript:void(0)" class="mark-all-noti"> Mark all as read <i class="feather-check-square"></i></a>
+                        </div>
+                        <ul>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html" class="active-noti">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/profile.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Lex Murphy</a></h6>
+                                            <p class="mb-0">45 mins ago</p>
+                                        </div>	
+                                        <p class="mb-2">Notifications alert you to new messages in your Gigs  inbox.</p>										
+                                        <div class="notify-btns">
+                                            <button class="btn btn-sm btn-primary">Accept</button>														
+                                            <button class="btn btn-sm btn-light">Decline</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html" class="active-noti">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-02.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Ray Arnold</a></h6>
+                                            <p class="mb-0">17 mins ago</p>
+                                        </div>	
+                                        <p class="mb-0">Notifications inform you when someone likes, reacts</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-03.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Dennis Nedry</a></h6>
+                                            <p class="mb-0">1 Day Ago</p>
+                                        </div>	
+                                        <p>Added a comment to Dennis Nedry</p>
+                                        <p class="noti-reply-msg">“Oh, I finished de-bugging the phones, but the system's compiling for eighteen minutes, or twenty.  So, some minor systems may go on and off for a while.”</p>
+                                    </div>
+                                </div>
+                            </li>	
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-04.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">John Hammond</a></h6>
+                                            <p class="mb-0">45 mins ago</p>
+                                        </div>
+                                        <p class="mb-0">Got Message for  Project “Service Management”</p>
+                                    </div>
+                                </div>
+                            </li>												
+                        </ul>
+                        <div class="clear-all-noti">
+                            <a class="clear-notification" href="seller-notifications.html"> View all </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-item dropdown nav-item-box">
+                    <a href="seller-profile.html" class="dropdown-toggle d-flex align-items-center nav-link" data-bs-toggle="dropdown">
+                        <span class="avatar online avatar-sm">
+                            <img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
+                        </span>
+                    </a>
+                    <div class="dropdown-menu p-0 dropdown-profile">
+                        <div class="d-flex align-items-center border-bottom p-2 mb-0">
+                            <span class="avatar avatar-lg me-2">
+                                <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
+                                <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+                            </div>
+                        </div>
+    
+                        <div class="p-2">
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                                <i class="ti ti-user-cog me-2"></i>My Profile
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                                <i class="ti ti-settings-cog me-2"></i>Settings
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
+                            <i class="ti ti-shopping-bag me-2"></i>Orders
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
+                                <i class="ti ti-moneybag me-2"></i>Earnings
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                                <i class="ti ti-wallet me-2"></i>Wallet
+                            </a>
+    
+                        </div>  
+                        
+                        <div class="border-top p-3">
+                          <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                        </div>
+    
+                    </div>
+                </div>
+                </div>
+                <div class="mobile-user-menu">
+                    <a role="button"
+  tabIndex="0" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                        <span class="avatar online avatar-sm">
+                        <img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
+                    </span>
+                    </a>
+                    <div class="dropdown-menu p-0 dropdown-profile">
+                        <div class="d-flex align-items-center border-bottom p-2 mb-0">
+                            <span class="avatar avatar-lg me-2">
+                                <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
+                                <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+                            </div>
+                        </div>
+    
+                        <div class="p-2">
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                                <i class="ti ti-user-cog me-2"></i>My Profile
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                                <i class="ti ti-settings-cog me-2"></i>Settings
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
+                            <i class="ti ti-shopping-bag me-2"></i>Orders
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
+                                <i class="ti ti-moneybag me-2"></i>Earnings
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                                <i class="ti ti-wallet me-2"></i>Wallet
+                            </a>
+    
+                        </div>  
+                        
+                        <div class="border-top p-3">
+                          <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+            </header>
+            <!-- /Header -->
+
+        <!-- Sidebar -->
+		<div class="sidebar" id="sidebar">
+			<div class="sidebar-logo">
+				<div class="d-flex align-items-center justify-content-between">
+					<a href="seller-dashboard.html" class="logo logo-normal">
+						<img src="assets/img/logo.svg" alt="Logo">
+					</a>
+					<a href="seller-dashboard.html" class="logo-small">
+						<img src="assets/img/logo-small.svg" alt="Logo" class="img-fluid">
+					</a>
+					<a href="seller-dashboard.html" class="dark-logo">
+						<img src="assets/img/dark-logo.svg" alt="Logo" class="img-fluid">
+					</a>
+					<a id="toggle_btn" role="button"
+  tabIndex="0" class="active">
+						<i class="ti ti-arrow-bar-right"></i>
+					</a>
+				</div>	
+			</div>
+			<div class="sidebar-inner slimscroll">
+				<div id="sidebar-menu" class="sidebar-menu">
+						<ul>
+							<li>
+								<ul>
+									<li>
+										<a href="seller-dashboard.html">
+											<i class="ti ti-layout-grid me-2"></i><span>Dashboard</span>
+										</a>
+									</li>
+									<li>
+										<a href="seller-gigs.html">
+											<i class="ti ti-layers-intersect me-2"></i><span>My Gigs</span>
+										</a>
+									</li>
+									<li>
+										<a href="seller-my-buyer.html">
+											<i class="ti ti-user-bolt me-2"></i><span>My Buyers</span>
+										</a>
+									</li>
+									<li>
+                                        <a href="seller-wallet.html" class="active">
+                                            <i class="ti ti-wallet me-2"></i><span>Wallet</span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-files.html">
+                                            <i class="ti ti-files me-2"></i><span>Files</span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-reviews.html">
+                                            <i class="ti ti-stars me-2"></i> <span> My Reviews </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-message.html">
+                                            <i class="ti ti-message me-2"></i> <span>Messages </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-notifications.html">
+                                            <i class="ti ti-bell me-2"></i> <span>Notifications </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-transactions.html">
+                                            <i class="ti ti-transition-top me-2"></i> <span>Transactions </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-payouts.html">
+                                            <i class="ti ti-pennant me-2"></i> <span>Payouts </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-earnings.html">
+                                            <i class="ti ti-moneybag me-2"></i> <span> Earnings </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-settings.html">
+                                            <i class="ti ti-settings-check me-2"></i> <span> Settings</span> 
+                                        </a>
+                                    </li>
+								</ul>
+							</li>
+						</ul>
+					<div class="sidebar-footer">
+						<a href="signin.html" target="_blank"><i class="ti ti-logout me-2"></i><span>Logout</span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Sidebar -->
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-content content bg-light">
+                <div class="container px-0">
+                    <!--User Wallet -->
+                    <div class="content">
+                        <div class="main-title mb-4">
+                            <h4>Wallet</h4>
+                        </div>
+                        <div class="wallet-wrap">
+                            <div class="wallet-item">
+                                <div class="wallet-info">
+                                    <p>Amount in Wallet</p>
+                                    <h5>$1,302.50</h5>
+                                </div>
+                            </div>
+                            <div class="wallet-item">
+                                <div class="wallet-info">
+                                    <p>Total Credit</p>
+                                    <h5>$9,292.50</h5>
+                                </div>
+                            </div>
+                            <div class="wallet-item">
+                                <div class="wallet-info">
+                                    <p>Total Debit</p>
+                                    <h5>$1,541.21</h5>
+                                </div>
+                            </div>
+                            <div class="wallet-item">
+                                <div class="wallet-info">
+                                    <p>Withdrawn</p>
+                                    <h5>$8,874.21</h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#withdraw" class="btn btn-primary btn-md">Withdraw</a>
+                            </div>
+                        </div>
+                        <div class="table-filter">
+                            <ul class="filter-item">
+                                <li>
+                                    <div class="dropdown">
+                                        <a role="button"
+  tabIndex="0" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                            <i class="ti ti-bulb me-2"></i>Reason
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-lg p-2">
+                                            <li>
+                                                <div class="mb-2">
+                                                    <div class="dropdown-add-search">
+                                                        <span class="input-icon">
+                                                                <i class="ti ti-search"></i>
+                                                            </span>
+                                                        <input type="text" class="form-control" placeholder="Search">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">I will do designing..</a></li>
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">Develop openAI...</a></li>
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">I will do Professional</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown">
+                                        <a role="button"
+  tabIndex="0" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                            <i class="ti ti-user-code me-2"></i>Payment Gateway
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-lg p-2">
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">Paypal</a></li>
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">Stripe</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown">
+                                        <a role="button"
+  tabIndex="0" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                            <i class="ti ti-user-code me-2"></i>Transaction Type
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-lg p-2">
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">Debit</a></li>
+                                            <li><a role="button"
+  tabIndex="0" class="dropdown-item">Credit</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div id="tablefilter"></div>
+                        </div>
+                        <div class="table-responsive custom-table">
+                            <table class="table datatable">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Uploaded For</th>
+                                        <th>Payment Gateway</th>
+                                        <th>Date & Time</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#WT120</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-09.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do designing and executing targeted email campaigns</a>
+                                                </h2>
+                                        </td>
+                                        <td>Paypal</td>
+                                        <td>22 May 2023 10:50PM</td>
+                                        <td><span class="badge new-badge badge-soft-danger"><i class="ti ti-arrow-up"></i> Debit</span></td>
+                                        <td>-$154</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT119</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-03.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will develop openai, dalle, chat gpt app for mobile</a>
+                                                </h2>
+                                        </td>
+                                        <td>Stripe</td>
+                                        <td>21 May 2023 11:25 PM</td>
+                                        <td><span class="badge new-badge badge-soft-success"><i class="ti ti-arrow-down"></i> Credit</span></td>
+                                        <td>+$1154</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT118</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-02.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do professional lifestyle and product photography</a>
+                                                </h2>
+                                        </td>
+                                        <td>Paypal</td>
+                                        <td>17 May 2023 12:16 AM</td>
+                                        <td><span class="badge new-badge badge-soft-success"><i class="ti ti-arrow-down"></i> Credit</span></td>
+                                        <td>+$6547</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT117</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-04.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">Embedded Android & AOSP customizations</a>
+                                                </h2>
+                                        </td>
+                                        <td>Stripe</td>
+                                        <td>15 May 2023 11:21 PM</td>
+                                        <td><span class="badge new-badge badge-soft-success"><i class="ti ti-arrow-down"></i> Credit</span></td>
+                                        <td>+$1454</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT116</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-01.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do creating and promoting video content to engage audiences </a>
+                                                </h2>
+                                        </td>
+                                        <td>Paypal</td>
+                                        <td>17 Feb 2025 10:50 PM</td>
+                                        <td><span class="badge new-badge badge-soft-danger"><i class="ti ti-arrow-up"></i> Debit</span></td>
+                                        <td>+$1454</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT115</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-09.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do implementing chatbots on websites or messaging apps</a>
+                                                </h2>
+                                        </td>
+                                        <td>Stripe</td>
+                                        <td>02 Feb 2025 10:04 PM</td>
+                                        <td><span class="badge new-badge badge-soft-success"><i class="ti ti-arrow-down"></i> Credit</span></td>
+                                        <td>+$1454</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT114</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-03.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will develop openai, dalle, chat gpt app for mobile </a>
+                                                </h2>
+                                        </td>
+                                        <td>Paypal</td>
+                                        <td>29 Jan 2025 03:50 PM</td>
+                                        <td><span class="badge new-badge badge-soft-danger"><i class="ti ti-arrow-up"></i> Debit</span></td>
+                                        <td>-$545</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT113</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-11.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do professional lifestyle and product photography</a>
+                                                </h2>
+                                        </td>
+                                        <td>Stripe</td>
+                                        <td>15 Jan 2025 05:50 AM</td>
+                                        <td><span class="badge new-badge badge-soft-danger"><i class="ti ti-arrow-up"></i> Debit</span></td>
+                                        <td>-$545</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT112</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-14.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">Embedded Android & AOSP customizations</a>
+                                                </h2>
+                                        </td>
+                                        <td>Paypal</td>
+                                        <td>12 Jan 2025 09:15 AM</td>
+                                        <td><span class="badge new-badge badge-soft-danger"><i class="ti ti-arrow-up"></i> Debit</span></td>
+                                        <td>-$545</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#WT111</td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                    <a role="button"
+  tabIndex="0" class="avatar">
+                                                        <img src="assets/img/gigs/gigs-13.jpg" alt="User Image">
+                                                    </a>
+                                                    <a role="button"
+  tabIndex="0" class="text-dark">I will do creating and promoting video content to engage audiences</a>
+                                                </h2>
+                                        </td>
+                                        <td>Stripe</td>
+                                        <td>05 Jan 2025 10:50 PM</td>
+                                        <td><span class="badge new-badge badge-soft-success"><i class="ti ti-arrow-down"></i> Credit</span></td>
+                                        <td>+$545</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-bottom-footer d-sm-flex align-items-center justify-content-between mt-4">
+                            <div class="dataTables_length" id="DataTables_Table_0_length">
+                                <label>Showing 
+                                <select name="DataTables_Table_0_length" class="form-select form-select-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> Results
+                            </label>
+                            </div>
+                            <div class="table-footer mt-0">
+                                <div id="tablepage"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /User Wallet -->
+
+                </div>
+            </div>
+        </div>
+        <!-- /Page Content -->
+
+        <!-- Mouse Cursor -->
+        <div class="mouse-cursor cursor-outer"></div>
+        <div class="mouse-cursor cursor-inner"></div>
+        <!-- /Mouse Cursor -->
+
+        <!-- Withdraw -->
+        <div class="modal new-modal fade" id="withdraw" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Withdraw Payment</h5>
+                        <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="amt-wrap">
+                                    <div class="form-wrap">
+                                        <label class="form-label">Enter Amount ($)<span class="text-danger ms-1">*</span></label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <ul class="amt-list">
+                                        <li>Or</li>
+                                        <li>
+                                            <a role="button"
+  tabIndex="0" class="vary-amt">$50</a>
+                                        </li>
+                                        <li>
+                                            <a role="button"
+  tabIndex="0" class="vary-amt">$100</a>
+                                        </li>
+                                        <li>
+                                            <a role="button"
+  tabIndex="0" class="vary-amt">$150</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="buyer-method">
+                                    <h6>Select Payment Gateway *</h6>
+                                    <label class="custom_radio">
+                                        <input type="radio" name="payment">
+                                        <span class="checkmark"></span>Paypal
+                                    </label>
+                                    <label class="custom_radio">
+                                        <input type="radio" name="payment">
+                                        <span class="checkmark"></span>Stripe
+                                    </label>
+                                </div>
+                                <div class="form-wrap form-item wallet-custom">
+                                    <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-wrap form-item wallet-custom">
+                                    <label class="form-label">Password<span class="text-danger ms-1">*</span></label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <a role="button"
+  tabIndex="0" data-bs-toggle="modal" data-bs-target="#success_credit" data-bs-dismiss="modal" class="btn btn-primary w-100">Withdraw</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Withdraw -->
+
+        <!-- Gigs Publish -->
+        <div class="modal custom-modal fade" id="success_credit" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="success-message text-center">
+                            <div class="success-popup-icon">
+                                <img src="assets/img/icons/happy-icon.svg" alt="icon">
+                            </div>
+                            <div class="success-content">
+                                <h4>Credit Successfully</h4>
+                                <p>Amount of <span>“$200”</span> has been successfully Credited to your account with transaction ID of <span>“#124454487878874”</span></p>
+                            </div>
+                            <div class="col-lg-12 text-center">
+                                <a href="buyer-wallet.html" class="btn btn-primary">Back to Wallet</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Gigs Publish -->
+
+    </div>
+    <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script src="assets/js/jquery-3.7.1.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="assets/js/bootstrap.bundle.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+    <script src="assets/js/bootstrap-scrollspy.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Feather JS -->
+    <script src="assets/js/feather.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Slimscroll JS -->
+    <script src="assets/js/jquery.slimscroll.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Select JS -->
+    <script src="assets/plugins/select2/js/select2.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Sticky Sidebar JS -->
+    <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+    <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Datatables JS -->
+    <script src="assets/plugins/datatables/jquery.dataTables.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+    <script src="assets/plugins/datatables/datatables.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Datepicker JS -->
+    <script src="assets/js/moment.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+    <script src="assets/js/bootstrap-datetimepicker.min.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/script.js" type="f7575ecf3e2d74cef82142bc-text/javascript"></script>
+
+<script src="../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="f7575ecf3e2d74cef82142bc-|49" defer></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"93a9a4fa4cb905ab","version":"2025.4.0-1-g37f21b1","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"token":"3ca157e612a14eccbb30cf6db6691c29","b":1}' crossorigin="anonymous"></script>
+</body>
+
+
+<!-- Mirrored from dreamgigs.dreamstechnologies.com/html/template/seller-wallet.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 17:18:48 GMT -->
+</html>

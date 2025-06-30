@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from dreamgigs.dreamstechnologies.com/html/template/seller-profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 17:19:00 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>DreamGigs</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Theme Settings Js -->
+    <script src="assets/js/theme-script.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Tabler Icon CSS -->
+    <link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.min.css">
+
+    <!-- Fearther CSS -->
+    <link rel="stylesheet" href="assets/css/feather.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Select CSS -->
+    <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+
+    <!-- Owl carousel CSS -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+
+        <!-- Header -->
+        <header class="header dashboard-header">
+            <div class="header-user">
+                <div class="header-left-mob">
+                    <a href="seller-dashboard.html" class="logo">
+                        <img src="assets/img/logo.svg" alt="Logo">
+                    </a>
+                </div>
+
+                <a id="mobile_btn" class="mobile_btn" href="#sidebar">
+                    <span class="bar-icon">
+					<i class="ti ti-baseline-density-medium"></i>
+				</span>
+			</a>
+			<div class="nav user-menu nav-list">
+				<div class="wallet-amount wallet-amount-two">
+					<span><i class="ti ti-point-filled me-1"></i>Wallet Balance : $6658</span>
+				</div>
+			</div>
+			<div class="header-right d-flex align-items-center">
+                <a href="index.html" class="btn btn-light fs-14 rounded-pill"><i class="ti ti-world me-1"></i>Website</a>
+				<div class="dashboard-link">
+					<ul class="d-inline-flex align-items-center p-1 rounded-pill">
+						<li><a href="buyer-dashboard.html">Buyer</a></li>
+						<li><a href="seller-dashboard.html" class="active">Seller</a></li>
+					</ul>
+				</div>
+                <div class="nav-item dropdown dropdown-menu-end flag-nav nav-item-box">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+  tabIndex="0" role="button">
+                        <img src="assets/img/flags/us.svg" alt="Language" class="img-fluid">
+                    </a>
+                    <ul class="dropdown-menu p-2">
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/us.svg" alt="" height="16" class="me-2"> English
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/de.svg" alt="" height="16" class="me-2"> German
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/fr.svg" alt="" height="16" class="me-2"> French
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item justify-content-start">
+                                <img src="assets/img/flags/ae.svg" alt="" height="16" class="me-2"> Arabic
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown flag-nav nav-item-box">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+  tabIndex="0" role="button">
+                        <i class="ti ti-sun-high"></i>
+                        <i class="ti ti-moon"></i>
+                    </a>
+                    <ul class="dropdown-menu p-2">
+                        <li class="mb-1">
+                            <a role="button"
+  tabIndex="0" class="dropdown-item active theme-toggle" id="light-mode-toggle">
+                                <i class="ti ti-sun-high me-1"></i>Light Mode
+                            </a>
+                        </li>
+                        <li>
+                            <a role="button"
+  tabIndex="0" class="dropdown-item theme-toggle" id="dark-mode-toggle">
+                                <i class="ti ti-moon me-1"></i>Dark Mode
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+				<div class="nav-item dropdown nav-item-box">
+					<a class="nav-link dropdown-toggle" href="seller-notifications.html" data-bs-toggle="dropdown">
+						<i class="ti ti-bell"></i>
+					</a>
+                    <div class="dropdown-menu dropdown-menu-end noti-blk">
+                        <div class="topnav-dropdown-header border-bottom">
+                            <div class="d-flex align-items-center">
+                              <h6 class="mb-0">Notifications</h6>
+                              <div class="count ms-1">2</div>											
+                            </div>
+                            <a href="javascript:void(0)" class="mark-all-noti"> Mark all as read <i class="feather-check-square"></i></a>
+                        </div>
+                        <ul>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html" class="active-noti">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/profile.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Lex Murphy</a></h6>
+                                            <p class="mb-0">45 mins ago</p>
+                                        </div>	
+                                        <p class="mb-2">Notifications alert you to new messages in your Gigs  inbox.</p>										
+                                        <div class="notify-btns">
+                                            <button class="btn btn-sm btn-primary">Accept</button>														
+                                            <button class="btn btn-sm btn-light">Decline</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html" class="active-noti">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-02.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Ray Arnold</a></h6>
+                                            <p class="mb-0">17 mins ago</p>
+                                        </div>	
+                                        <p class="mb-0">Notifications inform you when someone likes, reacts</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-03.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">Dennis Nedry</a></h6>
+                                            <p class="mb-0">1 Day Ago</p>
+                                        </div>	
+                                        <p>Added a comment to Dennis Nedry</p>
+                                        <p class="noti-reply-msg">“Oh, I finished de-bugging the phones, but the system's compiling for eighteen minutes, or twenty.  So, some minor systems may go on and off for a while.”</p>
+                                    </div>
+                                </div>
+                            </li>	
+                            <li class="notification-message">
+                                <div class="media noti-img d-flex">
+                                    <a href="seller-notifications.html">
+                                        <span class="avatar avatar-sm flex-shrink-0">
+                                            <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-04.jpg">
+                                        </span>
+                                    </a>
+                                    <div class="media-body flex-grow-1">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <h6 class="noti-details"><a href="seller-notifications.html">John Hammond</a></h6>
+                                            <p class="mb-0">45 mins ago</p>
+                                        </div>
+                                        <p class="mb-0">Got Message for  Project “Service Management”</p>
+                                    </div>
+                                </div>
+                            </li>												
+                        </ul>
+                        <div class="clear-all-noti">
+                            <a class="clear-notification" href="seller-notifications.html"> View all </a>
+                        </div>
+                    </div>
+				</div>
+                <div class="nav-item dropdown nav-item-box">
+                    <a href="seller-profile.html" class="dropdown-toggle d-flex align-items-center nav-link" data-bs-toggle="dropdown">
+                        <span class="avatar online avatar-sm">
+                            <img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
+                        </span>
+                    </a>
+                    <div class="dropdown-menu p-0 dropdown-profile">
+                        <div class="d-flex align-items-center border-bottom p-2 mb-0">
+                            <span class="avatar avatar-lg me-2">
+                                <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
+                                <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+                            </div>
+                        </div>
+   
+                        <div class="p-2">
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                                <i class="ti ti-user-cog me-2"></i>My Profile
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                                <i class="ti ti-settings-cog me-2"></i>Settings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
+                            <i class="ti ti-shopping-bag me-2"></i>Orders
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
+                                <i class="ti ti-moneybag me-2"></i>Earnings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                                <i class="ti ti-wallet me-2"></i>Wallet
+                            </a>
+
+                        </div>  
+                        
+                        <div class="border-top p-3">
+                          <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+                <div class="mobile-user-menu">
+                    <a role="button"
+  tabIndex="0" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                        <span class="avatar online avatar-sm">
+						<img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
+					</span>
+                    </a>
+                    <div class="dropdown-menu p-0 dropdown-profile">
+                        <div class="d-flex align-items-center border-bottom p-2 mb-0">
+                            <span class="avatar avatar-lg me-2">
+                                <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
+                                <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+                            </div>
+                        </div>
+   
+                        <div class="p-2">
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                                <i class="ti ti-user-cog me-2"></i>My Profile
+                            </a>
+    
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                                <i class="ti ti-settings-cog me-2"></i>Settings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
+                            <i class="ti ti-shopping-bag me-2"></i>Orders
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
+                                <i class="ti ti-moneybag me-2"></i>Earnings
+                            </a>
+
+                            <!-- Item-->
+                            <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                                <i class="ti ti-wallet me-2"></i>Wallet
+                            </a>
+
+                        </div>  
+                        
+                        <div class="border-top p-3">
+                          <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- /Header -->
+ 
+        <!-- Sidebar -->
+		<div class="sidebar" id="sidebar">
+			<div class="sidebar-logo">
+				<div class="d-flex align-items-center justify-content-between">
+					<a href="seller-dashboard.html" class="logo logo-normal">
+						<img src="assets/img/logo.svg" alt="Logo">
+					</a>
+					<a href="seller-dashboard.html" class="logo-small">
+						<img src="assets/img/logo-small.svg" alt="Logo" class="img-fluid">
+					</a>
+					<a href="seller-dashboard.html" class="dark-logo">
+						<img src="assets/img/dark-logo.svg" alt="Logo" class="img-fluid">
+					</a>
+					<a id="toggle_btn" role="button"
+  tabIndex="0" class="active">
+						<i class="ti ti-arrow-bar-right"></i>
+					</a>
+				</div>	
+			</div>
+			<div class="sidebar-inner slimscroll">
+				<div id="sidebar-menu" class="sidebar-menu">
+						<ul>
+							<li>
+								<ul>
+									<li>
+										<a href="seller-dashboard.html">
+											<i class="ti ti-layout-grid me-2"></i><span>Dashboard</span>
+										</a>
+									</li>
+									<li>
+										<a href="seller-gigs.html">
+											<i class="ti ti-layers-intersect me-2"></i><span>My Gigs</span>
+										</a>
+									</li>
+									<li>
+										<a href="seller-my-buyer.html">
+											<i class="ti ti-user-bolt me-2"></i><span>My Buyers</span>
+										</a>
+									</li>
+									<li>
+                                        <a href="seller-wallet.html">
+                                            <i class="ti ti-wallet me-2"></i><span>Wallet</span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-files.html">
+                                            <i class="ti ti-files me-2"></i><span>Files</span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-reviews.html">
+                                            <i class="ti ti-stars me-2"></i> <span> My Reviews </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-message.html">
+                                            <i class="ti ti-message me-2"></i> <span>Messages </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-notifications.html">
+                                            <i class="ti ti-bell me-2"></i> <span>Notifications </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-transactions.html">
+                                            <i class="ti ti-transition-top me-2"></i> <span>Transactions </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-payouts.html">
+                                            <i class="ti ti-pennant me-2"></i> <span>Payouts </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-earnings.html">
+                                            <i class="ti ti-moneybag me-2"></i> <span> Earnings </span> 
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="seller-settings.html">
+                                            <i class="ti ti-settings-check me-2"></i> <span> Settings</span> 
+                                        </a>
+                                    </li>
+								</ul>
+							</li>
+						</ul>
+					<div class="sidebar-footer">
+						<a href="signin.html" target="_blank"><i class="ti ti-logout me-2"></i><span>Logout</span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Sidebar -->
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-content content bg-light">
+                <div class="row justify-content-center">
+                    <div class="col-xl-10">
+                        <div class="main-title mb-4">
+                            <h4>My Profile</h4>
+                        </div>
+                        <div class="card profile-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-3 justify-content-between flex-wrap">
+                                    <div class="d-flex align-items-center flex-shrink-0">
+                                        <span class="avatar avatar-lg"><img class="rounded-2" src="assets/img/user/user-04.jpg" alt="img"></span>
+                                        <div class="ms-3">
+                                            <h6 class="mb-1 d-inline-flex flex-wrap align-items-center">Adrian Revolt <span class="badge badge-success-transparent ms-3 rounded-pill">16 Gigs</span></h6>
+                                            <p class="mb-2">California, US</p>
+                                            <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-star-filled me-2 text-warning"></i>Ratings 5.0 (45 Reviews)</p>
+                                        </div>
+                                    </div>
+                                    <div class="gap-2 d-flex">
+                                        <a role="button"
+  tabIndex="0" class="btn btn-md btn-dark"><i class="ti ti-user-edit me-1"></i>Edit Profile</a>
+                                        <a role="button"
+  tabIndex="0" class="btn btn-md btn-primary"><i class="ti ti-phone me-1"></i>Contact Me</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card profile-details profile-card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Personal Details</h5>
+                            </div>
+                            <div class="card-body personal-card">
+                                <div class="row row-gap-3">
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Name</h6>
+                                        <p class="mb-0">David Wilson</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Email</h6>
+                                        <p class="mb-0"><a href="https://dreamgigs.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a3a6b1aea3b0aeabb4a8a987a2bfa6aab7aba2e9a4a8aa">[email&#160;protected]</a></p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Phone</h6>
+                                        <p class="mb-0">+1(452) 125-6789</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Date</h6>
+                                        <p class="mb-0">25 Jan 2024</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Speaks</h6>
+                                        <p class="mb-0">English, Portugese</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Member Since</h6>
+                                        <p class="mb-0">25 Jan 2024</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card profile-details profile-card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Address Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row row-gap-3">
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Country</h6>
+                                        <p class="mb-0">United States</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">City</h6>
+                                        <p class="mb-0">California</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">State</h6>
+                                        <p class="mb-0">Los Angeles</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Address Line</h6>
+                                        <p class="mb-0">1234 Sunset Blvd, Apt 56B</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <h6 class="mb-1">Postal Code</h6>
+                                        <p class="mb-0">90026</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card profile-card">
+                            <div class="card-header">
+                                <h5 class="mb-0">About Me</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Hello, Greetings! My name is Adrian, a professional embroidery digitizer who converts an Image into embroidery files such as DST, PES or any other. I can produce an embroidery design file without any fabric puckering. I'm
+                                    the guy who has more than 15 years of experience in the field of embroidery design digitizing. I love what I do because embroidery digitizing is my passion and profession. so, get in touch with me if you have any question.
+                                    thank you!</p>
+                            </div>
+                        </div>
+                        <div class="card personal-card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Skills</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center flex-wrap-wrap gap-2 ">
+                                    <div class="badge bg-light fw-medium fs-13 text-dark">
+                                        <i class="ti ti-point-filled me-1"></i> Logo Design
+                                    </div>
+                                    <div class="badge bg-light fw-medium fs-13 text-dark">
+                                        <i class="ti ti-point-filled me-1"></i> Graphics Design
+                                    </div>
+                                    <div class="badge bg-light fw-medium fs-13 text-dark">
+                                        <i class="ti ti-point-filled me-1"></i> Adobe Illustrator
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card profile-details">
+                            <div class="card-header">
+                                <h5 class="mb-0">Checkout My Recent Portfolios</h5>
+                            </div>
+                            <div class="card-body Recent-card">
+                                <div class="gigs-card-slider  owl-carousel">
+                                    <div class="gigs-grid m-0">
+                                        <div class="gigs-img">
+                                            <div class="slide-images">
+                                                <a href="service-details.html">
+                                                    <img src="assets/img/gigs/gigs-01.jpg" class="img-fluid portfolio-img" alt="img">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gigs-grid m-0">
+                                        <div class="gigs-img">
+                                            <div class="slide-images">
+                                                <a href="service-details.html">
+                                                    <img src="assets/img/gigs/gigs-02.jpg" class="img-fluid portfolio-img" alt="img">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gigs-grid m-0">
+                                        <div class="gigs-img">
+                                            <div class="slide-images">
+                                                <a href="service-details.html">
+                                                    <img src="assets/img/gigs/gigs-03.jpg" class="img-fluid portfolio-img" alt="img">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gigs-grid m-0">
+                                        <div class="gigs-img">
+                                            <div class="slide-images">
+                                                <a href="service-details.html">
+                                                    <img src="assets/img/gigs/gigs-04.jpg" class="img-fluid portfolio-img" alt="img">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card profile-details mb-0 Recent-card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Recent Works</h5>
+                            </div>
+                            <div class="card-body pb-0">
+                                <div class="gigs-card-slider  owl-carousel">
+                                    <!-- Service List -->
+                                    <div class="gigs-grid">
+                                        <div class="gigs-img">
+                                            <div class="img-slider owl-carousel">
+                                                <div class="slide-images">
+                                                    <a href="service-details.html">
+                                                        <img src="assets/img/gigs/gigs-01.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html">
+                                                        <img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html">
+                                                        <img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="fav-selection">
+                                                <a role="button"
+  tabIndex="0"><i class="ti ti-heart-filled"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="gigs-content">
+                                            <div class="gigs-info">
+                                                <a role="button"
+  tabIndex="0" class="badge bg-primary-light">Software Development</a>
+                                            </div>
+                                            <div class="gigs-title">
+                                                <h3>
+                                                    <a href="service-details.html">Designing and developing software applications</a>
+                                                </h3>
+                                            </div>
+                                            <div class="gigs-card-footer">
+                                                <h5>$780</h5>
+                                                <span class="badge">Delivery in 1 day</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Service List -->
+
+                                    <!-- Service List -->
+                                    <div class="gigs-grid">
+                                        <div class="gigs-img">
+                                            <div class="img-slider owl-carousel">
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-02.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-08.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-09.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                            </div>
+                                            <div class="fav-selection">
+                                                <a role="button"
+  tabIndex="0"><i class="ti ti-heart-filled"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="gigs-content">
+                                            <div class="gigs-info">
+                                                <a role="button"
+  tabIndex="0" class="badge bg-primary-light">Ecommerce Seo</a>
+                                            </div>
+                                            <div class="gigs-title">
+                                                <h3><a href="service-details.html">Creating, managing, and optimizing databases</a></h3>
+                                            </div>
+                                            <div class="gigs-card-footer">
+                                                <h5>$350</h5>
+                                                <span class="badge">Delivery in 2 day</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Service List -->
+
+                                    <!-- Service List -->
+                                    <div class="gigs-grid">
+                                        <div class="gigs-img">
+                                            <div class="img-slider owl-carousel">
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-03.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-10.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-11.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                            </div>
+                                            <div class="fav-selection">
+                                                <a role="button"
+  tabIndex="0"><i class="ti ti-heart-filled"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="gigs-content">
+                                            <div class="gigs-info">
+                                                <a role="button"
+  tabIndex="0" class="badge bg-primary-light">Music & Audio</a>
+                                            </div>
+                                            <div class="gigs-title">
+                                                <h3><a href="service-details.html">I will develop openai, chat gpt app for mobile</a></h3>
+                                            </div>
+                                            <div class="gigs-card-footer">
+                                                <h5>$830</h5>
+                                                <span class="badge">Delivery in 1 day</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Service List -->
+
+                                    <!-- Service List -->
+                                    <div class="gigs-grid">
+                                        <div class="gigs-img">
+                                            <div class="img-slider owl-carousel">
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-03.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-10.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                                <div class="slide-images">
+                                                    <a href="service-details.html"><img src="assets/img/gigs/gigs-11.jpg" class="img-fluid" alt="img"></a>
+                                                </div>
+                                            </div>
+                                            <div class="fav-selection">
+                                                <a role="button"
+  tabIndex="0"><i class="ti ti-heart-filled"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="gigs-content">
+                                            <div class="gigs-info">
+                                                <a role="button"
+  tabIndex="0" class="badge bg-primary-light">Music & Audio</a>
+                                            </div>
+                                            <div class="gigs-title">
+                                                <h3><a href="service-details.html">I will develop openai, dalle, chat gpt app for mobile</a></h3>
+                                            </div>
+                                            <div class="gigs-card-footer">
+                                                <h5>$830</h5>
+                                                <span class="badge">Delivery in 1 day</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Service List -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Content -->
+
+        <!-- Mouse Cursor -->
+        <div class="mouse-cursor cursor-outer"></div>
+        <div class="mouse-cursor cursor-inner"></div>
+        <!-- /Mouse Cursor -->
+
+        <!-- Top Scroll -->
+        <div class="back-to-top">
+            <a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
+                <img src="assets/img/icons/arrow-badge-up.svg" alt="img">
+            </a>
+        </div>
+        <!-- /Top Scroll -->
+
+    </div>
+    <!-- /Main Wrapper -->
+
+    <!-- jQuery -->
+    <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery-3.7.1.min.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="assets/js/bootstrap.bundle.min.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+    <script src="assets/js/bootstrap-scrollspy.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Slimscroll JS -->
+    <script src="assets/js/jquery.slimscroll.min.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Feather JS -->
+    <script src="assets/js/feather.min.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Sticky Sidebar JS -->
+    <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+    <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Owl Carousel JS -->
+    <script src="assets/js/owl.carousel.min.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Select JS -->
+    <script src="assets/plugins/select2/js/select2.min.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/script.js" type="a2bdaaac9403cb2a67376477-text/javascript"></script>
+
+<script src="../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="a2bdaaac9403cb2a67376477-|49" defer></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"93a9a621cab0d6a3","version":"2025.4.0-1-g37f21b1","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"token":"3ca157e612a14eccbb30cf6db6691c29","b":1}' crossorigin="anonymous"></script>
+</body>
+
+
+<!-- Mirrored from dreamgigs.dreamstechnologies.com/html/template/seller-profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 04 May 2025 17:19:00 GMT -->
+</html>
