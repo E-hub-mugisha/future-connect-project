@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminSkillController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPartnerController;
 
 /**
  * -----------------------
@@ -150,6 +151,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/announcements/{announcement}/edit', [AdminAnnouncementController::class, 'edit'])->name('admin.announcements.edit');
     Route::put('/admin/announcements/{announcement}', [AdminAnnouncementController::class, 'update'])->name('admin.announcements.update');
     Route::delete('/admin/announcements/{announcement}', [AdminAnnouncementController::class, 'destroy'])->name('admin.announcements.destroy');
+
+    Route::get('/admin/partners', [AdminPartnerController::class, 'index'])->name('admin.partners.index');
+    Route::post('/admin/partners', [AdminPartnerController::class, 'store'])->name('admin.partners.store');
+    Route::put('/admin/partners/{partner}', [AdminPartnerController::class, 'update'])->name('admin.partners.update');
+    Route::delete('/admin/partners/{partner}', [AdminPartnerController::class, 'destroy'])->name('admin.partners.destroy');
+
 });
 /**
  * -----------------------

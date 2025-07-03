@@ -315,8 +315,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="seller-payouts.html">
-                                <i class="ti ti-pennant me-2"></i> <span>Payouts </span>
+                            <a href="/admin/partners">
+                                <i class="ti ti-pennant me-2"></i> <span>Partners </span>
                             </a>
                         </li>
                         <li>
