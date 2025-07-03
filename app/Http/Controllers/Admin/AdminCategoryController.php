@@ -12,7 +12,8 @@ class AdminCategoryController extends Controller
     // GET /api/categories
     public function index()
     {
-        return response()->json(Category::all());
+        $categories = Category::all();
+        return view('admin-pages.categories.index', compact('categories'));
     }
 
     // POST /api/categories
@@ -29,7 +30,7 @@ class AdminCategoryController extends Controller
 
         $category = Category::create($validated);
 
-        return response()->json($category, 201);
+        return redirect()->back();
     }
 
     // GET /api/categories/{id}
@@ -57,7 +58,7 @@ class AdminCategoryController extends Controller
 
         $category->update($validated);
 
-        return response()->json($category);
+        return redirect()->back();
     }
 
     // DELETE /api/categories/{id}
@@ -66,7 +67,7 @@ class AdminCategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return response()->json(['message' => 'Category deleted successfully.']);
+        return redirect()->back();
     }
 
 }

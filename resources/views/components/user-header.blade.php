@@ -14,22 +14,27 @@
                     </span>
                 </a>
                 <a href="index.html" class="navbar-brand logo">
-                    <img src="assets/img/FUTURE CONNECT LOGO - LONG.svg" alt="Logo" />
+                    <img src="{{ asset('assets/img/FUTURE CONNECT LOGO - LONG.svg') }}"
+                        alt="Logo" />
                 </a>
                 <a href="index.html" class="dark-logo">
-                    <img src="assets/img/FUTURE CONNECT LOGO - LONG - WHITE.svg" alt="Logo" class="img-fluid" />
+                    <img src="{{ asset('assets/img/FUTURE CONNECT LOGO - LONG - WHITE.svg') }}"
+                        alt="Logo" class="img-fluid" />
                 </a>
                 <a href="index.html" class="navbar-brand logo-small">
-                    <img src="assets/img/FUTURE CONNECT LOGO.png" class="img-fluid" alt="Logo" />
+                    <img src="{{ asset('assets/img/FUTURE CONNECT LOGO.png') }}"
+                        class="img-fluid" alt="Logo" />
                 </a>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">
                     <a href="index.html" class="menu-logo">
-                        <img src="assets/img/FUTURE CONNECT LOGO.png" class="img-fluid" alt="Logo" />
+                        <img src="{{ asset('assets/img/FUTURE CONNECT LOGO.png') }}"
+                            class="img-fluid" alt="Logo" />
                     </a>
                     <a href="index.html" class="menu-logo dark-logo">
-                        <img src="assets/img/FUTURE CONNECT LOGO - LONG - WHITE.svg" alt="Logo" class="img-fluid" />
+                        <img src="{{ asset('assets/img/FUTURE CONNECT LOGO - LONG - WHITE.svg') }}"
+                            alt="Logo" class="img-fluid" />
                     </a>
                     <a id="menu_close" class="menu-close" role="button" tabIndex="0"> <i class="fas fa-times"></i></a>
                 </div>
@@ -39,7 +44,7 @@
                     <li class="has-submenu">
                         <a role="button" tabIndex="0">Talents <i class="fas fa-chevron-down"></i></a>
                         <ul class="submenu">
-                            <li><a href="{{ route('user.talents')}}">All Talents</a></li>
+                            <li><a href="{{ route('user.talents') }}">All Talents</a></li>
                             <li><a href="/register_as_talent">Register as Talent</a></li>
                             <li class="has-submenu">
                                 <a role="button" tabIndex="0">Talent Categories </a>
@@ -71,7 +76,7 @@
                                     @foreach($categories as $cat)
                                         <li>
                                             <a
-                                                href="{{ url('/talents/category/' . $cat->slug) }}">{{ $cat->name }}</a>
+                                                href="{{ url('/story/category/' . $cat->slug) }}">{{ $cat->name }}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -90,7 +95,7 @@
                                     @foreach($categories as $cat)
                                         <li>
                                             <a
-                                                href="{{ url('/talents/category/' . $cat->slug) }}">{{ $cat->name }}</a>
+                                                href="{{ url('/skills/category/' . $cat->slug) }}">{{ $cat->name }}</a>
                                         </li>
                                     @endforeach
                                 </ul>

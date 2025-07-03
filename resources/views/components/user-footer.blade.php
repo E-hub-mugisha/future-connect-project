@@ -1,7 +1,10 @@
+ @php
+    $categories = \App\Models\Category::inRandomOrder()->take(5)->get();
+@endphp
  <footer class="footer-two">
-     <img src="assets/img/home/shape-3.svg" alt="img" class="d-lg-flex d-none img-fluid footer-bg" />
+     <img src="{{ asset('assets/img/home/shape-3.svg')}}" alt="img" class="d-lg-flex d-none img-fluid footer-bg" />
      <div class="footer-top-two position-relative">
-         <img src="assets/img/home/footer-bg.svg" alt="img" class="d-lg-flex d-none img-fluid footer-bg2" />
+         <img src="{{ asset('assets/img/home/footer-bg.svg')}}" alt="img" class="d-lg-flex d-none img-fluid footer-bg2" />
          <div class="container">
              <div class="row row-gap-4" data-aos="fade-up">
                  <div class="col-lg-3 col-sm-6 footer-links">
@@ -10,9 +13,9 @@
                          <li><a href="/about"><i class="ti ti-chevron-right me-2"></i>About Us</a></li>
                          <li><a href="how-it-works.html"><i class="ti ti-chevron-right me-2"></i>How It Works</a>
                          </li>
-                         <li><a href="talent-showcase.html"><i class="ti ti-chevron-right me-2"></i>Talent
-                                 Showcase</a></li>
-                         <li><a href="join-us.html"><i class="ti ti-chevron-right me-2"></i>Join the Platform</a>
+                         <li><a href="{{ route('talent.match')}}"><i class="ti ti-chevron-right me-2"></i>Talent
+                                 Room</a></li>
+                         <li><a href="/register_as_talent"><i class="ti ti-chevron-right me-2"></i>Join the Platform</a>
                          </li>
                          <li class="mb-0"><a href="/contact"><i class="ti ti-chevron-right me-2"></i>Contact
                                  Us</a></li>
@@ -21,9 +24,9 @@
                  <div class="col-lg-3 col-sm-6 footer-links">
                      <h6>Resources</h6>
                      <ul>
-                         <li><a href="stories.html"><i class="ti ti-chevron-right me-2"></i>Inspiring Stories</a>
+                         <li><a href="/stories"><i class="ti ti-chevron-right me-2"></i>Inspiring Stories</a>
                          </li>
-                         <li><a href="courses.html"><i class="ti ti-chevron-right me-2"></i>Skill Courses</a>
+                         <li><a href="/skills"><i class="ti ti-chevron-right me-2"></i>Skill Courses</a>
                          </li>
                          <li><a href="blogs.html"><i class="ti ti-chevron-right me-2"></i>Blog</a></li>
                          <li><a href="events.html"><i class="ti ti-chevron-right me-2"></i>Events</a></li>
@@ -33,16 +36,9 @@
                  <div class="col-lg-3 col-sm-6 footer-links">
                      <h6>Categories</h6>
                      <ul>
-                         <li><a href="category/arts.html"><i class="ti ti-chevron-right me-2"></i>Arts &
-                                 Creativity</a></li>
-                         <li><a href="category/tech.html"><i class="ti ti-chevron-right me-2"></i>Technology &
-                                 Coding</a></li>
-                         <li><a href="category/music.html"><i class="ti ti-chevron-right me-2"></i>Music &
-                                 Performance</a></li>
-                         <li><a href="category/business.html"><i
-                                     class="ti ti-chevron-right me-2"></i>Entrepreneurship</a></li>
-                         <li><a href="category/other.html"><i class="ti ti-chevron-right me-2"></i>Other
-                                 Talents</a></li>
+                        @foreach($categories as $cat)
+                         <li><a href="{{ url('/talents/category/' . $cat->slug) }}"><i class="ti ti-chevron-right me-2"></i>{{ $cat->name }}</a></li>
+                         @endforeach
                      </ul>
                  </div>
                  <div class="col-lg-3 col-sm-6 footer-contact">
@@ -76,7 +72,7 @@
          <div class="container">
              <div class="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
                  <a href="/" class="footer-logo">
-                     <img src="assets/img/logo.svg" alt="Future Connect Logo" />
+                     <img src="{{ asset('assets/img/logo.svg')}}" alt="Future Connect Logo' ) }}" />
                  </a>
                  <div class="social-links">
                      <ul>

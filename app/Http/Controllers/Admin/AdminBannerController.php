@@ -14,7 +14,7 @@ class AdminBannerController extends Controller
     public function index()
     {
         $banners = Banner::all();
-        return response()->json([
+        return view('admin-pages.banners.index', [
             'status' => true,
             'banners' => $banners
         ]);
@@ -28,24 +28,28 @@ class AdminBannerController extends Controller
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive',
         ]);
 
+        $imageName = null;
+
+        if ($image = $request->file('image')) {
+            $menuPath = 'image/banners/';
+            $imageName = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move(public_path($menuPath), $imageName);
+        }
+
         $banner = Banner::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => $request->image,
+            'image' => $imageName,
             'link' => $request->link,
             'status' => $request->status ?? 'active',
         ]);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Banner created successfully',
-            'banner' => $banner
-        ]);
+        return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully');
     }
 
     /**
@@ -70,21 +74,31 @@ class AdminBannerController extends Controller
             ], 404);
         }
 
+        
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive',
         ]);
 
+        $imageName = $banner->image; // Keep existing image by default
+
+        if ($image = $request->file('image')) {
+            $menuPath = 'image/banners/';
+            $imageName = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move(public_path($menuPath), $imageName);
+
+            // Optional: Delete old image if exists
+            if ($banner->image && file_exists(public_path($menuPath . $banner->image))) {
+                unlink(public_path($menuPath . $banner->image));
+            }
+        }
+
         $banner->update($request->only(['title', 'description', 'image', 'link', 'status']));
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Banner updated successfully',
-            'banner' => $banner
-        ]);
+        return redirect()->route('admin.banners.index')->with('success', 'Banner updated successfully');
     }
 
     /**
@@ -103,9 +117,7 @@ class AdminBannerController extends Controller
 
         $banner->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Banner deleted successfully'
-        ]);
+        return redirect()->route('admin.banners.index')->with('success', 'Banner deleted successfully');
     }
 }
+

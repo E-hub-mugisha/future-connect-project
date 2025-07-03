@@ -47,6 +47,16 @@
 
         </div>
 
+        
+
+        <!-- Top Scroll -->
+        <div class="back-to-top">
+            <a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
+                <img src="{{ asset('assets/img/icons/arrow-badge-up.svg') }}" alt="img">
+            </a>
+        </div>
+        <!-- /Top Scroll -->
+
         <!-- jQuery -->
         <script src="/assets/js/jquery-3.7.1.min.js"></script>
 

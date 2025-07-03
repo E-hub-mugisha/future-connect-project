@@ -11,11 +11,12 @@ class AdminTalentController extends Controller
 {
     public function index()
     {
-        return response()->json([
-        'talents' => Talent::all(),
-        'categories' => Category::all(),
-        ]);
+        $talents = Talent::all();
+        $categories = Category::all();
+
+        return view('admin-pages.talents.index', compact('talents', 'categories'));
     }
+
 
     public function store(Request $request)
     {
@@ -34,7 +35,7 @@ class AdminTalentController extends Controller
         ]);
 
         $talent = Talent::create($request->all());
-        return response()->json($talent, 201);
+        return redirect()->back();
     }
 
     public function show($id)
@@ -45,8 +46,11 @@ class AdminTalentController extends Controller
     public function update(Request $request, $id)
     {
         $talent = Talent::findOrFail($id);
-        $talent->update($request->all());
-        return response()->json($talent);
+        $data = $request->all();
+        $data['featured'] = $request->has('featured') ? 1 : 0;
+
+        $talent->update($data);
+        return redirect()->back();
     }
 
     public function destroy($id)
@@ -66,6 +70,6 @@ class AdminTalentController extends Controller
         $talent->status = $request->status;
         $talent->save();
 
-        return response()->json(['message' => 'Status updated successfully']);
+        return redirect()->back();
     }
 }

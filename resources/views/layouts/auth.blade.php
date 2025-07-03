@@ -47,18 +47,9 @@
 <body>
     <div class="main-wrapper">
 
-        <div class="top-header">
-            Find the Best Instant Talents Platform
-            <span class="close-btn"
-                onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
-                data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
-        </div>
-
-        @include('components.user-header')
 
         @yield('content')
-
-        @include('components.user-footer')
+        
         <!-- jQuery -->
         <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 
@@ -73,7 +64,7 @@
         <script src="{{ asset('assets/js/feather.min.js') }}"></script>
 
         <!-- Slick JS -->
-        <script src="{{ asset('assets/plugins/slick/slick.js')}}"></script>
+        <script src="{{ asset('assets/plugins/slick/slick.js') }}"></script>
 
         <!-- Apexchart JS -->
         <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
@@ -101,31 +92,7 @@
         <!-- Custom JS -->
         <script src="{{ asset('assets/js/script.js') }}"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('#skillsCategoryTabs .nav-link').on('click', function (e) {
-                    e.preventDefault();
 
-                    var selectedCategory = $(this).data('category');
-
-                    // Active tab highlighting
-                    $('#skillsCategoryTabs .nav-link').removeClass('active');
-                    $(this).addClass('active');
-
-                    // Filter skill cards
-                    $('.skill-card').each(function () {
-                        var cardCategory = $(this).data('category');
-
-                        if (selectedCategory === 'All' || cardCategory === selectedCategory) {
-                            $(this).fadeIn();
-                        } else {
-                            $(this).fadeOut();
-                        }
-                    });
-                });
-            });
-
-        </script>
 </body>
 
 </html>

@@ -683,19 +683,20 @@
 
 
 <div class="container">
-			<div class="join-with-us">
-				<img src="assets/img/home/shape-5.svg" alt="img" class="img-fluid join-with-us-bg">
-				<div class="d-sm-flex align-items-center justify-content-between">
-					<div data-aos="fade-right" class="aos-init aos-animate">
-						<h2 class="text-white">Join Future Connect</h2>
-						<p class="mb-0">Showcase your talent, share your story, and inspire others. Be part of a
-							community that empowers growth and recognition.</p>
-					</div>
-					<a href="upload-story.html" class="btn btn-lg btn-primary flex-shrink-0 aos-init aos-animate" data-aos="fade-left">Get
-						Started</a>
-				</div>
-			</div>
-		</div>
+    <div class="join-with-us">
+        <img src="assets/img/home/shape-5.svg" alt="img" class="img-fluid join-with-us-bg">
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <div data-aos="fade-right" class="aos-init aos-animate">
+                <h2 class="text-white">Join Future Connect</h2>
+                <p class="mb-0">Showcase your talent, share your story, and inspire others. Be part of a
+                    community that empowers growth and recognition.</p>
+            </div>
+            <a href="upload-story.html" class="btn btn-lg btn-primary flex-shrink-0 aos-init aos-animate"
+                data-aos="fade-left">Get
+                Started</a>
+        </div>
+    </div>
+</div>
 
 
 @endsection

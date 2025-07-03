@@ -30,7 +30,8 @@ class Talent extends Model
         'phone',
         'email',
         'language',
-        'category_id'
+        'category_id',
+        'matched',
     ];
 
     public function category()

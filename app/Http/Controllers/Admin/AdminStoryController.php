@@ -12,77 +12,84 @@ use Illuminate\Support\Str;
 class AdminStoryController extends Controller
 {
     public function index()
-{
-    return response()->json([
-        'stories' => Story::all(),
-    ]);
-}
+    {
+        return view('admin-pages.stories.index', [
+            'stories' => Story::all(),
+        ]);
+    }
 
-public function show($id)
-{
-    return response()->json(Story::with(['talent', 'category'])->findOrFail($id));
-}
-public function create()
-{
-    $categories = Category::all();
-    $talents = Talent::all();
+    public function show($id)
+    {
+        return view('admin-pages.stories.show', [
+            'stories' => Story::with(['talent', 'category'])->findOrFail($id),
+        ]);
+    }
 
-    return response()->json([
-        'categories' => $categories,
-        'talents' => $talents,
-    ]);
-}
-public function store(Request $request)
+    public function create()
+    {
+        $categories = Category::all();
+        $talents = Talent::all();
+
+        return view('admin-pages.stories.edit', [
+            'categories' => $categories,
+            'talents' => $talents,
+        ]);
+    }
+    public function store(Request $request)
     {
         $validated = $request->validate([
-    'talent_id' => 'required|exists:talents,id',
-    'category_id' => 'required|exists:categories,id',
-    'title' => 'required|string|max:255',
-    'content' => 'nullable|string',
-    'media' => 'nullable|string',
-    'tags' => 'nullable|string',
-    'status' => 'in:draft,published',
-]);
+            'talent_id' => 'required|exists:talents,id',
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'media' => 'nullable|string',
+            'tags' => 'nullable|string',
+            'status' => 'in:draft,published',
+        ]);
 
-$validated['slug'] = Str::slug($validated['title']);
+        $validated['slug'] = Str::slug($validated['title']);
         $story = Story::create($validated);
-        return response()->json($story, 201);
+        return redirect()->route('admin.stories.index');
     }
 
     public function edit($id)
-{
-    $story = Story::with(['category', 'talent'])->findOrFail($id);
+    {
+        $story = Story::with(['category', 'talent'])->findOrFail($id);
+        $talents = Talent::all();
+        $categories = Category::all();
 
-    return response()->json([
-        'story' => $story,
-    ]);
-}
+        return view('admin-pages.stories.edit',[
+            'story' => $story,
+            'talents' => $talents,
+            'categories' => $categories,
+        ]);
+    }
     // Update a story
     public function update(Request $request, $id)
     {
         $story = Story::findOrFail($id);
 
         $validated = $request->validate([
-    'talent_id' => 'required|exists:talents,id',
-    'category_id' => 'required|exists:categories,id',
-    'title' => 'required|string|max:255',
-    'content' => 'nullable|string',
-    'media' => 'nullable|string',
-    'tags' => 'nullable|string',
-    'status' => 'in:draft,published',
-]);
+            'talent_id' => 'required|exists:talents,id',
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'media' => 'nullable|string',
+            'tags' => 'nullable|string',
+            'status' => 'in:draft,published',
+        ]);
 
-$validated['slug'] = Str::slug($validated['title']);
+        $validated['slug'] = Str::slug($validated['title']);
         $story->update($validated);
-        return response()->json($story);
+        return redirect()->route('admin.stories.index');
     }
 
-// Delete a story
+    // Delete a story
     public function destroy($id)
     {
         $story = Story::findOrFail($id);
         $story->delete();
 
-        return response()->json(['message' => 'Story deleted successfully.']);
+        return redirect()->route('admin.stories.index');
     }
 }

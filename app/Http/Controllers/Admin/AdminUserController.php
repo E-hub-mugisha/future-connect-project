@@ -13,7 +13,9 @@ class AdminUserController extends Controller
     // GET /api/users
     public function index()
     {
-        return response()->json(User::all(), 200);
+        $users = User::all();
+
+        return view('admin-pages.users.index', compact('users'));
     }
 
     // POST /api/users

@@ -31,7 +31,7 @@ class HomeController extends Controller
         // Fetch featured talents - modify query as needed
         $talents = Talent::all();
 
-        
+
         return view('user-page.talents', [
             'talents' => $talents,
         ]);
@@ -71,7 +71,7 @@ class HomeController extends Controller
         $talents = Talent::where('category_id', $category->id)
             ->get();
 
-        return view('user-page.category-talents',[
+        return view('user-page.category-talents', [
             'categoryName' => $category->name,
             'talents' => $talents,
         ]);
@@ -90,6 +90,17 @@ class HomeController extends Controller
         // Return the Blade view with stories
         return view('user-page.stories', [
             'stories' => $stories
+        ]);
+    }
+    public function skills()
+    {
+        // Fetch all stories, eager load relationships if needed (like talent or category)
+        $skills = Skill::orderBy('created_at', 'desc')->get();
+
+        // Return the Blade view with skills
+        return view('user-page.skills', [
+            'skills' => $skills,
+            'categories' => \App\Models\Category::all(),
         ]);
     }
     public function storeReview(Request $request, $id)
@@ -119,7 +130,7 @@ class HomeController extends Controller
 
         $comment = StoryComment::create($data);
 
-        return response()->json($comment, 201);
+        return redirect()->back()->with('success', 'Talent registered successfully.');
     }
     public function storeTalent(Request $request)
     {
@@ -141,7 +152,18 @@ class HomeController extends Controller
     public function storyDetails($slug)
     {
         $story = \App\Models\Story::where('slug', $slug)->with('comments')->firstOrFail();
-        return response()->json($story);
+
+        // Fetch related stories based on category (excluding the current story)
+        $relatedStories = \App\Models\Story::where('category_id', $story->category_id)
+            ->where('id', '!=', $story->id)
+            ->latest()
+            ->take(3) // Limit to 3 related stories
+            ->get();
+        return view('user-page.story-details', [
+            'story' => $story,
+            'comments' => $story->comments,
+            'relatedStories' => $relatedStories,
+        ]);
     }
 
     public function random()
@@ -159,7 +181,7 @@ class HomeController extends Controller
             ->where('category_id', $category->id)
             ->get();
 
-        return response()->json([
+        return view('user-page.category-skills', [
             'categoryName' => $category->name,
             'skills' => $skills,
         ]);
@@ -173,7 +195,7 @@ class HomeController extends Controller
         $stories = Story::where('category_id', $category->id)
             ->get();
 
-        return response()->json([
+        return view('user-page.category-story', [
             'categoryName' => $category->name,
             'stories' => $stories,
         ]);
@@ -181,8 +203,18 @@ class HomeController extends Controller
     public function skillDetails($slug)
     {
         $skill = \App\Models\Skill::where('slug', $slug)->firstOrFail();
-        return response()->json($skill);
+
+        $relatedSkills = \App\Models\Skill::where('category_id', $skill->category_id)
+            ->where('id', '!=', $skill->id)
+            ->latest()
+            ->take(3) // Limit to 3 related stories
+            ->get();
+        return view('user-page.skill-details', [
+            'skill' => $skill,
+            'relatedSkills' => $relatedSkills,
+        ]);
     }
+
     public function relatedSkills($categoryId)
     {
         $excludeId = request()->query('exclude');
@@ -212,6 +244,18 @@ class HomeController extends Controller
 
         return view('user-page.announcement', [
             'announcements' => $announcements
+        ]);
+    }
+    public function uploadStory()
+    {
+        return view('user-page.upload-story', ['categories' => \App\Models\Category::all(),]);
+    }
+    public function matchedTalents()
+    {
+        $matchedTalents = \App\Models\Talent::where('matched', true)->get();
+
+        return view('user-page.talent-showroom', [
+            'matchedTalents' => $matchedTalents
         ]);
     }
 }

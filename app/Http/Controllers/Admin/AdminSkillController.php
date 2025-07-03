@@ -16,7 +16,7 @@ class AdminSkillController extends Controller
         //
         $categories = \App\Models\Category::all();
         $talents = \App\Models\Talent::all();
-        return response()->json([
+        return view('admin-pages.skills.index',[
             'skills' => Skill::all(),
             'categories' => $categories,
             'talents' => $talents,
@@ -42,7 +42,7 @@ class AdminSkillController extends Controller
         ]);
         $validatedData['slug'] = \Illuminate\Support\Str::slug($validatedData['name']);
         $skill = Skill::create($validatedData);
-        return response()->json($skill, 201);
+        return redirect()->route('admin.skills.index')->with('success', 'Skill created successfully');
     }
 
     /**
@@ -73,7 +73,7 @@ class AdminSkillController extends Controller
         ]);
         $validatedData['slug'] = \Illuminate\Support\Str::slug($validatedData['name']);
         $skill->update($validatedData);
-        return response()->json($skill, 200);
+        return redirect()->route('admin.skills.index')->with('success', 'Skill updated successfully');
     }
 
     /**
@@ -84,6 +84,6 @@ class AdminSkillController extends Controller
         //
         $skill = Skill::findOrFail($id);
         $skill->delete();
-        return response()->json(['message' => 'Skill deleted successfully'], 200);
+        return redirect()->route('admin.skills.index')->with('success', 'Skill deleted successfully');
     }
 }

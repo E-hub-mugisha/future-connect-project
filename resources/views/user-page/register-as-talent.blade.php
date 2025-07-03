@@ -43,7 +43,7 @@
                             <p class="text-muted">Share your talent details to get featured on Future Connect.</p>
                         </div>
 
-                        <form action="{{ route('talent.register') }}" method="POST">
+                        <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row g-3">
