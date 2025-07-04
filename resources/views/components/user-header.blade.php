@@ -2,6 +2,44 @@
     $categories = \App\Models\Category::all();
 @endphp
 
+<style>
+    .header {
+    background-color: rgba(66, 64, 62, 0.99);
+    height: 6rem; /* Reduced height */
+    padding: 7px 5px;
+}
+
+.main-menu-wrapper {
+    /* border: 2px solid #5E6872; */
+    background:rgba(51, 50, 48, 0.99);
+    padding: 1px 2rem; /* Reduced padding */
+    border-radius: 4rem;
+    backdrop-filter: blur(10px);
+}
+
+.main-menu-wrapper .main-nav .nav-link {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    /* border-radius: 2rem; */
+    /* padding: 0.3rem 0.8rem; */
+    transition: all 0.3s ease-in-out;
+    border: 2px solid transparent;
+    background: transparent;
+    display: inline-block; /* Prevents full-width behavior */
+}
+
+.main-menu-wrapper .main-nav .nav-link:hover {
+    color: #47d985;
+    border-bottom: 2px solid #47d985;
+    background: transparent;
+}
+
+
+   
+
+</style>
+
 <header class="header">
     <div class="container">
         <nav class="navbar navbar-expand-lg header-nav p-0">
@@ -13,36 +51,26 @@
                         <span></span>
                     </span>
                 </a>
-                <a href="index.html" class="navbar-brand logo">
-                    <img src="{{ asset('assets/img/FUTURE CONNECT LOGO - LONG.svg') }}"
-                        alt="Logo" />
-                </a>
-                <a href="index.html" class="dark-logo">
-                    <img src="{{ asset('assets/img/FUTURE CONNECT LOGO - LONG - WHITE.svg') }}"
-                        alt="Logo" class="img-fluid" />
-                </a>
-                <a href="index.html" class="navbar-brand logo-small">
-                    <img src="{{ asset('assets/img/FUTURE CONNECT LOGO.png') }}"
-                        class="img-fluid" alt="Logo" />
+
+                <a href="index.html">
+                    <img src="{{ asset('assets/img/company/logo.svg') }}" class="img-fluid"
+                        alt="Logo" style="height: 50px;" />
                 </a>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">
-                    <a href="index.html" class="menu-logo">
+                    <!-- <a href="index.html" >
                         <img src="{{ asset('assets/img/FUTURE CONNECT LOGO.png') }}"
                             class="img-fluid" alt="Logo" />
-                    </a>
-                    <a href="index.html" class="menu-logo dark-logo">
-                        <img src="{{ asset('assets/img/FUTURE CONNECT LOGO - LONG - WHITE.svg') }}"
-                            alt="Logo" class="img-fluid" />
-                    </a>
+                    </a> -->
                     <a id="menu_close" class="menu-close" role="button" tabIndex="0"> <i class="fas fa-times"></i></a>
                 </div>
                 <ul class="main-nav navbar-nav">
+
                     <li><a href="/" class="nav-link active">Home</a></li>
 
                     <li class="has-submenu">
-                        <a role="button" tabIndex="0">Talents <i class="fas fa-chevron-down"></i></a>
+                        <a role="button" class="nav-link" tabIndex="0">Talents <i class="fas fa-chevron-down"></i></a>
                         <ul class="submenu">
                             <li><a href="{{ route('user.talents') }}">All Talents</a></li>
                             <li><a href="/register_as_talent">Register as Talent</a></li>
@@ -62,11 +90,11 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('user.announcements') }}">Announcements</a>
+                        <a href="{{ route('user.announcements') }}" class="nav-link">Announcements</a>
                     </li>
 
                     <li class="has-submenu">
-                        <a role="button" tabIndex="0">Stories <i class="fas fa-chevron-down"></i></a>
+                        <a role="button" tabIndex="0" class="nav-link">Stories <i class="fas fa-chevron-down"></i></a>
                         <ul class="submenu">
                             <li><a href="/stories">All Stories</a></li>
                             <li><a href="/upload-story">Upload Story</a></li>
@@ -86,7 +114,7 @@
                     </li>
 
                     <li class="has-submenu">
-                        <a role="button" tabIndex="0">Skills <i class="fas fa-chevron-down"></i></a>
+                        <a role="button" class="nav-link" tabIndex="0">Skills <i class="fas fa-chevron-down"></i></a>
                         <ul class="submenu">
                             <li><a href="/skills">All Skills</a></li>
                             <li class="has-submenu">

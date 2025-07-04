@@ -13,20 +13,19 @@
                         <!-- Left Column -->
                         <div class="col-lg-7">
                             <div class="banner-content" data-aos="fade-up">
-                                <img src="assets/img/home/banner-shape-1.svg" alt="decorative shape"
-                                    class="img-fluid banner-bg-1 d-none d-lg-flex">
+                                
                                 <span class="d-inline-flex mb-3 align-items-center hero-title">
                                     <i class="ti ti-point-filled me-1"></i>Empowering Young Talents
                                 </span>
                                 <h1 class="mb-2">Share Your <span>Story</span> & Showcase Your
                                     <span>Skills</span>
                                 </h1>
-                                <p class="mb-4">
+                                <!-- <p class="mb-4">
                                     Future Connect is where creativity meets opportunity. Upload your journey,
                                     highlight your
                                     talents, and connect with a community that celebrates and supports your
                                     growth.
-                                </p>
+                                </p> -->
                                 <a href="talents.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">
                                     Discover Talents<i class="ti ti-chevron-right ms-1"></i>
                                 </a>
@@ -51,16 +50,15 @@
                     <div class="row align-items-center">
                         <div class="col-lg-7">
                             <div class="banner-content" data-aos="fade-up">
-                                <img src="assets/img/home/banner-shape-1.svg" alt="decorative shape"
-                                    class="img-fluid banner-bg-1 d-none d-lg-flex">
+                                
                                 <span class="d-inline-flex mb-3 align-items-center hero-title">
                                     <i class="ti ti-point-filled me-1"></i>Inspire the World
                                 </span>
                                 <h1 class="mb-2">Turn Your <span>Passion</span> into <span>Impact</span></h1>
-                                <p class="mb-4">
+                                <!-- <p class="mb-4">
                                     Upload your unique journey, find opportunities, and let the world see what
                                     you’re capable of.
-                                </p>
+                                </p> -->
                                 <a href="upload.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">
                                     Upload Your Story<i class="ti ti-chevron-right ms-1"></i>
                                 </a>
@@ -100,7 +98,7 @@
                 <div class="banner-search-list">
                     <div class="input-block">
                         <label>Explore</label>
-                        <select class="select">
+                        <select class="form-select">
                             <option>Select Category</option>
                             @foreach( $categories as $cat)
                                 <option>{{ $cat->name }}</option>
@@ -188,11 +186,6 @@
                                     <img src="assets/img/company/logo.svg" class="w-auto" alt="img">
                                 </div>
                             </div>
-
-
-
-
-
                             <div class="owl-item" style="width: 168px; margin-right: 24px;">
                                 <div class="client-logo">
                                     <img src="assets/img/company/logo.svg" class="w-auto" alt="img">
@@ -228,11 +221,6 @@
                                     <img src="assets/img/company/logo.svg" class="w-auto" alt="img">
                                 </div>
                             </div>
-
-
-
-
-
                             <div class="owl-item cloned active" style="width: 168px; margin-right: 24px;">
                                 <div class="client-logo">
                                     <img src="assets/img/company/logo.svg" class="w-auto" alt="img">

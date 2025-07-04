@@ -12,7 +12,6 @@ use App\Models\SkillReview;
 use App\Models\Story;
 use App\Models\StoryComment;
 use App\Models\Testimonial;
-
 class HomeController extends Controller
 {
     public function index()
@@ -24,6 +23,7 @@ class HomeController extends Controller
             'stories' => \App\Models\Story::all(),
             'skills' => \App\Models\Skill::all(),
             'testimonials' => \App\Models\Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
+            'partners' => \App\Models\Partner::all(), // Fetch only active partners
         ]);
     }
     public function talents()

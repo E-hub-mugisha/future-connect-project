@@ -47,12 +47,12 @@
 <body>
     <div class="main-wrapper">
 
-        <div class="top-header">
+        <!-- <div class="top-header">
             Find the Best Instant Talents Platform
             <span class="close-btn"
                 onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
                 data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
-        </div>
+        </div> -->
 
         @include('components.user-header')
 
