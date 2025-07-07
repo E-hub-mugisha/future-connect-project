@@ -11,6 +11,9 @@ use Faker\Factory as Faker;
 
 class SkillSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $faker = Faker::create();
@@ -18,32 +21,43 @@ class SkillSeeder extends Seeder
         $talentIds = Talent::pluck('id')->toArray();
         $categoryIds = Category::pluck('id')->toArray();
 
-        if (empty($talentIds)) {
-            $this->command->warn('No talents found. Please seed talents first.');
+        if (empty($talentIds) || empty($categoryIds)) {
+            $this->command->warn('Please seed talents and categories first.');
             return;
         }
 
-        if (empty($categoryIds)) {
-            $this->command->warn('No categories found. Please seed categories first.');
-            return;
-        }
+        $skills = [
+            [
+                'name' => 'Web Development',
+                'description' => 'Building responsive websites and web applications using modern technologies.',
+                'tags' => 'Future Connect,Web Development,Laravel',
+                'level' => 'Intermediate',
+            ],
+            [
+                'name' => 'Graphic Design',
+                'description' => 'Creating visually appealing designs for print and digital platforms.',
+                'tags' => 'Future Connect,Design,Creativity',
+                'level' => 'Beginner',
+            ],
+            [
+                'name' => 'Mobile App Development',
+                'description' => 'Developing user-friendly mobile applications for Android and iOS.',
+                'tags' => 'Future Connect,Mobile,Apps',
+                'level' => 'Advanced',
+            ],
+        ];
 
-        $levels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
-        $statuses = ['draft', 'published', 'archived'];
-
-        for ($i = 0; $i < 10; $i++) {
-            $name = $faker->unique()->jobTitle();
-
+        foreach ($skills as $skill) {
             Skill::create([
-                'name'        => $name,
-                'slug'        => Str::slug($name) . '-' . Str::random(5),
-                'description' => $faker->sentence(10),
-                'image'       => $faker->imageUrl(640, 480, 'technics', true),
+                'name'        => $skill['name'],
+                'slug'        => Str::slug($skill['name']) . '-' . $faker->unique()->randomNumber(3),
+                'description' => $skill['description'],
+                'image'       => $faker->imageUrl(640, 480, 'technology', true),
                 'talent_id'   => $faker->randomElement($talentIds),
                 'category_id' => $faker->randomElement($categoryIds),
-                'tags'        => implode(',', $faker->words(4)),
-                'status'      => $faker->randomElement($statuses),
-                'level'       => $faker->randomElement($levels),
+                'tags'        => $skill['tags'],
+                'status'      => $faker->randomElement(['draft', 'published', 'archived']),
+                'level'       => $skill['level'],
             ]);
         }
     }

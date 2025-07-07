@@ -13,7 +13,7 @@
                 <p>Connect with the next wave of talents, guiding you with fresh perspectives</p>
             </div>
 
-            <div className="row seller-list">
+            <div class="row seller-list">
                 @if($loading ?? false)
                     <p class="text-center">Loading...</p>
                 @else
@@ -23,30 +23,34 @@
                                 <div class="card" data-aos="flip-left">
                                     <div class="card-body text-center">
                                         <span class="avatar">
-                                            <a href="{{ url('talent/'.$talent->id) }}">
+                                            <a href="{{ url('/talent/' . $talent->id) }}">
                                                 <img class="rounded-pill"
-                                                    src="{{ asset('assets/img/user/profile.jpg') }}"
-                                                    alt="img" height="50" width="50" />
+                                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                                    alt="img" height="50" width="50">
+
                                             </a>
                                             <i class="ti ti-discount-check-filled verify-icon"></i>
                                         </span>
                                         <h6 class="mb-1">
                                             <a
-                                                href="{{ url('talent/'.$talent->id) }}">{{ $talent->name }}</a>
+                                                href="{{ url('/talent/' . $talent->id) }}">{{ $talent->name }}</a>
                                         </h6>
-                                        <p>{{ $talent->skill }}</p>
+                                        <p>{{ $talent->category->name ?? 'Uncategorized' }}
+                                        </p>
                                         <p class="mb-0 location-text d-inline-flex align-items-center">
-                                            <img src="{{ asset('assets/img/flags/flag-for-rwanda.svg') }}"
-                                                alt="flag" class="me-1" />
-                                            Rwanda <i class="ti ti-point-filled mx-1"></i> Total Gigs: 45
+                                            <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
+                                            Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories:
+                                            {{ $talent->stories_count ?? 0 }}
                                         </p>
                                         <div
                                             class="d-flex gap-2 align-items-center flex-wrap mt-3 justify-content-center">
-                                            <a href="service-details.html" class="badge bg-light">
-                                                Wordpress
+                                            <a href="{{ url('/talent/' . $talent->id) }}"
+                                                class="badge bg-light">
+                                                {{ $talent->skill }}
                                             </a>
-                                            <a href="service-details.html" class="badge bg-light">
-                                                Figma
+                                            <a href="{{ url('/talent/' . $talent->id) }}"
+                                                class="badge bg-light">
+                                                {{ $talent->language }}
                                             </a>
                                         </div>
                                     </div>

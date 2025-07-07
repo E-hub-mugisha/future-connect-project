@@ -35,6 +35,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/talent/{id}', 'showTalents');
     Route::get('/talents/category/{slug}', 'getTalentByCategory');
     Route::get('/categories-with-talent-count', 'withTalentCount');
+    Route::get('/search', 'search')->name('talent.search');
+    Route::post('/talent/feedback', 'storeFeedback')->name('talent.feedback.store');
+
 
     Route::get('/skills', 'skills')->name('user.skills');
     Route::get('/skills/category/{slug}', 'getByCategory');
@@ -96,7 +99,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/talents', [AdminTalentController::class, 'store'])->name('admin.talents.store');
 
     Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('admin.talents.updateStatus');
-    Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature']);
+    Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
+    Route::delete('/admin/talents/{id}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
 
     Route::apiResource('/admin/users', AdminUserController::class);
     Route::apiResource('/admin/categories', AdminCategoryController::class);

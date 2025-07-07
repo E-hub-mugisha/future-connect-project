@@ -9,6 +9,9 @@ use Faker\Factory as Faker;
 
 class SkillReviewSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $faker = Faker::create();
@@ -16,7 +19,7 @@ class SkillReviewSeeder extends Seeder
         $skillIds = Skill::pluck('id')->toArray();
 
         if (empty($skillIds)) {
-            $this->command->warn('No skills found. Please seed skills first.');
+            $this->command->warn('Please seed skills first.');
             return;
         }
 
@@ -26,7 +29,7 @@ class SkillReviewSeeder extends Seeder
                 'name'     => $faker->name(),
                 'email'    => $faker->unique()->safeEmail(),
                 'rating'   => $faker->numberBetween(1, 5),
-                'message'  => $faker->sentence(12),
+                'message'  => $faker->sentence(10),
             ]);
         }
     }

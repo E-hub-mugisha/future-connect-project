@@ -183,7 +183,7 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <img src="{{ $talent->image ?? '/assets/img/user/profile.jpg' }}"
+                                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
                                                 class="img-fluid rounded" alt="Talent Image">
                                         </div>
 
@@ -220,7 +220,7 @@
                         aria-labelledby="talentEditModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <form method="POST"
-                                action="{{ route('admin.talents.update', $talent->id ) }}">
+                                action="{{ route('admin.talents.update', $talent->id ) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -304,8 +304,8 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label class="form-label">Image URL</label>
-                                            <input type="text" name="image" class="form-control"
+                                            <label class="form-label">Image</label>
+                                            <input type="file" name="image" class="form-control"
                                                 value="{{ old('image', $talent->image ?? '') }}" />
                                         </div>
 
@@ -379,7 +379,7 @@
                 <div class="modal fade" id="talentAddModal" tabindex="-1" aria-labelledby="talentAdModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <form method="POST" action="{{ route('admin.talents.store') }}">
+                        <form method="POST" action="{{ route('admin.talents.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -451,8 +451,8 @@
 
                                     <!-- Image URL -->
                                     <div class="mb-3">
-                                        <label for="image" class="form-label">Image URL</label>
-                                        <input id="image" type="text" name="image" class="form-control">
+                                        <label for="image" class="form-label">Image</label>
+                                        <input id="image" type="file" name="image" class="form-control">
                                     </div>
 
                                     <!-- Description -->

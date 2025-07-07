@@ -402,7 +402,7 @@
                         <div class="row">
                             <div class="container">
 
-                                <div className="row" data-aos="fade-up">
+                                <div class="row" data-aos="fade-up">
                                     @foreach($stories as $story)
                                     <div class="col-xl-4 col-md-4">
                                         <div class="gigs-grid">
@@ -440,7 +440,7 @@
                                             <div class="gigs-content">
                                                 <div class="gigs-info">
                                                     <div>
-                                                        <span class="badge bg-light">Category ID: {{ $story->category_id }}</span>
+                                                        <span class="badge bg-light">{{ $story->category->name }}</span>
                                                         @if($story->tags)
                                                         <span class="ms-2">+{{ count(explode(',', $story->tags)) }}</span>
                                                         @endif
@@ -462,15 +462,13 @@
                                                         </a>
                                                         <div class="ms-2">
                                                             <h6 class="mb-0">
-                                                                <a role="button" tabindex="0">Talent ID: {{ $story->talent_id }}</a>
+                                                                <a role="button" tabindex="0">{{ $story->talent->name }}</a>
                                                             </h6>
                                                             <p class="mb-0">Posted: {{ \Carbon\Carbon::parse($story->created_at)->format('M d, Y') }}</p>
                                                         </div>
                                                     </div>
 
-                                                    <div class="text-end">
-                                                        <h6 class="mb-1">Status: {{ ucfirst($story->status) }}</h6>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -478,7 +476,6 @@
                                     @endforeach
 
                                 </div>
-
                             </div>
                         </div>
                     </div>

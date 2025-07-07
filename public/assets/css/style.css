@@ -7038,7 +7038,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .client-slider-sec {
-  background: var(--dark);
+  background: rgba(66, 64, 62, 0.99);
   padding: 80px 0;
   position: relative;
 }
@@ -7064,7 +7064,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .client-logo {
-  min-height: 40px;
+  min-height: 20px;
   display: flex;
   align-items: center;
 }

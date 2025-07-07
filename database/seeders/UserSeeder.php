@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -15,19 +13,43 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
+        $users = [
+            [
+                'name' => 'Eric Mugisha',
+                'email' => 'mugisha.eric@example.com',
+                'role' => 'admin',
+            ],
+            [
+                'name' => 'Aline Umutoni',
+                'email' => 'aline.umutoni@example.com',
+                'role' => 'user',
+            ],
+            [
+                'name' => 'Jean Claude Nshimiyimana',
+                'email' => 'jeanclaude.nshimiyimana@example.com',
+                'role' => 'user',
+            ],
+            [
+                'name' => 'Diane Uwase',
+                'email' => 'diane.uwase@example.com',
+                'role' => 'user',
+            ],
+            [
+                'name' => 'Patrick Habimana',
+                'email' => 'patrick.habimana@example.com',
+                'role' => 'admin',
+            ],
+        ];
 
-        for ($i = 0; $i < 10; $i++) {
+        foreach ($users as $user) {
             User::create([
-                'name'     => $faker->name(),
-                'email'    => $faker->unique()->safeEmail(),
-                'role'     => $faker->randomElement(['admin', 'user']),
-                'active'   => $faker->boolean(),
-                'password' => Hash::make('password123'), // Password requirement: min 6 chars
-                'active'   => true, // Default to active
+                'name' => $user['name'],
+                'email' => $user['email'],
+                'role' => $user['role'],
+                'active' => true,
+                'password' => Hash::make('password123'),
                 'created_at' => now(),
                 'updated_at' => now(),
-
             ]);
         }
     }

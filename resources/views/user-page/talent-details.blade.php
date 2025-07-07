@@ -1,6 +1,29 @@
 @extends('layouts.guest')
 @section('content')
 
+<style>
+    .star-rating {
+        direction: rtl;
+        display: inline-flex;
+        font-size: 1.5rem;
+    }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ddd;
+        cursor: pointer;
+    }
+
+    .star-rating input[type="radio"]:checked~label,
+    .star-rating label:hover,
+    .star-rating label:hover~label {
+        color: #ffc107;
+    }
+</style>
+
 <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
     <div class="breadcrumb-img">
         <div class="breadcrumb-left">
@@ -42,18 +65,21 @@
                     </h2>
                     <ul class="info-links">
                         <li>
-                            <i class="ti ti-star-filled text-warning"></i>5.0 (45 Supporters)
+                            <i class="ti ti-star-filled text-warning"></i>
+                            {{ number_format($talent->feedback->avg('rating'), 1) }}
+                            ({{ $talent->feedback->count() }} Feedbacks)
                         </li>
+
                         <li>
                             <i class="ti ti-user"></i>Open to Collaborations
                         </li>
                         <li>
-                            <i class="ti ti-calendar-due"></i>Profile Created: 25 Jan 2023
+                            <i class="ti ti-calendar-due"></i>Profile Created: {{ $talent->created_at->format('d M, Y') }}
                         </li>
                         <li class="border-0">
                             <div class="tranlator d-flex align-items-center">
                                 <i class="ti ti-heart"></i>
-                                Favorited
+                                {{ $talent->status ? 'Active' : 'Inactive' }}
                             </div>
                         </li>
                     </ul>
@@ -63,27 +89,9 @@
                 <div class="slider-card service-slider-card">
                     <div class="slider service-slider">
                         <div class="service-img-wrap">
-                            <img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid" alt="Slider Img">
+                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" class="img-fluid" alt="Slider Img">
                         </div>
-                        <div class="service-img-wrap">
-                            <img src="{{ asset('assets/img/service/service-slide-02.jpg') }}" class="img-fluid" alt="Slider Img">
-                        </div>
-                        <div class="service-img-wrap">
-                            <img src="{{ asset('assets/img/service/service-slide-03.jpg') }}" class="img-fluid" alt="Slider Img">
-                        </div>
-                        <div class="service-img-wrap">
-                            <img src="{{ asset('assets/img/service/service-slide-04.jpg') }}" class="img-fluid" alt="Slider Img">
-                        </div>
-                        <div class="service-img-wrap">
-                            <img src="{{ asset('assets/img/service/service-slide-05.jpg') }}" class="img-fluid" alt="Slider Img">
-                        </div>
-                    </div>
-                    <div class="slider slider-nav-thumbnails">
-                        <div><img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                        <div><img src="{{ asset('assets/img/service/service-slide-02.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                        <div><img src="{{ asset('assets/img/service/service-slide-03.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                        <div><img src="{{ asset('assets/img/service/service-slide-04.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                        <div><img src="{{ asset('assets/img/service/service-slide-05.jpg') }}" class="img-fluid" alt="Slider Img"></div>
+
                     </div>
                 </div>
                 <!-- /Slider -->
@@ -94,21 +102,29 @@
                         <div class="buy-box">
                             <i class="ti ti-photo-star text-secondary"></i>
                             <p>Total Stories</p>
-                            <h6>18</h6>
+                            <h6>
+                                {{ $talent->stories->count() }}
+                            </h6>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
                         <div class="buy-box">
                             <i class="ti ti-heart text-purple"></i>
-                            <p>Total Likes</p>
-                            <h6>320</h6>
+                            <p>Total Rating</p>
+                            <h6>
+                                {{ number_format($talent->feedback->avg('rating'), 1) }}
+                                
+                            </h6>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
                         <div class="buy-box">
                             <i class="ti ti-message-chatbot text-indigo"></i>
                             <p>Feedbacks</p>
-                            <h6>25</h6>
+                            <h6>
+                                {{ $talent->feedback->count() }}
+                                
+                            </h6>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
@@ -1038,244 +1054,162 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade " id="review" role="tabpanel">
-
+                    <div class="tab-pane fade" id="review" role="tabpanel">
                         <div class="review-widget">
+
+                            {{-- Reviews Title --}}
                             <div class="review-title sort-search-gigs">
                                 <div class="row align-items-center">
                                     <div class="col-sm-6">
-                                        <h3>Reviews (45)</h3>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="filters-wrap sort-categories justify-content-end">
-                                            <div class="collapse-card float-lg-end">
-                                                <div class="filter-header">
-                                                    <a role="button" tabIndex="0" class="sorts-list">
-                                                        Most Recent
-                                                    </a>
-                                                </div>
-                                                <div id="categories" class="collapse-body"
-                                                    style="display: 'none'">
-                                                    <div class="form-group search-group">
-                                                        <span class="search-icon"><i
-                                                                class="feather-search"></i></span>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Search Category" />
-                                                    </div>
-                                                    <ul class="checkbox-list categories-lists">
-                                                        <li class="active">
-                                                            <label class="custom_check">
-                                                                <span class="checked-title"> Recent</span>
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label class="custom_check">
-                                                                <span class="checked-title">Oldest </span>
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <h3>Reviews ({{ $talent->feedback->count() }})</h3>
                                     </div>
                                 </div>
                             </div>
 
-
+                            {{-- Star Breakdown --}}
                             <div class="total-rating align-items-center">
                                 <div class="total-review">
 
-                                    <div class="progress-lvl mb-2">
-                                        <h6>5 Star Ratings</h6>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-warning five-star" role="progressbar"
-                                                aria-label="Success example"
-                                                style=" width: '25%' " aria-valuenow="25"
-                                                aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <p>247</p>
-                                    </div>
+                                    @php
+                                    $total = $talent->feedback->count();
+                                    $starCounts = [
+                                    5 => $talent->feedback->where('rating', 5)->count(),
+                                    4 => $talent->feedback->where('rating', 4)->count(),
+                                    3 => $talent->feedback->where('rating', 3)->count(),
+                                    2 => $talent->feedback->where('rating', 2)->count(),
+                                    1 => $talent->feedback->where('rating', 1)->count(),
+                                    ];
+                                    $average = $total ? number_format($talent->feedback->avg('rating'), 1) : 0;
+                                    @endphp
 
-
+                                    @foreach($starCounts as $stars => $count)
+                                    @php
+                                    $percent = $total ? ($count / $total) * 100 : 0;
+                                    @endphp
                                     <div class="progress-lvl mb-2">
-                                        <h6>4 Star Ratings</h6>
+                                        <h6>{{ $stars }} Star Ratings</h6>
                                         <div class="progress">
                                             <div class="progress-bar bg-warning" role="progressbar"
-                                                aria-label="Success example"
-                                                style=" width: '25%' " aria-valuenow="25"
-                                                aria-valuemin="0" aria-valuemax="100"></div>
+                                                style="width: {{ $percent }}%" aria-valuenow="{{ $percent }}" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
                                         </div>
-                                        <p>145</p>
+                                        <p>{{ $count }}</p>
                                     </div>
+                                    @endforeach
 
-
-                                    <div class="progress-lvl mb-2">
-                                        <h6>3 Star Ratings</h6>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-warning" role="progressbar"
-                                                aria-label="Success example"
-                                                style=" width: '25%' " aria-valuenow="25"
-                                                aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <p>600</p>
-                                    </div>
-
-
-                                    <div class="progress-lvl mb-2">
-                                        <h6>2 Star Ratings</h6>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-warning" role="progressbar"
-                                                aria-label="Success example"
-                                                style=" width: '25%' " aria-valuenow="25"
-                                                aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <p>560</p>
-                                    </div>
-
-
-                                    <div class="progress-lvl">
-                                        <h6>1 Star Ratings</h6>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-warning" role="progressbar"
-                                                aria-label="Success example"
-                                                style=" width: '25%' " aria-valuenow="25"
-                                                aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <p>400</p>
-                                    </div>
                                 </div>
+
+                                {{-- Average Rating --}}
                                 <div class="total-reviews text-center bg-white">
                                     <h6> Customer Reviews & Ratings </h6>
-                                    <h2> 4.9 / 5.0 </h2>
+                                    <h2> {{ $average }} / 5.0 </h2>
                                     <div class="icons d-flex align-items-center justify-content-center gap-1 mb-2">
-                                        <i class="ti ti-star-filled text-warning"></i>
-                                        <i class="ti ti-star-filled text-warning"></i>
-                                        <i class="ti ti-star-filled text-warning"></i>
-                                        <i class="ti ti-star-filled text-warning"></i>
-                                        <i class="ti ti-star-filled text-warning"></i>
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="ti ti-star-filled {{ $i <= round($average) ? 'text-warning' : 'text-light' }}"></i>
+                                            @endfor
                                     </div>
-                                    <p class="text-center">Based On 2,459 Reviews</p>
+                                    <p class="text-center">Based on {{ $total }} Reviews</p>
                                 </div>
                             </div>
 
-
+                            {{-- Individual Reviews List --}}
                             <ul class="review-lists home-reviews">
+                                @forelse($talent->feedback as $fb)
                                 <li>
                                     <div class="review-wrap">
                                         <div class="review-user-info">
                                             <div class="review-img">
-                                                <img src="assets/img/user/profile.jpg" alt="img" />
+                                                <img src="{{ asset('assets/img/user/profile.jpg') }}" alt="img" />
                                             </div>
                                             <div class="reviewer-info">
                                                 <div class="reviewer-loc">
-                                                    <h6><a role="button" tabIndex="0">kadajsalamander</a></h6>
+                                                    <h6>{{ $fb->name }}</h6>
                                                 </div>
                                                 <div class="reviewer-rating">
                                                     <div class="star-rate">
                                                         <span class="ratings">
-                                                            <i class="fa-solid fa-star filled"></i>
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <i class="fa-solid fa-star {{ $i <= $fb->rating ? 'filled' : '' }}"></i>
+                                                                @endfor
                                                         </span>
-                                                        <span class="rating-count">5.0 </span>
+                                                        <span class="rating-count">{{ $fb->rating }} </span>
                                                     </div>
                                                 </div>
                                                 <div class="reviewer-time">
-                                                    <p>1 Months ago</p>
-                                                    <p> Excellent service! </p>
+                                                    <p>{{ $fb->created_at->diffForHumans() }}</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="review-content">
-                                            <p>I recently hired a him to help me with a project and I must say,
-                                                I am extremely impressed with their work. From start to finish,
-                                                the freelancer was professional, efficient, and a pleasure to
-                                                work with.</p>
-                                            <a role="button" tabIndex="0" class="reply-btn bg-light"><i
-                                                    class="feather-corner-up-left"></i>Reply</a>
+                                            <p>{{ $fb->comment }}</p>
                                         </div>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="review-wrap">
-                                        <div class="review-user-info">
-                                            <div class="review-img">
-                                                <img src="assets/img/user/profile.jpg" alt="img" />
-                                            </div>
-                                            <div class="reviewer-info">
-                                                <div class="reviewer-loc">
-                                                    <h6><a role="button" tabIndex="0">kadajsalamander</a></h6>
-                                                </div>
-                                                <div class="reviewer-rating">
-                                                    <div class="star-rate">
-                                                        <span class="ratings">
-                                                            <i class="fa-solid fa-star filled"></i>
-                                                        </span>
-                                                        <span class="rating-count">5.0 </span>
-                                                    </div>
-                                                </div>
-                                                <div class="reviewer-time">
-                                                    <p>1 Months ago</p>
-                                                    <p> Excellent service! </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="review-content">
-                                            <p>I recently hired a him to help me with a project and I must say,
-                                                I am extremely impressed with their work. From start to finish,
-                                                the freelancer was professional, efficient, and a pleasure to
-                                                work with.</p>
-                                            <a role="button" tabIndex="0" class="reply-btn bg-light"><i
-                                                    class="feather-corner-up-left"></i>Reply</a>
-                                        </div>
-                                    </div>
-                                </li>
+                                @empty
+                                <li>No reviews yet.</li>
+                                @endforelse
                             </ul>
-                            <div class="text-center dark-btn">
-                                <a href="faq.html" class="btn btn-dark text-center fs-13"> Load More </a>
-                            </div>
+
                         </div>
 
-                        <div class="login-card">
-                            <div class="login-heading text-start mb-4">
-                                <h5>Leave a Review</h5>
-                            </div>
-                            <div class="form-wrap form-focus">
-                                <label class="mb-1 fw-medium text-dark mb-1">Your Rating <span
-                                        class="text-primary">*</span> </label>
-                                <div class="icon d-flex gap-1">
-                                    <i class="ti ti-star-filled text-warning"></i>
-                                    <i class="ti ti-star-filled text-warning"></i>
-                                    <i class="ti ti-star-filled text-warning"></i>
-                                    <i class="ti ti-star-filled text-warning"></i>
-                                    <i class="ti ti-star-filled text-light"></i>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-wrap form-focus">
-                                        <label class="mb-1 fw-medium text-dark">Name <span
-                                                class="text-primary">*</span> </label>
-                                        <input type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-wrap form-focus">
-                                        <label class="mb-1 fw-medium text-dark"> Email <span
-                                                class="text-primary">*</span> </label>
-                                        <input type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-wrap form-focus">
-                                        <label class="mb-1 fw-medium text-dark"> Write a Review <span
-                                                class="text-primary">*</span> </label>
-                                        <textarea class="form-control text-area"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <a role="button" tabIndex="0" class="btn btn-primary member-btn"> Submit a Review </a>
-                        </div>
+                        {{-- Review Submission Form --}}
+                        <div class="login-card mt-4">
+                            <form action="{{ route('talent.feedback.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="talent_id" value="{{ $talent->id }}">
 
+                                <div class="login-heading text-start mb-4">
+                                    <h5>Leave a Review</h5>
+                                </div>
+
+                                <div class="form-wrap form-focus mb-3">
+                                    <label class="mb-1 fw-medium text-dark">Your Rating <span class="text-primary">*</span></label>
+
+                                    <div class="star-rating">
+                                        <input type="radio" name="rating" id="star5" value="5" required>
+                                        <label for="star5" class="ti ti-star-filled"></label>
+
+                                        <input type="radio" name="rating" id="star4" value="4">
+                                        <label for="star4" class="ti ti-star-filled"></label>
+
+                                        <input type="radio" name="rating" id="star3" value="3">
+                                        <label for="star3" class="ti ti-star-filled"></label>
+
+                                        <input type="radio" name="rating" id="star2" value="2">
+                                        <label for="star2" class="ti ti-star-filled"></label>
+
+                                        <input type="radio" name="rating" id="star1" value="1">
+                                        <label for="star1" class="ti ti-star-filled"></label>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="form-wrap form-focus">
+                                            <label class="mb-1 fw-medium text-dark">Name <span class="text-primary">*</span></label>
+                                            <input type="text" name="name" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="form-wrap form-focus">
+                                            <label class="mb-1 fw-medium text-dark">Email <span class="text-primary">*</span></label>
+                                            <input type="email" name="email" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 mb-3">
+                                        <div class="form-wrap form-focus">
+                                            <label class="mb-1 fw-medium text-dark">Write a Review <span class="text-primary">*</span></label>
+                                            <textarea name="comment" class="form-control text-area" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary member-btn">Submit a Review</button>
+                            </form>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -1333,7 +1267,7 @@
                 <div class="service-widget member-widget">
                     <div class="user-details">
                         <div class="user-img users-img">
-                            <img src="{{ asset('assets/img/user/profile.jpg') }}" alt="img" />
+                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
                         </div>
                         <div class="user-info">
                             <h5>
@@ -1407,6 +1341,24 @@
 
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.star-rating-input i').click(function() {
+            var rating = $(this).data('value');
+            $('#ratingInput').val(rating);
+
+            // Highlight stars
+            $('.star-rating-input i').each(function() {
+                if ($(this).data('value') <= rating) {
+                    $(this).removeClass('text-light').addClass('text-warning');
+                } else {
+                    $(this).removeClass('text-warning').addClass('text-light');
+                }
+            });
+        });
+    });
+</script>
 
 
 @endsection

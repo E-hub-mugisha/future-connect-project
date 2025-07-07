@@ -46,4 +46,8 @@ class Talent extends Model
     {
         return $this->hasMany(Skill::class);
     }
+    public function feedback()
+    {
+        return $this->hasMany(TalentFeedback::class);
+    }
 }

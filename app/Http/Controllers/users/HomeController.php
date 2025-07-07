@@ -12,16 +12,20 @@ use App\Models\SkillReview;
 use App\Models\Story;
 use App\Models\StoryComment;
 use App\Models\Testimonial;
+use App\Models\TalentFeedback;
+
 class HomeController extends Controller
 {
     public function index()
     {
 
+        $skills = Skill::withCount('reviews')->withAvg('reviews', 'rating')->get();
+
         return view('user-page.home', [
-            'talents' => \App\Models\Talent::all(),
-            'categories' => \App\Models\Category::all(),
+            'talents' => \App\Models\Talent::withCount('stories')->take(8)->get(),
+            'categories' => \App\Models\Category::withCount('talents')->take(10)->get(),
             'stories' => \App\Models\Story::all(),
-            'skills' => \App\Models\Skill::all(),
+            'skills' => $skills,
             'testimonials' => \App\Models\Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
             'partners' => \App\Models\Partner::all(), // Fetch only active partners
         ]);
@@ -257,5 +261,46 @@ class HomeController extends Controller
         return view('user-page.talent-showroom', [
             'matchedTalents' => $matchedTalents
         ]);
+    }
+    public function search(Request $request)
+    {
+        $category = $request->category;
+        $region = $request->region;
+        $keyword = $request->keyword;
+
+        $query = Talent::query();
+
+        if ($category) {
+            $query->where('category_id', $category);
+        }
+
+        if ($region) {
+            $query->where('address', 'like', "%$region%");
+        }
+
+        if ($keyword) {
+            $query->where('name', 'like', "%$keyword%")
+                ->orWhere('skills', 'like', "%$keyword%");
+        }
+
+        $talents = $query->get();
+
+        return view('user-page.search-results', compact('talents'));
+    }
+    
+
+    public function storeFeedback(Request $request)
+    {
+        $request->validate([
+            'talent_id' => 'required|exists:talents,id',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string',
+        ]);
+
+        TalentFeedback::create($request->all());
+
+        return back()->with('success', 'Thank you for your feedback!');
     }
 }
