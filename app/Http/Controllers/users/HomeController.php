@@ -11,6 +11,7 @@ use App\Models\Skill;
 use App\Models\SkillReview;
 use App\Models\Story;
 use App\Models\StoryComment;
+use App\Models\SupportTalent;
 use App\Models\Testimonial;
 use App\Models\TalentFeedback;
 
@@ -129,6 +130,7 @@ class HomeController extends Controller
             'name'    => 'required|string|max:100',
             'email'   => 'required|email',
             'comment' => 'required|string',
+            'rating'  => 'nullable|integer|min:1|max:5',
             'story_id' => 'required|exists:stories,id',
         ]);
 
@@ -287,7 +289,7 @@ class HomeController extends Controller
 
         return view('user-page.search-results', compact('talents'));
     }
-    
+
 
     public function storeFeedback(Request $request)
     {
@@ -302,5 +304,20 @@ class HomeController extends Controller
         TalentFeedback::create($request->all());
 
         return back()->with('success', 'Thank you for your feedback!');
+    }
+
+    public function storeSupport(Request $request)
+    {
+        $request->validate([
+            'talent_id' => 'required|exists:talents,id',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email',
+            'amount' => 'required|numeric|min:1',
+            'message' => 'nullable|string',
+        ]);
+
+        SupportTalent::create($request->all());
+
+        return back()->with('success', 'Support sent successfully!');
     }
 }

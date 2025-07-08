@@ -13,7 +13,10 @@ class AdminCategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('admin-pages.categories.index', compact('categories'));
+        $totalTalents = \App\Models\Talent::count();
+        $totalStories = \App\Models\Story::count();
+        $totalSkills = \App\Models\Skill::count();
+        return view('admin-pages.categories.index', compact('categories', 'totalTalents', 'totalStories', 'totalSkills'));
     }
 
     // POST /api/categories

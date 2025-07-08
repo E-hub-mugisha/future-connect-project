@@ -37,7 +37,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/categories-with-talent-count', 'withTalentCount');
     Route::get('/search', 'search')->name('talent.search');
     Route::post('/talent/feedback', 'storeFeedback')->name('talent.feedback.store');
-
+    Route::post('/support-talent', 'storeSupport')->name('support.talent');
 
     Route::get('/skills', 'skills')->name('user.skills');
     Route::get('/skills/category/{slug}', 'getByCategory');
@@ -81,7 +81,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/talent/skills/{id}', [HomeController::class, 'TalentSkillDetails']);
 Route::post('/skills/{id}/reviews', [HomeController::class, 'storeReview']);
 Route::get('/story-details/{slug}', [HomeController::class, 'storyDetails'])->name('story.details');
-Route::post('/stories/comments', [HomeController::class, 'storeStoryComment'])->name('comments.store');
+Route::post('/stories/comments', [HomeController::class, 'storeStoryComment'])->name('story.comment.store');
 
 /**
  * -----------------------
@@ -94,7 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/admin/talents', [AdminTalentController::class, 'index'])->name('admin.talents');
-    Route::put('/admin/talent/{id}/update', [AdminTalentController::class, 'update'])->name('admin.talents.update');
+    Route::put('/admin/talent/update/{id}', [AdminTalentController::class, 'update'])->name('admin.talents.update');
     // web.php
     Route::post('/admin/talents', [AdminTalentController::class, 'store'])->name('admin.talents.store');
 

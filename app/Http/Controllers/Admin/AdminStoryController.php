@@ -21,7 +21,7 @@ class AdminStoryController extends Controller
     public function show($id)
     {
         return view('admin-pages.stories.show', [
-            'stories' => Story::with(['talent', 'category'])->findOrFail($id),
+            'story' => Story::with(['talent', 'category'])->findOrFail($id),
         ]);
     }
 
@@ -42,12 +42,22 @@ class AdminStoryController extends Controller
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
-            'media' => 'nullable|string',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'media' => 'nullable|url',
             'tags' => 'nullable|string',
-            'status' => 'in:draft,published',
+            'status' => 'in:pending,approved,rejected',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
+
+        if ($request->hasFile('thumbnail')) {
+            $image = $request->file('thumbnail');
+            $path = 'image/thumbnails/';
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path($path), $imageName); 
+        }
+        
+        $validated['thumbnail'] = isset($imageName) ? $path . $imageName : null;
         $story = Story::create($validated);
         return redirect()->route('admin.stories.index');
     }
@@ -74,12 +84,25 @@ class AdminStoryController extends Controller
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
-            'media' => 'nullable|string',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'media' => 'nullable| url',
             'tags' => 'nullable|string',
-            'status' => 'in:draft,published',
+            'status' => 'in:pending,approved,rejected',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
+
+        if ($request->hasFile('thumbnail')) {
+            $image = $request->file('thumbnail');
+            $path = 'image/thumbnails/';
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path($path), $imageName);
+            $validated['thumbnail'] = $path . $imageName;
+        }
+        else {
+            $validated['thumbnail'] = $story->thumbnail; // Keep the old thumbnail if not updated
+        }
+        // Update the story with validated data
         $story->update($validated);
         return redirect()->route('admin.stories.index');
     }

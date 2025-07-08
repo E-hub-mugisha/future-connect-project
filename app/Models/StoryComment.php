@@ -11,6 +11,7 @@ class StoryComment extends Model
         'name',
         'email',
         'comment',
+        'rating', // Added rating field
     ];
 
     public function story()

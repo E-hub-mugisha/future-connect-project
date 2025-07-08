@@ -15,7 +15,7 @@
                     <div class="settings-card">
                         <div class="settings-card-head">
                             <form method="POST"
-                                action="{{ isset($story) ? route('admin.stories.update', $story->id) : route('admin.stories.store') }}">
+                                action="{{ isset($story) ? route('admin.stories.update', $story->id) : route('admin.stories.store') }}" enctype="multipart/form-data">
                                 @csrf
                                 @if(isset($story))
                                     @method('PUT')
@@ -61,9 +61,16 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label class="form-label">Thumbnail</label>
+                                    <input type="file" name="thumbnail" class="form-control"
+                                        value="{{ old('thumbnail', $story->thumbnail ?? '') }}">
+                                </div>
+
+                                <div class="mb-3">
                                     <label class="form-label">Media URL</label>
-                                    <input name="media" class="form-control"
-                                        value="{{ old('media', $story->media ?? '') }}">
+                                    <input type="url" name="media" class="form-control"
+                                        value="{{ old('media', $story->media ?? '') }}"
+                                        placeholder="https://example.com/media-url">
                                 </div>
 
                                 <div class="mb-3">
@@ -75,12 +82,15 @@
                                 <div class="mb-3">
                                     <label class="form-label">Status</label>
                                     <select name="status" class="form-select">
-                                        <option value="draft"
-                                            {{ (old('status', $story->status ?? '') == 'draft') ? 'selected' : '' }}>
-                                            Draft</option>
-                                        <option value="published"
-                                            {{ (old('status', $story->status ?? '') == 'published') ? 'selected' : '' }}>
-                                            Published</option>
+                                        <option value="pending"
+                                            {{ (old('status', $story->status ?? '') == 'pending') ? 'selected' : '' }}>
+                                            Pending</option>
+                                        <option value="approved"
+                                            {{ (old('status', $story->status ?? '') == 'approved') ? 'selected' : '' }}>
+                                            Approved</option>
+                                        <option value="rejected"
+                                            {{ (old('status', $story->status ?? '') == 'rejected') ? 'selected' : '' }}>
+                                            Rejected</option>
                                     </select>
                                 </div>
 

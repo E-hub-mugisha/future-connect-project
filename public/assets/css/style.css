@@ -8760,12 +8760,12 @@ div.dt-container .dt-paging .dt-paging-button.current {
 .pop-category span::before {
   position: absolute;
   content: "";
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   background-color: var(--gray-200);
   border-radius: 50px;
-  right: -10px;
-  bottom: -3px;
+  right: -5px;
+  bottom: -5px;
   z-index: -1;
 }
 
@@ -8923,7 +8923,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
   background-color: var(--white);
   border-radius: 50px;
   color: #27AE60;
-  position: absolute;
+  /* position: absolute; */
   right: 5px;
   bottom: 0;
 }
@@ -22796,4 +22796,56 @@ div.dt-container.dt-empty-footer tbody > tr:last-child > * {
   }
 }
 
+
+.watch-video-btn {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 12px 20px;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.watch-video-btn:hover {
+    background-color: #ff3d3d;
+    transform: scale(1.05);
+    color: #fff;
+}
+
+.video-thumb-wrapper {
+    overflow: hidden;
+    border-radius: 1rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.video-thumb-wrapper:hover {
+    transform: scale(1.01);
+}
+
+.star-rating {
+        direction: rtl;
+        display: inline-flex;
+        font-size: 1.5rem;
+    }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ddd;
+        cursor: pointer;
+    }
+
+    .star-rating input[type="radio"]:checked~label,
+    .star-rating label:hover,
+    .star-rating label:hover~label {
+        color: #ffc107;
+    }
 /*# sourceMappingURL=style.css.map */

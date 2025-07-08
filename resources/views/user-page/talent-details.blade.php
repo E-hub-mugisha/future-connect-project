@@ -1,28 +1,7 @@
 @extends('layouts.guest')
 @section('content')
 
-<style>
-    .star-rating {
-        direction: rtl;
-        display: inline-flex;
-        font-size: 1.5rem;
-    }
 
-    .star-rating input[type="radio"] {
-        display: none;
-    }
-
-    .star-rating label {
-        color: #ddd;
-        cursor: pointer;
-    }
-
-    .star-rating input[type="radio"]:checked~label,
-    .star-rating label:hover,
-    .star-rating label:hover~label {
-        color: #ffc107;
-    }
-</style>
 
 <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
     <div class="breadcrumb-img">
@@ -61,7 +40,7 @@
                         {{ $talent->category->name ?? 'Uncategorized' }}
                     </a><br />
                     <h2 class="breadcrumb-title">
-                        {{ $talent->name }} - {{ $talent->skill }}
+                        {{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i>
                     </h2>
                     <ul class="info-links">
                         <li>
@@ -71,7 +50,7 @@
                         </li>
 
                         <li>
-                            <i class="ti ti-user"></i>Open to Collaborations
+                            <i class="ti ti-user"></i>Open to {{ $talent->skill }}
                         </li>
                         <li>
                             <i class="ti ti-calendar-due"></i>Profile Created: {{ $talent->created_at->format('d M, Y') }}
@@ -88,8 +67,8 @@
                 <!-- Slider -->
                 <div class="slider-card service-slider-card">
                     <div class="slider service-slider">
-                        <div class="service-img-wrap">
-                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" class="img-fluid" alt="Slider Img">
+                        <div class="service-img-wrap text-center">
+                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" class="img-fluid" alt="Slider Img" style="width: 60%;">
                         </div>
 
                     </div>
@@ -151,12 +130,6 @@
                                 <a role="button" tabIndex="0" class="nav-link" data-bs-toggle="tab"
                                     data-bs-target="#my_skills" aria-selected="false" tabindex="-1">
                                     My Skills & Courses
-                                </a>
-                            </li>
-                            <li>
-                                <a role="button" tabIndex="0" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#faq" aria-selected="false" tabindex="-1">
-                                    FAQ
                                 </a>
                             </li>
                             <li>
@@ -557,70 +530,6 @@
 
 
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane fade " id="faq" role="tabpanel">
-
-                        <div class="service-wrap service-faq">
-                            <h3>FAQ</h3>
-                            <div class="faq-lists">
-                                <div class="faq-card">
-                                    <h4 class="faq-title">
-                                        <a class="collapsed" data-bs-toggle="collapse" href="#faqone"
-                                            aria-expanded="false">Do you offer assistance after the order has
-                                            been completed?</a>
-                                    </h4>
-                                    <div id="faqone" class="card-collapse collapse">
-                                        <div class="faq-content">
-                                            <p>Yes! My service guarantees you 24/7 lifetime support for anything
-                                                related to your website. Whenever you encounter a problem, feel
-                                                free to reach out to me anytime.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="faq-card">
-                                    <h4 class="faq-title">
-                                        <a class="collapsed" data-bs-toggle="collapse" href="#faqtwo"
-                                            aria-expanded="false">Can I choose my favorite Product category or
-                                            Niche?</a>
-                                    </h4>
-                                    <div id="faqtwo" class="card-collapse collapse">
-                                        <div class="faq-content">
-                                            <p>Yes! My service guarantees you 24/7 lifetime support for anything
-                                                related to your website. Whenever you encounter a problem, feel
-                                                free to reach out to me anytime.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="faq-card">
-                                    <h4 class="faq-title">
-                                        <a class="collapsed" data-bs-toggle="collapse" href="#faqOne"
-                                            aria-expanded="false">Can I add products myself?</a>
-                                    </h4>
-                                    <div id="faqOne" class="card-collapse collapse">
-                                        <div class="faq-content">
-                                            <p>Yes! My service guarantees you 24/7 lifetime support for anything
-                                                related to your website. Whenever you encounter a problem, feel
-                                                free to reach out to me anytime.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="faq-card border-0 faq-end-card">
-                                    <h4 class="faq-title">
-                                        <a class="collapsed" data-bs-toggle="collapse" href="#faqfour"
-                                            aria-expanded="false">Are there any additional or hidden
-                                            charges?</a>
-                                    </h4>
-                                    <div id="faqfour" class="card-collapse collapse">
-                                        <div class="faq-content">
-                                            <p>Yes! My service guarantees you 24/7 lifetime support for anything
-                                                related to your website. Whenever you encounter a problem, feel
-                                                free to reach out to me anytime.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1215,55 +1124,6 @@
 
             <div class="col-lg-4 theiaStickySidebar">
 
-                <div class="service-widget">
-                    <div class="service-amt p-3 price-lvl bg-dark">
-                        <h3 class="">
-                            <span class="d-block">Support Amount</span>
-                            $25
-                        </h3>
-                    </div>
-
-                    <div class="input-block form-wrap form-focus">
-                        <label class="mb-1 fw-medium text-dark">Choose Amount <span
-                                class="text-primary">*</span></label>
-                        <select class="select select2-hidden-accessible" data-select2-id="1" tabindex="-1"
-                            aria-hidden="true">
-                            <option data-select2-id="3" class="text-dark">$5</option>
-                            <option>$10</option>
-                            <option>$25</option>
-                            <option>$50</option>
-                            <option>$100</option>
-                        </select>
-                    </div>
-
-                    <div class="service-widget service-select-widget">
-                        <h5 class="mb-3">Support Options</h5>
-                        <div class="service-select d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <label class="custom_radio">
-                                    <input type="radio" name="support_option" checked="" />
-                                    <span class="checkmark"></span>
-                                    <span class="m-0 service-head-text">One-Time Support</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="service-select d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <label class="custom_radio">
-                                    <input type="radio" name="support_option" />
-                                    <span class="checkmark"></span>
-                                    <span class="m-0 service-head-text">Monthly Patron</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <a role="button" tabIndex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
-                        class="btn btn-primary w-100 mb-0">
-                        <i class="feather-heart"></i> Support This Talent
-                    </a>
-                </div>
-
                 <div class="service-widget member-widget">
                     <div class="user-details">
                         <div class="user-img users-img">
@@ -1271,12 +1131,13 @@
                         </div>
                         <div class="user-info">
                             <h5>
-                                <span class="me-2">{{ $talent->name }}</span>
+                                <span class="me-2">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></span>
                                 <span class="badge badge-success">
-                                    <i class="fa-solid fa-circle"></i> Online
+                                    Verified
                                 </span>
                             </h5>
-                            <p><i class="fa-solid fa-star"></i> 5.0 (45 Reviews)</p>
+                            <p><i class="fa-solid fa-star"></i> {{ number_format($talent->feedback->avg('rating'), 1) }}
+                            ({{ $talent->feedback->count() }} Feedbacks)</p>
                         </div>
                     </div>
 
@@ -1317,8 +1178,9 @@
                         </div>
                     </div>
 
-                    <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#contact_talent"
-                        class="btn btn-outline-primary mb-0 w-100">Contact Talent</a>
+                    <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
+                        class="btn btn-outline-primary mb-0 w-100">Support Talent</a>
+                        
                 </div>
 
 
@@ -1339,6 +1201,44 @@
 
         </div>
 
+    </div>
+</div>
+
+<div class="modal fade" id="support_talent" tabindex="-1" aria-labelledby="supportTalentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="supportTalentLabel">Support Talent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add form or message here -->
+                <form method="POST" action="{{ route('support.talent') }}">
+                    @csrf
+                    <input type="hidden" name="talent_id" value="{{ $talent->id }}">
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" name="name" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Your Email</label>
+                        <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Support Amount</label>
+                        <input type="number" class="form-control" name="amount" id="amount" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message (Optional)</label>
+                        <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Send Support</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

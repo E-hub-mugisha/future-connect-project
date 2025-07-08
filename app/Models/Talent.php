@@ -50,4 +50,9 @@ class Talent extends Model
     {
         return $this->hasMany(TalentFeedback::class);
     }
+
+    public function supports()
+    {
+        return $this->hasMany(SupportTalent::class);
+    }
 }

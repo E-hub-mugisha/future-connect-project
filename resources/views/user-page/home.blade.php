@@ -94,18 +94,18 @@
 <div class="banner-form banner-form-two" data-aos="fade-up">
     <div class="row justify-content-center">
         <div class="col-xl-8">
-            
+
             <form action="{{ url('/search') }}" method="GET">
-                
+
                 <div class="banner-search-list">
-                    
+
                     <!-- Category Select -->
                     <div class="input-block">
                         <label>Explore</label>
                         <select name="category" class="form-select">
                             <option value="">Select Category</option>
                             @foreach($categories as $cat)
-                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -123,7 +123,7 @@
                         <label>Search</label>
                         <input type="text" name="keyword" class="form-control" placeholder="e.g., photography, coding, music">
                     </div>
-                    
+
                 </div>
 
                 <!-- Submit Button -->
@@ -182,7 +182,7 @@
             @foreach($categories as $cat)
             <div class="col d-flex">
                 <div class="pop-category flex-fill" data-aos="flip-left">
-                    <span><i class="ti ti-movie"></i></span>
+                    <span><i class="{{ $cat->image ?? 'ti ti-star' }}"></i></span>
                     <h6 class="mb-1"><a
                             href="{{ url('/talents/category/' . $cat->slug) }}">{{ $cat->name }}</a>
                     </h6>
@@ -214,16 +214,19 @@
                     <div class="card-body text-center">
                         <span class="avatar">
                             <a href="{{ url('/talent/' . $talent->id) }}">
-                                <img class="rounded-pill"
-                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
-                                    alt="img" height="50" width="50">
+                                <img
+                                    class="rounded-3"
+                                    src="{{ $talent->image 
+        ? asset('image/talents/' . $talent->image) 
+        : asset('assets/img/user/profile.jpg') }}"
+                                    alt="img" />
 
                             </a>
-                            <i class="ti ti-discount-check-filled verify-icon"></i>
+
                         </span>
                         <h6 class="mb-1">
                             <a
-                                href="{{ url('/talent/' . $talent->id) }}">{{ $talent->name }}</a>
+                                href="{{ url('/talent/' . $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></a>
                         </h6>
                         <p>{{ $talent->category->name ?? 'Uncategorized' }}
                         </p>
@@ -254,21 +257,19 @@
 </div>
 <!-- next gen -->
 
-<!-- how it works for Future Connect -->
+
+
 <div class="how-it-works">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-12">
-                <div class="how-it-works-content position-relative row">
+            <div class="col-lg-6">
+                <div class="how-it-works-content position-relative">
                     <img src="assets/img/home/shape-1.svg" alt="img" class="img-fluid how-it-works-bg">
-                    <div class="section-header-two" data-aos="fade-up">
-                        <h2 class="mb-2"><span class="title-bg"></span>How It Works<span
-                                class="title-bg2"></span></h2>
-                        <p>Empowering young talents through storytelling, skills sharing, and community support.
-                        </p>
+                    <div class="section-header-two aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="mb-2"><span class="title-bg"></span>How it Works<span class="title-bg2"></span></h2>
+                        <p>Empowering young talents through storytelling, skills sharing, and community support.</p>
                     </div>
-                    <div class="col-md-6 how-it-works-item d-flex align-items-center p-3 bg-white rounded"
-                        data-aos="fade-up">
+                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-primary-transparent">01</span>
                         <div>
                             <h6 class="mb-2">Create Your Talent Profile</h6>
@@ -276,8 +277,7 @@
                                 text, images, and videos.</p>
                         </div>
                     </div>
-                    <div class="col-md-6 how-it-works-item d-flex align-items-center p-3 bg-white rounded"
-                        data-aos="fade-up">
+                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-secondary-transparent">02</span>
                         <div>
                             <h6 class="mb-2">Get Discovered & Rated</h6>
@@ -285,8 +285,7 @@
                                 and share feedback to help you grow.</p>
                         </div>
                     </div>
-                    <div class="col-md-6 how-it-works-item d-flex align-items-center p-3 bg-white rounded"
-                        data-aos="fade-up">
+                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-pink-transparent">03</span>
                         <div>
                             <h6 class="mb-2">Earn Support & Recognition</h6>
@@ -294,8 +293,7 @@
                                 the Future Connect community.</p>
                         </div>
                     </div>
-                    <div class="col-md-6 how-it-works-item d-flex align-items-center p-3 bg-white rounded"
-                        data-aos="fade-up">
+                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-success-transparent">04</span>
                         <div>
                             <h6 class="mb-2">Grow With Us</h6>
@@ -305,11 +303,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="how-it-works-images d-lg-block d-none">
+                    <div class="row align-items-center">
+                        <div class="col-7 text-end">
+                            <img src="assets/img/home/how-it-works-1.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
+                            <img src="assets/img/home/how-it-works-2.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-right">
+                            <img src="assets/img/home/how-it-works-3.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-up">
+                        </div>
+                        <div class="col-5">
+                            <img src="assets/img/home/how-it-works-4.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
+                            <img src="assets/img/home/how-it-works-5.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-left">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<!-- end how it works -->
-
 
 <!-- Future Connect talent slider -->
 <div class="service-slider-section">
@@ -517,30 +528,25 @@
                             <div class="col-xl-4 col-md-4">
                                 <div class="gigs-grid">
                                     <div class="gigs-img">
-                                        <div class="img-slider owl-carousel">
+                                        <div class="img-slider">
                                             <div class="slide-images">
                                                 <a href="{{ url('story-details/'.$story->slug) }}">
-                                                    <img src="{{ $story->media }}" class="img-fluid" alt="{{ $story->title }}">
-                                                </a>
-                                            </div>
-                                            <div class="slide-images">
-                                                <a href="{{ url('story-details/'.$story->slug) }}">
-                                                    <img src="{{ $story->thumbnail }}" class="img-fluid" alt="{{ $story->title }}">
+                                                    <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/user/profile.jpg') }}" class="img-fluid" alt="{{ $story->title }}">
                                                 </a>
                                             </div>
                                         </div>
 
                                         <div class="card-overlay-badge">
-                                            @if($story->status == 'published')
+                                            @if($story->status == 'approved')
                                             <a role="button" tabindex="0">
                                                 <span class="badge bg-success">
                                                     <i class="fa-solid fa-bolt"></i> Published
                                                 </span>
                                             </a>
-                                            @elseif($story->status == 'draft')
+                                            @elseif($story->status == 'pending')
                                             <a role="button" tabindex="0">
                                                 <span class="badge bg-warning">
-                                                    <i class="feather-star"></i> Draft
+                                                    <i class="feather-star"></i> Pending
                                                 </span>
                                             </a>
                                             @endif
@@ -568,7 +574,9 @@
                                         <div class="gigs-card-footer">
                                             <div class="d-flex align-items-center gigs-left-text">
                                                 <a role="button" tabindex="0" class="avatar avatar-sm flex-shrink-0">
-                                                    <img src="{{ asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-pill" alt="img">
+                                                    <img src="{{ $story->talent->image 
+        ? asset('image/talents/' . $story->talent->image) 
+        : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-pill" alt="img">
                                                 </a>
                                                 <div class="ms-2">
                                                     <h6 class="mb-0">
@@ -578,7 +586,7 @@
                                                 </div>
                                             </div>
 
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -593,6 +601,8 @@
         </div>
     </div>
 </div>
+
+
 <!-- testimonials -->
 <div class="testimonials-section-two">
     <img src="assets/img/home/shape-4.svg" alt="img" class="img-fluid testimonials-bg3 d-lg-inline-flex d-none">

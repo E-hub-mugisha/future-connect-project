@@ -216,125 +216,112 @@
 
                 <!-- Create/Edit Talent Modal -->
                 @foreach($talents as $talent)
-                    <div class="modal fade" id="talentEditModal{{ $talent->id }}" tabindex="-1"
-                        aria-labelledby="talentEditModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form method="POST"
-                                action="{{ route('admin.talents.update', $talent->id ) }}" enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
+<div class="modal fade" id="talentEditModal{{ $talent->id }}" tabindex="-1" aria-labelledby="talentEditModalLabel{{ $talent->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form method="POST" action="{{ route('admin.talents.update', $talent->id) }}" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="talentEditModalLabel{{ $talent->id }}">Edit Talent - {{ $talent->name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="talentEditModalLabel">
-                                            Edit Talent
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" name="name" class="form-control"
-                                                value="{{ old('name', $talent->name ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Address</label>
-                                            <input type="text" name="address" class="form-control"
-                                                value="{{ old('address', $talent->address ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Phone</label>
-                                            <input type="text" name="phone" class="form-control"
-                                                value="{{ old('phone', $talent->phone ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control"
-                                                value="{{ old('email', $talent->email ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Skill</label>
-                                            <input type="text" name="skill" class="form-control"
-                                                value="{{ old('skill', $talent->skill ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Category</label>
-                                            <select name="category_id" class="form-select" required>
-                                                <option value="">Select Category</option>
-                                                @foreach($categories as $category)
-                                                    <option value="{{ $category->id }}"
-                                                        {{ (old('category_id', $talent->category_id ?? '') == $category->id) ? 'selected' : '' }}>
-                                                        {{ $category->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Story</label>
-                                            <textarea name="story" class="form-control"
-                                                rows="3">{{ old('story', $talent->story ?? '') }}</textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Rating (0–5)</label>
-                                            <input type="number" min="0" max="5" name="rating" class="form-control"
-                                                value="{{ old('rating', $talent->rating ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Language</label>
-                                            <input type="text" name="language" class="form-control"
-                                                value="{{ old('language', $talent->language ?? '') }}"
-                                                required />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Image</label>
-                                            <input type="file" name="image" class="form-control"
-                                                value="{{ old('image', $talent->image ?? '') }}" />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <textarea name="description" class="form-control"
-                                                rows="3">{{ old('description', $talent->description ?? '') }}</textarea>
-                                        </div>
-
-                                        <div class="form-check mb-3">
-                                            <input type="checkbox" name="featured" class="form-check-input"
-                                                id="featuredCheck"
-                                                {{ old('featured', $talent->featured ?? false) ? 'checked' : '' }} />
-                                            <label class="form-check-label" for="featuredCheck">Featured</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">
-                                            {{ isset($talent) ? 'Update' : 'Create' }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                <div class="modal-body">
+                    {{-- Name --}}
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name', $talent->name) }}" required>
                     </div>
-                @endforeach
+
+                    {{-- Address --}}
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" name="address" class="form-control" value="{{ old('address', $talent->address) }}">
+                    </div>
+
+                    {{-- Phone --}}
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="phone" class="form-control" value="{{ old('phone', $talent->phone) }}">
+                    </div>
+
+                    {{-- Email --}}
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ old('email', $talent->email) }}">
+                    </div>
+
+                    {{-- Skill --}}
+                    <div class="mb-3">
+                        <label class="form-label">Skill</label>
+                        <input type="text" name="skill" class="form-control" value="{{ old('skill', $talent->skill) }}" required>
+                    </div>
+
+                    {{-- Category --}}
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category_id" class="form-select" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id', $talent->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Story --}}
+                    <div class="mb-3">
+                        <label class="form-label">Story</label>
+                        <textarea name="story" class="form-control" rows="3">{{ old('story', $talent->story) }}</textarea>
+                    </div>
+
+                    {{-- Rating --}}
+                    <div class="mb-3">
+                        <label class="form-label">Rating (0–5)</label>
+                        <input type="number" name="rating" min="0" max="5" class="form-control" value="{{ old('rating', $talent->rating) }}">
+                    </div>
+
+                    {{-- Language --}}
+                    <div class="mb-3">
+                        <label class="form-label">Language</label>
+                        <input type="text" name="language" class="form-control" value="{{ old('language', $talent->language) }}">
+                    </div>
+
+                    {{-- Image --}}
+                    <div class="mb-3">
+                        <label class="form-label">Image</label>
+                        <input type="file" name="image" class="form-control">
+                        @if($talent->image)
+                            <img src="{{ asset('image/talents/' . $talent->image) }}" alt="Talent Image" class="img-thumbnail mt-2" width="100">
+                        @endif
+                    </div>
+
+                    {{-- Description --}}
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3">{{ old('description', $talent->description) }}</textarea>
+                    </div>
+
+                    {{-- Featured --}}
+                    <div class="form-check mb-3">
+                        <input type="checkbox" name="featured" class="form-check-input" id="featured{{ $talent->id }}" {{ old('featured', $talent->featured) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="featured{{ $talent->id }}">Featured</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Talent</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
 
                 @foreach($talents as $talent)
                     <!-- Status Modal -->
@@ -375,6 +362,7 @@
                         </div>
                     </div>
                 @endforeach
+
                 <!-- Create/Edit Talent Modal -->
                 <div class="modal fade" id="talentAddModal" tabindex="-1" aria-labelledby="talentAdModalLabel"
                     aria-hidden="true">

@@ -52,8 +52,8 @@
                     </span>
                 </a>
 
-                <a href="index.html">
-                    <img src="{{ asset('assets/img/company/logo.svg') }}" class="img-fluid"
+                <a href="/">
+                    <img src="{{ asset('assets/img/logo.svg') }}" class="img-fluid"
                         alt="Logo" style="height: 50px;" />
                 </a>
             </div>
