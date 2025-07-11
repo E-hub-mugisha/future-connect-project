@@ -3,7 +3,7 @@
 
 <!-- Hero Section Carousel -->
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
-    <div class="carousel-inner">
+    <div class="carousel-inner pt-3">
 
         <!-- Carousel Item 1 -->
         <div class="carousel-item active">
@@ -97,12 +97,11 @@
 
             <form action="{{ url('/search') }}" method="GET">
 
-                <div class="banner-search-list">
+                <div class="banner-search-list text-center">
 
                     <!-- Category Select -->
                     <div class="input-block">
-                        <label>Explore</label>
-                        <select name="category" class="form-select">
+                        <select name="category" class="form-select" style="background: #c1c1c1; border: 1px solid #e4e4e4; border-radius: 30px;">
                             <option value="">Select Category</option>
                             @foreach($categories as $cat)
                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -112,16 +111,14 @@
 
                     <!-- Region Input -->
                     <div class="input-block">
-                        <label>Region</label>
-                        <div class="input-locaion">
-                            <input type="text" name="region" class="form-control" placeholder="e.g., Kigali, Nairobi, Lagos">
+                        <div class="input-location">
+                            <input type="text" name="region" class="form-control" placeholder="Region: e.g., Kigali, Nairobi, Lagos" style="background: #c1c1c1; border: 1px solid #e4e4e4; border-radius: 30px;">
                         </div>
                     </div>
 
                     <!-- Keyword Search -->
-                    <div class="input-block border-0">
-                        <label>Search</label>
-                        <input type="text" name="keyword" class="form-control" placeholder="e.g., photography, coding, music">
+                    <div class="input-block">
+                        <input type="text" name="keyword" class="form-control" placeholder="Search: e.g., photography, coding, music" style="background: #c1c1c1; border: 1px solid #e4e4e4; border-radius: 30px;">
                     </div>
 
                 </div>
@@ -184,7 +181,7 @@
                 <div class="pop-category flex-fill" data-aos="flip-left">
                     <span><i class="{{ $cat->image ?? 'ti ti-star' }}"></i></span>
                     <h6 class="mb-1"><a
-                            href="{{ url('/talents/category/' . $cat->slug) }}">{{ $cat->name }}</a>
+                            href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a>
                     </h6>
                     @if(isset($cat->talents_count))
                     <p>{{ $cat->talents_count }} talents</p>
@@ -202,7 +199,7 @@
 <!-- next gen -->
 <div class="next-gen-section">
     <div class="container">
-        <div class="section-header-two text-center" data-aos="fade-up">
+        <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
             <h2 class="mb-2"><span class="title-bg"></span>Meet the Next Generation of talents<span
                     class="title-bg2"></span></h2>
             <p>Connect with the next wave of talents, guiding you with fresh perspectives</p>
@@ -213,7 +210,7 @@
                 <div class="card" data-aos="flip-left">
                     <div class="card-body text-center">
                         <span class="avatar">
-                            <a href="{{ url('/talent/' . $talent->id) }}">
+                            <a href="{{ route('user.talent.details', $talent->id) }}">
                                 <img
                                     class="rounded-3"
                                     src="{{ $talent->image 
@@ -226,7 +223,7 @@
                         </span>
                         <h6 class="mb-1">
                             <a
-                                href="{{ url('/talent/' . $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></a>
+                                href="{{ route('user.talent.details', $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></a>
                         </h6>
                         <p>{{ $talent->category->name ?? 'Uncategorized' }}
                         </p>
@@ -235,11 +232,11 @@
                             Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
                         </p>
                         <div class="d-flex gap-2 align-items-center flex-wrap mt-3 justify-content-center">
-                            <a href="{{ url('/talent/' . $talent->id) }}"
+                            <a href="{{ route('user.talent.details', $talent->id) }}"
                                 class="badge bg-light">
                                 {{ $talent->skill }}
                             </a>
-                            <a href="{{ url('/talent/' . $talent->id) }}"
+                            <a href="{{ route('user.talent.details', $talent->id) }}"
                                 class="badge bg-light">
                                 {{ $talent->language }}
                             </a>
@@ -249,7 +246,7 @@
             </div>
             @endforeach
             <div class="text-center mt-3" data-aos="fade-up">
-                <a href="{{ url('/talents') }}" class="btn btn-lg btn-dark">View All
+                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-dark">View All
                     Talents</a>
             </div>
         </div>
@@ -307,13 +304,12 @@
                 <div class="how-it-works-images d-lg-block d-none">
                     <div class="row align-items-center">
                         <div class="col-7 text-end">
-                            <img src="assets/img/home/how-it-works-1.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
-                            <img src="assets/img/home/how-it-works-2.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-right">
-                            <img src="assets/img/home/how-it-works-3.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-up">
+                            <img src="{{ asset('assets/img/creative.png') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
+                            <img src="{{ asset('assets/img/singer.png') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-right">
                         </div>
                         <div class="col-5">
-                            <img src="assets/img/home/how-it-works-4.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
-                            <img src="assets/img/home/how-it-works-5.svg" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-left">
+                            <img src="{{ asset('assets/img/home/front-view-handsome-male-musician-singing-home-with-microphone.jpg') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
+                            <img src="{{ asset('assets/img/young-man-playing-music-jazz-day.jpg') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-left">
                         </div>
                     </div>
                 </div>
@@ -682,14 +678,13 @@
 
 <div class="container">
     <div class="join-with-us">
-        <img src="assets/img/home/shape-5.svg" alt="img" class="img-fluid join-with-us-bg">
         <div class="d-sm-flex align-items-center justify-content-between">
             <div data-aos="fade-right" class="aos-init aos-animate">
                 <h2 class="text-white">Join Future Connect</h2>
                 <p class="mb-0">Showcase your talent, share your story, and inspire others. Be part of a
                     community that empowers growth and recognition.</p>
             </div>
-            <a href="upload-story.html" class="btn btn-lg btn-primary flex-shrink-0 aos-init aos-animate"
+            <a href="{{ route('user.upload-story') }}" class="btn btn-lg btn-primary join-us flex-shrink-0 aos-init aos-animate"
                 data-aos="fade-left">Get
                 Started</a>
         </div>

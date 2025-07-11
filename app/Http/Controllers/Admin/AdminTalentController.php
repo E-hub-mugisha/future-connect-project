@@ -14,8 +14,12 @@ class AdminTalentController extends Controller
     {
         $talents = Talent::all();
         $categories = Category::all();
+        $totalRatings = Talent::sum('rating');
+        $totalStories = Talent::with('story')->count();
+        $totalComments = Talent::with('feedback')->count();
+        $totalSkills = Talent::distinct('skill')->count('skill');
 
-        return view('admin-pages.talents.index', compact('talents', 'categories'));
+        return view('admin-pages.talents.index', compact('talents', 'categories', 'totalRatings', 'totalStories', 'totalComments', 'totalSkills'));
     }
 
 

@@ -1,10 +1,10 @@
 #00625f
 #78321e
-#47d985
+#000000
 #ffc505
 #0098ff
-#47d985
-#ffffff
+#000000
+#FCF7EA
 
 
 
@@ -16,8 +16,20 @@
         border-radius: 4rem;
     }
     .main-menu-wrapper .main-nav .nav-link {
-        color: #47d985;
+        color: #000000;
         font-weight: 500;
     }
 
 </style>
+
+##666666
+#6b533c
+#b9a185
+#ccc1b3
+#dbd4cb
+
+#000000;
+#666666
+#959595
+#FFFFFF
+#e4e4e4

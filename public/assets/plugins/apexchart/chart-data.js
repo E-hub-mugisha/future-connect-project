@@ -21,7 +21,7 @@ $(document).ready(function() {
     var options = {
       series: [{
         name: "Purchase",
-        colors: ['#47d985'],
+        colors: ['#000000'],
         data: [{
           x: 'jan',
           y: 7.0,              
@@ -77,7 +77,7 @@ $(document).ready(function() {
                 endingShape: 'rounded'
             }
           },
-          colors: ['#47d985'],
+          colors: ['#000000'],
           
           };    
           var chart = new ApexCharts(document.querySelector("#purchase-chart"), options);
@@ -162,7 +162,7 @@ $(document).ready(function() {
     var options = {
       series: [{
         name: "Sales",
-        colors: ['#47d985'],
+        colors: ['#000000'],
         data: [{
           x: 'jan',
           y: 7.0,              
@@ -218,7 +218,7 @@ $(document).ready(function() {
                 endingShape: 'rounded'
             }
           },
-          colors: ['#47d985'],
+          colors: ['#000000'],
           
           };    
           var chart = new ApexCharts(document.querySelector("#amount-chart"), options);

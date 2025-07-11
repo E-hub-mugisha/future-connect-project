@@ -92,7 +92,7 @@
                             <p>Total Rating</p>
                             <h6>
                                 {{ number_format($talent->feedback->avg('rating'), 1) }}
-                                
+
                             </h6>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                             <p>Feedbacks</p>
                             <h6>
                                 {{ $talent->feedback->count() }}
-                                
+
                             </h6>
                         </div>
                     </div>
@@ -578,46 +578,43 @@
                                     </div>
                                 </div>
                                 <div class="tab-content dashboard-tab">
-                                    <div class="tab-pane fade show active" id="pills-popular" role="tabpanel"
-                                        aria-labelledby="pills-popular-tab">
-                                        <div class="row aos aos-init aos-animate" data-aos="fade-up"
-                                            data-aos-delay="500">
+
+                                    @php
+                                    $tabs = [
+                                    'popular' => 'Popular',
+                                    'latest' => 'Latest',
+                                    'rating' => 'Top Rated',
+                                    'trend' => 'Trending'
+                                    ];
+                                    @endphp
+
+                                    @foreach($tabs as $key => $label)
+                                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="pills-{{ $key }}" role="tabpanel" aria-labelledby="pills-{{ $key }}-tab">
+                                        <div class="row aos" data-aos="fade-up" data-aos-delay="500">
                                             <div class="col-md-12">
-                                                @if($talent->stories && $talent->stories->count() > 0)
+                                                @if($talent->stories && $talent->stories->count())
                                                 @foreach($talent->stories as $story)
                                                 <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-
                                                     <div class="position-relative" style="flex: 0 0 200px;">
                                                         <div class="owl-carousel owl-theme img-slider">
                                                             <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
+                                                                <a href="{{ url('story-details/'.$story->slug) }}">
+                                                                    <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="{{ $story->title }}">
                                                                 </a>
                                                             </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-06.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-07.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
+                                                            <!-- Optional: Add more slides if needed -->
                                                         </div>
-
                                                         <div class="position-absolute top-0 start-0 m-2">
                                                             <span class="badge bg-warning me-1">
                                                                 <i class="feather-star"></i> Featured
                                                             </span>
                                                             <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $story->level }}
+                                                                <i class="fa-solid fa-meteor"></i> {{ $story->level ?? 'N/A' }}
                                                             </span>
                                                         </div>
-
                                                         <div class="position-absolute bottom-0 start-0 m-2">
                                                             <a href="{{ url('buyer-profile') }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="img">
+                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="Talent">
                                                             </a>
                                                         </div>
                                                     </div>
@@ -625,42 +622,34 @@
                                                     <div class="flex-grow-1">
                                                         <div class="d-flex justify-content-between align-items-start">
                                                             <div>
-                                                                <a href="{{ url('service-details') }}" class="badge bg-primary-light mb-2">
+                                                                <a href="{{ url('story-details/'.$story->slug) }}" class="badge bg-primary-light mb-2">
                                                                     {{ $story->category->name ?? 'Uncategorized' }}
                                                                 </a>
                                                                 <p class="mb-1 text-muted">
                                                                     <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $story->tags }}
+                                                                    {{ $story->tags ?? 'No tags' }}
                                                                 </p>
                                                             </div>
                                                             <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
+                                                                <a role="button" tabindex="0" class="text-muted"><i class="feather-video"></i></a>
+                                                                <a role="button" tabindex="0" class="text-danger"><i class="feather-heart"></i></a>
+                                                                <a role="button" tabindex="0" class="text-muted"><i class="feather-share-2"></i></a>
                                                             </div>
                                                         </div>
 
                                                         <h5 class="mb-2">
-                                                            <a href="{{ url('service-details') }}" class="text-dark text-decoration-none">
+                                                            <a href="{{ url('story-details/'.$story->slug) }}" class="text-dark text-decoration-none">
                                                                 {{ $story->title }}
                                                             </a>
                                                         </h5>
 
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
+                                                                <span class="text-warning"><i class="fa-solid fa-star"></i></span>
                                                                 <small class="text-muted">5.0 (28 Reviews)</small>
                                                                 <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
                                                             </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
+                                                            <h6 class="mb-0 text-success">${{ $story->price ?? '780' }}</h6>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -668,297 +657,13 @@
                                                 @else
                                                 <p>No stories found.</p>
                                                 @endif
-
-
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-latest" role="tabpanel"
-                                        aria-labelledby="pills-latest-tab">
-                                        <div class="row">
-                                            <div class="col-md-12">
+                                    @endforeach
 
-                                                @if($talent->stories && $talent->stories->count() > 0)
-                                                @foreach($talent->stories as $story)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-06.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-07.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $story->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('buyer-profile') }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="img">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('service-details') }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $story->category->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $story->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('service-details') }}" class="text-dark text-decoration-none">
-                                                                {{ $story->title }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No stories found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-rating" role="tabpanel"
-                                        aria-labelledby="pills-rating-tab">
-                                        <div class="row">
-                                            <div class="col-md-12">
-
-                                                @if($talent->stories && $talent->stories->count() > 0)
-                                                @foreach($talent->stories as $story)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-06.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-07.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $story->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('buyer-profile') }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="img">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('service-details') }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $story->category->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $story->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('service-details') }}" class="text-dark text-decoration-none">
-                                                                {{ $story->title }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No stories found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-trend" role="tabpanel"
-                                        aria-labelledby="pills-trend-tab">
-                                        <div class="row">
-                                            <div class="col-md-12">
-
-                                                @if($talent->stories && $talent->stories->count() > 0)
-                                                @foreach($talent->stories as $story)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-06.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a href="{{ url('service-details') }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-07.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $story->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('buyer-profile') }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="img">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('service-details') }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $story->category->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $story->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('service-details') }}" class="text-dark text-decoration-none">
-                                                                {{ $story->title }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No stories found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -1137,13 +842,20 @@
                                 </span>
                             </h5>
                             <p><i class="fa-solid fa-star"></i> {{ number_format($talent->feedback->avg('rating'), 1) }}
-                            ({{ $talent->feedback->count() }} Feedbacks)</p>
+                                ({{ $talent->feedback->count() }} Feedbacks)</p>
                         </div>
                     </div>
 
                     <div class="about-me new-about">
                         <h6>About Me</h6>
-                        <p>{{ $talent->description }}</p>
+                        <p>
+                            Hello, I'm {{ $talent->name ?? 'Unnamed Talent' }},
+                            a passionate {{ $talent->skill ?? 'creative' }} and performer blending
+                            {{ $talent->category->name ?? 'various disciplines' }}.
+                            <span class="more-content">
+                                I create immersive experiences that inspire and uplift communities.
+                            </span>
+                        </p>
                         <a role="button" tabindex="0" class="read-more">Read More</a>
                     </div>
 
@@ -1180,7 +892,7 @@
 
                     <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
                         class="btn btn-outline-primary mb-0 w-100">Support Talent</a>
-                        
+
                 </div>
 
 
@@ -1216,7 +928,7 @@
                 <form method="POST" action="{{ route('support.talent') }}">
                     @csrf
                     <input type="hidden" name="talent_id" value="{{ $talent->id }}">
-                    
+
                     <div class="mb-3">
                         <label for="name" class="form-label">Your Name</label>
                         <input type="text" class="form-control" name="name" id="name" required>

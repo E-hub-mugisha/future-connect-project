@@ -12,26 +12,26 @@
             <div class="wallet-wrap">
                 <div class="wallet-item">
                     <div class="wallet-info">
-                        <p>Amount in Wallet</p>
-                        <h5>$1,302.50</h5>
+                        <p>Total Ratings</p>
+                        <h5>{{ $totalRatings }}</h5>
                     </div>
                 </div>
                 <div class="wallet-item">
                     <div class="wallet-info">
-                        <p>Total Credit</p>
-                        <h5>$9,292.50</h5>
+                        <p>Total Stories</p>
+                        <h5>{{ $totalStories }}</h5>
                     </div>
                 </div>
                 <div class="wallet-item">
                     <div class="wallet-info">
-                        <p>Total Debit</p>
-                        <h5>$1,541.21</h5>
+                        <p>Total comments</p>
+                        <h5>{{ $totalComments }}</h5>
                     </div>
                 </div>
                 <div class="wallet-item">
                     <div class="wallet-info">
-                        <p>Withdrawn</p>
-                        <h5>$8,874.21</h5>
+                        <p>Total Skills</p>
+                        <h5>{{ $totalSkills }}</h5>
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
@@ -48,8 +48,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Address</th>
-                            <th>Phone</th>
                             <th>Email</th>
                             <th>Category</th>
                             <th>Rating</th>
@@ -60,45 +58,43 @@
                     </thead>
                     <tbody>
                         @foreach($talents as $talent)
-                            <tr>
-                                <td>{{ $talent->id }}</td>
-                                <td>{{ $talent->name }}</td>
-                                <td>{{ $talent->address }}</td>
-                                <td>{{ $talent->phone }}</td>
-                                <td>{{ $talent->email }}</td>
-                                <td>{{ $talent->category ? $talent->category->name : 'N/A' }}
-                                </td>
-                                <td>{{ $talent->rating }}</td>
-                                <td>{{ $talent->status }}</td>
-                                <td>{{ $talent->featured ? 'Yes' : 'No' }}
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#quickViewModal{{ $talent->id }}">
-                                        Quick View
-                                    </button>
+                        <tr>
+                            <td>{{ $talent->id }}</td>
+                            <td>{{ $talent->name }}</td>
+                            <td>{{ $talent->email }}</td>
+                            <td>{{ $talent->category ? $talent->category->name : 'N/A' }}
+                            </td>
+                            <td>{{ $talent->rating }}</td>
+                            <td>{{ $talent->status }}</td>
+                            <td>{{ $talent->featured ? 'Yes' : 'No' }}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#quickViewModal{{ $talent->id }}">
+                                    Quick View
+                                </button>
 
-                                    <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
-                                        data-bs-target="#talentEditModal{{ $talent->id }}">Edit</button>
+                                <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#talentEditModal{{ $talent->id }}">Edit</button>
 
-                                    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal"
-                                        data-bs-target="#statusModal{{ $talent->id }}">Update
-                                        Status</button>
+                                <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#statusModal{{ $talent->id }}">Update
+                                    Status</button>
 
-                                    <!-- Feature/Unfeature Button -->
-                                    <button type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal"
-                                        data-bs-target="#featureModal{{ $talent->id }}">
-                                        {{ $talent->featured ? 'Unfeature' : 'Feature' }}
-                                    </button>
+                                <!-- Feature/Unfeature Button -->
+                                <button type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal"
+                                    data-bs-target="#featureModal{{ $talent->id }}">
+                                    {{ $talent->featured ? 'Unfeature' : 'Feature' }}
+                                </button>
 
-                                    <!-- Delete Button -->
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal{{ $talent->id }}">
-                                        Delete
-                                    </button>
+                                <!-- Delete Button -->
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal{{ $talent->id }}">
+                                    Delete
+                                </button>
 
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         @endforeach
 
                     </tbody>
@@ -108,7 +104,7 @@
                 <div class="modal fade" id="featureModal{{ $talent->id }}" tabindex="-1"
                     aria-labelledby="featureModalLabel{{ $talent->id }}" aria-hidden="true">
                     <div class="modal-dialog">
-                        <form action="{{ route('talents.feature', $talent->id) }}"
+                        <form action="{{ route('admin.talents.feature', $talent->id) }}"
                             method="POST" class="modal-content">
                             @csrf
                             @method('PUT')
@@ -142,7 +138,7 @@
                 <div class="modal fade" id="deleteModal{{ $talent->id }}" tabindex="-1"
                     aria-labelledby="deleteModalLabel{{ $talent->id }}" aria-hidden="true">
                     <div class="modal-dialog">
-                        <form action="{{ route('talents.destroy', $talent->id) }}"
+                        <form action="{{ route('admin.talents.destroy', $talent->id) }}"
                             method="POST" class="modal-content">
                             @csrf
                             @method('DELETE')
@@ -166,201 +162,201 @@
                 </div>
 
                 @foreach($talents as $talent)
-                    <!-- Quick View Modal -->
-                    <div class="modal fade" id="quickViewModal{{ $talent->id }}" tabindex="-1"
-                        aria-labelledby="quickViewLabel{{ $talent->id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
+                <!-- Quick View Modal -->
+                <div class="modal fade" id="quickViewModal{{ $talent->id }}" tabindex="-1"
+                    aria-labelledby="quickViewLabel{{ $talent->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
 
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="quickViewLabel{{ $talent->id }}">Talent Quick View
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="quickViewLabel{{ $talent->id }}">Talent Quick View
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
 
-                                <div class="modal-body">
+                            <div class="modal-body">
 
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
-                                                class="img-fluid rounded" alt="Talent Image">
-                                        </div>
-
-                                        <div class="col-md-8">
-                                            <h4>{{ $talent->name }}</h4>
-                                            <p><strong>Address:</strong> {{ $talent->address }}</p>
-                                            <p><strong>Phone:</strong> {{ $talent->phone }}</p>
-                                            <p><strong>Email:</strong> {{ $talent->email }}</p>
-                                            <p><strong>Skill:</strong> {{ $talent->skill }}</p>
-                                            <p><strong>Category:</strong>
-                                                {{ $talent->category->name ?? 'N/A' }}
-                                            </p>
-                                            <p><strong>Rating:</strong> {{ $talent->rating }}/5</p>
-                                            <p><strong>Language:</strong> {{ $talent->language }}</p>
-                                            <p><strong>Description:</strong> {{ $talent->description }}</p>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                            class="img-fluid rounded" alt="Talent Image">
                                     </div>
 
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
+                                    <div class="col-md-8">
+                                        <h4>{{ $talent->name }}</h4>
+                                        <p><strong>Address:</strong> {{ $talent->address }}</p>
+                                        <p><strong>Phone:</strong> {{ $talent->phone }}</p>
+                                        <p><strong>Email:</strong> {{ $talent->email }}</p>
+                                        <p><strong>Skill:</strong> {{ $talent->skill }}</p>
+                                        <p><strong>Category:</strong>
+                                            {{ $talent->category->name ?? 'N/A' }}
+                                        </p>
+                                        <p><strong>Rating:</strong> {{ $talent->rating }}/5</p>
+                                        <p><strong>Language:</strong> {{ $talent->language }}</p>
+                                        <p><strong>Description:</strong> {{ $talent->description }}</p>
+                                    </div>
                                 </div>
 
                             </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+
                         </div>
                     </div>
+                </div>
                 @endforeach
 
                 <!-- Create/Edit Talent Modal -->
                 @foreach($talents as $talent)
-<div class="modal fade" id="talentEditModal{{ $talent->id }}" tabindex="-1" aria-labelledby="talentEditModalLabel{{ $talent->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <form method="POST" action="{{ route('admin.talents.update', $talent->id) }}" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
+                <div class="modal fade" id="talentEditModal{{ $talent->id }}" tabindex="-1" aria-labelledby="talentEditModalLabel{{ $talent->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <form method="POST" action="{{ route('admin.talents.update', $talent->id) }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="talentEditModalLabel{{ $talent->id }}">Edit Talent - {{ $talent->name }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="talentEditModalLabel{{ $talent->id }}">Edit Talent - {{ $talent->name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    {{-- Name --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" name="name" class="form-control" value="{{ $talent->name }}" required>
+                                    </div>
+
+                                    {{-- Address --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" name="address" class="form-control" value="{{ $talent->address }}">
+                                    </div>
+
+                                    {{-- Phone --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" name="phone" class="form-control" value="{{ $talent->phone }}">
+                                    </div>
+
+                                    {{-- Email --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="email" class="form-control" value="{{ $talent->email }}">
+                                    </div>
+
+                                    {{-- Skill --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Skill</label>
+                                        <input type="text" name="skill" class="form-control" value="{{ $talent->skill }}" required>
+                                    </div>
+
+                                    {{-- Category --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Category</label>
+                                        <select name="category_id" class="form-select" required>
+                                            <option value="">Select Category</option>
+                                            @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $talent->category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    {{-- Story --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Story</label>
+                                        <textarea name="story" class="form-control" rows="3">{{ $talent->story }}</textarea>
+                                    </div>
+
+                                    {{-- Rating --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Rating (0–5)</label>
+                                        <input type="number" name="rating" min="0" max="5" class="form-control" value="{{ $talent->rating }}">
+                                    </div>
+
+                                    {{-- Language --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Language</label>
+                                        <input type="text" name="language" class="form-control" value="{{ $talent->language }}">
+                                    </div>
+
+                                    {{-- Image --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Image</label>
+                                        <input type="file" name="image" class="form-control">
+                                        @if($talent->image)
+                                        <img src="{{ asset('image/talents/' . $talent->image) }}" alt="Talent Image" class="img-thumbnail mt-2" width="100">
+                                        @endif
+                                    </div>
+
+                                    {{-- Description --}}
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea name="description" class="form-control" rows="3">{{ $talent->description }}</textarea>
+                                    </div>
+
+                                    {{-- Featured --}}
+                                    <div class="form-check mb-3">
+                                        <input type="checkbox" name="featured" class="form-check-input" id="featured{{ $talent->id }}" {{ $talent->featured ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="featured{{ $talent->id }}">Featured</label>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update Talent</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <div class="modal-body">
-                    {{-- Name --}}
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name', $talent->name) }}" required>
-                    </div>
-
-                    {{-- Address --}}
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text" name="address" class="form-control" value="{{ old('address', $talent->address) }}">
-                    </div>
-
-                    {{-- Phone --}}
-                    <div class="mb-3">
-                        <label class="form-label">Phone</label>
-                        <input type="text" name="phone" class="form-control" value="{{ old('phone', $talent->phone) }}">
-                    </div>
-
-                    {{-- Email --}}
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email', $talent->email) }}">
-                    </div>
-
-                    {{-- Skill --}}
-                    <div class="mb-3">
-                        <label class="form-label">Skill</label>
-                        <input type="text" name="skill" class="form-control" value="{{ old('skill', $talent->skill) }}" required>
-                    </div>
-
-                    {{-- Category --}}
-                    <div class="mb-3">
-                        <label class="form-label">Category</label>
-                        <select name="category_id" class="form-select" required>
-                            <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $talent->category_id) == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- Story --}}
-                    <div class="mb-3">
-                        <label class="form-label">Story</label>
-                        <textarea name="story" class="form-control" rows="3">{{ old('story', $talent->story) }}</textarea>
-                    </div>
-
-                    {{-- Rating --}}
-                    <div class="mb-3">
-                        <label class="form-label">Rating (0–5)</label>
-                        <input type="number" name="rating" min="0" max="5" class="form-control" value="{{ old('rating', $talent->rating) }}">
-                    </div>
-
-                    {{-- Language --}}
-                    <div class="mb-3">
-                        <label class="form-label">Language</label>
-                        <input type="text" name="language" class="form-control" value="{{ old('language', $talent->language) }}">
-                    </div>
-
-                    {{-- Image --}}
-                    <div class="mb-3">
-                        <label class="form-label">Image</label>
-                        <input type="file" name="image" class="form-control">
-                        @if($talent->image)
-                            <img src="{{ asset('image/talents/' . $talent->image) }}" alt="Talent Image" class="img-thumbnail mt-2" width="100">
-                        @endif
-                    </div>
-
-                    {{-- Description --}}
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea name="description" class="form-control" rows="3">{{ old('description', $talent->description) }}</textarea>
-                    </div>
-
-                    {{-- Featured --}}
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="featured" class="form-check-input" id="featured{{ $talent->id }}" {{ old('featured', $talent->featured) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="featured{{ $talent->id }}">Featured</label>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Talent</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-@endforeach
+                @endforeach
 
 
                 @foreach($talents as $talent)
-                    <!-- Status Modal -->
-                    <div class="modal fade" id="statusModal{{ $talent->id }}" tabindex="-1"
-                        aria-labelledby="statusModalLabel{{ $talent->id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form method="POST"
-                                action="{{ route('admin.talents.updateStatus', $talent->id ) }}">
-                                @csrf
-                                @method('PUT')
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="statusModalLabel{{ $talent->id }}">Update Status
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <select name="status" class="form-select" required>
-                                            <option value="pending"
-                                                {{ (isset($talent) && $talent->status == 'pending') ? 'selected' : '' }}>
-                                                Pending</option>
-                                            <option value="approved"
-                                                {{ (isset($talent) && $talent->status == 'approved') ? 'selected' : '' }}>
-                                                Approved</option>
-                                            <option value="rejected"
-                                                {{ (isset($talent) && $talent->status == 'rejected') ? 'selected' : '' }}>
-                                                Rejected</option>
-                                        </select>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </div>
+                <!-- Status Modal -->
+                <div class="modal fade" id="statusModal{{ $talent->id }}" tabindex="-1"
+                    aria-labelledby="statusModalLabel{{ $talent->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form method="POST"
+                            action="{{ route('admin.talents.updateStatus', $talent->id ) }}">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="statusModalLabel{{ $talent->id }}">Update Status
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="modal-body">
+                                    <select name="status" class="form-select" required>
+                                        <option value="pending"
+                                            {{ (isset($talent) && $talent->status == 'pending') ? 'selected' : '' }}>
+                                            Pending</option>
+                                        <option value="approved"
+                                            {{ (isset($talent) && $talent->status == 'approved') ? 'selected' : '' }}>
+                                            Approved</option>
+                                        <option value="rejected"
+                                            {{ (isset($talent) && $talent->status == 'rejected') ? 'selected' : '' }}>
+                                            Rejected</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+                </div>
                 @endforeach
 
                 <!-- Create/Edit Talent Modal -->
@@ -413,7 +409,7 @@
                                         <select id="category_id" name="category_id" class="form-select" required>
                                             <option value="">Select Category</option>
                                             @foreach($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

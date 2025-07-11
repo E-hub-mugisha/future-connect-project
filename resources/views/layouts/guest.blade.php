@@ -59,6 +59,13 @@
         @yield('content')
 
         @include('components.user-footer')
+
+        <div class="back-to-top">
+			<a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
+				<i class="ti ti-arrow-badge-up" aria-hidden="true"></i>
+			</a>
+		</div>
+        
         <!-- jQuery -->
         <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 

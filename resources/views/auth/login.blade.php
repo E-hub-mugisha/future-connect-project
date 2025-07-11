@@ -2,10 +2,10 @@
 @section('content')
 
 
-<div class="row gx-0">
+<div class="row gx-0 justify-content-center align-items-center vh-100">
 
     <!-- Left Section with Carousel -->
-    <div class="col-lg-6">
+    <!-- <div class="col-lg-6">
         <div class="authentication-wrapper">
             <div class="authentication-content">
                 <div class="login-carousel owl-carousel">
@@ -41,7 +41,7 @@
                     class="shape-07" />
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Right Section with Login Form -->
     <div class="col-lg-6">
@@ -51,7 +51,7 @@
                     @csrf
                     <div class="login-userset">
                         <div class="login-logo">
-                            <img src="{{ asset('assets/img/logo.svg') }}" alt="img" />
+                            <img src="{{ asset('assets/img/logo.svg') }}" alt="img" style="height: 50px;"/>
                         </div>
                         <div class="login-card">
                             <div class="login-heading">

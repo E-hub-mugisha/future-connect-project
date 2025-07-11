@@ -289,7 +289,7 @@
                                 @endforelse
 
                             </ul>
-                            
+
                         </div>
                         <!-- /Review Lists -->
 
@@ -372,16 +372,22 @@
                                 </span>
                             </h5>
                             <p><i class="fa-solid fa-star"></i> {{ number_format($story->talent->feedback->avg('rating'), 1) }}
-                            ({{ $story->talent->feedback->count() }} Feedbacks)</p>
+                                ({{ $story->talent->feedback->count() }} Feedbacks)</p>
                         </div>
                     </div>
 
                     <div class="about-me new-about">
                         <h6>{{ $story->talent->name }}</h6>
-                        <p>Hello, I'm Adrian, a passionate digital storyteller and performer blending visual art
-                            and technology.<span class="more-content"> I create immersive experiences that
-                                inspire and uplift communities.</span></p>
-                        <a role="button" tabIndex="0" class="read-more">Read More</a>
+                        <p>
+                            Hello, I'm {{ $story->talent->name ?? 'Unnamed Talent' }},
+                            a passionate {{ $story->talent->skill ?? 'creative' }} and performer blending
+                            {{ $story->talent->category->name ?? 'various disciplines' }}.
+                            <span class="more-content">
+                                I create immersive experiences that inspire and uplift communities.
+                            </span>
+                        </p>
+
+                        <a href="{{ route('user.talent.details', $story->talent->id) }}" role="button" tabIndex="0" class="read-more">Read More</a>
                     </div>
 
                     <div class="member-info member-info-new">
@@ -412,7 +418,7 @@
                             <h6 class="mb-0">
                                 Tags
                                 <span
-                                    class="pt-2">{{  $story->tags }}</span>
+                                    class="pt-2">{{ $story->tags }}</span>
 
                             </h6>
                         </div>

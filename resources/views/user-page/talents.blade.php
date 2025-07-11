@@ -3,25 +3,20 @@
 
 <div>
     <div class="breadcrumb-bar breadcrumb-bar-info">
-        <div class="breadcrumb-img">
-            <div class="breadcrumb-left">
-                <img src="{{ asset('assets/img/bg/banner-bg-03.png') }}" alt="img" />
-            </div>
-        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{{ url('/') }}">Home</a>
+                                <a href="{{ route('user.home') }}">Home</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">Talents</li>
                         </ol>
                     </nav>
-                    <h2 class="breadcrumb-title mb-0">
+                    <!-- <h2 class="breadcrumb-title mb-0">
                         Featured Talents on <span class="text-primary">Future Connect</span>
-                    </h2>
+                    </h2> -->
                 </div>
             </div>
         </div>
@@ -29,7 +24,7 @@
 
     <div class="next-gen-section">
         <div class="container">
-            <div class="section-header-two text-center" data-aos="fade-up">
+            <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
                 <h2 class="mb-2"><span class="title-bg"></span>Meet the Next Generation of talents<span class="title-bg2"></span></h2>
                 <p>Connect with the next wave of talents, guiding you with fresh perspectives</p>
             </div>

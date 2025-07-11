@@ -92,9 +92,11 @@ class HomeController extends Controller
         // Fetch all stories, eager load relationships if needed (like talent or category)
         $stories = Story::orderBy('created_at', 'desc')->get();
 
+        $categories = Category::all();
         // Return the Blade view with stories
         return view('user-page.stories', [
-            'stories' => $stories
+            'stories' => $stories,
+            'categories' => $categories
         ]);
     }
     public function skills()
@@ -319,5 +321,41 @@ class HomeController extends Controller
         SupportTalent::create($request->all());
 
         return back()->with('success', 'Support sent successfully!');
+    }
+
+    public function storyFilter(Request $request)
+    {
+        $category = $request->category;
+        $tags = $request->tags;
+        $keyword = $request->keyword;
+        $query = Story::query();
+
+        // Filter by Keyword
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('title', 'like', '%' . $keyword . '%')
+                    ->orWhere('content', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        // Filter by Category
+        if ($category) {
+            $query->where('category_id', $category);
+        }
+
+        // Filter by Tags (tags stored as comma-separated string)
+        if ($request->has('tags')) {
+            $tags = $request->tags;
+            $query->where(function ($q) use ($tags) {
+                foreach ($tags as $tag) {
+                    $q->orWhere('tags', 'like', '%' . $tag . '%');
+                }
+            });
+        }
+
+        $stories = $query->get();
+        $categories = Category::all();
+
+        return view('user-page.stories', compact('stories', 'categories'));
     }
 }
