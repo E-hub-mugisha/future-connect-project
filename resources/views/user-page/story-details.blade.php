@@ -2,11 +2,7 @@
 @section('content')
 <!-- Breadcrumb -->
 <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
-    <div class="breadcrumb-img">
-        <div class="breadcrumb-left">
-            <img src="{{ asset('assets/img/bg/banner-bg-03.png') }}" alt="img">
-        </div>
-    </div>
+    
     <div class="container">
         <nav aria-label="breadcrumb" class="page-breadcrumb">
             <ol class="breadcrumb">
@@ -25,6 +21,16 @@
 </div>
 <!-- /Breadcrumb -->
 
+<style>
+    .talent-story-info {
+        background: #011E34;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
 <!-- Content -->
 <div class="page-content content">
     <div class="container">
@@ -32,9 +38,9 @@
 
             <!-- Service Details -->
             <div class="col-lg-8">
-                <!-- Talent Profile Header -->
-                <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info text-start pt-0 bg-white">
-                    <a role="button" tabIndex="0" class="badge bg-light mb-4 text-dark">
+                <!-- Talent story Header -->
+                <div class="breadcrumb-bar breadcrumb-bar-info talent-story-info breadcrumb-info text-start pt-0 bg-white">
+                    <a role="button" tabIndex="0" class="badge bg-light mb-4 mt-4 text-dark">
                         {{ $story->category->name }}
                     </a>
                     </br>
@@ -53,14 +59,13 @@
                         </li>
                         <li class="border-0">
                             <div class="tranlator d-flex align-items-center">
-                                @if($story->status == 'published')
-                                <span class="badge bg-success"></span>
-                                <i class="ti ti-heart"></i>
-                                Published
-
-                                @elseif($story->status == 'draft')
-                                <span class="badge bg-warning"></span>
-                                <i class="feather-star"></i> Draft
+                                @if($story->status == 'approved')
+                                <span class="badge bg-success">
+                                    Approved
+                                </span>
+                                @elseif($story->status == 'pending')
+                                <span class="badge bg-warning">
+                                    Pending
                                 </span>
                                 @endif
                             </div>
@@ -78,20 +83,49 @@
                 @endphp
 
                 @if ($videoId && $story->thumbnail)
-                <div class="service-card">
+                <div class="service-card w-100 mb-4">
                     <div class="service-video-wrap text-center">
-                        <!-- Trigger thumbnail -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#youtubeModal" class="video-thumb-wrapper position-relative d-inline-block">
-                            <img
-                                src="{{ asset($story->thumbnail) }}"
-                                alt="Watch Video"
-                                class="img-fluid rounded-3"
-                                style="cursor: pointer;">
-                            <span class="watch-video-btn position-absolute top-50 start-50 translate-middle">
-                                <i class="fa fa-play"></i> Watch Story
-                            </span>
-                        </a>
+                        <div class="video-wrapper position-relative overflow-hidden rounded-4 shadow"
+                            style="width: 100%; padding-top: 56.25%;">
 
+                            <!-- Thumbnail Preview -->
+                            <div class="video-thumbnail position-absolute top-0 start-0 w-100 h-100"
+                                style="cursor: pointer; background-color: #000;">
+                                <img src="{{ asset($story->thumbnail) }}"
+                                    alt="Video Thumbnail"
+                                    class="img-fluid w-100 h-100 object-fit-cover rounded-4"
+                                    style="object-fit: cover;">
+                                <div class="position-absolute top-50 start-50 translate-middle bg-white px-4 py-2 rounded-pill shadow d-flex align-items-center gap-2 play-btn"
+                                    style="z-index: 2;">
+                                    <i class="fa fa-play text-danger"></i> <span class="fw-semibold text-dark">Watch Story</span>
+                                </div>
+                            </div>
+
+                            <!-- YouTube iFrame (initially hidden) -->
+                            <iframe id="player-{{ $story->id }}" class="video-iframe position-absolute top-0 start-0 w-100 h-100 rounded-4 d-none"
+                                src=""
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+
+                            <!-- Continue Watching Modal -->
+                            <div class="modal fade" id="pauseModal-{{ $story->id }}" tabindex="-1" aria-labelledby="pauseModalLabel-{{ $story->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content text-center">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="pauseModalLabel-{{ $story->id }}">Continue Watching?</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            You've reached 1 minute of this story. Would you like to continue watching?
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <button type="button" class="btn btn-primary" id="continueBtn-{{ $story->id }}" data-bs-dismiss="modal">Continue</button>
+                                            <button type="button" class="btn btn-secondary" id="cancelBtn-{{ $story->id }}">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @endif
@@ -149,7 +183,7 @@
                     </div>
                 </div>
 
-                <div class="tab-content">
+                <div class="tab-content rounded-3" style="background: var(--white);">
 
                     <div class="tab-pane fade show active" id="about_me" role="tabpanel">
                         <!-- About Gigs -->
@@ -359,7 +393,7 @@
             <!-- Talent Profile Sidebar -->
             <div class="col-lg-4 theiaStickySidebar">
 
-                <div class="service-widget member-widget">
+                <div class="service-widget member-widget" style="background: var(--white);">
                     <div class="user-details">
                         <div class="user-img users-img">
                             <img src="{{ $story->talent->image ? asset('image/talents/' . $story->talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img">
@@ -428,15 +462,15 @@
                         class="btn btn-outline-primary mb-0 w-100">Contact Talent</a>
                 </div>
 
-                <div class="service-widget">
-                    <h5 class="">Share Talent Profile</h5>
+                <div class="service-widget" style="background: var(--white);">
+                    <h5 class="">Share this story</h5>
                     <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
                         <ul>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-google"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-google" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube" style="color: var(--white);"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -559,7 +593,7 @@
     </div>
 
     <!-- Modal Script -->
-    <script>
+    <!-- <script>
         const modal = document.getElementById('youtubeModal');
         const iframe = document.getElementById('youtubeIframe');
 
@@ -570,5 +604,154 @@
         modal.addEventListener('hidden.bs.modal', function() {
             iframe.src = "";
         });
+    </script> -->
+
+
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player_ {
+            {
+                $story - > id
+            }
+        };
+        let modalShown_ {
+            {
+                $story - > id
+            }
+        } = false;
+        let checkInterval_ {
+            {
+                $story - > id
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const thumbnail = document.querySelector('.video-thumbnail');
+            const iframe = document.getElementById('player-{{ $story->id }}');
+
+            thumbnail.addEventListener('click', function() {
+                iframe.src = 'https://www.youtube.com/embed/{{ $videoId }}?enablejsapi=1&autoplay=1&rel=0&modestbranding=1';
+                iframe.classList.remove('d-none');
+                thumbnail.style.display = 'none';
+            });
+
+            document.getElementById('continueBtn-{{ $story->id }}').addEventListener('click', () => {
+                player_ {
+                    {
+                        $story - > id
+                    }
+                }.playVideo();
+            });
+
+            document.getElementById('cancelBtn-{{ $story->id }}').addEventListener('click', () => {
+                player_ {
+                    {
+                        $story - > id
+                    }
+                }.stopVideo();
+                const modalEl = document.getElementById('pauseModal-{{ $story->id }}');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+            });
+        });
+
+        function onYouTubeIframeAPIReady() {
+            player_ {
+                {
+                    $story - > id
+                }
+            } = new YT.Player('player-{{ $story->id }}', {
+                events: {
+                    'onStateChange': onPlayerStateChange_ {
+                        {
+                            $story - > id
+                        }
+                    }
+                }
+            });
+        }
+
+        function onPlayerStateChange_ {
+            {
+                $story - > id
+            }
+        }(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                if (checkInterval_ {
+                        {
+                            $story - > id
+                        }
+                    }) clearInterval(checkInterval_ {
+                    {
+                        $story - > id
+                    }
+                });
+                checkInterval_ {
+                    {
+                        $story - > id
+                    }
+                } = setInterval(() => {
+                    const currentTime = player_ {
+                        {
+                            $story - > id
+                        }
+                    }.getCurrentTime();
+                    if (!modalShown_ {
+                            {
+                                $story - > id
+                            }
+                        } && currentTime >= 60) { // Pause at 60 seconds
+                        player_ {
+                            {
+                                $story - > id
+                            }
+                        }.pauseVideo();
+                        modalShown_ {
+                            {
+                                $story - > id
+                            }
+                        } = true;
+
+                        logView({
+                            {
+                                $story - > id
+                            }
+                        });
+
+                        const modalEl = document.getElementById('pauseModal-{{ $story->id }}');
+                        const modal = new bootstrap.Modal(modalEl);
+                        modal.show();
+                    }
+                }, 1000);
+            } else {
+                if (checkInterval_ {
+                        {
+                            $story - > id
+                        }
+                    }) clearInterval(checkInterval_ {
+                    {
+                        $story - > id
+                    }
+                });
+            }
+        }
+
+        function logView(storyId) {
+            fetch("{{ route('log.view') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        story_id: storyId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log('View logged:', data))
+                .catch(error => console.error('Error logging view:', error));
+        }
     </script>
+
     @endsection

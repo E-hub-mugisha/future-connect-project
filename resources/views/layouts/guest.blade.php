@@ -45,94 +45,95 @@
 </head>
 
 <body>
-    <div class="main-wrapper">
+    <div class="body-overlay-wrapper">
+        <div class="main-wrapper">
 
-        <!-- <div class="top-header">
-            Find the Best Instant Talents Platform
-            <span class="close-btn"
-                onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
-                data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
-        </div> -->
+            <!-- <div class="top-header">
+                Find the Best Instant Talents Platform
+                <span class="close-btn"
+                    onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
+                    data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
+            </div> -->
 
-        @include('components.user-header')
+            @include('components.user-header')
 
-        @yield('content')
+            @yield('content')
 
-        @include('components.user-footer')
+            @include('components.user-footer')
 
-        <div class="back-to-top">
-			<a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
-				<i class="ti ti-arrow-badge-up" aria-hidden="true"></i>
-			</a>
-		</div>
-        
-        <!-- jQuery -->
-        <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+            <div class="back-to-top">
+                <a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
+                    <i class="ti ti-arrow-badge-up" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 
-        <!-- Bootstrap Core JS -->
-        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('assets/js/bootstrap-scrollspy.js') }}"></script>
+    <!-- Bootstrap Core JS -->
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-scrollspy.js') }}"></script>
 
-        <!-- Slimscroll JS -->
-        <script src="{{ asset('assets/js/jquery.slimscroll.min.js') }}"></script>
+    <!-- Slimscroll JS -->
+    <script src="{{ asset('assets/js/jquery.slimscroll.min.js') }}"></script>
 
-        <!-- Feather JS -->
-        <script src="{{ asset('assets/js/feather.min.js') }}"></script>
+    <!-- Feather JS -->
+    <script src="{{ asset('assets/js/feather.min.js') }}"></script>
 
-        <!-- Slick JS -->
-        <script src="{{ asset('assets/plugins/slick/slick.js')}}"></script>
+    <!-- Slick JS -->
+    <script src="{{ asset('assets/plugins/slick/slick.js')}}"></script>
 
-        <!-- Apexchart JS -->
-        <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/apexchart/chart-data.js') }}"></script>
+    <!-- Apexchart JS -->
+    <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/apexchart/chart-data.js') }}"></script>
 
-        <!-- date range -->
-        <script src="{{ asset('assets/js/moment.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}">
-        </script>
-        <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <!-- date range -->
+    <script src="{{ asset('assets/js/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}">
+    </script>
+    <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
 
-        <!-- Sticky Sidebar JS -->
-        <script src="{{ asset('assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}">
-        </script>
-        <script
-            src="{{ asset('assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}">
-        </script>
+    <!-- Sticky Sidebar JS -->
+    <script src="{{ asset('assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}">
+    </script>
+    <script
+        src="{{ asset('assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}">
+    </script>
 
-        <!-- Owl Carousel JS -->
-        <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+    <!-- Owl Carousel JS -->
+    <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
 
-        <!-- Select JS -->
-        <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+    <!-- Select JS -->
+    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
 
-        <!-- Custom JS -->
-        <script src="{{ asset('assets/js/script.js') }}"></script>
+    <!-- Custom JS -->
+    <script src="{{ asset('assets/js/script.js') }}"></script>
 
-        <script>
-            $(document).ready(function () {
-                $('#skillsCategoryTabs .nav-link').on('click', function (e) {
-                    e.preventDefault();
+    <script>
+        $(document).ready(function() {
+            $('#skillsCategoryTabs .nav-link').on('click', function(e) {
+                e.preventDefault();
 
-                    var selectedCategory = $(this).data('category');
+                var selectedCategory = $(this).data('category');
 
-                    // Active tab highlighting
-                    $('#skillsCategoryTabs .nav-link').removeClass('active');
-                    $(this).addClass('active');
+                // Active tab highlighting
+                $('#skillsCategoryTabs .nav-link').removeClass('active');
+                $(this).addClass('active');
 
-                    // Filter skill cards
-                    $('.skill-card').each(function () {
-                        var cardCategory = $(this).data('category');
+                // Filter skill cards
+                $('.skill-card').each(function() {
+                    var cardCategory = $(this).data('category');
 
-                        if (selectedCategory === 'All' || cardCategory === selectedCategory) {
-                            $(this).fadeIn();
-                        } else {
-                            $(this).fadeOut();
-                        }
-                    });
+                    if (selectedCategory === 'All' || cardCategory === selectedCategory) {
+                        $(this).fadeIn();
+                    } else {
+                        $(this).fadeOut();
+                    }
                 });
             });
-
-        </script>
+        });
+    </script>
 </body>
 
 </html>

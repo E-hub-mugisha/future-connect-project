@@ -3,18 +3,14 @@
 
 <!-- Breadcrumb -->
 <div class="breadcrumb-bar breadcrumb-bar-info">
-    <div class="breadcrumb-img">
-        <div class="breadcrumb-left">
-            <img src="assets/img/bg/breadcrump-bg-01.png" alt="img">
-        </div>
-    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
                 <nav aria-label="breadcrumb" class="page-breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">Home</a>
+                            <a href="{{ route('user.home') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Upload Story</li>
                     </ol>
@@ -25,11 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="breadcrumb-img">
-        <div class="breadcrumb-right">
-            <img src="assets/img/bg/breadcrump-bg-02.png" alt="img">
-        </div>
-    </div>
+
 </div>
 <!-- /Breadcrumb -->
 
@@ -70,18 +62,12 @@
                         </ul>
                     </div>
 
-                    <div class="marketing-bg">
-                        <img src="{{ asset('assets/img/bg/market-bg.png') }}" alt="img"
-                            class="market-bg">
-                        <img src="{{ asset('assets/img/bg/market-bg-01.png') }}" alt="img"
-                            class="market-img">
-                    </div>
                 </div>
             </div>
 
             <!-- General -->
             <div class="col-lg-10">
-                <div class="add-property-wrap">
+                <div class="add-property-wrap" style="background: var(--white);">
                     <div class="property-info">
                         <h5 class="mb-1">Story Details</h5>
                         <p>Tell us your inspiring journey to be featured on Future Connect</p>
@@ -132,10 +118,10 @@
                                     <select name="category_id" class="select2 form-control" required>
                                         <option value="">Select</option>
                                         @foreach($categories as $category)
-                                            <option value="{{ $category->id }}"
-                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                                {{ $category->name }}
-                                            </option>
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -143,29 +129,24 @@
 
                             <div class="col-md-12">
                                 <div class="form-wrap">
-                                    <label class="col-form-label">Upload Photo or Video</label>
-                                    <input type="file" name="media" class="form-control">
-                                    <span>Accepted formats: jpg, png, mp4 (Max size: 50MB)</span>
+                                    <label class="col-form-label">Upload Photo or Thumbnail</label>
+                                    <input type="file" name="thumbnail" class="form-control">
+                                    <span>Accepted formats: jpg, png (Max size: 50MB)</span>
                                 </div>
                             </div>
 
                         </div>
 
                         <!-- Optional Section -->
-                        <div class="property-info">
-                            <h5 class="mb-1">Optional Extras</h5>
-                            <p>You can add motivational tips, quotes, or a call to action</p>
+                        <div class="col-md-12">
+                            <div class="form-wrap">
+                                <label class="col-form-label">Upload video link</label>
+                                <input type="text" name="media" class="form-control">
+                                <span>Accepted formats: mp4, avi (Max size: 50MB)</span>
+                            </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-wrap">
-                                    <label class="col-form-label">Add Motivation Tip (Optional)</label>
-                                    <input type="text" name="motivation_tip" class="form-control"
-                                        placeholder="E.g. Believe in yourself, even when no one else does."
-                                        value="{{ old('motivation_tip') }}">
-                                </div>
-                            </div>
 
                             <div class="col-md-12 mt-3">
                                 <button type="submit" class="btn btn-primary w-100">Submit Story</button>

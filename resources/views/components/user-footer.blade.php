@@ -11,7 +11,7 @@
                      <h6>About Future Connect</h6>
                      <ul>
                          <li><a href="{{ route('user.about') }}"><i class="ti ti-chevron-right me-2"></i>About Us</a></li>
-                         <li><a href="how-it-works.html"><i class="ti ti-chevron-right me-2"></i>How It Works</a>
+                         <li><a href="{{ route('user.how-it-works')}}"><i class="ti ti-chevron-right me-2"></i>How It Works</a>
                          </li>
                          <li><a href="{{ route('talent.match')}}"><i class="ti ti-chevron-right me-2"></i>Talent
                                  Room</a></li>
@@ -28,9 +28,9 @@
                          </li>
                          <li><a href="{{ route('user.skills') }}"><i class="ti ti-chevron-right me-2"></i>Skill Courses</a>
                          </li>
-                         <li><a href="blogs.html"><i class="ti ti-chevron-right me-2"></i>Blog</a></li>
-                         <li><a href="events.html"><i class="ti ti-chevron-right me-2"></i>Events</a></li>
-                         <li><a href="faq.html"><i class="ti ti-chevron-right me-2"></i>FAQs</a></li>
+                         <li><a href="{{ route('user.blogs') }}"><i class="ti ti-chevron-right me-2"></i>Blog</a></li>
+                         <li><a href="{{ route('user.talents') }}"><i class="ti ti-chevron-right me-2"></i>Talents</a></li>
+                         <li><a href="{{ route('user.faq') }}"><i class="ti ti-chevron-right me-2"></i>FAQs</a></li>
                      </ul>
                  </div>
                  <div class="col-lg-3 col-sm-6 footer-links">
@@ -90,9 +90,9 @@
                  </div>
                  <div class="footer-links">
                      <ul class="d-flex align-items-center flex-wrap gap-3">
-                         <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                         <li><a href="terms-condition.html">Terms & Conditions</a></li>
-                         <li><a href="donation-policy.html">Donation Policy</a></li>
+                         <li><a href="{{ route('user.privacy-policy') }}">Privacy Policy</a></li>
+                         <li><a href="{{ route('user.terms-condition') }}">Terms & Conditions</a></li>
+                         <li><a href="{{ route('user.donation-policy') }}">Donation Policy</a></li>
                      </ul>
                  </div>
              </div>

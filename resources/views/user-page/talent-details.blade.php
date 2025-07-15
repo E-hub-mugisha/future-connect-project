@@ -4,11 +4,6 @@
 
 
 <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
-    <div class="breadcrumb-img">
-        <div class="breadcrumb-left">
-            <img src="{{ asset('assets/img/bg/banner-bg-03.png') }}" alt="img" />
-        </div>
-    </div>
     <div class="container">
         <nav aria-label="breadcrumb" class="page-breadcrumb">
             <ol class="breadcrumb">
@@ -27,16 +22,24 @@
     </div>
 </div>
 
+<style>
+    .talent-profile-info {
+        background: #011E34;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
 
 <div class="page-content content">
     <div class="container">
         <div class="row">
 
-
             <div class="col-lg-8">
 
-                <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info text-start pt-0 bg-white">
-                    <a role="button" tabIndex="0" class="badge bg-light mb-4 text-dark">
+                <div class=" breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 bg-white">
+                    <a role="button" tabIndex="0" class="badge bg-light mb-4 mt-4 text-dark">
                         {{ $talent->category->name ?? 'Uncategorized' }}
                     </a><br />
                     <h2 class="breadcrumb-title">
@@ -65,7 +68,7 @@
                 </div>
 
                 <!-- Slider -->
-                <div class="slider-card service-slider-card">
+                <div class="slider-card service-slider-card" style="background: var(--white);">
                     <div class="slider service-slider">
                         <div class="service-img-wrap text-center">
                             <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" class="img-fluid" alt="Slider Img" style="width: 60%;">
@@ -117,38 +120,37 @@
 
 
 
-                <div class="listing-tab">
-                    <div class="listing-slider">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a role="button" tabIndex="0" class="nav-link active" data-bs-toggle="tab"
-                                    data-bs-target="#about_me" aria-selected="false" tabindex="-1">
-                                    About Me
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a role="button" tabIndex="0" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#my_skills" aria-selected="false" tabindex="-1">
-                                    My Skills & Courses
-                                </a>
-                            </li>
-                            <li>
-                                <a role="button" tabIndex="0" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#my_stories" aria-selected="false" tabindex="-1">
-                                    My Stories
-                                </a>
-                            </li>
-                            <li>
-                                <a role="button" tabIndex="0" class="nav-link" data-bs-toggle="tab"
-                                    data-bs-target="#review" aria-selected="false" tabindex="-1">
-                                    Reviews
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="listing-tab rounded-3 bg-white shadow-sm p-3">
+                    <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="profileTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about_me"
+                                type="button" role="tab" aria-controls="about_me" aria-selected="true">
+                                About Me
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="skills-tab" data-bs-toggle="tab" data-bs-target="#my_skills"
+                                type="button" role="tab" aria-controls="my_skills" aria-selected="false">
+                                My Skills & Courses
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="stories-tab" data-bs-toggle="tab" data-bs-target="#my_stories"
+                                type="button" role="tab" aria-controls="my_stories" aria-selected="false">
+                                My Stories
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review"
+                                type="button" role="tab" aria-controls="review" aria-selected="false">
+                                Reviews
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="tab-content">
+
+                <div class="tab-content rounded-3 mt-4 py-4" style="background: var(--white);">
 
                     <div class="tab-pane fade show active" id="about_me" role="tabpanel">
 
@@ -829,7 +831,7 @@
 
             <div class="col-lg-4 theiaStickySidebar">
 
-                <div class="service-widget member-widget">
+                <div class="service-widget member-widget" style="background: var(--white);">
                     <div class="user-details">
                         <div class="user-img users-img">
                             <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
@@ -896,15 +898,15 @@
                 </div>
 
 
-                <div class="service-widget">
+                <div class="service-widget " style="background: var(--white);">
                     <h5 class="">Share Talent Profile</h5>
                     <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
                         <ul>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-google"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-google" style="color: var(--white);"></i></a></li>
+                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube" style="color: var(--white);"></i></a></li>
                         </ul>
                     </div>
                 </div>

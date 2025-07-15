@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('skill_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('skill_id')->constrained('skills')->onDelete('cascade');
-    $table->string('name');
-    $table->string('email')->nullable();
-    $table->tinyInteger('rating'); // 1-5
-    $table->text('message');
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->tinyInteger('rating'); // 1-5
+            $table->text('message');
             $table->timestamps();
         });
     }

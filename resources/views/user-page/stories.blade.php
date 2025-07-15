@@ -3,11 +3,7 @@
 
 
 <div class="breadcrumb-bar breadcrumb-bar-info">
-    <div class="breadcrumb-img">
-        <div class="breadcrumb-left">
-            <img src="assets/img/bg/banner-bg-03.png" alt="img" />
-        </div>
-    </div>
+    
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
@@ -92,22 +88,22 @@
                                             <div class="img-slider owl-carousel">
                                                 <div class="slide-images">
                                                     <a href="{{ url('story-details/'.$story->slug) }}">
-                                                        <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/user/profile.jpg') }}" class="img-fluid" alt="{{ $story->title }}">
+                                                        <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/user/profile.jpg') }}" class="img-fluid" alt="{{ $story->title }}" style="height: 240px; object-fit: cover;">
                                                     </a>
                                                 </div>
                                             </div>
 
                                             <div class="card-overlay-badge">
-                                                @if($story->status == 'published')
+                                                @if($story->status == 'approved')
                                                 <a role="button" tabindex="0">
                                                     <span class="badge bg-success">
-                                                        <i class="fa-solid fa-bolt"></i> Published
+                                                        <i class="fa-solid fa-bolt"></i> approved
                                                     </span>
                                                 </a>
-                                                @elseif($story->status == 'draft')
+                                                @elseif($story->status == 'pending')
                                                 <a role="button" tabindex="0">
                                                     <span class="badge bg-warning">
-                                                        <i class="feather-star"></i> Draft
+                                                        <i class="feather-star"></i> pending
                                                     </span>
                                                 </a>
                                                 @endif
@@ -127,7 +123,7 @@
                                             <div class="gigs-title">
                                                 <h5>
                                                     <a href="{{ url('story-details/'.$story->slug) }}">
-                                                        {{ $story->title }}
+                                                        {{ \Illuminate\Support\Str::limit($story->title, 60) }}
                                                     </a>
                                                 </h5>
                                             </div>
@@ -135,7 +131,7 @@
                                             <div class="gigs-card-footer">
                                                 <div class="d-flex align-items-center gigs-left-text">
                                                     <a role="button" tabindex="0" class="avatar avatar-sm flex-shrink-0">
-                                                        <img src="{{ asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-pill" alt="img">
+                                                        <img src="{{ asset('assets/img/user/profile.jpg') }}" class="rounded-circle me-2" width="40" height="40" alt="img">
                                                     </a>
                                                     <div class="ms-2">
                                                         <h6 class="mb-0">

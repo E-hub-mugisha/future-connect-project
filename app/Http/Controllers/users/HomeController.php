@@ -4,9 +4,13 @@ namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Models\Talent;
 use App\Models\Category;
+use App\Models\Contact;
+use App\Models\Faq;
+use App\Models\Partner;
 use App\Models\Skill;
 use App\Models\SkillReview;
 use App\Models\Story;
@@ -23,12 +27,16 @@ class HomeController extends Controller
         $skills = Skill::withCount('reviews')->withAvg('reviews', 'rating')->get();
 
         return view('user-page.home', [
-            'talents' => \App\Models\Talent::withCount('stories')->take(8)->get(),
-            'categories' => \App\Models\Category::withCount('talents')->take(10)->get(),
-            'stories' => \App\Models\Story::all(),
+            'talents' => Talent::withCount('stories')->take(8)->get(),
+            'categories' => Category::withCount('talents')->take(10)->get(),
+            'popularCategories' => Category::withCount('talents')
+                ->orderBy('talents_count', 'desc')
+                ->take(3)
+                ->get(),
+            'stories' => Story::all(),
             'skills' => $skills,
-            'testimonials' => \App\Models\Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
-            'partners' => \App\Models\Partner::all(), // Fetch only active partners
+            'testimonials' => Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
+            'partners' => Partner::all(), // Fetch only active partners
         ]);
     }
     public function talents()
@@ -44,13 +52,28 @@ class HomeController extends Controller
 
     public function about()
     {
-        return view('user-page.about');
+        $faqs = Faq::all();
+
+        return view('user-page.about', compact('faqs'));
     }
     public function contact()
     {
         return view('user-page.contact');
     }
 
+    public function contactSend(Request $request)
+    {
+        $data = $request->validate([
+            'names' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        $data = Contact::create($data);
+
+        return redirect()->back();
+    }
     public function categories()
     {
         return view('user-page.categories', ['categories' => \App\Models\Category::all(),]);
@@ -90,7 +113,7 @@ class HomeController extends Controller
     public function stories()
     {
         // Fetch all stories, eager load relationships if needed (like talent or category)
-        $stories = Story::orderBy('created_at', 'desc')->get();
+        $stories = Story::orderBy('created_at', 'desc')->paginate(9);
 
         $categories = Category::all();
         // Return the Blade view with stories
@@ -98,6 +121,16 @@ class HomeController extends Controller
             'stories' => $stories,
             'categories' => $categories
         ]);
+    }
+    public function logView(Request $request)
+    {
+        $request->validate(['story_id' => 'required|integer|exists:stories,id']);
+
+        $story = Story::findOrFail($request->story_id);
+        // Example: increment a views column
+        $story->increment('views');
+
+        return response()->json(['status' => 'success']);
     }
     public function skills()
     {
@@ -254,6 +287,14 @@ class HomeController extends Controller
             'announcements' => $announcements
         ]);
     }
+    public function announcementDetails($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+
+        return view('user-page.announcement-details', [
+            'announcement' => $announcement
+        ]);
+    }
     public function uploadStory()
     {
         return view('user-page.upload-story', ['categories' => \App\Models\Category::all(),]);
@@ -357,5 +398,59 @@ class HomeController extends Controller
         $categories = Category::all();
 
         return view('user-page.stories', compact('stories', 'categories'));
+    }
+
+    public function blogs()
+    {
+        // Fetch all blogs, eager load relationships if needed (like author or category)
+        $blogs = Blog::orderBy('created_at', 'desc')->paginate(9);
+
+        $categories = Category::all();
+        // Return the Blade view with blogs
+        return view('user-page.blogs', [
+            'blogs' => $blogs,
+            'categories' => $categories
+        ]);
+    }
+
+    public function blogDetails($slug)
+    {
+        $blog = Blog::where('slug', $slug)->firstOrFail();
+        $relatedPosts = Blog::where('category_id', $blog->category_id)
+                ->where('id', '!=', $blog->id)
+                ->where('is_published', true)
+                ->latest()
+                ->take(5)
+                ->get();
+        return view('user-page.blog-details', compact('blog', 'relatedPosts'));
+    }
+
+    public function faq()
+    {
+        // Fetch FAQs from the database
+        $faqs = Faq::all();
+
+        return view('user-page.faq', compact('faqs'));
+    }
+
+    public function howItWorks()
+    {
+        // If you want, pass dynamic data here (e.g., steps from DB)
+        return view('user-page.how-it-works');
+    }
+
+    public function privacyPolicy()
+    {
+        return view('user-page.privacy-policy');
+    }
+
+    public function termsCondition()
+    {
+        return view('user-page.terms-condition');
+    }
+
+    public function donationPolicy()
+    {
+        return view('user-page.donate');
     }
 }

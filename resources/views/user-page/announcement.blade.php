@@ -3,11 +3,7 @@
 <div>
 
     <div class="breadcrumb-bar breadcrumb-bar-info">
-        <div class="breadcrumb-img">
-            <div class="breadcrumb-left">
-                <img src="/assets/img/bg/banner-bg-03.png" alt="img" />
-            </div>
-        </div>
+        
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
@@ -32,32 +28,34 @@
         <div class="container">
             <div class="row">
                 @foreach($announcements as $ann)
-                    <div class="col-xl-4 col-lg-6 col-md-6">
-                        <div class="testimonial-slider-card">
-                            <div class="testimonial-item">
-                                <div class="testimonial-icon"><i class="ti ti-bell"></i></div>
-                                <h5 class="mb-2">{{ $ann->title }}</h5>
-                                <p class="mb-3">
-                                    {{ \Illuminate\Support\Str::limit($ann->content, 100, '...') }}
-                                </p>
-                                <div class="testimonial-review d-flex align-items-center justify-content-between">
-                                    <div class="testimonial-user p-0">
-                                        <img src="{{ asset('assets/img/user/admin.jpg') }}"
-                                            alt="img" />
-                                        <div class="testimonial-info">
-                                            <h6>Product Team</h6>
-                                            <p>Platform Update</p>
-                                        </div>
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="testimonial-slider-card">
+                        <div class="testimonial-item">
+                            <div class="testimonial-icon"><i class="ti ti-bell"></i></div>
+                            <h5 class="mb-2">{{ $ann->title }}</h5>
+                            <p class="mb-3">
+                                {{ \Illuminate\Support\Str::limit($ann->content, 100, '...') }}
+                            </p>
+                            <div class="testimonial-review d-flex align-items-center justify-content-between">
+                                <div class="testimonial-user p-0">
+                                    <img src="{{ asset('assets/img/user/admin.jpg') }}"
+                                        alt="img" />
+                                    <div class="testimonial-info">
+                                        <h6>Product Team</h6>
+                                        <p>{{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}</p>
                                     </div>
-                                    <div class="star-rate m-0 bg-light">
+                                </div>
+                                <div class="star-rate m-0 bg-light">
+                                    <a href="{{ route('user.announcement.details', $ann->id ) }}">
                                         <span class="text-muted">
-                                            {{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}
+                                            View Details
                                         </span>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 @endforeach
 
             </div>

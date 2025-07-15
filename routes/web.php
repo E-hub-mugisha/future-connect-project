@@ -29,6 +29,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('user.home');
     Route::get('/about', 'about')->name('user.about');
     Route::get('/contact', 'contact')->name('user.contact');
+    Route::post('/contact/send', 'contactSend')->name('contact.send');
     Route::get('/categories', 'categories')->name('user.categories');
     Route::get('/categories-with-talent-count', 'withTalentCount');
     Route::get('/testimonials/random', 'random');
@@ -58,10 +59,23 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/stories/search', 'storyFilter')->name('stories.filter'); // filtered results
     Route::get('/upload-story', 'uploadStory')->name('user.upload-story');
     Route::post('/upload-story/store', 'uploadStoryStory')->name('user.upload-story.store');
+    Route::post('/log-view', 'logView')->name('log.view');
 
     // 📢 Announcements
     Route::get('/announcements', 'announcements')->name('user.announcements');
     Route::get('/announcement/{id}', 'announcementDetails')->name('user.announcement.details');
+
+    // blogs
+    Route::get('/blogs', 'blogs')->name('user.blogs');
+    Route::get('/blog/{slug}', 'blogDetails')->name('user.blog.details');
+
+    // FAQs
+    Route::get('/faq', 'faq')->name('user.faq');
+
+    Route::get('/how-it-works', 'howItWorks')->name('user.how-it-works');
+    Route::get('/privacy-policy', 'privacyPolicy')->name('user.privacy-policy');
+    Route::get('/terms-condition', 'termsCondition')->name('user.terms-condition');
+    Route::get('/donation-policy', 'donationPolicy')->name('user.donation-policy');
 });
 
 

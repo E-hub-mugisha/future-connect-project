@@ -1,10 +1,10 @@
 @extends('layouts.auth')
 @section('content')
 
-<div class="row gx-0">
+<div class="row gx-0 justify-content-center align-items-center vh-100">
 
     <!-- Left Section with Carousel -->
-    <div class="col-lg-6">
+    <!-- <div class="col-lg-6">
         <div class="authentication-wrapper">
             <div class="authentication-content">
                 <div class="login-carousel owl-carousel">
@@ -40,7 +40,7 @@
                     class="shape-07" />
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Right Section with Forgot Password Form -->
     <div class="col-lg-6">

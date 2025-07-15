@@ -1,38 +1,41 @@
 @php
-    use Illuminate\Support\Facades\Route;
-    use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 
-    $categories = \App\Models\Category::all();
+$categories = \App\Models\Category::all();
 
-    // Helper to check if a route or url pattern is active, returns 'active' or ''
-    function isActiveRoute($routeNames, $urlPatterns = []) {
-        foreach ((array) $routeNames as $route) {
-            if (Route::is($route)) {
-                return 'active';
-            }
-        }
-        foreach ((array) $urlPatterns as $pattern) {
-            if (Request::is($pattern)) {
-                return 'active';
-            }
-        }
-        return '';
-    }
+// Helper to check if a route or url pattern is active, returns 'active' or ''
+function isActiveRoute($routeNames, $urlPatterns = []) {
+foreach ((array) $routeNames as $route) {
+if (Route::is($route)) {
+return 'active';
+}
+}
+foreach ((array) $urlPatterns as $pattern) {
+if (Request::is($pattern)) {
+return 'active';
+}
+}
+return '';
+}
 @endphp
 
 <style>
     .header {
-        background-color: #666666;
-        height: 6rem; /* Reduced height */
+        background-color: #011E34;
+        height: 6rem;
+        /* Reduced height */
         padding: 7px 5px;
     }
 
     .main-menu-wrapper {
-        background: #1c1c1c;
-        padding: 1px 2rem; /* Reduced padding */
+        background: linear-gradient(to right, #011E34, #09354F);
+        padding: 8px 2rem;
         border-radius: 4rem;
-        /* backdrop-filter: blur(10px); */
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
+
 
     .main-menu-wrapper .main-nav .nav-link {
         color: #e4e4e4;
@@ -41,12 +44,13 @@
         transition: all 0.3s ease-in-out;
         border: 2px solid transparent;
         background: transparent;
-        display: inline-block; /* Prevents full-width behavior */
+        display: inline-block;
+        /* Prevents full-width behavior */
     }
 
     .main-menu-wrapper .main-nav .nav-link:hover,
     .main-menu-wrapper .main-nav .nav-link.active {
-        color:#e4e4e4;
+        color: #e4e4e4;
         border-bottom: 2px solid #e4e4e4;
         background: transparent;
     }
@@ -96,22 +100,22 @@
                         <ul class="submenu">
                             <li>
                                 <a href="{{ route('user.talents') }}"
-                                   class="{{ isActiveRoute(['user.talents']) }}">All Talents</a>
+                                    class="{{ isActiveRoute(['user.talents']) }}">All Talents</a>
                             </li>
                             <li>
                                 <a href="{{ url('/register_as_talent') }}"
-                                   class="{{ Request::is('register_as_talent') ? 'active' : '' }}">Register as Talent</a>
+                                    class="{{ Request::is('register_as_talent') ? 'active' : '' }}">Register as Talent</a>
                             </li>
                             <li class="has-submenu">
                                 <a role="button" tabindex="0">Talent Categories</a>
                                 <ul class="submenu">
                                     @foreach($categories as $cat)
-                                        <li>
-                                            <a href="{{ url('/talents/category/' . $cat->slug) }}"
-                                               class="{{ Request::is('talents/category/' . $cat->slug) ? 'active' : '' }}">
-                                               {{ $cat->name }}
-                                            </a>
-                                        </li>
+                                    <li>
+                                        <a href="{{ url('/talents/category/' . $cat->slug) }}"
+                                            class="{{ Request::is('talents/category/' . $cat->slug) ? 'active' : '' }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </li>
@@ -121,7 +125,7 @@
                     {{-- Announcements --}}
                     <li>
                         <a href="{{ route('user.announcements') }}"
-                           class="nav-link {{ isActiveRoute(['user.announcements']) }}">Announcements</a>
+                            class="nav-link {{ isActiveRoute(['user.announcements']) }}">Announcements</a>
                     </li>
 
                     {{-- Stories --}}
@@ -137,22 +141,22 @@
                         <ul class="submenu">
                             <li>
                                 <a href="{{ url('/stories') }}"
-                                   class="{{ Request::is('stories') ? 'active' : '' }}">All Stories</a>
+                                    class="{{ Request::is('stories') ? 'active' : '' }}">All Stories</a>
                             </li>
                             <li>
                                 <a href="{{ url('/upload-story') }}"
-                                   class="{{ Request::is('upload-story') ? 'active' : '' }}">Upload Story</a>
+                                    class="{{ Request::is('upload-story') ? 'active' : '' }}">Upload Story</a>
                             </li>
                             <li class="has-submenu">
                                 <a role="button" tabindex="0">Story Categories</a>
                                 <ul class="submenu">
                                     @foreach($categories as $cat)
-                                        <li>
-                                            <a href="{{ url('/story/category/' . $cat->slug) }}"
-                                               class="{{ Request::is('story/category/' . $cat->slug) ? 'active' : '' }}">
-                                               {{ $cat->name }}
-                                            </a>
-                                        </li>
+                                    <li>
+                                        <a href="{{ url('/story/category/' . $cat->slug) }}"
+                                            class="{{ Request::is('story/category/' . $cat->slug) ? 'active' : '' }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </li>
@@ -172,18 +176,18 @@
                         <ul class="submenu">
                             <li>
                                 <a href="{{ url('/skills') }}"
-                                   class="{{ Request::is('skills') ? 'active' : '' }}">All Skills</a>
+                                    class="{{ Request::is('skills') ? 'active' : '' }}">All Skills</a>
                             </li>
                             <li class="has-submenu">
                                 <a role="button" tabindex="0">Skills Categories</a>
                                 <ul class="submenu">
                                     @foreach($categories as $cat)
-                                        <li>
-                                            <a href="{{ url('/skills/category/' . $cat->slug) }}"
-                                               class="{{ Request::is('skills/category/' . $cat->slug) ? 'active' : '' }}">
-                                               {{ $cat->name }}
-                                            </a>
-                                        </li>
+                                    <li>
+                                        <a href="{{ url('/skills/category/' . $cat->slug) }}"
+                                            class="{{ Request::is('skills/category/' . $cat->slug) ? 'active' : '' }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </li>
@@ -201,13 +205,13 @@
                     <ul class="dropdown-menu p-2">
                         <li class="mb-1">
                             <a role="button" tabindex="0" class="dropdown-item active theme-toggle rounded-2"
-                               id="light-mode-toggle">
+                                id="light-mode-toggle">
                                 <i class="ti ti-sun-high me-2"></i>Light Mode
                             </a>
                         </li>
                         <li>
                             <a role="button" tabindex="0" class="dropdown-item theme-toggle rounded-2"
-                               id="dark-mode-toggle">
+                                id="dark-mode-toggle">
                                 <i class="ti ti-moon me-2"></i>Dark Mode
                             </a>
                         </li>

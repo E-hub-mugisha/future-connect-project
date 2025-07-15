@@ -3,18 +3,13 @@
 <div>
 
     <div class="breadcrumb-bar">
-        <div class="breadcrumb-img">
-            <div class="breadcrumb-left">
-                <img src="assets/img/bg/banner-bg-03.png" alt="img" />
-            </div>
-        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="index.html">Home</a>
+                                <a href="{{ route('user.home') }}">Home</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">Contact Us</li>
                         </ol>
@@ -46,8 +41,7 @@
                                 </div>
                                 <div class="contact-details">
                                     <h6>Email Us</h6>
-                                    <p><a href="mailto:connect@Future Connect.org">connect@Future Connect.org</a></p>
-                                    <p><a href="mailto:support@Future Connect.org">support@Future Connect.org</a></p>
+                                    <p><a href="mailto:info@futureconnect.rw">info@futureconnect.rw</a></p>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +59,6 @@
                                 <div class="contact-details">
                                     <h6>Call Us</h6>
                                     <p>+250 788 123 456</p>
-                                    <p>+250 789 654 321</p>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +75,7 @@
                                 </div>
                                 <div class="contact-details contact-details-address">
                                     <h6>Visit Us</h6>
-                                    <p>Future Connect HQ, KG 123 St, Kigali Innovation City, Rwanda</p>
+                                    <p>Future Connect HQ, Kigali City, Rwanda</p>
                                 </div>
                             </div>
                         </div>
@@ -107,24 +100,25 @@
 
 
                     <div class="col-lg-6 col-md-12 d-flex">
-                        <div class="team-form w-100">
+                        <div class="team-form w-100 mt-4">
                             <div class="team-form-heading">
                                 <h3>Connect With Future Connect</h3>
-                                <p>Have a question, idea, or feedback? Drop us a message—we’d love to hear from you!
+                                <p>Have a question, idea, or feedback? Drop us a message we’d love to hear from you!
                                 </p>
                             </div>
-                            <form action="#">
+                            <form action="{{ route('contact.send') }}" method="POST">
+                                @csrf
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Full Name" />
+                                    <input type="text" name="names" class="form-control" placeholder="Full Name" />
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Email Address" />
+                                    <input type="email" name="email" class="form-control" placeholder="Email Address" />
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Subject" />
+                                    <input type="text" name="subject" class="form-control" placeholder="Subject" />
                                 </div>
                                 <div class="form-group">
-                                    <textarea class="form-control" placeholder="Your Message"></textarea>
+                                    <textarea class="form-control" name="message" placeholder="Your Message"></textarea>
                                 </div>
                                 <div class="form-group mb-0">
                                     <button type="submit" class="btn btn-primary">Send Message</button>
