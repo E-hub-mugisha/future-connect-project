@@ -13,11 +13,11 @@
         </a>
         <div class="nav user-menu nav-list">
             <div class="wallet-amount wallet-amount-two">
-                <span><i class="ti ti-point-filled me-1"></i>Wallet Balance : $6658</span>
+                <span><i class="ti ti-point-filled me-1"></i>Hello, {{ Auth::user()->name }}</span>
             </div>
         </div>
         <div class="header-right d-flex align-items-center">
-            <a href="index.html" class="btn btn-light fs-14 rounded-pill"><i class="ti ti-world me-1"></i>Website</a>
+            <a href="{{ route('user.home') }}" target="_blank" class="btn btn-light fs-14 rounded-pill"><i class="ti ti-world me-1"></i>Website <i class="ti ti-external-link"></i></a>
 
             <div class="nav-item dropdown flag-nav nav-item-box">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" tabIndex="0">
@@ -159,7 +159,7 @@
 
                     <div class="p-2">
 
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                        <a class="dropdown-item d-flex align-items-center mb-1" href="{{ route('admin.users.show', Auth::user()->id) }}">
                             <i class="ti ti-user-cog me-2"></i>My Profile
                         </a>
 
@@ -320,8 +320,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="seller-earnings.html">
-                                <i class="ti ti-moneybag me-2"></i> <span> Earnings </span>
+                            <a href="/admin/testimonials">
+                                <i class="ti ti-moneybag me-2"></i> <span> Testimonials </span>
                             </a>
                         </li>
                         <li>

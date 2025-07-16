@@ -79,7 +79,7 @@
                                     data-bs-target="#editCategoryModal{{ $cat->id }}">
                                     Edit
                                 </button>
-                                <form action="{{ route('categories.destroy', $cat->id) }}" method="POST" class="d-inline">
+                                <form action="{{ route('admin.categories.destroy', $cat->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm"
@@ -94,7 +94,7 @@
                 <!-- Add Category Modal -->
                 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
-                        <form class="modal-content" method="POST" action="{{ route('categories.store') }}">
+                        <form class="modal-content" method="POST" action="{{ route('admin.categories.store') }}">
                             @csrf
                             <div class="modal-header">
                                 <h5 class="modal-title">Add Category</h5>
@@ -149,7 +149,7 @@
                 @foreach($categories as $category)
                 <div class="modal fade" id="editCategoryModal{{ $category->id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
-                        <form class="modal-content" method="POST" action="{{ route('categories.update', $category->id) }}">
+                        <form class="modal-content" method="POST" action="{{ route('admin.categories.update', $category->id) }}">
                             @csrf
                             @method('PUT')
 

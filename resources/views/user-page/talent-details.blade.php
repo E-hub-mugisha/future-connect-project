@@ -68,12 +68,15 @@
                 </div>
 
                 <!-- Slider -->
-                <div class="slider-card service-slider-card" style="background: var(--white);">
-                    <div class="slider service-slider">
-                        <div class="service-img-wrap text-center">
-                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" class="img-fluid" alt="Slider Img" style="width: 60%;">
+                <div class="service-card w-100 mb-4">
+                    <div class="service-video-wrap text-center">
+                        <div class="service-img-wrap position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
+                            <img
+                                src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                class="img-fluid w-100 h-100 object-fit-cover rounded-4"
+                                alt="Slider Img"
+                                style="object-fit: cover;" />
                         </div>
-
                     </div>
                 </div>
                 <!-- /Slider -->
@@ -120,7 +123,7 @@
 
 
 
-                <div class="listing-tab rounded-3 bg-white shadow-sm p-3">
+                <div class="listing-tab ">
                     <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="profileTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about_me"

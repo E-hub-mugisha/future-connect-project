@@ -55,11 +55,7 @@
 </style>
 <!-- Hero Section Carousel -->
 <div id="heroCarousel" class="hero-section carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
-    <div class="banner-bg-imgs">
-        <img src="{{ asset('assets/img/bg/banner-bg-01.png') }}" class="banner-bg-one" alt="img">
-        <img src="{{ asset('assets/img/bg/banner-bg-02.png') }}" class="banner-bg-two" alt="img">
-        <img src="{{ asset('assets/img/bg/banner-bg-04.png') }}" class="banner-bg-four" alt="img">
-    </div>
+
     <div class="carousel-inner pt-3">
 
         <!-- Carousel Item 1 -->
@@ -279,49 +275,27 @@
 
 
 <style>
-    
     .card-custom {
-    background: #011E34;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    padding: 1.5rem;
-    color: #ffffff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    
-}
-.next-gen-section {
-  position: relative;
-  padding: 4rem 0;
-  overflow: hidden;
-  z-index: 1;
-}
+        background: linear-gradient(to right, #011E34, #09354F);
+        /* border: 1px solid rgba(255, 255, 255, 0.2); */
+        border-radius: 16px;
+        padding: 1.5rem;
+        color: #ffffff;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 
-.next-gen-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("/assets/img/bg/talents.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(6px); /* 🔵 Blur applied here */
-  z-index: -2;
-}
+    }
 
-.next-gen-section::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(1, 30, 52, 0.75); /* 🔵 Dark overlay */
-  z-index: -1;
-}
+    .next-gen-section {
+        position: relative;
+        padding: 4rem 0;
+        overflow: hidden;
+        z-index: 1;
+    }
 
+    .next-gen-section .card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
 </style>
 
 <!-- next gen -->
@@ -337,21 +311,21 @@
             <div class="col-xl-3 col-lg-4 col-md-6">
                 <div class="card card-custom" data-aos="flip-left">
                     <div class="card-body text-center">
-                        <span class="avatar">
+                        <span class="avatar d-inline-block" style="width: 60px; height: 60px; overflow: hidden;">
                             <a href="{{ route('user.talent.details', $talent->id) }}">
                                 <img
-                                    class="rounded-3"
+                                    class="rounded-3 w-100 h-100"
+                                    style="object-fit: cover;"
                                     src="{{ $talent->image 
-        ? asset('image/talents/' . $talent->image) 
-        : asset('assets/img/user/profile.jpg') }}"
+                ? asset('image/talents/' . $talent->image) 
+                : asset('assets/img/user/profile.jpg') }}"
                                     alt="img" />
-
                             </a>
-
                         </span>
+
                         <h6 class="mb-1">
                             <a
-                                href="{{ route('user.talent.details', $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></a>
+                                href="{{ route('user.talent.details', $talent->id) }}" style="color: var(--white);">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></a>
                         </h6>
                         <p>{{ $talent->category->name ?? 'Uncategorized' }}
                         </p>
@@ -726,62 +700,61 @@
 
 <style>
     .talent-card {
-  background: linear-gradient(to bottom right, #011E34, #27AE60);
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  text-align: left;
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
-}
+        background: linear-gradient(to bottom right, #011E34, #27AE60);
+        color: #ffffff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: left;
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
 
-.talent-card:hover {
-  transform: translateY(-5px);
-}
+    .talent-card:hover {
+        transform: translateY(-5px);
+    }
 
-/* Talent Image */
-.talent-card img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #ffffff33;
-}
+    /* Talent Image */
+    .talent-card img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ffffff33;
+    }
 
-/* Talent Info */
-.talent-info h4 {
-  margin: 0;
-  color: #dcdcdc;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
+    /* Talent Info */
+    .talent-info h4 {
+        margin: 0;
+        color: #dcdcdc;
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
 
-.talent-info p {
-  margin: 4px 0;
-  font-size: 0.95rem;
-}
+    .talent-info p {
+        margin: 4px 0;
+        font-size: 0.95rem;
+    }
 
-.talent-info .rating {
-  color: #FFD700;
-  font-size: 0.9rem;
-}
+    .talent-info .rating {
+        color: #FFD700;
+        font-size: 0.9rem;
+    }
 
-.talent-info .location {
-  color: #dcdcdc;
-  font-size: 0.85rem;
-}
+    .talent-info .location {
+        color: #dcdcdc;
+        font-size: 0.85rem;
+    }
 
-.talent-info .tag {
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 4px 10px;
-  border-radius: 15px;
-  font-size: 0.75rem;
-  margin-right: 5px;
-}
-
+    .talent-info .tag {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        margin-right: 5px;
+    }
 </style>
 
 
@@ -809,20 +782,20 @@
             <div class="col-lg-6">
                 @foreach($testimonials as $test)
                 <div class="talent-card mb-4">
-                <img src="{{ $test->talent->image 
+                    <img src="{{ $test->talent->image 
         ? asset('image/talents/' . $test->talent->image) 
         : asset('assets/img/user/profile.jpg') }}" alt="Talent Photo">
-                <div class="talent-info">
-                    <h4>{{ $test->talent->name ?? 'Jacob Rivera' }}</h4>
-                    <p>{{ $test->title ?? 'Creative Writer' }}</p>
-                    <div class="rating">@for($i = 0; $i < 5; $i++)
-                        <i
-                        class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
-                        @endfor</div>
-                    <p class="description">{{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}</p>
-                    <div class="location">📍 {{ $test->talent->address ?? 'New York, NY' }}</div>
+                    <div class="talent-info">
+                        <h4>{{ $test->talent->name ?? 'Jacob Rivera' }}</h4>
+                        <p>{{ $test->title ?? 'Creative Writer' }}</p>
+                        <div class="rating">@for($i = 0; $i < 5; $i++)
+                                <i
+                                class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                @endfor</div>
+                        <p class="description">{{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}</p>
+                        <div class="location">📍 {{ $test->talent->address ?? 'New York, NY' }}</div>
+                    </div>
                 </div>
-            </div>
                 @endforeach
             </div>
         </div>

@@ -64,10 +64,12 @@
                                 <td>{{ $user->active ? 'Active' : 'Inactive' }}
                                 </td>
                                 <td>
+                                    <a href="{{ route('admin.users.show', $user->id) }}"
+                                        class="btn btn-primary btn-sm me-2">View</a>
                                     <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
                                         data-bs-target="#editUserModal{{ $user->id }}">Edit</button>
 
-                                    <form action="{{ route('users.destroy', $user->id) }}"
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}"
                                         method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
@@ -86,7 +88,7 @@
                     <div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
                             <form class="modal-content" method="POST"
-                                action="{{ route('users.update', $user->id ) }}">
+                                action="{{ route('admin.users.update', $user->id ) }}">
                                 @csrf
                                 @method('PUT')
 
@@ -170,7 +172,7 @@
             <!-- User Modal -->
             <div class="modal fade" id="userAddModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
-                    <form class="modal-content" method="POST" action="{{ route('users.store') }}">
+                    <form class="modal-content" method="POST" action="{{ route('admin.users.store') }}">
                         @csrf
 
                         <div class="modal-header">

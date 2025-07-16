@@ -73,7 +73,7 @@ body {
   /* optional */
   min-height: 100vh;
   position: relative;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 /* 🔳 Dark overlay layer */
@@ -474,7 +474,7 @@ label {
 
 .card {
   background: var(--white);
-  border: 1px solid var(--gray-100);
+  /* border: 1px solid var(--gray-100); */
   border-radius: 10px;
   margin-bottom: 24px;
 }
@@ -3019,7 +3019,7 @@ hr.text-danger {
   transition: ease all 0.5s;
   -webkit-transition: ease all 0.5s;
   -ms-transition: ease all 0.5s;
-  background-color: var(--white);
+  background-color: var(--dark);
 }
 
 .navbar-brand.logo {
@@ -17670,7 +17670,7 @@ table.dataTable thead tr td {
 
 .card {
   border-radius: 5px;
-  border-color: var(--gray-100);
+  /* border-color: var(--gray-100); */
 }
 
 .card-body {
@@ -23511,10 +23511,10 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 }
 
 /****** Utils ******/
-.seller-list .card {
+/* .seller-list .card {
   box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.3607843137);
   border-radius: 5px;
-}
+} */
 
 .seller-list .card .avatar {
   width: 72px;

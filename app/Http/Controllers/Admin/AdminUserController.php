@@ -40,7 +40,7 @@ class AdminUserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user, 200);
+        return view('admin-pages.users.user-profile', compact('user'));
     }
 
     // PUT /api/users/{id}

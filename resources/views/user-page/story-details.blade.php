@@ -2,7 +2,7 @@
 @section('content')
 <!-- Breadcrumb -->
 <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
-    
+
     <div class="container">
         <nav aria-label="breadcrumb" class="page-breadcrumb">
             <ol class="breadcrumb">
@@ -85,47 +85,102 @@
                 @if ($videoId && $story->thumbnail)
                 <div class="service-card w-100 mb-4">
                     <div class="service-video-wrap text-center">
-                        <div class="video-wrapper position-relative overflow-hidden rounded-4 shadow"
-                            style="width: 100%; padding-top: 56.25%;">
+                        <div class="video-wrapper position-relative overflow-hidden rounded-4 shadow" style="width: 100%; padding-top: 56.25%;">
 
-                            <!-- Thumbnail Preview -->
-                            <div class="video-thumbnail position-absolute top-0 start-0 w-100 h-100"
-                                style="cursor: pointer; background-color: #000;">
+                            <!-- YouTube Player (hidden behind thumbnail initially) -->
+                            <div id="player" class="position-absolute top-0 start-0 w-100 h-100"></div>
+
+                            <!-- Custom Thumbnail Overlay -->
+                            <div class="video-thumbnail position-absolute top-0 start-0 w-100 h-100" id="custom-thumbnail" style="cursor: pointer; background-color: #000;">
                                 <img src="{{ asset($story->thumbnail) }}"
                                     alt="Video Thumbnail"
                                     class="img-fluid w-100 h-100 object-fit-cover rounded-4"
                                     style="object-fit: cover;">
                                 <div class="position-absolute top-50 start-50 translate-middle bg-white px-4 py-2 rounded-pill shadow d-flex align-items-center gap-2 play-btn"
                                     style="z-index: 2;">
-                                    <i class="fa fa-play text-danger"></i> <span class="fw-semibold text-dark">Watch Story</span>
+                                    <i class="fa fa-play text-danger"></i>
+                                    <span class="fw-semibold text-dark">Watch Story</span>
                                 </div>
                             </div>
 
-                            <!-- YouTube iFrame (initially hidden) -->
-                            <iframe id="player-{{ $story->id }}" class="video-iframe position-absolute top-0 start-0 w-100 h-100 rounded-4 d-none"
-                                src=""
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
-
-                            <!-- Continue Watching Modal -->
-                            <div class="modal fade" id="pauseModal-{{ $story->id }}" tabindex="-1" aria-labelledby="pauseModalLabel-{{ $story->id }}" aria-hidden="true">
+                            <!-- Modal -->
+                            <div class="modal fade" id="pauseModal" tabindex="-1" aria-labelledby="pauseModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content text-center">
+                                    <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="pauseModalLabel-{{ $story->id }}">Continue Watching?</h5>
+                                            <h5 class="modal-title" id="pauseModalLabel">Video Paused</h5>
                                         </div>
                                         <div class="modal-body">
-                                            You've reached 1 minute of this story. Would you like to continue watching?
+                                            The video was paused at 1:30. Would you like to continue watching?
                                         </div>
-                                        <div class="modal-footer justify-content-center">
-                                            <button type="button" class="btn btn-primary" id="continueBtn-{{ $story->id }}" data-bs-dismiss="modal">Continue</button>
-                                            <button type="button" class="btn btn-secondary" id="cancelBtn-{{ $story->id }}">Cancel</button>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button id="resumeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Continue</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- YouTube IFrame API + Playback Logic -->
+                            <script>
+                                var tag = document.createElement('script');
+                                tag.src = "https://www.youtube.com/iframe_api";
+                                var firstScriptTag = document.getElementsByTagName('script')[0];
+                                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                                var player;
+                                var pauseTime = 90; // 1:30
+                                var checkInterval;
+
+                                function onYouTubeIframeAPIReady() {
+                                    player = new YT.Player('player', {
+                                        height: '100%',
+                                        width: '100%',
+                                        videoId: '{{ $videoId }}', // Replace with dynamic video ID
+                                        playerVars: {
+                                            'autoplay': 0,
+                                            'controls': 1,
+                                            'rel': 0,
+                                            'modestbranding': 1
+                                        },
+                                        events: {
+                                            'onReady': onPlayerReady,
+                                            'onStateChange': onPlayerStateChange
+                                        }
+                                    });
+                                }
+
+                                function onPlayerReady(event) {
+                                    document.getElementById('custom-thumbnail').addEventListener('click', function() {
+                                        this.style.display = 'none';
+                                        event.target.playVideo();
+                                    });
+                                }
+
+                                function onPlayerStateChange(event) {
+                                    if (event.data === YT.PlayerState.PLAYING) {
+                                        checkInterval = setInterval(function() {
+                                            var currentTime = player.getCurrentTime();
+                                            if (currentTime >= pauseTime) {
+                                                player.pauseVideo();
+                                                clearInterval(checkInterval);
+                                                var modal = new bootstrap.Modal(document.getElementById('pauseModal'));
+                                                modal.show();
+                                            }
+                                        }, 500);
+                                    } else {
+                                        clearInterval(checkInterval);
+                                    }
+                                }
+
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    document.getElementById("resumeBtn").addEventListener("click", function() {
+                                        player.playVideo();
+                                    });
+                                });
+                            </script>
                         </div>
+
                     </div>
                 </div>
                 @endif
@@ -477,8 +532,6 @@
 
             </div>
             <!-- /Talent Profile Sidebar -->
-
-
         </div>
 
         <!-- Recent Work -->
@@ -571,187 +624,5 @@
 
     </div>
     <!-- /Content -->
-
-    <!-- Bootstrap Modal -->
-    <div class="modal fade" id="youtubeModal" tabindex="-1" aria-labelledby="youtubeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content bg-dark border-0">
-                <div class="modal-body p-0 position-relative">
-                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="ratio ratio-16x9">
-                        <iframe id="youtubeIframe"
-                            src=""
-                            title="YouTube video player"
-                            allow="autoplay; encrypted-media"
-                            allowfullscreen
-                            class="rounded-bottom">
-                        </iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Script -->
-    <!-- <script>
-        const modal = document.getElementById('youtubeModal');
-        const iframe = document.getElementById('youtubeIframe');
-
-        modal.addEventListener('show.bs.modal', function() {
-            iframe.src = "https://www.youtube.com/embed/{{ $videoId }}?autoplay=1";
-        });
-
-        modal.addEventListener('hidden.bs.modal', function() {
-            iframe.src = "";
-        });
-    </script> -->
-
-
-
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        let player_ {
-            {
-                $story - > id
-            }
-        };
-        let modalShown_ {
-            {
-                $story - > id
-            }
-        } = false;
-        let checkInterval_ {
-            {
-                $story - > id
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const thumbnail = document.querySelector('.video-thumbnail');
-            const iframe = document.getElementById('player-{{ $story->id }}');
-
-            thumbnail.addEventListener('click', function() {
-                iframe.src = 'https://www.youtube.com/embed/{{ $videoId }}?enablejsapi=1&autoplay=1&rel=0&modestbranding=1';
-                iframe.classList.remove('d-none');
-                thumbnail.style.display = 'none';
-            });
-
-            document.getElementById('continueBtn-{{ $story->id }}').addEventListener('click', () => {
-                player_ {
-                    {
-                        $story - > id
-                    }
-                }.playVideo();
-            });
-
-            document.getElementById('cancelBtn-{{ $story->id }}').addEventListener('click', () => {
-                player_ {
-                    {
-                        $story - > id
-                    }
-                }.stopVideo();
-                const modalEl = document.getElementById('pauseModal-{{ $story->id }}');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                modal.hide();
-            });
-        });
-
-        function onYouTubeIframeAPIReady() {
-            player_ {
-                {
-                    $story - > id
-                }
-            } = new YT.Player('player-{{ $story->id }}', {
-                events: {
-                    'onStateChange': onPlayerStateChange_ {
-                        {
-                            $story - > id
-                        }
-                    }
-                }
-            });
-        }
-
-        function onPlayerStateChange_ {
-            {
-                $story - > id
-            }
-        }(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                if (checkInterval_ {
-                        {
-                            $story - > id
-                        }
-                    }) clearInterval(checkInterval_ {
-                    {
-                        $story - > id
-                    }
-                });
-                checkInterval_ {
-                    {
-                        $story - > id
-                    }
-                } = setInterval(() => {
-                    const currentTime = player_ {
-                        {
-                            $story - > id
-                        }
-                    }.getCurrentTime();
-                    if (!modalShown_ {
-                            {
-                                $story - > id
-                            }
-                        } && currentTime >= 60) { // Pause at 60 seconds
-                        player_ {
-                            {
-                                $story - > id
-                            }
-                        }.pauseVideo();
-                        modalShown_ {
-                            {
-                                $story - > id
-                            }
-                        } = true;
-
-                        logView({
-                            {
-                                $story - > id
-                            }
-                        });
-
-                        const modalEl = document.getElementById('pauseModal-{{ $story->id }}');
-                        const modal = new bootstrap.Modal(modalEl);
-                        modal.show();
-                    }
-                }, 1000);
-            } else {
-                if (checkInterval_ {
-                        {
-                            $story - > id
-                        }
-                    }) clearInterval(checkInterval_ {
-                    {
-                        $story - > id
-                    }
-                });
-            }
-        }
-
-        function logView(storyId) {
-            fetch("{{ route('log.view') }}", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        story_id: storyId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => console.log('View logged:', data))
-                .catch(error => console.error('Error logging view:', error));
-        }
-    </script>
-
-    @endsection
+</div>
+@endsection

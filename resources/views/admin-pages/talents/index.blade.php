@@ -203,6 +203,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
+                                    <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
                             </div>
 
                         </div>

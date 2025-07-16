@@ -151,43 +151,55 @@
 
             @endforeach
             <!-- Add Modal -->
-            <div class="modal fade" id="addBannerModal" tabindex="-1">
+            <div class="modal fade" id="addBannerModal" tabindex="-1" aria-labelledby="addBannerModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <form action="{{ route('admin.banners.store') }}" method="POST" enctype="multipart/form-data" class="modal-content">
                         @csrf
                         <div class="modal-header">
-                            <h5 class="modal-title">Add Banner</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            <h5 class="modal-title" id="addBannerModalLabel">Add Banner</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+
                         <div class="modal-body">
+                            {{-- Title --}}
                             <div class="mb-3">
                                 <label class="form-label">Title</label>
-                                <input type="text" name="title" class="form-control" required>
+                                <input type="text" name="title" class="form-control" value="{{ old('title') }}">
                             </div>
+
+                            {{-- Description --}}
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" class="form-control" required></textarea>
+                                <textarea name="description" class="form-control">{{ old('description') }}</textarea>
                             </div>
+
+                            {{-- Image --}}
                             <div class="mb-3">
                                 <label class="form-label">Image</label>
                                 <input type="file" name="image" class="form-control">
                             </div>
+
+                            {{-- Link --}}
                             <div class="mb-3">
                                 <label class="form-label">Link</label>
-                                <input type="text" name="link" class="form-control">
+                                <input type="url" name="link" class="form-control" value="{{ old('link') }}">
                             </div>
+
+                            {{-- Status --}}
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="status" value="1">
+                                <input class="form-check-input" type="checkbox" name="status" value="active" {{ old('status') ? 'checked' : '' }}>
                                 <label class="form-check-label">Active</label>
                             </div>
                         </div>
+
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button type="submit" class="btn btn-primary">Add Banner</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

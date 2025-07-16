@@ -10,7 +10,12 @@ class AdminTestimonialController extends Controller
 {
     public function index()
     {
-        return response()->json(Testimonial::with('talent')->get());
+        $testimonials = Testimonial::with('talent')->get();
+
+        return view('admin-pages.testimonials.index', [
+            'talents' => \App\Models\Talent::all(),
+            'testimonials' => $testimonials
+        ]);
     }
 
     public function store(Request $request)
@@ -24,7 +29,7 @@ class AdminTestimonialController extends Controller
 
         $testimonial = Testimonial::create($validated);
 
-        return response()->json($testimonial, 201);
+        return redirect()->route('admin.testimonials.index')->with('success', 'Testimonial added successfully.');
     }
 
     public function show($id)
@@ -46,7 +51,7 @@ class AdminTestimonialController extends Controller
 
         $testimonial->update($validated);
 
-        return response()->json($testimonial);
+        return redirect()->route('admin.testimonials.index')->with('success', 'Testimonial updated successfully.');
     }
 
     public function destroy($id)
@@ -54,6 +59,6 @@ class AdminTestimonialController extends Controller
         $testimonial = Testimonial::findOrFail($id);
         $testimonial->delete();
 
-        return response()->json(null, 204);
+        return redirect()->route('admin.testimonials.index')->with('success', 'Testimonial deleted successfully.');
     }
 }

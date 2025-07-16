@@ -20,8 +20,8 @@
                                     class="ti ti-new-section text-white d-flex align-items-center justify-content-center"></i>
                             </div>
                             <div>
-                                <p class="mb-1"> Orders Active</p>
-                                <h6 class="mb-0">950</h6>
+                                <p class="mb-1"> Total Testimonials</p>
+                                <h6 class="mb-0">{{ $totalTestimonials }}</h6>
                             </div>
                         </div>
                     </div>
@@ -36,8 +36,8 @@
                                 <i class="ti ti-checks text-white d-flex align-items-center justify-content-center"></i>
                             </div>
                             <div>
-                                <p class="mb-1">Pending</p>
-                                <h6 class="mb-0">800</h6>
+                                <p class="mb-1">Total Stories</p>
+                                <h6 class="mb-0">{{ $totalStories }}</h6>
                             </div>
                         </div>
                     </div>
@@ -52,8 +52,8 @@
                                 <i class="ti ti-heart text-white d-flex align-items-center justify-content-center"></i>
                             </div>
                             <div>
-                                <p class="mb-1">Completed</p>
-                                <h6 class="mb-0">150</h6>
+                                <p class="mb-1">Talents</p>
+                                <h6 class="mb-0">{{ $totalTalents }}</h6>
                             </div>
                         </div>
                     </div>
@@ -68,8 +68,8 @@
                                 <i class="ti ti-star text-white d-flex align-items-center justify-content-center"></i>
                             </div>
                             <div>
-                                <p class="mb-1">Cancelled</p>
-                                <h6 class="mb-0">₹500,000</h6>
+                                <p class="mb-1">Total Users</p>
+                                <h6 class="mb-0">{{ $totalUsers }}</h6>
                             </div>
                         </div>
                     </div>
@@ -201,14 +201,15 @@
                 <div class="card dashboard-card flex-fill w-100">
                     <div class="card-header">
                         <div class="gig-card-head">
-                            <h5 class="mb-0">Recent Orders</h5>
+                            <h5 class="mb-0">Recent Talents</h5>
                         </div>
-                        <a href="seller-orders.html" class="view-link mb-0">View All</a>
+                        <a href="{{ route('admin.talents') }}" class="view-link mb-0">View All</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive card-table">
                             <table class="table">
                                 <tbody>
+                                    @foreach ($talents as $talent)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -217,118 +218,22 @@
                                                             class="img-fluid rounded-pill" alt="img"></a>
                                                 </div>
                                                 <div class="recent-payment">
-                                                    <h6><a role="button" tabIndex="0">I will do creating and promoting
-                                                            video...</a></h6>
+                                                    <h6><a role="button" tabIndex="0">{{ $talent->name }}</a></h6>
                                                     <ul>
-                                                        <li>Delivery Date: 11 Jan 2025</li>
-                                                        <li>Buyer : <span class="text-dark">Jones</span></li>
+                                                        <li>Registered Date: {{ $talent->created_at->format('d M Y') }}</li>
+                                                        <li>Category : <span class="text-dark">{{ $talent->category->name ?? 'N/A' }}</span></li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-end">
-                                            <span class="badge badge-pink-transparent">New</span>
+                                            <span class="badge badge-pink-transparent">{{ $talent->status }}</span>
                                         </td>
                                         <td class="text-end amount-info">
-                                            <h6 class="mb-0">$1400</h6>
+                                            <h6 class="mb-0">{{ $talent->phone }}</h6>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="table-img">
-                                                    <a role="button" tabIndex="0"><img src="assets/img/gigs/gigs-08.jpg"
-                                                            class="img-fluid rounded-pill" alt="img"></a>
-                                                </div>
-                                                <div class="recent-payment">
-                                                    <h6><a role="button" tabIndex="0">Optimizing online presence to
-                                                            enhance...</a></h6>
-                                                    <ul>
-                                                        <li>Delivery Date: 11/01/2025</li>
-                                                        <li>Buyer : <span class="text-dark">Rose</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-pink-transparent">New</span>
-                                        </td>
-                                        <td class="text-end amount-info">
-                                            <h6 class="mb-0">$7500</h6>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="table-img">
-                                                    <a role="button" tabIndex="0"><img src="assets/img/gigs/gigs-09.jpg"
-                                                            class="img-fluid rounded-pill" alt="img"></a>
-                                                </div>
-                                                <div class="recent-payment">
-                                                    <h6><a role="button" tabIndex="0">I will do english or german
-                                                            transcript of any...</a></h6>
-                                                    <ul>
-                                                        <li>Delivery Date: 09/01/2025</li>
-                                                        <li>Buyer : <span class="text-dark">Smith</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-pink-transparent">New</span>
-                                        </td>
-                                        <td class="text-end amount-info">
-                                            <h6 class="mb-0">$4470</h6>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="table-img">
-                                                    <a role="button" tabIndex="0"><img src="assets/img/gigs/gigs-04.jpg"
-                                                            class="img-fluid rounded-pill" alt="img"></a>
-                                                </div>
-                                                <div class="recent-payment">
-                                                    <h6><a role="button" tabIndex="0">I will do professional lifestyle
-                                                            and product...</a></h6>
-                                                    <ul>
-                                                        <li>Delivery Date: 08/01/2025</li>
-                                                        <li>Buyer : <span class="text-dark">Lidia</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-pink-transparent">New</span>
-                                        </td>
-                                        <td class="text-end amount-info">
-                                            <h6 class="mb-0">$3570</h6>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="table-img">
-                                                    <a role="button" tabIndex="0"><img src="assets/img/gigs/gigs-06.jpg"
-                                                            class="img-fluid rounded-pill" alt="img"></a>
-                                                </div>
-                                                <div class="recent-payment">
-                                                    <h6><a role="button" tabIndex="0">I will develop openai, dalle, chat
-                                                            gpt...</a></h6>
-                                                    <ul>
-                                                        <li>Delivery Date: 07/01/2025</li>
-                                                        <li>Buyer : <span class="text-dark">Anderson</span></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent text-success">Completed</span>
-                                        </td>
-                                        <td class="text-end amount-info">
-                                            <h6 class="mb-0">$4780</h6>
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -339,21 +244,22 @@
                 <div class="card files-card flex-fill w-100">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div class="gig-card-head">
-                            <h5 class="mb-0">Files</h5>
+                            <h5 class="mb-0">Users</h5>
                         </div>
-                        <a href="seller-files.html" class="view-link mb-0">View All</a>
+                        <a href="{{ route('admin.users.index') }}" class="view-link mb-0">View All</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive card-table">
                             <table class="table">
                                 <tbody>
+                                    @foreach ($users as $user)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <span class="files-icon flex-shrink-0"><i class="ti ti-pdf"></i></span>
                                                 <div>
-                                                    <h6 class="mb-1">Document.pdf</h6>
-                                                    <p>Update on: 11 Jan 2025</p>
+                                                    <h6 class="mb-1">{{ $user->name }}</h6>
+                                                    <p>Update on: {{ $user->updated_at->format('d M Y') }}</p>
                                                 </div>
                                                 <div class="card-edit-icon d-flex gap-2">
                                                     <a role="button" tabIndex="0"
@@ -361,91 +267,12 @@
                                                             class="ti ti-info-circle "></i> </a>
                                                     <a role="button" tabIndex="0"
                                                         class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-download"></i> </a>
+                                                            class="ti ti-eye"></i> </a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="files-icon flex-shrink-0"><i
-                                                        class="ti ti-photo"></i></span>
-                                                <div>
-                                                    <h6 class="mb-1">Logo.png</h6>
-                                                    <p>Update on: 10 Jan 2025</p>
-                                                </div>
-                                                <div class="card-edit-icon d-flex gap-2">
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-info-circle "></i> </a>
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-download"></i> </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="files-icon flex-shrink-0"><i
-                                                        class="ti ti-photo"></i></span>
-                                                <div>
-                                                    <h6 class="mb-1">Worklog.png</h6>
-                                                    <p>Update on: 09 Jan 2025</p>
-                                                </div>
-                                                <div class="card-edit-icon d-flex gap-2">
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-info-circle "></i> </a>
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-download"></i> </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="files-icon flex-shrink-0"><i
-                                                        class="ti ti-photo"></i></span>
-                                                <div>
-                                                    <h6 class="mb-1">Alter.png</h6>
-                                                    <p>Update on: 08 Jan 2025</p>
-                                                </div>
-                                                <div class="card-edit-icon d-flex gap-2">
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-info-circle "></i> </a>
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-download"></i> </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="files-icon flex-shrink-0"><i
-                                                        class="ti ti-photo"></i></span>
-                                                <div>
-                                                    <h6 class="mb-1">Reportfile.png</h6>
-                                                    <p>Update on: 07 Jan 2025</p>
-                                                </div>
-                                                <div class="card-edit-icon d-flex gap-2">
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-info-circle "></i> </a>
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-download"></i> </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -808,3 +635,4 @@
 <!-- /Transaction details -->
 
 
+@endsection

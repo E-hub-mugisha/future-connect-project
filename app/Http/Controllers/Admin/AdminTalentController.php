@@ -68,7 +68,9 @@ class AdminTalentController extends Controller
 
     public function show($id)
     {
-        return Talent::findOrFail($id);
+        $talent = Talent::withCount('stories')->findOrFail($id);
+        $categories = Category::all();
+        return view('admin-pages.talents.talent-profile', compact('talent', 'categories'));
     }
 
     public function update(Request $request, $id)

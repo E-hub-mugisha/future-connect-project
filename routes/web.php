@@ -76,6 +76,10 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/privacy-policy', 'privacyPolicy')->name('user.privacy-policy');
     Route::get('/terms-condition', 'termsCondition')->name('user.terms-condition');
     Route::get('/donation-policy', 'donationPolicy')->name('user.donation-policy');
+
+    Route::get('/video', function () {
+    return view('user-page.video');
+});
 });
 
 
@@ -127,6 +131,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
     Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
     Route::delete('/talents/{id}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
+    Route::get('/talents/{id}', [AdminTalentController::class, 'show'])->name('talents.view');
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +192,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     */
     Route::get('/banners', [AdminBannerController::class, 'index'])->name('banners.index');
     Route::get('/banners/create', [AdminBannerController::class, 'create'])->name('banners.create');
-    Route::post('/banners', [AdminBannerController::class, 'store'])->name('banners.store');
+    Route::post('/banners/store', [AdminBannerController::class, 'store'])->name('banners.store');
     Route::get('/banners/{banner}', [AdminBannerController::class, 'show'])->name('banners.show');
     Route::get('/banners/{banner}/edit', [AdminBannerController::class, 'edit'])->name('banners.edit');
     Route::put('/banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');

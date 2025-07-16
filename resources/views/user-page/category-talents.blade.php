@@ -36,14 +36,18 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="card" data-aos="flip-left">
                         <div class="card-body text-center">
-                            <span class="avatar">
+                            <span class="avatar d-inline-block" style="width: 60px; height: 60px; overflow: hidden;">
                                 <a href="{{ route('user.talent.details', $talent->id) }}">
-                                    <img class="rounded-3"
-                                        src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
+                                    <img
+                                        class="rounded-3 w-100 h-100"
+                                        style="object-fit: cover;"
+                                        src="{{ $talent->image 
+                ? asset('image/talents/' . $talent->image) 
+                : asset('assets/img/user/profile.jpg') }}"
                                         alt="img" />
                                 </a>
-
                             </span>
+
                             <h6 class="mb-1">
                                 <a
                                     href="{{ route('user.talent.details', $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon" style="color: #27AE60;"></i></a>
