@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TalentApprovalNotification;
+use App\Mail\TalentApproved;
 use App\Models\Talent;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AdminTalentController extends Controller
 {
@@ -102,7 +108,7 @@ class AdminTalentController extends Controller
             $image = $request->file('image');
             $path = 'image/talents/';
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path($path), $imageName); 
+            $image->move(public_path($path), $imageName);
         }
 
         // ✅ Update talent fields
@@ -148,5 +154,40 @@ class AdminTalentController extends Controller
         $talent->save();
 
         return redirect()->back();
+    }
+    public function approve($id)
+    {
+        $talent = Talent::findOrFail($id);
+
+        // Check if user already exists
+        $user = User::where('email', $talent->email)->first();
+
+        $password = null;
+
+        if (!$user) {
+            $password = Str::random(10); // generate a 10-character password
+
+            $user = User::create([
+                'name' => $talent->name,
+                'email' => $talent->email,
+                'password' => Hash::make($password),
+                'role' => 'talent',
+            ]);
+        }
+
+        // Update the talent
+        $talent->status = 'approved';
+        $talent->user_id = $user->id;
+        $talent->save();
+
+        // Send email to talent only if account was just created
+        if ($password) {
+            Mail::to($user->email)->send(new TalentApproved($user, $password));
+        }
+
+        // Send email to the approver/admin
+        Mail::to(auth()->user()->email)->send(new TalentApprovalNotification($talent));
+
+        return back()->with('success', 'Talent approved and notifications sent.');
     }
 }

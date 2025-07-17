@@ -65,7 +65,40 @@
                             <td>{{ $talent->category ? $talent->category->name : 'N/A' }}
                             </td>
                             <td>{{ $talent->rating }}</td>
-                            <td>{{ $talent->status }}</td>
+                            <td>
+                                @if ($talent->status !== 'approved')
+                                <!-- Button to open modal -->
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#approveTalentModal{{ $talent->id }}">
+                                    Approve
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="approveTalentModal{{ $talent->id }}" tabindex="-1" aria-labelledby="approveTalentLabel{{ $talent->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="{{ route('admin.talents.approve', $talent->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="approveTalentLabel{{ $talent->id }}">Approve Talent</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to approve <strong>{{ $talent->name }}</strong>?</p>
+                                                    <p>This will create a user account for them with a generated password.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-success">Approve</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                @else
+                                <span class="text-success">Approved</span>
+                                @endif
+                            </td>
                             <td>{{ $talent->featured ? 'Yes' : 'No' }}
                             </td>
                             <td>
@@ -203,7 +236,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
-                                    <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
+                                <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
                             </div>
 
                         </div>

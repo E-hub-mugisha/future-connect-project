@@ -295,7 +295,6 @@ return '';
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
                 <li>
-                    @if(Auth::check() && Auth::user()->role == 'admin')
                     <ul>
                         <li>
                             <a href="/admin/dashboard" class="{{ isActiveRoute('admin.dashboard') }}">
@@ -353,21 +352,6 @@ return '';
                             </a>
                         </li>
                     </ul>
-                    @else
-                    <ul>   
-                        <li>
-                            <a href="/talent/page/dashboard" class="{{ isActiveRoute('talent.dashboard') }}">
-                                <i class="ti ti-layout-grid me-2"></i><span>Dashboard</span>
-                            </a>
-                        </li>
-                        
-                        <li>
-                            <a href="/talent/profile" class="{{ isActiveRoute('talent.profile') }}">
-                                <i class="ti ti-user me-2"></i><span>Profile</span>
-                            </a>
-                        </li>
-                    </ul>
-                    @endif
                 </li>
             </ul>
             <div class="sidebar-footer">

@@ -15,6 +15,10 @@ use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPartnerController;
+use App\Http\Controllers\Talent\TalentDashboardController;
+use App\Http\Controllers\Talent\TalentProfileController;
+use App\Http\Controllers\Talent\TalentStoryController;
+use App\Http\Controllers\Talent\TalentSkillController;
 
 /**
  * -----------------------
@@ -78,8 +82,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/donation-policy', 'donationPolicy')->name('user.donation-policy');
 
     Route::get('/video', function () {
-    return view('user-page.video');
-});
+        return view('user-page.video');
+    });
 });
 
 
@@ -115,124 +119,109 @@ Route::post('/stories/comments', [HomeController::class, 'storeStoryComment'])->
  * -----------------------
  */
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+        // Dashboard
+        Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Talents
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents');
-    Route::post('/talents', [AdminTalentController::class, 'store'])->name('talents.store');
-    Route::put('/talent/update/{id}', [AdminTalentController::class, 'update'])->name('talents.update');
-    Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
-    Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
-    Route::delete('/talents/{id}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
-    Route::get('/talents/{id}', [AdminTalentController::class, 'show'])->name('talents.view');
+        // Talents
+        Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents');
+        Route::post('/talents', [AdminTalentController::class, 'store'])->name('talents.store');
+        Route::put('/talent/update/{id}', [AdminTalentController::class, 'update'])->name('talents.update');
+        Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
+        Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
+        Route::delete('/talents/{id}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
+        Route::get('/talents/{id}', [AdminTalentController::class, 'show'])->name('talents.view');
+        Route::put('/talents/{id}/approve', [AdminTalentController::class, 'approve'])->name('talents.approve');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Users & Categories
-    |--------------------------------------------------------------------------
-    */
-    // Users - Manually Defined API Resource Routes (no create/edit views)
-    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
-    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
-    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
-    Route::patch('/users/{user}', [AdminUserController::class, 'update']); // optional
-    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+        // Users
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+        Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+        Route::patch('/users/{user}', [AdminUserController::class, 'update']);
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
+        // Categories
+        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+        Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
+        Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+        Route::get('/categories/{category}', [AdminCategoryController::class, 'show'])->name('categories.show');
+        Route::get('/categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
+        Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+        Route::patch('/categories/{category}', [AdminCategoryController::class, 'update']);
+        Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
-    // Categories - Manually Defined Resource Routes
-    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
-    Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
-    Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
-    Route::get('/categories/{category}', [AdminCategoryController::class, 'show'])->name('categories.show');
-    Route::get('/categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
-    Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
-    Route::patch('/categories/{category}', [AdminCategoryController::class, 'update']); // optional if PATCH is used
-    Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+        // Stories
+        Route::resource('stories', AdminStoryController::class)->except(['edit', 'create']);
+        Route::get('/stories/create', [AdminStoryController::class, 'create'])->name('stories.create');
+        Route::get('/stories/{story}/edit', [AdminStoryController::class, 'edit'])->name('stories.edit');
 
+        // Skills
+        Route::resource('skills', AdminSkillController::class)->except(['edit', 'create']);
+        Route::get('/skills/create', [AdminSkillController::class, 'create'])->name('skills.create');
+        Route::get('/skills/{story}/edit', [AdminSkillController::class, 'edit'])->name('skills.edit');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Stories
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/stories', [AdminStoryController::class, 'index'])->name('stories.index');
-    Route::get('/stories/create', [AdminStoryController::class, 'create'])->name('stories.create');
-    Route::post('/stories', [AdminStoryController::class, 'store'])->name('stories.store');
-    Route::get('/stories/{story}', [AdminStoryController::class, 'show'])->name('stories.show');
-    Route::get('/stories/{story}/edit', [AdminStoryController::class, 'edit'])->name('stories.edit');
-    Route::put('/stories/{story}', [AdminStoryController::class, 'update'])->name('stories.update');
-    Route::patch('/stories/{story}', [AdminStoryController::class, 'update']); // optional
-    Route::delete('/stories/{story}', [AdminStoryController::class, 'destroy'])->name('stories.destroy');
+        // Banners
+        Route::get('/banners', [AdminBannerController::class, 'index'])->name('banners.index');
+        Route::get('/banners/create', [AdminBannerController::class, 'create'])->name('banners.create');
+        Route::post('/banners/store', [AdminBannerController::class, 'store'])->name('banners.store');
+        Route::get('/banners/{banner}', [AdminBannerController::class, 'show'])->name('banners.show');
+        Route::get('/banners/{banner}/edit', [AdminBannerController::class, 'edit'])->name('banners.edit');
+        Route::put('/banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');
+        Route::delete('/banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Skills
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/skills', [AdminSkillController::class, 'index'])->name('skills.index');
-    Route::get('/skills/create', [AdminSkillController::class, 'create'])->name('skills.create');
-    Route::post('/skills', [AdminSkillController::class, 'store'])->name('skills.store');
-    Route::get('/skills/{story}', [AdminSkillController::class, 'show'])->name('skills.show');
-    Route::get('/skills/{story}/edit', [AdminSkillController::class, 'edit'])->name('skills.edit');
-    Route::put('/skills/{story}', [AdminSkillController::class, 'update'])->name('skills.update');
-    Route::delete('/skills/{story}', [AdminSkillController::class, 'destroy'])->name('skills.destroy');
+        // Testimonials
+        Route::resource('testimonials', AdminTestimonialController::class)->except(['edit', 'create']);
+        Route::get('/testimonials/create', [AdminTestimonialController::class, 'create'])->name('testimonials.create');
+        Route::get('/testimonials/{testimonial}/edit', [AdminTestimonialController::class, 'edit'])->name('testimonials.edit');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Banners
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/banners', [AdminBannerController::class, 'index'])->name('banners.index');
-    Route::get('/banners/create', [AdminBannerController::class, 'create'])->name('banners.create');
-    Route::post('/banners/store', [AdminBannerController::class, 'store'])->name('banners.store');
-    Route::get('/banners/{banner}', [AdminBannerController::class, 'show'])->name('banners.show');
-    Route::get('/banners/{banner}/edit', [AdminBannerController::class, 'edit'])->name('banners.edit');
-    Route::put('/banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');
-    Route::delete('/banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
+        // Announcements
+        Route::resource('announcements', AdminAnnouncementController::class)->except(['edit', 'create']);
+        Route::get('/announcements/create', [AdminAnnouncementController::class, 'create'])->name('announcements.create');
+        Route::get('/announcements/{announcement}/edit', [AdminAnnouncementController::class, 'edit'])->name('announcements.edit');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Testimonials
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
-    Route::get('/testimonials/create', [AdminTestimonialController::class, 'create'])->name('testimonials.create');
-    Route::post('/testimonials', [AdminTestimonialController::class, 'store'])->name('testimonials.store');
-    Route::get('/testimonials/{testimonial}', [AdminTestimonialController::class, 'show'])->name('testimonials.show');
-    Route::get('/testimonials/{testimonial}/edit', [AdminTestimonialController::class, 'edit'])->name('testimonials.edit');
-    Route::put('/testimonials/{testimonial}', [AdminTestimonialController::class, 'update'])->name('testimonials.update');
-    Route::delete('/testimonials/{testimonial}', [AdminTestimonialController::class, 'destroy'])->name('testimonials.destroy');
-    /*
-    |--------------------------------------------------------------------------
-    | Announcements
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/announcements', [AdminAnnouncementController::class, 'index'])->name('announcements.index');
-    Route::get('/announcements/create', [AdminAnnouncementController::class, 'create'])->name('announcements.create');
-    Route::post('/announcements', [AdminAnnouncementController::class, 'store'])->name('announcements.store');
-    Route::get('/announcements/{announcement}', [AdminAnnouncementController::class, 'show'])->name('announcements.show');
-    Route::get('/announcements/{announcement}/edit', [AdminAnnouncementController::class, 'edit'])->name('announcements.edit');
-    Route::put('/announcements/{announcement}', [AdminAnnouncementController::class, 'update'])->name('announcements.update');
-    Route::delete('/announcements/{announcement}', [AdminAnnouncementController::class, 'destroy'])->name('announcements.destroy');
+        // Partners
+        Route::get('/partners', [AdminPartnerController::class, 'index'])->name('partners.index');
+        Route::post('/partners', [AdminPartnerController::class, 'store'])->name('partners.store');
+        Route::put('/partners/{partner}', [AdminPartnerController::class, 'update'])->name('partners.update');
+        Route::delete('/partners/{partner}', [AdminPartnerController::class, 'destroy'])->name('partners.destroy');
+    });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Partners
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/partners', [AdminPartnerController::class, 'index'])->name('partners.index');
-    Route::post('/partners', [AdminPartnerController::class, 'store'])->name('partners.store');
-    Route::put('/partners/{partner}', [AdminPartnerController::class, 'update'])->name('partners.update');
-    Route::delete('/partners/{partner}', [AdminPartnerController::class, 'destroy'])->name('partners.destroy');
-});
+// Talent routes
+Route::middleware(['auth', 'role:talent'])
+    ->prefix('talent')
+    ->name('talent.')
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/page/dashboard', [TalentDashboardController::class, 'dashboard'])->name('dashboard');
+
+        // Profile
+        Route::get('/profile', [TalentProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [TalentProfileController::class, 'update'])->name('profile.update');
+
+        // Announcements
+        Route::get('/announcements', [TalentDashboardController::class, 'index'])->name('announcements.index');
+        Route::get('/announcements/{announcement}', [TalentDashboardController::class, 'show'])->name('announcements.show');
+
+        // Testimonials
+        Route::get('/testimonials', [TalentDashboardController::class, 'index'])->name('testimonials.index');
+        Route::post('/testimonials', [TalentDashboardController::class, 'store'])->name('testimonials.store');
+
+        // Skills
+        Route::get('/skills', [TalentSkillController::class, 'index'])->name('skills.index');
+        Route::post('/skills', [TalentSkillController::class, 'store'])->name('skills.store');
+        Route::delete('/skills/{id}', [TalentSkillController::class, 'destroy'])->name('skills.destroy');
+
+        // Stories
+        Route::get('/stories', [TalentStoryController::class, 'index'])->name('stories.index');
+        Route::get('/stories/{id}', [TalentStoryController::class, 'show'])->name('stories.show');
+    });
+
 
 /**
  * -----------------------

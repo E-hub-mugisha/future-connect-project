@@ -55,4 +55,8 @@ class Talent extends Model
     {
         return $this->hasMany(SupportTalent::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
