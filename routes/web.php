@@ -15,10 +15,13 @@ use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPartnerController;
+use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Talent\TalentDashboardController;
 use App\Http\Controllers\Talent\TalentProfileController;
 use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\users\PaymentController as UsersPaymentController;
 
 /**
  * -----------------------
@@ -64,6 +67,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/upload-story', 'uploadStory')->name('user.upload-story');
     Route::post('/upload-story/store', 'uploadStoryStory')->name('user.upload-story.store');
     Route::post('/log-view', 'logView')->name('log.view');
+    
 
     // 📢 Announcements
     Route::get('/announcements', 'announcements')->name('user.announcements');
@@ -86,6 +90,12 @@ Route::controller(HomeController::class)->group(function () {
     });
 });
 
+Route::get('/video/verify-access/{story_id}/{video_id}', [UsersPaymentController::class, 'showEmailForm'])->name('video.access.verify');
+Route::post('/video/verify-email', [UsersPaymentController::class, 'verifyEmail'])->name('video.verifyEmail');
+Route::get('/story/payment/{story_id}/{video_id}', [UsersPaymentController::class, 'checkout'])->name('payment.checkout');
+// Route::post('/story/payment/pay', [UsersPaymentController::class, 'pay'])->name('payment.process');
+Route::get('/story/watch/{video_id}', [UsersPaymentController::class, 'watch'])->name('video.play');
+Route::get('/story/payment/callback', [UsersPaymentController::class, 'handleCallback'])->name('payment.callback');
 
 /**
  * -----------------------
@@ -189,6 +199,11 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/partners', [AdminPartnerController::class, 'store'])->name('partners.store');
         Route::put('/partners/{partner}', [AdminPartnerController::class, 'update'])->name('partners.update');
         Route::delete('/partners/{partner}', [AdminPartnerController::class, 'destroy'])->name('partners.destroy');
+
+        // Payments
+        Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{id}', [AdminPaymentController::class, 'show'])->name('payments.show');
+        // Additional payment management methods can be added here
     });
 
 // Talent routes

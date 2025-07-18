@@ -104,19 +104,25 @@
                             </div>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="pauseModal" tabindex="-1" aria-labelledby="pauseModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="emailVerifyModal" tabindex="-1" aria-labelledby="emailVerifyModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="pauseModalLabel">Video Paused</h5>
+                                    <div class="modal-content border-0 shadow-lg rounded-4">
+                                        <div class="modal-header bg-warning bg-opacity-10">
+                                            <h5 class="modal-title fw-bold" id="emailVerifyModalLabel">Verify Email to Continue</h5>
                                         </div>
-                                        <div class="modal-body">
-                                            The video was paused at 1:30. Would you like to continue watching?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            <button id="resumeBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Continue</button>
-                                        </div>
+                                        <form id="emailVerifyForm" method="POST" action="{{ route('video.verifyEmail') }}">
+                                            @csrf
+                                            <input type="hidden" name="story_id" value="{{ $story->id }}">
+                                            <input type="hidden" name="video_id" value="{{ $videoId }}">
+                                            <div class="modal-body text-center">
+                                                <p>Please enter your email to verify if you have access to this video.</p>
+                                                <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <button type="submit" class="btn btn-success px-4">Verify Email</button>
+                                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +170,7 @@
                                             if (currentTime >= pauseTime) {
                                                 player.pauseVideo();
                                                 clearInterval(checkInterval);
-                                                var modal = new bootstrap.Modal(document.getElementById('pauseModal'));
+                                                var modal = new bootstrap.Modal(document.getElementById('emailVerifyModal'));
                                                 modal.show();
                                             }
                                         }, 500);
@@ -174,8 +180,13 @@
                                 }
 
                                 document.addEventListener("DOMContentLoaded", function() {
-                                    document.getElementById("resumeBtn").addEventListener("click", function() {
+                                    document.getElementById("resumeBtn")?.addEventListener("click", function() {
                                         player.playVideo();
+                                    });
+
+                                    document.getElementById("cancelPlaybackBtn")?.addEventListener("click", function() {
+                                        player.stopVideo(); // Stops the video
+                                        document.getElementById('custom-thumbnail').style.display = 'block'; // Optionally show thumbnail again
                                     });
                                 });
                             </script>

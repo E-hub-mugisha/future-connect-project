@@ -348,19 +348,24 @@ return '';
                             </a>
                         </li>
                         <li>
+                            <a href="/admin/payments" class="{{ isActiveRoute('admin.payments.*', 'admin/payments*') }}">
+                                <i class="ti ti-transition-top me-2"></i> <span>Story Payments</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="seller-settings.html" class="{{ isActiveRoute('', 'seller-settings*') }}">
                                 <i class="ti ti-settings-check me-2"></i> <span>Settings</span>
                             </a>
                         </li>
                     </ul>
                     @else
-                    <ul>   
+                    <ul>
                         <li>
                             <a href="/talent/page/dashboard" class="{{ isActiveRoute('talent.dashboard') }}">
                                 <i class="ti ti-layout-grid me-2"></i><span>Dashboard</span>
                             </a>
                         </li>
-                        
+
                         <li>
                             <a href="/talent/profile" class="{{ isActiveRoute('talent.profile') }}">
                                 <i class="ti ti-user me-2"></i><span>Profile</span>
