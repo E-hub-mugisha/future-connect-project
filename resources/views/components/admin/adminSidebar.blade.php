@@ -1,23 +1,4 @@
-@php
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 
-
-// Helper to check if a route or url pattern is active, returns 'active' or ''
-function isActiveRoute($routeNames, $urlPatterns = []) {
-foreach ((array) $routeNames as $route) {
-if (Route::is($route)) {
-return 'active';
-}
-}
-foreach ((array) $urlPatterns as $pattern) {
-if (Request::is($pattern)) {
-return 'active';
-}
-}
-return '';
-}
-@endphp
 
 <header class="header dashboard-header">
     <div class="header-user">
