@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPartnerController;
 use App\Http\Controllers\Admin\AdminPaymentController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Talent\TalentDashboardController;
 use App\Http\Controllers\Talent\TalentProfileController;
 use App\Http\Controllers\Talent\TalentStoryController;
@@ -113,9 +114,9 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+     ->middleware('guest')
+     ->name('password.reset');
 
 /**
  * -----------------------
