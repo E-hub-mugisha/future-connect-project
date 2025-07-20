@@ -6,7 +6,7 @@
   --dark: #011E34;
   --black: #27AE60;
   --light: #F9F9F9;
-  --white: #e4e4e4;
+  --white: #F0F2F7;
   --light-100: #FDFEFE;
   --light-200: #FDFDFD;
   --light-300: #FCFCFD;
@@ -1110,8 +1110,8 @@ label {
 }
 
 .btn-secondary {
-  background: #e4e4e4;
-  border: 1px solid #e4e4e4;
+  background: #F0F2F7;
+  border: 1px solid #F0F2F7;
   border-radius: 5px;
   color: var(--white);
   font-weight: 500;
@@ -2132,7 +2132,7 @@ h6,
 }
 
 .text-secondary {
-  color: #e4e4e4 !important;
+  color: #F0F2F7 !important;
   opacity: 1;
 }
 
@@ -2309,13 +2309,13 @@ a:focus {
 }
 
 .link-secondary {
-  color: #e4e4e4 !important;
+  color: #F0F2F7 !important;
 }
 
 .link-secondary:hover,
 .link-secondary:focus,
 .link-secondary:active {
-  color: #e4e4e4 !important;
+  color: #F0F2F7 !important;
 }
 
 .link-success {
@@ -2432,7 +2432,7 @@ hr.text-danger {
 
 .blockquote.custom-blockquote.secondary {
   background-color: rgba(0, 150, 255, 0.1);
-  border-inline-start: 2px solid #e4e4e4;
+  border-inline-start: 2px solid #F0F2F7;
 }
 
 .blockquote.custom-blockquote.secondary:before {
@@ -9762,7 +9762,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 .popular-section-two {
   position: relative;
   padding: 80px 0;
-  background: url('/assets/img/bg/bg-signal.png') no-repeat center center/cover;
+  /* background: url('/assets/img/bg/bg-signal.png') no-repeat center center/cover; */
   /* color: #fff; */
   /* z-index: 1; */
   overflow: hidden;
@@ -9828,7 +9828,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
   content: "";
   width: 10px;
   height: 10px;
-  background-color: #e4e4e4;
+  background-color: #F0F2F7;
   right: -2px;
   top: 4px;
   border-radius: 50px;
@@ -9853,7 +9853,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
   content: "";
   width: 10px;
   height: 10px;
-  background-color: #e4e4e4;
+  background-color: #F0F2F7;
   right: -2px;
   top: 4px;
   border-radius: 50px;
@@ -9994,7 +9994,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .bg-secondary-transparent {
   background-color: #EEF8FF;
-  color: #e4e4e4;
+  color: #F0F2F7;
 }
 
 .bg-pink-transparent {
@@ -10072,7 +10072,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 .new-services-section {
   position: relative;
   padding: 80px 0;
-  background: #c1c1c1;
+  /* background: #c1c1c1; */
 }
 
 @media (max-width: 991.98px) {
@@ -10088,7 +10088,11 @@ div.dt-container .dt-paging .dt-paging-button.current {
 .next-gen-section {
   position: relative;
   padding: 80px 0 56px;
-  background-color: #011E34;
+  background-image: url("/assets/img/bg/preview-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
 }
 
 @media (max-width: 991.98px) {
@@ -10116,8 +10120,11 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .what-makes-dream-gigs {
   padding: 80px 0;
-  background-color: var(--dark);
+  background-image: url("/assets/img/bg/preview-bg.jpg");
   z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
 }
 
@@ -11517,7 +11524,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .text-secondary {
-  color: #e4e4e4 !important;
+  color: #F0F2F7 !important;
 }
 
 .text-purple {
@@ -23772,7 +23779,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 }
 
 .privacy-section .mail-link {
-  color: #e4e4e4;
+  color: #F0F2F7;
 }
 
 .privacy-section .mail-link:hover {
@@ -25630,28 +25637,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
   border: 1px solid var(--white);
 }
 
-.testimonials-section-two {
-  background-image: url("/assets/img/bg/preview.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 4rem 0;
-  /* optional spacing */
-  position: relative;
-  z-index: 1;
-}
 
-.testimonials-section-two::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  /* Optional dark overlay */
-  z-index: -1;
-}
 
 .talent-section-two {
   background-image: url("/assets/img/bg/preview.jpg");

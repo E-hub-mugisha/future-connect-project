@@ -38,7 +38,7 @@ return '';
 
 
     .main-menu-wrapper .main-nav .nav-link {
-        color: #e4e4e4;
+        color: #F0F2F7;
         font-size: 13px;
         font-weight: 500;
         transition: all 0.3s ease-in-out;
@@ -50,8 +50,8 @@ return '';
 
     .main-menu-wrapper .main-nav .nav-link:hover,
     .main-menu-wrapper .main-nav .nav-link.active {
-        color: #e4e4e4;
-        border-bottom: 2px solid #e4e4e4;
+        color: #F0F2F7;
+        border-bottom: 2px solid #F0F2F7;
         background: transparent;
     }
 </style>
@@ -143,10 +143,7 @@ return '';
                                 <a href="{{ url('/stories') }}"
                                     class="{{ Request::is('stories') ? 'active' : '' }}">All Stories</a>
                             </li>
-                            <li>
-                                <a href="{{ url('/upload-story') }}"
-                                    class="{{ Request::is('upload-story') ? 'active' : '' }}">Upload Story</a>
-                            </li>
+                            
                             <li class="has-submenu">
                                 <a role="button" tabindex="0">Story Categories</a>
                                 <ul class="submenu">
@@ -219,8 +216,13 @@ return '';
                 </div>
                 <ul class="nav header-navbar-rht">
                     <li class="nav-item">
-                        <a class="btn btn-light d-inline-flex align-items-center" href="/login"><i
-                                class="ti ti-lock me-1"></i>Sign In</a>
+                        <a class="btn btn-light d-inline-flex align-items-center"
+                            href="javascript:void(0)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#loginModal">
+                            <i class="ti ti-lock me-1"></i>Sign In
+                        </a>
+
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-primary d-inline-flex align-items-center" href="signup.html"><i
@@ -231,3 +233,62 @@ return '';
         </nav>
     </div>
 </header>
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        
+                <form action="{{ route('login') }}" method="POST">
+                  @csrf
+                  <div class="login-userset">
+                    <div class="login-logo text-center mb-3">
+                      <img src="{{ asset('assets/img/logo.svg') }}" alt="Logo" style="height: 50px;" />
+                    </div>
+                    <div class="login-heading text-center mb-4">
+                      <h3>Hi, Welcome Back!</h3>
+                      <p class="text-muted">Fill in your credentials to continue</p>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Email</label>
+                      <div class="form-wrap form-focus">
+                        <span class="form-icon"><i class="feather-mail"></i></span>
+                        <input type="email" name="email" class="form-control floating" required />
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Password</label>
+                      <div class="form-wrap form-focus pass-group">
+                        <span class="form-icon"><i class="toggle-password feather-eye-off"></i></span>
+                        <input type="password" name="password" class="pass-input form-control floating" required />
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-6">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                          <label class="form-check-label" for="remember">Remember Me</label>
+                        </div>
+                      </div>
+                      <div class="col-6 text-end">
+                        <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
+                      </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Sign In</button>
+
+                    <div class="text-center mt-3">
+                      <p>Don’t have an account? <a href="{{ route('register') }}">Sign Up</a></p>
+                    </div>
+
+                  </div>
+                </form>
+             
+          
+      </div>
+    </div>
+  </div>
+</div>
+

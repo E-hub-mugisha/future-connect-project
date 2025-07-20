@@ -94,7 +94,7 @@ Route::get('/video/verify-access/{story_id}/{video_id}', [UsersPaymentController
 Route::post('/video/verify-email', [UsersPaymentController::class, 'verifyEmail'])->name('video.verifyEmail');
 Route::get('/story/payment/{story_id}/{video_id}', [UsersPaymentController::class, 'checkout'])->name('payment.checkout');
 // Route::post('/story/payment/pay', [UsersPaymentController::class, 'pay'])->name('payment.process');
-Route::get('/story/watch/{video_id}', [UsersPaymentController::class, 'watch'])->name('video.play');
+Route::get('/story/watch/{video_id}/{story_id}', [UsersPaymentController::class, 'watch'])->name('video.play');
 Route::get('/story/payment/callback', [UsersPaymentController::class, 'handleCallback'])->name('payment.callback');
 
 /**

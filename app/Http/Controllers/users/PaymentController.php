@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Story;
 use App\Models\StoryPayment;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,8 @@ class PaymentController extends Controller
         if ($hasPaid) {
             // Save email in session so they can continue
             session(['video_access_email' => $request->email]);
-            return redirect()->route('video.play', ['video_id' => $request->video_id]);
+            return redirect()->route('video.play', ['video_id' => $request->video_id, 'story_id' => $request->story_id])
+                ->with('success', 'Payment verified. You can now watch the video.');
         }
 
         // Not paid, go to payment
@@ -60,10 +62,11 @@ class PaymentController extends Controller
         return redirect()->route('video.play', ['video_id' => $request->video_id])
             ->with('success', 'Payment completed. You may now watch the full video.');
     }
-    public function watch($video_id)
+    public function watch($video_id, $story_id)
     {
         // You can fetch video info from DB if needed
-        return view('user-page.video', compact('video_id'));
+        $story = Story::with('comments')->findOrFail($story_id);
+        return view('user-page.video', compact('video_id', 'story'));
     }
     public function handleCallback(Request $request)
     {
