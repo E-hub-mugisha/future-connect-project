@@ -66,9 +66,9 @@ jobs:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_DATABASE: futureconnect_database
-          DB_USERNAME: futureconnect_futureconnect
-          DB_PASSWORD: AltisCorolla@2008
+          DB_DATABASE: laravel_test
+          DB_USERNAME: laravel
+          DB_PASSWORD: secret
         run: php artisan test
 
   deploy:
