@@ -115,8 +115,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-     ->middleware('guest')
-     ->name('password.reset');
+    ->middleware('guest')
+    ->name('password.reset');
+
 
 /**
  * -----------------------
