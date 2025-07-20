@@ -97,3 +97,9 @@ jobs:
             **/.git*
             node_modules/**
             vendor/**
+            .env
+            .env.example
+            .env.production
+            .editorconfig
+            .gitattributes
+            .gitignore
