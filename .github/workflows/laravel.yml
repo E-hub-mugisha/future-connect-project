@@ -93,3 +93,7 @@ jobs:
           server-dir: /public_html/         # adjust if needed
           local-dir: ./
           timeout: 60000
+          exclude: |
+            **/.git*
+            node_modules/**
+            vendor/**
