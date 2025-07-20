@@ -94,7 +94,7 @@ jobs:
           local-dir: ./
           timeout: 60000
           exclude: |
-            **/.git*
+            .git/**
             node_modules/**
             vendor/**
             .env
@@ -103,4 +103,6 @@ jobs:
             .editorconfig
             .gitattributes
             .gitignore
-            .git/**
+            README.md
+            tests/**
+            phpunit.xml
