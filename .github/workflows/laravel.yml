@@ -88,7 +88,8 @@ jobs:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
           password: ${{ secrets.CPANEL_PASSWORD }}
-          protocol: ftp
+          protocol: ftps
           port: ${{ secrets.CPANEL_PORT }}
           server-dir: /public_html/         # adjust if needed
           local-dir: ./
+          timeout: 60000
