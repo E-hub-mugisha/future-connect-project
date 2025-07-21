@@ -88,11 +88,11 @@ jobs:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
           password: ${{ secrets.CPANEL_PASSWORD }}
-          protocol: ftps
+          protocol: ftp           # <--- change to 'ftp' for debugging
           port: ${{ secrets.CPANEL_PORT }}
-          server-dir: /public_html/         # adjust if needed
+          server-dir: /public_html/
           local-dir: ./
-          timeout: 60000
+          timeout: 120000
           exclude: |
             .git/**
             node_modules/**
