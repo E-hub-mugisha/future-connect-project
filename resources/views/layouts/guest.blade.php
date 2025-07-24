@@ -11,24 +11,23 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
+    <!-- AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
     <!-- Theme Settings Js -->
     <script src="{{ asset('assets/js/theme-script.js') }}"></script>
 
     <!-- Tabler Icon CSS -->
-    <link rel="stylesheet"
-        href="{{ asset('assets/plugins/tabler-icons/tabler-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/tabler-icons/tabler-icons.min.css') }}">
 
     <!-- Datetimepicker CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
 
     <!-- Daterangepicker CSS -->
-    <link rel="stylesheet"
-        href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
 
     <!-- Fontawesome CSS -->
-    <link rel="stylesheet"
-        href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
 
     <!-- Fearther CSS -->
@@ -48,11 +47,12 @@
     <div class="body-overlay-wrapper">
         <div class="main-wrapper">
 
+            <!-- Top Header (Optional) -->
             <!-- <div class="top-header">
                 Find the Best Instant Talents Platform
                 <span class="close-btn"
-                    onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
-                    data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
+                      onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
+                      data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
             </div> -->
 
             @include('components.user-header')
@@ -68,6 +68,7 @@
             </div>
         </div>
     </div>
+
     <!-- jQuery -->
     <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 
@@ -88,31 +89,33 @@
     <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/apexchart/chart-data.js') }}"></script>
 
-    <!-- date range -->
+    <!-- Date Range JS -->
     <script src="{{ asset('assets/js/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}">
-    </script>
+    <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
 
     <!-- Sticky Sidebar JS -->
-    <script src="{{ asset('assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}">
-    </script>
-    <script
-        src="{{ asset('assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}">
-    </script>
+    <script src="{{ asset('assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+    <script src="{{ asset('assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
 
     <!-- Owl Carousel JS -->
     <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
 
-    <!-- Select JS -->
+    <!-- Select2 JS -->
     <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/script.js') }}"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#skillsCategoryTabs .nav-link').on('click', function(e) {
+        $(document).ready(function () {
+            $('#skillsCategoryTabs .nav-link').on('click', function (e) {
                 e.preventDefault();
 
                 var selectedCategory = $(this).data('category');
@@ -122,7 +125,7 @@
                 $(this).addClass('active');
 
                 // Filter skill cards
-                $('.skill-card').each(function() {
+                $('.skill-card').each(function () {
                     var cardCategory = $(this).data('category');
 
                     if (selectedCategory === 'All' || cardCategory === selectedCategory) {

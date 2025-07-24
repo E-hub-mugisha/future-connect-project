@@ -1,7 +1,7 @@
 @extends('layouts.guest')
 @section('content')
 <!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
+<!-- <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
 
     <div class="container">
         <nav aria-label="breadcrumb" class="page-breadcrumb">
@@ -18,7 +18,7 @@
             {{ $story->title }}
         </h2>
     </div>
-</div>
+</div> -->
 <!-- /Breadcrumb -->
 
 <style>
@@ -28,6 +28,20 @@
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
+    }
+    .postLists {
+        display: flex;
+        /* align-items: center; */
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        /* text-align: center; */
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        margin-bottom: 4.75rem;
+
     }
 </style>
 
@@ -39,15 +53,15 @@
             <!-- Service Details -->
             <div class="col-lg-8">
                 <!-- Talent story Header -->
-                <div class="breadcrumb-bar breadcrumb-bar-info talent-story-info breadcrumb-info text-start pt-0 bg-white">
-                    <a role="button" tabIndex="0" class="badge bg-light mb-4 mt-4 text-dark">
-                        {{ $story->category->name }}
-                    </a>
-                    </br>
-                    <h2 class="breadcrumb-title">
+                <div class="postLists breadcrumb-bar breadcrumb-bar-info talent-story-info breadcrumb-info text-start pt-0 bg-white">
+                    
+                    <h2 class="breadcrumb-title mt-4">
                         {{ $story->title }}
                     </h2>
                     <ul class="info-links">
+                        <li>
+                            <i class="ti ti-calendar-due"></i>{{ $story->category->name }}
+                        </li>
                         <li>
                             <i class="ti ti-star-filled text-warning"></i>
                             {{ number_format($story->comments->avg('rating'), 1) }}
@@ -199,28 +213,28 @@
 
                 <div class="row gx-3 row-gap-3 mb-4 statistics">
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-photo-star text-secondary"></i>
                             <p>Total Ratings</p>
                             <h6>{{ number_format($story->comments->avg('rating'), 1) }}</h6>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-heart text-purple"></i>
                             <p>Total Likes</p>
                             <h6>320</h6>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-message-chatbot text-indigo"></i>
                             <p>Comments</p>
                             <h6>({{ $story->comments->count() }} Comments)</h6>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-eye text-teal"></i>
                             <p>Profile Views</p>
                             <h6>1,100</h6>
@@ -249,9 +263,9 @@
                     </div>
                 </div>
 
-                <div class="tab-content rounded-3" style="background: var(--white);">
+                <div class="tab-content rounded-3">
 
-                    <div class="tab-pane fade show active" id="about_me" role="tabpanel">
+                    <div class=" postLists tab-pane fade show active" id="about_me" role="tabpanel">
                         <!-- About Gigs -->
                         <div class="service-wrap">
                             <h3>{{ $story->title }}</h3>
@@ -259,7 +273,7 @@
                         </div>
                         <!-- /About Gigs -->
                     </div>
-                    <div class="tab-pane fade " id="review" role="tabpanel">
+                    <div class=" postLists tab-pane fade " id="review" role="tabpanel">
                         <!-- Review Lists -->
                         <div class="review-widget">
                             <div class="review-title sort-search-gigs">
@@ -459,7 +473,7 @@
             <!-- Talent Profile Sidebar -->
             <div class="col-lg-4 theiaStickySidebar">
 
-                <div class="service-widget member-widget" style="background: var(--white);">
+                <div class="service-widget member-widget postLists">
                     <div class="user-details">
                         <div class="user-img users-img">
                             <img src="{{ $story->talent->image ? asset('image/talents/' . $story->talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img">
@@ -528,7 +542,7 @@
                         class="btn btn-outline-primary mb-0 w-100">Contact Talent</a>
                 </div>
 
-                <div class="service-widget" style="background: var(--white);">
+                <div class="service-widget postLists">
                     <h5 class="">Share this story</h5>
                     <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
                         <ul>

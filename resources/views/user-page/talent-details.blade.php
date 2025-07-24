@@ -2,7 +2,7 @@
 @section('content')
 
 
-
+<!-- 
 <div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
     <div class="container">
         <nav aria-label="breadcrumb" class="page-breadcrumb">
@@ -20,7 +20,7 @@
             {{ $talent->name }}
         </h2>
     </div>
-</div>
+</div> -->
 
 <style>
     .talent-profile-info {
@@ -30,6 +30,21 @@
         padding: 20px;
         margin-bottom: 20px;
     }
+
+    .postLists {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        text-align: center;
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        margin-bottom: 4.75rem;
+
+    }
 </style>
 
 <div class="page-content content">
@@ -38,11 +53,8 @@
 
             <div class="col-lg-8">
 
-                <div class=" breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 bg-white">
-                    <a role="button" tabIndex="0" class="badge bg-light mb-4 mt-4 text-dark">
-                        {{ $talent->category->name ?? 'Uncategorized' }}
-                    </a><br />
-                    <h2 class="breadcrumb-title">
+                <div class="postLists breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 ">
+                    <h2 class="breadcrumb-title mt-4">
                         {{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i>
                     </h2>
                     <ul class="info-links">
@@ -56,7 +68,7 @@
                             <i class="ti ti-user"></i>Open to {{ $talent->skill }}
                         </li>
                         <li>
-                            <i class="ti ti-calendar-due"></i>Profile Created: {{ $talent->created_at->format('d M, Y') }}
+                            <i class="ti ti-calendar-due"></i>{{ $talent->category->name ?? 'Uncategorized' }}
                         </li>
                         <li class="border-0">
                             <div class="tranlator d-flex align-items-center">
@@ -84,7 +96,7 @@
 
                 <div class="row gx-3 row-gap-3 mb-4 statistics">
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-photo-star text-secondary"></i>
                             <p>Total Stories</p>
                             <h6>
@@ -93,7 +105,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-heart text-purple"></i>
                             <p>Total Rating</p>
                             <h6>
@@ -103,7 +115,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-message-chatbot text-indigo"></i>
                             <p>Feedbacks</p>
                             <h6>
@@ -113,7 +125,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box">
+                        <div class="buy-box postLists">
                             <i class="ti ti-eye text-teal"></i>
                             <p>Profile Views</p>
                             <h6>1,100</h6>
@@ -153,9 +165,9 @@
                 </div>
 
 
-                <div class="tab-content rounded-3 mt-4 py-4" style="background: var(--white);">
+                <div class="tab-content rounded-3 mt-4 py-4">
 
-                    <div class="tab-pane fade show active" id="about_me" role="tabpanel">
+                    <div class="tab-pane postLists fade show active" id="about_me" role="tabpanel">
 
                         <div class="service-wrap">
                             <h3>About Me</h3>
@@ -163,7 +175,7 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade " id="my_skills" role="tabpanel">
+                    <div class="tab-pane postLists fade " id="my_skills" role="tabpanel">
 
                         <div class="service-wrap">
                             <div class="container">
@@ -204,7 +216,7 @@
                                     </div>
                                 </div>
                                 <div class="tab-content dashboard-tab">
-                                    <div class="tab-pane fade show active" id="pills-popular" role="tabpanel"
+                                    <div class="tab-pane postLists fade show active" id="pills-popular" role="tabpanel"
                                         aria-labelledby="pills-popular-tab">
                                         <div class="row aos aos-init aos-animate" data-aos="fade-up"
                                             data-aos-delay="500">
@@ -288,7 +300,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-latest" role="tabpanel"
+                                    <div class="tab-pane postLists fade" id="pills-latest" role="tabpanel"
                                         aria-labelledby="pills-latest-tab">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -371,7 +383,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-rating" role="tabpanel"
+                                    <div class="tab-pane postLists fade" id="pills-rating" role="tabpanel"
                                         aria-labelledby="pills-rating-tab">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -454,7 +466,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-trend" role="tabpanel"
+                                    <div class="tab-pane postLists fade" id="pills-trend" role="tabpanel"
                                         aria-labelledby="pills-trend-tab">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -542,7 +554,7 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade " id="my_stories" role="tabpanel">
+                    <div class="tab-pane postLists fade " id="my_stories" role="tabpanel">
 
                         <div class="service-wrap">
                             <div class="container">
@@ -594,7 +606,7 @@
                                     @endphp
 
                                     @foreach($tabs as $key => $label)
-                                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="pills-{{ $key }}" role="tabpanel" aria-labelledby="pills-{{ $key }}-tab">
+                                    <div class="tab-pane postLists fade {{ $loop->first ? 'show active' : '' }}" id="pills-{{ $key }}" role="tabpanel" aria-labelledby="pills-{{ $key }}-tab">
                                         <div class="row aos" data-aos="fade-up" data-aos-delay="500">
                                             <div class="col-md-12">
                                                 @if($talent->stories && $talent->stories->count())
@@ -673,7 +685,7 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade" id="review" role="tabpanel">
+                    <div class="tab-pane postLists fade" id="review" role="tabpanel">
                         <div class="review-widget">
 
                             {{-- Reviews Title --}}
@@ -834,7 +846,7 @@
 
             <div class="col-lg-4 theiaStickySidebar">
 
-                <div class="service-widget member-widget" style="background: var(--white);">
+                <div class="service-widget member-widget postLists">
                     <div class="user-details">
                         <div class="user-img users-img">
                             <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
@@ -865,13 +877,7 @@
                     </div>
 
                     <div class="member-info member-info-new">
-                        <div class="member-list d-flex align-items-center gap mb-3">
-                            <i class="ti ti-music"></i>
-                            <h6 class="mb-0">
-                                Talent Type
-                                <span class="pt-2"> {{ $talent->skill }}</span>
-                            </h6>
-                        </div>
+                        
                         <div class="member-list d-flex align-items-center gap mb-3">
                             <i class="ti ti-world"></i>
                             <h6 class="mb-0">
@@ -901,7 +907,7 @@
                 </div>
 
 
-                <div class="service-widget " style="background: var(--white);">
+                <div class="service-widget postLists">
                     <h5 class="">Share Talent Profile</h5>
                     <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
                         <ul>

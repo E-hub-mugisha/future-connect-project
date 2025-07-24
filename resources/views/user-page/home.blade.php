@@ -72,7 +72,7 @@
                                     <h1 class="mb-2 text-white">Share Your Story & Showcase Your stories</h1>
                                     <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world.</p>
                                 </div>
-                                <div class="banner-form">
+                                <!-- <div class="banner-form">
                                     <form action="{{ url('/search') }}" method="GET">
                                         <div class="banner-search-list">
 
@@ -103,8 +103,8 @@
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                                <div class="popular-search">
+                                </div> -->
+                                <div class="popular-search mt-4">
                                     <h5>Popular Searches : </h5>
                                     <ul>
                                         @foreach($popularCategories as $category)
@@ -143,7 +143,7 @@
                                         Upload Your Story<i class="ti ti-chevron-right ms-1"></i>
                                     </a>
                                 </div>
-                                <div class="banner-form">
+                                <!-- <div class="banner-form">
                                     <form action="{{ url('/search') }}" method="GET">
 
                                         <div class="banner-search-list">
@@ -179,8 +179,8 @@
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                                <div class="popular-search">
+                                </div> -->
+                                <div class="popular-search mt-4">
                                     <h5>Popular Searches : </h5>
                                     <ul>
                                         @foreach($popularCategories as $category)
@@ -216,34 +216,10 @@
 <!-- /Hero Section Carousel -->
 
 
-<div class="client-slider-sec">
-    <div class="container">
-        <div class="row justify-content-center">
 
-            <div class="col-lg-12">
-                <div class="section-header text-center aos" data-aos="fade-up">
-                    <h3 class="text-white">Trusted by {{ $partners->count() }}+ partners Around Globe</h3>
-                </div>
-
-                <div class="row mt-4">
-                    @foreach($partners as $partner)
-                    <div class="col-6 col-sm-2 col-md-2 col-lg-2 mb-4 text-center">
-                        <div class="client-logo">
-                            <img src="{{ $partner->logo ? asset('image/partners/' . $partner->logo) : asset('/assets/img/company/logo.svg') }}"
-                                class="img-fluid"
-                                alt="Client Logo" style="height: 50px; width: auto;">
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Future Connect: Popular Talent Categories -->
-<div class="popular-section-two">
+<div class="popular-section-two" style="background: #aac2e1a8;">
     <div class="container">
         <div class="section-header-two text-center" data-aos="fade-up">
             <h2 class="mb-2"><span class="title-bg"></span>Popular Talent Categories<span
@@ -272,79 +248,165 @@
 </div>
 <!-- /Future Connect: Popular Talent Categories -->
 
+<div class="client-slider-sec">
+    <div class="container">
+        <div class="row justify-content-center">
 
+            <div class="col-lg-12">
+                <div class="section-header text-center aos" data-aos="fade-up">
+                    <h3 class="text-white">Trusted by {{ $partners->count() }}+ partners Around Globe</h3>
+                </div>
+
+                <div class="row mt-4">
+                    @foreach($partners as $partner)
+                    <div class="col-6 col-sm-2 col-md-2 col-lg-2 mb-4 text-center">
+                        <div class="client-logo">
+                            <img src="{{ $partner->logo ? asset('image/partners/' . $partner->logo) : asset('/assets/img/company/logo.svg') }}"
+                                class="img-fluid"
+                                alt="Client Logo" style="height: 50px; width: auto;">
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
-    .card-custom {
-        background: linear-gradient(to right, #011E34, #09354F);
-        /* border: 1px solid rgba(255, 255, 255, 0.2); */
-        border-radius: 16px;
-        padding: 1.5rem;
-        color: #ffffff;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    .postLists.cards .post-item.m-card {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        text-align: center;
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        margin-bottom: 4.75rem;
 
     }
 
-    .next-gen-section {
+    .postLists.cards .post-item.m-card .img {
         position: relative;
-        padding: 4rem 0;
+        display: block;
+        /* margin-top: -.625em; */
+        width: calc(100% - .85em);
+        /* padding-top: calc(89.45% - .67em); */
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: .75em;
+        box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
+        -webkit-box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
+        transform: translateZ(0);
+        transition: .25s;
+    }
+
+    .postLists.cards .post-item.m-card .infos {
+        width: 100%;
+    }
+
+    .postLists.cards .post-item.m-card .title {
+        font-size: 16px;
+        /* padding: 0 .5em; */
+        margin: 1em 0 .5em;
         overflow: hidden;
+        max-width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        white-space: normal;
+    }
+
+    /* .postLists.cards .post-card-wrapper {
+        width: 20%;
+    } */
+
+    .postLists .post-card-wrapper {
         z-index: 1;
     }
 
-    .next-gen-section .card {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    .postLists.cards .post-item.m-card .go {
+        display: inline-block;
+        min-width: 50%;
+        background: linear-gradient(90deg, #011E34, #011E34);
+        box-shadow: 0 .5em 1.2em #011E34;
+        font-size: 14px;
+        margin: .3em 0 1.5em;
+        padding: .45em 1.5em;
+        border-radius: 9em;
+        text-decoration: none;
+        color: #fff;
+        text-shadow: 0 2px 3px #011E34;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .postLists.cards .post-item.m-card .go:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+    }
+
+    .card.post-item.m-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card.post-item.m-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        z-index: 10;
     }
 </style>
 
 <!-- next gen -->
-<div class="next-gen-section">
+<div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2"><span class="title-bg"></span>Meet the Next Generation of talents<span
+            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span
                     class="title-bg2"></span></h2>
-            <p>Connect with the next wave of talents, guiding you with fresh perspectives</p>
+            <p style="color: #27AE60;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
         </div>
-        <div class="row seller-list">
+        <div class="row seller-list postLists cards">
             @foreach($talents as $talent)
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card card-custom" data-aos="flip-left">
+            <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper">
+                <div class="card post-item m-card" data-aos="flip-left">
                     <div class="card-body text-center">
-                        <span class="avatar d-inline-block" style="width: 60px; height: 60px; overflow: hidden;">
+                        <div class="avatar d-inline-block mb-3" style="width: 120px; height: 120px; overflow: hidden;">
                             <a href="{{ route('user.talent.details', $talent->id) }}">
-                                <img
-                                    class="rounded-3 w-100 h-100"
-                                    style="object-fit: cover;"
-                                    src="{{ $talent->image 
-                ? asset('image/talents/' . $talent->image) 
-                : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" />
+                                <img class="img rounded-3 w-100 h-100" style="object-fit: cover;" src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" alt="img" />
                             </a>
-                        </span>
+                        </div>
 
                         <h6 class="mb-1">
-                            <a
-                                href="{{ route('user.talent.details', $talent->id) }}" style="color: var(--white);">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></a>
+                            <a href="{{ route('user.talent.details', $talent->id) }}">
+                                {{ $talent->name }}
+                                <i class="ti ti-discount-check-filled verify-icon" style="color: #27AE60;"></i>
+                            </a>
                         </h6>
-                        <p>{{ $talent->category->name ?? 'Uncategorized' }}
-                        </p>
+                        <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
                         <p class="mb-0 location-text d-inline-flex align-items-center">
                             <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
                             Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
                         </p>
-                        <div class="d-flex gap-2 align-items-center flex-wrap mt-3 justify-content-center">
-                            <a href="{{ route('user.talent.details', $talent->id) }}"
-                                class="badge bg-light">
+                        <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
+                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
                                 {{ $talent->skill }}
                             </a>
-                            <a href="{{ route('user.talent.details', $talent->id) }}"
-                                class="badge bg-light">
+                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
                                 {{ $talent->language }}
                             </a>
                         </div>
+                        <a href="{{ route('user.talent.details', $talent->id) }}" class="go">view</a>
                     </div>
                 </div>
+
             </div>
             @endforeach
             <div class="text-center mt-3" data-aos="fade-up">
@@ -356,6 +418,22 @@
 </div>
 <!-- next gen -->
 
+<style>
+    .postLists-bg-white {
+        display: flex;
+        /* align-items: center; */
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        /* text-align: center; */
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        /* margin-bottom: 4.75rem; */
+
+    }
+</style>
 
 
 <div class="how-it-works">
@@ -368,7 +446,7 @@
                         <h2 class="mb-2"><span class="title-bg"></span>How it Works<span class="title-bg2"></span></h2>
                         <p>Empowering young talents through storytelling, skills sharing, and community support.</p>
                     </div>
-                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-primary-transparent">01</span>
                         <div>
                             <h6 class="mb-2">Create Your Talent Profile</h6>
@@ -376,7 +454,7 @@
                                 text, images, and videos.</p>
                         </div>
                     </div>
-                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-secondary-transparent">02</span>
                         <div>
                             <h6 class="mb-2">Get Discovered & Rated</h6>
@@ -384,7 +462,7 @@
                                 and share feedback to help you grow.</p>
                         </div>
                     </div>
-                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-pink-transparent">03</span>
                         <div>
                             <h6 class="mb-2">Earn Support & Recognition</h6>
@@ -392,7 +470,7 @@
                                 the Future Connect community.</p>
                         </div>
                     </div>
-                    <div class="how-it-works-item d-flex align-items-center p-3 bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
                         <span class="count bg-success-transparent">04</span>
                         <div>
                             <h6 class="mb-2">Grow With Us</h6>
