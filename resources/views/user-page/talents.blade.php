@@ -117,14 +117,14 @@
         display: inline-block;
         min-width: 50%;
         background: linear-gradient(90deg, #3b3d4a, #3b3d4a);
-        box-shadow: 0 .5em 1.2em #3b3d4a;
+        box-shadow: 0 .5em 1.2em #011e3461;
         font-size: 14px;
         margin: .3em 0 1.5em;
         padding: .45em 1.5em;
         border-radius: 9em;
         text-decoration: none;
         color: #fff;
-        text-shadow: 0 2px 3px #3b3d4a;
+        text-shadow: 0 2px 3px #011e3461;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 

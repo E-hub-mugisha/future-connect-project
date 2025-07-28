@@ -40,7 +40,7 @@ $categories = \App\Models\Category::all();
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         box-shadow: 0 1em 1em #1f2d3d26;
         border-radius: 10px;
-        width: 50px;
+        
     }
 </style>
 

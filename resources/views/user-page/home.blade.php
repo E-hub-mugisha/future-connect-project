@@ -430,7 +430,7 @@
         border: 1px solid #fff;
         border-radius: 1em;
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
+        box-shadow: 0 1em 1em #011e3461;
         /* text-align: center; */
         text-shadow: 0 1px #fff;
         transition: .25s;
@@ -603,27 +603,27 @@
                             </div>
                             <div class="gigs-card-footer d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center gigs-left-text">
-                                    <a href="{{ url('/talent/' . $skill->talent->id) }}" class="avatar avatar-sm flex-shrink-0">
-                                        <img src="{{ $skill->talent->image ? asset('image/talents/' . $skill->talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                    <a href="{{ url('/talent/' . $story->talent->id) }}" class="avatar avatar-sm flex-shrink-0">
+                                        <img src="{{ $story->talent->image ? asset('image/talents/' . $story->talent->image) : asset('/assets/img/user/profile.jpg') }}"
                                             class="img-fluid rounded-pill" alt="img" />
                                     </a>
                                     <div class="ms-2">
                                         <h6 class="mb-0">
                                             <a role="button"
-                                                tabindex="0">{{ $skill->talent->name ?? 'Author' }}</a>
+                                                tabindex="0">{{ $story->talent->name ?? 'Author' }}</a>
                                         </h6>
 
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <span>{{ $skill->tags }}</span>
+                                    <span>{{ $story->tags }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 @empty
-                <p class="text-center mt-4">No skills found.</p>
+                <p class="text-center mt-4">No stories found.</p>
                 @endforelse
             </div>
         </div>

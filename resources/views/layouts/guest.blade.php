@@ -115,13 +115,13 @@
 
     <script>
         $(document).ready(function () {
-            $('#skillsCategoryTabs .nav-link').on('click', function (e) {
+            $('#storiesCategoryTabs .nav-link').on('click', function (e) {
                 e.preventDefault();
 
                 var selectedCategory = $(this).data('category');
 
                 // Active tab highlighting
-                $('#skillsCategoryTabs .nav-link').removeClass('active');
+                $('#storiesCategoryTabs .nav-link').removeClass('active');
                 $(this).addClass('active');
 
                 // Filter skill cards
