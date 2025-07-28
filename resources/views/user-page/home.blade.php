@@ -6,6 +6,9 @@
     .hero-section {
         background: linear-gradient(165deg, #011E34 15% 40%, #27AE60 100%);
         color: #ffffff;
+        margin: 20px 100px;
+        border-radius: 30px;
+        box-shadow: 0 1em 1em #1f2d3d26
     }
 
 
@@ -54,6 +57,7 @@
     }
 </style>
 <!-- Hero Section Carousel -->
+ 
 <div id="heroCarousel" class="hero-section carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
 
     <div class="carousel-inner pt-3">
@@ -517,12 +521,12 @@
 <div class="new-services-section">
     <div class="container">
         <div class="section-header-two text-center" data-aos="fade-up">
-            <h2 class="mb-2"><span class="title-bg"></span>Our New Skills<span class="title-bg2"></span></h2>
+            <h2 class="mb-2"><span class="title-bg"></span>Our New Stories<span class="title-bg2"></span></h2>
             <p>Unlock a world of opportunities and take control of your future</p>
         </div>
         <div class="listing-tab" data-aos="fade-up">
             <div class="listing-slider">
-                <ul class="nav nav-tabs justify-content-center" id="skillsCategoryTabs" role="tablist">
+                <ul class="nav nav-tabs justify-content-center" id="storiesCategoryTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="tab-all" data-category="All" role="tab">
                             All
@@ -541,31 +545,31 @@
             </div>
         </div>
 
-        <div class="tab-content" data-aos="fade-up" id="skillsContent">
+        <div class="tab-content" data-aos="fade-up" id="storiesContent">
             <div class="row">
-                @forelse($skills as $skill)
+                @forelse($stories as $story)
                 <div class="col-xl-4 col-md-6 skill-card"
-                    data-category="{{ $skill->category->name ?? 'Uncategorized' }}">
+                    data-category="{{ $story->category->name ?? 'Uncategorized' }}">
                     <div class="gigs-grid">
                         <div class="gigs-img">
                             <div class="img-slider owl-carousel">
                                 <div class="slide-images">
-                                    <a href="{{ url('skills/category/' . $skill->slug) }}">
+                                    <a href="{{ url('/story-details/' . $story->slug) }}">
                                         <img src="{{ asset('assets/img/home/service-01.jpg') }}" class="img-fluid" alt="Gigs">
                                     </a>
                                 </div>
 
                             </div>
                             <div class="card-overlay-badge">
-                                <a href="{{ url('skills/category/'.$skill->slug) }}">
+                                <a href="{{ url('/story/category/'.$story->slug) }}">
                                     <span class="badge bg-warning">
-                                        <i class="feather-star"></i>{{ $skill->category->name ?? 'Uncategorized' }}
+                                        <i class="feather-star"></i>{{ $story->category->name ?? 'Uncategorized' }}
                                     </span>
                                 </a>
-                                <a href="{{ url('skills/category/'.$skill->slug) }}">
+                                <a href="{{ url('/story/category/'.$story->slug) }}">
                                     <span class="badge bg-danger">
                                         <i class="fa-solid fa-meteor"></i>
-                                        {{ $skill->level }}
+                                        {{ $story->category->name ?? 'Uncategorized' }}
                                     </span>
                                 </a>
                             </div>
@@ -578,23 +582,23 @@
                         <div class="gigs-content">
                             <div class="gigs-info">
                                 <div>
-                                    <a href="{{ url('skills/'.$skill->category->slug ?? '') }}"
+                                    <a href="{{ url('/story/category/'.$story->category->slug ?? '') }}"
                                         class="badge bg-light">
-                                        {{ $skill->category->name ?? 'Uncategorized' }}
+                                        {{ $story->category->name ?? 'Uncategorized' }}
                                     </a>
                                     <span class="ms-2">+1</span>
                                 </div>
                                 <div class="star-rate">
                                     <span>
                                         <i class="fa-solid fa-star"></i>
-                                        {{ $skill->average_rating ? number_format($skill->average_rating, 1) : '0.0' }}
-                                        ({{ $skill->total_reviews ?? 0 }} Reviews)
+                                        {{ number_format($story->comments->avg('rating'), 1) }}
+                                        ({{ $story->comments->count() }} Reviews)
                                     </span>
                                 </div>
                             </div>
                             <div class="gigs-title">
                                 <h5><a
-                                        href="{{ url('skills/'.$skill->slug) }}">{{ $skill->name }}</a>
+                                        href="{{ url('/story-details/'.$story->slug) }}">{{ $story->title }}</a>
                                 </h5>
                             </div>
                             <div class="gigs-card-footer d-flex justify-content-between align-items-center">

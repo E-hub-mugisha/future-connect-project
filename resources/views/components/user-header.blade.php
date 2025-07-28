@@ -6,23 +6,24 @@ $categories = \App\Models\Category::all();
 
 <style>
     .header {
-        background-color: #011E34;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
         height: 6rem;
         /* Reduced height */
         padding: 7px 5px;
     }
 
-    .main-menu-wrapper {
-        background: linear-gradient(to right, #011E34, #09354F);
+    /* .main-menu-wrapper {
+        background: linear-gradient(to right, #011E34, #2250e7ff);
         padding: 8px 2rem;
         border-radius: 4rem;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    }
+    } */
 
 
     .main-menu-wrapper .main-nav .nav-link {
-        color: #F0F2F7;
+        color: #27AE60;
         font-size: 13px;
         font-weight: 500;
         transition: all 0.3s ease-in-out;
@@ -34,9 +35,12 @@ $categories = \App\Models\Category::all();
 
     .main-menu-wrapper .main-nav .nav-link:hover,
     .main-menu-wrapper .main-nav .nav-link.active {
-        color: #F0F2F7;
-        border-bottom: 2px solid #F0F2F7;
-        background: transparent;
+        color: #27AE60;
+        /* border-bottom: 2px solid #F0F2F7; */
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        border-radius: 10px;
+        width: 50px;
     }
 </style>
 
