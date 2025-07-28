@@ -33,15 +33,15 @@ $categories = \App\Models\Category::all();
         /* Prevents full-width behavior */
     }
 
-    .main-menu-wrapper .main-nav .nav-link:hover,
+    /* .main-menu-wrapper .main-nav .nav-link:hover,
     .main-menu-wrapper .main-nav .nav-link.active {
         color: #27AE60;
-        /* border-bottom: 2px solid #F0F2F7; */
+        border-bottom: 2px solid #F0F2F7;
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         box-shadow: 0 1em 1em #1f2d3d26;
         border-radius: 10px;
         
-    }
+    } */
 </style>
 
 <style>
