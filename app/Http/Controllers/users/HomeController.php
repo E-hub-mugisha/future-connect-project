@@ -37,16 +37,18 @@ class HomeController extends Controller
             'skills' => $skills,
             'testimonials' => Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
             'partners' => Partner::all(), // Fetch only active partners
+            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1 )->take(4)->get(),
         ]);
     }
     public function talents()
     {
         // Fetch featured talents - modify query as needed
-        $talents = Talent::all();
+        $talents = Talent::paginate(8);
 
 
         return view('user-page.talents', [
             'talents' => $talents,
+            'categories' => Category::withCount('talents')->take(10)->get(),
         ]);
     }
 
@@ -119,7 +121,7 @@ class HomeController extends Controller
         // Return the Blade view with stories
         return view('user-page.stories', [
             'stories' => $stories,
-            'categories' => $categories
+            'categories' => Category::withCount('stories')->take(10)->get(),
         ]);
     }
     public function logView(Request $request)
@@ -180,14 +182,34 @@ class HomeController extends Controller
             'skill' => 'required|string',
             'story' => 'nullable|string',
             'description' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
             'address' => 'nullable|string',
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
             'language' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id'
         ]);
 
-        $talent = Talent::create($request->all());
+        $talentImage = null;
+        if ($image = $request->file('image')) {
+            $path = 'image/talents/';
+            $talentImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move(public_path($path), $talentImage);
+        }
+
+        Talent::create([
+            'name' => $request->name,
+            'skill' => $request->skill,
+            'story' => $request->story,
+            'description' => $request->description,
+            'image' => $talentImage,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'language' => $request->language,
+            'category_id' => $request->category_id,
+        ]);
+
         return redirect()->back()->with('success', 'Talent registered successfully.');
     }
     public function storyDetails($slug)
@@ -239,6 +261,7 @@ class HomeController extends Controller
         return view('user-page.category-story', [
             'categoryName' => $category->name,
             'stories' => $stories,
+            'categories' => Category::withCount('stories')->take(10)->get(),
         ]);
     }
     public function skillDetails($slug)

@@ -132,7 +132,7 @@
 
                     </tbody>
                 </table>
-
+                @foreach($talents as $talent)
                 <!-- Feature/Unfeature Modal -->
                 <div class="modal fade" id="featureModal{{ $talent->id }}" tabindex="-1"
                     aria-labelledby="featureModalLabel{{ $talent->id }}" aria-hidden="true">
@@ -164,9 +164,9 @@
                         </form>
                     </div>
                 </div>
+                @endforeach
 
-
-
+                @foreach($talents as $talent)
                 <!-- Delete Modal -->
                 <div class="modal fade" id="deleteModal{{ $talent->id }}" tabindex="-1"
                     aria-labelledby="deleteModalLabel{{ $talent->id }}" aria-hidden="true">
@@ -193,6 +193,7 @@
                         </form>
                     </div>
                 </div>
+                @endforeach
 
                 @foreach($talents as $talent)
                 <!-- Quick View Modal -->

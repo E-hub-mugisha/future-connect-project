@@ -50,6 +50,61 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                <!-- Category Section -->
+                <div class="marketing-section">
+                    <div class="marketing-content">
+                        <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
+                            <h2 class="mb-2"><span class="title-bg"></span>Here is the stories of our talents<span
+                                    class="title-bg2"></span></h2>
+                            <p style="color: #27AE60;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Category Section -->
+
+                <!-- Trending Categories -->
+                <div class="trend-section">
+                    <div class="row align-items-center">
+                        <div class="col-sm-10">
+                            <h5>Trending Categories of stories</h5>
+                        </div>
+                        <div class="col-sm-2 text-sm-end">
+                            <div class="owl-nav trend-nav nav-control nav-top"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="trend-items owl-carousel owl-loaded owl-drag">
+                                <div class="owl-stage-outer">
+                                    <div class="owl-stage" style="transform: translate3d(-1977px, 0px, 0px); transition: 2s; width: 4284px;">
+                                        @foreach($categories as $cat)
+                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
+                                            <div class="trend-box">
+                                                <div class="trend-info">
+
+                                                    <h6><a href="{{ url('/story/category/' . $cat->slug) }}">{{ $cat->name }}</a></h6>
+                                                    @if(isset($cat->stories_count))
+                                                    <p>{{ $cat->stories_count }} stories</p>
+                                                    @else
+                                                    <p>0 stories</p>
+                                                    @endif
+                                                </div>
+                                                <a href="{{ url('/story/category/' . $cat->slug) }}"><i class="feather-arrow-up-right"></i></a>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="owl-dots disabled"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Trending Categories -->
+
+            </div>
+            <div class="col-md-12">
                 <form action="{{ route('stories.filter') }}" method="GET">
                     <div class="filters-section mb-4">
                         <ul class="filters-wrap">
@@ -159,6 +214,37 @@
                                 </div>
                                 @endforeach
 
+                                <div class="col-md-12">
+
+                                    <!-- Pagination -->
+                                    <div class="pagination" data-aos="fade-up">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0);" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="active">1</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">2</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">3</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">4</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);">5</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="next"><i class="fa-solid fa-chevron-right"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /Pagination -->
+
+                                </div>
                             </div>
                         </div>
                     </div>

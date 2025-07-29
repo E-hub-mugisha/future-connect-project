@@ -57,11 +57,12 @@
     }
 </style>
 <!-- Hero Section Carousel -->
- 
+
 <div id="heroCarousel" class="hero-section carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
 
     <div class="carousel-inner pt-3">
 
+        @foreach( $featuredTalents as $talent)
         <!-- Carousel Item 1 -->
         <div class="carousel-item active">
             <div class="hero-section-two py-5">
@@ -71,10 +72,12 @@
                             <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                                 <div class="banner-head">
                                     <span class="d-inline-flex mb-3 align-items-center hero-title">
-                                        <i class="ti ti-point-filled me-1"></i>Inspire the World
+                                        <i class="ti ti-point-filled me-1"></i>{{ $talent->name }}
                                     </span>
-                                    <h1 class="mb-2 text-white">Share Your Story & Showcase Your stories</h1>
-                                    <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world.</p>
+                                    <h1 class="mb-2 text-white">Passionate {{ $talent->skill ?? 'creative' }} and performer blending
+                                        {{ $talent->category->name ?? 'various disciplines' }}.
+                                    </h1>
+                                    <p class="d-inline-flex">{{ $talent->story }}</p>
                                 </div>
                                 <!-- <div class="banner-form">
                                     <form action="{{ url('/search') }}" method="GET">
@@ -121,7 +124,7 @@
                         <div class="col-lg-5">
                             <div class="banner-img">
                                 <div class="banner-img-right">
-                                    <img src="{{ asset('assets/img/home/banner-image.svg') }}" class="img-fluid" alt="img">
+                                    <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}" class="img-fluid" alt="img">
                                 </div>
                             </div>
                         </div>
@@ -129,84 +132,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Carousel Item 2 (Duplicate or Variation) -->
-        <div class="carousel-item">
-            <div class="hero-section-two py-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                <div class="banner-head">
-                                    <span class="d-inline-flex mb-3 align-items-center hero-title">
-                                        <i class="ti ti-point-filled me-1"></i>Inspire the World
-                                    </span>
-                                    <h1 class="mb-2 text-white">Turn Your Passion into Impact</h1>
-                                    <p class="d-inline-flex">Join a community where your skills and stories can make a difference.</p>
-                                    <a href="{{ route('user.upload-story') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">
-                                        Upload Your Story<i class="ti ti-chevron-right ms-1"></i>
-                                    </a>
-                                </div>
-                                <!-- <div class="banner-form">
-                                    <form action="{{ url('/search') }}" method="GET">
-
-                                        <div class="banner-search-list">
-
-
-                                            <div class="input-block">
-                                                <select name="category" class="form-select">
-                                                    <option value="">Select Category</option>
-                                                    @foreach($categories as $cat)
-                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-
-                                            <div class="input-block">
-                                                <div class="input-location">
-                                                    <input type="text" name="region" class="form-control" placeholder="Region: e.g., Kigali, Nairobi, Lagos">
-                                                </div>
-                                            </div>
-
-
-                                            <div class="input-block">
-                                                <input type="text" name="keyword" class="form-control" placeholder="Search: e.g., photography, coding, music">
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="input-block-btn">
-                                            <button class="btn btn-lg btn-primary d-inline-flex align-items-center justify-content-center" type="submit">
-                                                <i class="ti ti-search"></i> Search
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div> -->
-                                <div class="popular-search mt-4">
-                                    <h5>Popular Searches : </h5>
-                                    <ul>
-                                        @foreach($popularCategories as $category)
-                                        <li><a href="{{ route('user.talents.category', $category->slug) }}">{{ $category->name }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5">
-                            <div class="banner-img">
-                                <div class="banner-img-right">
-                                    <img src="{{ asset('assets/img/home/front-view-handsome-male-musician-singing-home-with-microphone.jpg') }}"
-                                        alt="Hero image 2" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @endforeach
 
         <!-- Carousel Controls -->
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">

@@ -30,7 +30,7 @@ class AdminStoryController extends Controller
         $categories = Category::all();
         $talents = Talent::all();
 
-        return view('admin-pages.stories.edit', [
+        return view('admin-pages.stories.create', [
             'categories' => $categories,
             'talents' => $talents,
         ]);

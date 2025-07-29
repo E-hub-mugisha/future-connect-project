@@ -80,7 +80,7 @@
                 </div>
                 <div class="card mb-0">
                     <div class="card-header">
-                        <h6 class="mb-0">About Me</h6>
+                        <h6 class="mb-0">Content</h6>
                     </div>
                     <div class="card-body">
                         <p class="mb-0">

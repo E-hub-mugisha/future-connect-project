@@ -566,7 +566,7 @@
                     <div class="title-sec">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h3>Recent Works</h3>
+                                <h3>Related Stories</h3>
                             </div>
                             <div class="col-md-4">
                                 <div class="owl-nav worknav nav-control nav-top"></div>
@@ -574,21 +574,21 @@
                         </div>
                     </div>
                     <div class="gigs-slider owl-carousel">
-                        @forelse($relatedStories as $related)
+                        @forelse($relatedStories as $story)
                         <div class="gigs-grid">
                             <div class="gigs-img">
                                 <div class="img-slider">
                                     <div class="slide-images">
                                         <a
-                                            href="{{ route('story.details', $related->slug) }}">
-                                            <img src="{{ asset($related->media) }}" class="img-fluid"
-                                                alt="{{ $related->title }}">
+                                            href="{{ route('story.details', $story->slug) }}">
+                                            <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/user/profile.jpg') }}" class="img-fluid"
+                                                alt="{{ $story->title }}">
                                         </a>
                                     </div>
                                 </div>
 
                                 <div class="card-overlay-badge">
-                                    <span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span>
+                                    <span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>{{ $story->category->name }}</span>
                                 </div>
 
                                 <div class="fav-selection">
@@ -597,7 +597,7 @@
                                 </div>
 
                                 <div class="user-thumb">
-                                    <img src="{{ asset('assets/img/user/user-10.jpg') }}"
+                                    <img src="{{ asset('assets/img/user/profile.jpg') }}"
                                         alt="img">
                                 </div>
                             </div>
@@ -605,18 +605,16 @@
                             <div class="gigs-content">
                                 <div class="gigs-info">
                                     <span class="badge bg-primary-light">
-                                        {{ $related->category->name ?? 'Uncategorized' }}
+                                        {{ $story->category->name ?? 'Uncategorized' }}
                                     </span>
-                                    <p><i
-                                            class="ti ti-map-pin-check"></i>{{ $related->location ?? 'Unknown' }}
-                                    </p>
+                                    
                                 </div>
 
                                 <div class="gigs-title">
                                     <h3>
                                         <a
-                                            href="{{ route('story.details', $related->slug) }}">
-                                            {{ Str::limit($related->title, 60) }}
+                                            href="{{ route('story.details', $story->slug) }}">
+                                            {{ Str::limit($story->title, 60) }}
                                         </a>
                                     </h3>
                                 </div>
@@ -630,9 +628,9 @@
                                         <a role="button" tabindex="0" class="share-icon"><i
                                                 class="feather-share-2"></i></a>
                                         <span class="badge">Published
-                                            {{ \Carbon\Carbon::parse($related->created_at)->diffForHumans() }}</span>
+                                            {{ \Carbon\Carbon::parse($story->created_at)->diffForHumans() }}</span>
                                     </div>
-                                    <h5>${{ $related->price ?? 'N/A' }}</h5>
+                                    
                                 </div>
                             </div>
                         </div>

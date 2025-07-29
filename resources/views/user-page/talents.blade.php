@@ -4,23 +4,6 @@
 <!-- SwiperJS for carousel -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-<!-- <div class="breadcrumb-bar breadcrumb-bar-info">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <nav aria-label="breadcrumb" class="page-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('user.home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item" aria-current="page">Talents</li>
-                    </ol>
-                </nav>
-
-            </div>
-        </div>
-    </div>
-</div> -->
 
 <style>
     .talent-card {
@@ -147,34 +130,307 @@
 
 <!-- next gen -->
 <div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
-    <!-- <div class="container py-4">
-        <div class="card shadow-sm postLists cards">
-            <div class="card-body">
-                <div class="swiper talentSwiper">
-                    <div class="swiper-wrapper">
-                        @foreach ($talents as $talent)
-                        <div class="swiper-slide">
-                            <div class="talent-card text-center">
-                                <div class="talent-img-wrapper">
-                                    <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                        class="talent-img" alt="{{ $talent->name }}">
-                                </div>
-                                <h6 class="mt-2">{{ $talent->name }}</h6>
-                                <small class="text-muted">{{ $talent->category->name ?? 'Uncategorized' }}</small>
-                            </div>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-12">
+
+                <!-- Category Section -->
+                <div class="marketing-section">
+                    <div class="marketing-content">
+                        <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
+                            <h2 class="mb-2"><span class="title-bg"></span>Meet the Next Generation of talents<span
+                                    class="title-bg2"></span></h2>
+                            <p style="color: #27AE60;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
                         </div>
-                        @endforeach
                     </div>
                 </div>
+                <!-- /Category Section -->
+
+                <!-- Trending Categories -->
+                <div class="trend-section">
+                    <div class="row align-items-center">
+                        <div class="col-sm-10">
+                            <h5>Trending Categories of talents</h5>
+                        </div>
+                        <div class="col-sm-2 text-sm-end">
+                            <div class="owl-nav trend-nav nav-control nav-top"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="trend-items owl-carousel owl-loaded owl-drag">
+                                <div class="owl-stage-outer">
+                                    <div class="owl-stage" style="transform: translate3d(-1977px, 0px, 0px); transition: 2s; width: 4284px;">
+                                        @foreach($categories as $cat)
+                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
+                                            <div class="trend-box">
+                                                <div class="trend-info">
+
+                                                    <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+                                                    @if(isset($cat->talents_count))
+                                                    <p>{{ $cat->talents_count }} talents</p>
+                                                    @else
+                                                    <p>0 talents</p>
+                                                    @endif
+                                                </div>
+                                                <a href="{{ route('user.talents.category', $cat->slug) }}"><i class="feather-arrow-up-right"></i></a>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="owl-dots disabled"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Trending Categories -->
+
+                <!-- Filter -->
+                <div class="filters-section">
+                    <ul class="filters-wrap">
+
+                        <!-- Categories -->
+                        <li>
+                            <div class="collapse-card">
+                                <div class="filter-header">
+                                    <a href="javascript:void(0);">
+                                        <i class="ti ti-list page input"></i> Categories
+                                    </a>
+                                </div>
+                                <div id="categories" class="collapse-body">
+                                    <div class="form-group search-group">
+                                        <span class="search-icon"><i class="feather-search"></i></span>
+                                        <input type="text" class="form-control" placeholder="Search Category">
+                                    </div>
+                                    <ul class="checkbox-list categories-lists">
+                                        <li class="active">
+                                            <label class="custom_check">
+                                                <span class="checked-title">Programming &amp; Coding</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Data Science &amp; Analysis</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Databases </span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Mobile App Development</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Email Template Development</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- /Categories -->
+
+                        <!-- Locations -->
+                        <li>
+                            <div class="collapse-card">
+                                <div class="filter-header">
+                                    <a href="javascript:void(0);">
+                                        <i class="ti ti-map-pin-pin"></i>Locations
+                                    </a>
+                                </div>
+                                <div id="locations" class="collapse-body">
+                                    <div class="form-group search-group">
+                                        <span class="search-icon"><i class="feather-search"></i></span>
+                                        <input type="text" class="form-control" placeholder="Search Locations">
+                                    </div>
+                                    <ul class="checkbox-list categories-lists">
+                                        <li class="active">
+                                            <label class="custom_check">
+                                                <span class="checked-title">Canada</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Bolivia</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Tunsania</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">Indonesia</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">UK</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">UAE</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <span class="checked-title">USA</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- /Locations -->
+
+                        <!-- Ratings -->
+                        <li>
+                            <div class="collapse-card">
+                                <div class="filter-header">
+                                    <a href="javascript:void(0);">
+                                        <i class="ti ti-stars"></i>Reviews
+                                    </a>
+                                </div>
+                                <div id="ratings" class="collapse-body">
+                                    <ul class="checkbox-list star-rate">
+                                        <li>
+                                            <label class="custom_check">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                                <span class="ratings ms-4">
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                </span>
+                                                <span class="rating-count">(5.0)</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                                <span class="ratings ms-4">
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </span>
+                                                <span class="rating-count">(4.0)</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                                <span class="ratings ms-4">
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star "></i>
+                                                </span>
+                                                <span class="rating-count">(3.0)</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                                <span class="ratings ms-4">
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </span>
+                                                <span class="rating-count">(2.0)</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="custom_check">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                                <span class="ratings ms-4">
+                                                    <i class="fa-solid fa-star filled"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                </span>
+                                                <span class="rating-count">(1.0)</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                    <div class="filter-btn">
+                                        <a href="javascript:void(0);">Reset</a>
+                                        <button class="btn btn-primary">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- /Ratings -->
+
+                    </ul>
+                    <!-- /Filter -->
+
+                    <!-- Sort By -->
+                    <div class="filters-wrap sort-categories">
+                        <div class="collapse-card float-lg-end">
+                            <div class="filter-header">
+                                <a href="javascript:void(0);" class="sorts-list">
+                                    <i class="ti ti-sort-ascending"></i>Sorts by: <span>Recommended</span>
+                                </a>
+                            </div>
+                            <div id="categories2" class="collapse-body" style="display: none;">
+                                <div class="form-group search-group">
+                                    <span class="search-icon"><i class="feather-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search Category">
+                                </div>
+                                <ul class="checkbox-list categories-lists">
+                                    <li class="active">
+                                        <label class="custom_check">
+                                            <span class="checked-title"> Featured</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="custom_check">
+                                            <span class="checked-title">Popular</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="custom_check">
+                                            <span class="checked-title">Latest</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="custom_check">
+                                            <span class="checked-title"> Recommended </span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Sort By -->
+
+                </div>
+                <!-- /Filter -->
+
             </div>
         </div>
-    </div> -->
+    </div>
     <div class="container">
-        <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span
-                    class="title-bg2"></span></h2>
-            <p style="color: #27AE60;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
-        </div>
+
         <div class="row seller-list postLists cards">
             @foreach($talents as $talent)
             <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper">
@@ -211,9 +467,37 @@
 
             </div>
             @endforeach
-            <div class="text-center mt-3" data-aos="fade-up">
-                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-dark">View All
-                    Talents</a>
+            
+            <div class="col-md-12">
+
+                <!-- Pagination -->
+                <div class="pagination" data-aos="fade-up">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="active">1</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">2</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">3</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">4</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">5</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="next"><i class="fa-solid fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /Pagination -->
+
             </div>
         </div>
     </div>

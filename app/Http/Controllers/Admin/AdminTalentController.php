@@ -28,7 +28,6 @@ class AdminTalentController extends Controller
         return view('admin-pages.talents.index', compact('talents', 'categories', 'totalRatings', 'totalStories', 'totalComments', 'totalSkills'));
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -140,7 +139,7 @@ class AdminTalentController extends Controller
             unlink(public_path('image/talents/' . $talent->image));
         }
         $talent->delete();
-        return response()->json(['message' => 'Talent deleted successfully']);
+        return redirect()->route('admin.talents')->with('success', 'Talent deleted successfully.');
     }
 
     public function updateStatus(Request $request, $id)
@@ -151,6 +150,18 @@ class AdminTalentController extends Controller
 
         $talent = Talent::findOrFail($id);
         $talent->status = $request->status;
+        $talent->save();
+
+        return redirect()->back();
+    }
+    public function feature(Request $request, $id)
+    {
+        $request->validate([
+            'featured' => 'boolean',
+        ]);
+
+        $talent = Talent::findOrFail($id);
+        $talent->featured = $request->has('featured') ? 1 : 0;
         $talent->save();
 
         return redirect()->back();

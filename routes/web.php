@@ -145,6 +145,7 @@ Route::middleware(['auth', 'role:admin'])
 
         // Talents
         Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents');
+        
         Route::post('/talents', [AdminTalentController::class, 'store'])->name('talents.store');
         Route::put('/talent/update/{id}', [AdminTalentController::class, 'update'])->name('talents.update');
         Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
@@ -172,9 +173,13 @@ Route::middleware(['auth', 'role:admin'])
         Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
         // Stories
-        Route::resource('stories', AdminStoryController::class)->except(['edit', 'create']);
+        Route::get('/stories', [AdminStoryController::class, 'index'])->name('stories.index');
         Route::get('/stories/create', [AdminStoryController::class, 'create'])->name('stories.create');
+        Route::post('/stories', [AdminStoryController::class, 'store'])->name('stories.store');
+        Route::get('/stories/{story}', [AdminStoryController::class, 'show'])->name('stories.show');
         Route::get('/stories/{story}/edit', [AdminStoryController::class, 'edit'])->name('stories.edit');
+        Route::put('/stories/{story}', [AdminStoryController::class, 'update'])->name('stories.update');
+        Route::delete('/stories/{story}', [AdminStoryController::class, 'destroy'])->name('stories.destroy');
 
         // Skills
         Route::resource('skills', AdminSkillController::class)->except(['edit', 'create']);

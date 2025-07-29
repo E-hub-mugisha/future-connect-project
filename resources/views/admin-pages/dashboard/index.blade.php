@@ -84,11 +84,11 @@
                 <div class="dash-widget flex-fill w-100">
                     <div class="d-flex align-items-center mb-3">
                         <span class="dash-icon bg-success flex-shrink-0">
-                            <i class="ti ti-credit-card"></i>
+                            <i class="ti ti-report-money"></i>
                         </span>
                         <div>
-                            <p class="mb-1">Total Credit</p>
-                            <h5 class="mb-0">$10,292.50</h5>
+                            <p class="mb-1">Total Payment</p>
+                            <h5 class="mb-0">{{ $totalStoryPayments }}</h5>
                         </div>
                     </div>
                     <div class="bg-light p-3 rounded-2">
@@ -117,16 +117,16 @@
                     <div class="d-flex align-items-center gap-4">
                         <div class="earning-info">
                             <p class="mb-1">Earnings</p>
-                            <h5>$1,57,815</h5>
+                            <h5>{{ $totalStoryPayments}}</h5>
                         </div>
                         <div class="earning-info">
                             <p class="mb-1">Wallet Balance</p>
-                            <h5>$5690</h5>
+                            <h5>{{ $totalStoryPayments}}</h5>
                         </div>
                     </div>
                     <div class="earning-btn text-end">
-                        <a href="seller-wallet.html" class="btn btn-primary btn-md"><i
-                                class="ti ti-shopping-cart me-1"></i>Wallet</a>
+                        <a href="{{ route('admin.payments.index')}}" class="btn btn-primary btn-md"><i
+                                class="ti ti-shopping-cart me-1"></i>Payments</a>
                     </div>
                     <a role="button" tabIndex="0" class="withdraw-link" data-bs-toggle="modal"
                         data-bs-target="#withdraw">Withdraw Funds</a>
@@ -214,7 +214,7 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="table-img">
-                                                    <a role="button" tabIndex="0"><img src="assets/img/gigs/gigs-07.jpg"
+                                                    <a role="button" tabIndex="0"><img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
                                                             class="img-fluid rounded-pill" alt="img"></a>
                                                 </div>
                                                 <div class="recent-payment">
@@ -353,104 +353,32 @@
                 <div class="card recent-payment-card flex-fill w-100">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div class="gig-card-head">
-                            <h5 class="mb-0">Recent Payments</h5>
+                            <h5 class="mb-0">Recent Story Payments</h5>
                         </div>
-                        <a href="seller-transactions.html" class="view-link mb-0">View All</a>
+                        <a href="{{ route('admin.payments.index') }}" class="view-link mb-0">View All</a>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive card-table">
                             <table class="table">
                                 <tbody>
+                                    @foreach($payments as $payment)
                                     <tr>
                                         <td>
                                             <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will create a chatbot to change
-                                                        leads..</a></h6>
-                                                <p>Id : #232 <span>|</span> Order Date: 11 Jan 2025</p>
+                                                <h6><a role="button" tabIndex="0">{{ $payment->story->title }}</a></h6>
+                                                <p>Id : #{{ $payment->id }} <span>|</span> {{ \Carbon\Carbon::parse($payment->created_at)->format('d M Y') }}</p>
                                             </div>
                                         </td>
                                         <td class="text-end">
                                             <span class="badge badge-success-transparent text-success"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
+                                                    class="ti ti-point-filled me-1"></i>{{ $payment->status }}</span>
                                         </td>
                                         <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$500</h6>
+                                            <h6 class="mb-0">+${{ $payment->amount }}</h6>
                                             <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
+                                                data-bs-toggle="modal" data-bs-target="#transaction_details{{ $payment->id }}">View</a>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will do english or german transcript
-                                                        of any..</a></h6>
-                                                <p>Id : #231 <span>|</span> Order Date: 10 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$500</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md "
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will do professional lifestyle and
-                                                        product ph..</a></h6>
-                                                <p>Id : #230 <span>|</span> Order Date: 09 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$7800</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will develop openai, dall, chat gpt
-                                                        app for...</a></h6>
-                                                <p>Id : #229 <span>|</span> Order Date: 08 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$7400</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will develop Website for
-                                                        Ecommerce</a></h6>
-                                                <p>Id : #414 <span>|</span> Order Date: 07 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$1452</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
+                                        @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -584,19 +512,20 @@
 <!-- /Withdraw -->
 
 <!-- Transaction details  -->
-<div class="modal new-modal fade" id="transaction_details" data-keyboard="false" data-backdrop="static">
+@foreach($payments as $payment)
+<div class="modal new-modal fade" id="transaction_details{{ $payment->id }}" data-keyboard="false" data-backdrop="static" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Transaction details </h5><button type="button" class="close-btn"
-                    data-bs-dismiss="modal"><span>×</span></button>
+                <h5 class="modal-title">Transaction details </h5>
+                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
             </div>
             <div class="modal-body service-modal">
                 <h6 class="model-head-text"> Transaction Summary </h6>
                 <div class="sumary-widget">
                     <div class="summary-info">
                         <h6> Transaction ID</h6>
-                        <p> #TXN-20250321-00123462 </p>
+                        <p> #{{ $payment->tx_ref }} </p>
                     </div>
                     <div class="summary-info">
                         <h6> Transaction type </h6>
@@ -604,11 +533,11 @@
                     </div>
                     <div class="summary-info">
                         <h6> Amount</h6>
-                        <p> $320 </p>
+                        <p> ${{ $payment->amount }} </p>
                     </div>
                     <div class="summary-info">
                         <h6> Currency</h6>
-                        <p> USD </p>
+                        <p> {{ $payment->currency }} </p>
                     </div>
                     <div class="summary-info">
                         <h6> Processing Fee</h6>
@@ -620,11 +549,11 @@
                     </div>
                     <div class="summary-info mb-0">
                         <h6> Sender</h6>
-                        <p> John Doe </p>
+                        <p> {{ $payment->email }} </p>
                     </div>
                     <div class="summary-info mb-0">
                         <h6> Receiver</h6>
-                        <p> Jane Smith </p>
+                        <p> kabosierik@gmail.com </p>
                     </div>
 
                 </div>
@@ -632,6 +561,7 @@
         </div>
     </div>
 </div>
+@endforeach
 <!-- /Transaction details -->
 
 

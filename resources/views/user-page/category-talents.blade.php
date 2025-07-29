@@ -1,23 +1,6 @@
 @extends('layouts.guest')
 @section('content')
 
-<div class="breadcrumb-bar breadcrumb-bar-info">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <nav aria-label="breadcrumb" class="page-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('user.home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item" aria-current="page">Talents</li>
-                    </ol>
-                </nav>
-                {{ $categoryName }} talents
-            </div>
-        </div>
-    </div>
-</div>
 
 <style>
     .talent-card {
@@ -194,11 +177,7 @@
                 @endforelse
             </div>
 
-            <div class="text-center mt-3" data-aos="fade-up">
-                <a href="{{ url('talents') }}" class="btn btn-lg btn-dark">
-                    Load more Talents
-                </a>
-            </div>
+            
             @endif
         </div>
 

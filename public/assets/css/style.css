@@ -6870,7 +6870,9 @@ div.dt-container .dt-paging .dt-paging-button.disabled:active {
 .banner-img-right {
   max-width: 500px;
   position: absolute;
-  right: 30px;
+  /* right: 30px; */
+  left: 65%;
+  top: 25%;
 }
 
 @media (max-width: 1399.98px) {
@@ -7353,7 +7355,7 @@ div.dt-container .dt-paging .dt-paging-button.disabled:active {
 
 .gigs-grid {
   background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
+  box-shadow: 0 1em 1em #1f2d3d26;
   border: 1px solid var(--gray-100);
   border-radius: 10px;
   margin-bottom: 24px;
@@ -14045,11 +14047,12 @@ div.dt-container .dt-paging .dt-paging-button.current {
   display: flex;
   justify-content: space-between;
   -webkit-justify-content: space-between;
-  border-radius: 10px;
-  border: 1px solid var(--gray-100);
-  background: var(--white);
-  box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.3607843137);
+  border: 1px solid #fff;
+  border-radius: 1em;
+  background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+  box-shadow: 0 1em 1em #1f2d3d26;
   padding: 20px;
+  margin-bottom: 2rem;
 }
 
 .trend-info {

@@ -1,5 +1,3 @@
-
-
 <header class="header dashboard-header">
     <div class="header-user">
         <div class="header-left-mob">
@@ -40,7 +38,7 @@
                 </ul>
             </div>
             <div class="nav-item dropdown nav-item-box">
-                <a class="nav-link dropdown-toggle" href="seller-notifications.html" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                     <i class="ti ti-bell"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end noti-blk">
@@ -55,7 +53,7 @@
                     <ul>
                         <li class="notification-message">
                             <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html" class="active-noti">
+                                <a href="#" class="active-noti">
                                     <span class="avatar avatar-sm flex-shrink-0">
                                         <img class="avatar-img rounded-circle img-fluid" alt="User Image"
                                             src="{{ asset('assets/img/user/profile.jpg') }}" />
@@ -63,7 +61,7 @@
                                 </a>
                                 <div class="media-body flex-grow-1">
                                     <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">Lex Murphy</a>
+                                        <h6 class="noti-details"><a href="#">Lex Murphy</a>
                                         </h6>
                                         <p class="mb-0">45 mins ago</p>
                                     </div>
@@ -77,7 +75,7 @@
                         </li>
                         <li class="notification-message">
                             <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html" class="active-noti">
+                                <a href="#" class="active-noti">
                                     <span class="avatar avatar-sm flex-shrink-0">
                                         <img class="avatar-img rounded-circle img-fluid" alt="User Image"
                                             src="assets/img/user/user-02.jpg" />
@@ -85,7 +83,7 @@
                                 </a>
                                 <div class="media-body flex-grow-1">
                                     <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">Ray Arnold</a>
+                                        <h6 class="noti-details"><a href="#">Ray Arnold</a>
                                         </h6>
                                         <p class="mb-0">17 mins ago</p>
                                     </div>
@@ -95,7 +93,7 @@
                         </li>
                         <li class="notification-message">
                             <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html">
+                                <a href="#">
                                     <span class="avatar avatar-sm flex-shrink-0">
                                         <img class="avatar-img rounded-circle img-fluid" alt="User Image"
                                             src="assets/img/user/user-03.jpg" />
@@ -103,7 +101,7 @@
                                 </a>
                                 <div class="media-body flex-grow-1">
                                     <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">Dennis
+                                        <h6 class="noti-details"><a href="#">Dennis
                                                 Nedry</a></h6>
                                         <p class="mb-0">1 Day Ago</p>
                                     </div>
@@ -116,7 +114,7 @@
                         </li>
                         <li class="notification-message">
                             <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html">
+                                <a href="#">
                                     <span class="avatar avatar-sm flex-shrink-0">
                                         <img class="avatar-img rounded-circle img-fluid" alt="User Image"
                                             src="assets/img/user/user-04.jpg" />
@@ -124,7 +122,7 @@
                                 </a>
                                 <div class="media-body flex-grow-1">
                                     <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">John
+                                        <h6 class="noti-details"><a href="#">John
                                                 Hammond</a></h6>
                                         <p class="mb-0">45 mins ago</p>
                                     </div>
@@ -134,12 +132,12 @@
                         </li>
                     </ul>
                     <div class="clear-all-noti">
-                        <a class="clear-notification" href="seller-notifications.html"> View all </a>
+                        <a class="clear-notification" href="#"> View all </a>
                     </div>
                 </div>
             </div>
             <div class="nav-item dropdown nav-item-box">
-                <a href="seller-profile.html" class="dropdown-toggle d-flex align-items-center nav-link"
+                <a href="#" class="dropdown-toggle d-flex align-items-center nav-link"
                     data-bs-toggle="dropdown">
                     <span class="avatar online avatar-sm">
                         <img src="{{ asset('assets/img/user/user-04.jpg') }}" alt="Img"
@@ -167,23 +165,13 @@
                         </a>
 
 
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                        <a class="dropdown-item d-flex align-items-center mb-1" href="#">
                             <i class="ti ti-settings-cog me-2"></i>Settings
                         </a>
 
 
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
-                            <i class="ti ti-shopping-bag me-2"></i>Orders
-                        </a>
-
-
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
-                            <i class="ti ti-moneybag me-2"></i>Earnings
-                        </a>
-
-
-                        <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
-                            <i class="ti ti-wallet me-2"></i>Wallet
+                        <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.payments.index')}}">
+                            <i class="ti ti-wallet me-2"></i>Payments
                         </a>
 
                     </div>
@@ -218,34 +206,27 @@
 
                 <div class="p-2">
 
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
+                    <a class="dropdown-item d-flex align-items-center mb-1" href="#">
                         <i class="ti ti-user-cog me-2"></i>My Profile
                     </a>
 
 
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
+                    <a class="dropdown-item d-flex align-items-center mb-1" href="#">
                         <i class="ti ti-settings-cog me-2"></i>Settings
                     </a>
 
 
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
-                        <i class="ti ti-shopping-bag me-2"></i>Orders
-                    </a>
-
-
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
-                        <i class="ti ti-moneybag me-2"></i>Earnings
-                    </a>
-
-
-                    <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
+                    <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.payments.index')}}">
                         <i class="ti ti-wallet me-2"></i>Wallet
                     </a>
 
                 </div>
 
                 <div class="border-top p-3">
-                    <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-light btn-md w-100 border-0">Logout</button>
+                    </form>
                 </div>
 
             </div>
@@ -334,7 +315,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="seller-settings.html" class="{{ isActiveRoute('', 'seller-settings*') }}">
+                            <a href="#" class="{{ isActiveRoute('', 'seller-settings*') }}">
                                 <i class="ti ti-settings-check me-2"></i> <span>Settings</span>
                             </a>
                         </li>
@@ -357,7 +338,10 @@
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="signin.html" target="_blank"><i class="ti ti-logout me-2"></i><span>Logout</span></a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-light btn-md w-100 border-0"><i class="ti ti-logout me-2"></i><span>Logout</span></button>
+                </form>
             </div>
         </div>
     </div>
