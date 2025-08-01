@@ -9,7 +9,7 @@
     <div class="section-header-two text-center mb-5">
       <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>How It Works<span
                     class="title-bg2"></span>
-      <p class="lead text-muted" style="color: #27AE60;">Discover how our platform helps you find and showcase talents seamlessly.</p>
+      <p class="lead text-muted" style="color: #319BF9;">Discover how our platform helps you find and showcase talents seamlessly.</p>
     </div>
 
     <div class="row g-4">

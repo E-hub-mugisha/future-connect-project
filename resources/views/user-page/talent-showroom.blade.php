@@ -25,7 +25,7 @@
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
             <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the matched talents<span
                     class="title-bg2"></span></h2>
-            <p style="color: #27AE60;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+            <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
         </div>
         <div class="row seller-list">
             @forelse($matchedTalents as $talent)
@@ -42,7 +42,7 @@
                         </span>
                         <h6 class="mb-1">
                             <a
-                                href="{{ route('user.talent.details', $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon" style="color: #27AE60;"></i></a>
+                                href="{{ route('user.talent.details', $talent->id) }}">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i></a>
                         </h6>
                         <p>{{ $talent->category->name ?? 'Uncategorized' }}
                         </p>

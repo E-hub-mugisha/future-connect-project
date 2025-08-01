@@ -2,6 +2,12 @@
 
 $categories = \App\Models\Category::all();
 
+if (!function_exists('isActiveRoute')) {
+    function isActiveRoute($route)
+    {
+        return request()->routeIs($route) ? 'active' : '';
+    }
+}
 @endphp
 
 <style>
@@ -13,35 +19,35 @@ $categories = \App\Models\Category::all();
         padding: 7px 5px;
     }
 
-    /* .main-menu-wrapper {
-        background: linear-gradient(to right, #011E34, #2250e7ff);
-        padding: 8px 2rem;
+    .main-menu-wrapper {
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        padding: 15px 2rem;
         border-radius: 4rem;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    } */
+    }
 
 
-    .main-menu-wrapper .main-nav .nav-link {
-        color: #27AE60;
+    .main-menu-wrapper .main-nav a {
+        color: #319BF9;
         font-size: 13px;
         font-weight: 500;
         transition: all 0.3s ease-in-out;
         border: 2px solid transparent;
-        background: transparent;
         display: inline-block;
         /* Prevents full-width behavior */
+        
     }
 
-    /* .main-menu-wrapper .main-nav .nav-link:hover,
-    .main-menu-wrapper .main-nav .nav-link.active {
-        color: #27AE60;
+    .main-menu-wrapper .main-nav a:hover,
+    .main-menu-wrapper .main-nav a.active {
+        color: #319BF9;
         border-bottom: 2px solid #F0F2F7;
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         box-shadow: 0 1em 1em #1f2d3d26;
         border-radius: 10px;
-        
-    } */
+        padding: 6px 20px;
+    }
 </style>
 
 <style>
@@ -129,7 +135,7 @@ $categories = \App\Models\Category::all();
                     </span>
                 </a>
 
-                <a href="{{ url('/') }}">
+                <a href="{{ route('user.home') }}">
                     <img src="{{ asset('assets/img/logo.svg') }}" class="img-fluid" alt="Logo" style="height: 50px;" />
                 </a>
             </div>
@@ -142,7 +148,7 @@ $categories = \App\Models\Category::all();
                 <ul class="main-nav navbar-nav">
                     {{-- Home --}}
                     <li>
-                        <a href="{{ url('/') }}" class="nav-link {{ isActiveRoute(['home'], ['/']) }}">Home</a>
+                        <a href="{{ route('user.home') }}" class="nav-link {{ isActiveRoute(['user.home']) }}">Home</a>
                     </li>
 
                     {{-- Talents --}}
@@ -277,10 +283,11 @@ $categories = \App\Models\Category::all();
                 </div>
                 <ul class="nav header-navbar-rht">
                     <li class="nav-item">
-                        <a class="btn btn-light d-inline-flex align-items-center"
+                        <a class="btn btn-light d-inline-flex align-items-center login"
                             href="javascript:void(0)"
                             data-bs-toggle="modal"
-                            data-bs-target="#loginModal">
+                            data-bs-target="#loginModal" style="background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+  box-shadow: 0 1em 1em #1f2d3d26;">
                             <i class="ti ti-lock me-1"></i>Sign In
                         </a>
 
@@ -289,8 +296,6 @@ $categories = \App\Models\Category::all();
                         <a class="btn btn-primary d-inline-flex align-items-center" href="#" onclick="toggleSearchOverlay(event)">
                             <i class="ti ti-search me-1"></i>Search
                         </a>
-
-
                     </li>
                 </ul>
             </div>

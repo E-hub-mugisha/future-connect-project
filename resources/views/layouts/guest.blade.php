@@ -114,8 +114,8 @@
     <script src="{{ asset('assets/js/script.js') }}"></script>
 
     <script>
-        $(document).ready(function () {
-            $('#storiesCategoryTabs .nav-link').on('click', function (e) {
+        $(document).ready(function() {
+            $('#storiesCategoryTabs .nav-link').on('click', function(e) {
                 e.preventDefault();
 
                 var selectedCategory = $(this).data('category');
@@ -125,7 +125,7 @@
                 $(this).addClass('active');
 
                 // Filter skill cards
-                $('.skill-card').each(function () {
+                $('.skill-card').each(function() {
                     var cardCategory = $(this).data('category');
 
                     if (selectedCategory === 'All' || cardCategory === selectedCategory) {

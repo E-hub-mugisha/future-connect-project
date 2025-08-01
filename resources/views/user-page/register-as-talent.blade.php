@@ -30,7 +30,7 @@
                         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
                             <h2 class="mb-2"><span class="title-bg"></span>Talent Registration<span
                                     class="title-bg2"></span></h2>
-                            <p style="color: #27AE60;">Register as talent and Connect with the next wave of talents, guiding you with fresh perspectives</p>
+                            <p style="color: #319BF9;">Register as talent and Connect with the next wave of talents, guiding you with fresh perspectives</p>
                         </div>
                     </div>
                 </div>

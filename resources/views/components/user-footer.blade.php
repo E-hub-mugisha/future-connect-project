@@ -71,7 +71,7 @@
      <div class="footer-bottom-two">
          <div class="container">
              <div class="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
-                 <a href="/" class="footer-logo">
+                 <a href="{{ route('user.home') }}" class="footer-logo">
                      <img src="{{ asset('assets/img/logo.svg')}}" alt="Future Connect Logo' ) }}" />
                  </a>
                  <div class="social-links">

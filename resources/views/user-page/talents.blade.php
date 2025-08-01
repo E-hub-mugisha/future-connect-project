@@ -4,6 +4,11 @@
 <!-- SwiperJS for carousel -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
+@php
+
+$categories = \App\Models\Category::all();
+
+@endphp
 
 <style>
     .talent-card {
@@ -140,7 +145,7 @@
                         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
                             <h2 class="mb-2"><span class="title-bg"></span>Meet the Next Generation of talents<span
                                     class="title-bg2"></span></h2>
-                            <p style="color: #27AE60;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+                            <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
                         </div>
                     </div>
                 </div>
@@ -204,31 +209,13 @@
                                         <input type="text" class="form-control" placeholder="Search Category">
                                     </div>
                                     <ul class="checkbox-list categories-lists">
+                                        @foreach($categories as $cat)
                                         <li class="active">
                                             <label class="custom_check">
-                                                <span class="checked-title">Programming &amp; Coding</span>
+                                                <span class="checked-title">{{ $cat->name }}</span>
                                             </label>
                                         </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Data Science &amp; Analysis</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Databases </span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Mobile App Development</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Email Template Development</span>
-                                            </label>
-                                        </li>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>
@@ -445,7 +432,7 @@
                         <h6 class="mb-1">
                             <a href="{{ route('user.talent.details', $talent->id) }}">
                                 {{ $talent->name }}
-                                <i class="ti ti-discount-check-filled verify-icon" style="color: #27AE60;"></i>
+                                <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
                             </a>
                         </h6>
                         <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
