@@ -8,7 +8,11 @@
         background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
         color: #fff;
         border-radius: 30px;
-        margin: 20px 100px;
+        margin: 20px auto;
+        /* Center horizontally */
+        /* max-width: 1200px;  */
+        padding: 0 8em;
+        /* Equal inner spacing (left and right) */
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
         perspective: 1200px;
@@ -164,127 +168,189 @@
 </style>
 
 <!-- Hero Section Carousel -->
-<div id="heroCarousel" class="hero-section carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-    <!-- Bubble Background -->
-    <div class="bubbles">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+<div class="container">
+    <div id="heroCarousel" class="hero-section carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <!-- Bubble Background -->
+        <div class="bubbles">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
 
-    </div>
+        </div>
 
-    <div class="carousel-inner pt-3">
-        @foreach($featuredTalents as $index => $talent)
-        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-            <div class="hero-section-two py-5 w-100">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7">
-                            <div class="banner-content text-white" data-aos="fade-up" data-aos-duration="1000">
-                                <div class="banner-head mb-4">
-                                    <span class="d-inline-flex align-items-center hero-title">
-                                        <i class="ti ti-point-filled me-1"></i> {{ $talent->name }}
-                                    </span>
-                                    <h1 class="mt-2 mb-3 text-white">Passionate {{ $talent->skill ?? 'creative' }} and performer blending
-                                        {{ $talent->category->name ?? 'various disciplines' }}.
-                                    </h1>
-                                    <p class="d-inline-flex">{{ $talent->story }}</p>
-                                </div>
-                                <div class="popular-search mt-4" data-aos="fade-up">
-                                    <h5>Popular Searches:</h5>
-                                    <ul class="ps-0">
-                                        @foreach($popularCategories as $category)
-                                        <li class="d-inline-block me-3">
-                                            <a href="{{ route('user.talents.category', $category->slug) }}">{{ $category->name }}</a>
-                                        </li>
-                                        @endforeach
-                                    </ul>
+        <div class="carousel-inner pt-3">
+            @foreach($featuredTalents as $index => $talent)
+            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                <div class="hero-section-two py-5 w-100">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-7">
+                                <div class="banner-content text-white" data-aos="fade-up" data-aos-duration="1000">
+                                    <div class="banner-head mb-4">
+                                        <span class="d-inline-flex align-items-center hero-title">
+                                            <i class="ti ti-point-filled me-1"></i> {{ $talent->name }}
+                                        </span>
+                                        <h1 class="mt-2 mb-3 text-white">Passionate {{ $talent->skill ?? 'creative' }} and performer blending
+                                            {{ $talent->category->name ?? 'various disciplines' }}.
+                                        </h1>
+                                        <p class="d-inline-flex">{{ $talent->story }}</p>
+                                    </div>
+                                    <div class="popular-search mt-4" data-aos="fade-up">
+                                        <h5>Popular Searches:</h5>
+                                        <ul class="ps-0">
+                                            @foreach($popularCategories as $category)
+                                            <li class="d-inline-block me-3">
+                                                <a href="{{ route('user.talents.category', $category->slug) }}">{{ $category->name }}</a>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-5 text-center">
-                            <div class="banner-img" data-aos="zoom-in">
-                                <div class="banner-img-right">
-                                    <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
-                                        class="img-fluid" alt="Talent Image">
+                            <div class="col-lg-5 text-center">
+                                <div class="banner-img" data-aos="zoom-in">
+                                    <div class="banner-img-right">
+                                        <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
+                                            class="img-fluid" alt="Talent Image">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-
-    <!-- Carousel Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" aria-label="Previous">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" aria-label="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-</div>
-<!-- /Hero Section Carousel -->
-
-
-<!-- Future Connect: Popular Talent Categories -->
-<div class="popular-section-two" style="background: #aac2e1a8;">
-    <div class="container">
-        <div class="section-header-two text-center" data-aos="fade-up">
-            <h2 class="mb-2"><span class="title-bg"></span>Popular Talent Categories<span
-                    class="title-bg2"></span></h2>
-            <p>Discover inspiring stories, impactful skills, and creative talent across Africa</p>
-        </div>
-        <div
-            class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
-            @foreach($categories as $cat)
-            <div class="col d-flex">
-                <div class="pop-category flex-fill" data-aos="flip-left">
-                    <span><i class="{{ $cat->image ?? 'ti ti-star' }}"></i></span>
-                    <h6 class="mb-1" style="color: var(--white);"><a
-                            href="{{ route('user.talents.category', $cat->slug) }}" style="color: var(--white);">{{ $cat->name }}</a>
-                    </h6>
-                    @if(isset($cat->talents_count))
-                    <p style="color: var(--white);">{{ $cat->talents_count }} talents</p>
-                    @else
-                    <p style="color: var(--white);">0 talents</p>
-                    @endif
                 </div>
             </div>
             @endforeach
         </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" aria-label="Previous">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" aria-label="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
     </div>
 </div>
-<!-- /Future Connect: Popular Talent Categories -->
+<!-- /Hero Section Carousel -->
 
-<div class="client-slider-sec">
-    <div class="container">
-        <div class="row justify-content-center">
 
-            <div class="col-lg-12">
-                <div class="section-header text-center aos" data-aos="fade-up">
-                    <h3 class="text-white">Trusted by {{ $partners->count() }}+ partners Around Globe</h3>
-                </div>
 
-                <div class="row mt-4">
-                    @foreach($partners as $partner)
-                    <div class="col-6 col-sm-2 col-md-2 col-lg-2 mb-4 text-center">
-                        <div class="client-logo">
-                            <img src="{{ $partner->logo ? asset('image/partners/' . $partner->logo) : asset('/assets/img/company/logo.svg') }}"
-                                class="img-fluid"
-                                alt="Client Logo" style="height: 50px; width: auto;">
+<div class="container" style="margin-top: 4.5rem;">
+    <div class="trend-section ">
+        <div class="row align-items-center">
+            <div class="col-sm-10">
+                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of talents<span class="title-bg2"></span></h5>
+                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative talent across Africa</p>
+            </div>
+            <div class="col-sm-2 text-sm-end">
+                <div class="owl-nav trend-nav nav-control nav-top"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="trend-items owl-carousel owl-loaded owl-drag">
+                    <div class="owl-stage-outer">
+                        <div class="owl-stage" style="transform: translate3d(-1977px, 0px, 0px); transition: 2s; width: 4284px;">
+                            @foreach($categories as $cat)
+                            <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
+                                <div class="trend-box">
+                                    <div class="trend-info">
+
+                                        <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+                                        @if(isset($cat->talents_count))
+                                        <p>{{ $cat->talents_count }} talents</p>
+                                        @else
+                                        <p>0 talents</p>
+                                        @endif
+                                    </div>
+                                    <style>
+                                        .slide-line-btn {
+                                            position: relative;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 6px;
+                                            padding: 6px 16px;
+                                            color: #fff;
+                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                            border-radius: 30px;
+                                            text-decoration: none;
+                                            overflow: hidden;
+                                            z-index: 1;
+                                        }
+
+                                        .slide-line {
+                                            position: absolute;
+                                            top: 100%;
+                                            left: -100%;
+                                            width: 200%;
+                                            height: 100%;
+                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+                                            transform: rotate(45deg);
+                                            animation: slideRightUp 2s ease-in-out infinite;
+                                            z-index: 0;
+                                        }
+
+                                        .slide-line:nth-child(2) {
+                                            animation-delay: 0s;
+                                            opacity: 0;
+                                            width: 50%;
+                                        }
+
+                                        .slide-line:nth-child(3) {
+                                            animation-delay: 0s;
+                                            opacity: 0.5;
+                                            width: 150%;
+                                        }
+
+                                        .slide-line:nth-child(4) {
+                                            animation-delay: 0.8s;
+                                            opacity: 0.7;
+                                            width: 200%;
+                                        }
+
+                                        @keyframes slideRightUp {
+                                            0% {
+                                                top: 100%;
+                                                left: -100%;
+                                            }
+
+                                            50% {
+                                                top: 0%;
+                                                left: 0%;
+                                            }
+
+                                            100% {
+                                                top: -100%;
+                                                left: 100%;
+                                            }
+                                        }
+
+                                        .slide-line-btn span {
+                                            pointer-events: none;
+                                        }
+                                    </style>
+
+                                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
+                                        <i class="feather-arrow-right"></i>Read More
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                    </a>
+
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    @endforeach
+                    <div class="owl-dots disabled"></div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+<!-- /Trending Categories -->
 
 <style>
     .postLists.cards .post-item.m-card {
@@ -349,23 +415,25 @@
     .postLists.cards .post-item.m-card .go {
         position: relative;
         display: inline-flex;
-        /* Flex for centering */
         align-items: center;
+        gap: 6px;
+        padding: 16px 16px;
+        color: #fff;
+        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        border-radius: 30px;
+        text-decoration: none;
+        overflow: hidden;
+        z-index: 1;
         justify-content: center;
         min-width: 50%;
-        background: linear-gradient(90deg, #011E34, #011E34);
-        box-shadow: 0 .5em 1.2em #011E34;
+        /* Green to navy */
+        box-shadow: 0 0.5em 1.2em rgba(1, 30, 52, 0.6);
         font-size: 14px;
-        margin: .3em 0 1.5em;
-        padding: 1.25em 1.5em;
-        border-radius: 9em;
-        text-decoration: none;
-        color: #fff;
-        text-shadow: 0 2px 3px #011E34;
-        overflow: hidden;
-        height: 1.5em;
-        /* to prevent height jumping */
+        margin: 1em auto;
+        text-shadow: 0 2px 3px rgba(1, 30, 52, 0.5);
+        height: auto;
         line-height: 1.5em;
+        transition: all 0.3s ease;
     }
 
     .postLists.cards .post-item.m-card .go-text,
@@ -419,9 +487,9 @@
         z-index: 10;
         position: relative;
         display: block;
-        margin-top: -2.75em;
+        /* margin-top: -1.75em; */
         width: calc(100% - .85em);
-        padding-top: calc(28.45% - 1.67em);
+        /* padding-top: calc(28.45% - 1.67em); */
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -431,6 +499,28 @@
         transform: translateZ(0);
         transition: .25s;
         margin-bottom: 1em;
+    }
+
+    .talent-hover-box {
+        display: inline-block;
+        position: relative;
+    }
+
+    .default-badges,
+    .hover-badges {
+        transition: opacity 0.3s ease;
+    }
+
+    .hover-badges {
+        display: none;
+    }
+
+    .talent-hover-box:hover .default-badges {
+        display: none;
+    }
+
+    .talent-hover-box:hover .hover-badges {
+        display: inline-block;
     }
 </style>
 
@@ -443,144 +533,152 @@
             <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
         </div>
         <div class="row seller-list postLists cards">
-            @foreach($talents as $talent)
-            <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper">
-                <div class="card post-item m-card" data-aos="flip-left">
-                    <div class="card-body text-center">
-                        <a href="{{ route('user.talent.details', $talent->id) }}">
-                            <img class="img rounded-3 w-100 h-100" style="object-fit: cover;" src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" alt="img" />
-                        </a>
+            <!-- Filter -->
+            <div class="filters-section">
+                <div class="listing-tab ">
+                    <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-filter="latest" type="button">Latest</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-filter="popular" type="button">Popular</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-filter="featured" type="button">Featured</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-filter="recommended" type="button">Recommended</a>
+                        </li>
+                    </ul>
 
-                        <h6 class="mb-1">
-                            <a href="{{ route('user.talent.details', $talent->id) }}">
-                                {{ $talent->name }}
-                                <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
-                            </a>
-                        </h6>
-                        <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
-                        <p class="mb-0 location-text d-inline-flex align-items-center">
-                            <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
-                            Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
-                        </p>
-                        <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                {{ $talent->skill }}
-                            </a>
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                {{ $talent->language }}
+                </div>
+
+                <!-- /Filter -->
+
+                <!-- Sort By -->
+                <div class="filters-wrap sort-categories">
+                    <div class="collapse-card float-lg-end">
+                        <div class="filter-header">
+                            <a href="javascript:void(0);" class="sorts-list">
+                                <i class="ti ti-sort-ascending"></i>Sorts by: <span>Categories</span>
                             </a>
                         </div>
-                        <div class="text-center">
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="go text-center"><span class="go-text">view</span></a>
+                        <div id="categories2" class="collapse-body" style="display: none;">
+                            <div class="form-group search-group">
+                                <span class="search-icon"><i class="feather-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Search Category">
+                            </div>
+                            <ul class="checkbox-list categories-lists">
+                                @foreach($categories as $cat)
+                                <li class="active">
+                                    <label class="custom_check">
+                                        <span class="checked-title">{{ $cat->name }}</span>
+                                    </label>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Sort By -->
+
+            </div>
+            <!-- /Filter -->
+            <div class="row" id="talentGrid">
+                @foreach($talents as $talent)
+                <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
+                    <div class="card post-item m-card" data-aos="flip-left">
+                        <div class="card-body text-center">
+
+                            <!-- Image -->
+                            <a href="{{ route('user.talent.details', $talent->id) }}">
+                                <img
+                                    class="img rounded-3"
+                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
+                                    alt="img" />
+                            </a>
+
+                            <!-- Name -->
+                            <h6 class="mb-1">
+                                <a href="{{ route('user.talent.details', $talent->id) }}">
+                                    {{ $talent->name }}
+                                    <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
+                                </a>
+                            </h6>
+
+                            <!-- Category -->
+                            <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
+
+                            <!-- Location -->
+                            <p class="mb-0 location-text d-inline-flex align-items-center">
+                                <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
+                                Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
+                            </p>
+
+                            <!-- Ratings -->
+                            <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
+                                <div class="talent-hover-box">
+                                    <div class="default-badges">
+                                        <span class="badge bg-light">
+                                            {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
+                                        </span>
+                                        <span class="badge bg-light">
+                                            {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
+                                        </span>
+                                    </div>
+                                    <div class="hover-badges">
+                                        <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                            {{ $talent->skill }}
+                                        </a>
+                                        <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                            {{ $talent->language }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- View Button -->
+                            <div class="text-center d-flex justify-content-center">
+                                <a href="{{ route('user.talent.details', $talent->id) }}" class="go text-center">
+                                    <span class="go-text">view</span>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
-            </div>
-            @endforeach
-            <div class="text-center mt-3" data-aos="fade-up">
-                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-dark">View All
-                    Talents</a>
+                @endforeach
             </div>
         </div>
     </div>
 </div>
 <!-- next gen -->
 
-<style>
-    .postLists-bg-white {
-        display: flex;
-        /* align-items: center; */
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #011e3461;
-        /* text-align: center; */
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        /* margin-bottom: 4.75rem; */
-
-    }
-</style>
-
-
-<div class="how-it-works">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="how-it-works-content position-relative">
-                    <img src="assets/img/home/shape-1.svg" alt="img" class="img-fluid how-it-works-bg">
-                    <div class="section-header-two aos-init aos-animate" data-aos="fade-up">
-                        <h2 class="mb-2"><span class="title-bg"></span>How it Works<span class="title-bg2"></span></h2>
-                        <p>Empowering young talents through storytelling, skills sharing, and community support.</p>
-                    </div>
-                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
-                        <span class="count bg-primary-transparent">01</span>
-                        <div>
-                            <h6 class="mb-2">Create Your Talent Profile</h6>
-                            <p class="mb-0">Sign up and showcase your story, skills, and aspirations through
-                                text, images, and videos.</p>
-                        </div>
-                    </div>
-                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
-                        <span class="count bg-secondary-transparent">02</span>
-                        <div>
-                            <h6 class="mb-2">Get Discovered & Rated</h6>
-                            <p class="mb-0">Users browse talents by category, like your story, rate your skills,
-                                and share feedback to help you grow.</p>
-                        </div>
-                    </div>
-                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
-                        <span class="count bg-pink-transparent">03</span>
-                        <div>
-                            <h6 class="mb-2">Earn Support & Recognition</h6>
-                            <p class="mb-0">Receive donations or course purchases, and gain visibility through
-                                the Future Connect community.</p>
-                        </div>
-                    </div>
-                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
-                        <span class="count bg-success-transparent">04</span>
-                        <div>
-                            <h6 class="mb-2">Grow With Us</h6>
-                            <p class="mb-0">Access learning resources, connect with agents and mentors, and keep
-                                your profile evolving.</p>
-                        </div>
-                    </div>
+<div class="container">
+    <div class="client-slider-sec px-2 px-md-4 px-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="section-header text-center aos" data-aos="fade-up">
+                    <h3 class="text-white">Trusted by {{ $partners->count() }}+ partners Around Globe</h3>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="how-it-works-images d-lg-block d-none">
-                    <div class="row align-items-center">
-                        <div class="col-7 text-end">
-                            <img src="{{ asset('assets/img/creative.png') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
-                            <img src="{{ asset('assets/img/singer.png') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-right">
-                        </div>
-                        <div class="col-5">
-                            <img src="{{ asset('assets/img/home/front-view-handsome-male-musician-singing-home-with-microphone.jpg') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
-                            <img src="{{ asset('assets/img/young-man-playing-music-jazz-day.jpg') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-left">
+
+                <div class="row mt-4">
+                    @foreach($partners as $partner)
+                    <div class="col-6 col-sm-2 col-md-2 col-lg-2 mb-4 text-center">
+                        <div class="client-logo">
+                            <img src="{{ $partner->logo ? asset('image/partners/' . $partner->logo) : asset('/assets/img/company/logo.svg') }}"
+                                class="img-fluid"
+                                alt="Client Logo" style="height: 50px; width: auto;">
                         </div>
                     </div>
+                    @endforeach
                 </div>
+
             </div>
         </div>
     </div>
 </div>
-
-<!-- Future Connect talent slider -->
-<div class="service-slider-section">
-    <div class="horizontal-slide d-flex" data-direction="right" data-speed="slow">
-        <div class="slide-list d-flex gap-4">
-            @foreach($categories as $cat)
-            <div class="p-3 px-4 d-flex align-items-center service-item">
-                <h4>{{ $cat->name }}</h4>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</div>
-<!-- end Future Connect talent slider -->
-
 
 <!-- new services -->
 <div class="new-services-section">
@@ -698,11 +796,105 @@
 </div>
 <!-- new services -->
 
+<style>
+    .postLists-bg-white {
+        display: flex;
+        /* align-items: center; */
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #011e3461;
+        /* text-align: center; */
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        /* margin-bottom: 4.75rem; */
+
+    }
+</style>
+
+
+<div class="how-it-works">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="how-it-works-content position-relative">
+                    <img src="assets/img/home/shape-1.svg" alt="img" class="img-fluid how-it-works-bg">
+                    <div class="section-header-two aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="mb-2"><span class="title-bg"></span>How it Works<span class="title-bg2"></span></h2>
+                        <p>Empowering young talents through storytelling, skills sharing, and community support.</p>
+                    </div>
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                        <span class="count bg-primary-transparent">01</span>
+                        <div>
+                            <h6 class="mb-2">Create Your Talent Profile</h6>
+                            <p class="mb-0">Sign up and showcase your story, skills, and aspirations through
+                                text, images, and videos.</p>
+                        </div>
+                    </div>
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                        <span class="count bg-secondary-transparent">02</span>
+                        <div>
+                            <h6 class="mb-2">Get Discovered & Rated</h6>
+                            <p class="mb-0">Users browse talents by category, like your story, rate your skills,
+                                and share feedback to help you grow.</p>
+                        </div>
+                    </div>
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                        <span class="count bg-pink-transparent">03</span>
+                        <div>
+                            <h6 class="mb-2">Earn Support & Recognition</h6>
+                            <p class="mb-0">Receive donations or course purchases, and gain visibility through
+                                the Future Connect community.</p>
+                        </div>
+                    </div>
+                    <div class="how-it-works-item d-flex p-3 postLists-bg-white rounded aos-init aos-animate" data-aos="fade-up">
+                        <span class="count bg-success-transparent">04</span>
+                        <div>
+                            <h6 class="mb-2">Grow With Us</h6>
+                            <p class="mb-0">Access learning resources, connect with agents and mentors, and keep
+                                your profile evolving.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="how-it-works-images d-lg-block d-none">
+                    <div class="row align-items-center">
+                        <div class="col-7 text-end">
+                            <img src="{{ asset('assets/img/creative.png') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
+                            <img src="{{ asset('assets/img/singer.png') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-right">
+                        </div>
+                        <div class="col-5">
+                            <img src="{{ asset('assets/img/home/front-view-handsome-male-musician-singing-home-with-microphone.jpg') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-down">
+                            <img src="{{ asset('assets/img/young-man-playing-music-jazz-day.jpg') }}" class="img-fluid rounded aos-init aos-animate" alt="img" data-aos="fade-left">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Future Connect talent slider -->
+<!-- <div class="service-slider-section">
+    <div class="horizontal-slide d-flex" data-direction="right" data-speed="slow">
+        <div class="slide-list d-flex gap-4">
+            @foreach($categories as $cat)
+            <div class="p-3 px-4 d-flex align-items-center service-item">
+                <h4>{{ $cat->name }}</h4>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div> -->
+<!-- end Future Connect talent slider -->
 
 
 <!-- what makes Future Connect -->
-<div class="what-makes-dream-gigs">
-    <div class="container">
+<div class="container">
+    <div class="what-makes-dream-gigs">
+
         <div class="row align-items-center">
             <div class="col-lg-4">
                 <div class="what-makes-left" data-aos="fade-right">
@@ -907,7 +1099,7 @@
 
 <!-- testimonials -->
 <div class="testimonials-section-two">
-    <img src="{{ asset('assets/img/home/shape-4.svg') }}" alt="img" class="img-fluid testimonials-bg3 d-lg-inline-flex d-none">
+    <!-- <img src="{{ asset('assets/img/home/shape-4.svg') }}" alt="img" class="img-fluid testimonials-bg3 d-lg-inline-flex d-none"> -->
     <div class="container">
         <div class="row align-items-center row-gap-4">
             <div class="col-lg-6">
@@ -940,7 +1132,7 @@
                                 class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
                                 @endfor</div>
                         <p class="description">{{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}</p>
-                        <div class="location">📍 {{ $test->talent->address ?? 'New York, NY' }}</div>
+                        <div class="location"><i class="ti ti-location-pin"></i> {{ $test->talent->address ?? 'Kigali, Rwanda' }}</div>
                     </div>
                 </div>
                 @endforeach
@@ -965,6 +1157,32 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('#talentTabs .nav-link');
+        const items = document.querySelectorAll('.talent-item');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Activate clicked tab
+                buttons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+
+                items.forEach(item => {
+                    const category = item.dataset.category;
+                    if (filter === category) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 
 @endsection

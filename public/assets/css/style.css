@@ -6,7 +6,7 @@
   --dark: #011E34;
   --black: #319BF9;
   --light: #F9F9F9;
-  --white: #F0F2F7;
+  --white: #EFF1F8;
   --light-100: #FDFEFE;
   --light-200: #FDFDFD;
   --light-300: #FCFCFD;
@@ -64,20 +64,20 @@ body {
   background-color: var(--white);
 }
 
-.body-overlay-wrapper {
+/* .body-overlay-wrapper {
   background-image: url("/assets/img/bg/preview.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /* optional */
+  
   min-height: 100vh;
   position: relative;
-  /* z-index: 1; */
-}
+  z-index: 1;
+} */
 
 /* 🔳 Dark overlay layer */
-.body-overlay-wrapper::before {
+/* .body-overlay-wrapper::before {
   content: "";
   position: absolute;
   top: 0;
@@ -85,10 +85,16 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(255, 255, 255, 0.7);
-  /* Adjust opacity here */
+  
   z-index: -1;
-}
+} */
 
+.container {
+  max-width: 1680px;
+  margin: 0 auto;
+  /* This centers the container horizontally */
+  /* padding: 0 8em;  */
+}
 
 
 ::selection {
@@ -3282,6 +3288,7 @@ hr.text-danger {
   font-size: 13px;
   font-weight: 500;
 }
+
 .header-navbar-rht li>a.btn .login {
   padding: 6px 12px;
   font-size: 13px;
@@ -7938,6 +7945,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
   background: #011E34;
   padding: 80px 0;
   position: relative;
+  border-radius: 1.2em;
 }
 
 @media (max-width: 991.98px) {
@@ -8723,7 +8731,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .listing-tab .nav {
   border: 0;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
 }
 
 @media (max-width: 991.98px) {
@@ -9537,7 +9545,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .hero-section-two h1 {
-  font-size: 52px;
+  font-size: 30px;
 }
 
 @media (max-width: 1199.98px) {
@@ -9786,7 +9794,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
   width: 100%;
   height: 100%;
   /* backdrop-filter: blur(6px); */
-  background-color: rgba(255, 255, 255, 0.7);
+  /* background-color: rgba(255, 255, 255, 0.7); */
   /* dark overlay tint */
   /* z-index: -1; */
 }
@@ -9878,10 +9886,10 @@ div.dt-container .dt-paging .dt-paging-button.current {
   position: relative;
   z-index: 0;
   transition: 0.3s;
-  background: linear-gradient(to right, #011E34, #09354F);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  color: var(--white);
+  border-radius: 1em;
+  background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+  box-shadow: 0 1em 1em #1f2d3d26;
+  /* color: var(--white); */
 }
 
 .pop-category::before {
@@ -10128,13 +10136,14 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .what-makes-dream-gigs {
-  padding: 80px 0;
+  padding: 80px 40px;
   background-image: url("/assets/img/bg/preview-bg.jpg");
   z-index: 1;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  border-radius: 10px;
 }
 
 @media (max-width: 991.98px) {
@@ -11795,10 +11804,10 @@ div.dt-container .dt-paging .dt-paging-button.current {
   margin-bottom: 0;
 }
 
-.statistics {
+/* .statistics {
   border-bottom: 1px solid var(--gray-100);
-  padding-bottom: 24px;
-}
+  padding-bottom: 1.75rem;
+} */
 
 .delivery-add {
   text-align: right;
@@ -14031,7 +14040,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .trend-section {
-  border-bottom: 1px solid var(--gray-100);
+  /* border-bottom: 1px solid var(--gray-100); */
   margin-bottom: 24px;
   padding-bottom: 24px;
 }

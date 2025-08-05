@@ -18,6 +18,7 @@ use App\Models\StoryComment;
 use App\Models\SupportTalent;
 use App\Models\Testimonial;
 use App\Models\TalentFeedback;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -26,8 +27,33 @@ class HomeController extends Controller
 
         $skills = Skill::withCount('reviews')->withAvg('reviews', 'rating')->get();
 
+        $talents = Talent::with('category', 'feedback', 'stories')->get();
+
+        $now = Carbon::now();
+        $oneMonthAgo = $now->copy()->subMonth();
+
+        $talents->transform(function ($talent) use ($oneMonthAgo) {
+            $avgRating = $talent->feedback->avg('rating') ?? 0;
+            $feedbackCount = $talent->feedback->count();
+            $createdAt = $talent->created_at;
+
+            if ($talent->featured) {
+                $talent->tag = 'featured';
+            } elseif ($feedbackCount >= 20) {
+                $talent->tag = 'popular';
+            } elseif ($createdAt >= $oneMonthAgo) {
+                $talent->tag = 'latest';
+            } elseif ($avgRating >= 4 && $avgRating < 4.5) {
+                $talent->tag = 'recommended';
+            } else {
+                $talent->tag = 'latest';
+            }
+
+            return $talent;
+        });
+
         return view('user-page.home', [
-            'talents' => Talent::withCount('stories')->take(8)->get(),
+            'talents' => $talents,
             'categories' => Category::withCount('talents')->take(10)->get(),
             'popularCategories' => Category::withCount('talents')
                 ->orderBy('talents_count', 'desc')
@@ -37,18 +63,46 @@ class HomeController extends Controller
             'skills' => $skills,
             'testimonials' => Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
             'partners' => Partner::all(), // Fetch only active partners
-            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1 )->take(4)->get(),
+            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->take(4)->get(),
         ]);
     }
     public function talents()
     {
         // Fetch featured talents - modify query as needed
-        $talents = Talent::paginate(8);
+        $talents = Talent::with('category', 'feedback', 'stories')->get();
+
+        $now = Carbon::now();
+        $oneMonthAgo = $now->copy()->subMonth();
+
+        $talents->transform(function ($talent) use ($oneMonthAgo) {
+            $avgRating = $talent->feedback->avg('rating') ?? 0;
+            $feedbackCount = $talent->feedback->count();
+            $createdAt = $talent->created_at;
+
+            if ($talent->featured) {
+                $talent->tag = 'featured';
+            } elseif ($feedbackCount >= 20) {
+                $talent->tag = 'popular';
+            } elseif ($createdAt >= $oneMonthAgo) {
+                $talent->tag = 'latest';
+            } elseif ($avgRating >= 4 && $avgRating < 4.5) {
+                $talent->tag = 'recommended';
+            } else {
+                $talent->tag = 'latest';
+            }
+
+            return $talent;
+        });
 
 
         return view('user-page.talents', [
             'talents' => $talents,
             'categories' => Category::withCount('talents')->take(10)->get(),
+            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->take(4)->get(),
+            'popularCategories' => Category::withCount('talents')
+                ->orderBy('talents_count', 'desc')
+                ->take(3)
+                ->get(),
         ]);
     }
 
@@ -440,11 +494,11 @@ class HomeController extends Controller
     {
         $blog = Blog::where('slug', $slug)->firstOrFail();
         $relatedPosts = Blog::where('category_id', $blog->category_id)
-                ->where('id', '!=', $blog->id)
-                ->where('is_published', true)
-                ->latest()
-                ->take(5)
-                ->get();
+            ->where('id', '!=', $blog->id)
+            ->where('is_published', true)
+            ->latest()
+            ->take(5)
+            ->get();
         return view('user-page.blog-details', compact('blog', 'relatedPosts'));
     }
 

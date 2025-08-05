@@ -33,16 +33,16 @@
 
     .postLists {
         display: flex;
-        align-items: center;
+        /* align-items: center; */
         flex-direction: column;
         border: 1px solid #fff;
         border-radius: 1em;
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         box-shadow: 0 1em 1em #1f2d3d26;
-        text-align: center;
+        /* text-align: center; */
         text-shadow: 0 1px #fff;
         transition: .25s;
-        margin-bottom: 4.75rem;
+        margin-bottom: 1.75rem;
 
     }
 </style>
@@ -94,7 +94,7 @@
                 <!-- /Slider -->
 
 
-                <div class="row gx-3 row-gap-3 mb-4 statistics">
+                <div class="row gx-3 row-gap-3 statistics">
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
                         <div class="buy-box postLists">
                             <i class="ti ti-photo-star text-secondary"></i>
@@ -136,7 +136,7 @@
 
 
                 <div class="listing-tab ">
-                    <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="profileTab" role="tablist">
+                    <ul class="nav nav-tabsflex-wrap gap-2" id="profileTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about_me"
                                 type="button" role="tab" aria-controls="about_me" aria-selected="true">
@@ -165,7 +165,7 @@
                 </div>
 
 
-                <div class="tab-content rounded-3 mt-4 py-4">
+                <div class="tab-content rounded-3 ">
 
                     <div class="tab-pane postLists fade show active" id="about_me" role="tabpanel">
 
