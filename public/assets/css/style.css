@@ -12359,7 +12359,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 .review-widget {
   margin-bottom: 24px;
   padding: 20px;
-  border: 1px solid var(--gray-100);
+  /* border: 1px solid var(--gray-100); */
   border-radius: 10px;
 }
 
@@ -12435,9 +12435,9 @@ div.dt-container .dt-paging .dt-paging-button.current {
   border-bottom: none !important;
 }
 
-.review-lists li {
+/* .review-lists li {
   border-bottom: 1px solid var(--gray-100);
-}
+} */
 
 .review-lists li:last-child {
   margin-bottom: 20px;
@@ -17972,8 +17972,8 @@ table.dataTable thead tr td {
 .login-card {
   padding: 24px;
   border-radius: 10px;
-  border: 1px solid var(--gray-100);
-  background-color: var(--white);
+  /* border: 1px solid var(--gray-100);
+  background-color: var(--white); */
   box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.3607843137);
 }
 

@@ -98,12 +98,19 @@ class HomeController extends Controller
         return view('user-page.talents', [
             'talents' => $talents,
             'categories' => Category::withCount('talents')->take(10)->get(),
-            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->take(4)->get(),
+            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->get(),
             'popularCategories' => Category::withCount('talents')
                 ->orderBy('talents_count', 'desc')
                 ->take(3)
                 ->get(),
         ]);
+    }
+
+    public function talentStories($id)
+    {
+        $categories = Category::all();
+        $talent = Talent::with(['stories', 'category'])->findOrFail($id);
+        return view('user-page.talent-stories', compact('talent', 'categories'));
     }
 
     public function about()

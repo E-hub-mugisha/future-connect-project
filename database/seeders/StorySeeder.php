@@ -16,46 +16,50 @@ class StorySeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
-
-        $talentIds = Talent::pluck('id')->toArray();
-        $categoryIds = Category::pluck('id')->toArray();
-
-        if (empty($talentIds) || empty($categoryIds)) {
-            $this->command->warn('Please seed talents and categories first.');
-            return;
-        }
-
-        $stories = [
-            [
-                'title' => 'My Journey with Future Connect: From Beginner to Pro',
-                'content' => 'Joining Future Connect changed my life. I gained the skills, confidence, and network to launch my own tech startup.',
-                'tags' => 'Future Connect,Success Story,Inspiration',
-            ],
-            [
-                'title' => 'How Future Connect Helped Me Break Into the Tech Industry',
-                'content' => 'As a young talent in Rwanda, I struggled to find opportunities. Through Future Connect, I received mentorship and landed my first freelance project.',
-                'tags' => 'Future Connect,Mentorship,Freelancing',
-            ],
-            [
-                'title' => 'From Passion to Profession: My Future Connect Story',
-                'content' => 'I always loved technology, but lacked direction. Future Connect guided me to turn my passion for design into a real career.',
-                'tags' => 'Future Connect,Design,Passion',
-            ],
+        $youtubeLinks = [
+            'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'https://www.youtube.com/watch?v=3JZ_D3ELwOQ',
+            'https://www.youtube.com/watch?v=ScMzIvxBSi4',
+            'https://www.youtube.com/watch?v=aqz-KE-bpKQ'
         ];
 
-        foreach ($stories as $story) {
-            Story::create([
-                'talent_id'   => $faker->randomElement($talentIds),
-                'title'       => $story['title'],
-                'content'     => $story['content'],
-                'media'       => $faker->imageUrl(640, 480, 'business', true),
-                'thumbnail'   => $faker->imageUrl(300, 200, 'people', true),
-                'slug'        => Str::slug($story['title']) . '-' . $faker->unique()->randomNumber(4),
-                'category_id' => $faker->randomElement($categoryIds),
-                'tags'        => $story['tags'],
-                'status'      => $faker->randomElement(['pending', 'approved', 'rejected']),
-            ]);
+        $sampleThumbnails = [
+            'https://via.placeholder.com/800x600.png?text=Story+Thumbnail+1',
+            'https://via.placeholder.com/800x600.png?text=Story+Thumbnail+2',
+            'https://via.placeholder.com/800x600.png?text=Story+Thumbnail+3',
+            'https://via.placeholder.com/800x600.png?text=Story+Thumbnail+4'
+        ];
+
+        $storyContents = [
+            "This story highlights the journey, challenges, and achievements of the talent in their field, inspiring others through dedication and passion.",
+            "A personal insight into the creative process, lessons learned, and the moments that shaped their career."
+        ];
+
+        $tags = [
+            'music,performance,inspiration',
+            'art,creativity,journey',
+            'tech,innovation,development',
+            'sports,discipline,success'
+        ];
+
+        $talents = Talent::all();
+
+        foreach ($talents as $talent) {
+            for ($i = 1; $i <= 2; $i++) {
+                $title = "{$talent->name} Story {$i}";
+
+                Story::create([
+                    'talent_id' => $talent->id,
+                    'title' => $title,
+                    'content' => $storyContents[array_rand($storyContents)],
+                    'media' => $youtubeLinks[array_rand($youtubeLinks)],
+                    'thumbnail' => $sampleThumbnails[array_rand($sampleThumbnails)],
+                    'slug' => Str::slug($title) . '-' . Str::random(5),
+                    'category_id' => $talent->category_id,
+                    'tags' => $tags[array_rand($tags)],
+                    'status' => 'approved',
+                ]);
+            }
         }
     }
 }

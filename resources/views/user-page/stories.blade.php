@@ -215,36 +215,38 @@
                                 @endforeach
 
                                 <div class="col-md-12">
-
                                     <!-- Pagination -->
                                     <div class="pagination" data-aos="fade-up">
+                                        @if ($stories->hasPages())
                                         <ul>
-                                            <li>
-                                                <a href="javascript:void(0);" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);" class="active">1</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);">2</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);">3</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);">4</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);">5</a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0);" class="next"><i class="fa-solid fa-chevron-right"></i></a>
-                                            </li>
+                                            {{-- Previous Page Link --}}
+                                            @if ($stories->onFirstPage())
+                                            <li class="disabled"><span><i class="fa-solid fa-chevron-left"></i></span></li>
+                                            @else
+                                            <li><a href="{{ $stories->previousPageUrl() }}"><i class="fa-solid fa-chevron-left"></i></a></li>
+                                            @endif
+
+                                            {{-- Page Numbers --}}
+                                            @foreach ($stories->getUrlRange(1, $stories->lastPage()) as $page => $url)
+                                            @if ($page == $stories->currentPage())
+                                            <li><a href="javascript:void(0);" class="active">{{ $page }}</a></li>
+                                            @else
+                                            <li><a href="{{ $url }}">{{ $page }}</a></li>
+                                            @endif
+                                            @endforeach
+
+                                            {{-- Next Page Link --}}
+                                            @if ($stories->hasMorePages())
+                                            <li><a href="{{ $stories->nextPageUrl() }}"><i class="fa-solid fa-chevron-right"></i></a></li>
+                                            @else
+                                            <li class="disabled"><span><i class="fa-solid fa-chevron-right"></i></span></li>
+                                            @endif
                                         </ul>
+                                        @endif
                                     </div>
                                     <!-- /Pagination -->
-
                                 </div>
+
                             </div>
                         </div>
                     </div>

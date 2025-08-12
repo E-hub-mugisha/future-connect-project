@@ -54,6 +54,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/talent/{id}', 'showTalents')->name('user.talent.details');
     Route::get('/talents/category/{slug}', 'getTalentByCategory')->name('user.talents.category');
     Route::get('/search', 'search')->name('talent.search');
+    Route::get('/talent/{id}/stories', 'talentStories')->name('talent.stories');
 
     // 🧠 Skills
     Route::get('/skills', 'skills')->name('user.skills');

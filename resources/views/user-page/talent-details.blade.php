@@ -2,25 +2,6 @@
 @section('content')
 
 
-<!-- 
-<div class="breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
-    <div class="container">
-        <nav aria-label="breadcrumb" class="page-breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="/">Home</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="/talents">Talent</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Profile</li>
-            </ol>
-        </nav>
-        <h2 class="breadcrumb-title">
-            {{ $talent->name }}
-        </h2>
-    </div>
-</div> -->
 
 <style>
     .talent-profile-info {
@@ -51,7 +32,7 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-lg-8">
+            <div class="col-lg-5 col-md-6 col-sm-12">
 
                 <div class="postLists breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 ">
                     <h2 class="breadcrumb-title mt-4">
@@ -93,7 +74,6 @@
                 </div>
                 <!-- /Slider -->
 
-
                 <div class="row gx-3 row-gap-3 statistics">
                     <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
                         <div class="buy-box postLists">
@@ -133,560 +113,166 @@
                     </div>
                 </div>
 
+            </div>
 
+            <div class="col-lg-7">
 
-                <div class="listing-tab ">
-                    <ul class="nav nav-tabsflex-wrap gap-2" id="profileTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about_me"
-                                type="button" role="tab" aria-controls="about_me" aria-selected="true">
-                                About Me
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="skills-tab" data-bs-toggle="tab" data-bs-target="#my_skills"
-                                type="button" role="tab" aria-controls="my_skills" aria-selected="false">
-                                My Skills & Courses
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="stories-tab" data-bs-toggle="tab" data-bs-target="#my_stories"
-                                type="button" role="tab" aria-controls="my_stories" aria-selected="false">
-                                My Stories
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review"
-                                type="button" role="tab" aria-controls="review" aria-selected="false">
-                                Reviews
-                            </a>
-                        </li>
-                    </ul>
+                <div class="service-widget member-widget postLists">
+                    <div class="user-details">
+                        <div class="user-img users-img">
+                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
+                        </div>
+                        <div class="user-info">
+                            <h5>
+                                <span class="me-2">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></span>
+                                <span class="badge badge-success">
+                                    Verified
+                                </span>
+                            </h5>
+                            <p><i class="fa-solid fa-star"></i> {{ number_format($talent->feedback->avg('rating'), 1) }}
+                                ({{ $talent->feedback->count() }} Feedbacks)</p>
+                        </div>
+                    </div>
+
+                    <div class="about-me new-about">
+                        <h6>About Me</h6>
+                        <p>
+                            Hello, I'm {{ $talent->name ?? 'Unnamed Talent' }},
+                            a passionate {{ $talent->skill ?? 'creative' }} and performer blending
+                            {{ $talent->category->name ?? 'various disciplines' }}.
+                            <span class="more-content">
+                                I create immersive experiences that inspire and uplift communities.
+                            </span>
+                        </p>
+                        <a role="button" tabindex="0" class="read-more">Read More</a>
+                    </div>
+
+                    <div class="member-info member-info-new">
+
+                        <div class="member-list d-flex align-items-center gap mb-3">
+                            <i class="ti ti-world"></i>
+                            <h6 class="mb-0">
+                                Based In
+                                <span class="pt-2"> {{ $talent->address }}</span>
+                            </h6>
+                        </div>
+                        <div class="member-list d-flex align-items-center gap mb-3">
+                            <i class="ti ti-calendar-event"></i>
+                            <h6 class="mb-0">
+                                Active Since
+                                <span class="pt-2"> {{ \Carbon\Carbon::parse($talent->created_at)->format('F d, Y') }}</span>
+                            </h6>
+                        </div>
+                        <div class="member-list d-flex align-items-center gap">
+                            <i class="ti ti-language"></i>
+                            <h6 class="mb-0">
+                                Languages
+                                <span class="pt-2">{{ $talent->language }}</span>
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <style>
+                                        .slide-line-btn {
+                                            position: relative;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 6px;
+                                            padding: 6px 16px;
+                                            color: #fff;
+                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                            border-radius: 30px;
+                                            text-decoration: none;
+                                            overflow: hidden;
+                                            z-index: 1;
+                                        }
+
+                                        .slide-line {
+                                            position: absolute;
+                                            top: 100%;
+                                            left: -100%;
+                                            width: 200%;
+                                            height: 100%;
+                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+                                            transform: rotate(45deg);
+                                            animation: slideRightUp 2s ease-in-out infinite;
+                                            z-index: 0;
+                                        }
+
+                                        .slide-line:nth-child(2) {
+                                            animation-delay: 0s;
+                                            opacity: 0;
+                                            width: 50%;
+                                        }
+
+                                        .slide-line:nth-child(3) {
+                                            animation-delay: 0s;
+                                            opacity: 0.5;
+                                            width: 150%;
+                                        }
+
+                                        .slide-line:nth-child(4) {
+                                            animation-delay: 0.8s;
+                                            opacity: 0.7;
+                                            width: 200%;
+                                        }
+
+                                        @keyframes slideRightUp {
+                                            0% {
+                                                top: 100%;
+                                                left: -100%;
+                                            }
+
+                                            50% {
+                                                top: 0%;
+                                                left: 0%;
+                                            }
+
+                                            100% {
+                                                top: -100%;
+                                                left: 100%;
+                                            }
+                                        }
+
+                                        .slide-line-btn span {
+                                            pointer-events: none;
+                                        }
+                                    </style>
+                        <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
+                            class="btn slide-line-btn mb-0">Support Talent
+                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                    </a>
+                        <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}" 
+                            class="btn slide-line-btn mb-0">Stories
+                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                    </a>
+                    </div>
+                    <div class="service-widget mt-4">
+                        <h5 class="">Share Talent Profile</h5>
+                        <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
+                            <ul>
+                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook" style="color: var(--white);"></i></a></li>
+                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter" style="color: var(--white);"></i></a></li>
+                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram" style="color: var(--white);"></i></a></li>
+                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-google" style="color: var(--white);"></i></a></li>
+                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube" style="color: var(--white);"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
+            </div>
 
-                <div class="tab-content rounded-3 ">
+            <div class="clearfix"></div>
 
-                    <div class="tab-pane postLists fade show active" id="about_me" role="tabpanel">
-
-                        <div class="service-wrap">
-                            <h3>About Me</h3>
-                            <p>{{ $talent->description }}</p>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane postLists fade " id="my_skills" role="tabpanel">
-
-                        <div class="service-wrap">
-                            <div class="container">
-                                <div class="section-head d-flex">
-                                    <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                                        <h2><span>Explore</span> My Skills</h2>
-                                    </div>
-                                    <div class="section-tab">
-                                        <ul class="nav nav-pills inner-tab aos aos-init aos-animate" id="pills-tab"
-                                            role="tablist" data-aos="fade-up">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="pills-popular-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#pills-popular"
-                                                    type="button" role="tab" aria-controls="pills-popular"
-                                                    aria-selected="true">Popular</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-latest" type="button" role="tab"
-                                                    aria-controls="pills-latest" aria-selected="false"
-                                                    tabindex="-1">Latest</button>
-                                            </li>
-
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-rating-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-rating" type="button" role="tab"
-                                                    aria-controls="pills-rating" aria-selected="false"
-                                                    tabindex="-1">Top Ratings</button>
-                                            </li>
-
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-trend-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-trend" type="button" role="tab"
-                                                    aria-controls="pills-trend" aria-selected="false"
-                                                    tabindex="-1">Trending </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="tab-content dashboard-tab">
-                                    <div class="tab-pane postLists fade show active" id="pills-popular" role="tabpanel"
-                                        aria-labelledby="pills-popular-tab">
-                                        <div class="row aos aos-init aos-animate" data-aos="fade-up"
-                                            data-aos-delay="500">
-                                            <div class="col-md-12">
-                                                @if($talent->skills && $talent->skills->count() > 0)
-                                                @foreach($talent->skills as $skill)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $skill->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('talent/' . $talent->id) }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="User">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $skill->category?->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $skill->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('talent/skills/' . $skill->id) }}" class="text-dark text-decoration-none">
-                                                                {{ $skill->name }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No skills found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane postLists fade" id="pills-latest" role="tabpanel"
-                                        aria-labelledby="pills-latest-tab">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @if($talent->skills && $talent->skills->count() > 0)
-                                                @foreach($talent->skills as $skill)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $skill->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('talent/' . $talent->id) }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="User">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $skill->category?->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $skill->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('talent/skills/' . $skill->id) }}" class="text-dark text-decoration-none">
-                                                                {{ $skill->name }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No skills found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane postLists fade" id="pills-rating" role="tabpanel"
-                                        aria-labelledby="pills-rating-tab">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @if($talent->skills && $talent->skills->count() > 0)
-                                                @foreach($talent->skills as $skill)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $skill->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('talent/' . $talent->id) }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="User">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $skill->category?->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $skill->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('talent/skills/' . $skill->id) }}" class="text-dark text-decoration-none">
-                                                                {{ $skill->name }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No skills found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane postLists fade" id="pills-trend" role="tabpanel"
-                                        aria-labelledby="pills-trend-tab">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @if($talent->skills && $talent->skills->count() > 0)
-                                                @foreach($talent->skills as $skill)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}">
-                                                                    <img src="{{ asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="img">
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $skill->level }}
-                                                            </span>
-                                                        </div>
-
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('talent/' . $talent->id) }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="User">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('talent/skills/' . $skill->id) }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $skill->category?->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $skill->tags }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-video"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-danger">
-                                                                    <i class="feather-heart"></i>
-                                                                </a>
-                                                                <a role="button" tabindex="0" class="text-muted">
-                                                                    <i class="feather-share-2"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('talent/skills/' . $skill->id) }}" class="text-dark text-decoration-none">
-                                                                {{ $skill->name }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                </span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">$780</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No skills found.</p>
-                                                @endif
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane postLists fade " id="my_stories" role="tabpanel">
-
-                        <div class="service-wrap">
-                            <div class="container">
-                                <div class="section-head d-flex">
-                                    <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                                        <h2><span>Explore</span> My Stories</h2>
-                                    </div>
-                                    <div class="section-tab">
-                                        <ul class="nav nav-pills inner-tab aos aos-init aos-animate" id="pills-tab"
-                                            role="tablist" data-aos="fade-up">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="pills-popular-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#pills-popular"
-                                                    type="button" role="tab" aria-controls="pills-popular"
-                                                    aria-selected="true">Popular</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-latest" type="button" role="tab"
-                                                    aria-controls="pills-latest" aria-selected="false"
-                                                    tabindex="-1">Latest</button>
-                                            </li>
-
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-rating-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-rating" type="button" role="tab"
-                                                    aria-controls="pills-rating" aria-selected="false"
-                                                    tabindex="-1">Top Ratings</button>
-                                            </li>
-
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-trend-tab" data-bs-toggle="pill"
-                                                    data-bs-target="#pills-trend" type="button" role="tab"
-                                                    aria-controls="pills-trend" aria-selected="false"
-                                                    tabindex="-1">Trending </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="tab-content dashboard-tab">
-
-                                    @php
-                                    $tabs = [
-                                    'popular' => 'Popular',
-                                    'latest' => 'Latest',
-                                    'rating' => 'Top Rated',
-                                    'trend' => 'Trending'
-                                    ];
-                                    @endphp
-
-                                    @foreach($tabs as $key => $label)
-                                    <div class="tab-pane postLists fade {{ $loop->first ? 'show active' : '' }}" id="pills-{{ $key }}" role="tabpanel" aria-labelledby="pills-{{ $key }}-tab">
-                                        <div class="row aos" data-aos="fade-up" data-aos-delay="500">
-                                            <div class="col-md-12">
-                                                @if($talent->stories && $talent->stories->count())
-                                                @foreach($talent->stories as $story)
-                                                <div class="card mb-4 shadow-sm border-0 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
-                                                    <div class="position-relative" style="flex: 0 0 200px;">
-                                                        <div class="owl-carousel owl-theme img-slider">
-                                                            <div class="item">
-                                                                <a href="{{ url('story-details/'.$story->slug) }}">
-                                                                    <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/gigs/gigs-04.jpg') }}" class="img-fluid rounded-3" alt="{{ $story->title }}">
-                                                                </a>
-                                                            </div>
-                                                            <!-- Optional: Add more slides if needed -->
-                                                        </div>
-                                                        <div class="position-absolute top-0 start-0 m-2">
-                                                            <span class="badge bg-warning me-1">
-                                                                <i class="feather-star"></i> Featured
-                                                            </span>
-                                                            <span class="badge bg-danger">
-                                                                <i class="fa-solid fa-meteor"></i> {{ $story->level ?? 'N/A' }}
-                                                            </span>
-                                                        </div>
-                                                        <div class="position-absolute bottom-0 start-0 m-2">
-                                                            <a href="{{ url('buyer-profile') }}">
-                                                                <img src="{{ asset('assets/img/user/user-01.jpg') }}" class="rounded-circle" width="40" alt="Talent">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between align-items-start">
-                                                            <div>
-                                                                <a href="{{ url('story-details/'.$story->slug) }}" class="badge bg-primary-light mb-2">
-                                                                    {{ $story->category->name ?? 'Uncategorized' }}
-                                                                </a>
-                                                                <p class="mb-1 text-muted">
-                                                                    <i class="ti ti-map-pin-check me-1"></i>
-                                                                    {{ $story->tags ?? 'No tags' }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="d-flex gap-2">
-                                                                <a role="button" tabindex="0" class="text-muted"><i class="feather-video"></i></a>
-                                                                <a role="button" tabindex="0" class="text-danger"><i class="feather-heart"></i></a>
-                                                                <a role="button" tabindex="0" class="text-muted"><i class="feather-share-2"></i></a>
-                                                            </div>
-                                                        </div>
-
-                                                        <h5 class="mb-2">
-                                                            <a href="{{ url('story-details/'.$story->slug) }}" class="text-dark text-decoration-none">
-                                                                {{ $story->title }}
-                                                            </a>
-                                                        </h5>
-
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <span class="text-warning"><i class="fa-solid fa-star"></i></span>
-                                                                <small class="text-muted">5.0 (28 Reviews)</small>
-                                                                <span class="badge bg-secondary ms-2">Delivery in 1 day</span>
-                                                            </div>
-                                                            <h6 class="mb-0 text-success">${{ $story->price ?? '780' }}</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                                @else
-                                                <p>No stories found.</p>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane postLists fade" id="review" role="tabpanel">
-                        <div class="review-widget">
+            <div class="col-md-12">
+                <div class="postLists">
+                    <div class="row">
+                        <div class="review-widget col-md-6">
 
                             {{-- Reviews Title --}}
                             <div class="review-title sort-search-gigs">
@@ -784,7 +370,7 @@
                         </div>
 
                         {{-- Review Submission Form --}}
-                        <div class="login-card mt-4">
+                        <div class="login-card col-md-6">
                             <form action="{{ route('talent.feedback.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="talent_id" value="{{ $talent->id }}">
@@ -840,148 +426,178 @@
                             </form>
                         </div>
                     </div>
-
-                </div>
-            </div>
-
-            <div class="col-lg-4 theiaStickySidebar">
-
-                <div class="service-widget member-widget postLists">
-                    <div class="user-details">
-                        <div class="user-img users-img">
-                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
-                        </div>
-                        <div class="user-info">
-                            <h5>
-                                <span class="me-2">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></span>
-                                <span class="badge badge-success">
-                                    Verified
-                                </span>
-                            </h5>
-                            <p><i class="fa-solid fa-star"></i> {{ number_format($talent->feedback->avg('rating'), 1) }}
-                                ({{ $talent->feedback->count() }} Feedbacks)</p>
-                        </div>
-                    </div>
-
-                    <div class="about-me new-about">
-                        <h6>About Me</h6>
-                        <p>
-                            Hello, I'm {{ $talent->name ?? 'Unnamed Talent' }},
-                            a passionate {{ $talent->skill ?? 'creative' }} and performer blending
-                            {{ $talent->category->name ?? 'various disciplines' }}.
-                            <span class="more-content">
-                                I create immersive experiences that inspire and uplift communities.
-                            </span>
-                        </p>
-                        <a role="button" tabindex="0" class="read-more">Read More</a>
-                    </div>
-
-                    <div class="member-info member-info-new">
-                        
-                        <div class="member-list d-flex align-items-center gap mb-3">
-                            <i class="ti ti-world"></i>
-                            <h6 class="mb-0">
-                                Based In
-                                <span class="pt-2"> {{ $talent->address }}</span>
-                            </h6>
-                        </div>
-                        <div class="member-list d-flex align-items-center gap mb-3">
-                            <i class="ti ti-calendar-event"></i>
-                            <h6 class="mb-0">
-                                Active Since
-                                <span class="pt-2"> {{ \Carbon\Carbon::parse($talent->created_at)->format('F d, Y') }}</span>
-                            </h6>
-                        </div>
-                        <div class="member-list d-flex align-items-center gap">
-                            <i class="ti ti-language"></i>
-                            <h6 class="mb-0">
-                                Languages
-                                <span class="pt-2">{{ $talent->language }}</span>
-                            </h6>
-                        </div>
-                    </div>
-
-                    <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
-                        class="btn btn-outline-primary mb-0 w-100">Support Talent</a>
-
-                </div>
-
-
-                <div class="service-widget postLists">
-                    <h5 class="">Share Talent Profile</h5>
-                    <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
-                        <ul>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook" style="color: var(--white);"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter" style="color: var(--white);"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram" style="color: var(--white);"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-google" style="color: var(--white);"></i></a></li>
-                            <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube" style="color: var(--white);"></i></a></li>
-                        </ul>
-                    </div>
                 </div>
 
             </div>
 
         </div>
 
-    </div>
-</div>
-
-<div class="modal fade" id="support_talent" tabindex="-1" aria-labelledby="supportTalentLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="supportTalentLabel">Support Talent</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Add form or message here -->
-                <form method="POST" action="{{ route('support.talent') }}">
-                    @csrf
-                    <input type="hidden" name="talent_id" value="{{ $talent->id }}">
-
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Your Name</label>
-                        <input type="text" class="form-control" name="name" id="name" required>
+        <div class="recent-works">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title-sec">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3>My Stories</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="owl-nav worknav nav-control nav-top"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" name="email" id="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="amount" class="form-label">Support Amount</label>
-                        <input type="number" class="form-control" name="amount" id="amount" required>
+                    <div class="gigs-slider owl-carousel owl-loaded owl-drag">
+                        @if($talent->stories && $talent->stories->count())
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage" style="transform: translate3d(-440px, 0px, 0px); transition: 2s; width: 1760px;">
+                                @foreach($talent->stories as $story)
+                                <div class="owl-item" style="width: 416px; margin-right: 24px;">
+                                    <div class="gigs-grid">
+                                        <div class="gigs-img">
+                                            <div class="img-slider owl-loaded owl-drag">
+
+                                                <div class="owl-stage-outer">
+                                                    <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
+                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item active" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-13.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-13.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
+                                                            <div class="slide-images">
+                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
+                                                <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
+                                            </div>
+                                            <div class="card-overlay-badge">
+                                                <a href="service.html"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
+                                            </div>
+                                            <div class="fav-selection">
+                                                <a href="javascript:void(0);" class="video-icon"><i class="feather-video"></i></a>
+                                                <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
+                                            </div>
+                                            <div class="user-thumb">
+                                                <a href="buyer-profile.html"><img src="assets/img/user/user-10.jpg" alt="img"></a>
+                                            </div>
+                                        </div>
+                                        <div class="gigs-content">
+                                            <div class="gigs-info">
+                                                <a href="service.html"><span class="badge bg-primary-light">Video Marketing</span></a>
+                                                <p><i class="ti ti-map-pin-check"></i>Chicago</p>
+                                            </div>
+                                            <div class="gigs-title">
+                                                <h3><a href="service-details.html">I will do creating and promoting video content to engage audiences</a></h3>
+                                            </div>
+                                            <div class="star-rate">
+                                                <span><i class="fa-solid fa-star"></i>4.2 (65 Reviews)</span>
+                                            </div>
+                                            <div class="gigs-card-footer">
+                                                <div>
+                                                    <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
+                                                    <span class="badge">Delivery in 1 day</span>
+                                                </div>
+                                                <h5>$600</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="owl-dots disabled"></div>
+                        @else
+                        <p>No stories found.</p>
+                        @endif
                     </div>
 
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Message (Optional)</label>
-                        <textarea name="message" id="message" class="form-control" rows="3"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Send Support</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    $(document).ready(function() {
-        $('.star-rating-input i').click(function() {
-            var rating = $(this).data('value');
-            $('#ratingInput').val(rating);
+    <div class="modal fade" id="support_talent" tabindex="-1" aria-labelledby="supportTalentLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="supportTalentLabel">Support Talent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add form or message here -->
+                    <form method="POST" action="{{ route('support.talent') }}">
+                        @csrf
+                        <input type="hidden" name="talent_id" value="{{ $talent->id }}">
 
-            // Highlight stars
-            $('.star-rating-input i').each(function() {
-                if ($(this).data('value') <= rating) {
-                    $(this).removeClass('text-light').addClass('text-warning');
-                } else {
-                    $(this).removeClass('text-warning').addClass('text-light');
-                }
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" name="name" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control" name="email" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Support Amount</label>
+                            <input type="number" class="form-control" name="amount" id="amount" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message (Optional)</label>
+                            <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Send Support</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.star-rating-input i').click(function() {
+                var rating = $(this).data('value');
+                $('#ratingInput').val(rating);
+
+                // Highlight stars
+                $('.star-rating-input i').each(function() {
+                    if ($(this).data('value') <= rating) {
+                        $(this).removeClass('text-light').addClass('text-warning');
+                    } else {
+                        $(this).removeClass('text-warning').addClass('text-light');
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
-@endsection
+    @endsection
