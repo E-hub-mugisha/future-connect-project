@@ -30,6 +30,15 @@ use App\Http\Controllers\users\PaymentController as UsersPaymentController;
  * -----------------------
  */
 
+Route::get('/test-slide', function () {
+
+    $talents = [
+        ['name' => 'John Doe'],
+        ['name' => 'Jane Smith'],
+        ['name' => 'Alice Johnson'],
+    ];
+    return view('user-page.test', compact('talents'));
+});
 
 Route::controller(HomeController::class)->group(function () {
 
