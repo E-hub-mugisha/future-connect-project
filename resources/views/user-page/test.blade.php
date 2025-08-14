@@ -13,89 +13,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/5.1.3/css/bootstrap.min.css">
 
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
-
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            list-style-type: none;
-            text-decoration: none;
-        }
-
-        :root {
-            --primary: #ec994b;
-            --white: #ffffff;
-            --bg: #f5f5f5;
-        }
-
-        html {
-            font-size: 62.5%;
-            font-family: "Montserrat", sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        @media (min-width: 1440px) {
-            html {
-                zoom: 1.5;
-            }
-        }
-
-        @media (min-width: 2560px) {
-            html {
-                zoom: 1.7;
-            }
-        }
-
-        @media (min-width: 3860px) {
-            html {
-                zoom: 2.5;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 1.3rem;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            border-radius: 1rem;
-            background: #797979;
-            transition: all 0.5s ease-in-out;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #222224;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f9f9f9;
-        }
-
-        body {
-            font-size: 1.6rem;
-            background: var(--bg);
-        }
-
-        .container {
-            max-width: 124rem;
-            padding: 0 1rem;
-            margin: 0 auto;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .section-heading {
-            font-size: 3rem;
-            color: var(--primary);
-            padding: 2rem 0;
-        }
 
         #tranding {
             padding: 4rem 0;
+            margin: 6rem 9rem;
+            background: cadetblue;
+            border-radius: 2rem;
         }
 
         @media (max-width:1440px) {
@@ -104,11 +27,11 @@
             }
         }
 
-        #tranding .tranding-slider {
+        /* #tranding .tranding-slider {
             height: 52rem;
             padding: 2rem 0;
             position: relative;
-        }
+        } */
 
         @media (max-width:500px) {
             #tranding .tranding-slider {
@@ -121,7 +44,7 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 42rem;
+            height: 25rem;
             /* same as your original */
             perspective: 2000px;
             /* enables 3D effect */
@@ -140,8 +63,8 @@
         }
 
         .tranding-slide .tranding-slide-img img {
-            width: 37rem;
-            height: 42rem;
+            width: 20rem;
+            height: 20rem;
             border-radius: 2rem;
             object-fit: cover;
         }
@@ -183,16 +106,22 @@
             display: none;
         }
 
+        /* Hide slider controls by default */
         .tranding-slider-control {
-            position: relative;
-            bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
         }
 
+        /* Show when hovering over the whole slider */
+        .tranding-slider:hover .tranding-slider-control {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+
         .tranding-slider-control .swiper-button-next {
-            left: 58% !important;
+            left: 97% !important;
             transform: translateX(-58%) !important;
         }
 
@@ -229,7 +158,7 @@
             width: 3.5rem;
             height: 3.5rem;
             border-radius: 50%;
-            left: 42%;
+            left: 3%;
             transform: translateX(-42%);
             filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
         }
@@ -265,7 +194,7 @@
 
         /* First previous slide */
         .swiper-slide-prev {
-            transform: translate3d(500px, 0px, -280px) rotateY(45deg) scale(1) !important;
+            transform: translate3d(730px, 0px, -100px) rotateY(52deg) scale(1) !important;
             z-index: 1;
         }
 
@@ -273,7 +202,7 @@
 
         /* First next slide */
         .swiper-slide-next {
-            transform: translate3d(-500px, 0px, -280px) rotateY(-45deg) scale(1) !important;
+            transform: translate3d(-490px, 0px, -337px) rotateY(-50deg) scale(1) !important;
             z-index: 1;
         }
 
@@ -336,13 +265,6 @@
             position: absolute;
             left: 50rem;
         }
-
-        .tranding-slide-img img {
-            width: 100%;
-            height: 100%;
-            border-radius: 2rem;
-            object-fit: cover;
-        }
     </style>
 </head>
 
@@ -357,58 +279,53 @@
     @endphp
 
     <section id="tranding">
-        <div class="container">
-            <h3 class="text-center section-subheading">- popular Delivery -</h3>
-            <h1 class="text-center section-heading">Tranding food</h1>
-        </div>
 
-        <div class="container">
-            <div class="swiper tranding-slider">
-                <div class="swiper-wrapper">
-                    @foreach ($talents as $talent)
-                    <!-- Slide-start -->
-                    <div class="swiper-slide tranding-slide">
-                        <div class="slide-wrapper row">
-                            <!-- Caption on the left -->
-                            <div class="tranding-slide-caption col-md-6">
-                                <h2>Chef's Choice</h2>
-                                <p>Fresh ingredients & baked to perfection</p>
-                                <h3>{{ $talent['name'] }}</h3>
-                                <div class="food-rating">
-                                    <span>4.5</span>
-                                    <div class="rating">
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                    </div>
+        <div class="swiper tranding-slider">
+            <div class="swiper-wrapper">
+                @foreach ($talents as $talent)
+                <!-- Slide-start -->
+                <div class="swiper-slide tranding-slide">
+                    <div class="slide-wrapper row">
+                        <!-- Caption on the left -->
+                        <div class="tranding-slide-caption col-md-6">
+                            <h2>Chef's Choice</h2>
+                            <p>Fresh ingredients & baked to perfection</p>
+                            <h3>{{ $talent['name'] }}</h3>
+                            <div class="food-rating">
+                                <span>4.5</span>
+                                <div class="rating">
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
+                                    <ion-icon name="star"></ion-icon>
                                 </div>
-                                <p class="food-price">$20</p>
                             </div>
+                            <p class="food-price">$20</p>
+                        </div>
 
-                            <!-- Image on the right -->
-                            <div class="tranding-slide-img col-md-6">
-                                <img src="image/tranding-food-1.png" alt="{{ $talent['name'] }}">
-                            </div>
+                        <!-- Image on the right -->
+                        <div class="tranding-slide-img col-md-6">
+                            <img src="image/tranding-food-1.png" alt="{{ $talent['name'] }}">
                         </div>
                     </div>
-
-                    <!-- Slide-end -->
-                    @endforeach
                 </div>
 
-                <!-- Slider controls -->
-                <div class="tranding-slider-control">
-                    <div class="swiper-button-prev slider-arrow">
-                        <ion-icon name="arrow-back-outline"></ion-icon>
-                    </div>
-                    <div class="swiper-button-next slider-arrow">
-                        <ion-icon name="arrow-forward-outline"></ion-icon>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
+                <!-- Slide-end -->
+                @endforeach
             </div>
+
+            <!-- Slider controls -->
+            <div class="tranding-slider-control">
+                <div class="swiper-button-prev slider-arrow">
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </div>
+                <div class="swiper-button-next slider-arrow">
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+                <!-- <div class="swiper-pagination"></div> -->
+            </div>
+        </div>
         </div>
     </section>
 
@@ -421,32 +338,34 @@
     <script src="script.js"></script>
 
     <script>
-        var TrandingSlider = new Swiper('.tranding-slider', {
-            effect: 'coverflow',
-            grabCursor: true,
-            centeredSlides: true,
-            loop: true,
-            slidesPerView: 1.5,
-            coverflowEffect: {
-                rotate: 0,
-                stretch: 0,
-                depth: 100,
-                modifier: 2.5,
-            },
-            // autoplay: {
-            //     delay: 3000,
-            //     disableOnInteraction: false
-            // },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            }
-        });
-    </script>
+    var TrandingSlider = new Swiper('.tranding-slider', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        loop: true,
+        speed: 1000,
+        slidesPerView: 1.5,
+        coverflowEffect: {
+            rotate: 30,
+            stretch: 0,
+            depth: 100,
+            modifier: 2.5,
+            slideShadows: false
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        }
+    });
+</script>
 </body>
 
 </html>
