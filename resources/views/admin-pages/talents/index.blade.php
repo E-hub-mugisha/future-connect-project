@@ -43,7 +43,7 @@
             </div>
 
             <div class="table-responsive custom-table">
-                <table class="table datatable">
+                <table class="table datatable table-hover align-middle">
                     <thead class="thead-light">
                         <tr>
                             <th>ID</th>
@@ -99,32 +99,38 @@
                                 <span class="text-success">Approved</span>
                                 @endif
                             </td>
-                            <td>{{ $talent->featured ? 'Yes' : 'No' }}
+                            <td>
+                                @if($talent->featured)
+                                <span class="badge bg-primary">Yes</span>
+                                @else
+                                <span class="badge bg-secondary">No</span>
+                                @endif
                             </td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#quickViewModal{{ $talent->id }}">
-                                    Quick View
-                                </button>
-
-                                <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal"
-                                    data-bs-target="#talentEditModal{{ $talent->id }}">Edit</button>
-
-                                <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal"
-                                    data-bs-target="#statusModal{{ $talent->id }}">Update
-                                    Status</button>
-
-                                <!-- Feature/Unfeature Button -->
-                                <button type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal"
-                                    data-bs-target="#featureModal{{ $talent->id }}">
-                                    {{ $talent->featured ? 'Unfeature' : 'Feature' }}
-                                </button>
-
-                                <!-- Delete Button -->
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal{{ $talent->id }}">
-                                    Delete
-                                </button>
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $talent->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $talent->id }}">
+                                        <li>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#quickViewModal{{ $talent->id }}">Quick View</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#talentEditModal{{ $talent->id }}">Edit</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal{{ $talent->id }}">Update Status</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#featureModal{{ $talent->id }}">
+                                                {{ $talent->featured ? 'Unfeature' : 'Feature' }}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $talent->id }}">Delete</a>
+                                        </li>
+                                    </ul>
+                                </div>
 
                             </td>
                         </tr>
@@ -213,8 +219,10 @@
 
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
-                                            class="img-fluid rounded" alt="Talent Image">
+                                        <img src="{{ $talent->image ? asset('future-connect/public/image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                            alt="Talent Image" class="img-fluid rounded">
+
+
                                     </div>
 
                                     <div class="col-md-8">
@@ -251,7 +259,7 @@
                     <div class="modal-dialog modal-lg">
                         <form method="POST" action="{{ route('admin.talents.update', $talent->id) }}" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT')
+                            @method('PATCH')
 
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -338,9 +346,11 @@
 
                                     {{-- Featured --}}
                                     <div class="form-check mb-3">
-                                        <input type="checkbox" name="featured" class="form-check-input" id="featured{{ $talent->id }}" {{ $talent->featured ? 'checked' : '' }}>
+                                        <input type="hidden" name="featured" value="0">
+                                        <input type="checkbox" name="featured" class="form-check-input" id="featured{{ $talent->id }}" value="1" {{ $talent->featured ? 'checked' : '' }}>
                                         <label class="form-check-label" for="featured{{ $talent->id }}">Featured</label>
                                     </div>
+
                                 </div>
 
                                 <div class="modal-footer">

@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'flutterwave' => [
+        'public_key' => env('FLW_PUBLIC_KEY'),
+    ],
+
+
 ];

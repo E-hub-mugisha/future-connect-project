@@ -173,83 +173,83 @@
                     </div>
                     <div class="col-md-12 mt-4">
                         <style>
-                                        .slide-line-btn {
-                                            position: relative;
-                                            display: inline-flex;
-                                            align-items: center;
-                                            gap: 6px;
-                                            padding: 6px 16px;
-                                            color: #fff;
-                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-                                            border-radius: 30px;
-                                            text-decoration: none;
-                                            overflow: hidden;
-                                            z-index: 1;
-                                        }
+                            .slide-line-btn {
+                                position: relative;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 6px;
+                                padding: 6px 16px;
+                                color: #fff;
+                                background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                border-radius: 30px;
+                                text-decoration: none;
+                                overflow: hidden;
+                                z-index: 1;
+                            }
 
-                                        .slide-line {
-                                            position: absolute;
-                                            top: 100%;
-                                            left: -100%;
-                                            width: 200%;
-                                            height: 100%;
-                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                            transform: rotate(45deg);
-                                            animation: slideRightUp 2s ease-in-out infinite;
-                                            z-index: 0;
-                                        }
+                            .slide-line {
+                                position: absolute;
+                                top: 100%;
+                                left: -100%;
+                                width: 200%;
+                                height: 100%;
+                                background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+                                transform: rotate(45deg);
+                                animation: slideRightUp 2s ease-in-out infinite;
+                                z-index: 0;
+                            }
 
-                                        .slide-line:nth-child(2) {
-                                            animation-delay: 0s;
-                                            opacity: 0;
-                                            width: 50%;
-                                        }
+                            .slide-line:nth-child(2) {
+                                animation-delay: 0s;
+                                opacity: 0;
+                                width: 50%;
+                            }
 
-                                        .slide-line:nth-child(3) {
-                                            animation-delay: 0s;
-                                            opacity: 0.5;
-                                            width: 150%;
-                                        }
+                            .slide-line:nth-child(3) {
+                                animation-delay: 0s;
+                                opacity: 0.5;
+                                width: 150%;
+                            }
 
-                                        .slide-line:nth-child(4) {
-                                            animation-delay: 0.8s;
-                                            opacity: 0.7;
-                                            width: 200%;
-                                        }
+                            .slide-line:nth-child(4) {
+                                animation-delay: 0.8s;
+                                opacity: 0.7;
+                                width: 200%;
+                            }
 
-                                        @keyframes slideRightUp {
-                                            0% {
-                                                top: 100%;
-                                                left: -100%;
-                                            }
+                            @keyframes slideRightUp {
+                                0% {
+                                    top: 100%;
+                                    left: -100%;
+                                }
 
-                                            50% {
-                                                top: 0%;
-                                                left: 0%;
-                                            }
+                                50% {
+                                    top: 0%;
+                                    left: 0%;
+                                }
 
-                                            100% {
-                                                top: -100%;
-                                                left: 100%;
-                                            }
-                                        }
+                                100% {
+                                    top: -100%;
+                                    left: 100%;
+                                }
+                            }
 
-                                        .slide-line-btn span {
-                                            pointer-events: none;
-                                        }
-                                    </style>
+                            .slide-line-btn span {
+                                pointer-events: none;
+                            }
+                        </style>
                         <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
                             class="btn slide-line-btn mb-0">Support Talent
-                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                    </a>
-                        <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}" 
+                            <span class="slide-line"></span>
+                            <span class="slide-line"></span>
+                            <span class="slide-line"></span>
+                        </a>
+                        <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}"
                             class="btn slide-line-btn mb-0">Stories
-                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                    </a>
+                            <span class="slide-line"></span>
+                            <span class="slide-line"></span>
+                            <span class="slide-line"></span>
+                        </a>
                     </div>
                     <div class="service-widget mt-4">
                         <h5 class="">Share Talent Profile</h5>
@@ -438,7 +438,7 @@
                     <div class="title-sec">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h3>My Stories</h3>
+                                <h3>{{ $talent->name }}'s Stories</h3>
                             </div>
                             <div class="col-md-4">
                                 <div class="owl-nav worknav nav-control nav-top"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa-solid fa-chevron-right"></i></button></div>
@@ -453,78 +453,72 @@
                                 <div class="owl-item" style="width: 416px; margin-right: 24px;">
                                     <div class="gigs-grid">
                                         <div class="gigs-img">
-                                            <div class="img-slider owl-loaded owl-drag">
-
-                                                <div class="owl-stage-outer">
-                                                    <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item active" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-13.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-13.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            <div class="img-slider owl-carousel">
+                                                <div class="slide-images">
+                                                    <a href="{{ url('/story-details/' . $story->slug) }}">
+                                                        <img src="{{ asset('assets/img/home/service-01.jpg') }}" class="img-fluid" alt="Gigs">
+                                                    </a>
                                                 </div>
-                                                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                                                <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
+
                                             </div>
                                             <div class="card-overlay-badge">
-                                                <a href="service.html"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
+                                                <a href="{{ url('/story/category/'.$story->slug) }}">
+                                                    <span class="badge bg-warning">
+                                                        <i class="feather-star"></i>{{ $story->category->name ?? 'Uncategorized' }}
+                                                    </span>
+                                                </a>
+                                                <a href="{{ url('/story/category/'.$story->slug) }}">
+                                                    <span class="badge bg-danger">
+                                                        <i class="fa-solid fa-meteor"></i>
+                                                        {{ $story->category->name ?? 'Uncategorized' }}
+                                                    </span>
+                                                </a>
                                             </div>
                                             <div class="fav-selection">
-                                                <a href="javascript:void(0);" class="video-icon"><i class="feather-video"></i></a>
-                                                <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
-                                            </div>
-                                            <div class="user-thumb">
-                                                <a href="buyer-profile.html"><img src="assets/img/user/user-10.jpg" alt="img"></a>
+                                                <a role="button" tabindex="0"><i class="feather-video"></i></a>
+                                                <a role="button" tabindex="0" class="fav-icon"><i
+                                                        class="feather-heart"></i></a>
                                             </div>
                                         </div>
                                         <div class="gigs-content">
                                             <div class="gigs-info">
-                                                <a href="service.html"><span class="badge bg-primary-light">Video Marketing</span></a>
-                                                <p><i class="ti ti-map-pin-check"></i>Chicago</p>
+                                                <div>
+                                                    <a href="{{ url('/story/category/'.$story->category->slug ?? '') }}"
+                                                        class="badge bg-light">
+                                                        {{ $story->category->name ?? 'Uncategorized' }}
+                                                    </a>
+                                                    <span class="ms-2">+1</span>
+                                                </div>
+                                                <div class="star-rate">
+                                                    <span>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        {{ number_format($story->comments->avg('rating'), 1) }}
+                                                        ({{ $story->comments->count() }} Reviews)
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div class="gigs-title">
-                                                <h3><a href="service-details.html">I will do creating and promoting video content to engage audiences</a></h3>
+                                                <h5><a
+                                                        href="{{ url('/story-details/'.$story->slug) }}">{{ $story->title }}</a>
+                                                </h5>
                                             </div>
-                                            <div class="star-rate">
-                                                <span><i class="fa-solid fa-star"></i>4.2 (65 Reviews)</span>
-                                            </div>
-                                            <div class="gigs-card-footer">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
-                                                    <span class="badge">Delivery in 1 day</span>
+                                            <div class="gigs-card-footer d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center gigs-left-text">
+                                                    <a href="{{ url('/talent/' . $story->talent->id) }}" class="avatar avatar-sm flex-shrink-0">
+                                                        <img src="{{ $story->talent->image ? asset('image/talents/' . $story->talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                                            class="img-fluid rounded-pill" alt="img" />
+                                                    </a>
+                                                    <div class="ms-2">
+                                                        <h6 class="mb-0">
+                                                            <a role="button"
+                                                                tabindex="0">{{ $story->talent->name ?? 'Author' }}</a>
+                                                        </h6>
+
+                                                    </div>
                                                 </div>
-                                                <h5>$600</h5>
+                                                <div class="text-end">
+                                                    <span>{{ $story->tags }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

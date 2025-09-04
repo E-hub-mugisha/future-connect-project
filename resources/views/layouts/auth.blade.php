@@ -44,12 +44,27 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 
+<style>
+    .auth-content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        text-align: center;
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        margin-bottom: 4.75rem;
+    }
+</style>
+
 <body>
     <div class="main-wrapper">
 
 
         @yield('content')
-        
         <!-- jQuery -->
         <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
 

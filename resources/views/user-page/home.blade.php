@@ -947,7 +947,7 @@
             <div class="row" id="talentGrid">
                 @foreach($talents as $talent)
                 <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
-                    <div class="card post-item m-card" data-aos="flip-left">
+                    <div class="card post-item m-card">
                         <div class="card-body text-center">
 
                             <!-- Image -->

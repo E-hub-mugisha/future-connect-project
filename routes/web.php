@@ -157,7 +157,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents');
         
         Route::post('/talents', [AdminTalentController::class, 'store'])->name('talents.store');
-        Route::put('/talent/update/{id}', [AdminTalentController::class, 'update'])->name('talents.update');
+        Route::patch('/talent/update/{id}', [AdminTalentController::class, 'update'])->name('talents.update');
         Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
         Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
         Route::delete('/talents/{id}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
