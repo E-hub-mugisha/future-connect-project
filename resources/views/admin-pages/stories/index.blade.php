@@ -1,82 +1,94 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="page-wrapper">
-    <div class="page-content content pb-0 bg-light">
 
-        <div class="content">
-            <div class="main-title mb-4">
-                <h2>User Management</h2>
-            </div>
-            <div class="wallet-wrap">
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Amount in Wallet</p>
-                        <h5>$1,302.50</h5>
-                    </div>
-                </div>
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Total Credit</p>
-                        <h5>$9,292.50</h5>
-                    </div>
-                </div>
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Total Debit</p>
-                        <h5>$1,541.21</h5>
-                    </div>
-                </div>
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Withdrawn</p>
-                        <h5>$8,874.21</h5>
-                    </div>
-                </div>
+<!-- Page Content -->
+<div class="container-fluid">
+    <div class="nk-content-inner">
+        <div class="nk-content-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Stories Management</h2>
+
                 <div class="d-flex align-items-center">
 
                     <a href="{{ route('admin.stories.create') }}"
                         class="btn btn-primary btn-md">Create</a>
                 </div>
             </div>
-            <div class="table-responsive custom-table">
-                <table class="table datatable">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Title</th>
-                            <th>Talent</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($stories as $story)
+            <div class="card card-bordered card-preview">
+                <div class="card-inner">
+                    <table class="datatable-init nowrap table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Talent</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($stories as $story)
                             <tr>
                                 <td>{{ $story->title }}</td>
                                 <td>{{ $story->talent?->name ?? 'N/A' }}</td>
                                 <td>{{ $story->category?->name ?? 'N/A' }}</td>
                                 <td>{{ ucfirst($story->status) }}</td>
                                 <td>
-                                    <a href="{{ route('admin.stories.show', $story->id) }}"
-                                        class="btn btn-sm btn-info me-2">View</a>
-                                    <a href="{{ route('admin.stories.edit', $story->id) }}"
-                                        class="btn btn-sm btn-warning me-2">Edit</a>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $story->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $story->id }}">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('admin.stories.show', $story->id) }}">Quick View</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('admin.stories.edit', $story->id) }}">Edit</a>
+                                            </li>
 
-                                    <form
-                                        action="{{ route('admin.stories.destroy', $story->id) }}"
-                                        method="POST" class="d-inline"
-                                        onsubmit="return confirm('Are you sure you want to delete this story?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $story->id }}">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                 </td>
                             </tr>
-                        @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
+                    @foreach($stories as $story)
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal{{ $story->id }}" tabindex="-1"
+                        aria-labelledby="deleteModalLabel{{ $story->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form action="{{ route('admin.stories.destroy', $story->id) }}"
+                                method="POST" class="modal-content">
+                                @csrf
+                                @method('DELETE')
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $story->id }}">
+                                        Confirm Delete
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this story? This action cannot be undone.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    @endforeach
+
+                </div>
             </div>
         </div>
     </div>

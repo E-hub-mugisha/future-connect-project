@@ -1,92 +1,47 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description"
+        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <link rel="shortcut icon" href="images/favicon.png">
+    <title>@yield('title') - {{ config('app.name') }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/dashlitee1e3.css?ver=3.2.4') }}">
+    <link id="skin-default" rel="stylesheet" href="{{ asset('assets/css/themee1e3.css?ver=3.2.4') }}">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91615293-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-    <title>Future Connect</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-
-    <!-- Theme Settings Js -->
-    <script src="/assets/js/theme-script.js"></script>
-
-    <!-- Tabler Icon CSS -->
-    <link rel="stylesheet" href="/assets/plugins/tabler-icons/tabler-icons.min.css">
-
-    <!-- Datetimepicker CSS -->
-    <link rel="stylesheet" href="/assets/css/bootstrap-datetimepicker.min.css">
-
-    <!-- Daterangepicker CSS -->
-    <link rel="stylesheet" href="/assets/plugins/daterangepicker/daterangepicker.css">
-
-    <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="/assets/plugins/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/assets/plugins/fontawesome/css/all.min.css">
-
-    <!-- Fearther CSS -->
-    <link rel="stylesheet" href="/assets/css/feather.css">
-
-    <!-- Select CSS -->
-    <link rel="stylesheet" href="/assets/plugins/select2/css/select2.min.css">
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="/assets/css/style.css">
-
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-91615293-4');
+    </script>
 </head>
 
-<body class="font-sans antialiased">
-    <div class="main-wrapper">
-        @include('components.admin.adminSidebar')
-        <div className="page-wrapper">
-
-            @yield('content')
-
+<body class="nk-body bg-lighter npc-general has-sidebar ">
+    <div class="nk-app-root">
+        <div class="nk-main ">
+            @include('components.admin.sidebar')
+            <div class="nk-wrap ">
+                @include('components.admin.header')
+                <div class="nk-content ">
+                    @yield('content')
+                </div>
+                @include('components.admin.footer')
+            </div>
         </div>
-        <!-- Top Scroll -->
-        <div class="back-to-top">
-            <a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top">
-                <img src="{{ asset('assets/img/icons/arrow-badge-up.svg') }}" alt="img">
-            </a>
-        </div>
-        <!-- /Top Scroll -->
-
-        <!-- jQuery -->
-        <script src="/assets/js/jquery-3.7.1.min.js"></script>
-
-        <!-- Bootstrap Core JS -->
-        <script src="/assets/js/bootstrap.bundle.min.js"></script>
-        <script src="/assets/js/bootstrap-scrollspy.js"></script>
-
-        <!-- Slimscroll JS -->
-        <script src="/assets/js/jquery.slimscroll.min.js"></script>
-
-        <!-- Feather JS -->
-        <script src="/assets/js/feather.min.js"></script>
-
-        <!-- Apexchart JS -->
-        <script src="/assets/plugins/apexchart/apexcharts.min.js"></script>
-        <script src="/assets/plugins/apexchart/chart-data.js"></script>
-
-        <!-- date range -->
-        <script src="/assets/js/moment.min.js"></script>
-        <script src="/assets/plugins/daterangepicker/daterangepicker.js">
-        </script>
-        <script src="/assets/js/bootstrap-datetimepicker.min.js"></script>
-
-        <!-- Sticky Sidebar JS -->
-        <script src="/assets/plugins/theia-sticky-sidebar/ResizeSensor.js">
-        </script>
-        <script src="/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
-
-        <!-- Select JS -->
-        <script src="/assets/plugins/select2/js/select2.min.js"></script>
-
-        <!-- Custom JS -->
-        <script src="/assets/js/script.js"></script>
+    </div>
+    <script src="{{ asset('assets/js/bundlee1e3.js?ver=3.2.4') }}"></script>
+    <script src="{{ asset('assets/js/scriptse1e3.js?ver=3.2.4') }}"></script>
+    <script src="{{ asset('assets/js/demo-settingse1e3.js?ver=3.2.4') }}"></script>
+    <script src="{{ asset('assets/js/charts/gd-defaulte1e3.js?ver=3.2.4') }}"></script>
 </body>
 
 </html>

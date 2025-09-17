@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TalentRegisteredAdmin;
+use App\Mail\TalentRegisteredUser;
 use App\Models\Announcement;
 use App\Models\Blog;
 use Illuminate\Http\Request;
@@ -19,6 +21,7 @@ use App\Models\SupportTalent;
 use App\Models\Testimonial;
 use App\Models\TalentFeedback;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -240,15 +243,14 @@ class HomeController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'skill' => 'required|string',
-            'story' => 'nullable|string',
+            'featured' => 'boolean',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
             'address' => 'nullable|string',
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
             'language' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         $talentImage = null;
@@ -258,10 +260,9 @@ class HomeController extends Controller
             $image->move(public_path($path), $talentImage);
         }
 
-        Talent::create([
+        $talent = Talent::create([
             'name' => $request->name,
-            'skill' => $request->skill,
-            'story' => $request->story,
+            'featured' => $request->has('featured') ? 1 : 0,
             'description' => $request->description,
             'image' => $talentImage,
             'address' => $request->address,
@@ -271,7 +272,22 @@ class HomeController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->back()->with('success', 'Talent registered successfully.');
+        // Send email to user
+        if ($talent->email) {
+            Mail::to($talent->email)->send(new TalentRegisteredUser($talent));
+        }
+
+        // Send email to admin
+        Mail::to('kabosierik@gmail.com')->send(new TalentRegisteredAdmin($talent));
+
+        return redirect()->route('talent.success', $talent->id);
+    }
+
+    public function talentSuccess($id)
+    {
+        $talent = Talent::findOrFail($id);
+
+        return view('user-page.talent-success', compact('talent'));
     }
     public function storyDetails($slug)
     {

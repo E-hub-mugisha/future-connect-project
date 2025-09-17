@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\LoginActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // The redirect will now be handled by authenticated()
+        return $this->authenticated($request, Auth::user());
     }
 
     /**
@@ -43,5 +45,29 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * After user is authenticated.
+     */
+    protected function authenticated(Request $request, $user): RedirectResponse
+    {
+        // Log login activity
+        LoginActivity::create([
+            'user_id'     => $user->id,
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->userAgent(),
+            'logged_in_at' => now(),
+        ]);
+
+        // Redirect based on role
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');   // 👈 /admin/dashboard
+            case 'talent':
+                return redirect()->route('talent.dashboard'); // 👈 /talent/page/dashboard
+            default:
+                return redirect()->route('dashboard');        // 👈 fallback for normal users
+        }
     }
 }

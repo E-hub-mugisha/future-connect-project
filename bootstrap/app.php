@@ -16,10 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        // Register route middleware aliases
+        // ✅ Register route middleware aliases
         $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
             'auth' => \App\Http\Middleware\Authenticate::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

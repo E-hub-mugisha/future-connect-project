@@ -20,10 +20,10 @@ class AdminTalentController extends Controller
     {
         $talents = Talent::all();
         $categories = Category::all();
-        $totalRatings = Talent::sum('rating');
+        $totalRatings = Talent::with('rating')->count();
         $totalStories = Talent::with('story')->count();
         $totalComments = Talent::with('feedback')->count();
-        $totalSkills = Talent::distinct('skill')->count('skill');
+        $totalSkills = Talent::with('skill')->count();
 
         return view('admin-pages.talents.index', compact('talents', 'categories', 'totalRatings', 'totalStories', 'totalComments', 'totalSkills'));
     }
@@ -32,9 +32,6 @@ class AdminTalentController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'skill' => 'required|string',
-            'story' => 'nullable|string',
-            'rating' => 'nullable|integer|min:0|max:5',
             'featured' => 'boolean',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
@@ -54,9 +51,6 @@ class AdminTalentController extends Controller
 
         Talent::create([
             'name' => $request->name,
-            'skill' => $request->skill,
-            'story' => $request->story,
-            'rating' => $request->rating,
             'featured' => $request->has('featured') ? 1 : 0,
             'description' => $request->description,
             'image' => $talentImage,
@@ -84,9 +78,6 @@ class AdminTalentController extends Controller
         // ✅ Validate input
         $request->validate([
             'name' => 'required|string',
-            'skill' => 'required|string',
-            'story' => 'nullable|string',
-            'rating' => 'nullable|integer|min:0|max:5',
             'featured' => 'nullable|boolean',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
@@ -113,9 +104,6 @@ class AdminTalentController extends Controller
         // ✅ Update talent fields
         $talent->update([
             'name'        => $request->name,
-            'skill'       => $request->skill,
-            'story'       => $request->story,
-            'rating'      => $request->rating,
             'featured'    => $request->has('featured') ? 1 : 0, // checkbox
             'description' => $request->description,
             'image'       => $imageName,

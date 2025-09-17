@@ -31,22 +31,21 @@ class PasswordResetTest extends TestCase
     }
 
     public function test_reset_password_screen_can_be_rendered(): void
-{
-    Notification::fake();
+    {
+        Notification::fake();
 
-    $user = User::factory()->create();
+        $user = User::factory()->create();
 
-    $this->post('/forgot-password', ['email' => $user->email]);
+        $this->post('/forgot-password', ['email' => $user->email]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-        // Add email query param here:
-        $response = $this->get('/reset-password/' . $notification->token . '?email=' . urlencode($user->email));
+        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
+            $response = $this->get('/reset-password/'.$notification->token);
 
-        $response->assertStatus(200);
+            $response->assertStatus(200);
 
-        return true;
-    });
-}
+            return true;
+        });
+    }
 
     public function test_password_can_be_reset_with_valid_token(): void
     {

@@ -1,85 +1,59 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="page-wrapper">
-    <div class="page-content content pb-0 bg-light">
-
-        <div class="content">
-            <div class="main-title mb-4">
-                <h2>Skills Management</h2>
-            </div>
-            <div class="wallet-wrap">
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Amount in Wallet</p>
-                        <h5>$1,302.50</h5>
-                    </div>
-                </div>
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Total Credit</p>
-                        <h5>$9,292.50</h5>
-                    </div>
-                </div>
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Total Debit</p>
-                        <h5>$1,541.21</h5>
-                    </div>
-                </div>
-                <div class="wallet-item">
-                    <div class="wallet-info">
-                        <p>Withdrawn</p>
-                        <h5>$8,874.21</h5>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center">
+<div class="container-fluid">
+    <div class="nk-content-inner">
+        <div class="nk-content-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Testimonials</h2>
+                <div class="d-flex justify-content-between align-items-center mb-4">
 
                     <!-- Add Testimonial Button -->
                     <button class="btn btn-primary mb-3 btn-md" data-bs-toggle="modal"
-                        data-bs-target="#addTestimonialModal">Add Testimonial</button>
+                        data-bs-target="#addTestimonialModal">Add Testimonial
+                    </button>
                 </div>
             </div>
-            <div class="table-responsive custom-table">
-                <table class="table datatable">
-                    <thead class="thead-light">
-
-                        <tr>
-                            <th>Title</th>
-                            <th>Talent</th>
-                            <th>Rating</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($testimonials as $testimonial)
-                        <tr>
-                            <td>{{ $testimonial->title }}</td>
-                            <td>{{ $testimonial->talent->name ?? 'N/A' }}
-                            </td>
-                            <td>{{ $testimonial->rating ?? 'N/A' }}
-                            </td>
-                            <td>{{ ucfirst($testimonial->created_at->format('F j, Y')) }}</td>
-                            <td>
-                                <!-- edit Testimonial Button -->
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#editTestiModal{{ $testimonial->id }}">edit Testimonial</button>
-                                <form
-                                    action="{{ route('admin.testimonials.destroy', $testimonial->id) }}"
-                                    method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Delete this testimonial?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="card card-bordered card-preview">
+                <div class="card-inner">
+                    <table class="datatable-init nowrap table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Talent</th>
+                                <th>Rating</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($testimonials as $testimonial)
+                            <tr>
+                                <td>{{ $testimonial->title }}</td>
+                                <td>{{ $testimonial->talent->name ?? 'N/A' }}
+                                </td>
+                                <td>{{ $testimonial->rating ?? 'N/A' }}
+                                </td>
+                                <td>{{ ucfirst($testimonial->created_at->format('F j, Y')) }}</td>
+                                <td>
+                                    <!-- edit Testimonial Button -->
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#editTestiModal{{ $testimonial->id }}">edit Testimonial</button>
+                                    <form
+                                        action="{{ route('admin.testimonials.destroy', $testimonial->id) }}"
+                                        method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete this testimonial?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
             <!-- Edit Testimonial Modal -->
             @foreach($testimonials as $testimonial)
             <div class="modal fade"
@@ -198,11 +172,11 @@
                             <div class="mb-3">
                                 <label class="form-label">Rating</label>
                                 <select name="rating" class="form-select" required>
-                                    <option value="1" >1</option>
-                                    <option value="2" >2</option>
-                                    <option value="3" >3</option>
-                                    <option value="4" >4</option>
-                                    <option value="5" >5</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
                                 </select>
                                 @error('rating')
                                 <small class="text-danger">{{ $message }}</small>
