@@ -201,7 +201,7 @@ class HomeController extends Controller
     public function skills()
     {
         // Fetch all stories, eager load relationships if needed (like talent or category)
-        $skills = Skill::orderBy('created_at', 'desc')->get();
+        $skills = Skill::orderBy('created_at', 'desc')->paginate(9);
 
         // Return the Blade view with skills
         return view('user-page.skills', [
@@ -211,18 +211,22 @@ class HomeController extends Controller
     }
     public function storeReview(Request $request, $id)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email',
             'rating' => 'required|integer|min:1|max:5',
-            'message' => 'required|string',
+            'comment' => 'required|string',
         ]);
 
-        $data['skill_id'] = $id;
+        SkillReview::create([
+            'skill_id' => $id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'rating' => $request->rating,
+            'message' => $request->comment,
+        ]);
 
-        $review = SkillReview::create($data);
-
-        return response()->json(['message' => 'Review submitted successfully', 'review' => $review]);
+        return back()->with('success', 'Review submitted successfully!');
     }
     // Store a new comment for a story
     public function storeStoryComment(Request $request)
@@ -343,9 +347,21 @@ class HomeController extends Controller
     }
     public function skillDetails($slug)
     {
-        $skill = \App\Models\Skill::where('slug', $slug)->firstOrFail();
+        $skill = Skill::with(['reviews'])->where('slug', $slug)->firstOrFail();
 
-        $relatedSkills = \App\Models\Skill::where('category_id', $skill->category_id)
+        // Calculate rating stats
+        $totalReviews = $skill->reviews->count();
+        $averageRating = $totalReviews > 0 ? round($skill->reviews->avg('rating'), 1) : 0;
+
+        $ratingsCount = [
+            5 => $skill->reviews->where('rating', 5)->count(),
+            4 => $skill->reviews->where('rating', 4)->count(),
+            3 => $skill->reviews->where('rating', 3)->count(),
+            2 => $skill->reviews->where('rating', 2)->count(),
+            1 => $skill->reviews->where('rating', 1)->count(),
+        ];
+
+        $relatedSkills = Skill::where('category_id', $skill->category_id)
             ->where('id', '!=', $skill->id)
             ->latest()
             ->take(3) // Limit to 3 related stories
@@ -353,8 +369,13 @@ class HomeController extends Controller
         return view('user-page.skill-details', [
             'skill' => $skill,
             'relatedSkills' => $relatedSkills,
+            'totalReviews' => $totalReviews,
+            'averageRating' => $averageRating,
+            'ratingsCount' => $ratingsCount,
+            'reviews' => $skill->reviews()->latest()->paginate(5),
         ]);
     }
+
 
     public function relatedSkills($categoryId)
     {
@@ -391,10 +412,33 @@ class HomeController extends Controller
     {
         $announcement = Announcement::findOrFail($id);
 
+        $relatedAnnouncements = Announcement::where('category_id', $announcement->category_id)
+            ->where('id', '!=', $announcement->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
         return view('user-page.announcement-details', [
-            'announcement' => $announcement
+            'announcement' => $announcement,
+            'relatedAnnouncements' => $relatedAnnouncements
         ]);
     }
+
+    // AnnouncementController.php
+    public function addComment(Request $request, Announcement $announcement)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $announcement->comments()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
+
+        return back()->with('success', 'Comment added successfully!');
+    }
+
     public function uploadStory()
     {
         return view('user-page.upload-story', ['categories' => \App\Models\Category::all(),]);

@@ -2,27 +2,6 @@
 @section('content')
 
 
-<!-- <div class="breadcrumb-bar breadcrumb-bar-info">
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <nav aria-label="breadcrumb" class="page-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('user.home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item" aria-current="page">Stories</li>
-                    </ol>
-                </nav>
-                <h2 class="breadcrumb-title mb-0">
-                    Inspiring Talents stories on <span class="text-primary">Future Connect</span>
-                </h2>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <style>
     .postLists {
         display: flex;

@@ -47,7 +47,10 @@ Route::get('/skills', [HomeController::class, 'skills'])->name('user.skills');
 Route::get('/skills/category/{slug}', [HomeController::class, 'getByCategory']);
 Route::get('/skills/{slug}', [HomeController::class, 'skillDetails']);
 Route::get('/skills/related/{categoryId}', [HomeController::class, 'relatedSkills']);
+Route::post('/skills/{id}/reviews', [HomeController::class, 'storeReview'])->name('reviews.store');
 Route::get('/stories', [HomeController::class, 'stories'])->name('user.stories');
+Route::get('/story-details/{slug}', [HomeController::class, 'storyDetails'])->name('user.storyDetails');
+Route::post('/story/comment/store', [HomeController::class, 'storeStoryComment'])->name('story.comment.store');
 Route::get('/story/category/{slug}', [HomeController::class, 'getStoryByCategory']);
 Route::get('/stories/search', [HomeController::class, 'storyFilter'])->name('stories.filter');
 Route::get('/upload-story', [HomeController::class, 'uploadStory'])->name('user.upload-story');
@@ -55,6 +58,8 @@ Route::post('/upload-story/store', [HomeController::class, 'uploadStoryStory'])-
 Route::post('/log-view', [HomeController::class, 'logView'])->name('log.view');
 Route::get('/announcements', [HomeController::class, 'announcements'])->name('user.announcements');
 Route::get('/announcement/{id}', [HomeController::class, 'announcementDetails'])->name('user.announcement.details');
+Route::post('/announcement/{announcement}/comment', [HomeController::class, 'addComment'])->name('announcement.comment')->middleware('auth');
+
 Route::get('/blogs', [HomeController::class, 'blogs'])->name('user.blogs');
 Route::get('/blog/{slug}', [HomeController::class, 'blogDetails'])->name('user.blog.details');
 Route::get('/faq', [HomeController::class, 'faq'])->name('user.faq');

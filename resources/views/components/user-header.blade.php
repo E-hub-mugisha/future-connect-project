@@ -195,6 +195,11 @@ if (!function_exists('isActiveRoute')) {
                             class="nav-link {{ isActiveRoute(['user.announcements']) }}">Announcements</a>
                     </li>
 
+                    {{-- Announcements --}}
+                    <li>
+                        <a href="{{ route('talent.match') }}"
+                            class="nav-link {{ isActiveRoute(['talent.match']) }}">Connection Room</a>
+                    </li>
                     {{-- Stories --}}
                     <li class="has-submenu">
                         <a role="button" class="nav-link

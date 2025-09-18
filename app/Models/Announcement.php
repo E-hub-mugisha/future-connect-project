@@ -25,4 +25,10 @@ class Announcement extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    // App/Models/Announcement.php
+    public function comments()
+    {
+        return $this->hasMany(AnnouncementComment::class)->latest();
+    }
 }

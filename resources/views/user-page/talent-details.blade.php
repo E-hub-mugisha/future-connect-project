@@ -1,8 +1,6 @@
 @extends('layouts.guest')
 @section('content')
 
-
-
 <style>
     .talent-profile-info {
         background: #011E34;

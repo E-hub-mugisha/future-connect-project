@@ -1,8 +1,33 @@
 @extends('layouts.guest')
 @section('content')
-<div>
 
-    <div class="breadcrumb-bar">
+<style>
+    .talent-profile-info {
+        background: #011E34;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .postLists {
+        display: flex;
+        /* align-items: center; */
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        /* text-align: center; */
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        margin-bottom: 1.75rem;
+
+    }
+</style>
+
+<div class="container">
+    <div class="breadcrumb-bar postLists mt-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
@@ -21,18 +46,14 @@
             </div>
         </div>
     </div>
-
-
     <section class="contact-section">
-
-
         <div class="contact-bottom bg-white">
             <div class="container">
                 <div class="row justify-content-center">
 
 
                     <div class="col-lg-4 col-md-6 d-flex">
-                        <div class="contact-grid w-100">
+                        <div class="contact-grid w-100 postLists">
                             <div class="contact-content">
                                 <div class="contact-icon">
                                     <span>
@@ -49,7 +70,7 @@
 
 
                     <div class="col-lg-4 col-md-6 d-flex">
-                        <div class="contact-grid w-100">
+                        <div class="contact-grid w-100 postLists">
                             <div class="contact-content">
                                 <div class="contact-icon">
                                     <span>
@@ -66,7 +87,7 @@
 
 
                     <div class="col-lg-4 col-md-6 d-flex">
-                        <div class="contact-grid w-100">
+                        <div class="contact-grid w-100 postLists">
                             <div class="contact-content">
                                 <div class="contact-icon">
                                     <span>
@@ -92,7 +113,7 @@
 
 
                     <div class="col-lg-6 col-md-12 d-flex">
-                        <div class="contact-img">
+                        <div class="contact-img postLists">
                             <img src="assets/img/Future Connect-connect.jpg" class="img-fluid"
                                 alt="Connect with Future Connect" />
                         </div>
@@ -100,7 +121,7 @@
 
 
                     <div class="col-lg-6 col-md-12 d-flex">
-                        <div class="team-form w-100 mt-4">
+                        <div class="team-form w-100 mt-4 postLists">
                             <div class="team-form-heading">
                                 <h3>Connect With Future Connect</h3>
                                 <p>Have a question, idea, or feedback? Drop us a message we’d love to hear from you!
@@ -134,7 +155,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="contact-map map-v3 w-100">
+                <div class="contact-map map-v3 w-100 postLists">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1983.8594561078528!2d30.097123416047607!3d-1.9440729322966414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca6ddf3b71f67%3A0x7d91d3b6169b4f11!2sKigali%20Innovation%20City!5e0!3m2!1sen!2srw!4v1684567890123!5m2!1sen!2srw"
                         allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

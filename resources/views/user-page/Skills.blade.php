@@ -110,6 +110,11 @@
                     @empty
                     <p class="text-center mt-4">No skills found.</p>
                     @endforelse
+
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $skills->links() }}
+                    </div>
+
                 </div>
             </div>
 

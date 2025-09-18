@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Dashboard')
 @section('content')
 
 <div class="container-fluid">
@@ -94,7 +95,7 @@
                                             <div class="card-inner">
                                                 <div class="card-title-group align-start mb-2">
                                                     <div class="card-title">
-                                                        <h6 class="title">Active Subscriptions</h6>
+                                                        <h6 class="title">Total Testimonials</h6>
                                                     </div>
                                                     <div class="card-tools"><em
                                                             class="card-hint icon ni ni-help-fill"
@@ -106,11 +107,7 @@
                                                 <div
                                                     class="align-end flex-sm-wrap g-4 flex-md-nowrap">
                                                     <div class="nk-sale-data"><span
-                                                            class="amount">9.69K</span><span
-                                                            class="sub-title"><span
-                                                                class="change down text-danger"><em
-                                                                    class="icon ni ni-arrow-long-down"></em>1.93%</span>since
-                                                            last month</span></div>
+                                                            class="amount">{{ $totalTestimonials }}</span></div>
                                                     <div class="nk-sales-ck"><canvas
                                                             class="sales-bar-chart"
                                                             id="activeSubscription"></canvas></div>
@@ -123,7 +120,7 @@
                                             <div class="card-inner">
                                                 <div class="card-title-group align-start mb-2">
                                                     <div class="card-title">
-                                                        <h6 class="title">Avg Subscriptions</h6>
+                                                        <h6 class="title">Total Users</h6>
                                                     </div>
                                                     <div class="card-tools"><em
                                                             class="card-hint icon ni ni-help-fill"
@@ -135,11 +132,7 @@
                                                 <div
                                                     class="align-end flex-sm-wrap g-4 flex-md-nowrap">
                                                     <div class="nk-sale-data"><span
-                                                            class="amount">346.2</span><span
-                                                            class="sub-title"><span
-                                                                class="change up text-success"><em
-                                                                    class="icon ni ni-arrow-long-up"></em>2.45%</span>since
-                                                            last week</span></div>
+                                                            class="amount">{{ $totalUsers }}</span></div>
                                                     <div class="nk-sales-ck"><canvas
                                                             class="sales-bar-chart"
                                                             id="totalSubscription"></canvas></div>
@@ -228,27 +221,27 @@
                                                 class="d-none d-sm-inline">Status</span></div>
                                         <div class="nk-tb-col"><span>&nbsp;</span></div>
                                     </div>
+                                    @foreach ($talents as $talent)
                                     <div class="nk-tb-item">
                                         <div class="nk-tb-col"><span class="tb-lead"><a
-                                                    href="#">#95954</a></span></div>
+                                                    href="#">{{ $talent->id }}</a></span></div>
                                         <div class="nk-tb-col tb-col-sm">
                                             <div class="user-card">
                                                 <div class="user-avatar user-avatar-sm bg-purple">
-                                                    <span>AB</span>
+                                                    <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                                            class="img-fluid rounded-pill" alt="img">
                                                 </div>
-                                                <div class="user-name"><span class="tb-lead">Abu Bin
-                                                        Ishtiyak</span></div>
+                                                <div class="user-name"><span class="tb-lead">{{ $talent->name }}</span></div>
                                             </div>
                                         </div>
                                         <div class="nk-tb-col tb-col-md"><span
-                                                class="tb-sub">02/11/2020</span></div>
+                                                class="tb-sub">{{ $talent->created_at->format('d M Y') }}</span></div>
                                         <div class="nk-tb-col tb-col-lg"><span
-                                                class="tb-sub text-primary">SUB-2309232</span></div>
+                                                class="tb-sub text-primary">{{ $talent->phone }}</span></div>
                                         <div class="nk-tb-col"><span
-                                                class="tb-sub tb-amount">4,596.75
-                                                <span>USD</span></span></div>
+                                                class="tb-sub tb-amount">{{ $talent->category->name ?? 'Uncategorized' }}</span></div>
                                         <div class="nk-tb-col"><span
-                                                class="badge badge-dot badge-dot-xs bg-success">Paid</span>
+                                                class="badge badge-dot badge-dot-xs bg-success">{{ $talent->status }}</span>
                                         </div>
                                         <div class="nk-tb-col nk-tb-col-action">
                                             <div class="dropdown"><a
@@ -266,155 +259,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col"><span class="tb-lead"><a
-                                                    href="#">#95850</a></span></div>
-                                        <div class="nk-tb-col tb-col-sm">
-                                            <div class="user-card">
-                                                <div class="user-avatar user-avatar-sm bg-azure">
-                                                    <span>DE</span>
-                                                </div>
-                                                <div class="user-name"><span class="tb-lead">Desiree
-                                                        Edwards</span></div>
-                                            </div>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-md"><span
-                                                class="tb-sub">02/02/2020</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span
-                                                class="tb-sub text-primary">SUB-2309154</span></div>
-                                        <div class="nk-tb-col"><span class="tb-sub tb-amount">596.75
-                                                <span>USD</span></span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="badge badge-dot badge-dot-xs bg-danger">Canceled</span>
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-action">
-                                            <div class="dropdown"><a
-                                                    class="text-soft dropdown-toggle btn btn-icon btn-trigger"
-                                                    data-bs-toggle="dropdown"><em
-                                                        class="icon ni ni-more-h"></em></a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                                    <ul class="link-list-plain">
-                                                        <li><a href="#">View</a></li>
-                                                        <li><a href="#">Remove</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col"><span class="tb-lead"><a
-                                                    href="#">#95812</a></span></div>
-                                        <div class="nk-tb-col tb-col-sm">
-                                            <div class="user-card">
-                                                <div class="user-avatar user-avatar-sm bg-warning">
-                                                    <img src="images/avatar/b-sm.jpg" alt="">
-                                                </div>
-                                                <div class="user-name"><span class="tb-lead">Blanca
-                                                        Schultz</span></div>
-                                            </div>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-md"><span
-                                                class="tb-sub">02/01/2020</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span
-                                                class="tb-sub text-primary">SUB-2309143</span></div>
-                                        <div class="nk-tb-col"><span class="tb-sub tb-amount">199.99
-                                                <span>USD</span></span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="badge badge-dot badge-dot-xs bg-success">Paid</span>
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-action">
-                                            <div class="dropdown"><a
-                                                    class="text-soft dropdown-toggle btn btn-icon btn-trigger"
-                                                    data-bs-toggle="dropdown"><em
-                                                        class="icon ni ni-more-h"></em></a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                                    <ul class="link-list-plain">
-                                                        <li><a href="#">View</a></li>
-                                                        <li><a href="#">Invoice</a></li>
-                                                        <li><a href="#">Print</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col"><span class="tb-lead"><a
-                                                    href="#">#95256</a></span></div>
-                                        <div class="nk-tb-col tb-col-sm">
-                                            <div class="user-card">
-                                                <div class="user-avatar user-avatar-sm bg-purple">
-                                                    <span>NL</span>
-                                                </div>
-                                                <div class="user-name"><span class="tb-lead">Naomi
-                                                        Lawrence</span></div>
-                                            </div>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-md"><span
-                                                class="tb-sub">01/29/2020</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span
-                                                class="tb-sub text-primary">SUB-2305684</span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="tb-sub tb-amount">1099.99
-                                                <span>USD</span></span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="badge badge-dot badge-dot-xs bg-success">Paid</span>
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-action">
-                                            <div class="dropdown"><a
-                                                    class="text-soft dropdown-toggle btn btn-icon btn-trigger"
-                                                    data-bs-toggle="dropdown"><em
-                                                        class="icon ni ni-more-h"></em></a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                                    <ul class="link-list-plain">
-                                                        <li><a href="#">View</a></li>
-                                                        <li><a href="#">Invoice</a></li>
-                                                        <li><a href="#">Print</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col"><span class="tb-lead"><a
-                                                    href="#">#95135</a></span></div>
-                                        <div class="nk-tb-col tb-col-sm">
-                                            <div class="user-card">
-                                                <div class="user-avatar user-avatar-sm bg-success">
-                                                    <span>CH</span>
-                                                </div>
-                                                <div class="user-name"><span
-                                                        class="tb-lead">Cassandra Hogan</span></div>
-                                            </div>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-md"><span
-                                                class="tb-sub">01/29/2020</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span
-                                                class="tb-sub text-primary">SUB-2305564</span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="tb-sub tb-amount">1099.99
-                                                <span>USD</span></span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="badge badge-dot badge-dot-xs bg-warning">Due</span>
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-action">
-                                            <div class="dropdown"><a
-                                                    class="text-soft dropdown-toggle btn btn-icon btn-trigger"
-                                                    data-bs-toggle="dropdown"><em
-                                                        class="icon ni ni-more-h"></em></a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                                    <ul class="link-list-plain">
-                                                        <li><a href="#">View</a></li>
-                                                        <li><a href="#">Invoice</a></li>
-                                                        <li><a href="#">Notify</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="card-inner-sm border-top text-center d-sm-none"><a href="#"
@@ -526,45 +371,26 @@
                             <div class="card-inner border-bottom">
                                 <div class="card-title-group">
                                     <div class="card-title">
-                                        <h6 class="title">Support Requests</h6>
+                                        <h6 class="title">Recent Story Payments</h6>
                                     </div>
-                                    <div class="card-tools"><a href="#" class="link">All Tickets</a>
+                                    <div class="card-tools"><a href="{{ route('admin.payments.index') }}" class="link">All Payments</a>
                                     </div>
                                 </div>
                             </div>
                             <ul class="nk-support">
+                                @foreach($payments as $payment)
                                 <li class="nk-support-item">
                                     <div class="user-avatar"><img src="images/avatar/a-sm.jpg"
                                             alt=""></div>
                                     <div class="nk-support-content">
                                         <div class="title"><span>Vincent Lopez</span><span
-                                                class="badge badge-dot badge-dot-xs bg-warning ms-1">Pending</span>
+                                                class="badge badge-dot badge-dot-xs bg-warning ms-1">{{ $payment->status }}</span>
                                         </div>
-                                        <p>Thanks for contact us with your issues...</p><span
-                                            class="time">6 min ago</span>
+                                        <p>{{ $payment->story->title }}</p><span
+                                            class="time">{{ \Carbon\Carbon::parse($payment->created_at)->format('d M Y') }}</span>
                                     </div>
                                 </li>
-                                <li class="nk-support-item">
-                                    <div class="user-avatar bg-purple-dim"><span>DM</span></div>
-                                    <div class="nk-support-content">
-                                        <div class="title"><span>Daniel Moore</span><span
-                                                class="badge badge-dot badge-dot-xs bg-info ms-1">Open</span>
-                                        </div>
-                                        <p>Thanks for contact us with your issues...</p><span
-                                            class="time">2 Hours ago</span>
-                                    </div>
-                                </li>
-                                <li class="nk-support-item">
-                                    <div class="user-avatar"><img src="images/avatar/b-sm.jpg"
-                                            alt=""></div>
-                                    <div class="nk-support-content">
-                                        <div class="title"><span>Larry Henry</span><span
-                                                class="badge badge-dot badge-dot-xs bg-success ms-1">Solved</span>
-                                        </div>
-                                        <p>Thanks for contact us with your issues...</p><span
-                                            class="time">3 Hours ago</span>
-                                    </div>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
