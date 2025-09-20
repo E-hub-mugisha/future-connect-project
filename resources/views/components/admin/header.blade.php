@@ -4,16 +4,16 @@
             <div class="nk-menu-trigger d-xl-none ms-n1"><a href="#"
                     class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em
                         class="icon ni ni-menu"></em></a></div>
-            <div class="nk-header-brand d-xl-none"><a href="index.html" class="logo-link"><img
+            <div class="nk-header-brand d-xl-none"><a href="{{ route('user.home') }}" class="logo-link"><img
                         class="logo-light logo-img" src="images/logo.png"
-                        srcset="/demo1/images/logo2x.png 2x" alt="logo"><img class="logo-dark logo-img"
-                        src="images/logo-dark.png" srcset="/demo1/images/logo-dark2x.png 2x"
+                        srcset="{{ asset('assets/img/WORDMARK.png') }} 2x" alt="logo"><img class="logo-dark logo-img"
+                        src="{{ asset('assets/img/WORDMARK.png') }}" srcset="{{ asset('assets/img/WORDMARK.png') }} 2x"
                         alt="logo-dark"></a></div>
             <div class="nk-header-news d-none d-xl-block">
                 <div class="nk-news-list"><a class="nk-news-item" href="#">
                         <div class="nk-news-icon"><em class="icon ni ni-card-view"></em></div>
                         <div class="nk-news-text">
-                            <p>Do you know the latest update of 2022? <span> A overview of our is now
+                            <p>Do you know the latest update of 2025? <span> A overview of our is now
                                     available on YouTube</span></p><em class="icon ni ni-external"></em>
                         </div>
                     </a></div>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="user-profile-regular.html"><em
+                                    <li><a href="{{ route('admin.users.show', Auth::user()->id ) }}"><em
                                                 class="icon ni ni-user-alt"></em><span>View
                                                 Profile</span></a></li>
                                     <li><a href="/admin/settings"><em

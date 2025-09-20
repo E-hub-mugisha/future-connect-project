@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'User Profile')
+@section('title', $talent->name. ' Profile')
 @section('content')
 
 <div class="container-fluid">
@@ -40,17 +40,17 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="stories-tab" data-bs-toggle="tab" data-bs-target="#stories" type="button" role="tab" aria-controls="stories" aria-selected="false">
-                                        <em class="icon ni ni-repeat"></em><span>Stories</span>
+                                        <em class="icon ni ni-repeat"></em><span>Stories ({{ $talent->stories->count() }})</span>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="skills-tab" data-bs-toggle="tab" data-bs-target="#skills" type="button" role="tab" aria-controls="skills" aria-selected="false">
-                                        <em class="icon ni ni-file-text"></em><span>Skills</span>
+                                        <em class="icon ni ni-file-text"></em><span>Skills ({{ $talent->skills->count() }})</span>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">
-                                        <em class="icon ni ni-bell"></em><span>Reviews</span>
+                                        <em class="icon ni ni-bell"></em><span>Reviews ({{ $talent->feedback->count() }})</span>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
@@ -126,18 +126,158 @@
 
                                 <!-- Stories Tab -->
                                 <div class="tab-pane fade" id="stories" role="tabpanel" aria-labelledby="stories-tab">
-                                    <p>No stories available.</p>
+                                    <div class="card-inner">
+                                        <table class="datatable-init nowrap table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Talent</th>
+                                                    <th>Category</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($talent->stories as $story)
+                                                <tr>
+                                                    <td>{{ $story->title }}</td>
+                                                    <td>{{ $story->talent?->name ?? 'N/A' }}</td>
+                                                    <td>{{ $story->category?->name ?? 'N/A' }}</td>
+                                                    <td>{{ ucfirst($story->status) }}</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $story->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                Actions
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $story->id }}">
+                                                                <li>
+                                                                    <a class="dropdown-item" href="{{ route('admin.stories.show', $story->id) }}">Quick View</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="{{ route('admin.stories.edit', $story->id) }}">Edit</a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $story->id }}">Delete</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+
+                                        @foreach($talent->stories as $story)
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteModal{{ $story->id }}" tabindex="-1"
+                                            aria-labelledby="deleteModalLabel{{ $story->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <form action="{{ route('admin.stories.destroy', $story->id) }}"
+                                                    method="POST" class="modal-content">
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel{{ $story->id }}">
+                                                            Confirm Delete
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete this story? This action cannot be undone.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        @endforeach
+
+                                    </div>
                                 </div>
 
                                 <!-- Skills Tab -->
                                 <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
-                                    <p>No skills added yet.</p>
+                                    <div class="card-inner">
+                                        <table class="datatable-init nowrap table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Talent</th>
+                                                    <th>Category</th>
+                                                    <th>Status</th>
+                                                    <th>Level</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($talent->skills as $skill)
+                                                <tr>
+                                                    <td>{{ $skill->name }}</td>
+                                                    <td>{{ $skill->talent->name ?? 'N/A' }}
+                                                    </td>
+                                                    <td>{{ $skill->category->name ?? 'N/A' }}
+                                                    </td>
+                                                    <td>{{ ucfirst($skill->status) }}</td>
+                                                    <td>{{ ucfirst($skill->level) }}</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $skill->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                Actions
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $skill->id }}">
+                                                                <li>
+                                                                    <a class="dropdown-item" href="{{ route('admin.skills.show', $skill->id) }}">Quick View</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" href="{{ route('admin.skills.edit', $skill->id) }}">Edit</a>
+                                                                </li>
+
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $skill->id }}">Delete</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
 
                                 <!-- Reviews Tab -->
                                 <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                                    <p>No reviews yet.</p>
+                                    @forelse($talent->feedback as $fb)
+                                    <div class="card card-bordered mb-2">
+                                        <div class="card-inner py-3">
+                                            <div class="d-sm-flex align-items-sm-center justify-content-sm-between">
+                                                <div class="pb-1 pb-sm-0">
+                                                    <h5 class="title">{{ $fb->comment }}</h5>
+                                                    <div class="d-flex">
+                                                        <p class="m-0 pe-2">by <a href="#" target="_blank">{{ $fb->name }}</a></p><span>{{ $fb->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                </div>
+                                                <ul class="rating">
+                                                    <li>
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <em class="icon ni ni-star-fill {{ $i <= $fb->rating ? 'filled' : '' }}"></em>
+                                                        @endfor
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @empty
+                                    <li>No reviews yet.</li>
+                                    @endforelse
                                 </div>
+
 
                                 <!-- Activities Tab -->
                                 <div class="tab-pane fade" id="activities" role="tabpanel" aria-labelledby="activities-tab">

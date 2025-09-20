@@ -72,7 +72,7 @@
          <div class="container">
              <div class="mb-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
                  <a href="{{ route('user.home') }}" class="footer-logo">
-                     <img src="{{ asset('assets/img/logo.svg')}}" alt="Future Connect Logo' ) }}" />
+                     <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" alt="Future Connect Logo' ) }}" />
                  </a>
                  <div class="social-links">
                      <ul>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', isset($announcement) ? 'Edit' : 'Create')
 @section('content')
 <div class="container">
     <div class="nk-content-inner">

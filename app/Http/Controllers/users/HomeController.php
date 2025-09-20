@@ -185,6 +185,7 @@ class HomeController extends Controller
         // Return the Blade view with stories
         return view('user-page.stories', [
             'stories' => $stories,
+            'featuredStories' => Story::inRandomOrder()->take(4)->get(),
             'categories' => Category::withCount('stories')->take(10)->get(),
         ]);
     }
@@ -538,11 +539,15 @@ class HomeController extends Controller
             });
         }
 
-        $stories = $query->get();
-        $categories = Category::all();
+        // ✅ Use paginate instead of get
+        $stories = $query->paginate(10);
 
-        return view('user-page.stories', compact('stories', 'categories'));
+        $categories = Category::all();
+        $featuredStories = Story::inRandomOrder()->take(4)->get();
+
+        return view('user-page.stories', compact('featuredStories', 'stories', 'categories'));
     }
+
 
     public function blogs()
     {

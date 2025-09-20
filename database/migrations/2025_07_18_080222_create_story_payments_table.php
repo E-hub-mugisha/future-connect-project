@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('currency');
             $table->string('email');
-            $table->unsignedBigInteger('video_id');  // or nullable if optional
+            $table->string('video_id')->nullable();  // or nullable if optional
             $table->foreign('story_id')->references('id')->on('stories')->onDelete('cascade');
             $table->timestamps();
         });

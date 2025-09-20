@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', $story->title)
 @section('content')
 
 <style>
@@ -33,41 +34,6 @@
 
             <!-- Service Details -->
             <div class="col-lg-8">
-                <!-- Talent story Header -->
-                <!-- <div class="postLists breadcrumb-bar breadcrumb-bar-info talent-story-info breadcrumb-info text-start pt-0 bg-white">
-
-                    <h2 class="breadcrumb-title mt-4">
-                        {{ $story->title }}
-                    </h2>
-                    <ul class="info-links">
-                        <li>
-                            <i class="ti ti-calendar-due"></i>{{ $story->category->name }}
-                        </li>
-                        <li>
-                            <i class="ti ti-star-filled text-warning"></i>
-                            {{ number_format($story->comments->avg('rating'), 1) }}
-                            ({{ $story->comments->count() }} Comments)
-                        </li>
-                        <li>
-                            <i class="ti ti-calendar-due"></i>Posted on:
-                            {{ \Carbon\Carbon::parse($story->created_at)->format('M d, Y') }}
-                        </li>
-                        <li class="border-0">
-                            <div class="tranlator d-flex align-items-center">
-                                @if($story->status == 'approved')
-                                <span class="badge bg-success">
-                                    Approved
-                                </span>
-                                @elseif($story->status == 'pending')
-                                <span class="badge bg-warning">
-                                    Pending
-                                </span>
-                                @endif
-                            </div>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- /Talent Profile Header -->
 
 
                 <!-- Slider -->

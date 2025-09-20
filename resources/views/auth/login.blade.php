@@ -11,9 +11,9 @@
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="login-userset">
-                            <div class="login-logo">
+                            <!-- <div class="login-logo">
                                 <img src="{{ asset('assets/img/logo.svg') }}" alt="img" style="height: 50px;" />
-                            </div>
+                            </div> -->
                             <div class="login-card">
                                 <div class="login-heading">
                                     <h3>Hi, Welcome Back!</h3>

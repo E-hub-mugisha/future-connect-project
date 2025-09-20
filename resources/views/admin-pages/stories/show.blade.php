@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', $story->title )
 @section('content')
 
 <div class="container">
@@ -113,13 +113,13 @@
                         <hr class="hr border-light">
                         <div class="row g-gs flex-lg-row-reverse pt-5">
                             <div class="col-lg-5">
-                                <div class="video"><img class="video-poster w-100"
-                                        src="{{ asset($story->thumbnail) }}" alt=""><a
-                                        class="video-play popup-video"
-                                        href="{{ $story->media }}"><em
-                                            class="icon ni ni-play"></em><span>Watch
-                                            Video</span></a>
-                                        </div>
+                                <div class="video">
+                                    <img class="video-poster w-100" src="{{ asset($story->thumbnail) }}" alt="">
+                                    <a class="video-play popup-video" href="{{ $story->media }}">
+                                        <em class="icon ni ni-play"></em>
+                                        <span>Watch Video</span>
+                                    </a>
+                                </div>
                             </div>
                             <div class="col-lg-7">
                                 <div class="product-details entry me-xxl-3">
@@ -128,6 +128,33 @@
                                         {{ $story->content }}
                                     </p>
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-gs mt-4">
+                            <div class="col-md-10">
+
+                                <div class="card card-bordered">
+                                    <h4 class="p-2">Story comments</h4>
+                                    <div class="card-inner py-3">
+                                        @forelse($story->comments as $comment)
+                                        <div class="d-sm-flex align-items-sm-center justify-content-sm-between">
+                                            <div class="pb-1 pb-sm-0">
+                                                <h5 class="title">{{ $comment->comment }}</h5>
+                                                <div class="d-flex">
+                                                    <p class="m-0 pe-2">by <a href="#" target="_blank">{{ $comment->name }}</a></p><span>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</span>
+                                                </div>
+                                            </div>
+                                            <ul class="rating">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <em class="icon ni ni-star-fill {{ $i <= $comment->rating ? 'filled' : '' }}"></em>
+                                                @endfor
+                                            </ul>
+                                        </div>
+                                        @empty
+                                        <li>No reviews yet.</li>
+                                        @endforelse
+                                    </div>
                                 </div>
                             </div>
                         </div>

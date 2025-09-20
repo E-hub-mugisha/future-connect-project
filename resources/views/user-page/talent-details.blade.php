@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', $talent->name)
 @section('content')
 
 <style>

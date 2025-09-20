@@ -136,7 +136,7 @@ if (!function_exists('isActiveRoute')) {
                 </a>
 
                 <a href="{{ route('user.home') }}">
-                    <img src="{{ asset('assets/img/logo.svg') }}" class="img-fluid" alt="Logo" style="height: 50px;" />
+                    <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo" style="height: 50px;" />
                 </a>
             </div>
 
@@ -316,7 +316,7 @@ if (!function_exists('isActiveRoute')) {
                     @csrf
                     <div class="login-userset">
                         <div class="login-logo text-center mb-3">
-                            <img src="{{ asset('assets/img/logo.svg') }}" alt="Logo" style="height: 50px;" />
+                            <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" style="height: 50px;" />
                         </div>
                         <div class="login-heading text-center mb-4">
                             <h3>Hi, Welcome Back!</h3>

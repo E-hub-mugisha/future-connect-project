@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Login Activity')
 @section('content')
 <div class="container">
     <div class="nk-content-inner">
@@ -25,7 +25,7 @@
                                 <td>{{ $activity->user->name ?? 'N/A' }}</td>
                                 <td>{{ $activity->ip_address }}</td>
                                 <td>{{ $activity->user_agent }}</td>
-                                <td>{{ $activity->logged_in_at->format('d M Y, H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($activity->logged_in_at)->format('d M Y, h:i A') }}</td>
                             </tr>
                             @empty
                             <tr>

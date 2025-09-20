@@ -1,226 +1,209 @@
 @extends('layouts.app')
-@section('title', 'User Profile')
+@section('title', $user->name. ' User Profile')
 @section('content')
 
-<!-- Page Content -->
-<div class="page-wrapper">
-    <div class="page-content content bg-light">
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
-                <div class="main-title mb-4">
-                    <h4>My Profile</h4>
-                </div>
-                <div class="card profile-card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center gap-3 justify-content-between flex-wrap">
-                            <div class="d-flex align-items-center flex-shrink-0">
-                                <span class="avatar avatar-lg"><img class="rounded-2" src="assets/img/user/user-04.jpg" alt="img"></span>
-                                <div class="ms-3">
-                                    <h6 class="mb-1 d-inline-flex flex-wrap align-items-center">{{ $user->name }}<span class="badge badge-success-transparent ms-3 rounded-pill">16 Gigs</span></h6>
-                                    <p class="mb-2">{{ $user->location }}</p>
-                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-star-filled me-2 text-warning"></i>Ratings 5.0 (45 Reviews)</p>
+<div class="container-fluid">
+    <div class="nk-content-inner">
+        <div class="nk-content-body">
+            <div class="nk-block">
+                <div class="card card-bordered">
+                    <div class="card-aside-wrap">
+
+                        {{-- MAIN CONTENT --}}
+                        <div class="card-inner card-inner-lg tab-content">
+
+                            {{-- Personal Information TAB --}}
+                            <div class="tab-pane fade show active" id="tab-personal">
+                                <div class="nk-block-head nk-block-head-lg">
+                                    <div class="nk-block-between">
+                                        <div class="nk-block-head-content">
+                                            <h4 class="nk-block-title">{{ $user->name }} Personal Information</h4>
+                                            <div class="nk-block-des">
+                                                <p>Basic info, like your name and address, that you use
+                                                    on {{ config('app.name')}} Platform.</p>
+                                            </div>
+                                        </div>
+                                        <div class="nk-block-head-content align-self-start d-lg-none">
+                                            <a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside">
+                                                <em class="icon ni ni-menu-alt-r"></em>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nk-block">
+                                    <div class="nk-data data-list">
+                                        <div class="data-head">
+                                            <h6 class="overline-title">Basics</h6>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-col"><span class="data-label">Full Name</span><span class="data-value">{{ $user->name }}</span></div>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-col"><span class="data-label">Display Name</span><span class="data-value">{{ $user->name }}</span></div>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-col"><span class="data-label">Email</span><span class="data-value">{{ $user->email }}</span></div>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-col"><span class="data-label">Phone</span><span class="data-value">{{ $user->phone }}</span></div>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-col"><span class="data-label">Date Registered</span><span class="data-value">{{ $user->created_at->format('d M Y') }}</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="gap-2 d-flex">
-                                <a role="button"
-                                    tabIndex="0" class="btn btn-md btn-dark" data-bs-toggle="modal"
-                                        data-bs-target="#editUserModal{{ $user->id }}"><i class="ti ti-user-edit me-1"></i>Edit Profile</a>
-                                <a role="button"
-                                    tabIndex="0" class="btn btn-md btn-primary"><i class="ti ti-phone me-1"></i>Contact Me</a>
+
+                            {{-- Notifications TAB --}}
+                            <div class="tab-pane fade" id="tab-notifications">
+                                <h4 class="nk-block-title">Notifications</h4>
+                                <p>Here you can manage your notification preferences.</p>
+                            </div>
+
+                            {{-- Account Activity TAB --}}
+                            <div class="tab-pane fade" id="tab-activity">
+                                <h4 class="nk-block-title">Account Activity</h4>
+                                <p>Recent login sessions and activities will appear here.</p>
+                            </div>
+
+                            {{-- Security Settings TAB --}}
+                            <div class="tab-pane fade" id="tab-security">
+                                <h4 class="nk-block-title">Security Settings</h4>
+                                <p>Change password, enable 2FA, and more.</p>
+                            </div>
+
+                            {{-- Social TAB --}}
+                            <div class="tab-pane fade" id="tab-social">
+                                <h4 class="nk-block-title">Connected with Social</h4>
+                                <p>Manage your connected social accounts here.</p>
                             </div>
 
                         </div>
-                    </div>
-                </div>
-                <div class="card profile-details profile-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Personal Details</h5>
-                    </div>
-                    <div class="card-body personal-card">
-                        <div class="row row-gap-3">
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Name</h6>
-                                <p class="mb-0">{{ $user->name }}</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Email</h6>
-                                <p class="mb-0"><a href="https://dreamgigs.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a3a6b1aea3b0aeabb4a8a987a2bfa6aab7aba2e9a4a8aa">{{ $user->email }}</a></p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Phone</h6>
-                                <p class="mb-0">{{ $user->phone }}</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Date</h6>
-                                <p class="mb-0">{{ $user->created_at->format('d M Y') }}</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Speaks</h6>
-                                <p class="mb-0">English, Kinyarwanda</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Member Since</h6>
-                                <p class="mb-0">{{ $user->created_at->format('d M Y') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card profile-details profile-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Address Details</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row row-gap-3">
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Country</h6>
-                                <p class="mb-0">United States</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">City</h6>
-                                <p class="mb-0">California</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">State</h6>
-                                <p class="mb-0">Los Angeles</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Address Line</h6>
-                                <p class="mb-0">1234 Sunset Blvd, Apt 56B</p>
-                            </div>
-                            <div class="col-md-4 col-sm-6">
-                                <h6 class="mb-1">Postal Code</h6>
-                                <p class="mb-0">90026</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card profile-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">About Me</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0">Hello, Greetings! My name is Adrian, a professional embroidery digitizer who converts an Image into embroidery files such as DST, PES or any other. I can produce an embroidery design file without any fabric puckering. I'm
-                            the guy who has more than 15 years of experience in the field of embroidery design digitizing. I love what I do because embroidery digitizing is my passion and profession. so, get in touch with me if you have any question.
-                            thank you!</p>
-                    </div>
-                </div>
-                <div class="card personal-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Skills</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center flex-wrap-wrap gap-2 ">
-                            <div class="badge bg-light fw-medium fs-13 text-dark">
-                                <i class="ti ti-point-filled me-1"></i> Logo Design
-                            </div>
-                            <div class="badge bg-light fw-medium fs-13 text-dark">
-                                <i class="ti ti-point-filled me-1"></i> Graphics Design
-                            </div>
-                            <div class="badge bg-light fw-medium fs-13 text-dark">
-                                <i class="ti ti-point-filled me-1"></i> Adobe Illustrator
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card personal-card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Social Links</h5>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="#" class="text-dark fs-14"><i class="ti ti-facebook"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-dark fs-14"><i class="ti ti-twitter"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-dark fs-14"><i class="ti ti-instagram"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-dark fs-14"><i class="ti ti-linkedin"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
 
+                        {{-- SIDEBAR --}}
+                        <div class="card-aside card-aside-left user-aside toggle-slide toggle-slide-left toggle-break-lg toggle-screen-lg"
+                            data-toggle-body="true" data-content="userAside" data-toggle-screen="lg" data-toggle-overlay="true">
+                            <div class="card-inner-group">
+                                <div class="card-inner">
+                                    <div class="user-card">
+                                        <div class="user-avatar bg-primary"><span>AB</span></div>
+                                        <div class="user-info">
+                                            <span class="lead-text">{{ $user->name }}</span>
+                                            <span class="sub-text">{{ $user->email }}</span>
+                                        </div>
+                                        <div class="user-action">
+                                            <div class="dropdown"><a class="btn btn-icon btn-trigger me-n2" data-bs-toggle="dropdown" href="#"><em class="icon ni ni-more-v"></em></a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <ul class="link-list-opt no-bdr">
+                                                        <li><a href="#"><em class="icon ni ni-camera-fill"></em><span>Change
+                                                                    Photo</span></a></li>
+                                                        <li><a data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}"><em class="icon ni ni-edit-fill"></em><span>Update
+                                                                    Profile</span></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-inner p-0">
+                                    <ul class="link-list-menu nav flex-column">
+                                        <li><a class="nav-link active" data-bs-toggle="tab" href="#tab-personal"><em class="icon ni ni-user-fill-c"></em><span>Personal Infomation</span></a></li>
+                                        <li><a class="nav-link" data-bs-toggle="tab" href="#tab-notifications"><em class="icon ni ni-bell-fill"></em><span>Notifications</span></a></li>
+                                        <li><a class="nav-link" data-bs-toggle="tab" href="#tab-activity"><em class="icon ni ni-activity-round-fill"></em><span>Account Activity</span></a></li>
+                                        <li><a class="nav-link" data-bs-toggle="tab" href="#tab-security"><em class="icon ni ni-lock-alt-fill"></em><span>Security Settings</span></a></li>
+                                        <li><a class="nav-link" data-bs-toggle="tab" href="#tab-social"><em class="icon ni ni-grid-add-fill-c"></em><span>Connected with Social</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form class="modal-content" method="POST"
-                                action="{{ route('admin.users.update', $user->id ) }}">
-                                @csrf
-                                @method('PUT')
-
-                                <div class="modal-header">
-                                    <h5 class="modal-title">
-                                        Edit User
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control"
-                                            value="{{ old('name', $user->name) }}" required>
-                                        @error('name')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control"
-                                            value="{{ old('email', $user->email) }}" required>
-                                        @error('email')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Password <small>(Leave blank to keep current
-                                                password)</small></label>
-                                        <input type="password" name="password" class="form-control">
-                                        @error('password')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Role</label>
-                                        <select name="role" class="form-select">
-                                            <option value="admin"
-                                                {{ $user->role === 'admin' ? 'selected' : '' }}>
-                                                Admin</option>
-                                            <option value="user"
-                                                {{ $user->role === 'user' ? 'selected' : '' }}>
-                                                User</option>
-                                        </select>
-                                        @error('role')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Status</label>
-                                        <select name="active" class="form-select">
-                                            <option value="1"
-                                                {{ $user->active ? 'selected' : '' }}>
-                                                Active</option>
-                                            <option value="0"
-                                                {{ !$user->active ? 'selected' : '' }}>
-                                                Inactive</option>
-                                        </select>
-                                        @error('active')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Update </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
 </div>
-<!-- /Page Content -->
+
+<!-- User Modal -->
+<div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" method="POST"
+            action="{{ route('admin.users.update', $user->id ) }}">
+            @csrf
+            @method('PUT')
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit User
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control"
+                        value="{{ old('name', $user->name) }}" required>
+                    @error('name')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control"
+                        value="{{ old('email', $user->email) }}" required>
+                    @error('email')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password <small>(Leave blank to keep current
+                            password)</small></label>
+                    <input type="password" name="password" class="form-control">
+                    @error('password')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Role</label>
+                    <select name="role" class="form-select">
+                        <option value="admin"
+                            {{ $user->role === 'admin' ? 'selected' : '' }}>
+                            Admin</option>
+                        <option value="user"
+                            {{ $user->role === 'user' ? 'selected' : '' }}>
+                            User</option>
+                    </select>
+                    @error('role')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select name="active" class="form-select">
+                        <option value="1"
+                            {{ $user->active ? 'selected' : '' }}>
+                            Active</option>
+                        <option value="0"
+                            {{ !$user->active ? 'selected' : '' }}>
+                            Inactive</option>
+                    </select>
+                    @error('active')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Update </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

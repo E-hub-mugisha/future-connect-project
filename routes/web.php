@@ -26,6 +26,7 @@ use App\Http\Controllers\users\PaymentController as UsersPaymentController;
 | Public Routes
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', [HomeController::class, 'index'])->name('user.home');
 Route::get('/about', [HomeController::class, 'about'])->name('user.about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('user.contact');
@@ -146,12 +147,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('announcements', AdminAnnouncementController::class);
 
     // Partners
-    Route::resource('partners', AdminPartnerController::class)->only(['index','store','update','destroy']);
+    Route::resource('partners', AdminPartnerController::class)->only(['index', 'store', 'update', 'destroy']);
 
     // Payments
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{id}', [AdminPaymentController::class, 'show'])->name('payments.show');
-
+    Route::get('/payments/invoice/{id}', [AdminPaymentController::class, 'invoiceShow'])->name('payments.invoice');
+    Route::delete('/payments/{id}', [AdminPaymentController::class, 'destroyPayment'])->name('payments.destroy');
+    Route::get('/invoice/{id}/print', [AdminPaymentController::class, 'print'])->name('invoice.print');
     // Settings
     Route::get('/settings', [AdminDashboardController::class, 'index'])->name('settings.index');
     Route::put('/settings', [AdminDashboardController::class, 'update'])->name('settings.update');
@@ -192,4 +195,4 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('/stories/{id}', [TalentStoryController::class, 'show'])->name('stories.show');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

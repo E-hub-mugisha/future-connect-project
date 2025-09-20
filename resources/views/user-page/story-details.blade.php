@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', $story->title )
 @section('content')
 
 <style>

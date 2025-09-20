@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', $skill->name)
 @section('content')
 <div class="container">
     <div class="nk-content-inner">

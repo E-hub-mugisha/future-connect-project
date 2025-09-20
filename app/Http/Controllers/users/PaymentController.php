@@ -41,7 +41,7 @@ class PaymentController extends Controller
             'video_id' => $request->video_id
         ])->with('info', 'No payment found. Please make a payment to access this video.');
     }
-    public function checkout($story_id, $video_id, Request $request )
+    public function checkout($story_id, $video_id, Request $request)
     {
         $email = $request->query('email'); // Get email from query string or default to empty
         $story = \App\Models\Story::findOrFail($story_id);
@@ -69,41 +69,40 @@ class PaymentController extends Controller
         return view('user-page.video', compact('video_id', 'story'));
     }
     public function handleCallback(Request $request)
-{
-    $tx_ref = $request->get('tx_ref'); // e.g., "5-12-1721123456789"
-    $status = $request->get('status');
-    $story_id = $request->get('story_id');
-    $video_id = $request->get('video_id');
-    $email = $request->get('email', 'kabosierik@gmail.com'); // default if not passed
+    {
+        $tx_ref = $request->get('tx_ref'); // e.g., "5-12-1721123456789"
+        $status = $request->get('status');
+        $story_id = $request->get('story_id');
+        $video_id = $request->get('video_id');
+        $email = $request->get('email', 'kabosierik@gmail.com'); // default if not passed
 
-    // Check if the transaction already exists
-    if (StoryPayment::where('tx_ref', $tx_ref)->exists()) {
-        return redirect()->route('video.play', [
+        // Check if the transaction already exists
+        if (StoryPayment::where('tx_ref', $tx_ref)->exists()) {
+            return redirect()->route('video.play', [
+                'video_id' => $video_id,
+                'story_id' => $story_id
+            ])->with('info', 'Payment already processed.');
+        }
+
+        // Save the payment
+        StoryPayment::create([
+            'tx_ref' => $tx_ref,
+            'flw_ref' => $request->get('flw_ref', ''),
+            'status' => $status,
+            'amount' => 5.00,  // hardcoded or pass dynamically
+            'currency' => 'USD',
+            'email' => $email,
             'video_id' => $video_id,
-            'story_id' => $story_id
-        ])->with('info', 'Payment already processed.');
+            'story_id' => $story_id,
+        ]);
+
+        if ($status === 'successful') {
+            return redirect()->route('video.play', [
+                'video_id' => $video_id,
+                'story_id' => $story_id
+            ])->with('success', 'Payment successful. Enjoy your video!');
+        }
+
+        return redirect()->route('user.home')->with('error', 'Payment failed or cancelled.');
     }
-
-    // Save the payment
-    StoryPayment::create([
-        'tx_ref' => $tx_ref,
-        'flw_ref' => $request->get('flw_ref', ''),
-        'status' => $status,
-        'amount' => 5.00,  // hardcoded or pass dynamically
-        'currency' => 'USD',
-        'email' => $email,
-        'video_id' => $video_id,
-        'story_id' => $story_id,
-    ]);
-
-    if ($status === 'successful') {
-        return redirect()->route('video.play', [
-            'video_id' => $video_id,
-            'story_id' => $story_id
-        ])->with('success', 'Payment successful. Enjoy your video!');
-    }
-
-    return redirect()->route('user.home')->with('error', 'Payment failed or cancelled.');
-}
-
 }

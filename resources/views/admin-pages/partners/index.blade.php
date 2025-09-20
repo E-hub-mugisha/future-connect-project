@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Partners')
 @section('content')
 <div class="container-fluid">
     <div class="nk-content-inner">

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Stories Payments')
 @section('content')
 
 <div class="container-fluid">
@@ -30,9 +31,7 @@
                             <td>#{{ $payment->tx_ref }}</td>
                             <td>{{ $payment->email }}</td>
                             <td>
-                                <h2 class="table-avatar d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="text-dark">{{ $payment->story->title }}</a>
-                                </h2>
+                                {{ $payment->story->title }}
                             </td>
                             <td>
                                 {{ \Carbon\Carbon::parse($payment->created_at)->format('d M Y') }}
@@ -40,9 +39,24 @@
                             <td><span class="badge bg-light text-success border-success-100 users-badge debit-badge"><i class="fa-solid fa-arrow-up me-1"></i> {{ $payment->status }}</span></td>
                             <td class="text-start dt-type-numeric">${{ $payment->amount }}</td>
                             <td>
-                                <div class="table-action">
-                                    <a href="javascript:void(0);" class="border-rounded view-eye" data-bs-toggle="modal" data-bs-target="#transaction_details{{ $payment->id }}"><i class="feather-eye"></i></a>
-                                </div>
+                                <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $payment->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $payment->id }}">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.stories.show', $payment->story->id) }}">View Story</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#printModal{{ $payment->id }}">Print invoice</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $payment->id }}">Delete</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transaction_details{{ $payment->id }}">Quick view</a>
+                                    </li>
+                                </ul>
+
                             </td>
                         </tr>
                         @endforeach
@@ -50,6 +64,54 @@
                 </table>
 
                 <!-- /Tables -->
+
+                @foreach($payments as $payment)
+
+                <div class="modal fade" id="deleteModal{{ $payment->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $payment->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="deleteModalLabel{{ $payment->id }}">Delete Payment</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to <strong>permanently delete</strong> this payment record?
+                                <br><small class="text-muted">Payment ID: {{ $payment->id }}</small>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                <form action="{{ route('admin.payments.destroy', $payment->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+                @foreach($payments as $payment)
+                <div class="modal fade" id="printModal{{ $payment->id }}" tabindex="-1" aria-labelledby="printModalLabel{{ $payment->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="printModalLabel{{ $payment->id }}">Print Invoice</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Generate Invoice for <strong>{{ $payment->story->title }}</strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="{{ route('admin.payments.invoice', $payment->id) }}" target="_blank" class="btn btn-primary">
+                                    <em class="icon ni ni-printer"></em> View Invoice
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
 
                 <!-- Transaction details  -->
                 @foreach($payments as $payment)

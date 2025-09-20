@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', 'Welcome to')
 @section('content')
 
 
@@ -1078,7 +1079,7 @@
                             <div class="img-slider owl-carousel">
                                 <div class="slide-images">
                                     <a href="{{ url('/story-details/' . $story->slug) }}">
-                                        <img src="{{ asset('assets/img/home/service-01.jpg') }}" class="img-fluid" alt="Gigs">
+                                        <img src="{{ asset($story->thumbnail) }}" class="img-fluid w-100" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="Gigs">
                                     </a>
                                 </div>
 
