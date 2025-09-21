@@ -953,10 +953,7 @@
 
                             <!-- Image -->
                             <a href="{{ route('user.talent.details', $talent->id) }}">
-                                <img
-                                    class="img rounded-3"
-                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" />
+                                <img class="img rounded-3" src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" alt="img" />
                             </a>
 
                             <!-- Name -->
