@@ -558,15 +558,14 @@
                 @foreach ($featuredTalents as $talent)
                 <!-- Slide -->
                 <div class="swiper-slide tranding-slide">
-                    <div class="slide-wrapper row">
+                    <div class="slide-wrapper row align-items-center">
 
                         <!-- Caption on the left -->
-                        <div class="tranding-slide-caption col-md-6" data-aos="fade-up" data-aos-duration="1000">
-
+                        <div class="tranding-slide-caption col-md-6">
                             <p>{{ $talent->name }} - Passionate {{ $talent->skill ?? 'creative' }} and performer blending
                                 {{ $talent->category->name ?? 'various disciplines' }}
                             </p>
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="tranding-line-btn" data-aos="fade-up" data-aos-duration="1000">
+                            <a href="{{ route('user.talent.details', $talent->id) }}" class="tranding-line-btn">
                                 <i class="feather-arrow-right"></i>Read More
                                 <span class="slide-line"></span>
                                 <span class="slide-line"></span>
@@ -575,7 +574,7 @@
                         </div>
 
                         <!-- Image on the right -->
-                        <div class="tranding-slide-img col-md-6" data-aos="zoom-in" data-aos-duration="1000">
+                        <div class="tranding-slide-img col-md-6">
                             <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
                                 alt="{{ $talent['name'] }}">
                         </div>
@@ -596,6 +595,7 @@
         </div>
     </section>
 </div>
+
 
 
 <div class="container" style="margin-top: 4.5rem;">

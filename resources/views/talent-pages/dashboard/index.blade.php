@@ -1,518 +1,551 @@
 @extends('layouts.app')
+@section('title', 'Dashboard')
 @section('content')
 
-<!-- Page Content -->
-<div class="page-wrapper">
-    <div class="page-content content pb-0 bg-light">
-        <div class="main-title mb-4">
-            <h4>{{ Auth::user()->role }}'s Dashboard</h4>
-        </div>
-
-        <!-- status -->
-        <div class="row status-info">
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-start">
-                            <div
-                                class="avatar avatar-md bg-muted rounded-circle me-2 d-flex align-item-center justify-content-center text-center avatar-info">
-                                <i
-                                    class="ti ti-new-section text-white d-flex align-items-center justify-content-center"></i>
-                            </div>
-                            <div>
-                                <p class="mb-1"> Total Testimonials</p>
-                                <h6 class="mb-0">{{ $totalTestimonials }}</h6>
-                            </div>
+<div class="container-fluid">
+    <div class="nk-content-inner">
+        <div class="nk-content-body">
+            <div class="nk-block-head nk-block-head-sm">
+                <div class="nk-block-between">
+                    <div class="nk-block-head-content">
+                        <h3 class="nk-block-title page-title">{{ config('app.name')}} Overview</h3>
+                        <div class="nk-block-des text-soft">
+                            <p>Welcome to {{ config('app.name')}} Dashboard.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-start">
-                            <div
-                                class="avatar avatar-md bg-warning rounded-circle me-2 d-flex align-item-center justify-content-center text-center avatar-info">
-                                <i class="ti ti-checks text-white d-flex align-items-center justify-content-center"></i>
-                            </div>
-                            <div>
-                                <p class="mb-1">Total Stories</p>
-                                <h6 class="mb-0">{{ $totalStories }}</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-start">
-                            <div
-                                class="avatar avatar-md bg-info rounded-circle me-2 d-flex align-item-center justify-content-center text-center avatar-info">
-                                <i class="ti ti-heart text-white d-flex align-items-center justify-content-center"></i>
-                            </div>
-                            <div>
-                                <p class="mb-1">Talents</p>
-                                <h6 class="mb-0">{{ $totalTalents }}</h6>
+                    <div class="nk-block-head-content">
+                        <div class="toggle-wrap nk-block-tools-toggle"><a href="#"
+                                class="btn btn-icon btn-trigger toggle-expand me-n1"
+                                data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
+                            <div class="toggle-expand-content" data-content="pageMenu">
+                                <ul class="nk-block-tools g-3">
+                                    <li>
+                                        <div class="dropdown"><a href="#"
+                                                class="dropdown-toggle btn btn-white btn-dim btn-outline-light"
+                                                data-bs-toggle="dropdown"><em
+                                                    class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span
+                                                        class="d-none d-md-inline">Last</span> 30
+                                                    Days</span><em
+                                                    class="dd-indc icon ni ni-chevron-right"></em></a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <ul class="link-list-opt no-bdr">
+                                                    <li><a href="#"><span>Last 30 Days</span></a>
+                                                    </li>
+                                                    <li><a href="#"><span>Last 6 Months</span></a>
+                                                    </li>
+                                                    <li><a href="#"><span>Last 1 Years</span></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="nk-block-tools-opt"><a href="#"
+                                            class="btn btn-primary"><em
+                                                class="icon ni ni-reports"></em><span>Reports</span></a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-start">
-                            <div
-                                class="avatar avatar-md bg-pink rounded-circle me-2 d-flex align-item-center justify-content-center text-center avatar-info">
-                                <i class="ti ti-star text-white d-flex align-items-center justify-content-center"></i>
+            <div class="nk-block">
+                <div class="row g-gs">
+                    <div class="col-xxl-6">
+                        <div class="row g-gs">
+                            <div class="col-lg-6 col-xxl-12">
+                                <div class="card card-bordered">
+                                    <div class="card-inner">
+                                        <div class="card-title-group align-start mb-2">
+                                            <div class="card-title">
+                                                <h6 class="title">Sales Revenue</h6>
+                                                <p>In last 30 days revenue from subscription.</p>
+                                            </div>
+                                            <div class="card-tools"><em
+                                                    class="card-hint icon ni ni-help-fill"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="left"
+                                                    title="Revenue from subscription"></em></div>
+                                        </div>
+                                        <div
+                                            class="align-end gy-3 gx-5 flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
+                                            <div class="nk-sale-data-group flex-md-nowrap g-4">
+                                                <div class="nk-sale-data"><span
+                                                        class="amount">14,299.59 <span
+                                                            class="change down text-danger"><em
+                                                                class="icon ni ni-arrow-long-down"></em>16.93%</span></span><span
+                                                        class="sub-title">This Month</span></div>
+                                                <div class="nk-sale-data"><span
+                                                        class="amount">7,299.59 <span
+                                                            class="change up text-success"><em
+                                                                class="icon ni ni-arrow-long-up"></em>4.26%</span></span><span
+                                                        class="sub-title">This Week</span></div>
+                                            </div>
+                                            <div class="nk-sales-ck sales-revenue"><canvas
+                                                    class="sales-bar-chart"
+                                                    id="salesRevenue"></canvas></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p class="mb-1">Total Users</p>
-                                <h6 class="mb-0">{{ $totalUsers }}</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- status -->
-
-        <!-- Overview -->
-        <div class="row">
-            <div class="col-xl-3 col-md-6 d-flex">
-                <div class="dash-widget flex-fill w-100">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="dash-icon bg-success flex-shrink-0">
-                            <i class="ti ti-credit-card"></i>
-                        </span>
-                        <div>
-                            <p class="mb-1">Total Credit</p>
-                            <h5 class="mb-0">$10,292.50</h5>
-                        </div>
-                    </div>
-                    <div class="bg-light p-3 rounded-2">
-                        <p class="text-dark"><span class="text-secondary">+10%</span> from last week</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 d-flex">
-                <div class="dash-widget flex-fill w-100">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="dash-icon bg-danger flex-shrink-0">
-                            <i class="ti ti-report-money"></i>
-                        </span>
-                        <div>
-                            <p class="mb-1">Total Debit</p>
-                            <h5 class="mb-0">$4,254.47</h5>
-                        </div>
-                    </div>
-                    <div class="bg-light p-3 rounded-2">
-                        <p class="text-dark"><span class="text-error">-1%</span> from last week</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-6 col-md-12 d-flex">
-                <div class="dash-earning flex-fill w-100">
-                    <div class="d-flex align-items-center gap-4">
-                        <div class="earning-info">
-                            <p class="mb-1">Earnings</p>
-                            <h5>$1,57,815</h5>
-                        </div>
-                        <div class="earning-info">
-                            <p class="mb-1">Wallet Balance</p>
-                            <h5>$5690</h5>
-                        </div>
-                    </div>
-                    <div class="earning-btn text-end">
-                        <a href="seller-wallet.html" class="btn btn-primary btn-md"><i
-                                class="ti ti-shopping-cart me-1"></i>Wallet</a>
-                    </div>
-                    <a role="button" tabIndex="0" class="withdraw-link" data-bs-toggle="modal"
-                        data-bs-target="#withdraw">Withdraw Funds</a>
-                </div>
-            </div>
-        </div>
-        <!-- /Overview -->
-
-        <!-- status -->
-        <div class="row status-info">
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-1"> Orders Active</p>
-                                <h6 class="mb-0">454</h6>
-                            </div>
-                            <span class="bg-success-transparent status-icon"><i
-                                    class="ti ti-news text-success"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-1">Order Pending</p>
-                                <h6 class="mb-1">47</h6>
-                            </div>
-                            <span class="bg-warning-transparent status-icon"><i
-                                    class="ti ti-shopping-cart-bolt text-warning"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-1">Orders Completed</p>
-                                <h6 class="mb-1">25</h6>
-                            </div>
-                            <span class="bg-info-transparent status-icon"><i class="ti ti-hexagon text-info"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <p class="mb-1">Orders Cancelled</p>
-                                <h6 class="mb-1">632</h6>
-                            </div>
-                            <span class="bg-error-transparent status-icon"><i
-                                    class="ti ti-status-change text-error"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- status -->
-
-        <!-- order -->
-        <div class="row">
-            <div class="col-xl-8 col-md-6 d-flex">
-                <div class="card dashboard-card flex-fill w-100">
-                    <div class="card-header">
-                        <div class="gig-card-head">
-                            <h5 class="mb-0">Recent Talents</h5>
-                        </div>
-                        <a href="{{ route('admin.talents') }}" class="view-link mb-0">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive card-table">
-                            <table class="table">
-                                <tbody>
-                                    @foreach ($talents as $talent)
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="table-img">
-                                                    <a role="button" tabIndex="0"><img src="assets/img/gigs/gigs-07.jpg"
-                                                            class="img-fluid rounded-pill" alt="img"></a>
+                            <div class="col-lg-6 col-xxl-12">
+                                <div class="row g-gs">
+                                    <div class="col-sm-6 col-lg-12 col-xxl-6">
+                                        <div class="card card-bordered">
+                                            <div class="card-inner">
+                                                <div class="card-title-group align-start mb-2">
+                                                    <div class="card-title">
+                                                        <h6 class="title">Total Testimonials</h6>
+                                                    </div>
+                                                    <div class="card-tools"><em
+                                                            class="card-hint icon ni ni-help-fill"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="left"
+                                                            title="Total active subscription"></em>
+                                                    </div>
                                                 </div>
-                                                <div class="recent-payment">
-                                                    <h6><a role="button" tabIndex="0">{{ $talent->name }}</a></h6>
-                                                    <ul>
-                                                        <li>Registered Date: {{ $talent->created_at->format('d M Y') }}</li>
-                                                        <li>Category : <span class="text-dark">{{ $talent->category->name ?? 'N/A' }}</span></li>
+                                                <div
+                                                    class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                    <div class="nk-sale-data"><span
+                                                            class="amount">{{ $totalTestimonials }}</span></div>
+                                                    <div class="nk-sales-ck"><canvas
+                                                            class="sales-bar-chart"
+                                                            id="activeSubscription"></canvas></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-12 col-xxl-6">
+                                        <div class="card card-bordered">
+                                            <div class="card-inner">
+                                                <div class="card-title-group align-start mb-2">
+                                                    <div class="card-title">
+                                                        <h6 class="title">Total Users</h6>
+                                                    </div>
+                                                    <div class="card-tools"><em
+                                                            class="card-hint icon ni ni-help-fill"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="left"
+                                                            title="Daily Avg. subscription"></em>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                                                    <div class="nk-sale-data"><span
+                                                            class="amount">{{ $totalUsers }}</span></div>
+                                                    <div class="nk-sales-ck"><canvas
+                                                            class="sales-bar-chart"
+                                                            id="totalSubscription"></canvas></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-6">
+                        <div class="card card-bordered h-100">
+                            <div class="card-inner">
+                                <div class="card-title-group align-start gx-3 mb-3">
+                                    <div class="card-title">
+                                        <h6 class="title">Sales Overview</h6>
+                                        <p>In 30 days sales of product subscription. <a href="#">See
+                                                Details</a></p>
+                                    </div>
+                                    <div class="card-tools">
+                                        <div class="dropdown"><a href="#"
+                                                class="btn btn-primary btn-dim d-none d-sm-inline-flex"
+                                                data-bs-toggle="dropdown"><em
+                                                    class="icon ni ni-download-cloud"></em><span><span
+                                                        class="d-none d-md-inline">Download</span>
+                                                    Report</span></a><a href="#"
+                                                class="btn btn-icon btn-primary btn-dim d-sm-none"
+                                                data-bs-toggle="dropdown"><em
+                                                    class="icon ni ni-download-cloud"></em></a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <ul class="link-list-opt no-bdr">
+                                                    <li><a href="#"><span>Download Mini
+                                                                Version</span></a></li>
+                                                    <li><a href="#"><span>Download Full
+                                                                Version</span></a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="#"><em
+                                                                class="icon ni ni-opt-alt"></em><span>More
+                                                                Options</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="nk-sale-data-group align-center justify-between gy-3 gx-5">
+                                    <div class="nk-sale-data"><span class="amount">$82,944.60</span>
+                                    </div>
+                                    <div class="nk-sale-data"><span class="amount sm">1,937
+                                            <small>Subscribers</small></span></div>
+                                </div>
+                                <div class="nk-sales-ck large pt-4"><canvas
+                                        class="sales-overview-chart" id="salesOverview"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-8">
+                        <div class="card card-bordered card-full">
+                            <div class="card-inner">
+                                <div class="card-title-group">
+                                    <div class="card-title">
+                                        <h6 class="title"><span class="me-2">Talents</span> <a
+                                                href="{{ route('admin.talents')}}" class="link d-none d-sm-inline">See
+                                                All</a></h6>
+                                    </div>
+                                    <div class="card-tools">
+                                        <ul class="card-tools-nav">
+                                            <li><a href="#"><span>Pending</span></a></li>
+                                            <li><a href="#"><span>Approved</span></a></li>
+                                            <li class="active"><a href="#"><span>All</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-inner p-0 border-top">
+                                <div class="nk-tb-list nk-tb-orders">
+                                    <div class="nk-tb-item nk-tb-head">
+                                        <div class="nk-tb-col"><span>No.</span></div>
+                                        <div class="nk-tb-col tb-col-sm"><span>Name</span></div>
+                                        <div class="nk-tb-col tb-col-md"><span>Date</span></div>
+                                        <div class="nk-tb-col tb-col-lg"><span>Phone</span></div>
+                                        <div class="nk-tb-col"><span>Category</span></div>
+                                        <div class="nk-tb-col"><span
+                                                class="d-none d-sm-inline">Status</span></div>
+                                        <div class="nk-tb-col"><span>&nbsp;</span></div>
+                                    </div>
+                                    @foreach ($talents as $talent)
+                                    <div class="nk-tb-item">
+                                        <div class="nk-tb-col"><span class="tb-lead"><a
+                                                    href="#">{{ $talent->id }}</a></span></div>
+                                        <div class="nk-tb-col tb-col-sm">
+                                            <div class="user-card">
+                                                <div class="user-avatar user-avatar-sm bg-purple">
+                                                    <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                                        class="img-fluid rounded-pill" alt="img">
+                                                </div>
+                                                <div class="user-name"><span class="tb-lead">{{ $talent->name }}</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="nk-tb-col tb-col-md"><span
+                                                class="tb-sub">{{ $talent->created_at->format('d M Y') }}</span></div>
+                                        <div class="nk-tb-col tb-col-lg"><span
+                                                class="tb-sub text-primary">{{ $talent->phone }}</span></div>
+                                        <div class="nk-tb-col"><span
+                                                class="tb-sub tb-amount">{{ $talent->category->name ?? 'Uncategorized' }}</span></div>
+                                        <div class="nk-tb-col"><span
+                                                class="badge badge-dot badge-dot-xs bg-success">{{ $talent->status }}</span>
+                                        </div>
+                                        <div class="nk-tb-col nk-tb-col-action">
+                                            <div class="dropdown"><a
+                                                    class="text-soft dropdown-toggle btn btn-icon btn-trigger"
+                                                    data-bs-toggle="dropdown"><em
+                                                        class="icon ni ni-more-h"></em></a>
+                                                <div
+                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
+                                                    <ul class="link-list-plain">
+                                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#quickViewModal{{ $talent->id }}">Quick View</a></li>
+                                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#statusModal{{ $talent->id }}">Status Update</a></li>
+                                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $talent->id }}">Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-pink-transparent">{{ $talent->status }}</span>
-                                        </td>
-                                        <td class="text-end amount-info">
-                                            <h6 class="mb-0">{{ $talent->phone }}</h6>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6 d-flex">
-                <div class="card files-card flex-fill w-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div class="gig-card-head">
-                            <h5 class="mb-0">Users</h5>
-                        </div>
-                        <a href="{{ route('admin.users.index') }}" class="view-link mb-0">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive card-table">
-                            <table class="table">
-                                <tbody>
-                                    @foreach ($users as $user)
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="files-icon flex-shrink-0"><i class="ti ti-pdf"></i></span>
-                                                <div>
-                                                    <h6 class="mb-1">{{ $user->name }}</h6>
-                                                    <p>Update on: {{ $user->updated_at->format('d M Y') }}</p>
-                                                </div>
-                                                <div class="card-edit-icon d-flex gap-2">
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-info-circle "></i> </a>
-                                                    <a role="button" tabIndex="0"
-                                                        class="d-flex align-items-center justify-content-center"><i
-                                                            class="ti ti-eye"></i> </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- order -->
-
-        <div class="row">
-            <!-- Sales Statistics -->
-            <div class="col-lg-12">
-                <div class="card dashboard-card">
-                    <div class="card-header">
-                        <div class="gig-card-head">
-                            <h5 class="card-title mb-0">Sales Statistics</h5>
-                        </div>
-                        <div class="d-flex align-item-center gap-3">
-                            <ul class="revenue-tab nav nav-tabs m-0 border-0" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a role="button" tabIndex="0" class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#gigs_Information" aria-selected="false" role="tab"
-                                        tabindex="-1">
-                                        Gigs
-                                    </a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a role="button" tabIndex="0" class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#pay_Information" aria-selected="false" role="tab"
-                                        tabindex="-1">
-                                        Payments
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="input-icon-start mb-0 position-relative year">
-                                <span class="input-icon-addon"><i class="ti ti-calendar-up"></i></span>
-                                <input type="text" class="form-control yearpicker" placeholder="2025">
-                                <i class="ti ti-chevron-down"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="gigs_Information" role="tabpanel">
-                            <div class="card-body pb-0">
-                                <div id="sales-income"></div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="pay_Information" role="tabpanel">
-                            <div class="card-body pb-0">
-                                <div class="d-flex align-items-center justify-content-between gap-4 flex-wrap mb-4">
-                                    <div class="d-flex align-items-center gap-4">
-                                        <div>
-                                            <p class="mb-1">Revenue</p>
-                                            <h5 class="mb-0">$9,564.30</h5>
-                                        </div>
-                                        <div>
-                                            <p class="mb-1">Withdrawn</p>
-                                            <h5 class="mb-0">$3,855.64</h5>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        <p class="revenue me-2 mb-0"><i class="ti ti-point-filled"></i>Revenue</p>
-                                        <p class="mb-0"><i class="ti ti-point-filled"></i>Withdrawn</p>
+                                    @endforeach
+
+                                    @foreach($talents as $talent)
+                                    <!-- Status Modal -->
+                                    <div class="modal fade" id="statusModal{{ $talent->id }}" tabindex="-1"
+                                        aria-labelledby="statusModalLabel{{ $talent->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <form method="POST"
+                                                action="{{ route('admin.talents.updateStatus', $talent->id ) }}">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="statusModalLabel{{ $talent->id }}">Update Status
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <select name="status" class="form-select" required>
+                                                            <option value="pending"
+                                                                {{ (isset($talent) && $talent->status == 'pending') ? 'selected' : '' }}>
+                                                                Pending</option>
+                                                            <option value="approved"
+                                                                {{ (isset($talent) && $talent->status == 'approved') ? 'selected' : '' }}>
+                                                                Approved</option>
+                                                            <option value="rejected"
+                                                                {{ (isset($talent) && $talent->status == 'rejected') ? 'selected' : '' }}>
+                                                                Rejected</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    @endforeach
+
+                                    @foreach($talents as $talent)
+                                    <!-- Quick View Modal -->
+                                    <div class="modal fade" id="quickViewModal{{ $talent->id }}" tabindex="-1"
+                                        aria-labelledby="quickViewLabel{{ $talent->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="quickViewLabel{{ $talent->id }}">Talent Quick View
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <img src="{{ asset('image/talents/' . $talent->image) }}"
+                                                                alt="Talent Image" class="img-fluid rounded">
+
+
+                                                        </div>
+
+                                                        <div class="col-md-8">
+                                                            <h4>{{ $talent->name }}</h4>
+                                                            <p><strong>Address:</strong> {{ $talent->address }}</p>
+                                                            <p><strong>Phone:</strong> {{ $talent->phone }}</p>
+                                                            <p><strong>Email:</strong> {{ $talent->email }}</p>
+                                                            <p><strong>Category:</strong>
+                                                                {{ $talent->category->name ?? 'N/A' }}
+                                                            </p>
+                                                            <p><strong>Language:</strong> {{ $talent->language }}</p>
+                                                            <p><strong>Description:</strong> {{ $talent->description }}</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+
+                                    @foreach($talents as $talent)
+                                    <!-- Delete Modal -->
+                                    <div class="modal fade" id="deleteModal{{ $talent->id }}" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel{{ $talent->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <form action="{{ route('admin.talents.destroy', $talent->id) }}"
+                                                method="POST" class="modal-content">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel{{ $talent->id }}">
+                                                        Confirm Delete
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this talent? This action cannot be undone.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="card-inner-sm border-top text-center d-sm-none"><a href="#"
+                                    class="btn btn-link btn-block">See History</a></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xxl-4">
+                        <div class="card card-bordered card-full">
+                            <div class="card-inner border-bottom">
+                                <div class="card-title-group">
+                                    <div class="card-title">
+                                        <h6 class="title">Recent Announcements</h6>
+                                    </div>
+                                    <div class="card-tools">
+                                        <ul class="card-tools-nav">
+                                            <li><a href="#"><span>Published</span></a></li>
+                                            <li class="active"><a href="#"><span>All</span></a></li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div id="s-col" class="chart-set"></div>
+                            </div>
+                            <ul class="nk-activity">
+                                @foreach($announcements as $announcement)
+                                <li class="nk-activity-item">
+                                    <div class="nk-activity-media user-avatar bg-success"><img
+                                            src="images/avatar/c-sm.jpg" alt=""></div>
+                                    <div class="nk-activity-data">
+                                        <div class="label">{{ Str::limit($announcement->title, 50) }}
+                                        </div><span class="time">{{ $announcement->created_at->format('Y-m-d') }}</span>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xxl-4">
+                        <div class="card card-bordered card-full">
+                            <div class="card-inner-group">
+                                <div class="card-inner">
+                                    <div class="card-title-group">
+                                        <div class="card-title">
+                                            <h6 class="title">New Users</h6>
+                                        </div>
+                                        <div class="card-tools"><a href="{{ route('admin.users.index') }}"
+                                                class="link">View All</a></div>
+                                    </div>
+                                </div>
+                                @foreach ($users as $user)
+                                <div class="card-inner card-inner-md">
+                                    <div class="user-card">
+                                        <div class="user-avatar bg-primary-dim"><span>AB</span>
+                                        </div>
+                                        <div class="user-info"><span class="lead-text">{{ $user->name }}</span><span
+                                                class="sub-text">{{ $user->email }}</span></div>
+                                        <div class="user-action">
+                                            <div class="drodown"><a href="#"
+                                                    class="dropdown-toggle btn btn-icon btn-trigger me-n1"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"><em
+                                                        class="icon ni ni-more-h"></em></a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <ul class="link-list-opt no-bdr">
+                                                        <li><a href="#"><em
+                                                                    class="icon ni ni-setting"></em><span>Action
+                                                                    Settings</span></a></li>
+                                                        <li>
+                                                            <a href="#"><em class="icon ni ni-notify"></em><span>Push
+                                                                    Notification</span></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- /Sales Statistics -->
-
-        </div>
-
-        <div class="row">
-            <div class="col-xl-8 col-md-6 d-flex">
-                <div class="card recent-payment-card flex-fill w-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div class="gig-card-head">
-                            <h5 class="mb-0">Recent Payments</h5>
-                        </div>
-                        <a href="seller-transactions.html" class="view-link mb-0">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive card-table">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will create a chatbot to change
-                                                        leads..</a></h6>
-                                                <p>Id : #232 <span>|</span> Order Date: 11 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent text-success"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$500</h6>
+                    <div class="col-lg-6 col-xxl-4">
+                        <div class="card card-bordered h-100">
+                            <div class="card-inner border-bottom">
+                                <div class="card-title-group">
+                                    <div class="card-title">
+                                        <h6 class="title">Recent Story Payments</h6>
+                                    </div>
+                                    <div class="card-tools"><a href="{{ route('admin.payments.index') }}" class="link">All Payments</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="nk-support">
+                                @foreach($payments as $payment)
+                                <li class="nk-support-item">
+                                    <div class="user-avatar"><img src="images/avatar/a-sm.jpg"
+                                            alt=""></div>
+                                    <div class="nk-support-content">
+                                        <div class="title"><span>Vincent Lopez</span><span
+                                                class="badge badge-dot badge-dot-xs bg-warning ms-1">{{ $payment->status }}</span>
                                             <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will do english or german transcript
-                                                        of any..</a></h6>
-                                                <p>Id : #231 <span>|</span> Order Date: 10 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$500</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md "
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will do professional lifestyle and
-                                                        product ph..</a></h6>
-                                                <p>Id : #230 <span>|</span> Order Date: 09 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$7800</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will develop openai, dall, chat gpt
-                                                        app for...</a></h6>
-                                                <p>Id : #229 <span>|</span> Order Date: 08 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$7400</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">I will develop Website for
-                                                        Ecommerce</a></h6>
-                                                <p>Id : #414 <span>|</span> Order Date: 07 Jan 2025</p>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <span class="badge badge-success-transparent"><i
-                                                    class="ti ti-point-filled me-1"></i>Paid</span>
-                                        </td>
-                                        <td class="text-end amount-info w-25">
-                                            <h6 class="mb-0">+$1452</h6>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details">View</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                                data-bs-toggle="modal" data-bs-target="#transaction_details{{ $payment->id }}">View</a>
+                                        </div>
+                                        <p>{{ $payment->story->title }}</p><span
+                                            class="time">{{ \Carbon\Carbon::parse($payment->created_at)->format('d M Y') }}</span>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-6 d-flex">
-                <div class="card recent-payment-card flex-fill w-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div class="gig-card-head">
-                            <h5 class="mb-0">Recent Notifications</h5>
-                        </div>
-                        <a href="seller-notifications.html" class="view-link mb-0">View All</a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive card-table">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">Your Password Changed</a></h6>
-                                                <p>54 Min Ago</p>
+                    <div class="col-lg-6 col-xxl-4">
+                        <div class="card card-bordered h-100">
+                            <div class="card-inner border-bottom">
+                                <div class="card-title-group">
+                                    <div class="card-title">
+                                        <h6 class="title">Notifications</h6>
+                                    </div>
+                                    <div class="card-tools"><a href="#" class="link">View All</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-inner">
+                                <div class="timeline">
+                                    <h6 class="timeline-head">November, 2019</h6>
+                                    <ul class="timeline-list">
+                                        <li class="timeline-item">
+                                            <div class="timeline-status bg-primary is-outline">
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">Payment Settings Updated</a></h6>
-                                                <p>1 Hour Ago</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">Purchased Gigs “I will do
-                                                        professional..”</a></h6>
-                                                <p>1 Day Ago</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">Added New Gig “I will do english”.</a>
+                                            <div class="timeline-date">13 Nov <em
+                                                    class="icon ni ni-alarm-alt"></em></div>
+                                            <div class="timeline-data">
+                                                <h6 class="timeline-title">Submited KYC Application
                                                 </h6>
-                                                <p>15 Min Ago</p>
+                                                <div class="timeline-des">
+                                                    <p>Re-submitted KYC Application form.</p><span
+                                                        class="time">09:30am</span>
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="recent-payment">
-                                                <h6><a role="button" tabIndex="0">Profile Updated</a></h6>
-                                                <p>1 Day Ago</p>
+                                        </li>
+                                        <li class="timeline-item">
+                                            <div class="timeline-status bg-primary"></div>
+                                            <div class="timeline-date">13 Nov <em
+                                                    class="icon ni ni-alarm-alt"></em></div>
+                                            <div class="timeline-data">
+                                                <h6 class="timeline-title">Submited KYC Application
+                                                </h6>
+                                                <div class="timeline-des">
+                                                    <p>Re-submitted KYC Application form.</p><span
+                                                        class="time">09:30am</span>
+                                                </div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </li>
+                                        <li class="timeline-item">
+                                            <div class="timeline-status bg-pink"></div>
+                                            <div class="timeline-date">13 Nov <em
+                                                    class="icon ni ni-alarm-alt"></em></div>
+                                            <div class="timeline-data">
+                                                <h6 class="timeline-title">Submited KYC Application
+                                                </h6>
+                                                <div class="timeline-des">
+                                                    <p>Re-submitted KYC Application form.</p><span
+                                                        class="time">09:30am</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -520,7 +553,7 @@
         </div>
     </div>
 </div>
-<!-- /Page Content -->
+
 
 <!-- Withdraw -->
 <div class="modal new-modal fade" id="withdraw" data-keyboard="false" data-backdrop="static">
@@ -584,19 +617,20 @@
 <!-- /Withdraw -->
 
 <!-- Transaction details  -->
-<div class="modal new-modal fade" id="transaction_details" data-keyboard="false" data-backdrop="static">
+@foreach($payments as $payment)
+<div class="modal new-modal fade" id="transaction_details{{ $payment->id }}" data-keyboard="false" data-backdrop="static" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Transaction details </h5><button type="button" class="close-btn"
-                    data-bs-dismiss="modal"><span>×</span></button>
+                <h5 class="modal-title">Transaction details </h5>
+                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
             </div>
             <div class="modal-body service-modal">
                 <h6 class="model-head-text"> Transaction Summary </h6>
                 <div class="sumary-widget">
                     <div class="summary-info">
                         <h6> Transaction ID</h6>
-                        <p> #TXN-20250321-00123462 </p>
+                        <p> #{{ $payment->tx_ref }} </p>
                     </div>
                     <div class="summary-info">
                         <h6> Transaction type </h6>
@@ -604,11 +638,11 @@
                     </div>
                     <div class="summary-info">
                         <h6> Amount</h6>
-                        <p> $320 </p>
+                        <p> ${{ $payment->amount }} </p>
                     </div>
                     <div class="summary-info">
                         <h6> Currency</h6>
-                        <p> USD </p>
+                        <p> {{ $payment->currency }} </p>
                     </div>
                     <div class="summary-info">
                         <h6> Processing Fee</h6>
@@ -620,11 +654,11 @@
                     </div>
                     <div class="summary-info mb-0">
                         <h6> Sender</h6>
-                        <p> John Doe </p>
+                        <p> {{ $payment->email }} </p>
                     </div>
                     <div class="summary-info mb-0">
                         <h6> Receiver</h6>
-                        <p> Jane Smith </p>
+                        <p> kabosierik@gmail.com </p>
                     </div>
 
                 </div>
@@ -632,6 +666,7 @@
         </div>
     </div>
 </div>
+@endforeach
 <!-- /Transaction details -->
 
 

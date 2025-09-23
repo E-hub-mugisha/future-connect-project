@@ -42,6 +42,25 @@
     <script src="{{ asset('assets/js/scriptse1e3.js?ver=3.2.4') }}"></script>
     <script src="{{ asset('assets/js/demo-settingse1e3.js?ver=3.2.4') }}"></script>
     <script src="{{ asset('assets/js/charts/gd-defaulte1e3.js?ver=3.2.4') }}"></script>
+
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: "{{ session('error') }}",
+            html: `<p style="margin-top:10px;">
+                Please contact the administrator if you believe this is a mistake.<br>
+                <b>Tip:</b> Make sure you're logged in with the correct account.
+               </p>`,
+            showConfirmButton: true
+        });
+    </script>
+    @endif
+
 </body>
 
 </html>

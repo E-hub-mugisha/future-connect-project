@@ -64,7 +64,7 @@ class AuthenticatedSessionController extends Controller
         switch ($user->role) {
             case 'admin':
                 return redirect()->route('admin.dashboard');   // 👈 /admin/dashboard
-            case 'talent':
+            case 'user':
                 return redirect()->route('talent.dashboard'); // 👈 /talent/page/dashboard
             default:
                 return redirect()->route('dashboard');        // 👈 fallback for normal users

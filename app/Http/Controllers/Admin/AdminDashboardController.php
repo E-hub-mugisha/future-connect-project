@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
 use App\Models\LoginActivity;
 use App\Models\Setting;
 use App\Models\StoryPayment;
@@ -23,7 +24,8 @@ class AdminDashboardController extends Controller
         $users = \App\Models\User::latest()->take(5)->get();
         $talents = \App\Models\Talent::latest()->take(5)->get();
         $payments = \App\Models\StoryPayment::latest()->take(5)->get();
-        return view('admin-pages.dashboard.index', compact('payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents'));
+        $announcements = Announcement::latest()->take(5)->get();
+        return view('admin-pages.dashboard.index', compact('announcements','payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents'));
     }
 
     public function index()

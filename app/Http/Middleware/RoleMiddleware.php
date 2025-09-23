@@ -7,35 +7,22 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle($request, Closure $next, ...$roles)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $user = Auth::user();
 
-        if (in_array($user->role, $roles)) {
-            return $next($request);
+        // Abort if not logged in
+        if (!$user) {
+            return redirect()->route('login')
+                ->with('error', 'Please login to continue.');
         }
 
-        // 🚀 Redirect user back to their own dashboard
-        return redirect()->route($this->redirectTo($user->role));
-    }
+        // Check if user role is in allowed roles
+        if (!in_array($user->role, $roles)) {
+            return redirect()->back()
+                ->with('error', 'You don\'t have permission to access this page.');
+        }
 
-    /**
-     * Decide dashboard route based on role.
-     */
-    protected function redirectTo($role)
-    {
-        return match ($role) {
-            'admin'  => 'admin.dashboard',
-            'talent' => 'talent.dashboard',
-            'buyer'  => 'buyer.dashboard',
-            default  => 'user.home',
-        };
+        return $next($request);
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
+use App\Models\Talent;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,9 +94,13 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', 'update')->name('profile.update');
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
-
     // Password reset
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
+});
+
+Route::get('/test', function () {
+    $talents = Talent::all();
+    return view('user-page.slide', compact('talents'));
 });
 
 /*
@@ -168,7 +173,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 | Talent Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->group(function () {
+Route::middleware(['auth', 'role:user'])->prefix('talent')->name('talent.')->group(function () {
 
     // Dashboard
     Route::get('/page/dashboard', [TalentDashboardController::class, 'dashboard'])->name('dashboard');

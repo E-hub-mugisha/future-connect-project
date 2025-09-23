@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Talent;
 
 use App\Http\Controllers\Controller;
+use App\Models\Announcement;
 use Illuminate\Http\Request;
 
 class TalentDashboardController extends Controller
@@ -17,6 +18,8 @@ class TalentDashboardController extends Controller
 
         $users = \App\Models\User::latest()->take(5)->get();
         $talents = \App\Models\Talent::latest()->take(5)->get();
-        return view('talent-pages.dashboard.index', compact('totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents'));
+        $announcements = Announcement::latest()->take(5)->get();
+        $payments = \App\Models\StoryPayment::latest()->take(5)->get();
+        return view('talent-pages.dashboard.index', compact('totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents','announcements','payments'));
     }
 }
