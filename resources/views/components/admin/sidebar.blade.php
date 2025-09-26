@@ -43,6 +43,11 @@ $role = Auth::check() ? Auth::user()->role : null;
                         </a>
                     </li>
                     <li class="nk-menu-item">
+                        <a href="/admin/connections" class="nk-menu-link {{ isActiveRoute('admin.connections.*') }}">
+                            <i class="ti ti-user-bolt me-2"></i><span>Connections</span>
+                        </a>
+                    </li>
+                    <li class="nk-menu-item">
                         <a href="/admin/users" class="nk-menu-link {{ isActiveRoute('admin.users.*') }}">
                             <i class="ti ti-wallet me-2"></i><span>Users</span>
                         </a>

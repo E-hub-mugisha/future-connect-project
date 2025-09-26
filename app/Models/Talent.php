@@ -56,4 +56,9 @@ class Talent extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function connections()
+    {
+        return $this->hasMany(TalentConnection::class);
+    }
 }

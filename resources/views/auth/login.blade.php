@@ -1,81 +1,47 @@
-@extends('layouts.auth')
-@section('content')
+<x-guest-layout>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
 
-<div class="row gx-0 justify-content-center align-items-center vh-100">
-
-    <div class="col-lg-6">
-        <div class="login-wrapper">
-            <div class="login-content">
-                <div class="auth-content p-4">
-                    <form action="{{ route('login') }}" method="POST">
-                        @csrf
-                        <div class="login-userset">
-                            <!-- <div class="login-logo">
-                                <img src="{{ asset('assets/img/logo.svg') }}" alt="img" style="height: 50px;" />
-                            </div> -->
-                            <div class="login-card">
-                                <div class="login-heading">
-                                    <h3>Hi, Welcome Back!</h3>
-                                    <p>Fill the fields to get into your account</p>
-                                </div>
-
-                                <div>
-                                    <div class="form-wrap form-focus">
-                                        <span class="form-icon">
-                                            <i class="feather-mail"></i>
-                                        </span>
-                                        <input type="email" name="email" class="form-control floating" placeholder="Enter your email" required />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="form-wrap form-focus pass-group">
-                                        <span class="form-icon">
-                                            <i class="toggle-password feather-eye-off"></i>
-                                        </span>
-                                        <input type="password" name="password" class="pass-input form-control floating" placeholder="Enter your password" required />
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-wrap">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember"
-                                                    id="remember">
-                                                <label class="form-check-label" for="remember">
-                                                    Remember Me
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-wrap text-md-end">
-                                            <a href="{{ route('password.request') }}"
-                                                class="forgot-link">Forgot Password?</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-wrap mantadory-info d-none">
-                                    <p><i class="feather-alert-triangle"></i>Fill all the fields to submit</p>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Sign In</button>
-                            </div>
-
-                            <div class="acc-in">
-                                <p>Don’t have an account? <a href="{{ route('register') }}">Sign
-                                        Up</a></p>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <!-- Email Address -->
+        <div>
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
-    </div>
 
-</div>
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
 
-@endsection
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Remember Me -->
+        <div class="block mt-4">
+            <label for="remember_me" class="inline-flex items-center">
+                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            </label>
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            @if (Route::has('password.request'))
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
+
+            <x-primary-button class="ms-3">
+                {{ __('Log in') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>

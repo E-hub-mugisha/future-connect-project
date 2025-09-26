@@ -53,4 +53,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Talent::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(ConnectionPayment::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Skill::class, 'user_courses');
+    }
+
+    public function likedStories()
+    {
+        return $this->belongsToMany(Story::class, 'story_likes');
+    }
 }

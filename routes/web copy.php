@@ -22,7 +22,6 @@ use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
-use App\Http\Controllers\users\UserPanelController;
 use App\Models\Talent;
 
 /*
@@ -104,6 +103,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', 'update')->name('profile.update');
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
+    // Password reset
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
     
 });
 
@@ -189,7 +190,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 | Talent Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->group(function () {
+Route::middleware(['auth', 'role:user'])->prefix('talent')->name('talent.')->group(function () {
 
     // Dashboard
     Route::get('/page/dashboard', [TalentDashboardController::class, 'dashboard'])->name('dashboard');
@@ -214,18 +215,6 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     // Stories
     Route::get('/stories', [TalentStoryController::class, 'index'])->name('stories.index');
     Route::get('/stories/{id}', [TalentStoryController::class, 'show'])->name('stories.show');
-});
-
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('user/dashboard', [UserPanelController::class, 'dashboard'])->name('user.dashboard');
-    Route::get('user/profile', [UserPanelController::class, 'profile'])->name('user.profile');
-    Route::post('user/profile/update', [UserPanelController::class, 'updateProfile'])->name('profile.update');
-
-    Route::get('user/talents', [UserPanelController::class, 'myTalents'])->name('user.talents.connected');
-    Route::get('user/transactions', [UserPanelController::class, 'transactions'])->name('user.transactions');
-    Route::get('user/notifications', [UserPanelController::class, 'notifications'])->name('user.notifications');
-    Route::get('user/connections', [UserPanelController::class, 'connections'])->name('user.connections');
-    Route::post('user/connections/request', [UserPanelController::class, 'sendConnectionRequest'])->name('connections.request');
 });
 
 require __DIR__ . '/auth.php';

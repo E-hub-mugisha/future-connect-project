@@ -197,8 +197,8 @@ if (!function_exists('isActiveRoute')) {
 
                     {{-- Announcements --}}
                     <li>
-                        <a href="{{ route('talent.match') }}"
-                            class="nav-link {{ isActiveRoute(['talent.match']) }}">Connection Room</a>
+                        <a href="{{ route('talent.connections-room') }}"
+                            class="nav-link {{ isActiveRoute(['talent.connections-room']) }}">Connection Room</a>
                     </li>
                     {{-- Stories --}}
                     <li class="has-submenu">

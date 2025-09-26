@@ -133,55 +133,57 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const payBtn = document.getElementById("payBtn");
-    const payBtnText = document.getElementById("payBtnText");
-    const payBtnSpinner = document.getElementById("payBtnSpinner");
+    document.addEventListener("DOMContentLoaded", function() {
+        const payBtn = document.getElementById("payBtn");
+        const payBtnText = document.getElementById("payBtnText");
+        const payBtnSpinner = document.getElementById("payBtnSpinner");
 
-    if (!payBtn) return;
+        if (!payBtn) return;
 
-    payBtn.addEventListener("click", function() {
-        // Show spinner
-        payBtnText.textContent = "Processing Payment...";
-        payBtnSpinner.classList.remove("d-none");
-        payBtn.disabled = true;
+        payBtn.addEventListener("click", function() {
+            // Show spinner
+            payBtnText.textContent = "Processing Payment...";
+            payBtnSpinner.classList.remove("d-none");
+            payBtn.disabled = true;
 
-        if (typeof FlutterwaveCheckout === "undefined") {
-            alert("Payment script not loaded yet.");
-            payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
-            payBtnSpinner.classList.add("d-none");
-            payBtn.disabled = false;
-            return;
-        }
-
-        const userEmail = "{{ $email }}";
-        const storyId = "{{ $story->id }}";
-        const videoId = "{{ $video_id }}";
-        const txRef = storyId + "-" + videoId + "-" + Date.now();
-
-        FlutterwaveCheckout({
-            public_key: "{{ $public_key }}",
-            tx_ref: txRef,
-            amount: 5.00,
-            currency: "RWF",
-            payment_options: "card, mobilemoneyrwanda",
-            customer: { email: userEmail },
-            callback: function(data) {
-                window.location.href = `/story/payment/callback?story_id=${storyId}&video_id=${videoId}&email=${encodeURIComponent(userEmail)}&status=${encodeURIComponent(data.status)}&tx_ref=${encodeURIComponent(data.tx_ref)}`;
-            },
-            onclose: function() {
+            if (typeof FlutterwaveCheckout === "undefined") {
+                alert("Payment script not loaded yet.");
                 payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
                 payBtnSpinner.classList.add("d-none");
                 payBtn.disabled = false;
-            },
-            customizations: {
-                title: "Video Payment",
-                description: "Pay to watch the video",
-                logo: "{{ asset('logo.png') }}"
+                return;
             }
+
+            const userEmail = "{{ $email }}";
+            const storyId = "{{ $story->id }}";
+            const videoId = "{{ $video_id }}";
+            const txRef = storyId + "-" + videoId + "-" + Date.now();
+
+            FlutterwaveCheckout({
+                public_key: "{{ $public_key }}",
+                tx_ref: txRef,
+                amount: 5.00,
+                currency: "RWF",
+                payment_options: "card, mobilemoneyrwanda",
+                customer: {
+                    email: userEmail
+                },
+                callback: function(data) {
+                    window.location.href = `/story/payment/callback?story_id=${storyId}&video_id=${videoId}&email=${encodeURIComponent(userEmail)}&status=${encodeURIComponent(data.status)}&tx_ref=${encodeURIComponent(data.tx_ref)}`;
+                },
+                onclose: function() {
+                    payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
+                    payBtnSpinner.classList.add("d-none");
+                    payBtn.disabled = false;
+                },
+                customizations: {
+                    title: "Video Payment",
+                    description: "Pay to watch the video",
+                    logo: "{{ asset('logo.png') }}"
+                }
+            });
         });
     });
-});
 </script>
 
 @endsection
