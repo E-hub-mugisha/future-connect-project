@@ -1,192 +1,83 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description"
+        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <link rel="shortcut icon" href="images/favicon.png">
+    <title>User Panel | @yield('title') - {{ config('app.name') }}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/dashlitee1e3.css?ver=3.2.4') }}">
+    <link id="skin-default" rel="stylesheet" href="{{ asset('assets/css/themee1e3.css?ver=3.2.4') }}">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91615293-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-    <title>User Panel - @yield('title') - Future Connect</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-
-    <!-- AOS CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-
-    <!-- Theme Settings Js -->
-    <script src="{{ asset('assets/js/theme-script.js') }}"></script>
-
-    <!-- Tabler Icon CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/plugins/tabler-icons/tabler-icons.min.css') }}">
-
-    <!-- Datetimepicker CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
-
-    <!-- Daterangepicker CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
-
-    <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
-
-    <!-- Fearther CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/feather.css') }}">
-
-    <!-- Owl carousel CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
-
-    <!-- Select CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-
-    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
-
-    <!-- Toastr CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-91615293-4');
+    </script>
 </head>
 
-<body>
-
-    <!-- Main Wrapper -->
-    <div class="main-wrapper">
-
-        @include('user.header')
-
-        @include('user.sidebar')
-        
-        <div class="page-wrapper">
-            @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @yield('content')
+<body class="nk-body bg-lighter npc-general has-sidebar ">
+    <div class="nk-app-root">
+        <div class="nk-main ">
+            @include('user.sidebar')
+            <div class="nk-wrap ">
+                @include('user.header')
+                <div class="nk-content ">
+                    @yield('content')
+                </div>
+                @include('components.admin.footer')
+            </div>
         </div>
     </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/js/bundlee1e3.js?ver=3.2.4') }}"></script>
+    <script src="{{ asset('assets/js/scriptse1e3.js?ver=3.2.4') }}"></script>
+    <script src="{{ asset('assets/js/demo-settingse1e3.js?ver=3.2.4') }}"></script>
+    <script src="{{ asset('assets/js/charts/gd-defaulte1e3.js?ver=3.2.4') }}"></script>
 
-        <!-- jQuery -->
-        <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <!-- Bootstrap Core JS -->
-        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('assets/js/bootstrap-scrollspy.js') }}"></script>
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: "{{ session('error') }}",
+            html: `<p style="margin-top:10px;">
+                Please contact the administrator if you believe this is a mistake.<br>
+                <b>Tip:</b> Make sure you're logged in with the correct account.
+               </p>`,
+            showConfirmButton: true
+        });
+    </script>
+    @endif
 
-        <!-- Slimscroll JS -->
-        <script src="{{ asset('assets/js/jquery.slimscroll.min.js') }}"></script>
+    <script>
+        @if(session('success'))
+        toastr.success("{{ session('success') }}");
+        @endif
 
-        <!-- Feather JS -->
-        <script src="{{ asset('assets/js/feather.min.js') }}"></script>
+        @if(session('error'))
+        toastr.error("{{ session('error') }}");
+        @endif
 
-        <!-- Slick JS -->
-        <script src="{{ asset('assets/plugins/slick/slick.js')}}"></script>
+        @if(session('warning'))
+        toastr.warning("{{ session('warning') }}");
+        @endif
 
-        <!-- Apexchart JS -->
-        <script src="{{ asset('assets/plugins/apexchart/apexcharts.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/apexchart/chart-data.js') }}"></script>
-
-        <!-- Date Range JS -->
-        <script src="{{ asset('assets/js/moment.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-        <script src="{{ asset('assets/js/bootstrap-datetimepicker.min.js') }}"></script>
-
-        <!-- Sticky Sidebar JS -->
-        <script src="{{ asset('assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
-        <script src="{{ asset('assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
-
-        <!-- Owl Carousel JS -->
-        <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
-
-        <!-- Select2 JS -->
-        <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-
-        <!-- AOS JS -->
-        <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-        <script>
-            AOS.init();
-        </script>
-
-        <!-- Custom JS -->
-        <script src="{{ asset('assets/js/script.js') }}"></script>
-
-        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <!-- Toastr JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-        <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('#storiesCategoryTabs .nav-link').on('click', function(e) {
-                    e.preventDefault();
-
-                    var selectedCategory = $(this).data('category');
-
-                    // Active tab highlighting
-                    $('#storiesCategoryTabs .nav-link').removeClass('active');
-                    $(this).addClass('active');
-
-                    // Filter skill cards
-                    $('.skill-card').each(function() {
-                        var cardCategory = $(this).data('category');
-
-                        if (selectedCategory === 'All' || cardCategory === selectedCategory) {
-                            $(this).fadeIn();
-                        } else {
-                            $(this).fadeOut();
-                        }
-                    });
-                });
-            });
-        </script>
-        <script>
-            var TrandingSlider = new Swiper('.tranding-slider', {
-                effect: 'coverflow',
-                grabCursor: true,
-                centeredSlides: true,
-                loop: true,
-                speed: 1000,
-                slidesPerView: 1.5,
-                coverflowEffect: {
-                    rotate: 30,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 2.5,
-                    slideShadows: false
-                },
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                }
-            });
-        </script>
-
-
-        <script>
-            @if(session('success'))
-            toastr.success("{{ session('success') }}");
-            @endif
-
-            @if(session('error'))
-            toastr.error("{{ session('error') }}");
-            @endif
-
-            @if(session('warning'))
-            toastr.warning("{{ session('warning') }}");
-            @endif
-
-            @if(session('info'))
-            toastr.info("{{ session('info') }}");
-            @endif
-        </script>
+        @if(session('info'))
+        toastr.info("{{ session('info') }}");
+        @endif
+    </script>
 
 </body>
 

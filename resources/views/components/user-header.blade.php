@@ -3,10 +3,10 @@
 $categories = \App\Models\Category::all();
 
 if (!function_exists('isActiveRoute')) {
-    function isActiveRoute($route)
-    {
-        return request()->routeIs($route) ? 'active' : '';
-    }
+function isActiveRoute($route)
+{
+return request()->routeIs($route) ? 'active' : '';
+}
 }
 @endphp
 
@@ -36,7 +36,7 @@ if (!function_exists('isActiveRoute')) {
         border: 2px solid transparent;
         display: inline-block;
         /* Prevents full-width behavior */
-        
+
     }
 
     .main-menu-wrapper .main-nav a:hover,
@@ -59,7 +59,12 @@ if (!function_exists('isActiveRoute')) {
         z-index: 1055;
         width: 100%;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.95);
+
+        /* ✅ Transparent + Blur Background */
+        background: rgba(255, 255, 255, 0.05);      /* Slight tint for contrast */
+        backdrop-filter: blur(8px);                /* Main blur effect */
+        -webkit-backdrop-filter: blur(8px);        /* Safari support */
+
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
@@ -73,6 +78,12 @@ if (!function_exists('isActiveRoute')) {
         width: 90%;
         max-width: 600px;
         padding: 20px;
+
+        /* Optional frosted-glass look on the search box itself */
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border-radius: 12px;
     }
 
     .search-input-group {
@@ -92,7 +103,7 @@ if (!function_exists('isActiveRoute')) {
         border: none;
         border-bottom: 2px solid #0d6efd;
         background: transparent;
-        color: white;
+        color: #fff;
         font-size: 1.1rem;
         width: 100%;
     }
@@ -112,7 +123,7 @@ if (!function_exists('isActiveRoute')) {
         }
     }
 
-    /* Style close button (Bootstrap default styles should mostly apply) */
+    /* Style for the close button */
     .btn-close-white {
         filter: invert(1);
         opacity: 0.8;
@@ -287,16 +298,41 @@ if (!function_exists('isActiveRoute')) {
                     </ul>
                 </div>
                 <ul class="nav header-navbar-rht">
+                    {{-- If user is logged in --}}
+                    @auth
+                    @php
+                    $role = Auth::user()->role;
+                    $dashboards = [
+                    'admin' => 'admin.dashboard',
+                    'talent' => 'talent.dashboard',
+                    'user' => 'user.dashboard',
+                    ];
+                    @endphp
+
+                    <li class="nav-item">
+                        <a class="btn btn-light d-inline-flex align-items-center"
+                            href="{{ route($dashboards[$role] ?? 'user.dashboard') }}"
+                            style="background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+                  box-shadow: 0 1em 1em #1f2d3d26;">
+                            <i class="ti ti-dashboard me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    @endauth
+
+                    {{-- Show Sign In if NOT logged in --}}
+                    @guest
                     <li class="nav-item">
                         <a class="btn btn-light d-inline-flex align-items-center login"
                             href="javascript:void(0)"
                             data-bs-toggle="modal"
-                            data-bs-target="#loginModal" style="background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-  box-shadow: 0 1em 1em #1f2d3d26;">
+                            data-bs-target="#loginModal"
+                            style="background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+                  box-shadow: 0 1em 1em #1f2d3d26;">
                             <i class="ti ti-lock me-1"></i>Sign In
                         </a>
-
                     </li>
+                    @endguest
+
                     <li class="nav-item">
                         <a class="btn btn-primary d-inline-flex align-items-center" href="#" onclick="toggleSearchOverlay(event)">
                             <i class="ti ti-search me-1"></i>Search
@@ -368,12 +404,23 @@ if (!function_exists('isActiveRoute')) {
 
 <section class="search-overlay-section">
     <div class="search-overlay"></div>
-    <div class="search-content">
-        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" aria-label="Close" onclick="closeSearchOverlay()"></button>
 
+    <div class="search-content position-relative">
+        <!-- Close Button -->
+        <button type="button"
+                class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                aria-label="Close"
+                onclick="closeSearchOverlay()">
+        </button>
+
+        <!-- Search Form -->
         <form action="{{ route('talent.search') }}" method="GET" class="search-input-group position-relative">
             <i class="ti ti-search input-icon"></i>
-            <input type="text" class="form-control" name="keyword" placeholder="Search talents, skills or stories..." required>
+            <input type="text"
+                   class="form-control"
+                   name="keyword"
+                   placeholder="Search talents, skills or stories..."
+                   required>
         </form>
     </div>
 </section>
@@ -385,7 +432,11 @@ if (!function_exists('isActiveRoute')) {
         overlaySection.classList.toggle('active');
     }
 
-    // Optional: close overlay when clicking outside input
+    function closeSearchOverlay() {
+        document.querySelector('.search-overlay-section').classList.remove('active');
+    }
+
+    // Optional: close overlay when clicking outside the search box
     document.addEventListener('click', function(e) {
         const overlay = document.querySelector('.search-overlay-section');
         if (
@@ -396,8 +447,4 @@ if (!function_exists('isActiveRoute')) {
             overlay.classList.remove('active');
         }
     });
-
-    function closeSearchOverlay() {
-        document.querySelector('.search-overlay-section').classList.remove('active');
-    }
 </script>

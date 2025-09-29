@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Talent;
 use App\Models\TalentConnection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserPanelController extends Controller
 {
@@ -39,7 +41,7 @@ class UserPanelController extends Controller
     }
 
     public function myTalents() {
-        $talents = auth()->user()->talents;
+        $talents = TalentConnection::where('user_id', Auth::user()->id)->where('status', 'accepted')->get();
         return view('user.talents', compact('talents'));
     }
 
@@ -54,8 +56,15 @@ class UserPanelController extends Controller
     }
 
     public function connections() {
-        $connections = TalentConnection::where('user_id', auth()->id())->get();
+        $connections = TalentConnection::where('user_id', Auth::user()->id)->where('status', 'pending')->get();
         return view('user.connections', compact('connections'));
+    }
+    public function showConnection($id)
+    {
+        $connection = TalentConnection::with(['requester', 'talent', 'payment'])
+            ->findOrFail($id);
+
+        return view('user.connection-show', compact('connection'));
     }
 
     public function sendConnectionRequest(Request $request) {

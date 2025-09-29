@@ -1,266 +1,150 @@
-<!-- Header -->
-<header class="header dashboard-header">
-    <div class="header-user">
-        <div class="header-left-mob">
-            <a href="seller-dashboard.html" class="logo">
-                <img src="assets/img/logo.svg" alt="Logo">
-            </a>
-        </div>
-
-        <a id="mobile_btn" class="mobile_btn" href="#sidebar">
-            <span class="bar-icon">
-                <i class="ti ti-baseline-density-medium"></i>
-            </span>
-        </a>
-        <div class="nav user-menu nav-list">
-            <div class="wallet-amount wallet-amount-two">
-                <span><i class="ti ti-point-filled me-1"></i>Wallet Balance : $6658</span>
-            </div>
-        </div>
-        <div class="header-right d-flex align-items-center">
-            <a href="index.html" class="btn btn-light fs-14 rounded-pill"><i class="ti ti-world me-1"></i>Website</a>
-            <div class="dashboard-link">
-                <ul class="d-inline-flex align-items-center p-1 rounded-pill">
-                    <li><a href="buyer-dashboard.html">Buyer</a></li>
-                    <li><a href="seller-dashboard.html" class="active">Seller</a></li>
-                </ul>
-            </div>
-            <div class="nav-item dropdown dropdown-menu-end flag-nav nav-item-box">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
-                    <img src="assets/img/flags/us.svg" alt="Language" class="img-fluid">
-                </a>
-                <ul class="dropdown-menu p-2">
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-item justify-content-start">
-                            <img src="assets/img/flags/us.svg" alt="" height="16" class="me-2"> English
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-item justify-content-start">
-                            <img src="assets/img/flags/de.svg" alt="" height="16" class="me-2"> German
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-item justify-content-start">
-                            <img src="assets/img/flags/fr.svg" alt="" height="16" class="me-2"> French
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-item justify-content-start">
-                            <img src="assets/img/flags/ae.svg" alt="" height="16" class="me-2"> Arabic
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="nav-item dropdown flag-nav nav-item-box">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
-                    <i class="ti ti-sun-high"></i>
-                    <i class="ti ti-moon"></i>
-                </a>
-                <ul class="dropdown-menu p-2">
-                    <li class="mb-1">
-                        <a href="javascript:void(0);" class="dropdown-item active theme-toggle" id="light-mode-toggle">
-                            <i class="ti ti-sun-high me-1"></i>Light Mode
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="dropdown-item theme-toggle" id="dark-mode-toggle">
-                            <i class="ti ti-moon me-1"></i>Dark Mode
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="nav-item dropdown nav-item-box">
-                <a class="nav-link dropdown-toggle" href="seller-notifications.html" data-bs-toggle="dropdown">
-                    <i class="ti ti-bell"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end noti-blk">
-                    <div class="topnav-dropdown-header border-bottom">
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-0">Notifications</h6>
-                            <div class="count ms-1">2</div>
+<div class="nk-header nk-header-fixed is-light">
+    <div class="container-fluid">
+        <div class="nk-header-wrap">
+            <div class="nk-menu-trigger d-xl-none ms-n1"><a href="#"
+                    class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em
+                        class="icon ni ni-menu"></em></a></div>
+            <div class="nk-header-brand d-xl-none"><a href="{{ route('user.home') }}" class="logo-link"><img
+                        class="logo-light logo-img" src="images/logo.png"
+                        srcset="{{ asset('assets/img/WORDMARK.png') }} 2x" alt="logo"><img class="logo-dark logo-img"
+                        src="{{ asset('assets/img/WORDMARK.png') }}" srcset="{{ asset('assets/img/WORDMARK.png') }} 2x"
+                        alt="logo-dark"></a></div>
+            <div class="nk-header-news d-none d-xl-block">
+                <div class="nk-news-list"><a class="nk-news-item" href="#">
+                        <div class="nk-news-icon"><em class="icon ni ni-card-view"></em></div>
+                        <div class="nk-news-text">
+                            <p>Do you know the latest update of 2025? <span> A overview of our is now
+                                    available on YouTube</span></p><em class="icon ni ni-external"></em>
                         </div>
-                        <a href="javascript:void(0)" class="mark-all-noti"> Mark all as read <i class="feather-check-square"></i></a>
-                    </div>
-                    <ul>
-                        <li class="notification-message">
-                            <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html" class="active-noti">
-                                    <span class="avatar avatar-sm flex-shrink-0">
-                                        <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/profile.jpg">
-                                    </span>
-                                </a>
-                                <div class="media-body flex-grow-1">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">Lex Murphy</a></h6>
-                                        <p class="mb-0">45 mins ago</p>
-                                    </div>
-                                    <p class="mb-2">Notifications alert you to new messages in your Gigs inbox.</p>
-                                    <div class="notify-btns">
-                                        <button class="btn btn-sm btn-primary">Accept</button>
-                                        <button class="btn btn-sm btn-light">Decline</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="notification-message">
-                            <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html" class="active-noti">
-                                    <span class="avatar avatar-sm flex-shrink-0">
-                                        <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-02.jpg">
-                                    </span>
-                                </a>
-                                <div class="media-body flex-grow-1">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">Ray Arnold</a></h6>
-                                        <p class="mb-0">17 mins ago</p>
-                                    </div>
-                                    <p class="mb-0">Notifications inform you when someone likes, reacts</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="notification-message">
-                            <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html">
-                                    <span class="avatar avatar-sm flex-shrink-0">
-                                        <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-03.jpg">
-                                    </span>
-                                </a>
-                                <div class="media-body flex-grow-1">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">Dennis Nedry</a></h6>
-                                        <p class="mb-0">1 Day Ago</p>
-                                    </div>
-                                    <p>Added a comment to Dennis Nedry</p>
-                                    <p class="noti-reply-msg">“Oh, I finished de-bugging the phones, but the system's compiling for eighteen minutes, or twenty. So, some minor systems may go on and off for a while.”</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="notification-message">
-                            <div class="media noti-img d-flex">
-                                <a href="seller-notifications.html">
-                                    <span class="avatar avatar-sm flex-shrink-0">
-                                        <img class="avatar-img rounded-circle img-fluid" alt="User Image" src="assets/img/user/user-04.jpg">
-                                    </span>
-                                </a>
-                                <div class="media-body flex-grow-1">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <h6 class="noti-details"><a href="seller-notifications.html">John Hammond</a></h6>
-                                        <p class="mb-0">45 mins ago</p>
-                                    </div>
-                                    <p class="mb-0">Got Message for Project “Service Management”</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="clear-all-noti">
-                        <a class="clear-notification" href="seller-notifications.html"> View all </a>
-                    </div>
-                </div>
+                    </a></div>
             </div>
-            <div class="nav-item dropdown nav-item-box">
-                <a href="seller-profile.html" class="dropdown-toggle d-flex align-items-center nav-link" data-bs-toggle="dropdown">
-                    <span class="avatar online avatar-sm">
-                        <img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
-                    </span>
-                </a>
-                <div class="dropdown-menu p-0 dropdown-profile">
-                    <div class="d-flex align-items-center border-bottom p-2 mb-0">
-                        <span class="avatar avatar-lg me-2">
-                            <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
-                        </span>
-                        <div>
-                            <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
-                            <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
+            <div class="nk-header-tools">
+                <ul class="nk-quick-nav">
+                    <li class="dropdown user-dropdown"><a href="#" class="dropdown-toggle"
+                            data-bs-toggle="dropdown">
+                            <div class="user-toggle">
+                                <div class="user-avatar sm"><em class="icon ni ni-user-alt"></em></div>
+                                <div class="user-info d-none d-md-block">
+                                    <div class="user-status">{{ Auth::user()->role }}</div>
+                                    <div class="user-name dropdown-indicator">{{ Auth::user()->name }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end dropdown-menu-s1">
+                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                <div class="user-card">
+                                    <div class="user-avatar"><span>AB</span></div>
+                                    <div class="user-info"><span class="lead-text">{{ Auth::user()->name }}</span><span
+                                            class="sub-text">{{ Auth::user()->email }}</span></div>
+                                </div>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li><a href="{{ route('admin.users.show', Auth::user()->id ) }}"><em
+                                                class="icon ni ni-user-alt"></em><span>View
+                                                Profile</span></a></li>
+                                    <li><a href="/admin/settings"><em
+                                                class="icon ni ni-setting-alt"></em><span>Platform
+                                                Setting</span></a></li>
+                                    <li><a href="/admin/login-activity"><em
+                                                class="icon ni ni-activity-alt"></em><span>Login
+                                                Activity</span></a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown-inner">
+                                <ul class="link-list">
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit"><em class="icon ni ni-signout"></em><span>Sign
+                                                    out</span></button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="p-2">
-                        <!-- Item-->
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
-                            <i class="ti ti-user-cog me-2"></i>My Profile
+                    </li>
+                    <li class="dropdown notification-dropdown me-n1"><a href="#"
+                            class="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
+                            <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em>
+                            </div>
                         </a>
-
-                        <!-- Item-->
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
-                            <i class="ti ti-settings-cog me-2"></i>Settings
-                        </a>
-
-                        <!-- Item-->
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
-                            <i class="ti ti-shopping-bag me-2"></i>Orders
-                        </a>
-
-                        <!-- Item-->
-                        <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
-                            <i class="ti ti-moneybag me-2"></i>Earnings
-                        </a>
-
-                        <!-- Item-->
-                        <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
-                            <i class="ti ti-wallet me-2"></i>Wallet
-                        </a>
-
-                    </div>
-
-                    <div class="border-top p-3">
-                        <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="mobile-user-menu">
-            <a href="javascript:void(0);" class="dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                <span class="avatar online avatar-sm">
-                    <img src="assets/img/user/user-04.jpg" alt="Img" class="img-fluid rounded-circle">
-                </span>
-            </a>
-            <div class="dropdown-menu p-0 dropdown-profile">
-                <div class="d-flex align-items-center border-bottom p-2 mb-0">
-                    <span class="avatar avatar-lg me-2">
-                        <img src="assets/img/user/user-04.jpg" alt="img" class="rounded-circle">
-                    </span>
-                    <div>
-                        <h6 class="fs-14 fw-medium mb-1">Harry Brooks</h6>
-                        <p class="fs-13 mb-0">Joined On : 14 Jan 2024</p>
-                    </div>
-                </div>
-
-                <div class="p-2">
-                    <!-- Item-->
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-profile.html">
-                        <i class="ti ti-user-cog me-2"></i>My Profile
-                    </a>
-
-                    <!-- Item-->
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-settings.html">
-                        <i class="ti ti-settings-cog me-2"></i>Settings
-                    </a>
-
-                    <!-- Item-->
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-orders.html">
-                        <i class="ti ti-shopping-bag me-2"></i>Orders
-                    </a>
-
-                    <!-- Item-->
-                    <a class="dropdown-item d-flex align-items-center mb-1" href="seller-earnings.html">
-                        <i class="ti ti-moneybag me-2"></i>Earnings
-                    </a>
-
-                    <!-- Item-->
-                    <a class="dropdown-item d-flex align-items-center" href="seller-wallet.html">
-                        <i class="ti ti-wallet me-2"></i>Wallet
-                    </a>
-
-                </div>
-
-                <div class="border-top p-3">
-                    <a href="signin.html" class="btn btn-light btn-md w-100 border-0">Logout</a>
-                </div>
-
+                        <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
+                            <div class="dropdown-head"><span
+                                    class="sub-title nk-dropdown-title">Notifications</span><a
+                                    href="#">Mark All as Read</a></div>
+                            <div class="dropdown-body">
+                                <div class="nk-notification">
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon"><em
+                                                class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">You have requested to
+                                                <span>Widthdrawl</span>
+                                            </div>
+                                            <div class="nk-notification-time">2 hrs ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon"><em
+                                                class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">Your <span>Deposit
+                                                    Order</span> is placed</div>
+                                            <div class="nk-notification-time">2 hrs ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon"><em
+                                                class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">You have requested to
+                                                <span>Widthdrawl</span>
+                                            </div>
+                                            <div class="nk-notification-time">2 hrs ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon"><em
+                                                class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">Your <span>Deposit
+                                                    Order</span> is placed</div>
+                                            <div class="nk-notification-time">2 hrs ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon"><em
+                                                class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">You have requested to
+                                                <span>Widthdrawl</span>
+                                            </div>
+                                            <div class="nk-notification-time">2 hrs ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="nk-notification-item dropdown-inner">
+                                        <div class="nk-notification-icon"><em
+                                                class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
+                                        </div>
+                                        <div class="nk-notification-content">
+                                            <div class="nk-notification-text">Your <span>Deposit
+                                                    Order</span> is placed</div>
+                                            <div class="nk-notification-time">2 hrs ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-foot center"><a href="#">View All</a></div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-</header>
-<!-- /Header -->
+</div>

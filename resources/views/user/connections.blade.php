@@ -48,7 +48,7 @@
                                 </td>
                                 <td>{{ $connection->created_at->format('d M Y, h:i A') }}</td>
                                 <td>
-                                    <a href="{{ route('admin.connections.show', $connection->id ?? 0) }}"
+                                    <a href="{{ route('user.connections.show', $connection->id ) }}"
                                        class="btn btn-sm btn-outline-info">
                                         View
                                     </a>

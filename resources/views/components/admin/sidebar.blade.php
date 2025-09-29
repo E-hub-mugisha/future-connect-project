@@ -107,7 +107,7 @@ $role = Auth::check() ? Auth::user()->role : null;
                         </a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{ route('talent.stories') }}" class="nk-menu-link {{ isActiveRoute('talent.stories.*') }}">
+                        <a href="{{ route('talent.page.stories') }}" class="nk-menu-link {{ isActiveRoute('talent.page.stories.*') }}">
                             <i class="ti ti-microphone me-2"></i><span>My Stories</span>
                         </a>
                     </li>

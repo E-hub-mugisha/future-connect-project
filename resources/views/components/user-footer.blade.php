@@ -13,7 +13,7 @@
                          <li><a href="{{ route('user.about') }}"><i class="ti ti-chevron-right me-2"></i>About Us</a></li>
                          <li><a href="{{ route('user.how-it-works')}}"><i class="ti ti-chevron-right me-2"></i>How It Works</a>
                          </li>
-                         <li><a href="{{ route('talent.match')}}"><i class="ti ti-chevron-right me-2"></i>Talent
+                         <li><a href="{{ route('talent.connections-room')}}"><i class="ti ti-chevron-right me-2"></i>Connection
                                  Room</a></li>
                          <li><a href="{{ route('user.register_as_talent') }}"><i class="ti ti-chevron-right me-2"></i>Join the Platform</a>
                          </li>

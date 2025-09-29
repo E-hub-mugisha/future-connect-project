@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', 'Talents')
 @section('content')
 
 <!-- SwiperJS for carousel -->
@@ -963,7 +964,7 @@ $categories = \App\Models\Category::all();
                                 <img
                                     class="img rounded-3"
                                     src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" />
+                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;"/>
                             </a>
 
                             <!-- Name -->
@@ -1008,7 +1009,7 @@ $categories = \App\Models\Category::all();
                             <!-- View Button -->
                             <div class="text-center d-flex justify-content-center">
                                 <a href="{{ route('user.talent.details', $talent->id) }}" class="go text-center">
-                                    <span class="go-text">view</span>
+                                    <span class="go-text">view Profile</span>
                                 </a>
                             </div>
 

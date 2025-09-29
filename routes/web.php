@@ -120,7 +120,7 @@ Route::get('/test', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
 
     // Talents
     Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents');
@@ -207,13 +207,14 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::post('/testimonials', [TalentDashboardController::class, 'store'])->name('testimonials.store');
 
     // Skills
-    Route::get('/skills', [TalentSkillController::class, 'index'])->name('skills.index');
+    Route::get('/skills', [TalentSkillController::class, 'index'])->name('skills');
     Route::post('/skills', [TalentSkillController::class, 'store'])->name('skills.store');
     Route::delete('/skills/{id}', [TalentSkillController::class, 'destroy'])->name('skills.destroy');
 
     // Stories
-    Route::get('/stories', [TalentStoryController::class, 'index'])->name('stories.index');
-    Route::get('/stories/{id}', [TalentStoryController::class, 'show'])->name('stories.show');
+    Route::get('get/talent/stories', [TalentStoryController::class, 'index'])
+    ->name('page.stories');
+    Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('stories.show');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -222,6 +223,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('user/profile/update', [UserPanelController::class, 'updateProfile'])->name('profile.update');
 
     Route::get('user/talents', [UserPanelController::class, 'myTalents'])->name('user.talents.connected');
+    Route::get('user/connections/show/{id}', [UserPanelController::class, 'showConnection'])->name('user.connections.show');
     Route::get('user/transactions', [UserPanelController::class, 'transactions'])->name('user.transactions');
     Route::get('user/notifications', [UserPanelController::class, 'notifications'])->name('user.notifications');
     Route::get('user/connections', [UserPanelController::class, 'connections'])->name('user.connections');
