@@ -56,6 +56,20 @@
                                 {{ $talent->status ? 'Active' : 'Inactive' }}
                             </div>
                         </li>
+                        <li>
+                            @php
+                            // Pick a color class based on the level
+                            $badgeClass = match($talent->level) {
+                            'advanced' => 'bg-success', // Green
+                            'intermediate' => 'bg-warning text-dark', // Yellow/Orange
+                            default => 'bg-secondary', // Gray for Beginner
+                            };
+                            @endphp
+
+                            <span class="badge {{ $badgeClass }}">
+                                {{ ucfirst($talent->level) }}
+                            </span>
+                        </li>
                     </ul>
                 </div>
 

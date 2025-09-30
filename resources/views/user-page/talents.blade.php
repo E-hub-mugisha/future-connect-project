@@ -964,7 +964,7 @@ $categories = \App\Models\Category::all();
                                 <img
                                     class="img rounded-3"
                                     src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;"/>
+                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
                             </a>
 
                             <!-- Name -->
@@ -976,7 +976,20 @@ $categories = \App\Models\Category::all();
                             </h6>
 
                             <!-- Category -->
-                            <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
+                            <p>{{ $talent->category->name ?? 'Uncategorized' }}
+                                @php
+                                // Pick a color class based on the level
+                                $badgeClass = match($talent->level) {
+                                'advanced' => 'bg-success', // Green
+                                'intermediate' => 'bg-warning text-dark', // Yellow/Orange
+                                default => 'bg-secondary', // Gray for Beginner
+                                };
+                                @endphp
+
+                                <span class="badge {{ $badgeClass }}">
+                                    {{ ucfirst($talent->level) }}
+                                </span>
+                            </p>
 
                             <!-- Location -->
                             <p class="mb-0 location-text d-inline-flex align-items-center">
@@ -1008,8 +1021,11 @@ $categories = \App\Models\Category::all();
 
                             <!-- View Button -->
                             <div class="text-center d-flex justify-content-center">
-                                <a href="{{ route('user.talent.details', $talent->id) }}" class="go text-center">
-                                    <span class="go-text">view Profile</span>
+                                <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
+                                        <i class="feather-arrow-right"></i>View Profile
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
                                 </a>
                             </div>
 

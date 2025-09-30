@@ -38,9 +38,8 @@ class TalentStoryController extends Controller
      */
     public function show($id)
     {
-        $story = Story::where('user_id', Auth::id())
-            ->findOrFail($id);
+        $story = Story::findOrFail($id);
 
-        return view('talent.stories.show', compact('story'));
+        return view('talent-pages.stories.show', compact('story'));
     }
 }

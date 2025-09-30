@@ -969,8 +969,19 @@
 
                             <!-- Location -->
                             <p class="mb-0 location-text d-inline-flex align-items-center">
-                                <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
-                                Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
+                                @php
+                                // Pick a color class based on the level
+                                $badgeClass = match($talent->level) {
+                                'advanced' => 'bg-success', // Green
+                                'intermediate' => 'bg-warning text-dark', // Yellow/Orange
+                                default => 'bg-secondary', // Gray for Beginner
+                                };
+                                @endphp
+
+                                <span class="badge {{ $badgeClass }}">
+                                    {{ ucfirst($talent->level) }}
+                                </span>
+                                <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
                             </p>
 
                             <!-- Ratings -->
@@ -997,8 +1008,11 @@
 
                             <!-- View Button -->
                             <div class="text-center d-flex justify-content-center">
-                                <a href="{{ route('user.talent.details', $talent->id) }}" class="go text-center">
-                                    <span class="go-text">view</span>
+                                <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
+                                        <i class="feather-arrow-right"></i>View Profile
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
                                 </a>
                             </div>
 

@@ -64,6 +64,13 @@ body {
   background-color: var(--white);
 }
 
+.modal-backdrop.show {
+    background: rgba(255, 255, 255, 0.05);  /* frosted white instead of black */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+
 /* .body-overlay-wrapper {
   background-image: url("/assets/img/bg/preview.jpg");
   background-size: cover;

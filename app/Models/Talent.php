@@ -29,6 +29,7 @@ class Talent extends Model
         'language',
         'category_id',
         'matched',
+        'level'
     ];
 
     public function category()

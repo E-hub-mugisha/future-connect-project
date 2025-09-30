@@ -214,7 +214,7 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     // Stories
     Route::get('get/talent/stories', [TalentStoryController::class, 'index'])
     ->name('page.stories');
-    Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('stories.show');
+    Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('page.stories.show');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {

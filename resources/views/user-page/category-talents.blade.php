@@ -1,6 +1,6 @@
 @extends('layouts.guest')
+@section('title', $categoryName . 'Talents')
 @section('content')
-
 
 <style>
     .talent-card {
@@ -125,6 +125,73 @@
     }
 </style>
 
+<style>
+    .slide-line-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 16px;
+        color: #fff;
+        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        border-radius: 30px;
+        text-decoration: none;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .slide-line {
+        position: absolute;
+        top: 100%;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+        transform: rotate(45deg);
+        animation: slideRightUp 2s ease-in-out infinite;
+        z-index: 0;
+    }
+
+    .slide-line:nth-child(2) {
+        animation-delay: 0s;
+        opacity: 0;
+        width: 50%;
+    }
+
+    .slide-line:nth-child(3) {
+        animation-delay: 0s;
+        opacity: 0.5;
+        width: 150%;
+    }
+
+    .slide-line:nth-child(4) {
+        animation-delay: 0.8s;
+        opacity: 0.7;
+        width: 200%;
+    }
+
+    @keyframes slideRightUp {
+        0% {
+            top: 100%;
+            left: -100%;
+        }
+
+        50% {
+            top: 0%;
+            left: 0%;
+        }
+
+        100% {
+            top: -100%;
+            left: 100%;
+        }
+    }
+
+    .slide-line-btn span {
+        pointer-events: none;
+    }
+</style>
+
 <div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
@@ -140,44 +207,49 @@
             <div class="row seller-list postLists cards">
                 @forelse($talents as $talent)
                 <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper">
-                <div class="card post-item m-card" data-aos="flip-left">
-                    <div class="card-body text-center">
-                        <div class="avatar d-inline-block mb-3" style="width: 120px; height: 120px; overflow: hidden;">
-                            <a href="{{ route('user.talent.details', $talent->id) }}">
-                                <img class="img rounded-3 w-100 h-100" style="object-fit: cover;" src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" alt="img" />
-                            </a>
-                        </div>
+                    <div class="card post-item m-card" data-aos="flip-left">
+                        <div class="card-body text-center">
+                            <div class="avatar d-inline-block mb-3" style="width: 120px; height: 120px; overflow: hidden;">
+                                <a href="{{ route('user.talent.details', $talent->id) }}">
+                                    <img class="img rounded-3 w-100 h-100" style="object-fit: cover;" src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" alt="img" />
+                                </a>
+                            </div>
 
-                        <h6 class="mb-1">
-                            <a href="{{ route('user.talent.details', $talent->id) }}">
-                                {{ $talent->name }}
-                                <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
-                            </a>
-                        </h6>
-                        <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
-                        <p class="mb-0 location-text d-inline-flex align-items-center">
-                            <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
-                            Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
-                        </p>
-                        <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                {{ $talent->skill }}
-                            </a>
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                {{ $talent->language }}
+                            <h6 class="mb-1">
+                                <a href="{{ route('user.talent.details', $talent->id) }}">
+                                    {{ $talent->name }}
+                                    <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
+                                </a>
+                            </h6>
+                            <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
+                            <p class="mb-0 location-text d-inline-flex align-items-center">
+                                <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
+                                Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
+                            </p>
+                            <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
+                                <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                    {{ $talent->skill }}
+                                </a>
+                                <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                    {{ $talent->language }}
+                                </a>
+                            </div>
+                            <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
+                                <i class="feather-arrow-right"></i>View Profile
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
                             </a>
                         </div>
-                        <a href="{{ route('user.talent.details', $talent->id) }}" class="go">view</a>
                     </div>
-                </div>
 
-            </div>
+                </div>
                 @empty
                 <p class="text-center">No talents found.</p>
                 @endforelse
             </div>
 
-            
+
             @endif
         </div>
 

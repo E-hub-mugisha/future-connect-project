@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\TalentFeedback;
+use App\Observers\TalentFeedbackObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -23,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
         Paginator::useBootstrapFive();
+        TalentFeedback::observe(TalentFeedbackObserver::class);
     }
 }

@@ -56,6 +56,20 @@
                                 {{ $talent->status ? 'Active' : 'Inactive' }}
                             </div>
                         </li>
+                        <li>
+                            @php
+                            // Pick a color class based on the level
+                            $badgeClass = match($talent->level) {
+                            'advanced' => 'bg-success', // Green
+                            'intermediate' => 'bg-warning text-dark', // Yellow/Orange
+                            default => 'bg-secondary', // Gray for Beginner
+                            };
+                            @endphp
+
+                            <span class="badge {{ $badgeClass }}">
+                                {{ ucfirst($talent->level) }}
+                            </span>
+                        </li>
                     </ul>
                 </div>
 
@@ -540,7 +554,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="supportTalentLabel">Support Talent</h5>
+                    <h5 class="modal-title" id="supportTalentLabel">Talent connection request</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -549,11 +563,11 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="message" class="form-label">Message (Optional)</label>
+                            <label for="message" class="form-label">Add Message</label>
                             <textarea name="message" id="message" class="form-control" rows="3"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Send Support</button>
+                        <button type="submit" class="btn btn-primary">Send Request</button>
                     </form>
                 </div>
             </div>

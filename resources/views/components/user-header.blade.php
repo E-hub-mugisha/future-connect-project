@@ -80,7 +80,7 @@ return request()->routeIs($route) ? 'active' : '';
         padding: 20px;
 
         /* Optional frosted-glass look on the search box itself */
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
         border-radius: 12px;
