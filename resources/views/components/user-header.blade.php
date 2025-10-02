@@ -61,9 +61,12 @@ return request()->routeIs($route) ? 'active' : '';
         height: 100vh;
 
         /* ✅ Transparent + Blur Background */
-        background: rgba(255, 255, 255, 0.05);      /* Slight tint for contrast */
-        backdrop-filter: blur(8px);                /* Main blur effect */
-        -webkit-backdrop-filter: blur(8px);        /* Safari support */
+        background: rgba(53, 61, 93, 0.71);
+        /* Slight tint for contrast */
+        backdrop-filter: blur(5px);
+        /* Main blur effect */
+        -webkit-backdrop-filter: blur(5px);
+        /* Safari support */
 
         align-items: center;
         justify-content: center;
@@ -75,15 +78,13 @@ return request()->routeIs($route) ? 'active' : '';
     }
 
     .search-content {
-        width: 90%;
-        max-width: 600px;
-        padding: 20px;
-
-        /* Optional frosted-glass look on the search box itself */
-        background: rgba(255, 255, 255);
+        width: 55%;
+        /* max-width: 600px; */
+        /* padding: 20px; */
+        background: rgba(255, 255, 255, 0.67);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
-        border-radius: 12px;
+        border-radius: 50px;
     }
 
     .search-input-group {
@@ -93,7 +94,7 @@ return request()->routeIs($route) ? 'active' : '';
     .search-input-group .input-icon {
         position: absolute;
         top: 50%;
-        left: 12px;
+        left: 6px;
         transform: translateY(-50%);
         color: #ccc;
     }
@@ -131,6 +132,52 @@ return request()->routeIs($route) ? 'active' : '';
 
     .btn-close-white:hover {
         opacity: 1;
+    }
+
+    /* Close Button */
+    .btn-close-custom {
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.8);
+        color: #333;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-close-custom::before {
+        content: "×";
+        /* custom close icon */
+    }
+
+    .btn-close-custom:hover {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    /* Submit Button */
+    .btn-submit-custom {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        border: none;
+        background: #0d6efd;
+        color: #fff;
+        padding: 14px 14px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn-submit-custom:hover {
+        background: #084298;
     }
 </style>
 
@@ -408,22 +455,21 @@ return request()->routeIs($route) ? 'active' : '';
     <div class="search-content position-relative">
         <!-- Close Button -->
         <button type="button"
-                class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
-                aria-label="Close"
-                onclick="closeSearchOverlay()">
+            class="btn-close-custom position-absolute "
+            aria-label="Close"
+            onclick="closeSearchOverlay()">
         </button>
 
         <!-- Search Form -->
         <form action="{{ route('talent.search') }}" method="GET" class="search-input-group position-relative">
-            <i class="ti ti-search input-icon"></i>
-            <input type="text"
-                   class="form-control"
-                   name="keyword"
-                   placeholder="Search talents, skills or stories..."
-                   required>
+            <input type="text" class="form-control" name="keyword" placeholder="Search talents, skills or stories..." required>
+            <button type="submit" class="btn-submit-custom">
+                <i class="ti ti-search input-icon"></i>
+            </button>
         </form>
     </div>
 </section>
+
 
 <script>
     function toggleSearchOverlay(event) {
