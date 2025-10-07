@@ -68,6 +68,11 @@ $role = Auth::check() ? Auth::user()->role : null;
                         </a> 
                     </li>
                     <li class="nk-menu-item"> 
+                        <a href="/admin/courses" class="nk-menu-link {{ isActiveRoute('admin.courses.*', 'admin/courses*') }}"> 
+                            <i class="ti ti-video me-2"></i> <span>Courses</span> 
+                        </a>
+                    </li>
+                    <li class="nk-menu-item"> 
                         <a href="/admin/announcements" class="nk-menu-link {{ isActiveRoute('admin.announcements.*', 'admin/announcements*') }}"> 
                             <i class="ti ti-bell me-2"></i> <span>Announcements</span> 
                         </a> 

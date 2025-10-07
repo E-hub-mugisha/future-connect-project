@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminStoryController;
 use App\Http\Controllers\Admin\AdminSkillController;
 use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
+use App\Http\Controllers\Admin\AdminCoursesController;
 use App\Http\Controllers\Admin\AdminPartnerController;
 use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminTalentConnectionController;
@@ -20,9 +21,11 @@ use App\Http\Controllers\Talent\TalentProfileController;
 use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
 use App\Http\Controllers\users\UserPanelController;
+use App\Models\Course;
 use App\Models\Talent;
 
 /*
@@ -92,6 +95,18 @@ Route::get('/connection/{id}/payment', [TalentConnectionController::class, 'paym
 Route::post('/connections/{id}/pay-now', [TalentConnectionController::class, 'payNow'])->name('connections.payment.now');
 Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, 'payLater'])->name('connections.payment.later');
 Route::get('/connection/payment/callback', [TalentConnectionController::class, 'handleCallback'])->name('connection.payment.callback');
+
+Route::get('/courses', [CourseController::class, 'index'])->name('user.courses');
+Route::get('/course-details/{slug}', [CourseController::class, 'show'])->name('user.courses.show');
+Route::get('/course/category/{slug}', [CourseController::class, 'category'])->name('user.courses.category');
+Route::post('/courses/{id}/review', [CourseController::class, 'storeReview'])
+    ->name('courses.review')
+    ->middleware('auth');
+Route::get('/courses/category/{slug}', [CourseController::class, 'getCoursesByCategory'])->name('user.courses.category');
+Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])
+    ->name('user.courses.enroll')
+    ->middleware('auth');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
@@ -104,7 +119,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', 'update')->name('profile.update');
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
-    
 });
 
 Route::get('/test', function () {
@@ -120,7 +134,7 @@ Route::get('/test', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
 
     // Talents
     Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents');
@@ -182,6 +196,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         ->name('connections.respond');
     Route::post('/connections/{id}/accept', [AdminTalentConnectionController::class, 'accept'])
         ->name('connections.accept');
+
+    Route::get('courses', [AdminCoursesController::class, 'index'])->name('courses.index');
+    Route::get('courses/create', [AdminCoursesController::class, 'create'])->name('courses.create');
+    Route::post('courses', [AdminCoursesController::class, 'store'])->name('courses.store');
+    Route::get('courses/{slug}', [AdminCoursesController::class, 'show'])->name('courses.show');
+    Route::get('courses/{id}/edit', [AdminCoursesController::class, 'edit'])->name('courses.edit');
+    Route::put('courses/{id}', [AdminCoursesController::class, 'update'])->name('courses.update');
+    Route::delete('courses/{id}', [AdminCoursesController::class, 'destroy'])->name('courses.destroy');
+    Route::post('courses/feedback', [AdminCoursesController::class, 'storeFeedback'])
+        ->name('courses.feedback.store');
+    // Admin Courses Lessons Routes
+    Route::post('courses/lessons', [AdminCoursesController::class, 'storeLesson'])
+        ->name('courses.lessons.store');
 });
 
 /*
@@ -213,7 +240,7 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
 
     // Stories
     Route::get('get/talent/stories', [TalentStoryController::class, 'index'])
-    ->name('page.stories');
+        ->name('page.stories');
     Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('page.stories.show');
 });
 
@@ -228,6 +255,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('user/notifications', [UserPanelController::class, 'notifications'])->name('user.notifications');
     Route::get('user/connections', [UserPanelController::class, 'connections'])->name('user.connections');
     Route::post('user/connections/request', [UserPanelController::class, 'sendConnectionRequest'])->name('connections.request');
+
+    Route::get('user/courses', [UserPanelController::class, 'userCourses'])->name('user.courses');
+    Route::get('user/courses/{slug}', [UserPanelController::class, 'userCoursesShow'])->name('user-panel.courses.show');
 });
 
 require __DIR__ . '/auth.php';

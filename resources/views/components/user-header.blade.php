@@ -258,29 +258,25 @@ return request()->routeIs($route) ? 'active' : '';
                         <a href="{{ route('talent.connections-room') }}"
                             class="nav-link {{ isActiveRoute(['talent.connections-room']) }}">Connection Room</a>
                     </li>
-                    {{-- Stories --}}
+                    {{-- Courses --}}
                     <li class="has-submenu">
-                        <a role="button" class="nav-link
-                            {{
-                                isActiveRoute([], [
-                                    'stories', 'upload-story', 'story/category/*'
-                                ])
-                            }}"
-                            tabindex="0">Stories <i class="fas fa-chevron-down"></i></a>
+                        <a role="button" class="nav-link {{ isActiveRoute([], [ 'courses', 'courses/*', 'courses/category/*' ]) }}"
+                            tabindex="0">Courses <i class="fas fa-chevron-down"></i>
+                        </a>
 
                         <ul class="submenu">
                             <li>
-                                <a href="{{ url('/stories') }}"
-                                    class="{{ Request::is('stories') ? 'active' : '' }}">All Stories</a>
+                                <a href="{{ url('/courses') }}"
+                                    class="{{ Request::is('courses') ? 'active' : '' }}">All Courses</a>
                             </li>
 
                             <li class="has-submenu">
-                                <a role="button" tabindex="0">Story Categories</a>
+                                <a role="button" tabindex="0">Course Categories</a>
                                 <ul class="submenu">
                                     @foreach($categories as $cat)
                                     <li>
-                                        <a href="{{ url('/story/category/' . $cat->slug) }}"
-                                            class="{{ Request::is('story/category/' . $cat->slug) ? 'active' : '' }}">
+                                        <a href="{{ url('/courses/category/' . $cat->slug) }}"
+                                            class="{{ Request::is('courses/category/' . $cat->slug) ? 'active' : '' }}">
                                             {{ $cat->name }}
                                         </a>
                                     </li>
@@ -289,6 +285,7 @@ return request()->routeIs($route) ? 'active' : '';
                             </li>
                         </ul>
                     </li>
+
 
                     {{-- Skills --}}
                     <li class="has-submenu">
@@ -391,8 +388,8 @@ return request()->routeIs($route) ? 'active' : '';
     </div>
 </header>
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content postLists">
             <div class="modal-body">
 
                 <form action="{{ route('login') }}" method="POST">

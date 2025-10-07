@@ -62,4 +62,8 @@ class Talent extends Model
     {
         return $this->hasMany(TalentConnection::class);
     }
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Talent;
 use App\Models\TalentConnection;
 use Illuminate\Http\Request;
@@ -78,5 +79,15 @@ class UserPanelController extends Controller
         }
 
         return back()->with('success', 'Connection request sent.');
+    }
+
+    public function userCourses() {
+        $user = auth()->user();
+        $courses = $user->enrollments()->with('course')->get()->pluck('course');
+        return view('user.courses', compact('courses'));
+    }
+    public function userCoursesShow($slug) {
+        $course = Course::where('slug', $slug)->with(['talent', 'feedback', 'lessons'])->firstOrFail();
+        return view('user.course-show', compact('course'));
     }
 }

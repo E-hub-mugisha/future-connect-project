@@ -51,8 +51,8 @@ $role = Auth::check() ? Auth::user()->role : null;
                         </a>
                     </li>
                     <li class="nk-menu-item"> 
-                        <a href="/admin/stories" class="nk-menu-link {{ isActiveRoute('admin.stories.*', 'admin/stories*') }}"> 
-                            <i class="ti ti-stars me-2"></i> <span>Stories</span> 
+                        <a href="/user/courses" class="nk-menu-link {{ isActiveRoute('user.courses.*', 'user/courses*') }}"> 
+                            <i class="ti ti-stars me-2"></i> <span>courses</span> 
                         </a> 
                     </li>
                     <li class="nk-menu-item"> 

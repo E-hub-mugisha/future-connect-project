@@ -1009,10 +1009,10 @@
                             <!-- View Button -->
                             <div class="text-center d-flex justify-content-center">
                                 <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i>View Profile
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
+                                    <i class="feather-arrow-right"></i>View Profile
+                                    <span class="slide-line"></span>
+                                    <span class="slide-line"></span>
+                                    <span class="slide-line"></span>
                                 </a>
                             </div>
 
@@ -1262,6 +1262,121 @@
 </div> -->
 <!-- end Future Connect talent slider -->
 
+<div class="new-services-section">
+    <div class="container">
+        <div class="section-header-two text-center" data-aos="fade-up">
+            <h2 class="mb-2"><span class="title-bg"></span>Our New Courses<span class="title-bg2"></span></h2>
+            <p>Unlock a world of opportunities and take control of your future</p>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="listing-tab" data-aos="fade-up">
+            <div class="listing-slider">
+                <ul class="nav nav-tabs justify-content-center" id="coursesCategoryTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="tab-all" data-category="All" role="tab">
+                            All
+                        </a>
+                    </li>
+                    @foreach($categories as $category)
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link"
+                            id="tab-{{ \Illuminate\Support\Str::slug($category->name) }}"
+                            data-category="{{ $category->name }}" role="tab">
+                            {{ $category->name }}
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+
+        <!-- Courses Content -->
+        <div class="tab-content" data-aos="fade-up" id="coursesContent">
+            <div class="row">
+                @forelse($courses as $course)
+                <div class="col-xl-4 col-md-6 skill-card"
+                    data-category="{{ $course->category->name ?? 'Uncategorized' }}">
+                    <div class="gigs-grid">
+                        <div class="gigs-img">
+                            <div class="img-slider owl-carousel">
+                                <div class="slide-images">
+                                    <a href="{{ url('/course-details/' . $course->slug) }}">
+                                        <img src="{{ asset($course->thumbnail) }}" class="img-fluid w-100"
+                                            style="height: 240px; object-fit: cover; transition: transform 0.3s ease;"
+                                            alt="{{ $course->title }}">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-overlay-badge">
+                                <a href="{{ url('/course/category/'.$course->category->slug) }}">
+                                    <span class="badge bg-warning">
+                                        <i class="feather-star"></i>{{ $course->category->name ?? 'Uncategorized' }}
+                                    </span>
+                                </a>
+                                <a href="{{ url('/course/category/'.$course->category->slug) }}">
+                                    <span class="badge bg-danger">
+                                        <i class="fa-solid fa-meteor"></i>
+                                        {{ $course->category->name ?? 'Uncategorized' }}
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="fav-selection">
+                                <a role="button" tabindex="0"><i class="feather-video"></i></a>
+                                <a role="button" tabindex="0" class="fav-icon"><i class="feather-heart"></i></a>
+                            </div>
+                        </div>
+                        <div class="gigs-content">
+                            <div class="gigs-info">
+                                <div>
+                                    <a href="{{ url('/course/category/'.$course->category->slug ?? '') }}"
+                                        class="badge bg-light">
+                                        {{ $course->category->name ?? 'Uncategorized' }}
+                                    </a>
+                                    <span class="ms-2">+1</span>
+                                </div>
+                                <div class="star-rate">
+                                    <span>
+                                        <i class="fa-solid fa-star"></i>
+                                        {{ number_format($course->feedback->avg('rating'), 1) }}
+                                        ({{ $course->feedback->count() }} Reviews)
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="gigs-title">
+                                <h5><a href="{{ url('/course-details/'.$course->slug) }}">{{ $course->title }}</a></h5>
+                            </div>
+                            <div class="gigs-card-footer d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gigs-left-text">
+                                    <a href="{{ url('/talent/' . $course->talent->id) }}" class="avatar avatar-sm flex-shrink-0">
+                                        <img src="{{ $course->talent->image ? asset('image/talents/' . $course->talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                            class="img-fluid rounded-pill" alt="talent" />
+                                    </a>
+                                    <div class="ms-2">
+                                        <h6 class="mb-0">
+                                            <a role="button" tabindex="0">{{ $course->talent->name ?? 'talent' }}</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    @if($course->is_free)
+                                    <span>Free</span>
+                                    @else
+                                    <span>${{ number_format($course->price, 2) }}</span>
+                                    @endif
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                <p class="text-center mt-4">No courses found.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- what makes Future Connect -->
 <div class="container">

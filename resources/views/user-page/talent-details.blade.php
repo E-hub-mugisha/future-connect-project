@@ -451,6 +451,109 @@
                     <div class="title-sec">
                         <div class="row align-items-center">
                             <div class="col-md-8">
+                                <h3>{{ $talent->name }}'s courses</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="owl-nav worknav nav-control nav-top"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next disabled"><i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gigs-slider owl-carousel owl-loaded owl-drag">
+                        @if($talent->courses && $talent->courses->count())
+                        <div class="owl-stage-outer">
+                            <div class="owl-stage" style="transform: translate3d(-440px, 0px, 0px); transition: 2s; width: 1760px;">
+                                @foreach($talent->courses as $course)
+                                <div class="owl-item" style="width: 416px; margin-right: 24px;">
+                                    <div class="gigs-grid">
+                                        <div class="gigs-img">
+                                            <div class="img-slider owl-carousel">
+                                                <div class="slide-images">
+                                                    <a href="{{ url('/course-details/' . $course->slug) }}">
+                                                        <img src="{{ asset('assets/img/home/service-01.jpg') }}" class="img-fluid" alt="Gigs">
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-overlay-badge">
+                                                <a href="{{ url('/course/category/'.$course->slug) }}">
+                                                    <span class="badge bg-warning">
+                                                        <i class="feather-star"></i>{{ $course->category->name ?? 'Uncategorized' }}
+                                                    </span>
+                                                </a>
+                                                <a href="{{ url('/course/category/'.$course->slug) }}">
+                                                    <span class="badge bg-danger">
+                                                        <i class="fa-solid fa-meteor"></i>
+                                                        {{ $course->category->name ?? 'Uncategorized' }}
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="fav-selection">
+                                                <a role="button" tabindex="0"><i class="feather-video"></i></a>
+                                                <a role="button" tabindex="0" class="fav-icon"><i
+                                                        class="feather-heart"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="gigs-content">
+                                            <div class="gigs-info">
+                                                <div>
+                                                    <a href="{{ url('/course/category/'.$course->category->slug ?? '') }}"
+                                                        class="badge bg-light">
+                                                        {{ $course->category->name ?? 'Uncategorized' }}
+                                                    </a>
+                                                    <span class="ms-2">+1</span>
+                                                </div>
+                                                <div class="star-rate">
+                                                    <span>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        {{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
+                                                        ({{ $course->feedback->count() }} feedback)
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="gigs-title">
+                                                <h5><a
+                                                        href="{{ url('/course/details/'.$course->slug) }}">{{ $course->title }}</a>
+                                                </h5>
+                                            </div>
+                                            <div class="gigs-card-footer d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center gigs-left-text">
+                                                    <a href="{{ url('/talent/' . $course->talent->id) }}" class="avatar avatar-sm flex-shrink-0">
+                                                        <img src="{{ $course->talent->image ? asset('image/talents/' . $course->talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                                            class="img-fluid rounded-pill" alt="img" />
+                                                    </a>
+                                                    <div class="ms-2">
+                                                        <h6 class="mb-0">
+                                                            <a role="button"
+                                                                tabindex="0">{{ $course->talent->name ?? 'Author' }}</a>
+                                                        </h6>
+
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span>{{ $course->tags }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="owl-dots disabled"></div>
+                        @else
+                        <p>No courses found.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-works">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title-sec">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
                                 <h3>{{ $talent->name }}'s Stories</h3>
                             </div>
                             <div class="col-md-4">
@@ -606,5 +709,5 @@
         });
     </script>
 
-
-    @endsection
+</div>
+@endsection

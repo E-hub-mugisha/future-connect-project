@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Talent;
 use App\Models\Category;
 use App\Models\Contact;
+use App\Models\Course;
 use App\Models\Faq;
 use App\Models\Partner;
 use App\Models\Skill;
@@ -55,6 +56,8 @@ class HomeController extends Controller
             return $talent;
         });
 
+        $courses = Course::with(['category', 'feedback', 'talent'])->latest()->get();
+
         return view('user-page.home', [
             'talents' => $talents,
             'categories' => Category::withCount('talents')->take(10)->get(),
@@ -67,6 +70,7 @@ class HomeController extends Controller
             'testimonials' => Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
             'partners' => Partner::all(), // Fetch only active partners
             'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->take(4)->get(),
+            'courses' => $courses,
         ]);
     }
     public function talents()
@@ -151,7 +155,7 @@ class HomeController extends Controller
 
     public function showTalents($id)
     {
-        $talent = Talent::with(['skills', 'stories'])->findOrFail($id);
+        $talent = Talent::with(['skills', 'stories','courses'])->findOrFail($id);
         return view('user-page.talent-details', [
             'talent' => $talent
         ]);

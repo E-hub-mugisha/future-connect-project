@@ -97,11 +97,32 @@ body {
 } */
 
 .container {
-  max-width: 1680px;
-  margin: 0 auto;
-  /* This centers the container horizontally */
-  /* padding: 0 8em;  */
+  width: 100%;              /* Full width by default */
+  max-width: 1680px;        /* Maximum width on large screens */
+  margin: 0 auto;           /* Center horizontally */
+  padding: 0 2rem;          /* Add horizontal padding for small screens */
+  box-sizing: border-box;   /* Ensure padding is included in width */
 }
+
+/* Optional: adjust padding for larger screens */
+@media (min-width: 768px) {
+  .container {
+    padding: 0 3rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    padding: 0 4rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .container {
+    padding: 0 6rem;
+  }
+}
+
 
 
 ::selection {
