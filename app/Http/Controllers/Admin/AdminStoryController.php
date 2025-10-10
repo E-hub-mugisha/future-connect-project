@@ -52,13 +52,14 @@ class AdminStoryController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
-            $path = 'image/thumbnails/';
+            $path = 'image/stories/';
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path($path), $imageName); 
         }
         
         $validated['thumbnail'] = isset($imageName) ? $path . $imageName : null;
         $story = Story::create($validated);
+
         return redirect()->route('admin.stories.index');
     }
 
@@ -94,7 +95,7 @@ class AdminStoryController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
-            $path = 'image/thumbnails/';
+            $path = 'image/stories/';
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path($path), $imageName);
             $validated['thumbnail'] = $path . $imageName;
@@ -104,6 +105,7 @@ class AdminStoryController extends Controller
         }
         // Update the story with validated data
         $story->update($validated);
+
         return redirect()->route('admin.stories.index');
     }
 
@@ -111,6 +113,10 @@ class AdminStoryController extends Controller
     public function destroy($id)
     {
         $story = Story::findOrFail($id);
+        // Delete associated thumbnail if exists
+        if ($story->thumbnail && file_exists(public_path($story->thumbnail))) {
+            unlink(public_path($story->thumbnail));
+        }
         $story->delete();
 
         return redirect()->route('admin.stories.index');

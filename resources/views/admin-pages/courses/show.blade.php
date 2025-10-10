@@ -30,11 +30,11 @@
                         </video>
                         @else
                         @if($course->video)
-                        <video class="w-100 rounded" controls poster="{{ asset('storage/'.$course->thumbnail) }}">
-                            <source src="{{ asset('storage/'.$course->video) }}" type="video/mp4">
+                        <video class="w-100 rounded" controls poster="{{ asset('images/thumbnails/'.$course->thumbnail) }}">
+                            <source src="{{ $course->video }}" type="video/mp4">
                         </video>
                         @else
-                        <img src="{{ asset('storage/'.$course->thumbnail) }}" class="w-100 rounded" alt="{{ $course->title }}">
+                        <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="w-100 rounded" alt="{{ $course->title }}">
                         @endif
                         @endif
                     </div>
@@ -212,7 +212,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="video_url" class="form-label">Lesson Video</label>
-                        <input type="file" name="video_url" class="form-control" accept="video/*" required>
+                        <input type="text" name="video_url" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="order" class="form-label">Lesson Order</label>

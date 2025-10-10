@@ -9,7 +9,7 @@ use App\Models\CourseFeedback;
 use App\Models\CourseLesson;
 use App\Models\Talent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminCoursesController extends Controller
 {
@@ -26,6 +26,7 @@ class AdminCoursesController extends Controller
         return view('admin-pages.courses.create', compact('categories', 'talents'));
     }
 
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -33,25 +34,57 @@ class AdminCoursesController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'is_free' => 'boolean',
+            'is_free' => 'sometimes|boolean',
             'price' => 'nullable|numeric|min:0',
             'level' => 'nullable|string|max:50',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:51200',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'video' => 'nullable|url|max:255',
             'status' => 'required|in:draft,published',
         ]);
 
+        $course = new Course();
+
+        $course->title = $validated['title'];
+        $course->slug = Str::slug($validated['title']) . '-' . uniqid();
+        $course->description = $validated['description'] ?? '';
+        $course->category_id = $validated['category_id'];
+        $course->talent_id = $validated['talent_id'];
+        $course->status = $validated['status'];
+        $course->level = $validated['level'] ?? 'Beginner';
+        $course->video = $validated['video'] ?? null;
+
+        $course->is_free = $request->boolean('is_free');
+        $course->price = $course->is_free ? 0 : ($validated['price'] ?? 0);
+
+        // Handle manual file upload with move()
         if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            $image = $request->file('thumbnail');
+
+            // Build safe, unique file name
+            $fileName = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+
+            // Destination path (inside public/)
+            $destinationPath = public_path('images/thumbnails');
+
+            // Ensure directory exists
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Move the uploaded file
+            $image->move($destinationPath, $fileName);
+
+            // Save only filename or relative path
+            $course->thumbnail = $fileName;
         }
 
-        if ($request->hasFile('video')) {
-            $validated['video'] = $request->file('video')->store('videos', 'public');
-        }
+        $course->save();
 
-        Course::create($validated);
-        return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
+        return redirect()
+            ->route('admin.courses.index')
+            ->with('success', 'Course created successfully.');
     }
+
 
     public function edit($id)
     {
@@ -63,33 +96,57 @@ class AdminCoursesController extends Controller
 
     public function update(Request $request, $id)
     {
+        $course = Course::findOrFail($id);
+
         $validated = $request->validate([
             'talent_id' => 'required|exists:talents,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'is_free' => 'boolean',
+            'is_free' => 'sometimes|boolean',
             'price' => 'nullable|numeric|min:0',
             'level' => 'nullable|string|max:50',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:51200',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'video' => 'nullable|url|max:255',
             'status' => 'required|in:draft,published',
         ]);
 
-        $course = Course::findOrFail($id);
+        // Update basic fields
+        $course->title = $validated['title'];
+        $course->slug = Str::slug($validated['title']) . '-' . uniqid();
+        $course->description = $validated['description'] ?? '';
+        $course->category_id = $validated['category_id'];
+        $course->talent_id = $validated['talent_id'];
+        $course->status = $validated['status'];
+        $course->level = $validated['level'] ?? 'Beginner';
+        $course->video = $validated['video'] ?? null;
+        $course->is_free = $request->boolean('is_free');
+        $course->price = $course->is_free ? 0 : ($validated['price'] ?? 0);
 
+        // Handle thumbnail replacement
         if ($request->hasFile('thumbnail')) {
-            if ($course->thumbnail) Storage::disk('public')->delete($course->thumbnail);
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+            $image = $request->file('thumbnail');
+            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('images/thumbnails');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Delete old image if exists
+            if ($course->thumbnail && file_exists(public_path('images/thumbnails/' . $course->thumbnail))) {
+                unlink(public_path('images/thumbnails/' . $course->thumbnail));
+            }
+
+            // Move new file
+            $image->move($destinationPath, $filename);
+            $course->thumbnail = $filename;
         }
 
-        if ($request->hasFile('video')) {
-            if ($course->video) Storage::disk('public')->delete($course->video);
-            $validated['video'] = $request->file('video')->store('videos', 'public');
-        }
+        $course->save();
 
-        $course->update($validated);
-        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
+        return redirect()->route('admin.courses.index')
+            ->with('success', 'Course updated successfully.');
     }
 
     public function show($slug)
@@ -98,13 +155,20 @@ class AdminCoursesController extends Controller
         return view('admin-pages.courses.show', compact('course'));
     }
 
-    public function destroy(Course $course)
+    public function destroy($id)
     {
-        if ($course->thumbnail) Storage::disk('public')->delete($course->thumbnail);
-        if ($course->video) Storage::disk('public')->delete($course->video);
+        $course = Course::findOrFail($id);
+
+        // Delete thumbnail file if it exists
+        if ($course->thumbnail && file_exists(public_path('images/thumbnails/' . $course->thumbnail))) {
+            unlink(public_path('images/thumbnails/' . $course->thumbnail));
+        }
+
+        // Delete the course record
         $course->delete();
 
-        return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
+        return redirect()->route('admin.courses.index')
+            ->with('success', 'Course deleted successfully.');
     }
 
     public function storeFeedback(Request $request)
@@ -132,21 +196,52 @@ class AdminCoursesController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'nullable|string',
             'order' => 'nullable|integer',
-            'video_url' => 'required|mimes:mp4,mov,avi,wmv|max:51200', // 50MB max
+            'video_url' => 'required|url|max:522', // 50MB max
         ]);
-
-        // Upload video
-        $videoPath = $request->file('video_url')->store('course_videos', 'public');
-
         // Create lesson
         $lesson = CourseLesson::create([
             'course_id' => $request->course_id,
             'title' => $request->title,
             'content' => $request->content,
-            'video_url' => $videoPath,
+            'video_url' => $request->video_url,
             'order' => $request->order,
         ]);
 
         return redirect()->back()->with('success', 'Lesson added successfully.');
+    }
+
+    public function editLesson($id)
+    {
+        $lesson = CourseLesson::findOrFail($id);
+        return view('admin-pages.courses.edit-lesson', compact('lesson'));
+    }
+
+    public function updateLesson(Request $request, $id)
+    {
+        $lesson = CourseLesson::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'order' => 'nullable|integer',
+            'video_url' => 'required|url|max:522', // 50MB max
+        ]);
+
+        $lesson->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'video_url' => $request->video_url,
+            'order' => $request->order,
+        ]);
+
+        return redirect()->back()->with('success', 'Lesson updated successfully.');
+    }
+
+    public function destroyLesson($id)
+    {
+        $lesson = CourseLesson::findOrFail($id);
+        $lesson->delete();
+
+        return redirect()->back()->with('success', 'Lesson deleted successfully.');
     }
 }

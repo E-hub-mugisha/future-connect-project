@@ -597,7 +597,7 @@
 
                         <!-- Image on the right -->
                         <div class="tranding-slide-img col-md-6" data-aos="zoom-in" data-aos-duration="1000">
-                            <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/user/profile.jpg') }}"
+                            <img src="{{ asset('images/stories/'.$story->thumbnail) }}"
                                 alt="{{ \Illuminate\Support\Str::limit($story->title, 60) }}">
                         </div>
                     </div>
@@ -724,7 +724,7 @@
                                     <div class="gigs-grid postLists mb-4">
                                         <div class="gigs-img position-relative">
                                             <a href="{{ url('story-details/'.$story->slug) }}">
-                                                <img src="{{ $story->thumbnail ? asset($story->thumbnail) : asset('assets/img/user/profile.jpg') }}"
+                                                <img src="{{ asset('images/stories/'.$story->thumbnail) }}"
                                                     class="img-fluid w-100" alt="{{ $story->title }}"
                                                     style="height: 240px; object-fit: cover; transition: transform 0.3s ease;"
                                                     onmouseover="this.style.transform='scale(1.05)'"

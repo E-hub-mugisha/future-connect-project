@@ -42,7 +42,7 @@
                                     {{-- Thumbnail --}}
                                     <td>
                                         @if($course->thumbnail)
-                                            <img src="{{ asset('storage/'.$course->thumbnail) }}" 
+                                            <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" 
                                                  class="rounded-3 shadow-sm" width="70" height="50" 
                                                  style="object-fit: cover;">
                                         @else
@@ -83,9 +83,9 @@
                                     {{-- Video Preview --}}
                                     <td>
                                         @if($course->video)
-                                            <video width="80" height="50" controls muted class="rounded">
-                                                <source src="{{ asset('storage/'.$course->video) }}" type="video/mp4">
-                                            </video>
+                                            <iframe width="80" height="50" controls muted class="rounded">
+                                                <source src="{{ $course->video }}" type="video/mp4">
+                                            </iframe>
                                         @else
                                             <span class="text-muted">No Video</span>
                                         @endif

@@ -5,7 +5,26 @@
     <div class="nk-content-inner">
         <div class="nk-content-body">
             <h3 class="nk-block-title mb-4">Add New Skill</h3>
-
+            <a href="{{ route('admin.skills.index') }}" class="btn btn-secondary mb-4">Back to Skills</a>
+            
+            <!-- error -->
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <!-- end error -->
+            <!-- success -->
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+            <!-- end success -->
             <form action="{{ route('admin.skills.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 

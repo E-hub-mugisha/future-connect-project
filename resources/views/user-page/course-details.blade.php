@@ -78,19 +78,19 @@
 							<div class="service-img-wrap">
 								{{-- If course is free, autoplay the first lesson video --}}
 								@if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
-								<video class="img-fluid w-100 rounded-3" controls autoplay muted playsinline poster="{{ asset($course->thumbnail) }}">
+								<video class="img-fluid w-100 rounded-3" controls autoplay muted playsinline poster="{{ asset('images/thumbnails/'.$course->thumbnail) }}">
 									<source src="{{ asset($course->lessons->first()->video) }}" type="video/mp4">
 									Your browser does not support the video tag.
 								</video>
 								@elseif($course->video)
 								{{-- Otherwise show intro video --}}
-								<video class="img-fluid w-100 rounded-3" controls poster="{{ asset($course->thumbnail) }}">
+								<video class="img-fluid w-100 rounded-3" controls poster="{{ asset('images/thumbnails/'.$course->thumbnail) }}">
 									<source src="{{ asset($course->video) }}" type="video/mp4">
 									Your browser does not support the video tag.
 								</video>
 								@else
 								{{-- Fallback image --}}
-								<img src="{{ asset($course->thumbnail) }}" class="img-fluid w-100 rounded-3" alt="{{ $course->title }}">
+								<img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid w-100 rounded-3" alt="{{ $course->title }}">
 								@endif
 							</div>
 						</div>

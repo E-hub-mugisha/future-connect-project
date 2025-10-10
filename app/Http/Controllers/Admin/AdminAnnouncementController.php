@@ -44,9 +44,9 @@ class AdminAnnouncementController extends Controller
         $imageName = null;
 
         if ($image = $request->file('image')) {
-            $menuPath = 'image/announcements/';
+            $imagePath = 'image/announcements/';
             $imageName = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move(public_path($menuPath), $imageName);
+            $image->move(public_path($imagePath), $imageName);
         }
 
         $announcement = Announcement::create([

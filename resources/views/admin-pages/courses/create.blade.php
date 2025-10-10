@@ -115,11 +115,11 @@
                             <!-- Video -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Intro Video</label>
-                                <input type="file" name="video" class="form-control rounded-3 shadow-sm">
+                                <input type="text" name="video" class="form-control rounded-3 shadow-sm">
                                 @if(isset($course) && $course->video)
                                 <div class="mt-3">
                                     <video width="200" class="rounded-3 shadow-sm" controls>
-                                        <source src="{{ asset('storage/'.$course->video) }}" type="video/mp4">
+                                        <source src="{{ $course->video }}" type="video/mp4">
                                     </video>
                                 </div>
                                 @endif

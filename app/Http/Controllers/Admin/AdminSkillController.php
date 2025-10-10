@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Skill;
+use Illuminate\Support\Str;
 
 class AdminSkillController extends Controller
 {
@@ -39,7 +40,23 @@ class AdminSkillController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validatedData['image'] = $request->file('image')->store('skills', 'public');
+            $image = $request->file('image');
+            // Build safe, unique file name
+            $fileName = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+
+            // Destination path (inside public/)
+            $destinationPath = public_path('images/skills');
+
+            // Ensure directory exists
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Move the uploaded file
+            $image->move($destinationPath, $fileName);
+
+            // Save only filename or relative path
+            $validatedData['image'] = $fileName;
         }
 
         $slug = \Illuminate\Support\Str::slug($validatedData['name']);
@@ -82,8 +99,24 @@ class AdminSkillController extends Controller
             'level' => 'required|in:Beginner,Intermediate,Advanced,Expert',
         ]);
 
+        // Handle image replacement
         if ($request->hasFile('image')) {
-            $validatedData['image'] = $request->file('image')->store('skills', 'public');
+            $image = $request->file('image');
+            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('images/skills');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            // Delete old image if exists
+            if ($skill->image && file_exists(public_path('images/skills/' . $skill->image))) {
+                unlink(public_path('images/skills/' . $skill->image));
+            }
+
+            // Move new file
+            $image->move($destinationPath, $filename);
+            $skill->image = $filename;
         }
 
         $slug = \Illuminate\Support\Str::slug($validatedData['name']);
@@ -98,6 +131,10 @@ class AdminSkillController extends Controller
     public function destroy(string $id)
     {
         $skill = Skill::findOrFail($id);
+        // Delete associated image if exists
+        if ($skill->image && file_exists(public_path('images/skills/' . $skill->image))) {
+            unlink(public_path('images/skills/' . $skill->image));
+        }
         $skill->delete();
 
         return redirect()->route('admin.skills.index')->with('success', 'Skill deleted successfully');

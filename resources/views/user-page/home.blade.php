@@ -1090,7 +1090,7 @@
                             <div class="img-slider owl-carousel">
                                 <div class="slide-images">
                                     <a href="{{ url('/story-details/' . $story->slug) }}">
-                                        <img src="{{ asset($story->thumbnail) }}" class="img-fluid w-100" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="Gigs">
+                                        <img src="{{ asset('images/stories/'.$story->thumbnail) }}" class="img-fluid w-100" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="Gigs">
                                     </a>
                                 </div>
 
@@ -1302,7 +1302,7 @@
                             <div class="img-slider owl-carousel">
                                 <div class="slide-images">
                                     <a href="{{ url('/course-details/' . $course->slug) }}">
-                                        <img src="{{ asset($course->thumbnail) }}" class="img-fluid w-100"
+                                        <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid w-100"
                                             style="height: 240px; object-fit: cover; transition: transform 0.3s ease;"
                                             alt="{{ $course->title }}">
                                     </a>

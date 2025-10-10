@@ -51,7 +51,7 @@
 
                             <!-- Custom Thumbnail Overlay -->
                             <div class="video-thumbnail position-absolute top-0 start-0 w-100 h-100" id="custom-thumbnail" style="cursor: pointer; background-color: #000;">
-                                <img src="{{ asset($story->thumbnail) }}"
+                                <img src="{{ asset('images/stories/'.$story->thumbnail) }}"
                                     alt="Video Thumbnail"
                                     class="img-fluid w-100 h-100 object-fit-cover rounded-4"
                                     style="object-fit: cover;">

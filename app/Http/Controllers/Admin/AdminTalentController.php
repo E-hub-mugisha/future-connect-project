@@ -28,30 +28,43 @@ class AdminTalentController extends Controller
         return view('admin-pages.talents.index', compact('talents', 'categories', 'totalRatings', 'totalStories', 'totalComments', 'totalSkills'));
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'featured' => 'boolean',
+            'name' => 'required|string|max:255',
+            'featured' => 'sometimes|boolean',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
-            'address' => 'nullable|string',
-            'phone' => 'nullable|string',
-            'email' => 'nullable|email',
-            'language' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'language' => 'nullable|string|max:50',
             'category_id' => 'required|exists:categories,id',
         ]);
 
         $talentImage = null;
-        if ($image = $request->file('image')) {
-            $path = 'image/talents/';
-            $talentImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move(public_path($path), $talentImage);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $path = public_path('image/talents/');
+
+            // Ensure folder exists
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Create a safe, unique file name
+            $talentImage = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+
+            // Move uploaded file
+            $image->move($path, $talentImage);
         }
 
         Talent::create([
             'name' => $request->name,
-            'featured' => $request->has('featured') ? 1 : 0,
+            'featured' => $request->boolean('featured'),
             'description' => $request->description,
             'image' => $talentImage,
             'address' => $request->address,
@@ -61,9 +74,9 @@ class AdminTalentController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        session()->flash('success', 'Talent registered successfully.');
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Talent registered successfully.');
     }
+
 
     public function show($id)
     {
@@ -74,50 +87,57 @@ class AdminTalentController extends Controller
 
     public function update(Request $request, $id)
     {
-        Log::info('Update hit', $request->all()); // add this
-        // ✅ Validate input
+        $talent = Talent::findOrFail($id);
+
         $request->validate([
-            'name' => 'required|string',
-            'featured' => 'nullable|boolean',
+            'name' => 'required|string|max:255',
+            'featured' => 'sometimes|boolean',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
-            'address' => 'nullable|string',
-            'phone' => 'nullable|string',
-            'email' => 'nullable|email',
-            'language' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'language' => 'nullable|string|max:50',
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        // ✅ Find the talent record
-        $talent = Talent::findOrFail($id);
-
-        // ✅ Handle image upload
-        $imageName = $talent->image; // Keep current image if no new one is uploaded
+        $talentImage = $talent->image; // keep old image by default
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $path = 'image/talents/';
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path($path), $imageName);
+            $path = public_path('image/talents/');
+
+            // Create folder if it doesn’t exist
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // Delete old image if exists
+            if ($talent->image && file_exists($path . $talent->image)) {
+                unlink($path . $talent->image);
+            }
+
+            // Generate safe, unique filename
+            $talentImage = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+
+            // Move new image
+            $image->move($path, $talentImage);
         }
 
-        // ✅ Update talent fields
         $talent->update([
-            'name'        => $request->name,
-            'featured'    => $request->has('featured') ? 1 : 0, // checkbox
+            'name' => $request->name,
+            'featured' => $request->boolean('featured'),
             'description' => $request->description,
-            'image'       => $imageName,
-            'address'     => $request->address,
-            'phone'       => $request->phone,
-            'email'       => $request->email,
-            'language'    => $request->language,
+            'image' => $talentImage,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'language' => $request->language,
             'category_id' => $request->category_id,
         ]);
 
-        // ✅ Flash success message & redirect to index
-        return redirect()->route('admin.talents')->with('success', 'Talent updated successfully.');
+        return redirect()->back()->with('success', 'Talent updated successfully.');
     }
-
 
     public function destroy($id)
     {
