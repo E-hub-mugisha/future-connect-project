@@ -3,6 +3,9 @@
 
 @section('content')
 
+<!-- Flutterwave Script -->
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+
 <style>
 	.talent-story-info {
 		background: #011E34;
@@ -72,35 +75,97 @@
 		<div class="row">
 			<!-- Course Details -->
 			<div class="col-lg-8">
-				<div class="slider-card service-slider-card postLists">
-					<div class="slide-part">
-						<div class="slider service-slider">
-							<div class="service-img-wrap">
-								{{-- If course is free, autoplay the first lesson video --}}
-								@if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
-								<video class="img-fluid w-100 rounded-3" controls autoplay muted playsinline poster="{{ asset('images/thumbnails/'.$course->thumbnail) }}">
-									<source src="{{ asset($course->lessons->first()->video) }}" type="video/mp4">
-									Your browser does not support the video tag.
-								</video>
-								@elseif($course->video)
-								{{-- Otherwise show intro video --}}
-								<video class="img-fluid w-100 rounded-3" controls poster="{{ asset('images/thumbnails/'.$course->thumbnail) }}">
-									<source src="{{ asset($course->video) }}" type="video/mp4">
-									Your browser does not support the video tag.
-								</video>
-								@else
-								{{-- Fallback image --}}
-								<img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid w-100 rounded-3" alt="{{ $course->title }}">
-								@endif
+				<div class="service-card w-100 mb-4 postLists">
+					<div class="service-video-wrap text-center">
+						<div class="video-wrapper position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
+							@if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
+							<div class="ratio ratio-16x9">
+								<iframe
+									src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->lessons->first()->video, 'v=') }}?autoplay=1&mute=1&playsinline=1"
+									title="{{ $course->lessons->first()->title }}"
+									allow="autoplay; encrypted-media"
+									allowfullscreen
+									class="rounded-3">
+								</iframe>
 							</div>
+							@elseif($course->video)
+							<div class="ratio ratio-16x9">
+								<iframe
+									src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->video, 'v=') }}"
+									title="{{ $course->title }}"
+									allow="autoplay; encrypted-media"
+									allowfullscreen
+									class="rounded-3">
+								</iframe>
+							</div>
+							@else
+							<img
+								src="{{ asset('images/thumbnails/'.$course->thumbnail) }}"
+								class="img-fluid w-100 rounded-3 shadow-sm"
+								alt="{{ $course->title }}">
+							@endif
 						</div>
+
 					</div>
 				</div>
-
 				<div class="service-wrap postLists">
 					<h3>About this course</h3>
 					<p>{{ $course->description }}</p>
 				</div>
+
+				<!-- Lessons Section -->
+				<div class="service-wrap course-lessons postLists mt-5">
+					<h3>Course Lessons</h3>
+
+					@if($course->lessons->count() > 0)
+					<ul class="list-group list-group-flush">
+						@foreach($course->lessons as $key => $lesson)
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>{{ $key + 1 }}. {{ $lesson->title ?? 'Untitled Lesson' }}</span>
+							<button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#lessonModal{{ $lesson->id }}">
+								<i class="fa-solid fa-eye"></i> View
+							</button>
+						</li>
+
+						<!-- Lesson Modal -->
+						<div class="modal fade" id="lessonModal{{ $lesson->id }}" tabindex="-1" aria-labelledby="lessonModalLabel{{ $lesson->id }}" aria-hidden="true">
+							<div class="modal-dialog modal-lg modal-dialog-centered">
+								<div class="modal-content postLists">
+									<div class="modal-header">
+										<h5 class="modal-title" id="lessonModalLabel{{ $lesson->id }}">
+											{{ $lesson->title ?? 'Untitled Lesson' }}
+										</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										@if($lesson->video_url)
+										<div class="ratio ratio-16x9 mb-3">
+											<iframe src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($lesson->video_url, 'v=') }}?autoplay=0&playsinline=1"
+												title="{{ $lesson->title ?? 'Lesson Video' }}" allowfullscreen class="rounded-3">
+											</iframe>
+										</div>
+										@else
+										<p class="text-muted">No video available for this lesson.</p>
+										@endif
+										<p>{{ $lesson->description ?? '' }}</p>
+									</div>
+									<div class="modal-footer">
+										<span class="text-muted">Duration: {{ $lesson->duration ?? '-' }}</span>
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Lesson Modal -->
+
+						@endforeach
+					</ul>
+					@else
+					<p class="text-muted">No lessons available for this course yet.</p>
+					@endif
+				</div>
+				<!-- /Lessons Section -->
+
 
 				<!-- Reviews -->
 				<div class="review-widget postLists">
@@ -228,9 +293,13 @@
 						</h3>
 					</div>
 
-					<a href="#" data-bs-toggle="modal" data-bs-target="#enrollModal" class="btn btn-primary w-100 mb-0">
+					<a href="#"
+						class="btn btn-primary w-100 mb-0"
+						data-bs-toggle="modal"
+						data-bs-target="{{ $course->is_free ? '#enrollModal' : '#paymentModal' }}">
 						<i class="feather-book-open"></i> Enroll to Full Story
 					</a>
+
 				</div>
 
 				<div class="service-widget member-widget postLists">
@@ -358,7 +427,89 @@
 		</div>
 		<!-- /Enroll Modal -->
 
+		<!-- Paid Course Payment Modal -->
+		<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content postLists">
+					<div class="modal-header">
+						<h5 class="modal-title" id="paymentModalLabel">Pay to Enroll in {{ $course->title }}</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<p>The course costs <strong>${{ number_format($course->price, 2) }}</strong>.</p>
+						<p>Please complete the payment to confirm enrollment.</p>
+					</div>
+					<div class="modal-footer">
+						<form action="{{ route('user.courses.pay', $course->id) }}" method="POST">
+							@csrf
+							<button type="button" class="btn btn-success w-100" id="payBtn">
+								<span id="payBtnText"><i class="fa fa-money-bill-wave"></i> Pay Now</span>
+								<span id="payBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+							</button>
+						</form>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </div>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const payBtn = document.getElementById("payBtn");
+		const payBtnText = document.getElementById("payBtnText");
+		const payBtnSpinner = document.getElementById("payBtnSpinner");
+
+		if (!payBtn) return;
+
+		payBtn.addEventListener("click", function() {
+			payBtnText.textContent = "Processing Payment...";
+			payBtnSpinner.classList.remove("d-none");
+			payBtn.disabled = true;
+
+			const userEmail = "{{ auth()->user()->email ?? 'guest@example.com' }}";
+			const userName = "{{ auth()->user()->name ?? 'Guest' }}";
+			const courseId = "{{ $course->id }}";
+			const coursePrice = "{{ $course->price }}";
+			const txRef = "course-" + courseId + "-" + Date.now();
+
+			FlutterwaveCheckout({
+				public_key: "{{ env('FLW_PUBLIC_KEY') }}",
+				tx_ref: txRef,
+				amount: coursePrice,
+				currency: "RWF",
+				payment_options: "card, mobilemoneyrwanda",
+				customer: {
+					email: userEmail,
+					name: userName
+				},
+				callback: function(data) {
+					if (data.status === "successful" || data.status === "completed") {
+						window.location.href = `/course/payment/callback?tx_ref=${data.tx_ref}&course_id=${courseId}&status=${data.status}`;
+					} else {
+						alert("Payment not successful. Please try again.");
+						resetPaymentButton();
+					}
+				},
+				onclose: function() {
+					resetPaymentButton();
+				},
+				customizations: {
+					title: "{{ $course->title }}",
+					description: "Pay to enroll in this course",
+					logo: "{{ asset('logo.png') }}"
+				}
+			});
+		});
+
+		function resetPaymentButton() {
+			payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
+			payBtnSpinner.classList.add("d-none");
+			payBtn.disabled = false;
+		}
+	});
+</script>
 
 @endsection

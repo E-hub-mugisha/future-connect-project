@@ -107,6 +107,11 @@ Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])
     ->name('user.courses.enroll')
     ->middleware('auth');
 
+// web.php
+Route::post('/courses/{course}/pay', [CourseController::class, 'pay'])->name('user.courses.pay');
+Route::get('/courses/{course}/success', [CourseController::class, 'paymentSuccess'])->name('user.courses.success');
+Route::get('/course/payment/callback', [CourseController::class, 'handleCallback'])->name('course.payment.callback');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes

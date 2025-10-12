@@ -28,20 +28,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // ✅ Role-based redirect logic
         $user = Auth::user();
 
-        if ($user->role === 'admin') {
-            return redirect()->intended(route('admin.dashboard'));
-        } elseif ($user->role === 'agent') {
-            return redirect()->intended(route('agent.dashboard'));
-        } elseif ($user->role === 'talent') {
-            return redirect()->intended(route('talent.dashboard'));
-        } else {
-            // Default redirect for normal users
-            return redirect()->intended(route('user.dashboard'));
-        }
+        // ✅ Always use redirect()->intended() — it remembers the previous protected page
+        // If there’s no intended URL, it falls back to role-based dashboards
+        $defaultRedirect = match ($user->role) {
+            'admin'  => route('admin.dashboard'),
+            'agent'  => route('agent.dashboard'),
+            'talent' => route('talent.dashboard'),
+            default  => route('user.dashboard'),
+        };
+
+        return redirect()->intended($defaultRedirect);
     }
+
 
     /**
      * Destroy an authenticated session.
