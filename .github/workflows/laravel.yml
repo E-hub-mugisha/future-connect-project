@@ -39,13 +39,6 @@ jobs:
       - name: Build Assets
         run: npm run production
 
-      # Step 5: Ensure vendor & compiled assets are tracked
-      - name: Include vendor and public assets
-        run: |
-          git add vendor
-          git add public/js public/css public/build || true
-          git commit -m "Add vendor and compiled assets" || echo "Nothing to commit"
-
       # Step 6: Deploy via FTP
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
