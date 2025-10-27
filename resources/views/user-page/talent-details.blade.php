@@ -14,7 +14,7 @@
     .postLists {
         display: flex;
         /* align-items: center; */
-        flex-direction: column;
+        /* flex-direction: column; */
         border: 1px solid #fff;
         border-radius: 1em;
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
@@ -30,256 +30,211 @@
 <div class="page-content content">
     <div class="container">
         <div class="row">
-
-            <div class="col-lg-5 col-md-6 col-sm-12">
-
-                <div class="postLists breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 ">
-                    <h2 class="breadcrumb-title mt-4">
-                        {{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i>
-                    </h2>
-                    <ul class="info-links">
-                        <li>
-                            <i class="ti ti-star-filled text-warning"></i>
-                            {{ number_format($talent->feedback->avg('rating'), 1) }}
-                            ({{ $talent->feedback->count() }} Feedbacks)
-                        </li>
-
-                        <li>
-                            <i class="ti ti-user"></i>Open to {{ $talent->skill }}
-                        </li>
-                        <li>
-                            <i class="ti ti-calendar-due"></i>{{ $talent->category->name ?? 'Uncategorized' }}
-                        </li>
-                        <li class="border-0">
-                            <div class="tranlator d-flex align-items-center">
-                                <i class="ti ti-heart"></i>
-                                {{ $talent->status ? 'Active' : 'Inactive' }}
+            <div class="postLists">
+                <div class="col-md-5">
+                    
+                    <!-- Slider -->
+                    <div class="service-card w-100 mb-4 mt-4">
+                        <div class="service-video-wrap text-center">
+                            <div class="service-img-wrap position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
+                                <img
+                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
+                                    class="img-fluid w-100 h-100 object-fit-cover rounded-4"
+                                    alt="Slider Img"
+                                    style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" />
                             </div>
-                        </li>
-                        <li>
-                            @php
-                            // Pick a color class based on the level
-                            $badgeClass = match($talent->level) {
-                            'advanced' => 'bg-success', // Green
-                            'intermediate' => 'bg-warning text-dark', // Yellow/Orange
-                            default => 'bg-secondary', // Gray for Beginner
-                            };
-                            @endphp
+                        </div>
+                    </div>
+                    <!-- /Slider -->
+                    <div class="row gx-3 row-gap-3 statistics">
+                        <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
+                            <div class="buy-box">
+                                <i class="ti ti-photo-star text-secondary"></i>
+                                <p>Total Stories</p>
+                                <h6>
+                                    {{ $talent->stories->count() }}
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
+                            <div class="buy-box">
+                                <i class="ti ti-heart text-purple"></i>
+                                <p>Total Rating</p>
+                                <h6>
+                                    {{ number_format($talent->feedback->avg('rating'), 1) }}
 
-                            <span class="badge {{ $badgeClass }}">
-                                {{ ucfirst($talent->level) }}
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
+                            <div class="buy-box">
+                                <i class="ti ti-message-chatbot text-indigo"></i>
+                                <p>Feedbacks</p>
+                                <h6>
+                                    {{ $talent->feedback->count() }}
 
-                <!-- Slider -->
-                <div class="service-card w-100 mb-4">
-                    <div class="service-video-wrap text-center">
-                        <div class="service-img-wrap position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
-                            <img
-                                src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
-                                class="img-fluid w-100 h-100 object-fit-cover rounded-4"
-                                alt="Slider Img"
-                                style="object-fit: cover;" />
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
+                            <div class="buy-box">
+                                <i class="ti ti-eye text-teal"></i>
+                                <p>Profile Views</p>
+                                <h6>1,100</h6>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Slider -->
-
-                <div class="row gx-3 row-gap-3 statistics">
-                    <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box postLists">
-                            <i class="ti ti-photo-star text-secondary"></i>
-                            <p>Total Stories</p>
-                            <h6>
-                                {{ $talent->stories->count() }}
-                            </h6>
+                <div class="col-md-7">
+                    <div class="service-widget member-widget">
+                        <div class="user-details">
+                            <div class="user-img users-img">
+                                <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
+                            </div>
+                            <div class="user-info">
+                                <h5>
+                                    <span class="me-2">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></span>
+                                    <span class="badge badge-success">
+                                        Verified
+                                    </span>
+                                </h5>
+                                <p><i class="fa-solid fa-star"></i> {{ number_format($talent->feedback->avg('rating'), 1) }}
+                                    ({{ $talent->feedback->count() }} Feedbacks)</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box postLists">
-                            <i class="ti ti-heart text-purple"></i>
-                            <p>Total Rating</p>
-                            <h6>
-                                {{ number_format($talent->feedback->avg('rating'), 1) }}
 
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box postLists">
-                            <i class="ti ti-message-chatbot text-indigo"></i>
-                            <p>Feedbacks</p>
-                            <h6>
-                                {{ $talent->feedback->count() }}
-
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                        <div class="buy-box postLists">
-                            <i class="ti ti-eye text-teal"></i>
-                            <p>Profile Views</p>
-                            <h6>1,100</h6>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-lg-7">
-
-                <div class="service-widget member-widget postLists">
-                    <div class="user-details">
-                        <div class="user-img users-img">
-                            <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}" alt="img" />
-                        </div>
-                        <div class="user-info">
-                            <h5>
-                                <span class="me-2">{{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i></span>
-                                <span class="badge badge-success">
-                                    Verified
+                        <div class="about-me new-about">
+                            <h6>About Me</h6>
+                            <p>
+                                Hello, I'm {{ $talent->name ?? 'Unnamed Talent' }},
+                                a passionate {{ $talent->skill ?? 'creative' }} and performer blending
+                                {{ $talent->category->name ?? 'various disciplines' }}.
+                                <span class="more-content">
+                                    I create immersive experiences that inspire and uplift communities.
                                 </span>
-                            </h5>
-                            <p><i class="fa-solid fa-star"></i> {{ number_format($talent->feedback->avg('rating'), 1) }}
-                                ({{ $talent->feedback->count() }} Feedbacks)</p>
+                            </p>
+                            <a role="button" tabindex="0" class="read-more">Read More</a>
                         </div>
-                    </div>
 
-                    <div class="about-me new-about">
-                        <h6>About Me</h6>
-                        <p>
-                            Hello, I'm {{ $talent->name ?? 'Unnamed Talent' }},
-                            a passionate {{ $talent->skill ?? 'creative' }} and performer blending
-                            {{ $talent->category->name ?? 'various disciplines' }}.
-                            <span class="more-content">
-                                I create immersive experiences that inspire and uplift communities.
-                            </span>
-                        </p>
-                        <a role="button" tabindex="0" class="read-more">Read More</a>
-                    </div>
+                        <div class="member-info member-info-new">
 
-                    <div class="member-info member-info-new">
-
-                        <div class="member-list d-flex align-items-center gap mb-3">
-                            <i class="ti ti-world"></i>
-                            <h6 class="mb-0">
-                                Based In
-                                <span class="pt-2"> {{ $talent->address }}</span>
-                            </h6>
+                            <div class="member-list d-flex align-items-center gap mb-3">
+                                <i class="ti ti-world"></i>
+                                <h6 class="mb-0">
+                                    Based In
+                                    <span class="pt-2"> {{ $talent->address }}</span>
+                                </h6>
+                            </div>
+                            <div class="member-list d-flex align-items-center gap mb-3">
+                                <i class="ti ti-calendar-event"></i>
+                                <h6 class="mb-0">
+                                    Active Since
+                                    <span class="pt-2"> {{ \Carbon\Carbon::parse($talent->created_at)->format('F d, Y') }}</span>
+                                </h6>
+                            </div>
+                            <div class="member-list d-flex align-items-center gap">
+                                <i class="ti ti-language"></i>
+                                <h6 class="mb-0">
+                                    Languages
+                                    <span class="pt-2">{{ $talent->language }}</span>
+                                </h6>
+                            </div>
                         </div>
-                        <div class="member-list d-flex align-items-center gap mb-3">
-                            <i class="ti ti-calendar-event"></i>
-                            <h6 class="mb-0">
-                                Active Since
-                                <span class="pt-2"> {{ \Carbon\Carbon::parse($talent->created_at)->format('F d, Y') }}</span>
-                            </h6>
-                        </div>
-                        <div class="member-list d-flex align-items-center gap">
-                            <i class="ti ti-language"></i>
-                            <h6 class="mb-0">
-                                Languages
-                                <span class="pt-2">{{ $talent->language }}</span>
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mt-4">
-                        <style>
-                            .slide-line-btn {
-                                position: relative;
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 6px;
-                                padding: 6px 16px;
-                                color: #fff;
-                                background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-                                border-radius: 30px;
-                                text-decoration: none;
-                                overflow: hidden;
-                                z-index: 1;
-                            }
+                        <div class="col-md-12 mt-4">
+                            <style>
+                                .slide-line-btn {
+                                    position: relative;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                    padding: 6px 16px;
+                                    color: #fff;
+                                    background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                    border-radius: 30px;
+                                    text-decoration: none;
+                                    overflow: hidden;
+                                    z-index: 1;
+                                }
 
-                            .slide-line {
-                                position: absolute;
-                                top: 100%;
-                                left: -100%;
-                                width: 200%;
-                                height: 100%;
-                                background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                transform: rotate(45deg);
-                                animation: slideRightUp 2s ease-in-out infinite;
-                                z-index: 0;
-                            }
-
-                            .slide-line:nth-child(2) {
-                                animation-delay: 0s;
-                                opacity: 0;
-                                width: 50%;
-                            }
-
-                            .slide-line:nth-child(3) {
-                                animation-delay: 0s;
-                                opacity: 0.5;
-                                width: 150%;
-                            }
-
-                            .slide-line:nth-child(4) {
-                                animation-delay: 0.8s;
-                                opacity: 0.7;
-                                width: 200%;
-                            }
-
-                            @keyframes slideRightUp {
-                                0% {
+                                .slide-line {
+                                    position: absolute;
                                     top: 100%;
                                     left: -100%;
+                                    width: 200%;
+                                    height: 100%;
+                                    background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+                                    transform: rotate(45deg);
+                                    animation: slideRightUp 2s ease-in-out infinite;
+                                    z-index: 0;
                                 }
 
-                                50% {
-                                    top: 0%;
-                                    left: 0%;
+                                .slide-line:nth-child(2) {
+                                    animation-delay: 0s;
+                                    opacity: 0;
+                                    width: 50%;
                                 }
 
-                                100% {
-                                    top: -100%;
-                                    left: 100%;
+                                .slide-line:nth-child(3) {
+                                    animation-delay: 0s;
+                                    opacity: 0.5;
+                                    width: 150%;
                                 }
-                            }
 
-                            .slide-line-btn span {
-                                pointer-events: none;
-                            }
-                        </style>
-                        <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
-                            class="btn slide-line-btn mb-0">Support Talent
-                            <span class="slide-line"></span>
-                            <span class="slide-line"></span>
-                            <span class="slide-line"></span>
-                        </a>
-                        <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}"
-                            class="btn slide-line-btn mb-0">Stories
-                            <span class="slide-line"></span>
-                            <span class="slide-line"></span>
-                            <span class="slide-line"></span>
-                        </a>
-                    </div>
-                    <div class="service-widget mt-4">
-                        <h5 class="">Share Talent Profile</h5>
-                        <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
-                            <ul>
-                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook" style="color: var(--white);"></i></a></li>
-                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter" style="color: var(--white);"></i></a></li>
-                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram" style="color: var(--white);"></i></a></li>
-                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-google" style="color: var(--white);"></i></a></li>
-                                <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube" style="color: var(--white);"></i></a></li>
-                            </ul>
+                                .slide-line:nth-child(4) {
+                                    animation-delay: 0.8s;
+                                    opacity: 0.7;
+                                    width: 200%;
+                                }
+
+                                @keyframes slideRightUp {
+                                    0% {
+                                        top: 100%;
+                                        left: -100%;
+                                    }
+
+                                    50% {
+                                        top: 0%;
+                                        left: 0%;
+                                    }
+
+                                    100% {
+                                        top: -100%;
+                                        left: 100%;
+                                    }
+                                }
+
+                                .slide-line-btn span {
+                                    pointer-events: none;
+                                }
+                            </style>
+                            <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
+                                class="btn slide-line-btn mb-0">Support Talent
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                            </a>
+                            <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}"
+                                class="btn slide-line-btn mb-0">Stories
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                            </a>
+                        </div>
+                        <div class="service-widget mt-4">
+                            <h5 class="">Share Talent Profile</h5>
+                            <div class="social-links d-flex align-items-center breadcrumb-social pt-2">
+                                <ul>
+                                    <li><a role="button" tabIndex="0"><i class="fa-brands fa-facebook" style="color: var(--white);"></i></a></li>
+                                    <li><a role="button" tabIndex="0"><i class="fa-brands fa-x-twitter" style="color: var(--white);"></i></a></li>
+                                    <li><a role="button" tabIndex="0"><i class="fa-brands fa-instagram" style="color: var(--white);"></i></a></li>
+                                    <li><a role="button" tabIndex="0"><i class="fa-brands fa-google" style="color: var(--white);"></i></a></li>
+                                    <li><a role="button" tabIndex="0"><i class="fa-brands fa-youtube" style="color: var(--white);"></i></a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
             <div class="clearfix"></div>
 
             <div class="col-md-12">
@@ -469,7 +424,7 @@
                                             <div class="img-slider owl-carousel">
                                                 <div class="slide-images">
                                                     <a href="{{ url('/course-details/' . $course->slug) }}">
-                                                        <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid" alt="Gigs">
+                                                        <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="Gigs">
                                                     </a>
                                                 </div>
 
@@ -519,7 +474,7 @@
                                                 <div class="d-flex align-items-center gigs-left-text">
                                                     <a href="{{ url('/talent/' . $course->talent->id) }}" class="avatar avatar-sm flex-shrink-0">
                                                         <img src="{{ $course->talent->image ? asset('image/talents/' . $course->talent->image) : asset('/assets/img/user/profile.jpg') }}"
-                                                            class="img-fluid rounded-pill" alt="img" />
+                                                            class="img-fluid rounded-pill"  alt="img" />
                                                     </a>
                                                     <div class="ms-2">
                                                         <h6 class="mb-0">

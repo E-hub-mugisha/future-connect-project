@@ -25,7 +25,8 @@ class AdminDashboardController extends Controller
         $talents = \App\Models\Talent::latest()->take(5)->get();
         $payments = \App\Models\StoryPayment::latest()->take(5)->get();
         $announcements = Announcement::latest()->take(5)->get();
-        return view('admin-pages.dashboard.index', compact('announcements','payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents'));
+        $totalCourses = \App\Models\Course::count();
+        return view('admin-pages.dashboard.index', compact('announcements','payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents','totalCourses'));
     }
 
     public function index()

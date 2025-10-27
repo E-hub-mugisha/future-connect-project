@@ -285,10 +285,8 @@ return request()->routeIs($route) ? 'active' : '';
                             </li>
                         </ul>
                     </li>
-
-
                     {{-- Skills --}}
-                    <li class="has-submenu">
+                    <!-- <li class="has-submenu">
                         <a role="button" class="nav-link
                             {{
                                 isActiveRoute([], [
@@ -316,7 +314,7 @@ return request()->routeIs($route) ? 'active' : '';
                                 </ul>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 

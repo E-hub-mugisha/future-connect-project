@@ -2,64 +2,72 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Category;
 use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $categories = [
             [
-                'name' => 'Web Development',
-                'description' => 'Frontend, backend, and full-stack talent.',
+                'name' => 'Music',
+                'description' => 'Talents related to singing, instruments, composition, and music production.',
                 'featured' => true,
-                'image' => 'https://via.placeholder.com/100',
+                'image' => 'uploads/categories/music.jpg',
             ],
             [
-                'name' => 'Graphic Design',
-                'description' => 'Logo design, branding, and UI/UX experts.',
-                'featured' => false,
-                'image' => 'https://via.placeholder.com/100',
-            ],
-            [
-                'name' => 'Music & Audio',
-                'description' => 'Musicians, producers, and audio engineers.',
-                'featured' => false,
-                'image' => 'https://via.placeholder.com/100',
+                'name' => 'Dance',
+                'description' => 'Talents specialized in different dance styles including contemporary, hip-hop, ballet, and more.',
+                'featured' => true,
+                'image' => 'uploads/categories/dance.jpg',
             ],
             [
                 'name' => 'Photography',
-                'description' => 'Professional photographers and editors.',
-                'featured' => false,
-                'image' => 'https://via.placeholder.com/100',
-            ],
-            [
-                'name' => 'Digital Marketing',
-                'description' => 'SEO, social media, and ad campaign talents.',
+                'description' => 'Talents skilled in photography, photo editing, and creative visual storytelling.',
                 'featured' => true,
-                'image' => 'https://via.placeholder.com/100',
+                'image' => 'uploads/categories/photography.jpg',
             ],
             [
-                'name' => 'Writing & Translation',
-                'description' => 'Writers, editors, and translators.',
+                'name' => 'Fashion',
+                'description' => 'Talents focused on fashion design, styling, tailoring, and clothing innovation.',
+                'featured' => true,
+                'image' => 'uploads/categories/fashion.jpg',
+            ],
+            [
+                'name' => 'Coding',
+                'description' => 'Talents in programming, web development, app development, and software engineering.',
                 'featured' => false,
-                'image' => 'https://via.placeholder.com/100',
+                'image' => 'uploads/categories/coding.jpg',
+            ],
+            [
+                'name' => 'Art',
+                'description' => 'Talents specialized in painting, drawing, sculpture, and creative arts.',
+                'featured' => false,
+                'image' => 'uploads/categories/art.jpg',
+            ],
+            [
+                'name' => 'Cooking',
+                'description' => 'Talents skilled in culinary arts, recipe creation, and food styling.',
+                'featured' => false,
+                'image' => 'uploads/categories/cooking.jpg',
+            ],
+            [
+                'name' => 'Sports',
+                'description' => 'Talents in different sports disciplines including athletics, football, basketball, and fitness training.',
+                'featured' => false,
+                'image' => 'uploads/categories/sports.jpg',
             ],
         ];
 
-        foreach ($categories as $cat) {
+        foreach ($categories as $category) {
             Category::create([
-                'name' => $cat['name'],
-                'description' => $cat['description'],
-                'featured' => $cat['featured'],
-                'image' => $cat['image'],
-                'slug' => Str::slug($cat['name']),
+                'name' => $category['name'],
+                'description' => $category['description'],
+                'featured' => $category['featured'],
+                'image' => $category['image'],
+                'slug' => Str::slug($category['name']),
             ]);
         }
     }

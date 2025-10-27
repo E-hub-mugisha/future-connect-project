@@ -33,7 +33,7 @@
 
             <div class="col-lg-5 col-md-6 col-sm-12">
 
-                <div class="postLists breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 ">
+                <!-- <div class="postLists breadcrumb-bar-info talent-profile-info breadcrumb-info text-start pt-0 ">
                     <h2 class="breadcrumb-title mt-4">
                         {{ $talent->name }} <i class="ti ti-discount-check-filled verify-icon"></i>
                     </h2>
@@ -71,7 +71,7 @@
                             </span>
                         </li>
                     </ul>
-                </div>
+                </div> -->
 
                 <!-- Slider -->
                 <div class="service-card w-100 mb-4">
@@ -469,7 +469,7 @@
                                             <div class="img-slider owl-carousel">
                                                 <div class="slide-images">
                                                     <a href="{{ url('/course-details/' . $course->slug) }}">
-                                                        <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid" alt="Gigs">
+                                                        <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="Gigs">
                                                     </a>
                                                 </div>
 
@@ -572,7 +572,7 @@
                                             <div class="img-slider owl-carousel">
                                                 <div class="slide-images">
                                                     <a href="{{ url('/story-details/' . $story->slug) }}">
-                                                        <img src="{{ asset('images/stories/'.$story->thumbnail) }}" class="img-fluid" alt="Gigs">
+                                                        <img src="{{ asset('images/stories/'.$story->thumbnail) }}" class="img-fluid" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="Gigs">
                                                     </a>
                                                 </div>
 

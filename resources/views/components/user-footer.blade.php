@@ -26,7 +26,7 @@
                      <ul>
                          <li><a href="{{ route('user.stories') }}"><i class="ti ti-chevron-right me-2"></i>Inspiring Stories</a>
                          </li>
-                         <li><a href="{{ route('user.skills') }}"><i class="ti ti-chevron-right me-2"></i>Skill Courses</a>
+                         <li><a href="{{ url('/courses') }}"><i class="ti ti-chevron-right me-2"></i>Courses</a>
                          </li>
                          <li><a href="{{ route('user.blogs') }}"><i class="ti ti-chevron-right me-2"></i>Blog</a></li>
                          <li><a href="{{ route('user.talents') }}"><i class="ti ti-chevron-right me-2"></i>Talents</a></li>

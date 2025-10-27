@@ -97,7 +97,7 @@ Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, '
 Route::get('/connection/payment/callback', [TalentConnectionController::class, 'handleCallback'])->name('connection.payment.callback');
 
 Route::get('/courses', [CourseController::class, 'index'])->name('user.courses');
-Route::get('/course-details/{slug}', [CourseController::class, 'show'])->name('user.courses.show');
+Route::get('/course/details/{slug}', [CourseController::class, 'show'])->name('user.courses.show');
 Route::get('/course/category/{slug}', [CourseController::class, 'category'])->name('user.courses.category');
 Route::post('/courses/{id}/review', [CourseController::class, 'storeReview'])
     ->name('courses.review')
@@ -129,6 +129,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/test', function () {
     $talents = Talent::all();
     return view('user-page.slide', compact('talents'));
+});
+
+Route::get('/testing', function () {
+    $talents = Talent::all();
+    return view('user-page.testing', compact('talents'));
 });
 
 /*

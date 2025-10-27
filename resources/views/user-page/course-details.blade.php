@@ -351,8 +351,8 @@
 						<div class="gigs-grid postLists">
 							<div class="gigs-img">
 								<div class="img-slider">
-									<a href="{{ route('course.detail', $related->id) }}">
-										<img src="{{ asset($related->thumbnail) }}" class="img-fluid" alt="{{ $related->title }}">
+									<a href="{{ route('user.courses.show', $related->slug) }}">
+										<img src="{{ asset('image/thumbnails/'.$related->thumbnail) }}" class="img-fluid" alt="{{ $related->title }}">
 									</a>
 								</div>
 								@if($related->is_hot)
@@ -369,12 +369,12 @@
 
 							<div class="gigs-content">
 								<div class="gigs-info">
-									<a href="{{ route('course.detail', $related->id) }}">
+									<a href="{{ route('user.courses.show', $related->slug) }}">
 										<span class="badge bg-primary-light">{{ $related->category->name }}</span>
 									</a>
 								</div>
 								<div class="gigs-title">
-									<h3><a href="{{ route('course.detail', $related->id) }}">{{ $related->title }}</a></h3>
+									<h3><a href="{{ route('user.courses.show', $related->slug) }}">{{ $related->title }}</a></h3>
 								</div>
 								<div class="star-rate">
 									<span>

@@ -58,8 +58,8 @@
                                     <div class="card-inner">
                                         <div class="card-title-group align-start mb-2">
                                             <div class="card-title">
-                                                <h6 class="title">Sales Revenue</h6>
-                                                <p>In last 30 days revenue from subscription.</p>
+                                                <h6 class="title">Courses Overview</h6>
+                                                <p>An overview of total courses</p>
                                             </div>
                                             <div class="card-tools"><em
                                                     class="card-hint icon ni ni-help-fill"
@@ -71,15 +71,13 @@
                                             class="align-end gy-3 gx-5 flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
                                             <div class="nk-sale-data-group flex-md-nowrap g-4">
                                                 <div class="nk-sale-data"><span
-                                                        class="amount">14,299.59 <span
-                                                            class="change down text-danger"><em
-                                                                class="icon ni ni-arrow-long-down"></em>16.93%</span></span><span
-                                                        class="sub-title">This Month</span></div>
+                                                        class="amount">Total Courses</span><span
+                                                        class="sub-title">All Talents</span></div>
                                                 <div class="nk-sale-data"><span
-                                                        class="amount">7,299.59 <span
+                                                        class="amount">{{ $totalCourses }} <span
                                                             class="change up text-success"><em
                                                                 class="icon ni ni-arrow-long-up"></em>4.26%</span></span><span
-                                                        class="sub-title">This Week</span></div>
+                                                        class="sub-title">Course Enrollment</span></div>
                                             </div>
                                             <div class="nk-sales-ck sales-revenue"><canvas
                                                     class="sales-bar-chart"
@@ -149,9 +147,9 @@
                             <div class="card-inner">
                                 <div class="card-title-group align-start gx-3 mb-3">
                                     <div class="card-title">
-                                        <h6 class="title">Sales Overview</h6>
-                                        <p>In 30 days sales of product subscription. <a href="#">See
-                                                Details</a></p>
+                                        <h6 class="title">Talent Overview</h6>
+                                        <p>In 30 days of talent overview. <a href="/admin/talents">See
+                                                talents</a></p>
                                     </div>
                                     <div class="card-tools">
                                         <div class="dropdown"><a href="#"
@@ -180,10 +178,8 @@
                                 </div>
                                 <div
                                     class="nk-sale-data-group align-center justify-between gy-3 gx-5">
-                                    <div class="nk-sale-data"><span class="amount">$82,944.60</span>
-                                    </div>
-                                    <div class="nk-sale-data"><span class="amount sm">1,937
-                                            <small>Subscribers</small></span></div>
+                                    <div class="nk-sale-data"><span class="amount sm">{{ $totalTalents }}
+                                            <small>Registeres</small></span></div>
                                 </div>
                                 <div class="nk-sales-ck large pt-4"><canvas
                                         class="sales-overview-chart" id="salesOverview"></canvas>

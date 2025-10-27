@@ -4,87 +4,119 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Talent;
-use App\Models\Category;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class TalentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        $faker = Faker::create();
-
-        $categoryIds = Category::pluck('id')->toArray();
-
-        if (empty($categoryIds)) {
-            $this->command->warn('No categories found. Please seed categories first.');
-            return;
-        }
-
         $talents = [
             [
-                'name' => 'Eric Mugisha',
-                'skill' => 'Web Development',
-                'phone' => '+250 788 123 456',
-                'email' => 'eric.mugisha@example.com',
+                'name' => 'Alice Niyonsaba',
+                'featured' => true,
+                'description' => 'Professional vocalist and stage performer known for soulful music and live energy.',
+                'image' => 'uploads/talents/alice.jpg',
+                'address' => 'Kigali, Rwanda',
+                'phone' => '+250780111111',
+                'email' => 'alice@talentsphere.com',
                 'language' => 'English',
+                'category_id' => 1,
             ],
             [
-                'name' => 'Aline Uwase',
-                'skill' => 'Graphic Design',
-                'phone' => '+250 722 456 789',
-                'email' => 'aline.uwase@example.com',
+                'name' => 'John Mugisha',
+                'featured' => false,
+                'description' => 'Digital artist specializing in concept art and digital illustrations.',
+                'image' => 'uploads/talents/john.jpg',
+                'address' => 'Huye, Rwanda',
+                'phone' => '+250780222222',
+                'email' => 'john@talentsphere.com',
                 'language' => 'Kinyarwanda',
+                'category_id' => 2,
             ],
             [
-                'name' => 'Jean Claude Niyonsaba',
-                'skill' => 'Photography',
-                'phone' => '+250 784 987 654',
-                'email' => 'jeanclaude.niyonsaba@example.com',
-                'language' => 'French',
+                'name' => 'Grace Uwamahoro',
+                'featured' => true,
+                'description' => 'Photographer and creative storyteller with expertise in portrait and travel photography.',
+                'image' => 'uploads/talents/grace.jpg',
+                'address' => 'Musanze, Rwanda',
+                'phone' => '+250780333333',
+                'email' => 'grace@talentsphere.com',
+                'language' => 'English, French',
+                'category_id' => 3,
             ],
             [
-                'name' => 'Sandrine Umwali',
-                'skill' => 'Digital Marketing',
-                'phone' => '+250 730 654 321',
-                'email' => 'sandrine.umwali@example.com',
+                'name' => 'Patrick Habimana',
+                'featured' => false,
+                'description' => 'Creative writer and spoken word poet, blending emotion and cultural expression.',
+                'image' => 'uploads/talents/patrick.jpg',
+                'address' => 'Kigali, Rwanda',
+                'phone' => '+250780444444',
+                'email' => 'patrick@talentsphere.com',
                 'language' => 'English',
+                'category_id' => 4,
             ],
             [
-                'name' => 'Patrick Nsengimana',
-                'skill' => 'UI/UX Design',
-                'phone' => '+250 788 741 258',
-                'email' => 'patrick.nsengimana@example.com',
-                'language' => 'Kinyarwanda',
+                'name' => 'Sarah Uwase',
+                'featured' => true,
+                'description' => 'Professional dancer specializing in contemporary and traditional Rwandan styles.',
+                'image' => 'uploads/talents/sarah.jpg',
+                'address' => 'Rubavu, Rwanda',
+                'phone' => '+250780555555',
+                'email' => 'sarah@talentsphere.com',
+                'language' => 'Kinyarwanda, English',
+                'category_id' => 5,
             ],
             [
-                'name' => 'Diane Uwizeye',
-                'skill' => 'Mobile App Development',
-                'phone' => '+250 728 369 147',
-                'email' => 'diane.uwizeye@example.com',
+                'name' => 'Eric Nkurunziza',
+                'featured' => true,
+                'description' => 'Music producer and sound engineer with experience in mixing, mastering, and beat creation.',
+                'image' => 'uploads/talents/eric.jpg',
+                'address' => 'Kigali, Rwanda',
+                'phone' => '+250780666666',
+                'email' => 'eric@talentsphere.com',
                 'language' => 'English',
+                'category_id' => 1,
+            ],
+            [
+                'name' => 'Linda Ingabire',
+                'featured' => false,
+                'description' => 'Fashion designer crafting modern African-inspired outfits for global markets.',
+                'image' => 'uploads/talents/linda.jpg',
+                'address' => 'Nyanza, Rwanda',
+                'phone' => '+250780777777',
+                'email' => 'linda@talentsphere.com',
+                'language' => 'French, English',
+                'category_id' => 8,
+            ],
+            [
+                'name' => 'Kevin Mutabazi',
+                'featured' => false,
+                'description' => 'Actor and filmmaker passionate about African stories and cinematic storytelling.',
+                'image' => 'uploads/talents/kevin.jpg',
+                'address' => 'Kigali, Rwanda',
+                'phone' => '+250780888888',
+                'email' => 'kevin@talentsphere.com',
+                'language' => 'English',
+                'category_id' => 6,
             ],
         ];
 
-        foreach ($talents as $talent) {
-            Talent::create([
-                'name'        => $talent['name'],
-                'skill'       => $talent['skill'],
-                'story'       => $faker->paragraph(3),
-                'rating'      => $faker->numberBetween(1, 5),
-                'status'      => $faker->randomElement(['pending', 'approved', 'rejected']),
-                'featured'    => $faker->boolean(),
-                'description' => $faker->sentence(),
-                'image'       => $faker->imageUrl(640, 480, 'people', true),
-                'address'     => $faker->address(),
-                'phone'       => $talent['phone'],
-                'email'       => $talent['email'],
-                'language'    => $talent['language'],
-                'category_id' => $faker->randomElement($categoryIds),
-                'matched'     => $faker->boolean(),
+        foreach ($talents as $data) {
+            $talent = Talent::create($data);
+
+            // Approve the talent
+            $talent->status = 'approved';
+            $talent->save();
+
+            // Create a user for this talent
+            $password = 'password123'; // you can change this or randomize it
+
+            User::create([
+                'name' => $talent->name,
+                'email' => $talent->email,
+                'password' => Hash::make($password),
+                'role' => 'talent',
             ]);
         }
     }

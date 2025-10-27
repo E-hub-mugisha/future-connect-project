@@ -51,7 +51,7 @@
 
                             <!-- Custom Thumbnail Overlay -->
                             <div class="video-thumbnail position-absolute top-0 start-0 w-100 h-100" id="custom-thumbnail" style="cursor: pointer; background-color: #000;">
-                                <img src="{{ asset('images/stories/'.$story->thumbnail) }}"
+                                <img src="{{ asset('image/stories/'.$story->thumbnail) }}"
                                     alt="Video Thumbnail"
                                     class="img-fluid w-100 h-100 object-fit-cover rounded-4"
                                     style="object-fit: cover;">
@@ -534,7 +534,7 @@
                         <div class="gigs-grid">
                             <div class="gigs-img">
                                 <div class="img-slider owl-carousel">
-                                    <div class="slide-images">
+                                    <div class="slide-image">
                                         <a href="{{ url('/story-details/' . $story->slug) }}">
                                             <img src="{{ asset('assets/img/home/service-01.jpg') }}" class="img-fluid" alt="Gigs">
                                         </a>

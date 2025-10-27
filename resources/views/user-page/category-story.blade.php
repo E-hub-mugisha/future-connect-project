@@ -92,7 +92,7 @@
                                 <div class="gigs-grid postLists mb-4">
                                     <div class="gigs-img position-relative">
                                         <a href="{{ url('story-details/'.$story->slug) }}">
-                                            <img src="{{ asset('images/stories/'.$story->thumbnail) }}"
+                                            <img src="{{ asset('image/stories/'.$story->thumbnail) }}"
                                                 class="img-fluid w-100" alt="{{ $story->title }}"
                                                 style="height: 240px; object-fit: cover; transition: transform 0.3s ease;"
                                                 onmouseover="this.style.transform='scale(1.05)'"

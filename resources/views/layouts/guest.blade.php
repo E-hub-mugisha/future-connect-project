@@ -52,13 +52,7 @@
     <div class="body-overlay-wrapper">
         <div class="main-wrapper">
 
-            <!-- Top Header (Optional) -->
-            <!-- <div class="top-header">
-                Find the Best Instant Talents Platform
-                <span class="close-btn"
-                      onclick="if (!window.__cfRLUnblockHandlers) return false; this.parentElement.style.display='none'"
-                      data-cf-modified-befc89958e432fcd140d906a-=""><i class="ti ti-xbox-x"></i></span>
-            </div> -->
+
 
             @include('components.user-header')
 
@@ -122,7 +116,7 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <!-- <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script> -->
     <script>
         $(document).ready(function() {
             $('#storiesCategoryTabs .nav-link').on('click', function(e) {
@@ -147,34 +141,57 @@
             });
         });
     </script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
     <script>
-        var TrandingSlider = new Swiper('.tranding-slider', {
+        var captionSwiper = new Swiper('#captionSwiper', {
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            loop: true,
+            allowTouchMove: false,
+            slidesPerView: 1,
+            speed: 700,
+        });
+
+        var imageSwiper = new Swiper('#imageSwiper', {
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
             loop: true,
+            slidesPerView: 'auto',
             speed: 1000,
-            slidesPerView: 1.5,
-            coverflowEffect: {
-                rotate: 30,
-                stretch: 0,
-                depth: 100,
-                modifier: 2.5,
-                slideShadows: false
-            },
             autoplay: {
-                delay: 3000,
-                disableOnInteraction: false
+                delay: 4000, // Change this value to control slide interval
+                disableOnInteraction: false, // Keeps autoplay running after manual navigation
             },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
+            coverflowEffect: {
+                rotate: 25,
+                stretch: 0,
+                depth: 150,
+                modifier: 1.5,
+                slideShadows: false
             },
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
-            }
+            },
         });
+
+
+
+        imageSwiper.on('slideChangeTransitionStart', function() {
+            captionSwiper.slideToLoop(imageSwiper.realIndex);
+        });
+
+        captionSwiper.on('slideChangeTransitionStart', function() {
+            imageSwiper.slideToLoop(captionSwiper.realIndex);
+        });
+
+        const section = document.querySelector('#tranding');
+        section.addEventListener('mouseenter', () => imageSwiper.autoplay?.stop());
+        section.addEventListener('mouseleave', () => imageSwiper.autoplay?.start());
     </script>
 
 

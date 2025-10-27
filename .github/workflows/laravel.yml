@@ -1,110 +1,59 @@
-name: Laravel CI/CD
+name: Deploy Laravel via FTP
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main  # Change if you deploy from a different branch
 
 jobs:
-  laravel-tests:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel_test
-          MYSQL_USER: laravel
-          MYSQL_PASSWORD: secret
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: shivammathur/setup-php@v2
+      # Step 2: Setup PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v3
         with:
-          php-version: '8.2'
+          php-version: 8.1
+          extensions: mbstring, bcmath, curl, xml, json, openssl
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+          coverage: none
 
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      # Step 3: Install Composer dependencies (no dev)
+      - name: Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader --prefer-dist
 
-      - name: Update .env DB config for GitHub Action
+      # Step 4: Setup Node.js & build front-end assets
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Build Assets
+        run: npm run production
+
+      # Step 5: Ensure vendor & compiled assets are tracked
+      - name: Include vendor and public assets
         run: |
-          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
-          sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-          sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
-          sed -i 's/DB_DATABASE=.*/DB_DATABASE=laravel_test/' .env
-          sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel/' .env
-          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=secret/' .env
+          git add vendor
+          git add public/js public/css public/build || true
+          git commit -m "Add vendor and compiled assets" || echo "Nothing to commit"
 
-      - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Generate App Key
-        run: php artisan key:generate
-
-      - name: Migrate Database
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel_test
-          DB_USERNAME: laravel
-          DB_PASSWORD: secret
-        run: php artisan migrate --force
-
-      - name: Run Tests
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel_test
-          DB_USERNAME: laravel
-          DB_PASSWORD: secret
-        run: php artisan test
-
-  deploy:
-    name: Deploy Laravel to cPanel
-    needs: laravel-tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Production Dependencies
-        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      # Step 6: Deploy via FTP
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.5.0
         with:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
           password: ${{ secrets.CPANEL_PASSWORD }}
-          protocol: ftp           # <--- change to 'ftp' for debugging
-          port: ${{ secrets.CPANEL_PORT }}
-          server-dir: /public_html/
-          local-dir: ./
-          timeout: 120000
-          passive: true
-          dangerous-clean-slate: false
-          exclude: |
-            .git/**
-            node_modules/**
-            vendor/**
-            .env
-            .env.example
-            .env.production
-            .editorconfig
-            .gitattributes
-            .gitignore
-            README.md
-            tests/**
-            phpunit.xml
+          port: 21
+          local-dir: ./                     # Root of your repo
+          server-dir: /public_html/futureconnect/  # Adjust to your cPanel folder
+          git-ftp-args: --insecure

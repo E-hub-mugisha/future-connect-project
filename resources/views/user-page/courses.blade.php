@@ -96,7 +96,7 @@
                                     <div class="img-slider owl-carousel">
                                         <div class="slide-images">
                                             <a href="{{ route('user.courses.show', $course->slug) }}">
-                                                <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" class="img-fluid" alt="{{ $course->title }}">
+                                                <img src="{{ asset('image/thumbnails/'.$course->thumbnail) }}" class="img-fluid" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="{{ $course->title }}">
                                             </a>
                                         </div>
                                     </div>

@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-
+@section('title', $announcement->title)
 @section('content')
 
 <style>

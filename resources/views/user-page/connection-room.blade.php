@@ -366,7 +366,7 @@ $categories = \App\Models\Category::all();
                                 <img
                                     class="img rounded-3"
                                     src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;"/>
+                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
                             </a>
 
                             <!-- Name -->
@@ -409,12 +409,15 @@ $categories = \App\Models\Category::all();
                             </div>
 
                             <!-- View Button -->
+                            
                             <div class="text-center d-flex justify-content-center">
-                                <a href="{{ route('talent.profile.show',$talent->id) }}" class="go text-center">
-                                    <span class="go-text">view Profile</span>
+                                <a href="{{ route('talent.profile.show', $talent->id) }}" class="slide-line-btn">
+                                    <i class="feather-arrow-right"></i>View Profile
+                                    <span class="slide-line"></span>
+                                    <span class="slide-line"></span>
+                                    <span class="slide-line"></span>
                                 </a>
                             </div>
-
                         </div>
                     </div>
                 </div>

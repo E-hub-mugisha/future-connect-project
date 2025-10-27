@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', 'Announcements')
 @section('content')
 
 <style>
@@ -26,6 +27,73 @@
     }
 </style>
 
+<style>
+    .slide-line-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 16px;
+        color: #fff;
+        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        border-radius: 30px;
+        text-decoration: none;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .slide-line {
+        position: absolute;
+        top: 100%;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+        transform: rotate(45deg);
+        animation: slideRightUp 2s ease-in-out infinite;
+        z-index: 0;
+    }
+
+    .slide-line:nth-child(2) {
+        animation-delay: 0s;
+        opacity: 0;
+        width: 50%;
+    }
+
+    .slide-line:nth-child(3) {
+        animation-delay: 0s;
+        opacity: 0.5;
+        width: 150%;
+    }
+
+    .slide-line:nth-child(4) {
+        animation-delay: 0.8s;
+        opacity: 0.7;
+        width: 200%;
+    }
+
+    @keyframes slideRightUp {
+        0% {
+            top: 100%;
+            left: -100%;
+        }
+
+        50% {
+            top: 0%;
+            left: 0%;
+        }
+
+        100% {
+            top: -100%;
+            left: 100%;
+        }
+    }
+
+    .slide-line-btn span {
+        pointer-events: none;
+    }
+</style>
+
 <div class="container">
     <div class="breadcrumb-bar mt-4 breadcrumb-bar-info postLists">
         <div class="row">
@@ -44,46 +112,42 @@
             </div>
         </div>
     </div>
+</div>
 
-
-    <div class="page-content content">
-        <div class="container">
-            <div class="row">
-                @foreach($announcements as $ann)
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="testimonial-slider-card postLists">
-                        <div class="testimonial-item">
-                            <div class="testimonial-icon"><i class="ti ti-bell"></i></div>
-                            <h5 class="mb-2">{{ $ann->title }}</h5>
-                            <p class="mb-3">
-                                {{ \Illuminate\Support\Str::limit($ann->content, 100, '...') }}
-                            </p>
-                            <div class="testimonial-review d-flex align-items-center justify-content-between">
-                                <div class="testimonial-user p-0">
-                                    <img src="{{ asset('assets/img/user/admin.jpg') }}"
-                                        alt="img" />
-                                    <div class="testimonial-info">
-                                        <h6>Product Team</h6>
-                                        <p>{{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}</p>
-                                    </div>
-                                </div>
-                                <div class="star-rate m-0 bg-light">
-                                    <a href="{{ route('user.announcement.details', $ann->id ) }}">
-                                        <span class="text-muted">
-                                            View Details
-                                        </span>
-                                    </a>
+<div class="page-content content">
+    <div class="container">
+        <div class="row">
+            @foreach($announcements as $ann)
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="testimonial-slider-card postLists">
+                    <div class="testimonial-item">
+                        <div class="testimonial-icon"><i class="ti ti-bell"></i></div>
+                        <h5 class="mb-2">{{ $ann->title }}</h5>
+                        <p class="mb-3">
+                            {{ \Illuminate\Support\Str::limit($ann->content, 100, '...') }}
+                        </p>
+                        <div class="testimonial-review d-flex align-items-center justify-content-between">
+                            <div class="testimonial-user p-0">
+                                <img src="{{ asset('assets/img/user/admin.jpg') }}"
+                                    alt="img" />
+                                <div class="testimonial-info">
+                                    <h6>Product Team</h6>
+                                    <p>{{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}</p>
                                 </div>
                             </div>
+                            <a href="{{ route('user.announcement.details', $ann->id ) }}" class="slide-line-btn">
+                                <i class="feather-arrow-right"></i>Read More
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                                <span class="slide-line"></span>
+                            </a>
                         </div>
                     </div>
                 </div>
-                @endforeach
-
             </div>
+            @endforeach
+
         </div>
     </div>
-
-
-
-    @endsection
+</div>
+@endsection
