@@ -18,9 +18,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: mbstring, bcmath, curl, xml, json, openssl
-          ini-values: post_max_size=256M, upload_max_filesize=256M
+          ini-values: post_max_size=512M, upload_max_filesize=512M
           coverage: none
 
       # Step 3: Install Composer dependencies (no dev)
