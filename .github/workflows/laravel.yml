@@ -3,43 +3,18 @@ name: Deploy Laravel via FTP
 on:
   push:
     branches:
-      - main  # Change if you deploy from a different branch
+      - main  # Deploy only when main branch is updated
 
 jobs:
-  build-and-deploy:
+  ftp-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
+      # Step 1: Checkout your repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup PHP
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          extensions: mbstring, bcmath, curl, xml, json, openssl
-          ini-values: post_max_size=512M, upload_max_filesize=512M
-          coverage: none
-
-      # Step 3: Install Composer dependencies (no dev)
-      - name: Install Composer Dependencies
-        run: composer install --no-dev --optimize-autoloader --prefer-dist
-
-      # Step 4: Setup Node.js & build front-end assets
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Build Assets
-        run: npm run production
-
-      # Step 6: Deploy via FTP
+      # Step 2: Deploy all project files via FTP
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
@@ -48,5 +23,5 @@ jobs:
           password: ${{ secrets.CPANEL_PASSWORD }}
           port: 21
           local-dir: ./                     # Root of your repo
-          server-dir: /public_html/futureconnect/  # Adjust to your cPanel folder
+          server-dir: /public_html/futureconnect/  # Path on cPanel
           git-ftp-args: --insecure
