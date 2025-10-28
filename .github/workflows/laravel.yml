@@ -1,27 +1,37 @@
-name: Deploy Laravel via FTP
+name: Deploy Laravel App to cPanel via FTP
 
 on:
   push:
     branches:
-      - main  # Deploy only when main branch is updated
+      - main   # Change this if your deployment branch is different
 
 jobs:
-  ftp-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout your repository
-      - name: Checkout Repository
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Deploy all project files via FTP
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+      # 2️⃣ Upload files via FTP
+      - name: Deploy via FTP to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.5.0
         with:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
           password: ${{ secrets.CPANEL_PASSWORD }}
           port: 21
-          local-dir: ./                     # Root of your repo
-          server-dir: /public_html/futureconnect/  # Path on cPanel
-          git-ftp-args: --insecure
+          protocol: ftp
+          security: loose
+          passive: true
+          local-dir: ./
+          server-dir: /public_html/futureconnect/
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            **/.github/**
+            **/tests/**
+            **/storage/framework/cache/data/**
+            **/storage/debugbar/**
+          debug: true
