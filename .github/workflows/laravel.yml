@@ -24,7 +24,7 @@ jobs:
           port: 21
           protocol: ftp
           security: loose
-          passive: true
+          passive: false
           local-dir: ./
           server-dir: /public_html/futureconnect/
           exclude: |
