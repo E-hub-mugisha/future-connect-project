@@ -16,12 +16,15 @@ use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminTalentConnectionController;
 use App\Http\Controllers\Admin\AdminTalentController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
+use App\Http\Controllers\Admin\SellerAdminController;
 use App\Http\Controllers\Talent\TalentDashboardController;
 use App\Http\Controllers\Talent\TalentProfileController;
 use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\Seller\SellerController;
+use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
 use App\Http\Controllers\users\UserPanelController;
@@ -221,6 +224,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Admin Courses Lessons Routes
     Route::post('courses/lessons', [AdminCoursesController::class, 'storeLesson'])
         ->name('courses.lessons.store');
+
+    // sellers route
+    Route::get('/sellers', [SellerAdminController::class, 'index'])->name('sellers.index');
+    Route::get('/sellers/{seller}', [SellerAdminController::class, 'show'])->name('sellers.show');
+    Route::patch('/sellers/{seller}', [SellerAdminController::class, 'update'])->name('sellers.update');
+    Route::delete('/sellers/{seller}', [SellerAdminController::class, 'destroy'])->name('sellers.destroy');
+    Route::patch('/sellers/{seller}/status', [SellerAdminController::class, 'updateStatus'])->name('sellers.updateStatus');
 });
 
 /*
@@ -303,4 +313,13 @@ Route::get('/deploy', function (Request $request) {
 
     return response("<pre>" . implode("<br><br>", $output) . "</pre>");
 });
+
+Route::get('/seller/apply', [SellerController::class, 'create'])->name('seller.create');
+Route::post('/seller/store', [SellerController::class, 'store'])->name('seller.store');
+
+Route::middleware(['auth', 'role:seller'])->group(function () {
+    Route::get('seller/dashboard', [SellerPanelController::class, 'dashboard'])->name('seller.dashboard');
+    Route::get('seller/pro', [SellerPanelController::class, 'dashboard'])->name('seller.dashboard');
+});
+
 require __DIR__ . '/auth.php';

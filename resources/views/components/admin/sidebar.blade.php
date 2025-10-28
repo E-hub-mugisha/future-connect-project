@@ -102,6 +102,11 @@ $role = Auth::check() ? Auth::user()->role : null;
                             <i class="ti ti-settings-check me-2"></i> <span>Settings</span> 
                         </a> 
                     </li>
+                    <li class="nk-menu-item"> 
+                        <a href="/admin/sellers" class="nk-menu-link {{ isActiveRoute('admin.sellers', 'admin/sellers*') }}"> 
+                            <i class="ti ti-settings-check me-2"></i> <span>Sellers</span> 
+                        </a> 
+                    </li>
                     @endif
 
                     {{-- ===================== TALENT ===================== --}}
@@ -138,20 +143,15 @@ $role = Auth::check() ? Auth::user()->role : null;
                     @endrole
 
                     {{-- ===================== AGENT ===================== --}}
-                    @if( $role === 'agent')
+                    @if( $role === 'seller')
                     <li class="nk-menu-item">
-                        <a href="{{ route('agent.dashboard') }}" class="nk-menu-link {{ isActiveRoute('agent.dashboard') }}">
-                            <i class="ti ti-briefcase me-2"></i><span>Agent Dashboard</span>
+                        <a href="{{ route('seller.dashboard') }}" class="nk-menu-link {{ isActiveRoute('seller.dashboard') }}">
+                            <i class="ti ti-briefcase me-2"></i><span>Seller Dashboard</span>
                         </a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{ route('agent.clients') }}" class="nk-menu-link {{ isActiveRoute('agent.clients.*') }}">
-                            <i class="ti ti-users me-2"></i><span>My Clients</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('agent.reports') }}" class="nk-menu-link {{ isActiveRoute('agent.reports.*') }}">
-                            <i class="ti ti-chart-bar me-2"></i><span>Reports</span>
+                        <a href="{{ route('seller.products') }}" class="nk-menu-link {{ isActiveRoute('seller.products.*') }}">
+                            <i class="ti ti-users me-2"></i><span>Products</span>
                         </a>
                     </li>
                     @endrole

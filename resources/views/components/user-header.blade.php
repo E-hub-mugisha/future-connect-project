@@ -179,6 +179,23 @@ return request()->routeIs($route) ? 'active' : '';
     .btn-submit-custom:hover {
         background: #084298;
     }
+
+    /* Modern Input Focus Effect */
+.form-control:focus, .form-select:focus {
+    border-color: #0052D4 !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 82, 212, 0.25) !important;
+}
+
+/* Smooth modal appearance */
+.modal-content {
+    animation: slideUp 0.35s ease-in-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
 </style>
 
 <header class="header">
@@ -285,6 +302,12 @@ return request()->routeIs($route) ? 'active' : '';
                             </li>
                         </ul>
                     </li>
+                    <!-- Apply as Seller Button -->
+                    <li>
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#applySellerModal">
+                            Become a Seller
+                        </a>
+                    </li>
                     {{-- Skills --}}
                     <!-- <li class="has-submenu">
                         <a role="button" class="nav-link
@@ -385,64 +408,87 @@ return request()->routeIs($route) ? 'active' : '';
         </nav>
     </div>
 </header>
+
+<!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content postLists">
-            <div class="modal-body">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            
+            <!-- Header -->
+            <div class="modal-header border-0 bg-gradient text-white"
+                 style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                <h5 class="modal-title fw-bold" id="loginModalLabel">
+                    🔐 Welcome Back
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <!-- Body -->
+            <div class="modal-body px-4 py-4">
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
-                    <div class="login-userset">
-                        <div class="login-logo text-center mb-3">
-                            <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" style="height: 50px;" />
-                        </div>
-                        <div class="login-heading text-center mb-4">
-                            <h3>Hi, Welcome Back!</h3>
-                            <p class="text-muted">Fill in your credentials to continue</p>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <div class="form-wrap form-focus">
-                                <span class="form-icon"><i class="feather-mail"></i></span>
-                                <input type="email" name="email" class="form-control floating" required />
+                    <div class="text-center mb-4">
+                        <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" style="height: 50px;" class="mb-3" />
+                        <h4 class="fw-semibold mb-1">Hi, Welcome Back!</h4>
+                        <p class="text-muted small">Fill in your credentials to continue</p>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Email</label>
+                            <div class="input-group input-group-lg rounded-3 shadow-sm">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="feather-mail text-primary"></i>
+                                </span>
+                                <input type="email" name="email" class="form-control border-0 rounded-end" placeholder="you@example.com" required>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <div class="form-wrap form-focus pass-group">
-                                <span class="form-icon"><i class="toggle-password feather-eye-off"></i></span>
-                                <input type="password" name="password" class="pass-input form-control floating" required />
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Password</label>
+                            <div class="input-group input-group-lg rounded-3 shadow-sm">
+                                <span class="input-group-text bg-light border-0">
+                                    <i class="feather-lock text-primary"></i>
+                                </span>
+                                <input type="password" name="password" class="form-control border-0 rounded-end" placeholder="••••••••" required>
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                                    <label class="form-check-label" for="remember">Remember Me</label>
-                                </div>
+                        <div class="col-12 d-flex justify-content-between align-items-center mt-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                                <label class="form-check-label small" for="remember">Remember Me</label>
                             </div>
-                            <div class="col-6 text-end">
-                                <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
-                            </div>
+                            <a href="{{ route('password.request') }}" class="text-primary small text-decoration-none fw-semibold">
+                                Forgot Password?
+                            </a>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-semibold shadow-sm">
+                                Sign In
+                            </button>
+                        </div>
 
                         <div class="text-center mt-3">
-                            <p>Don’t have an account? <a href="{{ route('register') }}">Sign Up</a></p>
+                            <p class="text-muted mb-0 small">
+                                Don’t have an account?
+                                <a href="{{ route('register') }}" class="fw-semibold text-primary text-decoration-none">Sign Up</a>
+                            </p>
                         </div>
-
                     </div>
                 </form>
+            </div>
 
-
+            <!-- Footer -->
+            <div class="modal-footer border-0 bg-light py-2 justify-content-center small text-muted">
+                © {{ date('Y') }} Future Connect • All rights reserved
             </div>
         </div>
     </div>
 </div>
+
 
 <section class="search-overlay-section">
     <div class="search-overlay"></div>
@@ -464,6 +510,78 @@ return request()->routeIs($route) ? 'active' : '';
         </form>
     </div>
 </section>
+
+
+<!-- Seller Application Modal -->
+<div class="modal fade" id="applySellerModal" tabindex="-1" aria-labelledby="applySellerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            
+            <form action="{{ route('seller.store') }}" method="POST" class="p-2">
+                @csrf
+
+                <!-- Header -->
+                <div class="modal-header border-0 bg-gradient text-white" 
+                     style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                    <h5 class="modal-title fw-bold" id="applySellerModalLabel">
+                        🌟 Apply to Become a Seller
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body py-4 px-3">
+                    <p class="text-muted mb-4">
+                        Join the <strong>Future Connect Shop</strong> and start selling products that empower our members.
+                    </p>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Company Name</label>
+                            <input type="text" name="company_name" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                   placeholder="e.g. Creative Minds Ltd" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                   placeholder="e.g. example@domain.com" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Phone</label>
+                            <input type="text" name="phone" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                   placeholder="+250 700 123 456">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Address</label>
+                            <input type="text" name="address" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                   placeholder="e.g. Kigali, Rwanda">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Company Description</label>
+                            <textarea name="description" rows="3" 
+                                      class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                      placeholder="Tell us more about your company, products, and goals..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
+                    <button type="button" class="btn btn-light border rounded-3 px-4 py-2 shadow-sm" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">
+                        Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <script>

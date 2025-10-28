@@ -36,6 +36,7 @@ class AuthenticatedSessionController extends Controller
             'admin'  => route('admin.dashboard'),
             'agent'  => route('agent.dashboard'),
             'talent' => route('talent.dashboard'),
+            'seller' => route('seller.dashboard'),
             default  => route('user.dashboard'),
         };
 
