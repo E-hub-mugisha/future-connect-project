@@ -14,9 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Upload files via FTP
+      # 2️⃣ Deploy to cPanel via FTP
       - name: Deploy via FTP to cPanel
-        uses: samkirkland/ftp-deploy-action@v4.4.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
@@ -34,4 +34,5 @@ jobs:
             **/tests/**
             **/storage/framework/cache/data/**
             **/storage/debugbar/**
+          timeout: 120000
           debug: true
