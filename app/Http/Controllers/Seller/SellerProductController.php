@@ -8,6 +8,7 @@ use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SellerProductController extends Controller
 {
@@ -16,7 +17,7 @@ class SellerProductController extends Controller
         $seller = Seller::where('user_id', Auth::id())->first();
         $products = Product::where('seller_id', $seller->id)->get();
 
-        return view('seller.products.index', compact('products'));
+        return view('sellers-page.products.index', compact('products'));
     }
 
     public function store(Request $request)
@@ -38,11 +39,12 @@ class SellerProductController extends Controller
         Product::create([
             'seller_id' => $seller->id,
             'name' => $request->name,
+            'slug' => Str::slug($request['name']),
             'price' => $request->price,
             'description' => $request->description,
             'stock' => $request->stock,
             'image' => $imagePath,
-            'status' => 'active',
+            'status' => 'inactive',
         ]);
 
         return redirect()->back()->with('success', 'Product added successfully.');
@@ -70,6 +72,7 @@ class SellerProductController extends Controller
         $product->update([
             'name' => $request->name,
             'price' => $request->price,
+            'slug' => Str::slug($request['name']),
             'description' => $request->description,
             'stock' => $request->stock,
             'image' => $imagePath,

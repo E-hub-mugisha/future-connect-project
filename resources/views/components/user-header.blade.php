@@ -302,6 +302,11 @@ return request()->routeIs($route) ? 'active' : '';
                             </li>
                         </ul>
                     </li>
+                    {{-- products --}}
+                    <li>
+                        <a href="{{ route('user.products.index') }}"
+                            class="nav-link {{ isActiveRoute(['user.products.index']) }}">Shop</a>
+                    </li>
                     <!-- Apply as Seller Button -->
                     <li>
                         <a class="nav-link" data-bs-toggle="modal" data-bs-target="#applySellerModal">

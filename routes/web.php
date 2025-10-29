@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminTalentConnectionController;
 use App\Http\Controllers\Admin\AdminTalentController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SellerAdminController;
 use App\Http\Controllers\Talent\TalentDashboardController;
 use App\Http\Controllers\Talent\TalentProfileController;
@@ -25,8 +26,12 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
+use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\TalentConnectionController;
+use App\Http\Controllers\users\CartController;
+use App\Http\Controllers\users\CheckoutController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
+use App\Http\Controllers\users\ProductController as UsersProductController;
 use App\Http\Controllers\users\UserPanelController;
 use App\Models\Course;
 use App\Models\Talent;
@@ -116,6 +121,22 @@ Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])
 Route::post('/courses/{course}/pay', [CourseController::class, 'pay'])->name('user.courses.pay');
 Route::get('/courses/{course}/success', [CourseController::class, 'paymentSuccess'])->name('user.courses.success');
 Route::get('/course/payment/callback', [CourseController::class, 'handleCallback'])->name('course.payment.callback');
+
+// products
+Route::get('/our-products', [UsersProductController::class, 'index'])->name('user.products.index');
+Route::get('/our-product/{id}', [UsersProductController::class, 'details'])->name('user.product-details');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/cart/payment/callback', [CheckoutController::class, 'paymentCallback'])->name('cart.payment.callback');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -231,6 +252,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::patch('/sellers/{seller}', [SellerAdminController::class, 'update'])->name('sellers.update');
     Route::delete('/sellers/{seller}', [SellerAdminController::class, 'destroy'])->name('sellers.destroy');
     Route::patch('/sellers/{seller}/status', [SellerAdminController::class, 'updateStatus'])->name('sellers.updateStatus');
+
+    // products route
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::put('/products/{id}/status', [ProductController::class, 'updateStatus'])->name('products.updateStatus');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 });
 
 /*
@@ -318,8 +344,11 @@ Route::get('/seller/apply', [SellerController::class, 'create'])->name('seller.c
 Route::post('/seller/store', [SellerController::class, 'store'])->name('seller.store');
 
 Route::middleware(['auth', 'role:seller'])->group(function () {
-    Route::get('seller/dashboard', [SellerPanelController::class, 'dashboard'])->name('seller.dashboard');
-    Route::get('seller/pro', [SellerPanelController::class, 'dashboard'])->name('seller.dashboard');
+    Route::get('seller/dashboard', [SellerPanelController::class, 'index'])->name('seller.dashboard');
+    Route::get('seller/products', [SellerProductController::class, 'index'])->name('seller.products');
+    Route::post('seller/products', [SellerProductController::class, 'store'])->name('seller.products.store');
+    Route::put('seller/products', [SellerProductController::class, 'update'])->name('seller.products.update');
+    Route::delete('seller/products', [SellerProductController::class, 'destroy'])->name('seller.products.destroy');
 });
 
 require __DIR__ . '/auth.php';
