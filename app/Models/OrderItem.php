@@ -25,4 +25,9 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function codes()
+    {
+        return $this->hasMany(TicketCode::class);
+    }
 }

@@ -32,6 +32,9 @@ use App\Http\Controllers\users\CartController;
 use App\Http\Controllers\users\CheckoutController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
 use App\Http\Controllers\users\ProductController as UsersProductController;
+use App\Http\Controllers\users\UserCorporateRecruitmentController;
+use App\Http\Controllers\users\UserEventController;
+use App\Http\Controllers\users\UserEventTicketOrderController;
 use App\Http\Controllers\users\UserPanelController;
 use App\Models\Course;
 use App\Models\Talent;
@@ -139,6 +142,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart/payment/callback', [CheckoutController::class, 'paymentCallback'])->name('cart.payment.callback');
 });
 
+Route::prefix('corporate')->group(function () {
+    Route::get('/', [UserCorporateRecruitmentController::class, 'index'])->name('corporate.index');
+    Route::get('/create', [UserCorporateRecruitmentController::class, 'create'])->middleware('auth')->name('corporate.create');
+    Route::post('/store', [UserCorporateRecruitmentController::class, 'store'])->middleware('auth')->name('corporate.store');
+    Route::get('/{corporateRecruitment}', [UserCorporateRecruitmentController::class, 'show'])->name('corporate.show');
+});
+
+Route::get('/', [UserEventController::class,'index'])->name('events.index');
+Route::get('/events/{event}', [UserEventController::class,'show'])->name('events.show');
+
+// Auth
+Route::middleware('auth')->group(function () {
+    Route::post('/event/cart/checkout', [UserEventTicketOrderController::class,'checkout'])->name('event.orders.checkout');
+    Route::get('/event/orders/{order}', [UserEventTicketOrderController::class,'show'])->name('event.orders.show');
+});
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
