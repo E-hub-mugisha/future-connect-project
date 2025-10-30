@@ -148,12 +148,11 @@
         const grandTotal = Number("{{ $grandTotal }}");
         const publicKey = "{{ $public_key }}";
         const cartId = "{{ $cartId }}";
+        const phone = "{{ Auth::user()->phone ?? '' }}"; // fallback if phone missing
 
         if (!payBtn) return;
 
-        payBtn.addEventListener("click", () => {
-            
-
+        payBtn.addEventListener("click", async () => {
             payBtn.disabled = true;
             payBtnText.textContent = "Processing Payment...";
             payBtnSpinner.classList.remove("d-none");
@@ -162,33 +161,47 @@
             const userEmail = "{{ Auth::user()->email }}";
             const userName = "{{ Auth::user()->name }}";
 
-            FlutterwaveCheckout({
-                public_key: publicKey,
-                tx_ref: txRef,
-                amount: grandTotal,
-                currency: "RWF",
-                payment_options: "card, mobilemoneyrwanda",
-                customer: {
-                    email: userEmail,
-                    phonenumber: phone || "0000000000",
-                    name: userName
-                },
-                customizations: {
-                    title: "Cart Payment",
-                    description: "Payment for your cart items",
-                    logo: "{{ asset('logo.png') }}"
-                },
-                callback: function(data) {
-                    window.location.href = `/cart/payment/callback?cart_id=${cartId}&amount=${amount}&email=${encodeURIComponent(userEmail)}&status=${encodeURIComponent(data.status)}&tx_ref=${encodeURIComponent(data.tx_ref)}`;
-                },
-                onclose: function() {
-                    payBtn.disabled = false;
-                    payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
-                    payBtnSpinner.classList.add("d-none");
-                }
-            });
+            try {
+                // Optional: check Flutterwave is reachable
+                const ping = await fetch('https://api.flutterwave.com/v3/ping');
+                if (!ping.ok) throw new Error('Flutterwave service is temporarily unavailable');
+
+                FlutterwaveCheckout({
+                    public_key: publicKey,
+                    tx_ref: txRef,
+                    amount: grandTotal,
+                    currency: "RWF",
+                    payment_options: "card, mobilemoneyrwanda",
+                    customer: {
+                        email: userEmail,
+                        phonenumber: phone || "0000000000",
+                        name: userName
+                    },
+                    customizations: {
+                        title: "Cart Payment",
+                        description: "Payment for your cart items",
+                        logo: "{{ asset('logo.png') }}"
+                    },
+                    callback: function(data) {
+                        window.location.href = `/cart/payment/callback?cart_id=${cartId}&amount=${grandTotal}&email=${encodeURIComponent(userEmail)}&status=${encodeURIComponent(data.status)}&tx_ref=${encodeURIComponent(data.tx_ref)}`;
+                    },
+                    onclose: function() {
+                        payBtn.disabled = false;
+                        payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
+                        payBtnSpinner.classList.add("d-none");
+                    }
+                });
+
+            } catch (error) {
+                alert("Payment service is temporarily unavailable. Please try again later.");
+                payBtn.disabled = false;
+                payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
+                payBtnSpinner.classList.add("d-none");
+                console.error("Flutterwave error:", error);
+            }
         });
     });
 </script>
+
 
 @endsection

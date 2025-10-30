@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Future Connect Shop')
+@section('title', $category->name )
 @section('content')
 
 <style>
@@ -28,7 +28,7 @@
                 <!-- Shop Category Section -->
                 <div class="marketing-section postLists">
                     <div class="marketing-content text-center text-black">
-                        <h2>future connector Shop</h2>
+                        <h2>Products in {{ $category->name }} future connector Shop</h2>
                         <p>Find everything you need from trusted local and global sellers.</p>
                     </div>
                 </div>

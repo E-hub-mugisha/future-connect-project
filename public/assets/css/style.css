@@ -14023,7 +14023,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .marketing-section h2 {
   font-size: 28px;
-  color: var(--white);
+  /* color: var(--white); */
   margin-bottom: 5px;
 }
 

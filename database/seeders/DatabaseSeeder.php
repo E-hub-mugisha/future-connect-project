@@ -28,6 +28,11 @@ class DatabaseSeeder extends Seeder
             // 📢 Other Content
             AnnouncementSeeder::class,
             TestimonialSeeder::class,
+
+            SellerSeeder::class,
+            
+            ProductCategorySeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

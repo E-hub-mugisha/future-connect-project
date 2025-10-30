@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -18,10 +19,30 @@ class Product extends Model
         'stock',
         'image',
         'status',
+        'product_category_id',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($product) {
+            // Generate a slug if it doesn’t exist
+            $product->slug = $product->slug ?? Str::slug($product->name);
+        });
+
+        static::updating(function ($product) {
+            // Optionally regenerate slug if the name changes
+            if ($product->isDirty('name')) {
+                $product->slug = Str::slug($product->name);
+            }
+        });
+    }
 
     public function seller()
     {
         return $this->belongsTo(Seller::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
 }

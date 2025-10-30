@@ -125,6 +125,7 @@ Route::get('/course/payment/callback', [CourseController::class, 'handleCallback
 // products
 Route::get('/our-products', [UsersProductController::class, 'index'])->name('user.products.index');
 Route::get('/our-product/{id}', [UsersProductController::class, 'details'])->name('user.product-details');
+Route::get('/product/category/{id}', [UsersProductController::class, 'showCategory'])->name('user.product.category');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');

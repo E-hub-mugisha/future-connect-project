@@ -63,7 +63,7 @@
                                 <i class="ti ti-calendar-due"></i>Created On : 25 May 2025
                             </li>
                             <li>
-                                <i class="ti ti-home-shield"></i>Remote
+                                <i class="ti ti-home-shield"></i>{{ $product->category?->name ?? 'Uncategorized' }}
                             </li>
                             <li class="border-0">
                                 <div class="tranlator d-flex align-items-center">

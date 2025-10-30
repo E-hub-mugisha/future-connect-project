@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +17,8 @@ class SellerProductController extends Controller
     {
         $seller = Seller::where('user_id', Auth::id())->first();
         $products = Product::where('seller_id', $seller->id)->get();
-
-        return view('sellers-page.products.index', compact('products'));
+        $categories = ProductCategory::all();
+        return view('sellers-page.products.index', compact('products','categories'));
     }
 
     public function store(Request $request)
@@ -28,6 +29,7 @@ class SellerProductController extends Controller
             'description' => 'nullable',
             'stock' => 'required|integer',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'category_id' => 'required',
         ]);
 
         $seller = Seller::where('user_id', Auth::id())->first();
@@ -40,6 +42,7 @@ class SellerProductController extends Controller
             'seller_id' => $seller->id,
             'name' => $request->name,
             'slug' => Str::slug($request['name']),
+            'category_id' => $request->category_id,
             'price' => $request->price,
             'description' => $request->description,
             'stock' => $request->stock,
@@ -59,6 +62,7 @@ class SellerProductController extends Controller
             'stock' => 'required|integer',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'status' => 'required|in:active,inactive',
+            'category_id' => 'required',
         ]);
 
         $imagePath = $product->image;
@@ -73,6 +77,7 @@ class SellerProductController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'slug' => Str::slug($request['name']),
+            'category_id' => $request->category_id,
             'description' => $request->description,
             'stock' => $request->stock,
             'image' => $imagePath,
