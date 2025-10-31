@@ -10,13 +10,16 @@ class UserEventController extends Controller
 {
     public function index()
     {
-        $events = Event::with('tickets')->where('event_date','>=', now())->get();
+        $events = Event::with('tickets')->where('event_date', '>=', now())->get();
         return view('user-page.events.index', compact('events'));
     }
 
-    public function show(Event $event)
+    public function show($id)
     {
-        $event->load('tickets');
+        $event = Event::where('id', $id)
+            ->with('tickets') // relationship: hasMany(EventTicket)
+            ->firstOrFail();
+
         return view('user-page.events.show', compact('event'));
     }
 }

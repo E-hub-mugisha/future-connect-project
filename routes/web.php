@@ -35,6 +35,7 @@ use App\Http\Controllers\users\ProductController as UsersProductController;
 use App\Http\Controllers\users\UserCorporateRecruitmentController;
 use App\Http\Controllers\users\UserEventController;
 use App\Http\Controllers\users\UserEventTicketOrderController;
+use App\Http\Controllers\users\UserJobController;
 use App\Http\Controllers\users\UserPanelController;
 use App\Models\Course;
 use App\Models\Talent;
@@ -149,8 +150,11 @@ Route::prefix('corporate')->group(function () {
     Route::get('/{corporateRecruitment}', [UserCorporateRecruitmentController::class, 'show'])->name('corporate.show');
 });
 
-Route::get('/', [UserEventController::class,'index'])->name('events.index');
-Route::get('/events/{event}', [UserEventController::class,'show'])->name('events.show');
+Route::get('/events', [UserEventController::class,'index'])->name('user.events.index');
+Route::get('/events/{id}', [UserEventController::class,'show'])->name('user.events.show');
+
+// job routes
+Route::get('/jobs', [UserJobController::class, 'index'])->name('user.jobs.index');
 
 // Auth
 Route::middleware('auth')->group(function () {

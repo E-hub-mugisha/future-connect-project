@@ -170,7 +170,7 @@
                     public_key: publicKey,
                     tx_ref: txRef,
                     amount: grandTotal,
-                    currency: "RWF",
+                    currency: "RWF,USD",
                     payment_options: "card, mobilemoneyrwanda",
                     customer: {
                         email: userEmail,
