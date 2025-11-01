@@ -22,6 +22,12 @@ class Event extends Model
         'image'
     ];
 
+    protected $casts = [
+        'event_date' => 'datetime',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+
     public function organizer()
     {
         return $this->belongsTo(User::class, 'organizer_id');

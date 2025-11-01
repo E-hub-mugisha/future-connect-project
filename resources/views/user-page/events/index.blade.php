@@ -28,15 +28,12 @@
 					<div class="marketing-content">
 						<h2>All Categories</h2>
 						<p>Digital marketing is an essential component of modern business, given the widespread use of the internet and digital devices.</p>
-						<div class="marketing-bg">
-							<img src="assets/img/bg/market-bg.png" alt="img" class="market-bg">
-							<img src="assets/img/bg/market-bg-01.png" alt="img" class="market-img">
-						</div>
+						
 					</div>
 				</div>
 
 				<!-- Trending Categories -->
-				<div class="trend-section">
+				<!-- <div class="trend-section">
 					<div class="row align-items-center">
 						<div class="col-sm-10 sortby-title">
 							<h4>Trending Categories Today</h4>
@@ -48,11 +45,6 @@
 					<div class="row">
 						<div class="col-xl-12">
 							<div class="service-sliders owl-carousel owl-loaded owl-drag">
-
-
-
-
-
 								<div class="owl-stage-outer">
 									<div class="owl-stage" style="transform: translate3d(-1320px, 0px, 0px); transition: all; width: 4290px;">
 										<div class="owl-item cloned" style="width: 306px; margin-right: 24px;">
@@ -241,10 +233,10 @@
 								</div>
 								<div class="owl-dots disabled"></div>
 							</div>
-							<!-- /Service Slider -->
+							
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- /Trending Categories -->
 
 			</div>

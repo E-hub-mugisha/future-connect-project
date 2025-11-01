@@ -181,21 +181,28 @@ return request()->routeIs($route) ? 'active' : '';
     }
 
     /* Modern Input Focus Effect */
-.form-control:focus, .form-select:focus {
-    border-color: #0052D4 !important;
-    box-shadow: 0 0 0 0.2rem rgba(0, 82, 212, 0.25) !important;
-}
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0052D4 !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 82, 212, 0.25) !important;
+    }
 
-/* Smooth modal appearance */
-.modal-content {
-    animation: slideUp 0.35s ease-in-out;
-}
+    /* Smooth modal appearance */
+    .modal-content {
+        animation: slideUp 0.35s ease-in-out;
+    }
 
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
 
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
 </style>
 
 <header class="header">
@@ -302,19 +309,6 @@ return request()->routeIs($route) ? 'active' : '';
                             </li>
                         </ul>
                     </li>
-                    {{-- products --}}
-                    <li>
-                        <a href="{{ route('user.products.index') }}"
-                            class="nav-link {{ isActiveRoute(['user.products.index']) }}">Shop</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('user.events.index') }}"
-                            class="nav-link {{ isActiveRoute(['user.events.index']) }}">Events</a>
-                            </li>
-                    <li>
-                        <a href="{{ route('user.jobs.index') }}"
-                            class="nav-link {{ isActiveRoute(['user.jobs.index']) }}">Jobs</a>
-                    </li>
                     <!-- Apply as Seller Button -->
                     <li>
                         <a class="nav-link" data-bs-toggle="modal" data-bs-target="#applySellerModal">
@@ -322,35 +316,29 @@ return request()->routeIs($route) ? 'active' : '';
                         </a>
                     </li>
                     {{-- Skills --}}
-                    <!-- <li class="has-submenu">
-                        <a role="button" class="nav-link
-                            {{
-                                isActiveRoute([], [
-                                    'skills', 'skills/category/*'
-                                ])
-                            }}"
-                            tabindex="0">Skills <i class="fas fa-chevron-down"></i></a>
+                    <li class="has-submenu">
+                        <a role="button" class="nav-link"
+                            tabindex="0">Other features <i class="fas fa-chevron-down"></i></a>
 
                         <ul class="submenu">
                             <li>
-                                <a href="{{ url('/skills') }}"
-                                    class="{{ Request::is('skills') ? 'active' : '' }}">All Skills</a>
+                                <a href="{{ route('user.projects.index') }}"
+                                    class="nav-link {{ isActiveRoute(['user.projects.index']) }}">Projects</a>
                             </li>
-                            <li class="has-submenu">
-                                <a role="button" tabindex="0">Skills Categories</a>
-                                <ul class="submenu">
-                                    @foreach($categories as $cat)
-                                    <li>
-                                        <a href="{{ url('/skills/category/' . $cat->slug) }}"
-                                            class="{{ Request::is('skills/category/' . $cat->slug) ? 'active' : '' }}">
-                                            {{ $cat->name }}
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
+                            <li>
+                                <a href="{{ route('user.products.index') }}"
+                                    class="nav-link {{ isActiveRoute(['user.products.index']) }}">Shop</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('user.events.index') }}"
+                                    class="nav-link {{ isActiveRoute(['user.events.index']) }}">Events</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('user.jobs.index') }}"
+                                    class="nav-link {{ isActiveRoute(['user.jobs.index']) }}">Jobs</a>
                             </li>
                         </ul>
-                    </li> -->
+                    </li>
                 </ul>
             </div>
 
@@ -426,10 +414,10 @@ return request()->routeIs($route) ? 'active' : '';
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-            
+
             <!-- Header -->
             <div class="modal-header border-0 bg-gradient text-white"
-                 style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
                 <h5 class="modal-title fw-bold" id="loginModalLabel">
                     🔐 Welcome Back
                 </h5>
@@ -529,13 +517,13 @@ return request()->routeIs($route) ? 'active' : '';
 <div class="modal fade" id="applySellerModal" tabindex="-1" aria-labelledby="applySellerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-            
+
             <form action="{{ route('seller.store') }}" method="POST" class="p-2">
                 @csrf
 
                 <!-- Header -->
-                <div class="modal-header border-0 bg-gradient text-white" 
-                     style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                <div class="modal-header border-0 bg-gradient text-white"
+                    style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
                     <h5 class="modal-title fw-bold" id="applySellerModalLabel">
                         🌟 Apply to Become a Seller
                     </h5>
@@ -552,32 +540,32 @@ return request()->routeIs($route) ? 'active' : '';
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Company Name</label>
                             <input type="text" name="company_name" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                   placeholder="e.g. Creative Minds Ltd" required>
+                                placeholder="e.g. Creative Minds Ltd" required>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Email</label>
                             <input type="email" name="email" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                   placeholder="e.g. example@domain.com" required>
+                                placeholder="e.g. example@domain.com" required>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Phone</label>
                             <input type="text" name="phone" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                   placeholder="+250 700 123 456">
+                                placeholder="+250 700 123 456">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Address</label>
                             <input type="text" name="address" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                   placeholder="e.g. Kigali, Rwanda">
+                                placeholder="e.g. Kigali, Rwanda">
                         </div>
 
                         <div class="col-12">
                             <label class="form-label fw-semibold">Company Description</label>
-                            <textarea name="description" rows="3" 
-                                      class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                      placeholder="Tell us more about your company, products, and goals..."></textarea>
+                            <textarea name="description" rows="3"
+                                class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                placeholder="Tell us more about your company, products, and goals..."></textarea>
                         </div>
                     </div>
                 </div>

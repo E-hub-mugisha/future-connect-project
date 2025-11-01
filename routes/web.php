@@ -37,6 +37,7 @@ use App\Http\Controllers\users\UserEventController;
 use App\Http\Controllers\users\UserEventTicketOrderController;
 use App\Http\Controllers\users\UserJobController;
 use App\Http\Controllers\users\UserPanelController;
+use App\Http\Controllers\users\UserProjectController;
 use App\Models\Course;
 use App\Models\Talent;
 use Illuminate\Support\Facades\Artisan;
@@ -150,17 +151,23 @@ Route::prefix('corporate')->group(function () {
     Route::get('/{corporateRecruitment}', [UserCorporateRecruitmentController::class, 'show'])->name('corporate.show');
 });
 
-Route::get('/events', [UserEventController::class,'index'])->name('user.events.index');
-Route::get('/events/{id}', [UserEventController::class,'show'])->name('user.events.show');
+Route::get('/events', [UserEventController::class, 'index'])->name('user.events.index');
+Route::get('/events/{id}', [UserEventController::class, 'show'])->name('user.events.show');
 
 // job routes
 Route::get('/jobs', [UserJobController::class, 'index'])->name('user.jobs.index');
+Route::get('/job/{id}', [UserJobController::class, 'show'])->name('user.jobs.show');
+Route::post('/jobs/{job}/apply', [UserJobController::class, 'apply'])->name('user.jobs.apply');
 
-// Auth
-Route::middleware('auth')->group(function () {
-    Route::post('/event/cart/checkout', [UserEventTicketOrderController::class,'checkout'])->name('event.orders.checkout');
-    Route::get('/event/orders/{order}', [UserEventTicketOrderController::class,'show'])->name('event.orders.show');
-});
+Route::post('/tickets/order', [UserEventTicketOrderController::class, 'checkout'])->name('event.orders.checkout');
+Route::get('/orders/{id}/tickets', [UserEventTicketOrderController::class, 'showticket'])->name('order.tickets');
+Route::get('/event/payment/callback', [UserEventTicketOrderController::class, 'callback'])->name('payment.callback');
+Route::get('/ticket/order/{order}/summary', [UserEventTicketOrderController::class, 'summary'])->name('user.ticket.order-summary');
+Route::get('/tickets/{id}/download', [UserEventTicketOrderController::class, 'downloadTicket'])->name('user.tickets.download');
+
+Route::get('/projects', [UserProjectController::class, 'index'])->name('user.projects.index');
+Route::get('/projects/{id}', [UserProjectController::class, 'show'])->name('user.projects.show');
+Route::post('/projects/{id}/apply', [UserProjectController::class, 'store'])->name('user.projects.apply');
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes

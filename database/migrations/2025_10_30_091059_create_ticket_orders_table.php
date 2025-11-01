@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('ticket_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->decimal('total', 10, 2);
+            $table->string('customer_name');
+            $table->string('customer_email')->nullable();
+            $table->string('customer_phone')->nullable();
+            $table->decimal('total_amount', 10, 2);
+            $table->string('transaction_id')->nullable(); // from Flutterwave
             $table->enum('payment_status', ['pending', 'paid', 'cancelled'])->default('pending');
             $table->timestamps();
         });
