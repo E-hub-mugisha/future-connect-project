@@ -11,8 +11,10 @@ use App\Http\Controllers\Admin\AdminSkillController;
 use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminCoursesController;
+use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\Admin\AdminPartnerController;
 use App\Http\Controllers\Admin\AdminPaymentController;
+use App\Http\Controllers\Admin\AdminProjectController;
 use App\Http\Controllers\Admin\AdminTalentConnectionController;
 use App\Http\Controllers\Admin\AdminTalentController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
@@ -287,6 +289,51 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::put('/products/{id}/status', [ProductController::class, 'updateStatus'])->name('products.updateStatus');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    // projects route
+    Route::get('/projects', [AdminProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/{id}', [AdminProjectController::class, 'show'])->name('projects.show');
+    Route::post('/projects/{id}/verify', [AdminProjectController::class, 'verify'])->name('projects.verify');
+    Route::delete('/projects/{id}', [AdminProjectController::class, 'destroy'])->name('projects.destroy');
+
+    // ==========================
+    // 🎟 EVENTS MANAGEMENT
+    // ==========================
+    Route::resource('events', AdminEventController::class);
+
+    // Show specific event with tickets and orders
+    Route::get('events/{event}/show', [AdminEventController::class, 'show'])
+        ->name('events.show');
+
+    // ==========================
+    // 🎫 TICKETS MANAGEMENT
+    // ==========================
+    // Event Tickets
+    Route::get('events/{event}/tickets', [AdminEventController::class, 'index'])->name('tickets.index');
+    Route::get('events/{event}/tickets/create', [AdminEventController::class, 'createTicket'])->name('tickets.create');
+    Route::post('events/tickets', [AdminEventController::class, 'storeTicket'])->name('tickets.store');
+
+    Route::put('tickets/{ticket}', [AdminEventController::class, 'updateTicket'])->name('tickets.update');
+    Route::delete('tickets/{ticket}', [AdminEventController::class, 'destroyTicket'])->name('tickets.destroy');
+    Route::get('tickets/{ticket}', [AdminEventController::class, 'showTicket'])->name('tickets.show');
+
+    Route::get('tickets/{ticket}/show', [AdminEventController::class, 'showTicket'])
+        ->name('tickets.show');
+
+    Route::get('tickets/{ticket}/orders', [AdminEventController::class, 'ticketOrders'])
+        ->name('tickets.orders');
+    // ==========================
+    // 💵 ORDERS MANAGEMENT
+    // ==========================
+    Route::resource('orders', AdminEventController::class)->only(['index', 'show', 'destroy']);
+
+    // View Orders by Ticket
+    Route::get('orders/ticket/{ticket}', [AdminEventController::class, 'ordersByTicket'])
+        ->name('orders.byTicket');
+
+    // View Payment Details for an Order
+    Route::get('orders/{order}/payment', [AdminEventController::class, 'paymentDetails'])
+        ->name('orders.payment');
 });
 
 /*

@@ -112,6 +112,16 @@ $role = Auth::check() ? Auth::user()->role : null;
                             <i class="ti ti-settings-check me-2"></i> <span>Products</span> 
                         </a> 
                     </li>
+                    <li class="nk-menu-item"> 
+                        <a href="/admin/projects" class="nk-menu-link {{ isActiveRoute('admin.projects', 'admin/projects*') }}"> 
+                            <i class="ti ti-settings-check me-2"></i> <span>projects</span> 
+                        </a> 
+                    </li>
+                    <li class="nk-menu-item"> 
+                        <a href="/admin/events" class="nk-menu-link {{ isActiveRoute('admin.events', 'admin/events*') }}"> 
+                            <i class="ti ti-settings-check me-2"></i> <span>events</span> 
+                        </a> 
+                    </li>
                     @endif
 
                     {{-- ===================== TALENT ===================== --}}
