@@ -20,7 +20,6 @@
                             <th>#</th>
                             <th>Buyer</th>
                             <th>Email</th>
-                            <th>Quantity</th>
                             <th>Total</th>
                             <th>Status</th>
                             <th class="text-center">Payment</th>
@@ -30,17 +29,16 @@
                         @forelse($orders as $order)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $order->user->name ?? 'Guest' }}</td>
+                            <td>{{ $order->user->name ?? $order->customer_name }}</td>
                             <td>{{ $order->user->email ?? $order->customer_email }}</td>
-                            <td>{{ $order->quantity }}</td>
-                            <td>{{ number_format($order->total, 2) }} {{ config('app.currency', 'RWF') }}</td>
+                            <td>{{ number_format($order->total_amount, 2) }} {{ config('app.currency', 'RWF') }}</td>
                             <td>
-                                @if($order->status === 'paid')
-                                    <span class="badge bg-success">Paid</span>
-                                @elseif($order->status === 'pending')
-                                    <span class="badge bg-warning">Pending</span>
+                                @if($order->payment_status === 'paid')
+                                <span class="badge bg-success">Paid</span>
+                                @elseif($order->payment_status === 'pending')
+                                <span class="badge bg-warning">Pending</span>
                                 @else
-                                    <span class="badge bg-danger">Failed</span>
+                                <span class="badge bg-danger">Failed</span>
                                 @endif
                             </td>
                             <td class="text-center">
@@ -57,11 +55,24 @@
                                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p><strong>Transaction Ref:</strong> {{ $order->tx_ref }}</p>
-                                                <p><strong>Amount:</strong> {{ number_format($order->total, 2) }} {{ config('app.currency', 'RWF') }}</p>
-                                                <p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>
-                                                <p><strong>Payment Method:</strong> {{ $order->payment_method ?? 'N/A' }}</p>
-                                                <p><strong>Date:</strong> {{ $order->created_at->format('M d, Y H:i') }}</p>
+                                                <div class="modal-body">
+                                                    @if($order->payment)
+                                                    <p><strong>Transaction Ref:</strong> {{ $order->payment->transaction_id }}</p>
+                                                    <p><strong>Amount:</strong> {{ number_format($order->payment->amount, 2) }} {{ config('app.currency', 'RWF') }}</p>
+                                                    <p><strong>Status:</strong>
+                                                        <span class="badge bg-{{ $order->payment->status === 'paid' ? 'success' : ($order->payment->status === 'pending' ? 'warning' : 'danger') }}">
+                                                            {{ ucfirst($order->payment->status) }}
+                                                        </span>
+                                                    </p>
+                                                    <p><strong>Payment Method:</strong> {{ $order->payment->payment_method ?? 'N/A' }}</p>
+                                                    <p><strong>Date:</strong> {{ $order->payment->created_at->format('M d, Y H:i') }}</p>
+                                                    @else
+                                                    <div class="alert alert-warning rounded-3">
+                                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                                        No payment record found for this order yet.
+                                                    </div>
+                                                    @endif
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>

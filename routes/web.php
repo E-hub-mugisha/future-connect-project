@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminCoursesController;
 use App\Http\Controllers\Admin\AdminEventController;
+use App\Http\Controllers\Admin\AdminJobController;
 use App\Http\Controllers\Admin\AdminPartnerController;
 use App\Http\Controllers\Admin\AdminPaymentController;
 use App\Http\Controllers\Admin\AdminProjectController;
@@ -334,6 +335,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // View Payment Details for an Order
     Route::get('orders/{order}/payment', [AdminEventController::class, 'paymentDetails'])
         ->name('orders.payment');
+
+
+    // Job Management
+    Route::get('/jobs', [AdminJobController::class, 'index'])->name('jobs.index');
+    Route::get('/jobs/create', [AdminJobController::class, 'create'])->name('jobs.create');
+    Route::post('/jobs', [AdminJobController::class, 'store'])->name('jobs.store');
+    Route::get('/jobs/{job}', [AdminJobController::class, 'show'])->name('jobs.show');
+    Route::get('/jobs/{job}/edit', [AdminJobController::class, 'edit'])->name('jobs.edit');
+    Route::put('/jobs/{job}', [AdminJobController::class, 'update'])->name('jobs.update');
+    Route::delete('/jobs/{job}', [AdminJobController::class, 'destroy'])->name('jobs.destroy');
+    Route::get('{job}/applications', [AdminJobController::class, 'applications'])->name('jobs.applications');
+    Route::patch('applications/{id}/status', [AdminJobController::class, 'updateApplicationStatus'])->name('jobs.updateApplicationStatus');
 });
 
 /*

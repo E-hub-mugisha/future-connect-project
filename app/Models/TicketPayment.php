@@ -27,6 +27,6 @@ class TicketPayment extends Model
 
     public function order()
     {
-        return $this->belongsTo(TicketOrder::class);
+        return $this->belongsTo(TicketOrder::class, 'order_id');
     }
 }

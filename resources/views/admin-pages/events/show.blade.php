@@ -45,7 +45,7 @@
                     <small class="text-muted">Tickets Sold</small>
                 </div>
                 <div class="bg-light rounded-4 p-3 flex-fill text-center shadow-sm">
-                    <h5 class="fw-bold mb-0 text-warning">{{ number_format($event->tickets->sum(fn($t) => $t->orders()->sum('total')), 2) }} RWF</h5>
+                    <h5 class="fw-bold mb-0 text-warning">{{ number_format($event->tickets->sum(fn($t) => $t->orders()->sum('total_amount')), 2) }} RWF</h5>
                     <small class="text-muted">Revenue</small>
                 </div>
                 <div class="bg-light rounded-4 p-3 flex-fill text-center shadow-sm">
@@ -84,7 +84,7 @@
                             <td>{{ number_format($ticket->price, 2) }} RWF</td>
                             <td>{{ $ticket->quantity }}</td>
                             <td>{{ $ticket->orders()->sum('quantity') }}</td>
-                            <td>{{ number_format($ticket->orders()->sum('total'), 2) }} RWF</td>
+                            <td>{{ number_format($ticket->orders()->sum('total_amount'), 2) }} RWF</td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#editTicketModal{{ $ticket->id }}">
                                     Edit Ticket

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventTicket;
+use App\Models\TicketOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -159,8 +160,14 @@ class AdminEventController extends Controller
 
     public function ticketOrders($ticketId)
     {
-        $ticket = EventTicket::with('orders.user')->findOrFail($ticketId);
-        $orders = $ticket->orders()->latest()->get();
+        $ticket = EventTicket::findOrFail($ticketId);
+
+        $orders = TicketOrder::whereHas('items', function ($query) use ($ticketId) {
+            $query->where('ticket_id', $ticketId);
+        })
+            ->with(['items.ticket', 'payment'])
+            ->latest()
+            ->get();
 
         return view('admin-pages.events.tickets-orders', compact('ticket', 'orders'));
     }

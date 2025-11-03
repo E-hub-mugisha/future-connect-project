@@ -20,11 +20,16 @@ class TicketOrder extends Model
 
     public function items()
     {
-        return $this->hasMany(TicketOrderItem::class);
+        return $this->hasMany(TicketOrderItem::class, 'ticket_order_id');
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(EventTicket::class, 'ticket_id');
     }
 
     public function payment()
     {
-        return $this->hasOne(TicketPayment::class);
+        return $this->hasOne(TicketPayment::class, 'order_id');
     }
 }
