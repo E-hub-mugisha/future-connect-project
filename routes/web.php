@@ -452,6 +452,10 @@ Route::get('/run-migrations-seeders', function() {
         Artisan::call('db:seed', ['--class' => 'SellerSeeder', '--force' => true]);
         Artisan::call('db:seed', ['--class' => 'ProductCategorySeeder', '--force' => true]);
         Artisan::call('db:seed', ['--class' => 'ProductSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'EventSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'EventTicketSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'JobSectionSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'ProjectSeeder', '--force' => true]);
 
         return "Migration and seeders ran successfully!";
     } catch (\Exception $e) {
