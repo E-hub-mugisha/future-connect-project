@@ -463,4 +463,6 @@ Route::get('/run-migrations-seeders', function() {
     }
 });
 
+Route::get('/git-pull', [HomeController::class, 'pull']);
+
 require __DIR__ . '/auth.php';

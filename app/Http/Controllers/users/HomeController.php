@@ -155,7 +155,7 @@ class HomeController extends Controller
 
     public function showTalents($id)
     {
-        $talent = Talent::with(['skills', 'stories','courses'])->findOrFail($id);
+        $talent = Talent::with(['skills', 'stories', 'courses'])->findOrFail($id);
         return view('user-page.talent-details', [
             'talent' => $talent
         ]);
@@ -605,5 +605,23 @@ class HomeController extends Controller
     public function donationPolicy()
     {
         return view('user-page.donate');
+    }
+
+    public function pull()
+    {
+
+        // Go to your project directory
+        $output = [];
+        $status = null;
+
+        // Run git commands
+        chdir(base_path()); // Ensure you are in project root
+        exec('git reset --hard 2>&1', $output, $status);
+        exec('git pull origin main 2>&1', $output, $status);
+
+        return response()->json([
+            'status' => $status,
+            'output' => $output
+        ]);
     }
 }
