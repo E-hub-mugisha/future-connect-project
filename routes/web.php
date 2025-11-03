@@ -441,4 +441,22 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::delete('seller/products', [SellerProductController::class, 'destroy'])->name('seller.products.destroy');
 });
 
+Route::get('/run-migrations-seeders', function() {
+    
+
+    try {
+        // Run migrations
+        Artisan::call('migrate', ['--force' => true]);
+
+        // Run seeders (example: ProductCategorySeeder)
+        Artisan::call('db:seed', ['--class' => 'SellerSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'ProductCategorySeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'ProductSeeder', '--force' => true]);
+
+        return "Migration and seeders ran successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
 require __DIR__ . '/auth.php';
