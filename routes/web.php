@@ -449,9 +449,6 @@ Route::get('/run-migrations-seeders', function() {
         Artisan::call('migrate', ['--force' => true]);
 
         // Run seeders (example: ProductCategorySeeder)
-        Artisan::call('db:seed', ['--class' => 'SellerSeeder', '--force' => true]);
-        Artisan::call('db:seed', ['--class' => 'ProductCategorySeeder', '--force' => true]);
-        Artisan::call('db:seed', ['--class' => 'ProductSeeder', '--force' => true]);
         Artisan::call('db:seed', ['--class' => 'EventSeeder', '--force' => true]);
         Artisan::call('db:seed', ['--class' => 'EventTicketSeeder', '--force' => true]);
         Artisan::call('db:seed', ['--class' => 'JobSectionSeeder', '--force' => true]);
