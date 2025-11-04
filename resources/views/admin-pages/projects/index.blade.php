@@ -1,8 +1,12 @@
 @extends('layouts.app')
+@section('title', 'Manage Projects')
 @section('content')
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Manage Projects</h2>
+        <a href="{{ route('admin.projects.create') }}" class="btn btn-primary btn-sm rounded-pill">
+            <i class="bi bi-plus-circle"></i> Add Project
+        </a>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4">
@@ -34,6 +38,7 @@
                         </td>
                         <td>
                             <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                            <a href="{{ route('admin.projects.edit', $project->id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
                             @if(!$project->verified)
                                 <form action="{{ route('admin.projects.verify', $project->id) }}" method="POST" class="d-inline">
                                     @csrf

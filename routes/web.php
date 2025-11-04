@@ -293,6 +293,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // projects route
     Route::get('/projects', [AdminProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/create', [AdminProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [AdminProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{id}/edit', [AdminProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('/projects/{id}', [AdminProjectController::class, 'update'])->name('projects.update');
     Route::get('/projects/{id}', [AdminProjectController::class, 'show'])->name('projects.show');
     Route::post('/projects/{id}/verify', [AdminProjectController::class, 'verify'])->name('projects.verify');
     Route::delete('/projects/{id}', [AdminProjectController::class, 'destroy'])->name('projects.destroy');
