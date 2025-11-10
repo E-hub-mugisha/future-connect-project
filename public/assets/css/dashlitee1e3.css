@@ -34605,7 +34605,8 @@ body.nav-shown {
 }
 
 .nk-content {
-    padding: 24px 4px
+    padding: 24px 4px;
+    margin-top: 5rem;
 }
 
 .nk-content-fs {

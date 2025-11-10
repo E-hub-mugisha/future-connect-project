@@ -1,5 +1,5 @@
 @extends ('layouts.guest')
-@section('title', 'Courses')
+@section('title', 'Learning Center and Courses')
 @section('content')
 
 <style>
@@ -24,29 +24,77 @@
     }
 </style>
 
-<!-- Page Content -->
-<div class="page-content">
-    <div class="container">
-        <!-- Breadcrumb -->
-        <div class="breadcrumb-bar breadcrumb-bar-info postLists">
-            <div class="breadcrumb-img">
-                <div class="breadcrumb-left"> <img src="{{ asset('assets/img/bg/banner-bg-03.png') }}" alt="img"> </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 col-12">
-                        <nav aria-label="breadcrumb" class="page-breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"> <a href="{{ route('user.home') }}">Home</a> </li>
-                                <li class="breadcrumb-item"> <a href="{{ route('user.courses') }}">Courses</a> </li>
-                            </ol>
-                        </nav>
-                        <h2 class="breadcrumb-title mb-0"> Browse Listing & More <span class="text-primary">
-                                {{ $courses->count() }} Courses </span> </h2>
+<section class="hero-section">
+    <div class="banner-bg-imgs">
+        <img src="{{ asset('assets/img/bg/banner-bg-01.png') }}" class="banner-bg-one" alt="img">
+        <img src="{{ asset('assets/img/bg/banner-bg-02.png') }}" class="banner-bg-two" alt="img">
+        <!-- <img src="{{ asset('assets/img/bg/banner-bg-04.png') }}" class="banner-bg-four" alt="img"> -->
+    </div>
+    <div class="container p-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                    <div class="banner-head">
+                        <h1 class="mb-2">Learning center where knowledge meets opportunity</h1>
+                        <p class="d-inline-flex">Explore our courses and categories to enhance your skills and advance your career.</p>
+                    </div>
+                    <div class="banner-form">
+                        <form action="#">
+                            <div class="banner-search-list">
+                                <div class="input-block">
+                                    <label>Category</label>
+                                    <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                        <option data-select2-id="6">Select</option>
+                                        <option>Digital Marketing</option>
+                                        <option>Writing</option>
+                                        <option>Social Media</option>
+                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                                <div class="input-block">
+                                    <label>Location</label>
+                                    <div class="input-locaion">
+                                        <input type="text" class="form-control" placeholder="Miami, USA">
+                                        <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
+                                    </div>
+                                </div>
+                                <div class="input-block border-0">
+                                    <label>Keyword</label>
+                                    <input type="text" class="form-control" placeholder="Need Graphic Designer">
+                                </div>
+                            </div>
+                            <div class="input-block-btn">
+                                <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
+                                    <i class="ti ti-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="popular-search">
+                        <h5>Popular Searches : </h5>
+                        <ul>
+                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
+                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
+                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="banner-img">
+                    <!-- <div class="banner-img-right">
+                        <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                    </div> -->
+                    <img src="{{ asset('assets/img/bg/banner-small-bg-01.svg') }}" class="banner-small-bg-one" alt="img">
+                    <img src="{{ asset('assets/img/bg/banner-small-bg-02.png') }}" class="banner-small-bg-two" alt="img">
+                </div>
+            </div>
         </div>
+    </div>
+</section>
+
+<!-- Page Content -->
+<div class="page-content">
+    <div class="container">
 
         <div class="trend-section server-grid-slider">
             <div class="service-sliders owl-carousel">
@@ -68,7 +116,8 @@
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <div class="title-header">
-                        <h3>Skills & Courses</h3>
+                        <h3>Skills & Courses Browse Listing & More <span class="text-primary">
+                                {{ $courses->count() }} Courses </span></h3>
                         <p>View all skills and courses offered by talents</p>
                     </div>
                 </div>

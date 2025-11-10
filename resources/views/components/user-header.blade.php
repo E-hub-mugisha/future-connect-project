@@ -19,6 +19,12 @@ return request()->routeIs($route) ? 'active' : '';
         padding: 7px 5px;
     }
 
+    .header.fixed {
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+        background: rgba(255, 255, 255, 0.45);
+    }
+
     .main-menu-wrapper {
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         padding: 15px 2rem;
@@ -26,7 +32,6 @@ return request()->routeIs($route) ? 'active' : '';
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
-
 
     .main-menu-wrapper .main-nav a {
         color: #319BF9;
@@ -36,7 +41,6 @@ return request()->routeIs($route) ? 'active' : '';
         border: 2px solid transparent;
         display: inline-block;
         /* Prevents full-width behavior */
-
     }
 
     .main-menu-wrapper .main-nav a:hover,
@@ -47,6 +51,97 @@ return request()->routeIs($route) ? 'active' : '';
         box-shadow: 0 1em 1em #1f2d3d26;
         border-radius: 10px;
         padding: 6px 20px;
+    }
+
+    /* Sticky Glassmorphism Navbar */
+    .navbar-glass {
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+        background: rgba(255, 255, 255, 0.45);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Main navigation */
+    .main-nav>li>a {
+        padding: 12px 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.25s ease;
+        font-size: 15px;
+    }
+
+    .main-nav>li>a:hover {
+        color: #007bff;
+        transform: translateY(-2px);
+    }
+
+    /* Dropdown */
+    .main-nav li.has-submenu {
+        position: relative;
+    }
+
+    .submenu {
+        position: absolute;
+        top: 55px;
+        left: 0;
+        min-width: 230px;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 14px;
+        padding: 10px 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: 0.25s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .has-submenu:hover>.submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* Dropdown items */
+    .submenu li a {
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #1b1b1b;
+        font-size: 14px;
+        transition: 0.25s ease;
+    }
+
+    .submenu li a:hover {
+        background: rgba(255, 255, 255, 0.35);
+        color: #007bff;
+        transform: translateX(4px);
+        border-radius: 8px;
+    }
+
+    /* Nested submenu */
+    .submenu .has-submenu {
+        position: relative;
+    }
+
+    .submenu .has-submenu .submenu {
+        top: 0;
+        left: 100%;
+        margin-left: 8px;
+    }
+
+    /* Theme toggler dropdown */
+    .theme-toggle {
+        cursor: pointer;
     }
 </style>
 
@@ -205,9 +300,11 @@ return request()->routeIs($route) ? 'active' : '';
     }
 </style>
 
-<header class="header">
+<header class="header navbar-glass">
     <div class="container">
         <nav class="navbar navbar-expand-lg header-nav p-0">
+
+            <!-- Mobile Menu Button -->
             <div class="navbar-header">
                 <a id="mobile_btn" role="button" tabindex="0">
                     <span class="bar-icon">
@@ -222,47 +319,109 @@ return request()->routeIs($route) ? 'active' : '';
                 </a>
             </div>
 
+            <!-- MOBILE MENU OVERLAY -->
+            <div id="mobileMenuOverlay"></div>
+
+            <!-- Main Menu Wrapper -->
             <div class="main-menu-wrapper">
+
                 <div class="menu-header">
-                    <a id="menu_close" class="menu-close" role="button" tabindex="0"><i class="fas fa-times"></i></a>
+                    <a id="menu_close" class="menu-close" role="button" tabindex="0">
+                        <i class="fas fa-times"></i>
+                    </a>
                 </div>
 
                 <ul class="main-nav navbar-nav">
-                    {{-- Home --}}
+
+                    <!-- Home -->
                     <li>
-                        <a href="{{ route('user.home') }}" class="nav-link {{ isActiveRoute(['user.home']) }}">Home</a>
+                        <a href="{{ route('user.home') }}">
+                            <i class="ti ti-home"></i> Home
+                        </a>
                     </li>
 
-                    {{-- Talents --}}
+                    <!-- Talent Hub -->
                     <li class="has-submenu">
-                        {{-- Parent menu link does not go anywhere --}}
-                        <a role="button" class="nav-link
-                            {{
-                                // Check if any talent-related routes or URLs are active
-                                isActiveRoute(
-                                    ['user.talents'], // route names
-                                    ['talents*', 'register_as_talent', 'talents/category/*']
-                                )
-                            }}"
-                            tabindex="0">Talents <i class="fas fa-chevron-down"></i></a>
+                        <a role="button">
+                            <span><i class="ti ti-users"></i> Talent Hub</span>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                        </a>
 
                         <ul class="submenu">
+
                             <li>
-                                <a href="{{ route('user.talents') }}"
-                                    class="{{ isActiveRoute(['user.talents']) }}">All Talents</a>
+                                <a href="{{ route('user.talents') }}">
+                                    <i class="ti ti-briefcase"></i> Talent Marketplace
+                                </a>
                             </li>
+
                             <li>
-                                <a href="{{ url('/register_as_talent') }}"
-                                    class="{{ Request::is('register_as_talent') ? 'active' : '' }}">Register as Talent</a>
+                                <a href="{{ url('/register_as_talent') }}">
+                                    <i class="ti ti-user-plus"></i> Become a Talent
+                                </a>
                             </li>
+
                             <li class="has-submenu">
-                                <a role="button" tabindex="0">Talent Categories</a>
+                                <a role="button">
+                                    <span><i class="ti ti-tag"></i> Talent Categories</span>
+                                    <i class="fas fa-chevron-right submenu-arrow"></i>
+                                </a>
+
                                 <ul class="submenu">
                                     @foreach($categories as $cat)
                                     <li>
-                                        <a href="{{ url('/talents/category/' . $cat->slug) }}"
-                                            class="{{ Request::is('talents/category/' . $cat->slug) ? 'active' : '' }}">
-                                            {{ $cat->name }}
+                                        <a href="{{ url('/talents/category/' . $cat->slug) }}">
+                                            <i class="ti ti-circle"></i> {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('talent.connections-room') }}">
+                                    <i class="ti ti-message-dots"></i> Networking Hub
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Updates -->
+                    <li class="has-submenu">
+                        <a role="button">
+                            <span><i class="ti ti-bell"></i> Updates</span>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><a href="{{ route('user.announcements') }}"><i class="ti ti-megaphone"></i> Announcements</a></li>
+                            <li><a href="{{ route('user.events.index') }}"><i class="ti ti-calendar-event"></i> Events</a></li>
+                            <li><a href="{{ route('user.projects.index') }}"><i class="ti ti-building"></i> Projects</a></li>
+                            <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Learning Center -->
+                    <li class="has-submenu">
+                        <a role="button">
+                            <span><i class="ti ti-book"></i> Learning Center</span>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><a href="/courses"><i class="ti ti-list"></i> Browse Courses</a></li>
+
+                            <li class="has-submenu">
+                                <a role="button">
+                                    <span><i class="ti ti-category"></i> Categories</span>
+                                    <i class="fas fa-chevron-right submenu-arrow"></i>
+                                </a>
+
+                                <ul class="submenu">
+                                    @foreach($categories as $cat)
+                                    <li>
+                                        <a href="{{ url('/courses/category/' . $cat->slug) }}">
+                                            <i class="ti ti-circle"></i> {{ $cat->name }}
                                         </a>
                                     </li>
                                     @endforeach
@@ -271,144 +430,69 @@ return request()->routeIs($route) ? 'active' : '';
                         </ul>
                     </li>
 
-                    {{-- Announcements --}}
-                    <li>
-                        <a href="{{ route('user.announcements') }}"
-                            class="nav-link {{ isActiveRoute(['user.announcements']) }}">Announcements</a>
-                    </li>
-
-                    {{-- Announcements --}}
-                    <li>
-                        <a href="{{ route('talent.connections-room') }}"
-                            class="nav-link {{ isActiveRoute(['talent.connections-room']) }}">Connection Room</a>
-                    </li>
-                    {{-- Courses --}}
+                    <!-- Marketplace -->
                     <li class="has-submenu">
-                        <a role="button" class="nav-link {{ isActiveRoute([], [ 'courses', 'courses/*', 'courses/category/*' ]) }}"
-                            tabindex="0">Courses <i class="fas fa-chevron-down"></i>
+                        <a role="button">
+                            <span><i class="ti ti-shopping-cart"></i> Marketplace</span>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
                         </a>
 
                         <ul class="submenu">
-                            <li>
-                                <a href="{{ url('/courses') }}"
-                                    class="{{ Request::is('courses') ? 'active' : '' }}">All Courses</a>
-                            </li>
-
-                            <li class="has-submenu">
-                                <a role="button" tabindex="0">Course Categories</a>
-                                <ul class="submenu">
-                                    @foreach($categories as $cat)
-                                    <li>
-                                        <a href="{{ url('/courses/category/' . $cat->slug) }}"
-                                            class="{{ Request::is('courses/category/' . $cat->slug) ? 'active' : '' }}">
-                                            {{ $cat->name }}
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </li>
+                            <li><a href="{{ route('user.products.index') }}"><i class="ti ti-box"></i> All Products</a></li>
+                            <li><a data-bs-toggle="modal" data-bs-target="#applySellerModal"><i class="ti ti-store"></i> Become a Seller</a></li>
                         </ul>
                     </li>
-                    <!-- Apply as Seller Button -->
-                    <li>
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#applySellerModal">
-                            Become a Seller
-                        </a>
-                    </li>
-                    {{-- Skills --}}
-                    <li class="has-submenu">
-                        <a role="button" class="nav-link"
-                            tabindex="0">Other features <i class="fas fa-chevron-down"></i></a>
 
-                        <ul class="submenu">
-                            <li>
-                                <a href="{{ route('user.projects.index') }}"
-                                    class="nav-link {{ isActiveRoute(['user.projects.index']) }}">Projects</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('user.products.index') }}"
-                                    class="nav-link {{ isActiveRoute(['user.products.index']) }}">Shop</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('user.events.index') }}"
-                                    class="nav-link {{ isActiveRoute(['user.events.index']) }}">Events</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('user.jobs.index') }}"
-                                    class="nav-link {{ isActiveRoute(['user.jobs.index']) }}">Jobs</a>
-                            </li>
-                        </ul>
-                    </li>
                 </ul>
             </div>
 
+            <!-- Right Section (unchanged) -->
             <div class="d-flex align-items-center">
-                <div class="nav-item dropdown flag-nav nav-item-box nav-item-box-home me-3">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" tabindex="0" role="button">
-                        <i class="ti ti-sun-high"></i>
-                        <i class="ti ti-moon"></i>
-                    </a>
-                    <ul class="dropdown-menu p-2">
-                        <li class="mb-1">
-                            <a role="button" tabindex="0" class="dropdown-item active theme-toggle rounded-2"
-                                id="light-mode-toggle">
-                                <i class="ti ti-sun-high me-2"></i>Light Mode
-                            </a>
-                        </li>
-                        <li>
-                            <a role="button" tabindex="0" class="dropdown-item theme-toggle rounded-2"
-                                id="dark-mode-toggle">
-                                <i class="ti ti-moon me-2"></i>Dark Mode
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+
                 <ul class="nav header-navbar-rht">
-                    {{-- If user is logged in --}}
+
                     @auth
+
                     @php
-                    $role = Auth::user()->role;
+                    $role = auth()->user()->role;
+
+                    // Define dashboard routes per role
                     $dashboards = [
                     'admin' => 'admin.dashboard',
+                    'agent' => 'agent.dashboard',
                     'talent' => 'talent.dashboard',
-                    'user' => 'user.dashboard',
+                    'seller' => 'seller.dashboard',
+                    'user' => 'user.dashboard'
                     ];
                     @endphp
-
                     <li class="nav-item">
-                        <a class="btn btn-light d-inline-flex align-items-center"
-                            href="{{ route($dashboards[$role] ?? 'user.dashboard') }}"
-                            style="background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-                  box-shadow: 0 1em 1em #1f2d3d26;">
-                            <i class="ti ti-dashboard me-1"></i>Dashboard
+                        <a class="btn btn-light" href="{{ route($dashboards[$role] ?? 'user.dashboard') }}">
+                            <i class="ti ti-dashboard me-1"></i> Dashboard
                         </a>
                     </li>
                     @endauth
 
-                    {{-- Show Sign In if NOT logged in --}}
                     @guest
                     <li class="nav-item">
-                        <a class="btn btn-light d-inline-flex align-items-center login"
-                            href="javascript:void(0)"
-                            data-bs-toggle="modal"
-                            data-bs-target="#loginModal"
-                            style="background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-                  box-shadow: 0 1em 1em #1f2d3d26;">
-                            <i class="ti ti-lock me-1"></i>Sign In
+                        <a class="btn btn-light login" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="ti ti-lock me-1"></i> Sign In
                         </a>
                     </li>
                     @endguest
 
                     <li class="nav-item">
-                        <a class="btn btn-primary d-inline-flex align-items-center" href="#" onclick="toggleSearchOverlay(event)">
-                            <i class="ti ti-search me-1"></i>Search
+                        <a class="btn btn-primary" href="#" onclick="toggleSearchOverlay(event)">
+                            <i class="ti ti-search me-1"></i> Search
                         </a>
                     </li>
                 </ul>
+
             </div>
+
         </nav>
     </div>
 </header>
+
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">

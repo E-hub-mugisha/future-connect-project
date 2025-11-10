@@ -20,6 +20,18 @@
             </div>
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
+                    <li class="me-n1">
+                        @if(!Auth::user()->is_verified)
+                        <!-- Upgrade Button -->
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verifyModal">
+                            Upgrade to Verified
+                        </button>
+                        @else
+                        <span class="badge bg-success p-2">Verified Member</span>
+
+                        @endif
+
+                    </li>
                     <li class="dropdown user-dropdown"><a href="#" class="dropdown-toggle"
                             data-bs-toggle="dropdown">
                             <div class="user-toggle">
@@ -144,6 +156,43 @@
                         </div>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Verification Modal -->
+<div class="modal fade" id="verifyModal" tabindex="-1" aria-labelledby="verifyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="verifyModalLabel">Upgrade to Verified</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Choose how you want to upgrade your account to Verified:</p>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Wallet
+                        <span class="badge bg-primary">{{ number_format(Auth::user()->wallet->balance ?? 0, 2) }} RWF</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Pay Direct (Flutterwave)
+                        <span class="badge bg-warning">Secure Payment</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer border-0 d-flex justify-content-between">
+                <!-- Wallet Upgrade -->
+                <form action="{{ route('membership.upgrade.wallet') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">Use Wallet</button>
+                </form>
+
+                <!-- Flutterwave Upgrade -->
+                <a href="{{ route('membership.upgrade.flutterwave') }}" class="btn btn-warning">
+                    Pay with Flutterwave
+                </a>
             </div>
         </div>
     </div>

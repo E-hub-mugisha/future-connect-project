@@ -192,6 +192,121 @@
     }
 </style>
 
+<div class="container" style="margin-top: 4.5rem;">
+    <div class="trend-section ">
+        <div class="row align-items-center">
+            <div class="col-sm-10">
+                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of talents<span class="title-bg2"></span></h5>
+                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative talent across Africa</p>
+            </div>
+            <div class="col-sm-2 text-sm-end">
+                <div class="owl-nav trend-nav nav-control nav-top"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="trend-items owl-carousel owl-loaded owl-drag">
+                    <div class="owl-stage-outer">
+                        <div class="owl-stage" style="transform: translate3d(-1977px, 0px, 0px); transition: 2s; width: 4284px;">
+                            @foreach($categories as $cat)
+                            <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
+                                <div class="trend-box">
+                                    <div class="trend-info">
+
+                                        <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+                                        @if(isset($cat->talents_count))
+                                        <p>{{ $cat->talents_count }} talents</p>
+                                        @else
+                                        <p>0 talents</p>
+                                        @endif
+                                    </div>
+                                    <style>
+                                        .slide-line-btn {
+                                            position: relative;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 6px;
+                                            padding: 6px 16px;
+                                            color: #fff;
+                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                            border-radius: 30px;
+                                            text-decoration: none;
+                                            overflow: hidden;
+                                            z-index: 1;
+                                        }
+
+                                        .slide-line {
+                                            position: absolute;
+                                            top: 100%;
+                                            left: -100%;
+                                            width: 200%;
+                                            height: 100%;
+                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
+                                            transform: rotate(45deg);
+                                            animation: slideRightUp 2s ease-in-out infinite;
+                                            z-index: 0;
+                                        }
+
+                                        .slide-line:nth-child(2) {
+                                            animation-delay: 0s;
+                                            opacity: 0;
+                                            width: 50%;
+                                        }
+
+                                        .slide-line:nth-child(3) {
+                                            animation-delay: 0s;
+                                            opacity: 0.5;
+                                            width: 150%;
+                                        }
+
+                                        .slide-line:nth-child(4) {
+                                            animation-delay: 0.8s;
+                                            opacity: 0.7;
+                                            width: 200%;
+                                        }
+
+                                        @keyframes slideRightUp {
+                                            0% {
+                                                top: 100%;
+                                                left: -100%;
+                                            }
+
+                                            50% {
+                                                top: 0%;
+                                                left: 0%;
+                                            }
+
+                                            100% {
+                                                top: -100%;
+                                                left: 100%;
+                                            }
+                                        }
+
+                                        .slide-line-btn span {
+                                            pointer-events: none;
+                                        }
+                                    </style>
+
+                                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
+                                        <i class="feather-arrow-right"></i>Read More
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                    </a>
+
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="owl-dots disabled"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Trending Categories -->
+
 <div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">

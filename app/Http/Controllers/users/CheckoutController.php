@@ -36,9 +36,10 @@ class CheckoutController extends Controller
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
         $order = Order::create([
             'user_id' => Auth::id(),
-            'address' => $address,
+            'shipping_address' => $address,
             'total' => $amount,
-            'payment_ref' => $txRef,
+            'transaction_ref' => $txRef,
+            'payment_method' => 'Flutterwave',
             'payment_status' => 'paid',
         ]);
 
@@ -51,15 +52,23 @@ class CheckoutController extends Controller
             ]);
         }
 
-
-
         if ($status === 'successful') {
 
             // Clear cart
             Cart::where('user_id', Auth::id())->delete();
-            return redirect()->route('orders.show', $order->id)
+            return redirect()->route('user.orders.show', $order->id)
                 ->with('success', 'Payment successful and order created!');
         }
         return redirect()->route('cart.index')->with('error', 'Payment failed or cancelled.');
+    }
+
+    public function orderShow($id)
+    {
+        $order = Order::with('items.product')
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('user-page.orders.success', compact('order'));
     }
 }

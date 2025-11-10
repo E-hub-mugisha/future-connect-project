@@ -12,8 +12,11 @@ use App\Models\Talent;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Course;
+use App\Models\Event;
 use App\Models\Faq;
+use App\Models\JobSection;
 use App\Models\Partner;
+use App\Models\Project;
 use App\Models\Skill;
 use App\Models\SkillReview;
 use App\Models\Story;
@@ -29,9 +32,9 @@ class HomeController extends Controller
     public function index()
     {
 
-        $skills = Skill::withCount('reviews')->withAvg('reviews', 'rating')->get();
+        $skills = Skill::withCount('reviews')->withAvg('reviews', 'rating')->take(6)->get();
 
-        $talents = Talent::with('category', 'feedback', 'stories')->get();
+        $talents = Talent::with('category', 'feedback', 'stories')->take(8)->get();
 
         $now = Carbon::now();
         $oneMonthAgo = $now->copy()->subMonth();
@@ -56,7 +59,7 @@ class HomeController extends Controller
             return $talent;
         });
 
-        $courses = Course::with(['category', 'feedback', 'talent'])->latest()->get();
+        $courses = Course::with(['category', 'feedback', 'talent'])->latest()->take(6)->get();
 
         return view('user-page.home', [
             'talents' => $talents,
@@ -65,12 +68,13 @@ class HomeController extends Controller
                 ->orderBy('talents_count', 'desc')
                 ->take(3)
                 ->get(),
-            'stories' => Story::all(),
+            'stories' => Story::all()->take(6),
             'skills' => $skills,
             'testimonials' => Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
             'partners' => Partner::all(), // Fetch only active partners
             'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->take(4)->get(),
             'courses' => $courses,
+            'totalTalents' => Talent::where('status', 'approved')->count(),
         ]);
     }
     public function talents()
@@ -172,6 +176,7 @@ class HomeController extends Controller
         return view('user-page.category-talents', [
             'categoryName' => $category->name,
             'talents' => $talents,
+            'categories' => \App\Models\Category::all(),
         ]);
     }
     public function TalentSkillDetails($id)
@@ -408,9 +413,15 @@ class HomeController extends Controller
     public function announcements()
     {
         $announcements = Announcement::orderBy('created_at', 'desc')->get();
+        $events = Event::orderBy('created_at', 'desc')->get();
+        $projects = Project::orderBy('created_at', 'desc')->get();
+        $jobs = JobSection::orderBy('created_at', 'desc')->get();
 
         return view('user-page.announcement', [
-            'announcements' => $announcements
+            'announcements' => $announcements,
+            'events' => $events,
+            'projects' => $projects,
+            'jobs' => $jobs
         ]);
     }
     public function announcementDetails($id)

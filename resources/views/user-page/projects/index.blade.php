@@ -1,554 +1,104 @@
 @extends('layouts.guest')
-@section('title','Projects')
+@section('title', 'Ongoing Projects')
 @section('content')
+<!-- Service -->
 
-<style>
-    .postLists {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 1.5rem;
-    }
-</style>
-
-<div class="page-content">
-    <div class="container">
+<section class="hero-section">
+    <div class="banner-bg-imgs">
+        <img src="{{ asset('assets/img/bg/banner-bg-01.png') }}" class="banner-bg-one" alt="img">
+        <img src="{{ asset('assets/img/bg/banner-bg-02.png') }}" class="banner-bg-two" alt="img">
+        <!-- <img src="{{ asset('assets/img/bg/banner-bg-04.png') }}" class="banner-bg-four" alt="img"> -->
+    </div>
+    <div class="container p-4">
         <div class="row">
-            <div class="col-md-12">
-
-                <!-- Category Section -->
-                <div class="marketing-section postLists">
-                    <div class="marketing-content">
-                        <h2>Verified Projects Marketplace</h2>
-                        <p class="text-black">
-                            Discover verified projects and connect with skilled collaborators across industries.
-                            Whether you’re a <strong>developer</strong> seeking a designer, a <strong>filmmaker</strong> looking for an editor,
-                            or a <strong>creator</strong> with a new idea — our marketplace helps you find the right partners
-                            to bring your vision to life.
-                        </p>
+            <div class="col-lg-8">
+                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                    <div class="banner-head">
+                        <h1 class="mb-2">Get inspired with projects & Opportunities</h1>
+                        <p class="d-inline-flex">Discover the latest initiatives, programs, and collaborations that drive impact.</< /p>
+                    </div>
+                    <div class="banner-form">
+                        <form action="#">
+                            <div class="banner-search-list">
+                                <div class="input-block">
+                                    <label>Category</label>
+                                    <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                        <option data-select2-id="6">Select</option>
+                                        <option>Digital Marketing</option>
+                                        <option>Writing</option>
+                                        <option>Social Media</option>
+                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                                <div class="input-block">
+                                    <label>Location</label>
+                                    <div class="input-locaion">
+                                        <input type="text" class="form-control" placeholder="Miami, USA">
+                                        <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
+                                    </div>
+                                </div>
+                                <div class="input-block border-0">
+                                    <label>Keyword</label>
+                                    <input type="text" class="form-control" placeholder="Need Graphic Designer">
+                                </div>
+                            </div>
+                            <div class="input-block-btn">
+                                <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
+                                    <i class="ti ti-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="popular-search">
+                        <h5>Popular Searches : </h5>
+                        <ul>
+                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
+                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
+                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                        </ul>
                     </div>
                 </div>
-
-                <!-- /Category Section -->
-
-                <!-- Trending Categories -->
-                <!-- <div class="trend-section">
-                    <div class="row align-items-center">
-                        <div class="col-sm-10">
-                            <h5>Trending Categories on Digital Marketing</h5>
-                        </div>
-                        <div class="col-sm-2 text-sm-end">
-                            <div class="owl-nav trend-nav nav-control nav-top"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="trend-items owl-carousel owl-loaded owl-drag">
-
-
-
-
-
-                                <div class="owl-stage-outer">
-                                    <div class="owl-stage" style="transform: translate3d(-1318px, 0px, 0px); transition: all; width: 4284px;">
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Ecommerce-Seo</a></h6>
-                                                    <p>(42 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Promoted Listing</a></h6>
-                                                    <p>(24 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Social Ecommerce</a></h6>
-                                                    <p>(55 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="jservice-sub-category.html">Promoted Listing</a></h6>
-                                                    <p>(24 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item active" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Website Promotion</a></h6>
-                                                    <p>(80 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item active" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Ecommerce-Seo</a></h6>
-                                                    <p>(42 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item active" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Promoted Listing</a></h6>
-                                                    <p>(24 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item active" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Social Ecommerce</a></h6>
-                                                    <p>(55 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="jservice-sub-category.html">Promoted Listing</a></h6>
-                                                    <p>(24 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Website Promotion</a></h6>
-                                                    <p>(80 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Ecommerce-Seo</a></h6>
-                                                    <p>(42 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Promoted Listing</a></h6>
-                                                    <p>(24 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                            <div class="trend-box">
-                                                <div class="trend-info">
-                                                    <h6><a href="service-sub-category.html">Social Ecommerce</a></h6>
-                                                    <p>(55 Services)</p>
-                                                </div>
-                                                <a href="service-sub-category.html"><i class="feather-arrow-up-right"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="owl-dots disabled"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- /Trending Categories -->
-
-                <!-- Filter -->
-                <div class="filters-section">
-                    <ul class="filters-wrap">
-
-                        <!-- Categories -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-list page input"></i> Categories
-                                    </a>
-                                </div>
-                                <div id="categories" class="collapse-body">
-                                    <div class="form-group search-group">
-                                        <span class="search-icon"><i class="feather-search"></i></span>
-                                        <input type="text" class="form-control" placeholder="Search Category">
-                                    </div>
-                                    <ul class="checkbox-list categories-lists">
-                                        <li class="active">
-                                            <label class="custom_check">
-                                                <span class="checked-title">Programming &amp; Coding</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Data Science &amp; Analysis</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Databases </span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Mobile App Development</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Email Template Development</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Categories -->
-
-                        <!-- Locations -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-map-pin-pin"></i>Locations
-                                    </a>
-                                </div>
-                                <div id="locations" class="collapse-body">
-                                    <div class="form-group search-group">
-                                        <span class="search-icon"><i class="feather-search"></i></span>
-                                        <input type="text" class="form-control" placeholder="Search Locations">
-                                    </div>
-                                    <ul class="checkbox-list categories-lists">
-                                        <li class="active">
-                                            <label class="custom_check">
-                                                <span class="checked-title">Canada</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Bolivia</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Tunsania</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">Indonesia</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">UK</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">UAE</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <span class="checked-title">USA</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Locations -->
-
-                        <!-- Ratings -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-stars"></i>Reviews
-                                    </a>
-                                </div>
-                                <div id="ratings" class="collapse-body">
-                                    <ul class="checkbox-list star-rate">
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="ratings ms-4">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                </span>
-                                                <span class="rating-count">(5.0)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="ratings ms-4">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                </span>
-                                                <span class="rating-count">(4.0)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="ratings ms-4">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star "></i>
-                                                </span>
-                                                <span class="rating-count">(3.0)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="ratings ms-4">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                </span>
-                                                <span class="rating-count">(2.0)</span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox">
-                                                <span class="checkmark"></span>
-                                                <span class="ratings ms-4">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                </span>
-                                                <span class="rating-count">(1.0)</span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                    <div class="filter-btn">
-                                        <a href="javascript:void(0);">Reset</a>
-                                        <button class="btn btn-primary">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Ratings -->
-
-                        <!-- Budget -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-moneybag"></i>Budget
-                                    </a>
-                                </div>
-                                <div id="budget" class="collapse-body">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Enter Custom Budget">
-                                    </div>
-                                    <ul class="checkbox-list">
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget" checked="">
-                                                <span class="checkmark"></span><span class="text-dark"> Value :</span> Under $4500
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget">
-                                                <span class="checkmark"></span><span class="text-dark"> Mid-range :</span> Under $4500
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget">
-                                                <span class="checkmark"></span><span class="text-dark"> High-end :</span> Under $4500
-                                            </label>
-                                        </li>
-                                    </ul>
-                                    <div class="filter-btn">
-                                        <a href="javascript:void(0);">Reset</a>
-                                        <button class="btn btn-primary">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Budget -->
-
-                        <!-- Seller Details -->
-                        <li class="more-content" style="display: none;">
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <img src="assets/img/icons/user-icon.svg" alt="icon" class="me-2">Seller Details
-                                    </a>
-                                </div>
-                                <div id="seller" class="collapse-body">
-                                    <ul class="seller-list">
-                                        <li>
-                                            <a href="javascript:void(0):">Seller Level<span><i class="feather-chevron-right"></i></span></a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0):">Seller Availability<span><i class="feather-chevron-right"></i></span></a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0):">Seller Speaks<span><i class="feather-chevron-right"></i></span></a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0):">Seller Lives in<span><i class="feather-chevron-right"></i></span></a>
-                                        </li>
-                                    </ul>
-                                    <div class="filter-btn">
-                                        <a href="javascript:void(0);">Reset</a>
-                                        <button class="btn btn-primary">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Seller Details -->
-
-                        <!-- Delivery Time -->
-                        <li class="more-content" style="display: none;">
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <img src="assets/img/icons/time-icon.svg" alt="icon" class="me-2">Delivery Time
-                                    </a>
-                                </div>
-                                <div id="deivery" class="collapse-body">
-                                    <ul class="checkbox-list">
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget" checked="">
-                                                <span class="checkmark"></span>Enter 24H
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget">
-                                                <span class="checkmark"></span>Upto 3 days
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget">
-                                                <span class="checkmark"></span>Upto 7 days
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget">
-                                                <span class="checkmark"></span>Anytime
-                                            </label>
-                                        </li>
-                                    </ul>
-                                    <div class="filter-btn">
-                                        <a href="javascript:void(0);">Reset</a>
-                                        <button class="btn btn-primary">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Delivery Time -->
-
-                        <li class="view-all">
-                            <a href="javascript:void(0);" class="show-more"><span><img src="assets/img/icons/add-icon.svg" alt="img"></span><span>Show More</span></a>
-                        </li>
-                    </ul>
-                    <!-- /Filter -->
-
-                    <!-- Sort By -->
-                    <div class="filters-wrap sort-categories">
-                        <div class="collapse-card float-lg-end">
-                            <div class="filter-header">
-                                <a href="javascript:void(0);" class="sorts-list">
-                                    <i class="ti ti-sort-ascending"></i>Sorts by: <span>Recommended</span>
-                                </a>
-                            </div>
-                            <div id="categories2" class="collapse-body" style="display: none;">
-                                <div class="form-group search-group">
-                                    <span class="search-icon"><i class="feather-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Search Category">
-                                </div>
-                                <ul class="checkbox-list categories-lists">
-                                    <li class="active">
-                                        <label class="custom_check">
-                                            <span class="checked-title"> Featured</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="custom_check">
-                                            <span class="checked-title">Price: Low to High </span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="custom_check">
-                                            <span class="checked-title"> Price: High to Low </span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="custom_check">
-                                            <span class="checked-title"> Recommended </span>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /Sort By -->
-
+            </div>
+            <div class="col-lg-4">
+                <div class="banner-img">
+                    <!-- <div class="banner-img-right">
+                        <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                    </div> -->
+                    <img src="{{ asset('assets/img/bg/banner-small-bg-01.svg') }}" class="banner-small-bg-one" alt="img">
+                    <img src="{{ asset('assets/img/bg/banner-small-bg-02.png') }}" class="banner-small-bg-two" alt="img">
                 </div>
-                <!-- /Filter -->
-
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- Service -->
+<div class="popular-section-two">
+    <div class="container">
+        <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
+            <h2 class="mb-2"><span class="title-bg"></span>Popular Categories<span class="title-bg2"></span></h2>
+            <p>Unlock a world of opportunities and take control of your future</p>
+        </div>
+        <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
+            @foreach( $categories as $category )
+            <div class="col d-flex">
+                <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                    <span><i class="ti ti-speakerphone"></i></span>
+                    <h6 class="mb-1"><a href="javascript:void(0);">{{ $category->name }}</a></h6>
+                    <p>{{ $category->projects_count ? $category->projects_count : 0 }} Projects</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<div class="page-content content">
+    <div class="container">
         <div class="service-gigs">
             <div class="row">
-
+                <div class="section-header-two text-center">
+                    <h2 class="mb-2"><span class="title-bg"></span>Our ongoing projects<span class="title-bg2"></span></h2>
+                    <p>Get inspired with projects like these</p>
+                </div>
                 <div class="col-lg-12">
                     <div class="row">
                         @foreach( $projects as $project )
@@ -585,45 +135,31 @@
                         </div>
                         <!-- /Service List -->
                         @endforeach
-
-                        <div class="col-md-12">
-
-                            <!-- Pagination -->
-                            <div class="pagination">
-                                <ul>
-                                    <li>
-                                        <a href="javascript:void(0);" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="active">1</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">5</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="next"><i class="fa-solid fa-chevron-right"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- /Pagination -->
-
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /Service -->
-
     </div>
 </div>
+<!-- /Service -->
 
+<div class="container">
+    <div class="trusted-customers-two">
+        <img src="assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="trusted-customers-image position-relative d-lg-block d-none text-center aos-init aos-animate" data-aos="fade-up">
+                    <img src="assets/img/home/jointeam.svg" alt="img" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-lg-5 aos-init aos-animate" data-aos="fade-left">
+                <h2 class="mb-3">Want to Get Involved?</h2>
+                <p>Explore more projects, collaborate with talented individuals, or submit your own initiatives to make a meaningful impact.</p>
+                <a href="#" class="btn btn-white btn-lg me-3" style="font-weight: 600; padding: 0.8rem 2rem;">
+                    Submit a Project
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

@@ -25,13 +25,16 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
         $user = Auth::user();
 
-        // ✅ Always use redirect()->intended() — it remembers the previous protected page
-        // If there’s no intended URL, it falls back to role-based dashboards
+        // ✅ Allow custom redirect via ?redirect_to=...
+        if ($request->has('redirect_to')) {
+            return redirect()->to($request->redirect_to);
+        }
+
+        // ✅ Default dashboard per role
         $defaultRedirect = match ($user->role) {
             'admin'  => route('admin.dashboard'),
             'agent'  => route('agent.dashboard'),
@@ -40,9 +43,9 @@ class AuthenticatedSessionController extends Controller
             default  => route('user.dashboard'),
         };
 
+        // ✅ Go back to the saved intended URL (protected route)
         return redirect()->intended($defaultRedirect);
     }
-
 
     /**
      * Destroy an authenticated session.
@@ -52,7 +55,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

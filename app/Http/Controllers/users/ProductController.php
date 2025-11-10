@@ -11,14 +11,14 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('seller', 'category')->latest()->get();
+        $products = Product::with('seller', 'category', 'reviews')->latest()->get();
         $categories = ProductCategory::withCount('products')->get();
         return view('user-page.products.index', compact('products', 'categories'));
     }
 
     public function details($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('reviews')->findOrFail($id);
         return view('user-page.products.details', compact('product'));
     }
 
@@ -29,5 +29,26 @@ class ProductController extends Controller
         $products = Product::where('product_category_id', $id)->get();
         $categories = ProductCategory::withCount('products')->get();
         return view('user-page.products.category', compact('category', 'products', 'categories'));
+    }
+
+    /**
+     * Store a new review
+     */
+    public function store(Request $request, $productId)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+        ]);
+
+        $product = Product::findOrFail($productId);
+
+        $product->reviews()->create([
+            'user_id' => auth()->id(),
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->back()->with('success', 'Your review has been submitted!');
     }
 }

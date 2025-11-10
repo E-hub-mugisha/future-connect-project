@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Welcome to')
+@section('title', 'Empowering Talent, Opportunities & Growth')
 @section('content')
 
 
@@ -372,6 +372,24 @@
 </div>
 <!-- /Trending Categories -->
 
+<div class="container">
+    <div class="trusted-customers-two">
+        <img src="assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="trusted-customers-image position-relative d-lg-block d-none text-center aos-init aos-animate" data-aos="fade-up">
+                    <img src="assets/img/home/jointeam.svg" alt="img" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-lg-5 aos-init aos-animate" data-aos="fade-left">
+                <h2 class="mb-3">Find the right talent for your needs</h2>
+                <p>Over {{ $totalTalents }}K talents of Gigs- available today for you.</p>
+                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-white">Talent hub</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .postLists.cards .post-item.m-card {
         display: flex;
@@ -712,6 +730,52 @@
     </div>
 </div>
 @endif
+
+<section class="provide-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-9">
+                <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
+                    <h2><span>We’r</span> Empowering Talents, Creators and Innovators</h2>
+                    <p>Discover opportunities, grow your skills, showcase your talent and connect with a community built for your success.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                    <div class="provide-icon">
+                        <img src="assets/img/icons/ipad-icon.svg" alt="icon">
+                    </div>
+                    <h6 class="mb-1">Talent Hub</h6>
+                    <p>Find skilled young creatives across different industries and categories.</p>
+                    <a href="{{ route('user.talents') }}" class="btn btn-primary">Explore talent<i class="ti ti-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                    <div class="provide-icon">
+                        <img src="assets/img/icons/service-icon.svg" alt="icon">
+                    </div>
+                    <h6 class="mb-1">Learning Center</h6>
+                    <p>Access courses, mentorships and skill-building resources tailored for your growth.</p>
+                    <a href="/courses" class="btn btn-primary">Explore Courses<i class="ti ti-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                    <div class="provide-icon">
+                        <img src="assets/img/icons/user-icon-01.svg" alt="icon">
+                    </div>
+                    <h6 class="mb-1">Marketplace</h6>
+                    <p>Shop or sell tools, digital kits and creative products from local sellers.</p>
+                    <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary"><i class="ti ti-store"></i>Apply to Sell</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- new services -->
 <div class="new-services-section">
     <div class="container">

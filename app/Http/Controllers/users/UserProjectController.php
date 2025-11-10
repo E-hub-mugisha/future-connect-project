@@ -13,7 +13,8 @@ class UserProjectController extends Controller
     public function index()
     {
         $projects = Project::where('status', 'approved')->latest()->paginate(10);
-        return view('user-page.projects.index', compact('projects'));
+        $categories = \App\Models\Category::all();
+        return view('user-page.projects.index', compact('projects', 'categories'));
     }
     public function show($id)
     {

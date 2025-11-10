@@ -27,6 +27,7 @@ use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\Seller\SellerProductController;
@@ -41,8 +42,11 @@ use App\Http\Controllers\users\UserEventTicketOrderController;
 use App\Http\Controllers\users\UserJobController;
 use App\Http\Controllers\users\UserPanelController;
 use App\Http\Controllers\users\UserProjectController;
+use App\Http\Controllers\Wallets\PaymentController;
+use App\Http\Controllers\Wallets\WalletController;
 use App\Models\Course;
 use App\Models\Talent;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 
@@ -134,6 +138,7 @@ Route::get('/course/payment/callback', [CourseController::class, 'handleCallback
 Route::get('/our-products', [UsersProductController::class, 'index'])->name('user.products.index');
 Route::get('/our-product/{id}', [UsersProductController::class, 'details'])->name('user.product-details');
 Route::get('/product/category/{id}', [UsersProductController::class, 'showCategory'])->name('user.product.category');
+Route::post('/products/{product}/reviews', [UsersProductController::class, 'store'])->name('product.reviews.store')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
@@ -141,6 +146,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])->name('user.orders.show');
 
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
@@ -183,6 +189,21 @@ Route::middleware('auth')->group(function () {
         Route::patch('/profile', 'update')->name('profile.update');
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
+
+    Route::post('/membership/upgrade', [MembershipController::class, 'upgradeToVerified'])
+        ->name('membership.upgrade');
+
+    Route::post('/membership/upgrade/wallet', [MembershipController::class, 'upgradeWithWallet'])->name('membership.upgrade.wallet');
+    Route::get('/membership/upgrade/flutterwave', [MembershipController::class, 'upgradeWithFlutter'])->name('membership.upgrade.flutterwave');
+    Route::get('/membership/verify/callback', [MembershipController::class, 'callbackFlutter'])->name('membership.verify.callback');
+
+    // Wallet
+    Route::get('/wallets', [WalletController::class, 'index'])->name('user.wallet.index');
+    Route::post('/wallets/topup', [WalletController::class, 'topupRequest'])->name('user.wallet.topup');
+    Route::get('/wallet/topup/{transaction}', [WalletController::class, 'showTopup'])->name('user.wallet.topup.show');
+    Route::delete('/wallets/transaction/{id}', [WalletController::class, 'deleteTransaction'])->name('user.wallet.transaction.delete');
+    // Payment
+    Route::get('/wallets/topup/callback', [PaymentController::class, 'callback'])->name('user.wallet.callback');
 });
 
 Route::get('/test', function () {
@@ -288,6 +309,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // products route
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.view');
+    Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::put('/products/{id}/status', [ProductController::class, 'updateStatus'])->name('products.updateStatus');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
@@ -351,6 +377,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/jobs/{job}', [AdminJobController::class, 'destroy'])->name('jobs.destroy');
     Route::get('{job}/applications', [AdminJobController::class, 'applications'])->name('jobs.applications');
     Route::patch('applications/{id}/status', [AdminJobController::class, 'updateApplicationStatus'])->name('jobs.updateApplicationStatus');
+
+    // wallets
+    Route::get('/wallets', [WalletController::class, 'walletsIndex'])->name('wallets.index');
 });
 
 /*
@@ -445,18 +474,18 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::delete('seller/products', [SellerProductController::class, 'destroy'])->name('seller.products.destroy');
 });
 
-Route::get('/run-migrations-seeders', function() {
-    
+Route::get('/run-migrations-seeders', function () {
+
 
     try {
         // Run migrations
         Artisan::call('migrate', ['--force' => true]);
 
         // Run seeders (example: ProductCategorySeeder)
-        Artisan::call('db:seed', ['--class' => 'EventSeeder', '--force' => true]);
-        Artisan::call('db:seed', ['--class' => 'EventTicketSeeder', '--force' => true]);
-        Artisan::call('db:seed', ['--class' => 'JobSectionSeeder', '--force' => true]);
-        Artisan::call('db:seed', ['--class' => 'ProjectSeeder', '--force' => true]);
+        // Artisan::call('db:seed', ['--class' => 'EventSeeder', '--force' => true]);
+        // Artisan::call('db:seed', ['--class' => 'EventTicketSeeder', '--force' => true]);
+        // Artisan::call('db:seed', ['--class' => 'JobSectionSeeder', '--force' => true]);
+        // Artisan::call('db:seed', ['--class' => 'ProjectSeeder', '--force' => true]);
 
         return "Migration and seeders ran successfully!";
     } catch (\Exception $e) {

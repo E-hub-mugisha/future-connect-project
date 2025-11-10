@@ -166,304 +166,77 @@
                 </div>
                 <!-- /About Gigs -->
 
-                <!-- Review Lists -->
-                <div class="review-widget postLists">
-                    <div class="review-title sort-search-gigs">
-                        <div class="row align-items-center">
-                            <div class="col-sm-6">
-                                <h3>Reviews (45)</h3>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="filters-wrap sort-categories justify-content-end">
-                                    <div class="collapse-card float-lg-end">
-                                        <div class="filter-header">
-                                            <a href="javascript:void(0);" class="sorts-list">
-                                                Most Recent
-                                            </a>
-                                        </div>
-                                        <div id="categories" class="collapse-body" style="display: none;">
-                                            <div class="form-group search-group">
-                                                <span class="search-icon"><i class="feather-search"></i></span>
-                                                <input type="text" class="form-control" placeholder="Search Category">
-                                            </div>
-                                            <ul class="checkbox-list categories-lists">
-                                                <li class="active">
-                                                    <label class="custom_check">
-                                                        <span class="checked-title"> Recent</span>
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <label class="custom_check">
-                                                        <span class="checked-title">Oldest </span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                <!-- Product Reviews Section -->
+                <section class="product-reviews py-5" style="background: rgba(255,255,255,0.25); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border-radius: 1rem; box-shadow: 0 8px 28px rgba(0,0,0,0.08); margin: 3rem 0;">
+                    <div class="container">
+                        <!-- Header -->
+                        <div class="review-title sort-search-gigs mb-4">
+                            <div class="row align-items-center">
+                                <div class="col-sm-6">
+                                    <h3>Reviews ({{ $product->reviews ? $product->reviews->count() : 0 }})</h3>
+                                </div>
+                                <div class="col-sm-6 text-end">
+                                    <a href="javascript:void(0);" class="btn btn-outline-primary btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                                        <i class="fas fa-plus me-1"></i> Write a Review
+                                    </a>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Average Rating -->
+                        <div class="total-rating align-items-center mb-4">
+                            <div class="total-reviews text-center bg-white p-4 rounded" style="box-shadow: 0 6px 20px rgba(0,0,0,0.08);">
+                                <h6>Customer Reviews & Ratings</h6>
+                                <h2>{{ number_format($product->reviews->avg('rating'), 1) }} / 5.0</h2>
+                                <div class="icons d-flex align-items-center justify-content-center gap-1 mb-2">
+                                    @for ($i = 0; $i < 5; $i++)
+                                        @if($i < round($product->reviews->avg('rating')))
+                                        <i class="ti ti-star-filled text-warning"></i>
+                                        @else
+                                        <i class="ti ti-star-filled text-light"></i>
+                                        @endif
+                                        @endfor
+                                </div>
+                                <p>Based on {{ $product->reviews->count() }} Reviews</p>
+                            </div>
+                        </div>
+
+                        <!-- Review List -->
+                        <ul class="review-lists home-reviews list-unstyled">
+                            @foreach($product->reviews as $review)
+                            <li class="mb-4">
+                                <div class="review-wrap p-3 rounded" style="background: rgba(255,255,255,0.35); backdrop-filter: blur(12px);">
+                                    <div class="review-user-info d-flex align-items-start mb-2">
+                                        <div class="review-img me-3">
+                                            <img src="{{ $review->user->profile_photo_url ?? asset('assets/img/default-avatar.png') }}" alt="img" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
+                                        </div>
+                                        <div class="reviewer-info">
+                                            <h6>{{ $review->user->name }}</h6>
+                                            <div class="reviewer-rating mb-1">
+                                                <div class="star-rate">
+                                                    @for($i = 0; $i < 5; $i++)
+                                                        <i class="fa-solid fa-star {{ $i < $review->rating ? 'filled text-warning' : 'text-light' }}"></i>
+                                                        @endfor
+                                                        <span class="rating-count">{{ $review->rating }}.0</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted">{{ $review->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="review-content">
+                                        <p>{{ $review->comment }}</p>
+                                        <a href="javascript:void(0);" class="reply-btn bg-light p-1 rounded"><i class="feather-corner-up-left"></i> Reply</a>
+                                    </div>
+                                </div>
+                            </li>
+                            @endforeach
+                        </ul>
+
+                        <div class="text-center mt-3">
+                            <a href="#" class="btn btn-dark fs-13">Load More</a>
                         </div>
                     </div>
-
-                    <!-- Total Ratings -->
-                    <div class="total-rating align-items-center">
-                        <div class="total-review">
-                            <!-- Progress 1 -->
-                            <div class="progress-lvl mb-2">
-                                <h6>5 Star Ratings</h6>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning five-star" role="progressbar" aria-label="Success example" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p>247</p>
-                            </div>
-
-                            <!-- Progress 2 -->
-                            <div class="progress-lvl mb-2">
-                                <h6>4 Star Ratings</h6>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" role="progressbar" aria-label="Success example" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p>145</p>
-                            </div>
-
-                            <!-- Progress 3 -->
-                            <div class="progress-lvl mb-2">
-                                <h6>3 Star Ratings</h6>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" role="progressbar" aria-label="Success example" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p>600</p>
-                            </div>
-
-                            <!-- Progress 4 -->
-                            <div class="progress-lvl mb-2">
-                                <h6>2 Star Ratings</h6>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" role="progressbar" aria-label="Success example" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p>560</p>
-                            </div>
-
-                            <!-- Progress 5 -->
-                            <div class="progress-lvl">
-                                <h6>1 Star Ratings</h6>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" role="progressbar" aria-label="Success example" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <p>400</p>
-                            </div>
-                        </div>
-                        <div class="total-reviews text-center bg-white">
-                            <h6> Customer Reviews &amp; Ratings </h6>
-                            <h2> 4.9 / 5.0 </h2>
-                            <div class="icons d-flex align-items-center justify-content-center gap-1 mb-2">
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                            </div>
-                            <p class="text-center">Based On 2,459 Reviews</p>
-                        </div>
-                    </div>
-                    <!-- Total Ratings -->
-
-                    <ul class="review-lists home-reviews">
-                        <li>
-                            <div class="review-wrap">
-                                <div class="review-user-info">
-                                    <div class="review-img">
-                                        <img src="assets/img/user/user-01.jpg" alt="img">
-                                    </div>
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-loc">
-                                            <h6><a href="javascript:void(0);">kadajsalamander</a></h6>
-                                        </div>
-                                        <div class="reviewer-rating">
-                                            <div class="star-rate">
-                                                <span class="ratings">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                </span>
-                                                <span class="rating-count">5.0 </span>
-                                            </div>
-                                        </div>
-                                        <div class="reviewer-time">
-                                            <p>1 Months ago</p>
-                                            <p> Excellent service! </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <p>I recently hired a him to help me with a project and I must say, I am extremely impressed with their work. From start to finish, the freelancer was professional, efficient, and a pleasure to work with.</p>
-                                    <a href="javascript:void(0);" class="reply-btn bg-light"><i class="feather-corner-up-left"></i>Reply</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="review-wrap">
-                                <div class="review-user-info">
-                                    <div class="review-img">
-                                        <img src="assets/img/user/user-01.jpg" alt="img">
-                                    </div>
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-loc">
-                                            <h6><a href="javascript:void(0);">kadajsalamander</a></h6>
-                                        </div>
-                                        <div class="reviewer-rating">
-                                            <div class="star-rate">
-                                                <span class="ratings">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                </span>
-                                                <span class="rating-count">5.0 </span>
-                                            </div>
-                                        </div>
-                                        <div class="reviewer-time">
-                                            <p>1 Months ago</p>
-                                            <p> Excellent service! </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <p>I recently hired a him to help me with a project and I must say, I am extremely impressed with their work. From start to finish, the freelancer was professional, efficient, and a pleasure to work with.</p>
-                                    <a href="javascript:void(0);" class="reply-btn bg-light"><i class="feather-corner-up-left"></i>Reply</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="review-wrap">
-                                <div class="review-user-info">
-                                    <div class="review-img">
-                                        <img src="assets/img/user/user-01.jpg" alt="img">
-                                    </div>
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-loc">
-                                            <h6><a href="javascript:void(0);">kadajsalamander</a></h6>
-                                        </div>
-                                        <div class="reviewer-rating">
-                                            <div class="star-rate">
-                                                <span class="ratings">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                </span>
-                                                <span class="rating-count">5.0 </span>
-                                            </div>
-                                        </div>
-                                        <div class="reviewer-time">
-                                            <p>1 Months ago</p>
-                                            <p> Excellent service! </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <p>I recently hired a him to help me with a project and I must say, I am extremely impressed with their work. From start to finish, the freelancer was professional, efficient, and a pleasure to work with.</p>
-                                    <a href="javascript:void(0);" class="reply-btn bg-light"><i class="feather-corner-up-left"></i>Reply</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="border-0">
-                            <div class="review-wrap">
-                                <div class="review-user-info">
-                                    <div class="review-img">
-                                        <img src="assets/img/user/user-01.jpg" alt="img">
-                                    </div>
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-loc">
-                                            <h6><a href="javascript:void(0);">kadajsalamander</a></h6>
-                                        </div>
-                                        <div class="reviewer-rating">
-                                            <div class="star-rate">
-                                                <span class="ratings">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                </span>
-                                                <span class="rating-count">5.0 </span>
-                                            </div>
-                                        </div>
-                                        <div class="reviewer-time">
-                                            <p>1 Months ago</p>
-                                            <p> Excellent service! </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <p>I recently hired a him to help me with a project and I must say, I am extremely impressed with their work. From start to finish, the freelancer was professional, efficient, and a pleasure to work with.</p>
-                                    <a href="javascript:void(0);" class="reply-btn bg-light"><i class="feather-corner-up-left"></i>Reply</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="review-active">
-                            <div class="review-wrap">
-                                <div class="review-user-info">
-                                    <div class="review-img">
-                                        <img src="assets/img/user/user-01.jpg" alt="img">
-                                    </div>
-                                    <div class="reviewer-info">
-                                        <div class="reviewer-loc">
-                                            <h6><a href="javascript:void(0);">kadajsalamander</a></h6>
-                                        </div>
-                                        <div class="reviewer-rating">
-                                            <div class="star-rate">
-                                                <span class="ratings">
-                                                    <i class="fa-solid fa-star filled"></i>
-                                                </span>
-                                                <span class="rating-count">5.0 </span>
-                                            </div>
-                                        </div>
-                                        <div class="reviewer-time">
-                                            <p>1 Months ago</p>
-                                            <p> Excellent service! </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-content">
-                                    <p>I recently hired a him to help me with a project and I must say, I am extremely impressed with their work. From start to finish, the freelancer was professional, efficient, and a pleasure to work with.</p>
-                                    <a href="javascript:void(0);" class="reply-btn bg-light"><i class="feather-corner-up-left"></i>Reply</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="text-center dark-btn">
-                        <a href="faq.html" class="btn btn-dark text-center fs-13"> Load More </a>
-                    </div>
-                </div>
-                <!-- /Review Lists -->
-
-                <!-- Review Tags -->
-                <div class="login-card postLists">
-                    <div class="login-heading text-start mb-4">
-                        <h5>Leave a Review</h5>
-                    </div>
-                    <div class="form-wrap form-focus">
-                        <label class="mb-1 fw-medium text-dark mb-1">Your Rating <span class="text-primary">*</span> </label>
-                        <div class="icon d-flex gap-1">
-                            <i class="ti ti-star-filled text-warning"></i>
-                            <i class="ti ti-star-filled text-warning"></i>
-                            <i class="ti ti-star-filled text-warning"></i>
-                            <i class="ti ti-star-filled text-warning"></i>
-                            <i class="ti ti-star-filled text-light"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-wrap form-focus">
-                                <label class="mb-1 fw-medium text-dark">Name <span class="text-primary">*</span> </label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-wrap form-focus">
-                                <label class="mb-1 fw-medium text-dark"> Email <span class="text-primary">*</span> </label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-wrap form-focus">
-                                <label class="mb-1 fw-medium text-dark"> Write a Review <span class="text-primary">*</span> </label>
-                                <textarea class="form-control text-area"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#" class="btn btn-primary member-btn"> Submit a Review </a>
-                </div>
-                <!-- /Review Tags -->
+                </section>
 
             </div>
             <!-- /Service Details -->
@@ -867,6 +640,43 @@
     </div>
 </div>
 
+<!-- Add Review Modal -->
+<div class="modal fade" id="addReviewModal" tabindex="-1" aria-labelledby="addReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                <h5 class="modal-title" id="addReviewModalLabel" style="font-weight: 700;">Leave a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('product.reviews.store', $product->id) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+
+                    <!-- Star Rating -->
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Your Rating <span class="text-primary">*</span></label>
+                        <div class="star-rating d-flex gap-1" style="font-size: 1.5rem; cursor: pointer; color: #ffc107;">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="fa-regular fa-star text-warning" data-value="{{ $i }}"></i>
+                                @endfor
+                        </div>
+                        <input type="hidden" name="rating" id="ratingInput" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Write a Review <span class="text-primary">*</span></label>
+                        <textarea name="comment" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-success w-50 rounded-pill shadow-sm">
+                        <i class="fas fa-paper-plane me-1"></i> Submit Review
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modern Add to Cart Modal -->
 <div class="modal fade" id="addToCartModal{{ $product->id }}" tabindex="-1" aria-labelledby="addToCartModalLabel{{ $product->id }}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -933,20 +743,50 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modalId = {{ $product->id }};
-    const qtyInput = document.querySelector('#addToCartModal' + modalId + ' .quantity-input');
-    const totalEl = document.getElementById('modal-total-' + modalId);
+    document.addEventListener('DOMContentLoaded', function() {
+        const modalId = {
+            {
+                $product - > id
+            }
+        };
+        const qtyInput = document.querySelector('#addToCartModal' + modalId + ' .quantity-input');
+        const totalEl = document.getElementById('modal-total-' + modalId);
 
-    function updateTotal() {
-        let qty = parseInt(qtyInput.value) || 1;
-        const price = parseFloat(qtyInput.dataset.price);
-        totalEl.textContent = (price * qty).toFixed(2);
-    }
+        function updateTotal() {
+            let qty = parseInt(qtyInput.value) || 1;
+            const price = parseFloat(qtyInput.dataset.price);
+            totalEl.textContent = (price * qty).toFixed(2);
+        }
 
-    qtyInput.addEventListener('input', updateTotal);
-    updateTotal(); // initial
-});
+        qtyInput.addEventListener('input', updateTotal);
+        updateTotal(); // initial
+    });
+</script>
+
+<!-- Star Rating Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const stars = document.querySelectorAll(".star-rating i");
+        const ratingInput = document.getElementById("ratingInput");
+
+        stars.forEach(star => {
+            star.addEventListener("click", () => {
+                const rating = star.getAttribute("data-value");
+                ratingInput.value = rating;
+
+                // Fill stars visually
+                stars.forEach(s => {
+                    if (s.getAttribute("data-value") <= rating) {
+                        s.classList.remove("fa-regular");
+                        s.classList.add("fa-solid");
+                    } else {
+                        s.classList.remove("fa-solid");
+                        s.classList.add("fa-regular");
+                    }
+                });
+            });
+        });
+    });
 </script>
 
 

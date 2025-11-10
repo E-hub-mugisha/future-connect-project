@@ -968,8 +968,8 @@ label {
   background-color: var(--gray-900);
   border-color: var(--gray-900);
   color: var(--white);
-  background-color: #FFF1E7;
-  border-color: #FFF1E7;
+  background-color: #3E96F3;
+  border-color: #3E96F3;
   color: #319BF9;
 }
 
@@ -1225,8 +1225,8 @@ label {
   background-color: var(--gray-900);
   border-color: var(--gray-900);
   color: var(--white);
-  background-color: #FFF1E7;
-  border-color: #FFF1E7;
+  background-color: #3E96F3;
+  border-color: #3E96F3;
   color: #319BF9;
 }
 
@@ -1234,8 +1234,8 @@ label {
   background-color: var(--gray-900);
   border-color: var(--gray-900);
   color: var(--white);
-  background-color: #FFF1E7;
-  border-color: #FFF1E7;
+  background-color: #3E96F3;
+  border-color: #3E96F3;
   color: #319BF9;
 }
 
@@ -1280,8 +1280,8 @@ label {
   background-color: var(--gray-900);
   border-color: var(--gray-900);
   color: var(--white);
-  background-color: #FFF1E7;
-  border-color: #FFF1E7;
+  background-color: #3E96F3;
+  border-color: #3E96F3;
   color: #319BF9;
 }
 
@@ -1311,8 +1311,8 @@ label {
   background-color: var(--gray-900);
   border-color: var(--gray-900);
   color: var(--white);
-  background-color: #FFF1E7;
-  border-color: #FFF1E7;
+  background-color: #3E96F3;
+  border-color: #3E96F3;
   color: #319BF9;
 }
 
@@ -3589,7 +3589,7 @@ hr.text-danger {
 
 .menu-heading span {
   border-radius: 10px;
-  background: #FFF1E7;
+  background: #3E96F3;
   width: 40px;
   height: 40px;
   -webkit-box-align: center;
@@ -6587,7 +6587,7 @@ div.dt-container .dt-paging .dt-paging-button.disabled:active {
 }
 
 .hero-section {
-  background: #FFF1E7;
+  /* background: #3E96F3; */
   /* border-bottom-right-radius: 150px; */
   /* padding: 60px 0 60px; */
   position: relative;
@@ -11841,8 +11841,8 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .btn-light-primary {
-  background-color: #FFF1E7;
-  border: 1px solid #FFF1E7;
+  background-color: #3E96F3;
+  border: 1px solid #3E96F3;
   color: #319BF9;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -16616,7 +16616,7 @@ table.dataTable thead tr td {
 
 .badge.bg-primary-light {
   color: rgb(255, 105, 0);
-  background: #FFF1E7;
+  background: #3E96F3;
 }
 
 [data-theme=dark] .blog-sidebar .card-header h6 img {
@@ -17217,7 +17217,7 @@ table.dataTable thead tr td {
 .img-remove-btn a {
   padding: 11px 15px;
   color: #319BF9;
-  background: #FFF1E7;
+  background: #3E96F3;
   border-radius: 10px;
   margin-left: 15px;
   display: inline-block;
@@ -24494,7 +24494,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FFF1E7;
+  background: #3E96F3;
   margin: 0 auto 15px;
 }
 
@@ -25652,7 +25652,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 }
 
 .star-rating {
-  direction: rtl;
+  direction: ltr;
   display: inline-flex;
   font-size: 1.5rem;
 }

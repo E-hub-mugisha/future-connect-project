@@ -47,6 +47,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_verified' => 'boolean',
         ];
     }
     public function talents()
@@ -75,5 +76,15 @@ class User extends Authenticatable
     public function userCourses()
     {
         return $this->belongsToMany(Course::class, 'course_enrollments', 'user_id', 'course_id');
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    public function verify()
+    {
+        $this->update(['is_verified' => true]);
     }
 }

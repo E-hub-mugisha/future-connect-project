@@ -21,8 +21,9 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
+                                <th>Image</th>
+                                <th>User info</th>
+                                <th>Contact</th>
                                 <th>Category</th>
                                 <th>Status</th>
                                 <th>Featured</th>
@@ -33,9 +34,14 @@
                             @foreach($talents as $talent)
                             <tr>
                                 <td>{{ $talent->id }}</td>
-                                <td>{{ $talent->name }}</td>
-                                <td>{{ $talent->email }}</td>
-                                <td>{{ $talent->category ? $talent->category->name : 'N/A' }}
+                                <td>
+                                    <img src="{{ asset('image/talents/' . $talent->image) }}" alt="Talent Image" width="50" height="50" class="rounded-circle">
+                                </td>
+                                <td>{{ $talent->name }} </br><small>{{ $talent->email }}</small></td>
+                                <td>{{ $talent->phone }}</br><small>{{ $talent->address }}</small></td>
+                                <td>
+                                    {{ $talent->category ? $talent->category->name : 'N/A' }}</br>
+                                    <small>{{ $talent->language }}</small>
                                 </td>
                                 <td>
                                     @if ($talent->status !== 'approved')

@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Connection Room')
+@section('title', 'Networking Hub – Connect with Talents & Opportunities')
 @section('content')
 
 @php
@@ -180,6 +180,130 @@ $categories = \App\Models\Category::all();
     }
 </style>
 
+<section class="hero-section">
+    <div class="banner-bg-imgs">
+        <img src="{{ asset('assets/img/bg/banner-bg-01.png') }}" class="banner-bg-one" alt="img">
+        <img src="{{ asset('assets/img/bg/banner-bg-02.png') }}" class="banner-bg-two" alt="img">
+        <!-- <img src="{{ asset('assets/img/bg/banner-bg-04.png') }}" class="banner-bg-four" alt="img"> -->
+    </div>
+    <div class="container p-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                    <div class="banner-head">
+                        <h1 class="mb-2">Networking Hub – Connect with Talents & Opportunities</h1>
+                        <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
+                    </div>
+                    <div class="banner-form">
+                        <form action="#">
+                            <div class="banner-search-list">
+                                <div class="input-block">
+                                    <label>Category</label>
+                                    <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                        <option data-select2-id="6">Select</option>
+                                        <option>Digital Marketing</option>
+                                        <option>Writing</option>
+                                        <option>Social Media</option>
+                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                                <div class="input-block">
+                                    <label>Location</label>
+                                    <div class="input-locaion">
+                                        <input type="text" class="form-control" placeholder="Miami, USA">
+                                        <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
+                                    </div>
+                                </div>
+                                <div class="input-block border-0">
+                                    <label>Keyword</label>
+                                    <input type="text" class="form-control" placeholder="Need Graphic Designer">
+                                </div>
+                            </div>
+                            <div class="input-block-btn">
+                                <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
+                                    <i class="ti ti-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="popular-search">
+                        <h5>Popular Searches : </h5>
+                        <ul>
+                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
+                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
+                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="banner-img">
+                    <!-- <div class="banner-img-right">
+                        <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                    </div> -->
+                    <img src="{{ asset('assets/img/bg/banner-small-bg-01.svg') }}" class="banner-small-bg-one" alt="img">
+                    <img src="{{ asset('assets/img/bg/banner-small-bg-02.png') }}" class="banner-small-bg-two" alt="img">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-us-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="row me-4">
+                    <div class="col-sm-6">
+                        <div class="about-inner-img">
+                            <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="about-inner-img">
+                                    <img src="{{ asset('assets/img/aboutus/about-us-02.jpg') }}" class="img-fluid" alt="img">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="about-inner-img">
+                                    <img src="{{ asset('assets/img/aboutus/about-us-03.jpg') }}" class="img-fluid" alt="img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-us-info">
+                    <div class="about-us-head">
+                        <h6>About the Networking Hub</h6>
+                        <h2>The <strong>Networking Hub</strong> gateway to meaningful professional connections.</h2>
+                        <p>
+                            your gateway to meaningful professional connections.
+                            Whether you are a talent seeking opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network, this hub connects you with the right people.
+                        </p>
+                        <h5>Our Mission</h5>
+                        <p>At Future Connect, our mission is to empower individuals and businesses by facilitating easy access to a diverse range of high-quality services. We believe in creating a collaborative and inclusive marketplace that fosters growth,
+                            creativity, and mutual success.
+                        </p>
+                    </div>
+                    <div class="about-features">
+                        <ul class="list-one">
+                            <li><span><img src="{{ asset('assets/img/icons/target-arrow-icon.svg') }}" alt="img"></span>Diverse Network of Professionals</li>
+                            <li><span><img src="{{ asset('assets/img/icons/target-arrow-icon.svg') }}" alt="img"></span>Trust and Transparency</li>
+                        </ul>
+                        <ul class="list-two">
+                            <li><span><img src="{{ asset('assets/img/icons/target-arrow-icon.svg') }}" alt="img"></span>User Friendly Platform</li>
+                            <li><span><img src="{{ asset('assets/img/icons/target-arrow-icon.svg') }}" alt="img"></span>Innovation In Technology</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <div class="container" style="margin-top: 4.5rem;">
     <div class="trend-section ">
         <div class="row align-items-center">
@@ -299,7 +423,7 @@ $categories = \App\Models\Category::all();
 <div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Connection room of talents<span
+            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>verified talents ready for Connection<span
                     class="title-bg2"></span></h2>
             <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
         </div>
@@ -409,10 +533,10 @@ $categories = \App\Models\Category::all();
                             </div>
 
                             <!-- View Button -->
-                            
+
                             <div class="text-center d-flex justify-content-center">
                                 <a href="{{ route('talent.profile.show', $talent->id) }}" class="slide-line-btn">
-                                    <i class="feather-arrow-right"></i>View Profile
+                                    <i class="feather-arrow-right"></i>See Profile
                                     <span class="slide-line"></span>
                                     <span class="slide-line"></span>
                                     <span class="slide-line"></span>
@@ -429,6 +553,69 @@ $categories = \App\Models\Category::all();
 </div>
 <!-- next gen -->
 
+<section class="popular-section expert-section">
+    <div class="popular-img">
+        <div class="popular-img-left">
+            <img src="assets/img/bg/banner-bg-04.png" alt="Shape">
+        </div>
+        <div class="popular-img-right">
+            <img src="assets/img/bg/shape-08.png" alt="Shape">
+        </div>
+    </div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="expert-header">
+                    <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
+                        <h2><span>Key</span> Benefits</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="section-header aos-init aos-animate" data-aos="fade-up">
+                    <h6 class="fw-medium text-white">Find professionals across various fields and expand your network effortlessly.</h6>
+                </div>
+            </div>
+        </div>
+        <div class="expert-wrapper">
+            <div class="row gx-0 justify-content-center">
+                <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
+                    <div class="expert-item">
+                        <div class="expert-icon">
+                            <img src="assets/img/icons/flag-icon.svg" alt="img">
+                        </div>
+                        <div class="expert-info">
+                            <h5>Collaborate on Projects</h5>
+                            <p>Work together with talented individuals to bring your ideas to life.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
+                    <div class="expert-item">
+                        <div class="expert-icon">
+                            <img src="assets/img/icons/expert-icon.svg" alt="img">
+                        </div>
+                        <div class="expert-info">
+                            <h5>Connect with Talents</h5>
+                            <p>Find professionals across various fields and expand your network effortlessly.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
+                    <div class="expert-item">
+                        <div class="expert-icon">
+                            <img src="assets/img/icons/users-icon.svg" alt="img">
+                        </div>
+                        <div class="expert-info">
+                            <h5>Attend Networking Events</h5>
+                            <p>Discover and participate in events designed to foster professional relationships.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- SwiperJS Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
