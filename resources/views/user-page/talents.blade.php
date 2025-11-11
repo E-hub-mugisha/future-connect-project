@@ -216,6 +216,627 @@ $categories = \App\Models\Category::all();
     }
 </style>
 
+<!-- Modern UI Styling -->
+<style>
+    .modern-tabs .nav-link {
+        border: none !important;
+        background: #f8f9fa;
+        margin-right: 8px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        color: #555;
+    }
+
+    .modern-tabs .nav-link:hover {
+        background: #e9ecef;
+        color: #000;
+    }
+
+    .modern-tabs .nav-link.active {
+        background: #0d6efd;
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
+
+    .modern-tab-content {
+        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid #eee;
+    }
+</style>
+
+<!-- Modern Tabs Section -->
+<section class="container py-5">
+
+    <!-- <h2 class="mb-4 fw-bold text-dark">Explore Opportunities</h2> -->
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs modern-tabs mb-4 justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill btn-outline-primary" id="marketplace-tab" data-bs-toggle="tab" data-bs-target="#marketplace" type="button" role="tab">
+                Talent Marketplace
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill btn-outline-primary" id="become-tab" data-bs-toggle="tab" data-bs-target="#become" type="button" role="tab">
+                Become a Talent
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill btn-outline-primary" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab">
+                Talent Categories
+            </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill btn-outline-primary" id="networking-tab" data-bs-toggle="tab" data-bs-target="#networking" type="button" role="tab">
+                Networking Hub
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content modern-tab-content" id="myTabContent">
+
+        <div class="tab-pane fade show active" id="marketplace" role="tabpanel">
+            <section id="tranding">
+                <div class="bubbles">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="tranding-grid">
+                    <!-- Caption Slider -->
+                    <div class="swiper tranding-caption-slider" id="captionSwiper">
+                        <div class="swiper-wrapper">
+                            @foreach ($featuredTalents as $talent)
+                            <div class="swiper-slide">
+                                <div class="tranding-slide-caption">
+                                    <h3 class="text-2xl text-white font-bold mb-2">{{ $talent->name }}</h3>
+                                    <p>
+                                        Passionate {{ $talent->skill ?? 'creative' }} blending
+                                        {{ $talent->category->name ?? 'various disciplines' }} into meaningful art and innovation.
+                                    </p>
+                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="tranding-line-btn">
+                                        <i class="feather-arrow-right"></i> Read More
+                                    </a>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Image Slider -->
+                    <div class="swiper tranding-image-slider" id="imageSwiper">
+                        <div class="swiper-wrapper">
+                            @foreach ($featuredTalents as $talent)
+                            <div class="swiper-slide">
+                                <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
+                                    alt="{{ $talent->name }}">
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="tranding-slider-control">
+                    <div class="swiper-button-prev slider-arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
+                    <div class="swiper-button-next slider-arrow"><ion-icon name="arrow-forward-outline"></ion-icon></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-pane fade" id="become" role="tabpanel">
+            <style>
+                /* Smooth card */
+                .wizard-wrapper {
+                    background: rgba(255, 255, 255, 0.25);
+                    backdrop-filter: blur(15px) saturate(180%);
+                    -webkit-backdrop-filter: blur(15px) saturate(180%);
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    border-radius: 1.2rem;
+                    padding: 2.5rem;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                }
+
+                .progress {
+                    height: 10px;
+                    border-radius: 50px;
+                    overflow: hidden;
+                    background: #e9ecef;
+                }
+
+                .progress-bar {
+                    transition: width .4s ease-in-out;
+                }
+
+                /* Step titles */
+                .step-title {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    color: #34495e;
+                    margin-bottom: .7rem;
+                }
+
+                /* Wizard step section */
+                .step-section {
+                    display: none;
+                }
+
+                .step-section.active {
+                    display: block;
+                    animation: fadeStep .35s ease;
+                }
+
+                @keyframes fadeStep {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                /* Button styles */
+                .btn-primary,
+                .btn-success,
+                .btn-danger {
+                    padding: .6rem 1.5rem;
+                    font-weight: 600;
+                    border-radius: .5rem;
+                    transition: all 0.25s ease-in-out;
+                }
+
+                .btn-primary:hover {
+                    transform: translateY(-2px);
+                }
+
+                .btn-success:hover {
+                    transform: translateY(-2px);
+                }
+
+                .wizard-header {
+                    text-align: center;
+                    margin-bottom: 2rem;
+                }
+
+                .wizard-header h2 {
+                    font-weight: 800;
+                    color: #2d3436;
+                    letter-spacing: -.5px;
+                }
+
+                .wizard-header p {
+                    font-size: 1rem;
+                    color: #6c757d;
+                }
+
+                .info-note {
+                    background: rgba(13, 110, 253, 0.1);
+                    border-left: 4px solid #0d6efd;
+                    padding: 1rem 1.2rem;
+                    border-radius: .5rem;
+                    margin-bottom: 1.3rem;
+                    font-size: .95rem;
+                }
+
+                /* Modal glass style */
+                .modal-glass .modal-content {
+                    background: rgba(255, 255, 255, 0.69);
+                    backdrop-filter: blur(15px) saturate(180%);
+                    -webkit-backdrop-filter: blur(15px) saturate(180%);
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    border-radius: 1rem;
+                }
+
+                .seller-info-content {
+                    background: #319bf970;
+                    backdrop-filter: blur(15px) saturate(180%);
+                    /* box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.36); */
+                    border-radius: 10px;
+                    padding: 40px;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    justify-content: center;
+                    margin: auto 0 auto -100px;
+                    height: 420px;
+                }
+            </style>
+
+            <section class="start-seller-sec">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 d-flex">
+                            <div class="seller-inner-img w-100">
+                                <img src="assets/img/aboutus/about-us-04.jpg" class="img-fluid" alt="img">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex">
+                            <div class="seller-info-content w-100">
+                                <div class="seller-head">
+                                    <h3>Join Our Talent Hub</h3>
+                                    <p>Showcase your skills, get verified, and connect with clients globally.
+                                        Our platform helps talents like you grow professionally and gain exposure.</p>
+                                </div>
+                                <div class="seller-feature-list d-flex w-100">
+                                    <div class="sllers-list">
+                                        <ul>
+                                            <li><span><i class="feather-check-square"></i></span>Network with companies and clients seeking your expertise.</li>
+                                            <li><span><i class="feather-check-square"></i></span>Display your skills, experience, and achievements professionally.</li>
+                                            <li><span><i class="feather-check-square"></i></span>Earn trust and credibility with verified profiles.</li>
+                                        </ul>
+                                        <button class="btn btn-outline-primary rounded-pill w-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register as a Talent</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Talent Modal -->
+            <div class="modal fade modal-glass" id="talentModal" tabindex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                        <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                            <h5 class="modal-title fw-bold" id="talentModalLabel">Talent Registration</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+
+                                <!-- Step 1 -->
+                                <div class="step-section active" id="step-1">
+                                    <div class="step-title"><i class="fas fa-user"></i> Personal Info</div>
+                                    <div class="info-note">Fill your basic information for profile setup.</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Names</label>
+                                            <input type="text" name="name" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g John Doe" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Address</label>
+                                            <input type="text" name="address" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g Kigali, Rwanda" required>
+                                        </div>
+                                    </div>
+                                    <div class="text-end mt-4">
+                                        <button type="button" class="btn btn-primary btn-next">Next</button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="step-section" id="step-2">
+                                    <div class="step-title"><i class="fas fa-phone"></i> Contact Info</div>
+                                    <div class="info-note">Provide your contact details for clients to reach you.</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Phone</label>
+                                            <input type="text" name="phone" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g +250 788 123 456" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Email</label>
+                                            <input type="email" name="email" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g john.doe@example.com" required>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <button type="button" class="btn btn-danger btn-prev">Back</button>
+                                        <button type="button" class="btn btn-primary btn-next">Next</button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 3 -->
+                                <div class="step-section" id="step-3">
+                                    <div class="step-title"><i class="fas fa-star"></i> Talent Info</div>
+                                    <div class="info-note">Define your skills and expertise.</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Languages Spoken</label>
+                                            <input type="text" name="language" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g English, Kinyarwanda" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Talent Category</label>
+                                            <select name="category_id" class="form-select" required>
+                                                <option value="">Select Talent Category</option>
+                                                @foreach($categories as $cat)
+                                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold">Description</label>
+                                            <textarea name="description" class="form-control rounded-3 border-0 shadow-sm" rows="3" placeholder="Describe your talent..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <button type="button" class="btn btn-danger btn-prev">Back</button>
+                                        <button type="button" class="btn btn-primary btn-next">Next</button>
+                                    </div>
+                                </div>
+
+                                <!-- Step 4 -->
+                                <div class="step-section" id="step-4">
+                                    <div class="step-title"><i class="fas fa-camera"></i> Upload Photo & Submit</div>
+                                    <div class="info-note">Add a professional photo for your profile.</div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Profile Image</label>
+                                        <input type="file" name="image" class="form-control rounded-3 border-0 shadow-sm" accept="image/*" required>
+                                        <div class="invalid-feedback">Please upload a valid image file. Accepts: .jpg, .jpeg, .png</div>
+                                    </div>
+                                    <div class="form-check mt-3 mb-3">
+                                        <input type="checkbox" class="form-check-input" id="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I accept the <a href="{{ route('user.terms-condition') }}" class="text-primary">Terms & Conditions</a>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <button type="button" class="btn btn-danger btn-prev">Back</button>
+                                        <button type="submit" class="btn btn-success">Submit Registration</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const steps = document.querySelectorAll(".step-section");
+                    const nextBtns = document.querySelectorAll(".btn-next");
+                    const prevBtns = document.querySelectorAll(".btn-prev");
+                    const progressBar = document.getElementById("progressBar");
+
+                    let currentStep = 0;
+
+                    function showStep(step) {
+                        steps.forEach((s, i) => s.classList.toggle("active", i === step));
+                    }
+
+                    nextBtns.forEach(btn => btn.addEventListener("click", () => {
+                        if (currentStep < steps.length - 1) currentStep++;
+                        showStep(currentStep);
+                    }));
+
+                    prevBtns.forEach(btn => btn.addEventListener("click", () => {
+                        if (currentStep > 0) currentStep--;
+                        showStep(currentStep);
+                    }));
+
+                    showStep(currentStep);
+                });
+            </script>
+        </div>
+
+        <div class="tab-pane fade" id="categories" role="tabpanel">
+            <div class="popular-section-two">
+                <div class="container">
+                    <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="mb-2"><span class="title-bg"></span>Popular Categories<span class="title-bg2"></span></h2>
+                        <p>Unlock a world of opportunities and take control of your future</p>
+                    </div>
+                    <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-speakerphone"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Digital Marketing</a></h6>
+                                <p>100 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-code-circle"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Programming &amp; Tech</a></h6>
+                                <p>120 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-pencil-star"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Digital Marketing</a></h6>
+                                <p>130 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-camera-heart"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Photography</a></h6>
+                                <p>68 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-robot"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Artificial Intelligence</a></h6>
+                                <p>148 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-music"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Music &amp; Audio</a></h6>
+                                <p>90 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-file-typography"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Design</a></h6>
+                                <p>63 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-briefcase"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Business</a></h6>
+                                <p>145 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-camera-heart"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Marketing &amp; Sales</a></h6>
+                                <p>90 Service</p>
+                            </div>
+                        </div>
+                        <div class="col d-flex">
+                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                                <span><i class="ti ti-social"></i></span>
+                                <h6 class="mb-1"><a href="javascript:void(0);">Social Media</a></h6>
+                                <p>125 Service</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="networking" role="tabpanel">
+            <section class="hero-section">
+                <div class="banner-bg-imgs">
+                    <img src="http://localhost:8000/assets/img/bg/banner-bg-01.png" class="banner-bg-one" alt="img">
+                    <img src="http://localhost:8000/assets/img/bg/banner-bg-02.png" class="banner-bg-two" alt="img">
+                    <!-- <img src="http://localhost:8000/assets/img/bg/banner-bg-04.png" class="banner-bg-four" alt="img"> -->
+                </div>
+                <div class="container p-4">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                                <div class="banner-head">
+                                    <h1 class="mb-2">Networking Hub – Connect with Talents &amp; Opportunities</h1>
+                                    <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
+                                </div>
+                                <div class="banner-form">
+                                    <form action="#">
+                                        <div class="banner-search-list">
+                                            <div class="input-block">
+                                                <label>Category</label>
+                                                <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                                    <option data-select2-id="6">Select</option>
+                                                    <option>Digital Marketing</option>
+                                                    <option>Writing</option>
+                                                    <option>Social Media</option>
+                                                </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false" aria-labelledby="select2-tkto-container"><span class="select2-selection__rendered" id="select2-tkto-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span><span class="select2 select2-container select2-container--default select2-hidden-accessible" dir="ltr" data-select2-id="5" style="width: 100%;" tabindex="-1" aria-hidden="true"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="1" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-ywkf-container"><span class="select2-selection__rendered" id="select2-ywkf-container" role="textbox" aria-readonly="true"></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                            </div>
+                                            <div class="input-block">
+                                                <label>Location</label>
+                                                <div class="input-locaion">
+                                                    <input type="text" class="form-control" placeholder="Miami, USA">
+                                                    <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
+                                                </div>
+                                            </div>
+                                            <div class="input-block border-0">
+                                                <label>Keyword</label>
+                                                <input type="text" class="form-control" placeholder="Need Graphic Designer">
+                                            </div>
+                                        </div>
+                                        <div class="input-block-btn">
+                                            <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
+                                                <i class="ti ti-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="popular-search">
+                                    <h5>Popular Searches : </h5>
+                                    <ul>
+                                        <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
+                                        <li><a href="service-grid-sidebar.html">Carpentering</a></li>
+                                        <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="banner-img">
+                                <!-- <div class="banner-img-right">
+                        <img src="http://localhost:8000/assets/img/bg/provide-bg.jpg" class="img-fluid" alt="img">
+                    </div> -->
+                                <img src="http://localhost:8000/assets/img/bg/banner-small-bg-01.svg" class="banner-small-bg-one" alt="img">
+                                <img src="http://localhost:8000/assets/img/bg/banner-small-bg-02.png" class="banner-small-bg-two" alt="img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="about-us-section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <div class="row me-4">
+                                <div class="col-sm-6">
+                                    <div class="about-inner-img">
+                                        <img src="http://localhost:8000/assets/img/bg/provide-bg.jpg" class="img-fluid" alt="img">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="about-inner-img">
+                                                <img src="http://localhost:8000/assets/img/aboutus/about-us-02.jpg" class="img-fluid" alt="img">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="about-inner-img">
+                                                <img src="http://localhost:8000/assets/img/aboutus/about-us-03.jpg" class="img-fluid" alt="img">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="about-us-info">
+                                <div class="about-us-head">
+                                    <h6>About the Networking Hub</h6>
+                                    <h2>The <strong>Networking Hub</strong> gateway to meaningful professional connections.</h2>
+                                    <p>
+                                        your gateway to meaningful professional connections.
+                                        Whether you are a talent seeking opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network, this hub connects you with the right people.
+                                    </p>
+                                    <h5>Our Mission</h5>
+                                    <p>At Future Connect, our mission is to empower individuals and businesses by facilitating easy access to a diverse range of high-quality services. We believe in creating a collaborative and inclusive marketplace that fosters growth,
+                                        creativity, and mutual success.
+                                    </p>
+                                </div>
+                                <div class="about-features">
+                                    <ul class="list-one">
+                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>Diverse Network of Professionals</li>
+                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>Trust and Transparency</li>
+                                    </ul>
+                                    <ul class="list-two">
+                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>User Friendly Platform</li>
+                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>Innovation In Technology</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
 <div class="container p-4">
     <section id="tranding">
         <div class="bubbles">

@@ -27,7 +27,7 @@ return request()->routeIs($route) ? 'active' : '';
 
     .main-menu-wrapper {
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        padding: 15px 2rem;
+        padding: 5px -2rem;
         border-radius: 4rem;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -67,7 +67,7 @@ return request()->routeIs($route) ? 'active' : '';
 
     /* Main navigation */
     .main-nav>li>a {
-        padding: 12px 20px;
+        padding: 10px 7px;
         font-weight: 600;
         color: #1a1a1a;
         display: flex;
@@ -341,13 +341,13 @@ return request()->routeIs($route) ? 'active' : '';
                     </li>
 
                     <!-- Talent Hub -->
-                    <li class="has-submenu">
-                        <a role="button">
+                    <li>
+                        <a href="{{ route('user.talents') }}">
                             <span><i class="ti ti-users"></i> Talent Hub</span>
-                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                            <!-- <i class="fas fa-chevron-right submenu-arrow"></i> -->
                         </a>
 
-                        <ul class="submenu">
+                        <!-- <ul class="submenu">
 
                             <li>
                                 <a href="{{ route('user.talents') }}">
@@ -383,32 +383,17 @@ return request()->routeIs($route) ? 'active' : '';
                                     <i class="ti ti-message-dots"></i> Networking Hub
                                 </a>
                             </li>
-                        </ul>
-                    </li>
-
-                    <!-- Updates -->
-                    <li class="has-submenu">
-                        <a role="button">
-                            <span><i class="ti ti-bell"></i> Updates</span>
-                            <i class="fas fa-chevron-right submenu-arrow"></i>
-                        </a>
-
-                        <ul class="submenu">
-                            <li><a href="{{ route('user.announcements') }}"><i class="ti ti-megaphone"></i> Announcements</a></li>
-                            <li><a href="{{ route('user.events.index') }}"><i class="ti ti-calendar-event"></i> Events</a></li>
-                            <li><a href="{{ route('user.projects.index') }}"><i class="ti ti-building"></i> Projects</a></li>
-                            <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
-                        </ul>
+                        </ul> -->
                     </li>
 
                     <!-- Learning Center -->
-                    <li class="has-submenu">
+                    <li>
                         <a role="button">
                             <span><i class="ti ti-book"></i> Learning Center</span>
                             <i class="fas fa-chevron-right submenu-arrow"></i>
                         </a>
 
-                        <ul class="submenu">
+                        <!-- <ul class="submenu">
                             <li><a href="/courses"><i class="ti ti-list"></i> Browse Courses</a></li>
 
                             <li class="has-submenu">
@@ -427,22 +412,50 @@ return request()->routeIs($route) ? 'active' : '';
                                     @endforeach
                                 </ul>
                             </li>
-                        </ul>
+                        </ul> -->
+                    </li>
+
+                    <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
+
+                    <li>
+                        <a href="{{ route('talent.connections-room') }}">
+                            <i class="ti ti-message-dots"></i> Networking Hub
+                        </a>
                     </li>
 
                     <!-- Marketplace -->
-                    <li class="has-submenu">
+                    <li>
                         <a role="button">
                             <span><i class="ti ti-shopping-cart"></i> Marketplace</span>
                             <i class="fas fa-chevron-right submenu-arrow"></i>
                         </a>
 
-                        <ul class="submenu">
+                        <!-- <ul class="submenu">
                             <li><a href="{{ route('user.products.index') }}"><i class="ti ti-box"></i> All Products</a></li>
                             <li><a data-bs-toggle="modal" data-bs-target="#applySellerModal"><i class="ti ti-store"></i> Become a Seller</a></li>
-                        </ul>
+                        </ul> -->
                     </li>
 
+                    <li>
+                        <a href="{{ route('talent.connections-room') }}">
+                            <i class="ti ti-message-dots"></i> Diaspora Connect
+                        </a>
+                    </li>
+
+                    <!-- Updates -->
+                    <li>
+                        <a role="button">
+                            <span><i class="ti ti-bell"></i> Updates</span>
+                            <i class="fas fa-chevron-right submenu-arrow"></i>
+                        </a>
+
+                        <!-- <ul class="submenu">
+                            <li><a href="{{ route('user.announcements') }}"><i class="ti ti-megaphone"></i> Announcements</a></li>
+                            <li><a href="{{ route('user.events.index') }}"><i class="ti ti-calendar-event"></i> Events</a></li>
+                            <li><a href="{{ route('user.projects.index') }}"><i class="ti ti-building"></i> Projects</a></li>
+                            <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
+                        </ul> -->
+                    </li>
                 </ul>
             </div>
 
