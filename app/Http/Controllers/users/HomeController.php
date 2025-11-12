@@ -80,7 +80,7 @@ class HomeController extends Controller
     public function talents()
     {
         // Fetch featured talents - modify query as needed
-        $talents = Talent::with('category', 'feedback', 'stories')->get();
+        $talents = Talent::with('category', 'feedback', 'stories')->paginate(8);
 
         $now = Carbon::now();
         $oneMonthAgo = $now->copy()->subMonth();

@@ -286,51 +286,156 @@ $categories = \App\Models\Category::all();
     <div class="tab-content modern-tab-content" id="myTabContent">
 
         <div class="tab-pane fade show active" id="marketplace" role="tabpanel">
-            <section id="tranding">
-                <div class="bubbles">
-                    <span></span><span></span><span></span><span></span><span></span>
-                </div>
+            <div class="talent-section-two next-gen-section">
+                <div class="container">
+                    <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
+                        <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span
+                                class="title-bg2"></span></h2>
+                        <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+                    </div>
+                    <div class="row seller-list postLists cards">
+                        <!-- Filter -->
+                        <div class="filters-section">
+                            <div class="listing-tab ">
+                                <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" data-filter="latest" type="button">Latest</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-filter="popular" type="button">Popular</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-filter="featured" type="button">Featured</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-filter="recommended" type="button">Recommended</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <!-- Search Modal Trigger -->
+                                        <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                            <i class="ti ti-search me-1"></i> Search Talents
+                                        </a>
+                                    </li>
 
-                <div class="tranding-grid">
-                    <!-- Caption Slider -->
-                    <div class="swiper tranding-caption-slider" id="captionSwiper">
-                        <div class="swiper-wrapper">
-                            @foreach ($featuredTalents as $talent)
-                            <div class="swiper-slide">
-                                <div class="tranding-slide-caption">
-                                    <h3 class="text-2xl text-white font-bold mb-2">{{ $talent->name }}</h3>
-                                    <p>
-                                        Passionate {{ $talent->skill ?? 'creative' }} blending
-                                        {{ $talent->category->name ?? 'various disciplines' }} into meaningful art and innovation.
-                                    </p>
-                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="tranding-line-btn">
-                                        <i class="feather-arrow-right"></i> Read More
-                                    </a>
+                                </ul>
+
+                            </div>
+
+                            <!-- /Filter -->
+
+                            <!-- Sort By -->
+                            <div class="filters-wrap sort-categories">
+                                <div class="collapse-card float-lg-end">
+                                    <div class="filter-header">
+                                        <a href="javascript:void(0);" class="sorts-list">
+                                            <i class="ti ti-sort-ascending"></i>Sorts by: <span>Categories</span>
+                                        </a>
+                                    </div>
+                                    <div id="categories2" class="collapse-body" style="display: none;">
+                                        <div class="form-group search-group">
+                                            <span class="search-icon"><i class="feather-search"></i></span>
+                                            <input type="text" class="form-control" placeholder="Search Category">
+                                        </div>
+                                        <ul class="checkbox-list categories-lists">
+                                            @foreach($categories as $cat)
+                                            <li class="active">
+                                                <label class="custom_check">
+                                                    <span class="checked-title">{{ $cat->name }}</span>
+                                                </label>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Sort By -->
+
+                        </div>
+                        <!-- /Filter -->
+                        <div class="row" id="talentGrid">
+                            @foreach($talents as $talent)
+                            <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
+                                <div class="card post-item m-card">
+                                    <div class="card-body text-center">
+
+                                        <!-- Image -->
+                                        <a href="{{ route('user.talent.details', $talent->id) }}">
+                                            <img
+                                                class="img rounded-3"
+                                                src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
+                                                alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
+                                        </a>
+
+                                        <!-- Name -->
+                                        <h6 class="mb-1">
+                                            <a href="{{ route('user.talent.details', $talent->id) }}">
+                                                {{ $talent->name }}
+                                                <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
+                                            </a>
+                                        </h6>
+
+                                        <!-- Category -->
+                                        <p>{{ $talent->category->name ?? 'Uncategorized' }}
+                                            @php
+                                            // Pick a color class based on the level
+                                            $badgeClass = match($talent->level) {
+                                            'advanced' => 'bg-success', // Green
+                                            'intermediate' => 'bg-warning text-dark', // Yellow/Orange
+                                            default => 'bg-secondary', // Gray for Beginner
+                                            };
+                                            @endphp
+
+                                            <span class="badge {{ $badgeClass }}">
+                                                {{ ucfirst($talent->level) }}
+                                            </span>
+                                        </p>
+
+                                        <!-- Location -->
+                                        <p class="mb-0 location-text d-inline-flex align-items-center">
+                                            <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
+                                            Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
+                                        </p>
+
+                                        <!-- Ratings -->
+                                        <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
+                                            <div class="talent-hover-box">
+                                                <div class="default-badges">
+                                                    <span class="badge bg-light">
+                                                        {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
+                                                    </span>
+                                                    <span class="badge bg-light">
+                                                        {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="hover-badges">
+                                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                                        {{ $talent->skill }}
+                                                    </a>
+                                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                                        {{ $talent->language }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- View Button -->
+                                        <div class="text-center d-flex justify-content-center">
+                                            <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
+                                                <i class="feather-arrow-right"></i>View Profile
+                                                <span class="slide-line"></span>
+                                                <span class="slide-line"></span>
+                                                <span class="slide-line"></span>
+                                            </a>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                             @endforeach
                         </div>
                     </div>
-
-                    <!-- Image Slider -->
-                    <div class="swiper tranding-image-slider" id="imageSwiper">
-                        <div class="swiper-wrapper">
-                            @foreach ($featuredTalents as $talent)
-                            <div class="swiper-slide">
-                                <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
-                                    alt="{{ $talent->name }}">
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Controls -->
-                <div class="tranding-slider-control">
-                    <div class="swiper-button-prev slider-arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
-                    <div class="swiper-button-next slider-arrow"><ion-icon name="arrow-forward-outline"></ion-icon></div>
-                </div>
-            </section>
+            </div>
         </div>
 
         <div class="tab-pane fade" id="become" role="tabpanel">

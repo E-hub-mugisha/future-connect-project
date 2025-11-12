@@ -14,7 +14,7 @@
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
-        /* height: 22rem; */
+        height: 22rem;
     }
 
     .tranding-grid {
@@ -208,243 +208,50 @@
     }
 </style>
 
-<style>
-    /* --- SWITCH-STYLE NAV PILLS --- */
-    .nav-pills {
-        display: inline-flex;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 50px;
-        padding: 5px;
-        margin-bottom: 2rem;
-        justify-content: center;
-    }
-
-    .nav-pills .nav-link {
-        border-radius: 50px;
-        color: #fff;
-        font-weight: 500;
-        padding: 0.6rem 1.5rem;
-        transition: all 0.3s ease;
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #0d6efd;
-        color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
-    }
-
-    .nav-pills .nav-link:not(.active):hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-
-    .hero-tab {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
-        padding: 2rem;
-        color: #f1f1f1;
-    }
-
-    .hero-tab h4 {
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .hero-tab p {
-        font-size: 1rem;
-        margin: 1rem 0 1.5rem;
-    }
-
-    .btn-light {
-        border-radius: 50px;
-        font-weight: 600;
-        padding: 0.6rem 1.5rem;
-    }
-
-    #market-section {
-        position: relative;
-        /* background: #319bf9; */
-        color: #f1f1f1;
-        padding: 80px 0 56px;
-        z-index: 1;
-    }
-
-    #market-section .provide-box {
-        background: #d4e6f526;
-        backdrop-filter: blur(15px) saturate(180%);
-    }
-</style>
-
-<style>
-    /* HERO SECTION */
-    .announcement-hero {
-      position: relative;
-      height: 90vh;
-      background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
-                  url('assets/img/creative.png') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #fff;
-      padding: 2rem;
-    }
-
-    .announcement-content {
-      z-index: 2;
-      max-width: 800px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 3rem;
-      border-radius: 25px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      animation: fadeInUp 1.2s ease;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        transform: translateY(20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .announcement-hero h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .announcement-hero p {
-      font-size: 1.1rem;
-      color: #e0e0e0;
-      margin-bottom: 2rem;
-    }
-
-    .highlight {
-      color: #ffdd57;
-      font-weight: 600;
-    }
-
-    /* CTA BUTTONS */
-    .hero-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-hero {
-      border-radius: 50px;
-      font-weight: 600;
-      padding: 0.8rem 1.6rem;
-      transition: all 0.3s ease;
-    }
-
-    .btn-events {
-      background-color: #fff;
-      color: #0d6efd;
-    }
-
-    .btn-events:hover {
-      background-color: #0d6efd;
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .btn-announcements {
-      border: 2px solid #fff;
-      color: #fff;
-      background: transparent;
-    }
-
-    .btn-announcements:hover {
-      background-color: #fff;
-      color: #0d6efd;
-      transform: translateY(-2px);
-    }
-
-</style>
-
 <div class="container p-4">
     <section id="tranding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                        <div class="banner-head mt-4">
-                            <h1 class="mb-2 text-white">Your gateway to skills, opportunities, and growth.</h1>
-                            <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
-                        </div>
-                        <div class="banner-form">
-                            <!-- Tabs Navigation -->
-                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Skills Marketplace</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#opportunities" type="button" role="tab">Opportunities</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="connection-tab" data-bs-toggle="pill" data-bs-target="#connection" type="button" role="tab">Connection room</button>
-                                </li>
-                            </ul>
+        <div class="bubbles">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
 
-                            <!-- Tabs Content -->
-                            <div class="tab-content" id="heroTabsContent">
-                                <!-- Skills Marketplace -->
-                                <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                    <h4 class="text-white">Promote Your Skills</h4>
-                                    <p class="text-white">
-                                        Stand out! Boost your profile and reach 3× more employers.<br>
-                                        Get verified and feature your story on our homepage.
-                                    </p>
-                                    <a href="#skills" class="btn btn-light">Explore Marketplace</a>
-                                </div>
-
-                                <!-- Opportunities Center -->
-                                <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
-                                    <h4 class="text-white">Unlock New Opportunities</h4>
-                                    <p class="text-white">
-                                        Discover tailored job listings, collaboration projects, and freelance gigs.<br>
-                                        Set up alerts to never miss a chance to grow your career.
-                                    </p>
-                                    <a href="#opportunities" class="btn btn-light">Start Exploring</a>
-                                </div>
-                                <!-- Connection Room -->
-                                <div class="tab-pane hero-tab fade" id="connection" role="tabpanel">
-                                    <h4 class="text-white">Expand Your Network</h4>
-                                    <p class="text-white">
-                                        Connect with industry professionals, mentors, and peers.<br>
-                                        Join groups, attend virtual events, and build relationships that matter.
-                                    </p>
-                                    <a href="#connections" class="btn btn-light">Join the Community</a>
-                                </div>
-                            </div>
-                            <!-- <div class="popular-search">
-                                <h5>Popular Searches : </h5>
-                                <ul>
-                                    <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                                    <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                                    <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
-                                </ul>
-                            </div> -->
+        <div class="tranding-grid">
+            <!-- Caption Slider -->
+            <div class="swiper tranding-caption-slider" id="captionSwiper">
+                <div class="swiper-wrapper">
+                    @foreach ($featuredTalents as $talent)
+                    <div class="swiper-slide">
+                        <div class="tranding-slide-caption">
+                            <h3 class="text-2xl text-white font-bold mb-2">{{ $talent->name }}</h3>
+                            <p>
+                                Passionate {{ $talent->skill ?? 'creative' }} blending
+                                {{ $talent->category->name ?? 'various disciplines' }} into meaningful art and innovation.
+                            </p>
+                            <a href="{{ route('user.talent.details', $talent->id) }}" class="tranding-line-btn">
+                                <i class="feather-arrow-right"></i> Read More
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="banner-img">
-                        <div class="banner-img-right">
-                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
+
+            <!-- Image Slider -->
+            <div class="swiper tranding-image-slider" id="imageSwiper">
+                <div class="swiper-wrapper">
+                    @foreach ($featuredTalents as $talent)
+                    <div class="swiper-slide">
+                        <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
+                            alt="{{ $talent->name }}">
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="tranding-slider-control">
+            <div class="swiper-button-prev slider-arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
+            <div class="swiper-button-next slider-arrow"><ion-icon name="arrow-forward-outline"></ion-icon></div>
         </div>
     </section>
 </div>
@@ -454,8 +261,8 @@
     <div class="trend-section ">
         <div class="row align-items-center">
             <div class="col-sm-10">
-                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories for our skills marketplace<span class="title-bg2"></span></h5>
-                <p data-aos="fade-up"> Explore the most sought-after skills and connections in today's job market.</p>
+                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of talents<span class="title-bg2"></span></h5>
+                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative talent across Africa</p>
             </div>
             <div class="col-sm-2 text-sm-end">
                 <div class="owl-nav trend-nav nav-control nav-top"></div>
@@ -575,379 +382,13 @@
                 </div>
             </div>
             <div class="col-lg-5 aos-init aos-animate" data-aos="fade-left">
-                <h2 class="mb-3">Find the right skills for your needs</h2>
-                <p>Over {{ $totalTalents }}K skills available today for you.</p>
-                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-white">Explore skills hub</a>
+                <h2 class="mb-3">Find the right talent for your needs</h2>
+                <p>Over {{ $totalTalents }}K talents of Gigs- available today for you.</p>
+                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-white">Talent hub</a>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    /* Section base */
-    .features-section {
-        padding: 5rem 1rem;
-        /* background: #fff; */
-        /* text-align: right; */
-    }
-
-    .features-section h2 {
-        font-weight: 700;
-        margin-bottom: 2rem;
-        color: #0d6efd;
-    }
-
-    /* Switch Tabs Container */
-    .feature-switch {
-        display: inline-flex;
-        background: #f1f5ff;
-        border-radius: 50px;
-        padding: 5px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 2.5rem;
-        gap: 0.5rem;
-    }
-
-    .feature-switch .nav-link {
-        border-radius: 50px;
-        font-weight: 500;
-        color: #0d6efd;
-        padding: 0.5rem 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .feature-switch .nav-link.active {
-        background-color: #0d6efd;
-        color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.4);
-    }
-
-    .feature-switch .nav-link:hover:not(.active) {
-        background-color: rgba(13, 110, 253, 0.1);
-    }
-
-    /* Tab Content */
-    .tab-pane.feature-tab {
-        /* max-width: 750px; */
-        margin: 0 auto;
-        background: #f8faff;
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .tab-pane h4 {
-        color: #0d6efd;
-        font-weight: 600;
-    }
-
-    .tab-pane p {
-        margin-top: 1rem;
-        color: #555;
-    }
-
-    .btn-primary {
-        background-color: #0d6efd;
-        border: none;
-        border-radius: 50px;
-        padding: 0.6rem 1.5rem;
-        margin-top: 1.2rem;
-        transition: 0.3s;
-    }
-
-    .btn-primary:hover {
-        background-color: #084298;
-        transform: translateY(-2px);
-    }
-
-    .coin-note {
-        margin-top: 1rem;
-        font-size: 0.9rem;
-        color: #0d6efd;
-    }
-</style>
-
-<section class="features-section" id="features">
-    <div class="container">
-        <h2>Explore Future Connect Features</h2>
-
-        <!-- Switch Tabs -->
-        <ul class="nav feature-switch" id="featuresTab" role="tablist">
-            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#skills">Skills</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#learning-section">Learning</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#opportunity">Opportunities</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#connect">Connect</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#marketplace-features">Marketplace</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#diaspora">Diaspora</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#announcements">Update</button></li>
-        </ul>
-
-        <!-- Tab Content -->
-        <div class="tab-content">
-
-            <!-- 1. Skills Marketplace -->
-            <div class="tab-pane feature-tab fade show active" id="skills">
-                <div class="hero-section-two">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-7">
-                                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
-                                    <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Skills Marketplace</span>
-                                    <h1 class="mb-2">Showcase your talent <span>and</span> reach verified employers.</h1>
-                                    <p class="mb-4">Future Connect’s Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore skills marketplace<i class="ti ti-chevron-right ms-1"></i></a>
-                                    <div class="banner-users d-flex align-items-center flex-wrap gap-3">
-                                        <div class="avatar-list-stacked me-2">
-                                            @foreach($featuredTalents as $talent)
-                                            <span class="avatar avatar-md rounded-circle border-0"><img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                                            @endforeach
-                                        </div>
-                                        <div>
-                                            <div class="d-flex align-items-center mb-1">
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <h6 class="mb-0 ms-2">4.8/5</h6>
-                                            </div>
-                                            <p class="mb-0">over {{ $totalTalents}}+ skilled professionals</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="banner-image">
-                                    <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. Learning Center -->
-            <div class="tab-pane feature-tab fade" id="learning-section">
-                <section class="hero-section">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <div class="banner-head">
-                                        <h1 class="mb-2">Upskill with short, impactful professional courses.</h1>
-                                        <p class="d-inline-flex">The Learning Center brings together experts and learners for short, affordable, high-quality learning experiences. Each course is designed for practical application — so you can implement your knowledge immediately.</p>
-                                    </div>
-                                    <a href="{{ route('user.courses') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center mb-3">Explore courses<i class="ti ti-chevron-right ms-1"></i></a>
-                                    <div class="banner-form">
-                                        <form action="#">
-                                            <div class="banner-search-list">
-                                                <div class="input-block border-0">
-                                                    <label>Keyword</label>
-                                                    <input type="text" class="form-control" placeholder="Eg. Graphic Design, Digital Marketing">
-                                                </div>
-                                            </div>
-                                            <div class="input-block-btn">
-                                                <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
-                                                    <i class="ti ti-search"></i> Search
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="popular-search">
-                                        <h5>Popular Searches : </h5>
-                                        <ul>
-                                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="banner-img">
-                                    <div class="banner-img-right">
-                                        <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 3. Opportunities -->
-            <div class="tab-pane feature-tab fade" id="opportunity">
-                <section class="hero-section-two">
-                    <div class="container">
-                        <div class="banner-content">
-                            <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Future Connect Opportunities</span>
-                            <h1 class="mb-2">Post jobs, find collaborators, <span>and</span> build your dream team in one verified network.</h1>
-                            <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore jobs<i class="ti ti-chevron-right ms-1"></i></a>
-                            <a href="{{ route('user.talents') }}" class="btn btn-lg btn-outline-primary rounded-pill d-inline-flex align-items-center" style="margin-top: 1.2rem;">Post a collaboration<i class="ti ti-chevron-right ms-1"></i></a>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 4. Connect Room -->
-            <div class="tab-pane feature-tab fade" id="connect">
-                <section class="about-us-section">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6">
-                                <div class="row me-4">
-                                    <div class="col-sm-6">
-                                        <div class="about-inner-img">
-                                            <img src="assets/img/aboutus/about-us-01.jpg" class="img-fluid" alt="img">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="about-inner-img">
-                                                    <img src="assets/img/aboutus/about-us-02.jpg" class="img-fluid" alt="img">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="about-inner-img">
-                                                    <img src="assets/img/aboutus/about-us-03.jpg" class="img-fluid" alt="img">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="about-us-info">
-                                    <div class="about-us-head">
-                                        <h6>Connection Room</h6>
-                                        <h2>Network and collaborate securely with verified users.</h2>
-                                        <p>
-                                            The Connect Room offers a secure messaging and meeting system for verified professionals. Build meaningful relationships, exchange ideas, or schedule mentorship calls with trusted peers.
-                                        </p>
-                                    </div>
-                                    <div class="about-features">
-                                        <ul class="list-one">
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Diverse Network of Professionals</li>
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Trust and Transparency</li>
-                                        </ul>
-                                        <ul class="list-two">
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>User Friendly Platform</li>
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Innovation In Technology</li>
-                                        </ul>
-                                    </div>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Join community<i class="ti ti-chevron-right ms-1"></i></a>
-                                    <div class="coin-note">Each connection supports skill programs and platform growth.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 5. Marketplace -->
-            <div class="tab-pane feature-tab fade" id="marketplace-features">
-                <section class="provide-section" id="market-section">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-9">
-                                <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                                    <h2><span>We’r</span> here help to find your Needs.</h2>
-                                    <p>Our Marketplace lets creators showcase digital products from templates to software tools with full payment protection via our platform.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/ipad-icon.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Browse a product</h6>
-                                    <p>Everything you need for your craft — safe payments through Future Connect.</p>
-                                    <a href="{{ route('user.products.index') }}" class="btn btn-primary rounded-pill">Explore products<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/service-icon.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Sell a product</h6>
-                                    <p>Our Marketplace lets creators showcase digital products</p>
-                                    <a href="#" class="btn btn-primary rounded-pill">Find a product<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/user-icon-01.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Become a seller</h6>
-                                    <p>Sellers earn instantly — FC keeps a small fee for logistics & support.</p>
-                                    <a class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 6. Diaspora Connect -->
-            <div class="tab-pane feature-tab fade" id="diaspora">
-                <section class="start-seller-sec">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 d-flex">
-                                <div class="seller-inner-img w-100">
-                                    <img src="assets/img/creative.png" class="img-fluid" alt="img">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 d-flex">
-                                <div class="seller-info-content w-100">
-                                    <div class="seller-head">
-                                        <h3>Diaspora Connect</h3>
-                                        <div class="subtitle">Bridge global Rwandans with local innovators.</div>
-                                        <p>Diaspora Connect helps professionals abroad mentor, invest in, and empower young talents back home. Every contribution supports verifiable, trackable growth projects with transparent reporting.</p>
-                                    </div>
-                                    <div class="seller-feature-list d-flex w-100">
-                                        <div class="sllers-list">
-                                            <ul>
-                                                <li><span><i class="feather-check-square"></i></span>Fund youth-led startups and education projects.</li>
-                                                <li><span><i class="feather-check-square"></i></span>Receive real-time progress updates and reports.</li>
-                                                <li><span><i class="feather-check-square"></i></span>Participate in virtual mentorship sessions.</li>
-                                            </ul>
-                                            <a href="#" class="btn btn-primary w-auto">Join Diaspora Connect</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 7. Announcements -->
-            <div class="tab-pane feature-tab fade" id="announcements">
-                <section class="announcement-hero">
-                    <div class="announcement-content container">
-                        <h1 class="text-white">Stay Updated with <span class="highlight">Future Connect</span></h1>
-                        <p class="text-white">Discover upcoming <strong>events</strong>, read important <strong>announcements</strong>, and never miss out on the opportunities shaping your future.</p>
-
-                        <div class="hero-buttons">
-                            <a href="#events" class="btn btn-hero btn-events">View Events</a>
-                            <a href="#announcements" class="btn btn-hero btn-announcements">Read Announcements</a>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-        </div>
-    </div>
-</section>
 
 <style>
     .postLists.cards .post-item.m-card {
