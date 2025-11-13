@@ -52,9 +52,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <h2 class="fw-bold mb-0">{{ $project->title }}</h2>
                         @if($project->verified)
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-                                <i class="bi bi-patch-check-fill me-1"></i> Verified
-                            </span>
+                        <span class="badge bg-success px-3 py-2 rounded-pill">
+                            <i class="bi bi-patch-check-fill me-1"></i> Verified
+                        </span>
                         @endif
                     </div>
                     <p class="small text-muted mt-2 mb-0">
@@ -92,10 +92,69 @@
                     </div>
 
                     <!-- Collaboration Button -->
-                    <button class="btn btn-primary w-100 py-3 fw-semibold rounded-pill shadow-sm"
+                    <button class="btn btn-primary fw-semibold rounded-pill shadow-sm"
                         data-bs-toggle="modal" data-bs-target="#applyModal">
                         <i class="bi bi-envelope-paper me-2"></i> Apply for Collaboration
                     </button>
+                    <!-- Sponsor Button -->
+                    <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#sponsorModal">
+                        Sponsor This Project
+                    </button>
+
+                    <!-- Sponsor Modal -->
+                    <div class="modal fade" id="sponsorModal" tabindex="-1" aria-labelledby="sponsorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content rounded-4 shadow-lg">
+                                <div class="modal-header rounded-top-4">
+                                    <h5 class="modal-title fw-bold" id="sponsorModalLabel">Sponsor: {{ $project->title }}</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <h6 class="mb-2 fw-bold">❗ Please fix the following errors:</h6>
+                                        <ul class="mb-0">
+                                            @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    @endif
+                                    <p class="text-muted mb-4">{{ $project->description }}</p>
+
+                                    <form id="sponsorForm" action="{{ route('diaspora.sponsorship.store', $project->id) }}" method="POST">
+                                        @csrf
+                                        <div class="col-12">
+                                            <label class="form-label">Message</label>
+                                            <textarea name="message" rows="4" class="form-control" placeholder="Leave a message..."></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Amount</label>
+                                            <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}" required>
+                                            @error('amount')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Currency</label>
+                                            <select name="currency" class="form-select @error('currency') is-invalid @enderror">
+                                                <option value="USD">USD</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="RWF">RWF</option>
+                                            </select>
+                                            @error('currency')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary w-100 rounded-pill">Sponsor Now</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -108,18 +167,18 @@
                 </div>
                 <div class="list-group list-group-flush">
                     @foreach($recent as $item)
-                        <a href="{{ route('user.projects.show', $item->id) }}" 
-                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
-                            <div>
-                                <h6 class="fw-semibold mb-1 text-dark">{{ $item->title }}</h6>
-                                <small class="text-muted">
-                                    <i class="bi bi-tag me-1"></i>{{ $item->category ?? 'General' }}
-                                </small>
-                            </div>
-                            @if($item->verified)
-                                <i class="bi bi-patch-check-fill text-success"></i>
-                            @endif
-                        </a>
+                    <a href="{{ route('user.projects.show', $item->id) }}"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            <h6 class="fw-semibold mb-1 text-dark">{{ $item->title }}</h6>
+                            <small class="text-muted">
+                                <i class="bi bi-tag me-1"></i>{{ $item->category ?? 'General' }}
+                            </small>
+                        </div>
+                        @if($item->verified)
+                        <i class="bi bi-patch-check-fill text-success"></i>
+                        @endif
+                    </a>
                     @endforeach
                 </div>
             </div>

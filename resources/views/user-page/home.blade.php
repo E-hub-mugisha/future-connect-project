@@ -280,95 +280,95 @@
 <style>
     /* HERO SECTION */
     .announcement-hero {
-      position: relative;
-      height: 90vh;
-      background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
-                  url('assets/img/creative.png') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #fff;
-      padding: 2rem;
+        position: relative;
+        height: 90vh;
+        background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
+            url('assets/img/creative.png') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        padding: 2rem;
     }
 
     .announcement-content {
-      z-index: 2;
-      max-width: 800px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 3rem;
-      border-radius: 25px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      animation: fadeInUp 1.2s ease;
+        z-index: 2;
+        max-width: 800px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 3rem;
+        border-radius: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 1.2s ease;
     }
 
     @keyframes fadeInUp {
-      from {
-        transform: translateY(20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .announcement-hero h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
     }
 
     .announcement-hero p {
-      font-size: 1.1rem;
-      color: #e0e0e0;
-      margin-bottom: 2rem;
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
     }
 
     .highlight {
-      color: #ffdd57;
-      font-weight: 600;
+        color: #ffdd57;
+        font-weight: 600;
     }
 
     /* CTA BUTTONS */
     .hero-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      flex-wrap: wrap;
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        flex-wrap: wrap;
     }
 
     .btn-hero {
-      border-radius: 50px;
-      font-weight: 600;
-      padding: 0.8rem 1.6rem;
-      transition: all 0.3s ease;
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.8rem 1.6rem;
+        transition: all 0.3s ease;
     }
 
     .btn-events {
-      background-color: #fff;
-      color: #0d6efd;
+        background-color: #fff;
+        color: #0d6efd;
     }
 
     .btn-events:hover {
-      background-color: #0d6efd;
-      color: #fff;
-      transform: translateY(-2px);
+        background-color: #0d6efd;
+        color: #fff;
+        transform: translateY(-2px);
     }
 
     .btn-announcements {
-      border: 2px solid #fff;
-      color: #fff;
-      background: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+        background: transparent;
     }
 
     .btn-announcements:hover {
-      background-color: #fff;
-      color: #0d6efd;
-      transform: translateY(-2px);
+        background-color: #fff;
+        color: #0d6efd;
+        transform: translateY(-2px);
     }
-
 </style>
 
 <div class="container p-4">
@@ -920,7 +920,7 @@
                                                 <li><span><i class="feather-check-square"></i></span>Receive real-time progress updates and reports.</li>
                                                 <li><span><i class="feather-check-square"></i></span>Participate in virtual mentorship sessions.</li>
                                             </ul>
-                                            <a href="#" class="btn btn-primary w-auto">Join Diaspora Connect</a>
+                                            <a href="{{ route('diaspora.index')}}" class="btn btn-primary w-auto">Explore more</a>
                                         </div>
                                     </div>
                                 </div>
@@ -1122,7 +1122,7 @@
 </style>
 
 <!-- next gen -->
-<div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
+<!-- <div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
             <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span
@@ -1130,7 +1130,6 @@
             <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
         </div>
         <div class="row seller-list postLists cards">
-            <!-- Filter -->
             <div class="filters-section">
                 <div class="listing-tab ">
                     <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
@@ -1150,9 +1149,6 @@
 
                 </div>
 
-                <!-- /Filter -->
-
-                <!-- Sort By -->
                 <div class="filters-wrap sort-categories">
                     <div class="collapse-card float-lg-end">
                         <div class="filter-header">
@@ -1177,22 +1173,17 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Sort By -->
-
+                
             </div>
-            <!-- /Filter -->
             <div class="row" id="talentGrid">
                 @foreach($talents as $talent)
                 <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
                     <div class="card post-item m-card">
                         <div class="card-body text-center">
-
-                            <!-- Image -->
                             <a href="{{ route('user.talent.details', $talent->id) }}">
                                 <img class="img rounded-3" src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" alt="img" />
                             </a>
 
-                            <!-- Name -->
                             <h6 class="mb-1">
                                 <a href="{{ route('user.talent.details', $talent->id) }}">
                                     {{ $talent->name }}
@@ -1200,10 +1191,8 @@
                                 </a>
                             </h6>
 
-                            <!-- Category -->
                             <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
 
-                            <!-- Location -->
                             <p class="mb-0 location-text d-inline-flex align-items-center">
                                 @php
                                 // Pick a color class based on the level
@@ -1220,7 +1209,6 @@
                                 <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
                             </p>
 
-                            <!-- Ratings -->
                             <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
                                 <div class="talent-hover-box">
                                     <div class="default-badges">
@@ -1242,7 +1230,6 @@
                                 </div>
                             </div>
 
-                            <!-- View Button -->
                             <div class="text-center d-flex justify-content-center">
                                 <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
                                     <i class="feather-arrow-right"></i>View Profile
@@ -1260,7 +1247,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- next gen -->
 
 @if($partners->count() != 0)
@@ -1336,7 +1323,7 @@
 </section>
 
 <!-- new services -->
-<div class="new-services-section">
+<!-- <div class="new-services-section">
     <div class="container">
         <div class="section-header-two text-center" data-aos="fade-up">
             <h2 class="mb-2"><span class="title-bg"></span>Our New Stories<span class="title-bg2"></span></h2>
@@ -1448,7 +1435,7 @@
 
 
     </div>
-</div>
+</div> -->
 <!-- new services -->
 
 <style>
@@ -1545,14 +1532,14 @@
 </div> -->
 <!-- end Future Connect talent slider -->
 
-<div class="new-services-section">
+<!-- <div class="new-services-section">
     <div class="container">
         <div class="section-header-two text-center" data-aos="fade-up">
             <h2 class="mb-2"><span class="title-bg"></span>Our New Courses<span class="title-bg2"></span></h2>
             <p>Unlock a world of opportunities and take control of your future</p>
         </div>
 
-        <!-- Category Tabs -->
+        
         <div class="listing-tab" data-aos="fade-up">
             <div class="listing-slider">
                 <ul class="nav nav-tabs justify-content-center" id="coursesCategoryTabs" role="tablist">
@@ -1574,7 +1561,7 @@
             </div>
         </div>
 
-        <!-- Courses Content -->
+        
         <div class="tab-content" data-aos="fade-up" id="coursesContent">
             <div class="row">
                 @forelse($courses as $course)
@@ -1659,7 +1646,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- what makes Future Connect -->
 <div class="container">

@@ -27,6 +27,7 @@ use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\Diaspora\DiasporaAccountController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
@@ -177,6 +178,11 @@ Route::get('/tickets/{id}/download', [UserEventTicketOrderController::class, 'do
 Route::get('/projects', [UserProjectController::class, 'index'])->name('user.projects.index');
 Route::get('/projects/{id}', [UserProjectController::class, 'show'])->name('user.projects.show');
 Route::post('/projects/{id}/apply', [UserProjectController::class, 'store'])->name('user.projects.apply');
+Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'store'])
+    ->name('diaspora.sponsorship.store')->middleware('auth');
+Route::get('/sponsorship/{sponsorship}/payment', [UserProjectController::class, 'payment'])
+        ->name('diaspora.sponsorship.payment');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
@@ -214,6 +220,19 @@ Route::get('/test', function () {
 Route::get('/testing', function () {
     $talents = Talent::all();
     return view('user-page.testing', compact('talents'));
+});
+
+Route::prefix('diaspora')->group(function () {
+    Route::get('/account/register', [DiasporaAccountController::class, 'create'])->name('diaspora.create');
+    Route::post('/register', [DiasporaAccountController::class, 'store'])->name('diaspora.store');
+    Route::post('/{diaspora}/upload-documents', [DiasporaAccountController::class, 'uploadDocuments']);
+    Route::get('diaspora/register/success', [DiasporaAccountController::class, 'success'])->name('register.success');
+
+    // Admin routes (use middleware('auth:admin') in real setup)
+    Route::get('/', [DiasporaAccountController::class, 'diasporaPage'])->name('diaspora.index');
+    Route::get('/{id}', [DiasporaAccountController::class, 'show']);
+    Route::post('/{id}/approve', [DiasporaAccountController::class, 'approve']);
+    Route::post('/{id}/reject', [DiasporaAccountController::class, 'reject']);
 });
 
 /*
