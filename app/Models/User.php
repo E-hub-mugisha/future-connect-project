@@ -87,4 +87,8 @@ class User extends Authenticatable
     {
         $this->update(['is_verified' => true]);
     }
+    public function diaspora()
+    {
+        return $this->hasOne(DiasporaAccount::class);
+    }
 }

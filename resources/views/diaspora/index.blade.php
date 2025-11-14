@@ -17,8 +17,8 @@
                             <li class="mb-2">Partner as a mentor or investor — verified collaboration, zero spam.</li>
                         </ul>
                     </div>
-                    <a href="{{ route('diaspora.create') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Become a Sponsor<i class="ti ti-chevron-right ms-1"></i></a>
-                    <a href="{{ route('user.projects.index') }}" class="btn btn-outline-light btn-lg rounded-pill d-inline-flex align-items-center">
+                    <a href="{{ route('diaspora.create') }}" class="btn btn-lg btn-primary rounded-pill d-inline-flex align-items-center">Become a Sponsor<i class="ti ti-chevron-right ms-1"></i></a>
+                    <a href="{{ route('user.projects.index') }}" class="btn btn-outline-primary btn-lg rounded-pill d-inline-flex align-items-center">
                         View Projects
                     </a>
                 </div>

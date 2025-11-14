@@ -7,6 +7,7 @@ use App\Models\DiasporaAccount;
 use App\Models\Project;
 use App\Models\ProjectSponsorship;
 use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,12 @@ class DiasporaAccountController extends Controller
             ? $request->file('address_proof')->store('diaspora/address_proofs', 'public')
             : null;
 
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'name' => $request->first_name . ' ' . $request->last_name,
+            ]);
+
         $account = DiasporaAccount::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -76,7 +83,8 @@ class DiasporaAccountController extends Controller
             'newsletter_opt_in' => $request->boolean('newsletter_opt_in'),
             'password' => Hash::make($request->password),
             'verification_status' => 'pending',
-            'sponsorship_preferences' => $request->sponsorship_preferences
+            'sponsorship_preferences' => $request->sponsorship_preferences,
+            'user_id' => $user->id,
         ]);
 
         return redirect()->route('register.success')->with('success', 'Account Submitted Successfully!');

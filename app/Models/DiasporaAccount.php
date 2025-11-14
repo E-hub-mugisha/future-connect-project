@@ -42,6 +42,7 @@ class DiasporaAccount extends Model
         'verification_notes',
         'verified_at',
         'verified_by',
+        'user_id'
     ];
 
     /**
@@ -131,5 +132,10 @@ class DiasporaAccount extends Model
     //         $diaspora->is_diaspora = $diaspora->country_of_origin !== $diaspora->current_country;
     //     });
     // }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

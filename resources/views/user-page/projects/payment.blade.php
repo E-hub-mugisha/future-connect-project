@@ -1,6 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('content')
+
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-6">
@@ -8,11 +11,12 @@
                 <h3 class="fw-bold mb-3">💳 Complete Your Sponsorship</h3>
                 <p class="mb-4">
                     You are sponsoring <strong>{{ $sponsorship->project->title }}</strong><br>
-                    Amount: <strong>{{ $sponsorship->amount }} {{ $sponsorship->currency }}</strong>
+                    Amount: <strong>{{ $payment->amount }} {{ $payment->currency }}</strong>
                 </p>
 
-                <button id="payButton" class="btn btn-primary btn-lg rounded-pill w-100 mb-3">
-                    Proceed to Payment
+                <button id="payBtn" class="btn btn-pay w-100">
+                    <span id="payBtnText"><i class="fa fa-money-bill-wave"></i> Pay Now</span>
+                    <span id="payBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 </button>
 
                 <a href="{{ route('user.projects.index') }}" class="btn btn-outline-secondary rounded-pill">
@@ -23,38 +27,64 @@
     </div>
 </div>
 
-<script src="https://checkout.flutterwave.com/v3.js"></script>
+
 <script>
-document.getElementById('payButton').addEventListener('click', function () {
-    FlutterwaveCheckout({
-        public_key: "{{ env('FLUTTERWAVE_PUBLIC_KEY') }}",
-        tx_ref: "sponsorship_{{ $payment->id }}_{{ time() }}",
-        amount: {{ $payment->amount }},
-        currency: "{{ $payment->currency }}",
-        payment_options: "card, mobilemoney, ussd",
-        customer: {
-            email: "{{ Auth::user()->email }}",
-            phone_number: "{{ Auth::user()->diasporaAccount->phone }}",
-            name: "{{ Auth::user()->diasporaAccount->full_name }}"
-        },
-        customizations: {
-            title: "Future Connect Sponsorship",
-            description: "Sponsoring {{ $sponsorship->project->title }}",
-            logo: "{{ asset('assets/img/logo.png') }}"
-        },
-        callback: function (data) {
-            if (data.status === "successful") {
-                // Update payment record via server
-                fetch("{{ route('diaspora.sponsorship.success', $sponsorship->id) }}")
-                .then(() => {
-                    window.location.href = "{{ route('diaspora.sponsorship.success', $sponsorship->id) }}";
-                });
-            }
-        },
-        onclose: function() {
-            console.log("Payment closed");
+document.addEventListener("DOMContentLoaded", function() {
+
+    const payBtn = document.getElementById("payBtn");
+    const payBtnText = document.getElementById("payBtnText");
+    const payBtnSpinner = document.getElementById("payBtnSpinner");
+
+    if (!payBtn) return;
+
+    payBtn.addEventListener("click", function() {
+
+        // Show spinner
+        payBtnText.textContent = "Processing Payment...";
+        payBtnSpinner.classList.remove("d-none");
+        payBtn.disabled = true;
+
+        if (typeof FlutterwaveCheckout === "undefined") {
+            alert("Payment script not loaded yet.");
+            payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
+            payBtnSpinner.classList.add("d-none");
+            payBtn.disabled = false;
+            return;
         }
-    });
-});
+
+        const paymentId = "{{ $payment->id }}";
+        const amount = "{{ $payment->amount }}";
+        const currency = "{{ $payment->currency }}";
+
+        FlutterwaveCheckout({
+            public_key: "{{ $public_key }}",
+            tx_ref: "sponsorship_{{ $payment->id }}_{{ time() }}",
+            amount: amount,
+            currency: currency,
+            payment_options: "card, mobilemoneyrwanda",
+
+            customer: {
+                email: "{{ Auth::user()->email }}",
+                phone_number: "{{ Auth::user()->phone }}",
+                name: "{{ Auth::user()->name }}"
+            },
+
+            customizations: {
+                title: "Future Connect Sponsorship",
+                description: "Sponsoring {{ $sponsorship->project->title }}",
+                logo: "{{ asset('assets/img/logo.png') }}"
+            },
+
+            callback: function(data) {
+                window.location.href =
+                    `/project/payment/callback?payment_id=${paymentId}&status=${data.status}&tx_ref=${data.tx_ref}`;
+            }
+        });
+
+    }); // END click handler
+
+}); // END DOMContentLoaded
 </script>
+
+
 @endsection

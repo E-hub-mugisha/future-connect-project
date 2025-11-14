@@ -26,4 +26,8 @@ class ProjectSponsorship extends Model
     {
         return $this->belongsTo(Project::class);
     }
+    public function payments()
+    {
+        return $this->hasMany(ProjectPayment::class, 'project_sponsorship_id');
+    }
 }

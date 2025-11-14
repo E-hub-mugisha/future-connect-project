@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
+use App\Models\DiasporaAccount;
 use App\Models\Project;
 use App\Models\ProjectApplication;
 use App\Models\ProjectPayment;
@@ -60,7 +61,8 @@ class UserProjectController extends Controller
             'message' => 'required|string'
         ]);
 
-        $diaspora = Auth::user()->id;
+        $user = Auth::user();
+        $diaspora = DiasporaAccount::where('user_id', $user->id)->first();
 
         // Step 1: Create sponsorship record
         $sponsorship = ProjectSponsorship::create([
@@ -80,17 +82,24 @@ class UserProjectController extends Controller
             'payment_gateway' => 'flutterwave',
             'status' => 'pending',
         ]);
-
-        // Optionally: redirect to payment gateway
-        // e.g., Future Connect Wallet / PayPal / Stripe
-        return redirect()->route('diaspora.sponsorship.payment', compact('sponsorship', 'payment'))
-                         ->with('success', 'Sponsorship initiated. Complete payment to confirm.');
+        return redirect()->route('diaspora.sponsorship.payment', compact('sponsorship'))
+            ->with('success', 'Sponsorship initiated. Complete payment to confirm.');
     }
     public function payment(ProjectSponsorship $sponsorship)
     {
-        $payment = $sponsorship->payment()->first(); // fetch associated payment
-        return view('diaspora.sponsorship.payment', compact('sponsorship', 'payment'));
+        $payment = $sponsorship->payments()->firstOrCreate([
+            'project_sponsorship_id' => $sponsorship->id,
+        ], [
+            'amount' => $sponsorship->amount,
+            'currency' => $sponsorship->currency,
+            'status' => 'pending'
+        ]);
+
+        $public_key = config('services.flutterwave.public_key');
+
+        return view('user-page.projects.payment', compact('sponsorship', 'payment','public_key'));
     }
+
 
     public function success(ProjectSponsorship $sponsorship)
     {
@@ -99,21 +108,36 @@ class UserProjectController extends Controller
         return view('diaspora.sponsorship.success', compact('sponsorship'));
     }
     // Webhook endpoint for Flutterwave
-    public function webhook(Request $request)
+    public function handleCallback(Request $request)
     {
-        $data = $request->all();
+        $paymentId = $request->payment_id;
+        $status = $request->status;
 
-        // Verify payment with Flutterwave (signature, secret, etc.)
-        // For simplicity, we assume the payment is verified
+        $payment = ProjectPayment::find($paymentId);
 
-        $transactionId = $data['tx_ref'] ?? null;
-        $payment = ProjectPayment::where('transaction_id', $transactionId)->first();
-
-        if ($payment && $data['status'] === 'successful') {
-            $payment->update(['status' => 'successful', 'response' => $data]);
-            $payment->sponsorship()->update(['status' => 'paid']);
+        if (!$payment) {
+            return redirect()->route('user.projects.index')->with('error', 'Payment not found.');
         }
 
-        return response()->json(['received' => true]);
+        if ($status === 'successful') {
+            $payment->update([
+                'status' => 'successful',
+                'response' => json_encode($request->all()),
+            ]);
+
+            $payment->sponsorship()->update([
+                'status' => 'paid',
+            ]);
+
+            return redirect()->route('user.projects.index')->with('success', 'Payment completed successfully.');
+        }
+
+        // failed or cancelled
+        $payment->update([
+            'status' => 'failed',
+            'response' => json_encode($request->all()),
+        ]);
+
+        return redirect()->route('user.projects.index')->with('error', 'Payment failed or cancelled.');
     }
 }

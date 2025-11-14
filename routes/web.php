@@ -178,11 +178,11 @@ Route::get('/tickets/{id}/download', [UserEventTicketOrderController::class, 'do
 Route::get('/projects', [UserProjectController::class, 'index'])->name('user.projects.index');
 Route::get('/projects/{id}', [UserProjectController::class, 'show'])->name('user.projects.show');
 Route::post('/projects/{id}/apply', [UserProjectController::class, 'store'])->name('user.projects.apply');
-Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'store'])
+Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'storeSponsorship'])
     ->name('diaspora.sponsorship.store')->middleware('auth');
-Route::get('/sponsorship/{sponsorship}/payment', [UserProjectController::class, 'payment'])
+Route::get('/sponsorship/{sponsorship}/payment/', [UserProjectController::class, 'payment'])
         ->name('diaspora.sponsorship.payment');
-
+Route::get('/project/payment/callback', [UserProjectController::class, 'handleCallback'])->name('project.sponsor.callback');
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes
