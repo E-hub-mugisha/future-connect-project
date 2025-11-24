@@ -388,15 +388,14 @@ return request()->routeIs($route) ? 'active' : '';
 
                     <!-- Learning Center -->
                     <li>
-                        <a role="button">
+                        <a href="/courses">
                             <span><i class="ti ti-book"></i> Learning Center</span>
-                            <i class="fas fa-chevron-right submenu-arrow"></i>
                         </a>
 
-                        <!-- <ul class="submenu">
-                            <li><a href="/courses"><i class="ti ti-list"></i> Browse Courses</a></li>
+                        <ul class="submenu">
+                            <!-- <li><a href="/courses"><i class="ti ti-list"></i> Browse Courses</a></li> -->
 
-                            <li class="has-submenu">
+                            <!-- <li class="has-submenu">
                                 <a role="button">
                                     <span><i class="ti ti-category"></i> Categories</span>
                                     <i class="fas fa-chevron-right submenu-arrow"></i>
@@ -411,8 +410,8 @@ return request()->routeIs($route) ? 'active' : '';
                                     </li>
                                     @endforeach
                                 </ul>
-                            </li>
-                        </ul> -->
+                            </li> -->
+                        </ul>
                     </li>
 
                     <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
@@ -425,9 +424,8 @@ return request()->routeIs($route) ? 'active' : '';
 
                     <!-- Marketplace -->
                     <li>
-                        <a role="button">
+                        <a href="{{ route('user.products.index') }}">
                             <span><i class="ti ti-shopping-cart"></i> Marketplace</span>
-                            <i class="fas fa-chevron-right submenu-arrow"></i>
                         </a>
 
                         <!-- <ul class="submenu">
@@ -444,17 +442,10 @@ return request()->routeIs($route) ? 'active' : '';
 
                     <!-- Updates -->
                     <li>
-                        <a role="button">
+                        <a href="{{ route('user.announcements') }}">
                             <span><i class="ti ti-bell"></i> Updates</span>
-                            <i class="fas fa-chevron-right submenu-arrow"></i>
                         </a>
 
-                        <!-- <ul class="submenu">
-                            <li><a href="{{ route('user.announcements') }}"><i class="ti ti-megaphone"></i> Announcements</a></li>
-                            <li><a href="{{ route('user.events.index') }}"><i class="ti ti-calendar-event"></i> Events</a></li>
-                            <li><a href="{{ route('user.projects.index') }}"><i class="ti ti-building"></i> Projects</a></li>
-                            <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
-                        </ul> -->
                     </li>
                 </ul>
             </div>

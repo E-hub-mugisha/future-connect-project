@@ -68,7 +68,7 @@
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
-                                            <button type="submit"><em class="icon ni ni-signout"></em><span>Sign
+                                            <button class="btn btn-danger " type="submit"><em class="icon ni ni-signout"></em><span>Sign
                                                     out</span></button>
                                         </form>
                                     </li>

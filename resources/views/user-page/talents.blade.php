@@ -941,56 +941,6 @@ $categories = \App\Models\Category::all();
 
 
 
-
-<div class="container p-4">
-    <section id="tranding">
-        <div class="bubbles">
-            <span></span><span></span><span></span><span></span><span></span>
-        </div>
-
-        <div class="tranding-grid">
-            <!-- Caption Slider -->
-            <div class="swiper tranding-caption-slider" id="captionSwiper">
-                <div class="swiper-wrapper">
-                    @foreach ($featuredTalents as $talent)
-                    <div class="swiper-slide">
-                        <div class="tranding-slide-caption">
-                            <h3 class="text-2xl text-white font-bold mb-2">{{ $talent->name }}</h3>
-                            <p>
-                                Passionate {{ $talent->skill ?? 'creative' }} blending
-                                {{ $talent->category->name ?? 'various disciplines' }} into meaningful art and innovation.
-                            </p>
-                            <a href="{{ route('user.talent.details', $talent->id) }}" class="tranding-line-btn">
-                                <i class="feather-arrow-right"></i> Read More
-                            </a>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Image Slider -->
-            <div class="swiper tranding-image-slider" id="imageSwiper">
-                <div class="swiper-wrapper">
-                    @foreach ($featuredTalents as $talent)
-                    <div class="swiper-slide">
-                        <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/home/banner-image.svg') }}"
-                            alt="{{ $talent->name }}">
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="tranding-slider-control">
-            <div class="swiper-button-prev slider-arrow"><ion-icon name="arrow-back-outline"></ion-icon></div>
-            <div class="swiper-button-next slider-arrow"><ion-icon name="arrow-forward-outline"></ion-icon></div>
-        </div>
-    </section>
-</div>
-
-
 <div class="container" style="margin-top: 4.5rem;">
     <div class="trend-section ">
         <div class="row align-items-center">
@@ -1279,7 +1229,7 @@ $categories = \App\Models\Category::all();
 </style>
 
 <!-- next gen -->
-<div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
+<div class="talent-section-two next-gen-section">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
             <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span

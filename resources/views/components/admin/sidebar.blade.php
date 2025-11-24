@@ -43,11 +43,6 @@ $role = Auth::check() ? Auth::user()->role : null;
                         </a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="/admin/connections" class="nk-menu-link {{ isActiveRoute('admin.connections.*') }}">
-                            <i class="ti ti-user-bolt me-2"></i><span>Connections</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
                         <a href="/admin/users" class="nk-menu-link {{ isActiveRoute('admin.users.*') }}">
                             <i class="ti ti-wallet me-2"></i><span>Users</span>
                         </a>
@@ -78,11 +73,6 @@ $role = Auth::check() ? Auth::user()->role : null;
                         </a> 
                     </li>
                     <li class="nk-menu-item"> 
-                        <a href="/admin/banners" class="nk-menu-link {{ isActiveRoute('admin.banners.*', 'admin/banners*') }}"> 
-                            <i class="ti ti-transition-top me-2"></i> <span>Banners</span> 
-                        </a> 
-                    </li>
-                    <li class="nk-menu-item"> 
                         <a href="/admin/partners" class="nk-menu-link {{ isActiveRoute('admin.partners.*', 'admin/partners*') }}"> 
                             <i class="ti ti-pennant me-2"></i> <span>Partners</span> 
                         </a> 
@@ -90,11 +80,6 @@ $role = Auth::check() ? Auth::user()->role : null;
                     <li class="nk-menu-item"> 
                         <a href="/admin/testimonials" class="nk-menu-link {{ isActiveRoute('admin.testimonials.*', 'admin/testimonials*') }}"> 
                             <i class="ti ti-moneybag me-2"></i> <span>Testimonials</span> 
-                        </a> 
-                    </li>
-                    <li class="nk-menu-item"> 
-                        <a href="/admin/payments" class="nk-menu-link {{ isActiveRoute('admin.payments.*', 'admin/payments*') }}"> 
-                            <i class="ti ti-transition-top me-2"></i> <span>Story Payments</span> 
                         </a> 
                     </li>
                     <li class="nk-menu-item"> 

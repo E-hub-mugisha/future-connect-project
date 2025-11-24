@@ -9,10 +9,13 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Stories Management</h2>
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center gap-2">
 
                     <a href="{{ route('admin.stories.create') }}"
-                        class="btn btn-primary btn-md">Create</a>
+                        class="btn btn-primary rounded-pill btn-md">Create</a>
+                        <a href="/admin/payments" class="btn btn-warning rounded-pill btn-md"> 
+                            <i class="ti ti-transition-top me-2"></i> <span>Story Payments</span> 
+                        </a> 
                 </div>
             </div>
             <div class="card card-bordered card-preview">

@@ -420,7 +420,7 @@ $categories = \App\Models\Category::all();
 <!-- /Trending Categories -->
 
 <!-- next gen -->
-<div class="talent-section-two next-gen-section" style="background: #aac2e1a8;">
+<div class="talent-section-two next-gen-section">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
             <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>verified talents ready for Connection<span

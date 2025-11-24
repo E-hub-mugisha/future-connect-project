@@ -8,11 +8,14 @@
         <div class="nk-content-body">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Talent Management</h2>
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
+                <div class="d-flex justify-content-between align-items-center mb-4 gap-2">
+                    <button type="button" class="btn btn-primary rounded-pill btn-md" data-bs-toggle="modal"
                         data-bs-target="#talentAddModal">
                         Add Talent
                     </button>
+                    <a href="/admin/connections" class="rounded-pill btn-md btn-warning btn">
+                            <i class="ti ti-user-bolt me-2"></i><span>Connections</span>
+                        </a>
                 </div>
             </div>
             <div class="card card-bordered card-preview">
