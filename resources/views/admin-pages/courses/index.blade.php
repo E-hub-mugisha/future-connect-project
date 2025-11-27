@@ -2,10 +2,11 @@
 @section('title', 'Courses')
 
 @section('content')
+
 <div class="container-fluid py-4">
     <div class="nk-content-inner">
         <div class="nk-content-body">
-            
+
             {{-- Header --}}
             <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
                 <div>
@@ -19,106 +20,139 @@
             </div>
 
             {{-- Courses Table --}}
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-4">
-                    <div class="table-responsive">
-                        <table class="datatable-init table table-hover align-middle mb-0">
-                            <thead class="table-light text-nowrap">
-                                <tr>
-                                    <th>Thumbnail</th>
-                                    <th>Title</th>
-                                    <th>Talent</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Level</th>
-                                    <th>Status</th>
-                                    <th>Video</th>
-                                    <th class="text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($courses as $course)
-                                <tr>
-                                    {{-- Thumbnail --}}
-                                    <td>
-                                        @if($course->thumbnail)
-                                            <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}" 
-                                                 class="rounded-3 shadow-sm" width="70" height="50" 
-                                                 style="object-fit: cover;">
-                                        @else
-                                            <span class="text-muted">No Image</span>
-                                        @endif
-                                    </td>
+            <div class="card card-bordered card-preview">
+                <div class="card-inner">
+                    <table class="datatable-init table nowrap">
+                        <thead>
+                            <tr>
+                                <th>Thumbnail</th>
+                                <th>Title</th>
+                                <th>Talent</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Level</th>
+                                <th>Status</th>
+                                <th>Video</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($courses as $course)
+                            <tr>
+                                {{-- Thumbnail --}}
+                                <td>
+                                    @if($course->thumbnail)
+                                    <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}"
+                                        class="rounded-3" width="70" height="50"
+                                        style="object-fit: cover;">
+                                    @else
+                                    <span class="text-muted">No Image</span>
+                                    @endif
+                                </td>
 
-                                    {{-- Title --}}
-                                    <td class="fw-semibold">{{ $course->title }}</td>
+                                {{-- Title --}}
+                                <td class="fw-semibold">{{ $course->title }}</td>
 
-                                    {{-- Talent --}}
-                                    <td>{{ $course->talent->name ?? '-' }}</td>
+                                {{-- Talent --}}
+                                <td>{{ $course->talent->name ?? '-' }}</td>
 
-                                    {{-- Category --}}
-                                    <td>{{ $course->category->name ?? '-' }}</td>
+                                {{-- Category --}}
+                                <td>{{ $course->category->name ?? '-' }}</td>
 
-                                    {{-- Price --}}
-                                    <td>
-                                        @if($course->is_free)
-                                            <span class="badge bg-success-subtle text-success">Free</span>
-                                        @else
-                                            <span>${{ number_format($course->price, 2) }}</span>
-                                        @endif
-                                    </td>
+                                {{-- Price --}}
+                                <td>
+                                    @if($course->is_free)
+                                    <span class="badge bg-success-subtle text-success">Free</span>
+                                    @else
+                                    <span>${{ number_format($course->price, 2) }}</span>
+                                    @endif
+                                </td>
 
-                                    {{-- Level --}}
-                                    <td><span class="badge bg-secondary-subtle text-secondary">{{ $course->level }}</span></td>
+                                {{-- Level --}}
+                                <td><span class="badge bg-secondary-subtle text-secondary">{{ $course->level }}</span></td>
 
-                                    {{-- Status --}}
-                                    <td>
-                                        @if($course->status === 'published')
-                                            <span class="badge bg-success-subtle text-success">Published</span>
-                                        @else
-                                            <span class="badge bg-warning-subtle text-warning">Draft</span>
-                                        @endif
-                                    </td>
+                                {{-- Status --}}
+                                <td>
+                                    @if($course->status === 'published')
+                                    <span class="badge bg-success-subtle text-success">Published</span>
+                                    @else
+                                    <span class="badge bg-warning-subtle text-warning">Draft</span>
+                                    @endif
+                                </td>
 
-                                    {{-- Video Preview --}}
-                                    <td>
-                                        @if($course->video)
-                                            <iframe width="80" height="50" controls muted class="rounded">
-                                                <source src="{{ $course->video }}" type="video/mp4">
-                                            </iframe>
-                                        @else
-                                            <span class="text-muted">No Video</span>
-                                        @endif
-                                    </td>
+                                {{-- Video Preview --}}
+                                <td>
+                                    @if($course->video)
+                                    <iframe width="80" height="50" controls muted class="rounded">
+                                        <source src="{{ $course->video }}" type="video/mp4">
+                                    </iframe>
+                                    @else
+                                    <span class="text-muted">No Video</span>
+                                    @endif
+                                </td>
 
-                                    {{-- Actions --}}
-                                    <td class="text-end">
-                                        <a href="{{ route('admin.courses.show', $course->slug) }}" 
-                                           class="btn btn-sm btn-outline-info rounded-pill px-3 me-2">
-                                            View
-                                        </a>
-                                        <a href="{{ route('admin.courses.edit', $course->id) }}" 
-                                           class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('admin.courses.destroy', $course->id) }}" 
-                                              method="POST" class="d-inline">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" 
-                                                onclick="return confirm('Are you sure you want to delete this course?')" 
-                                                class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div> {{-- /table-responsive --}}
-                </div>
+                                {{-- Actions --}}
+                                <td class="text-end">
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $course->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $course->id }}">
+                                            <li>
+                                                <a href="{{ route('admin.courses.show', $course->slug) }}"
+                                                    class="dropdown-item">
+                                                    View
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('admin.courses.edit', $course->id) }}"
+                                                    class="dropdown-item">
+                                                    Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $course->id }}">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div> {{-- /table-responsive --}}
+
             </div>
         </div>
     </div>
 </div>
+
+@foreach($courses as $course)
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal{{ $course->id }}" tabindex="-1"
+    aria-labelledby="deleteModalLabel{{ $course->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.courses.destroy', $course->id) }}"
+            method="POST" class="modal-content">
+            @csrf
+            @method('DELETE')
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ $course->id }}">
+                    Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this course? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
 @endsection

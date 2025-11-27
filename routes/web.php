@@ -181,7 +181,7 @@ Route::post('/projects/{id}/apply', [UserProjectController::class, 'store'])->na
 Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'storeSponsorship'])
     ->name('diaspora.sponsorship.store')->middleware('auth');
 Route::get('/sponsorship/{sponsorship}/payment/', [UserProjectController::class, 'payment'])
-        ->name('diaspora.sponsorship.payment');
+    ->name('diaspora.sponsorship.payment');
 Route::get('/project/payment/callback', [UserProjectController::class, 'handleCallback'])->name('project.sponsor.callback');
 /*
 |--------------------------------------------------------------------------
@@ -268,7 +268,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Stories
     Route::resource('stories', AdminStoryController::class);
-
+    Route::post('/reviews', [AdminStoryController::class, 'storeComment'])->name('reviews.store');
+    Route::put('/stories/{story}/status', [AdminStoryController::class, 'updateStatus'])
+        ->name('stories.updateStatus');
     // Skills
     Route::resource('skills', AdminSkillController::class);
 
@@ -282,7 +284,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Announcements
     Route::resource('announcements', AdminAnnouncementController::class);
+    Route::put('/announcements/{id}/activate', [AdminAnnouncementController::class, 'activate'])
+        ->name('announcements.activate');
 
+    Route::put('/announcements/{id}/deactivate', [AdminAnnouncementController::class, 'deactivate'])
+        ->name('announcements.deactivate');
     // Partners
     Route::resource('partners', AdminPartnerController::class)->only(['index', 'store', 'update', 'destroy']);
 

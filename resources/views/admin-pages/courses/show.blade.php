@@ -6,11 +6,14 @@
     <div class="nk-content-inner">
         <div class="nk-content-body">
             <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h2 class="fw-bold mb-1">{{ $course->title }}</h2>
-                    <p class="text-muted mb-0">Category: <span class="fw-semibold text-primary">{{ $course->category->name ?? '-' }}</span></p>
-                </div>
+            <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+                <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-info rounded-pill">
+                    <em class="icon ni ni-edit"></em> Edit Course
+                </a>
+                <button class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addLessonModal">Add Lesson</button>
+                <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                    <em class="icon ni ni-chat"></em> Add Review
+                </button>
                 <a href="{{ route('admin.courses.index') }}" class="btn btn-outline-primary rounded-pill">
                     <em class="icon ni ni-arrow-left"></em> Back to Courses
                 </a>
@@ -44,16 +47,17 @@
                 <div class="col-lg-6">
                     <div class="card border-0 shadow-sm rounded-4 p-4">
                         <h3 class="fw-semibold mb-3">{{ $course->title }}</h3>
+                        <p class="text-muted mb-0">Category: <span class="fw-semibold text-primary">{{ $course->category->name ?? '-' }}</span></p>
                         <p class="text-muted">{{ $course->description }}</p>
 
                         <div class="d-flex align-items-center mb-3">
-                            <span class="badge bg-light text-dark me-2 px-3 py-2">{{ ucfirst($course->level ?? 'Beginner') }}</span>
-                            <span class="badge bg-{{ $course->is_free ? 'success' : 'primary' }} px-3 py-2">
+                            <span class="text-light text-dark">{{ ucfirst($course->level ?? 'Beginner') }}</span>
+                            <span class="text-{{ $course->is_free ? 'success' : 'primary' }}">
                                 {{ $course->is_free ? 'Free' : '$' . number_format($course->price, 2) }}
                             </span>
                         </div>
 
-                        <div class="mt-3">
+                        <div class="mt-3 mb-3">
                             <div class="d-flex flex-wrap gap-3">
                                 <div>
                                     <span class="text-muted d-block small">Author</span>
@@ -69,20 +73,22 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mt-4">
-                            <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-dark me-2 mt-4">
-                                <em class="icon ni ni-edit"></em> Edit Course
-                            </a>
-                            <button class="btn btn-success mt-4" data-bs-toggle="modal" data-bs-target="#addLessonModal">Add Lesson</button>
-                            <button class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addReviewModal">
-                                <em class="icon ni ni-chat"></em> Add Review
-                            </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Course Details Section -->
+            <div class="mt-5">
+                <h4 class="fw-bold mb-3">Course Details</h4>
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body">
+                        <p class="text-muted">{{ $course->description }}</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <span class="badge bg-light text-dark">Status: {{ ucfirst($course->status) }}</span>
+                            <span class="badge bg-light text-dark">Created: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</span>
                         </div>
                     </div>
                 </div>
             </div>
-
             {{-- Course Lessons --}}
             <div class="row mt-4">
                 <div class="col-12">
@@ -140,24 +146,8 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Course Details Section -->
-            <div class="mt-5">
-                <h4 class="fw-bold mb-3">Course Details</h4>
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
-                        <p class="text-muted">{{ $course->description }}</p>
-                        <div class="d-flex flex-wrap gap-3">
-                            <span class="badge bg-light text-dark">Status: {{ ucfirst($course->status) }}</span>
-                            <span class="badge bg-light text-dark">Created: {{ $course->created_at->format('d M Y') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-
-
 </div>
 
 {{-- Add Review Modal --}}

@@ -303,21 +303,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-inner card-inner-sm">
-                                    <ul class="btn-toolbar justify-center gx-1">
-                                        <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                    class="icon ni ni-shield-off"></em></a></li>
-                                        <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                    class="icon ni ni-mail"></em></a></li>
-                                        <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                    class="icon ni ni-download-cloud"></em></a></li>
-                                        <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                    class="icon ni ni-bookmark"></em></a></li>
-                                        <li><a href="#"
-                                                class="btn btn-trigger btn-icon text-danger"><em
-                                                    class="icon ni ni-na"></em></a></li>
-                                    </ul>
-                                </div>
                                 <div class="card-inner">
                                     <div class="row text-center">
                                         <div class="col-4">

@@ -111,4 +111,22 @@ class AdminAnnouncementController extends Controller
         Announcement::findOrFail($id)->delete();
         return redirect()->route('admin.announcements.index')->with('success', 'Announcement deleted successfully');
     }
+
+    public function activate($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+        $announcement->is_active = 1;
+        $announcement->save();
+
+        return back()->with('success', 'Announcement activated successfully.');
+    }
+
+    public function deactivate($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+        $announcement->is_active = 0;
+        $announcement->save();
+
+        return back()->with('success', 'Announcement deactivated.');
+    }
 }
