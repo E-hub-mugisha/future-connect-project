@@ -64,44 +64,6 @@
                                     ({{ $talent->feedback->count() }} Feedbacks)</p>
                             </div>
                         </div>
-                        <div class="row gx-3 row-gap-3 statistics">
-                            <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                                <div class="buy-box">
-                                    <i class="ti ti-photo-star text-secondary"></i>
-                                    <p>Total Stories</p>
-                                    <h6>
-                                        {{ $talent->stories->count() }}
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                                <div class="buy-box">
-                                    <i class="ti ti-heart text-purple"></i>
-                                    <p>Total Rating</p>
-                                    <h6>
-                                        {{ number_format($talent->feedback->avg('rating'), 1) }}
-
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                                <div class="buy-box">
-                                    <i class="ti ti-message-chatbot text-indigo"></i>
-                                    <p>Feedbacks</p>
-                                    <h6>
-                                        {{ $talent->feedback->count() }}
-
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-sm-4 col-6">
-                                <div class="buy-box">
-                                    <i class="ti ti-eye text-teal"></i>
-                                    <p>Profile Views</p>
-                                    <h6>1,100</h6>
-                                </div>
-                            </div>
-                        </div>
                         <div class="about-me new-about">
                             <h6>About Me</h6>
                             <p>
@@ -214,7 +176,7 @@
                                 <span class="slide-line"></span>
                             </a>
                             <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}"
-                                class="btn slide-line-btn mb-0">Stories
+                                class="btn slide-line-btn mb-0">My Stories
                                 <span class="slide-line"></span>
                                 <span class="slide-line"></span>
                                 <span class="slide-line"></span>

@@ -49,7 +49,7 @@
 								<i class="ti ti-eye"></i>{{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
 								({{ $course->feedback->count() }} feedback)
 							</li>
-							<li><i class="ti ti-calendar-due"></i>Published On: {{ $course->created_at->format('d M Y') }}</li>
+							<li><i class="ti ti-calendar-due"></i>Published On: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</li>
 							<li><i class="ti ti-map-pin-heart"></i>{{ $course->location ?? 'Kigali, Rwanda' }}</li>
 							<li class="border-0">{{ $course->category->name }}</li>
 						</ul>
@@ -262,7 +262,7 @@
 						<div class="buy-box postLists">
 							<i class="feather-calendar"></i>
 							<p>Published</p>
-							<h6>{{ $course->updated_at->format('M d, Y') }}</h6>
+							<h6>{{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</h6>
 						</div>
 					</div>
 					<div class="col-xl-4 col-lg-6 col-sm-4 col-6">
@@ -318,7 +318,7 @@
 					<ul class="member-info">
 						<li>Category <span>{{ $course->category->name }}</span></li>
 						<li>Language <span>{{ $course->language }}</span></li>
-						<li>Last Update <span>{{ $course->updated_at->format('d M Y') }}</span></li>
+						<li>Last Update <span>{{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</span></li>
 					</ul>
 					<div class="about-me new-about">
 						<h6>About the Author</h6>

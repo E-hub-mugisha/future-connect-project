@@ -43,13 +43,13 @@
                             <div class="banner-search-list">
                                 <div class="input-block">
                                     <label>Category</label>
-                                    <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                    <select class="select">
                                         <option data-select2-id="6">Select</option>
                                         <option>Digital Marketing</option>
                                         <option>Writing</option>
                                         <option>Social Media</option>
-                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                </div>
+                                    </select>
+                                 </div>
                                 <div class="input-block">
                                     <label>Location</label>
                                     <div class="input-locaion">
@@ -72,9 +72,9 @@
                     <div class="popular-search">
                         <h5>Popular Searches : </h5>
                         <ul>
-                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                            <li><a href="#">Online Mockup</a></li>
+                            <li><a href="#">Carpentering</a></li>
+                            <li><a href="#">Event Organiser</a></li>
                         </ul>
                     </div>
                 </div>
