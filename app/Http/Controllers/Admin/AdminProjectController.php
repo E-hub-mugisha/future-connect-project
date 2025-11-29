@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\JobSectionApplication;
 use App\Models\Project;
+use App\Models\ProjectApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -83,5 +85,23 @@ class AdminProjectController extends Controller
         $project->delete();
 
         return redirect()->back()->with('success', 'Project deleted successfully!');
+    }
+    public function accept($id)
+    {
+        $application = ProjectApplication::findOrFail($id);
+        $application->status = 'accepted';
+        $application->save();
+
+        return back()->with('success', 'Application accepted successfully.');
+    }
+
+    public function reject(Request $request, $id)
+    {
+        $application = ProjectApplication::findOrFail($id);
+        $application->status = 'rejected';
+        $application->message = $request->message;
+        $application->save();
+
+        return back()->with('error', 'Application rejected.');
     }
 }

@@ -30,47 +30,6 @@
 
 <div class="page-content content">
 	<div class="container">
-		<!-- Breadcrumb & Course Info -->
-		<div class="postLists breadcrumb-bar breadcrumb-bar-info breadcrumb-info">
-			<div class="container">
-				<div class="row align-items-center">
-					<div class="col-lg-8 col-12 text-start">
-						<nav aria-label="breadcrumb" class="page-breadcrumb">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="{{ route('user.home') }}">Home</a></li>
-								<li class="breadcrumb-item"><a href="{{ route('user.stories') }}">Talent Stories</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Story Detail</li>
-							</ol>
-						</nav>
-						<h2 class="breadcrumb-title">{{ $course->title }}</h2>
-						<ul class="info-links">
-							<li><i class="ti ti-star-filled text-warning"></i></li>
-							<li>
-								<i class="ti ti-eye"></i>{{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
-								({{ $course->feedback->count() }} feedback)
-							</li>
-							<li><i class="ti ti-calendar-due"></i>Published On: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</li>
-							<li><i class="ti ti-map-pin-heart"></i>{{ $course->location ?? 'Kigali, Rwanda' }}</li>
-							<li class="border-0">{{ $course->category->name }}</li>
-						</ul>
-					</div>
-					<div class="col-lg-4 col-12">
-						<ul class="breadcrumb-links service-details">
-							<li class="me-0">
-								<div class="social-links d-flex align-items-center breadcrumb-social justify-content-lg-end">
-									Share
-									<ul class="ms-3">
-										@foreach(['facebook','twitter','instagram','linkedin','whatsapp'] as $social)
-										<li><a href="javascript:void(0);"><i class="fa-brands fa-{{ $social }}"></i></a></li>
-										@endforeach
-									</ul>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
 
 		<div class="row">
 			<!-- Course Details -->
@@ -257,80 +216,215 @@
 
 			<!-- Sidebar -->
 			<div class="col-lg-4 theiaStickySidebar">
-				<div class="row gx-3 row-gap-3 mb-4">
-					<div class="col-xl-4 col-lg-6 col-sm-4 col-6">
-						<div class="buy-box postLists">
-							<i class="feather-calendar"></i>
-							<p>Published</p>
-							<h6>{{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</h6>
+				<div class="service-widget member-widget postLists p-4 shadow-sm rounded-4 bg-white">
+					<div class="course-header shadow-sm rounded-4 p-4 mb-4">
+						<!-- Course Title -->
+						<h2 class="breadcrumb-title fw-bold mb-3">{{ $course->title }}</h2>
+
+						<!-- Course Info -->
+						<ul class="info-links d-flex flex-wrap gap-3 mb-4 list-unstyled p-0">
+							<li class="d-flex align-items-center">
+								<i class="ti ti-star-filled text-warning me-1"></i>
+								{{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
+							</li>
+							<li class="d-flex align-items-center">
+								<i class="ti ti-eye me-1"></i>
+								{{ $course->feedback->count() }} feedback
+							</li>
+							<li class="d-flex align-items-center">
+								<i class="ti ti-calendar-due me-1"></i>
+								Published: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}
+							</li>
+							<li class="d-flex align-items-center">
+								<i class="ti ti-tag me-1"></i>
+								Category: {{ $course->category->name }}
+							</li>
+							<li class="d-flex align-items-center">
+								<i class="feather-heart me-1 text-danger"></i>
+								{{ $course->likes_count ?? 0 }} Likes
+							</li>
+						</ul>
+
+						<!-- Author Info -->
+						<div class="d-flex align-items-center gap-3 mb-3">
+							<div class="user-img flex-shrink-0">
+								<img src="{{ $course->talent->image ? asset('image/talents/'.$course->talent->image) : asset('assets/img/user/profile.jpg') }}"
+									alt="Author" class="rounded-circle shadow-sm" style="width: 70px; height: 70px; object-fit: cover;">
+							</div>
+							<div class="user-info flex-grow-1">
+								<h5 class="mb-1 fw-semibold">
+									{{ $course->talent->name }}
+									<span class="badge bg-success ms-2 py-1 px-2 small">
+										<i class="fa-solid fa-circle fa-xs me-1"></i> {{ ucfirst($course->talent->status) }}
+									</span>
+								</h5>
+								<p class="text-muted mb-0 small">
+									<i class="fa-solid fa-star text-warning me-1"></i>{{ $course->talent->rating }}
+									({{ $course->talent->rating_count }} Ratings)
+								</p>
+							</div>
+						</div>
+
+						<!-- About Author -->
+						<div class="about-me border-top pt-3">
+							<ul class="breadcrumb-links service-details">
+								<li class="me-0">
+									<div class="social-links d-flex align-items-center breadcrumb-social justify-content-lg-start">
+										Share
+										<ul class="ms-3">
+											@foreach(['facebook','twitter','instagram','linkedin','whatsapp'] as $social)
+											<li><a href="javascript:void(0);"><i class="fa-brands fa-{{ $social }}"></i></a></li>
+											@endforeach
+										</ul>
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
-					<div class="col-xl-4 col-lg-6 col-sm-4 col-6">
-						<div class="buy-box postLists">
-							<i class="feather-eye"></i>
-							<p>Total reviews</p>
-							<h6>{{ $course->feedback->count() }}</h6>
-						</div>
+
+					<style>
+						.course-header {
+							background: #fff;
+							transition: all 0.3s ease;
+						}
+
+						.course-header:hover {
+							transform: translateY(-3px);
+							box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+						}
+
+						.info-links li {
+							background: #f7f9fc;
+							border-radius: 0.5rem;
+							padding: 0.5rem 0.75rem;
+							display: flex;
+							align-items: center;
+							font-size: 0.875rem;
+							transition: 0.3s;
+						}
+
+						.info-links li:hover {
+							background: #e6f0ff;
+						}
+
+						.user-img img {
+							border: 2px solid #e6ecf4;
+						}
+
+						.badge {
+							font-size: 0.75rem;
+						}
+					</style>
+
+					<!-- Action Buttons -->
+					<div class="d-flex gap-2 flex-wrap">
+						<a href="{{ route('user.talent.details', $course->talent->id) }}"
+							class="btn btn-outline-primary rounded-pill flex-grow-1 modern-btn">
+							View Author Profile
+						</a>
+
+						@if($course->is_free)
+						<a href="#enrollModal"
+							class="btn btn-primary rounded-pill flex-grow-1 modern-btn"
+							data-bs-toggle="modal">
+							<i class="feather-book-open me-1"></i> Enroll for Free
+						</a>
+						@else
+						<a href="#paymentModal"
+							class="btn btn-primary rounded-pill flex-grow-1 modern-btn"
+							data-bs-toggle="modal">
+							<i class="feather-book-open me-1"></i> Enroll for ${{ number_format($course->price, 2) }}
+						</a>
+						@endif
 					</div>
-					<div class="col-xl-4 col-lg-6 col-sm-4 col-6">
-						<div class="buy-box postLists">
-							<i class="feather-heart"></i>
-							<p>Likes</p>
-							<h6>{{ $course->likes_count ?? 0 }}</h6>
-						</div>
-					</div>
+
+					<style>
+						/* Modern card hover */
+						.postLists {
+							transition: all 0.3s ease;
+						}
+
+						.postLists:hover {
+							transform: translateY(-5px);
+							box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+						}
+
+						/* User image border */
+						.user-img img {
+							border: 2px solid #e6ecf4;
+						}
+
+						/* Badges */
+						.badge {
+							font-size: 0.75rem;
+						}
+
+						/* Modern buttons */
+						.modern-btn {
+							position: relative;
+							overflow: hidden;
+							min-width: 150px;
+							padding: 0.625rem 1.5rem;
+							font-weight: 600;
+							transition: all 0.3s ease;
+							background: linear-gradient(135deg, #6C63FF, #5CC1FF);
+							color: #fff;
+							border: none;
+							box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+						}
+
+						.modern-btn.btn-outline-primary {
+							color: #6C63FF;
+							border: 2px solid #6C63FF;
+							background: transparent;
+						}
+
+						.modern-btn:hover {
+							transform: translateY(-2px);
+							box-shadow: 0 6px 18px rgba(108, 99, 255, 0.4);
+							background-position: right center;
+						}
+
+						.modern-btn i {
+							transition: transform 0.3s ease;
+						}
+
+						.modern-btn:hover i {
+							transform: translateX(3px);
+						}
+
+						/* Responsive: stack buttons on small screens */
+						@media (max-width: 575px) {
+							.modern-btn {
+								flex-grow: 1;
+								text-align: center;
+							}
+						}
+					</style>
+
 				</div>
 
-				<div class="service-widget">
-					<div class="service-amt p-3 price-lvl price-lvl1 bg-light postLists">
-						<h3 class="text-grey">
-							@if($course->is_free)
-							<span class="d-block text-grey"> Access Free </span>
-							@else
-							<span class="d-block text-grey"> Access Price </span>
-							${{ number_format($course->price, 2) }}
-							@endif
-						</h3>
-					</div>
+				<style>
+					.postLists {
+						transition: all 0.3s ease;
+					}
 
-					<a href="#"
-						class="btn btn-primary w-100 mb-0"
-						data-bs-toggle="modal"
-						data-bs-target="{{ $course->is_free ? '#enrollModal' : '#paymentModal' }}">
-						<i class="feather-book-open"></i> Enroll to Full Story
-					</a>
+					.postLists:hover {
+						transform: translateY(-4px);
+						box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+					}
 
-				</div>
+					.user-img img {
+						border: 2px solid #e6ecf4;
+					}
 
-				<div class="service-widget member-widget postLists">
-					<div class="user-details">
-						<div class="user-img users-img">
-							<img src="{{ $course->talent->image ? asset('image/talents/'.$course->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="Author">
-						</div>
-						<div class="user-info">
-							<h5>
-								{{ $course->talent->name }}
-								<span class="badge badge-success"><i class="fa-solid fa-circle"></i> {{ $course->talent->status }}</span>
-							</h5>
-							<p><i class="fa-solid fa-star"></i>{{ $course->talent->rating }} ({{ $course->talent->rating_count }} Ratings)</p>
-						</div>
-					</div>
-					<ul class="member-info">
-						<li>Category <span>{{ $course->category->name }}</span></li>
-						<li>Language <span>{{ $course->language }}</span></li>
-						<li>Last Update <span>{{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</span></li>
-					</ul>
-					<div class="about-me new-about">
-						<h6>About the Author</h6>
-						<p>{{ $course->talent->bio }}</p>
-					</div>
-					<a href="{{ route('user.talent.details', $course->talent->id) }}" class="btn btn-primary mb-0 w-100">Talent Profile</a>
-				</div>
+					.badge {
+						font-size: 0.75rem;
+					}
+				</style>
+
 			</div>
-
-
 		</div>
-
 		<!-- Related Courses -->
 		<div class="related-courses mt-5">
 			<div class="row">

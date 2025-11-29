@@ -34,7 +34,7 @@ $role = Auth::check() ? Auth::user()->role : null;
                     @if( $role === 'admin')
                     <li class="nk-menu-item">
                         <a href="/admin/dashboard" class="nk-menu-link {{ isActiveRoute('admin.dashboard') }}">
-                            <i class="ti ti-layout-grid me-2"></i><span>Admin Dashboard</span>
+                            <i class="ti ti-layout-grid me-2"></i><span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nk-menu-item">

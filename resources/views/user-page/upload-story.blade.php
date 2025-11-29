@@ -1,125 +1,122 @@
 @extends('layouts.guest')
+@section('title', 'Share Your Story')
 @section('content')
 
-<!-- Breadcrumb -->
-<div class="breadcrumb-bar breadcrumb-bar-info">
+<style>
+    .story-card {
+        border-radius: 1.3rem;
+        background: #ffffff;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        transition: .3s ease;
+        border: 1px solid #f0f3f7;
+    }
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <nav aria-label="breadcrumb" class="page-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('user.home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Upload Story</li>
-                    </ol>
-                </nav>
-                <h2 class="breadcrumb-title mb-0">
-                    Share Your Story
-                </h2>
-            </div>
-        </div>
-    </div>
+    .story-card:hover {
+        box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+    }
 
-</div>
-<!-- /Breadcrumb -->
+    .section-heading h5 {
+        font-weight: 700;
+        color: #1a2537;
+    }
 
-<!-- Page Content -->
+    .section-heading p {
+        color: #6c7a8a;
+        margin-top: -3px;
+    }
+
+    .form-wrap label {
+        font-weight: 600;
+        margin-bottom: .3rem;
+        color: #1f2d3d;
+    }
+
+    .form-control, select, textarea {
+        border-radius: 0.7rem !important;
+        border: 1px solid #d8e1eb;
+        box-shadow: none !important;
+        padding: .75rem .9rem;
+    }
+
+    .form-control:focus {
+        border-color: #4b8df7;
+        box-shadow: 0 0 0 2px rgba(75, 141, 247, 0.2) !important;
+    }
+
+    .action-btn {
+        border-radius: 0.8rem;
+        font-size: 1rem;
+        padding: .75rem;
+        font-weight: 600;
+    }
+
+    .subtext {
+        font-size: .85rem;
+        color: #8694a6;
+    }
+</style>
+
 <div class="page-content">
     <div class="container">
 
         <div class="row justify-content-center">
-
             <div class="col-lg-10">
-                <div class="marketing-section gig-post">
-                    <div class="gigs-step position-relative z-1">
-                        <ul>
-                            <li>
-                                <span><img src="{{ asset('assets/img/icons/book-01.svg') }}"
-                                        alt="img"></span>
-                                <p>Step 01</p>
-                                <h6>Write Your Story</h6>
-                            </li>
-                            <li>
-                                <span><img src="{{ asset('assets/img/icons/book-02.svg') }}"
-                                        alt="img"></span>
-                                <p>Step 02</p>
-                                <h6>Upload Media</h6>
-                            </li>
-                            <li>
-                                <span><img src="{{ asset('assets/img/icons/book-03.svg') }}"
-                                        alt="img"></span>
-                                <p>Step 03</p>
-                                <h6>Select Skills</h6>
-                            </li>
-                            <li>
-                                <span><img src="{{ asset('assets/img/icons/book-04.svg') }}"
-                                        alt="img"></span>
-                                <p>Step 04</p>
-                                <h6>Submit for Review</h6>
-                            </li>
-                        </ul>
+
+                <div class="story-card">
+
+                    <!-- Section Title -->
+                    <div class="section-heading mb-4">
+                        <h5>Share Your Story</h5>
+                        <p>Inspire others by telling your journey to success on Future Connect.</p>
                     </div>
 
-                </div>
-            </div>
-
-            <!-- General -->
-            <div class="col-lg-10">
-                <div class="add-property-wrap" style="background: var(--white);">
-                    <div class="property-info">
-                        <h5 class="mb-1">Story Details</h5>
-                        <p>Tell us your inspiring journey to be featured on Future Connect</p>
-                    </div>
-
-                    <form action="{{ route('user.upload-story.store') }}" method="POST"
-                        enctype="multipart/form-data">
+                    <!-- Form -->
+                    <form action="{{ route('user.upload-story.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
+
                         <div class="row">
 
-                            <div class="col-md-12">
+                            <!-- Story Title -->
+                            <div class="col-md-12 mb-3">
                                 <div class="form-wrap">
-                                    <label class="col-form-label">Story Title<span
-                                            class="text-danger ms-1">*</span></label>
-                                    <input type="text" name="title" class="form-control mb-2"
-                                        placeholder="E.g. From Village Roots to Tech Stars"
+                                    <label>Story Title <span class="text-danger">*</span></label>
+                                    <input type="text" name="title" class="form-control"
+                                        placeholder="E.g. From Village Roots to Tech Innovator"
                                         value="{{ old('title') }}" required>
-                                    <span><i class="ti ti-info-circle me-1"></i>Minimum 10 characters</span>
+                                    <span class="subtext"><i class="ti ti-info-circle me-1"></i>Minimum 10 characters</span>
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <!-- Story Description -->
+                            <div class="col-md-12 mb-3">
                                 <div class="form-wrap">
-                                    <label class="col-form-label">Your Story<span
-                                            class="text-danger ms-1">*</span></label>
-                                    <textarea name="description" class="form-control mb-2" rows="6"
-                                        placeholder="Describe your journey, struggles, breakthroughs, and achievements..."
+                                    <label>Your Story <span class="text-danger">*</span></label>
+                                    <textarea name="description" class="form-control" rows="6"
+                                        placeholder="Describe your journey, challenges, turning points, and achievements..."
                                         required>{{ old('description') }}</textarea>
-                                    <span><i class="ti ti-info-circle me-1"></i>Minimum 180 characters</span>
+                                    <span class="subtext"><i class="ti ti-info-circle me-1"></i>Minimum 180 characters</span>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <!-- Skills -->
+                            <div class="col-md-6 mb-3">
                                 <div class="form-wrap">
-                                    <label class="col-form-label">Skills Highlighted</label>
-                                    <div class="input-block input-block-tagsinput mb-1">
-                                        <input type="text" data-role="tagsinput" class="input-tags form-control"
-                                            name="skills" value="{{ old('skills') }}" id="skills">
-                                    </div>
-                                    <span>Enter comma-separated skills</span>
+                                    <label>Skills Highlighted</label>
+                                    <input type="text" data-role="tagsinput" class="form-control"
+                                        name="skills" value="{{ old('skills') }}" id="skills">
+                                    <span class="subtext">Enter comma-separated skills</span>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <!-- Category -->
+                            <div class="col-md-6 mb-3">
                                 <div class="form-wrap">
-                                    <label class="col-form-label">Story Category<span
-                                            class="text-danger ms-1">*</span></label>
+                                    <label>Story Category <span class="text-danger">*</span></label>
                                     <select name="category_id" class="select2 form-control" required>
-                                        <option value="">Select</option>
+                                        <option value="">Select Category</option>
                                         @foreach($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                         @endforeach
@@ -127,41 +124,41 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <!-- Thumbnail -->
+                            <div class="col-md-12 mb-3">
                                 <div class="form-wrap">
-                                    <label class="col-form-label">Upload Photo or Thumbnail</label>
+                                    <label>Upload Thumbnail Image</label>
                                     <input type="file" name="thumbnail" class="form-control">
-                                    <span>Accepted formats: jpg, png (Max size: 50MB)</span>
+                                    <span class="subtext">Formats: jpg, png – Max 50MB</span>
+                                </div>
+                            </div>
+
+                            <!-- Video Link -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-wrap">
+                                    <label>Video Link (Optional)</label>
+                                    <input type="text" name="media" class="form-control"
+                                           placeholder="Paste video link (e.g. YouTube)">
+                                    <span class="subtext">Supported: YouTube, Vimeo, mp4, avi</span>
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Optional Section -->
-                        <div class="col-md-12">
-                            <div class="form-wrap">
-                                <label class="col-form-label">Upload video link</label>
-                                <input type="text" name="media" class="form-control">
-                                <span>Accepted formats: mp4, avi (Max size: 50MB)</span>
-                            </div>
+                        <!-- Submit -->
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary w-100 action-btn">
+                                Submit Your Story
+                            </button>
                         </div>
 
-                        <div class="row">
-
-                            <div class="col-md-12 mt-3">
-                                <button type="submit" class="btn btn-primary w-100">Submit Story</button>
-                            </div>
-                        </div>
                     </form>
                 </div>
-            </div>
-            <!-- /General -->
 
+            </div>
         </div>
 
     </div>
 </div>
-<!-- /Page Content -->
-
 
 @endsection

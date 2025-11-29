@@ -260,15 +260,15 @@
                                                 @foreach($talent->stories as $story)
                                                 <div class="owl-item" style="width: 416px; margin-right: 24px;">
                                                     <div class="gigs-grid">
-                                                        <div class="gigs-img">
-                                                            <div class="img-slider owl-carousel">
+                                                        <div class="gigs-img" style="padding-bottom: 3rem;">
+                                                            <!-- <div class="img-slider owl-carousel">
                                                                 <div class="slide-images">
                                                                     <a href="{{ url('/story-details/' . $story->slug) }}">
                                                                         <img src="{{ asset('images/stories/'.$story->thumbnail) }}" class="img-fluid" alt="Gigs">
                                                                     </a>
                                                                 </div>
 
-                                                            </div>
+                                                            </div> -->
                                                             <div class="card-overlay-badge">
                                                                 <a href="{{ url('/story/category/'.$story->slug) }}">
                                                                     <span class="badge bg-warning">
@@ -618,43 +618,70 @@
 </div>
 
 
+<!-- Support Talent Modal -->
 <div class="modal fade" id="support_talent" tabindex="-1" aria-labelledby="supportTalentLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="supportTalentLabel">Support Talent</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                <h5 class="modal-title" id="supportTalentLabel">Support {{ $talent->name }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <!-- Add form or message here -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body p-4">
+                <p class="text-muted mb-3">Enter your details below to support this talent. Your contribution helps them grow and achieve more!</p>
+
                 <form method="POST" action="{{ route('support.talent') }}">
                     @csrf
                     <input type="hidden" name="talent_id" value="{{ $talent->id }}">
 
                     <div class="mb-3">
-                        <label for="name" class="form-label">Your Name</label>
-                        <input type="text" class="form-control" name="name" id="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Your Email</label>
-                        <input type="email" class="form-control" name="email" id="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="amount" class="form-label">Support Amount</label>
-                        <input type="number" class="form-control" name="amount" id="amount" required>
+                        <label for="name" class="form-label fw-semibold">Your Name</label>
+                        <input type="text" class="form-control rounded-3 border-0 shadow-sm" name="name" id="name" placeholder="John Doe" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="message" class="form-label">Message (Optional)</label>
-                        <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                        <label for="email" class="form-label fw-semibold">Your Email</label>
+                        <input type="email" class="form-control rounded-3 border-0 shadow-sm" name="email" id="email" placeholder="you@example.com" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Send Support</button>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label fw-semibold">Support Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0">$</span>
+                            <input type="number" class="form-control rounded-3 border-0 shadow-sm" name="amount" id="amount" placeholder="50" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-semibold">Message (Optional)</label>
+                        <textarea name="message" id="message" class="form-control rounded-3 border-0 shadow-sm" rows="3" placeholder="Write a short note..."></textarea>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                            <i class="bi bi-heart-fill me-2"></i> Send Support
+                        </button>
+                    </div>
                 </form>
             </div>
+            
         </div>
     </div>
 </div>
+
+<style>
+    /* Optional: hover shadow for modal */
+    #support_talent .modal-content {
+        transition: all 0.3s ease;
+    }
+    #support_talent .modal-content:hover {
+        box-shadow: 0 0 30px rgba(0,0,0,0.1);
+    }
+</style>
+
 
 <script>
     $(document).ready(function() {

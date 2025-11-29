@@ -352,6 +352,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/projects/{id}/verify', [AdminProjectController::class, 'verify'])->name('projects.verify');
     Route::delete('/projects/{id}', [AdminProjectController::class, 'destroy'])->name('projects.destroy');
 
+    Route::post('/applications/{id}/accept', [AdminProjectController::class, 'accept'])
+        ->name('applications.accept');
+
+    Route::post('/applications/{id}/reject', [AdminProjectController::class, 'reject'])
+        ->name('applications.reject');
     // ==========================
     // 🎟 EVENTS MANAGEMENT
     // ==========================

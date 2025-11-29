@@ -51,10 +51,21 @@
                                 </td>
 
                                 {{-- Title --}}
-                                <td class="fw-semibold">{{ $course->title }}</td>
+                                <td class="fw-semibold">
+                                    <span class="fw-bold">{{ $course->title }}</span><br>
+                                    <small class="text-muted">
+                                        {{ \Illuminate\Support\Str::limit($course->description, 40) }}
+                                    </small>
+                                </td>
 
                                 {{-- Talent --}}
-                                <td>{{ $course->talent->name ?? '-' }}</td>
+                                <td>
+                                    <div class="fw-bold text-dark">
+                                        {{ $course->talent->name }}
+                                    </div>
+                                    <div class="small text-muted mt-1">
+                                        {{ $course->talent->email }}
+                                    </div>
 
                                 {{-- Category --}}
                                 <td>{{ $course->category->name ?? '-' }}</td>
@@ -62,21 +73,21 @@
                                 {{-- Price --}}
                                 <td>
                                     @if($course->is_free)
-                                    <span class="badge bg-success-subtle text-success">Free</span>
+                                    <span class="badge bg-success text-white">Free</span>
                                     @else
                                     <span>${{ number_format($course->price, 2) }}</span>
                                     @endif
                                 </td>
 
                                 {{-- Level --}}
-                                <td><span class="badge bg-secondary-subtle text-secondary">{{ $course->level }}</span></td>
+                                <td><span class="badge bg-secondary text-white">{{ $course->level }}</span></td>
 
                                 {{-- Status --}}
                                 <td>
                                     @if($course->status === 'published')
-                                    <span class="badge bg-success-subtle text-success">Published</span>
+                                    <span class="badge bg-success text-white">Published</span>
                                     @else
-                                    <span class="badge bg-warning-subtle text-warning">Draft</span>
+                                    <span class="badge bg-warning text-white">Draft</span>
                                     @endif
                                 </td>
 

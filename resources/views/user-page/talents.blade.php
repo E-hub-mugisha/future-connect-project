@@ -289,9 +289,9 @@ $categories = \App\Models\Category::all();
             <div class="talent-section-two next-gen-section">
                 <div class="container">
                     <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-                        <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span
+                        <h2 class="mb-2" style="color: #f9f9f9;"><span class="title-bg"></span>Meet the Next Generation of talents<span
                                 class="title-bg2"></span></h2>
-                        <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+                        <p style="color: #f9f9f9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
                     </div>
                     <div class="row seller-list postLists cards">
                         <!-- Filter -->
@@ -735,76 +735,20 @@ $categories = \App\Models\Category::all();
                         <p>Unlock a world of opportunities and take control of your future</p>
                     </div>
                     <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
+                        @foreach($categories as $cat)
                         <div class="col d-flex">
                             <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
                                 <span><i class="ti ti-speakerphone"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Digital Marketing</a></h6>
-                                <p>100 Service</p>
+                                <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+                                @if(isset($cat->talents_count))
+                                <p>{{ $cat->talents_count }} talents</p>
+                                @else
+                                <p>0 talents</p>
+                                @endif
                             </div>
                         </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-code-circle"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Programming &amp; Tech</a></h6>
-                                <p>120 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-pencil-star"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Digital Marketing</a></h6>
-                                <p>130 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-camera-heart"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Photography</a></h6>
-                                <p>68 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-robot"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Artificial Intelligence</a></h6>
-                                <p>148 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-music"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Music &amp; Audio</a></h6>
-                                <p>90 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-file-typography"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Design</a></h6>
-                                <p>63 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-briefcase"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Business</a></h6>
-                                <p>145 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-camera-heart"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Marketing &amp; Sales</a></h6>
-                                <p>90 Service</p>
-                            </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-social"></i></span>
-                                <h6 class="mb-1"><a href="javascript:void(0);">Social Media</a></h6>
-                                <p>125 Service</p>
-                            </div>
-                        </div>
+                        @endforeach
+
                     </div>
                 </div>
             </div>
@@ -1074,9 +1018,9 @@ $categories = \App\Models\Category::all();
 
     .postLists.cards .post-item.m-card .img {
         position: relative;
-        display: block;
-        margin-top: -1.75em;
-        width: calc(100% - .85em);
+        /* display: block; */
+        /* margin-top: -1.75em; */
+        /* width: calc(100% - .85em); */
         /* padding-top: calc(89.45% - .67em); */
         background-position: center;
         background-size: cover;
@@ -1185,25 +1129,7 @@ $categories = \App\Models\Category::all();
         z-index: 10;
     }
 
-    .card.post-item.m-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-        position: relative;
-        display: block;
-        /* margin-top: -1.75em; */
-        width: calc(100% - .85em);
-        /* padding-top: calc(28.45% - 1.67em); */
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        border-radius: .75em;
-        box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        -webkit-box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        transform: translateZ(0);
-        transition: .25s;
-        margin-bottom: 1em;
-    }
+
 
     .talent-hover-box {
         display: inline-block;
