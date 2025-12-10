@@ -1,9 +1,8 @@
 @extends('layouts.guest')
-@section('title', 'Browse Marketplace Products')
+@section('title', 'Explore our Marketplace')
 @section('content')
 
 <style>
-
     .postLists {
         display: flex;
         /* align-items: center; */
@@ -20,68 +19,123 @@
     }
 </style>
 
+<style>
+    /* --- SWITCH-STYLE NAV PILLS --- */
+    .nav-pills {
+        display: inline-flex;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 50px;
+        padding: 5px;
+        margin-bottom: 2rem;
+        justify-content: center;
+    }
+
+    .nav-pills .nav-link {
+        border-radius: 50px;
+        color: #fff;
+        font-weight: 500;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #0d6efd;
+        color: #fff;
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+    }
+
+    .nav-pills .nav-link:not(.active):hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+
+    .hero-tab {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 2rem;
+        color: #f1f1f1;
+    }
+
+    .hero-tab h4 {
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .hero-tab p {
+        font-size: 1rem;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .btn-light {
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+    }
+
+    #market-section {
+        position: relative;
+        /* background: #319bf9; */
+        color: #f1f1f1;
+        padding: 80px 0 56px;
+        z-index: 1;
+    }
+
+    #market-section .provide-box {
+        background: #d4e6f526;
+        backdrop-filter: blur(15px) saturate(180%);
+    }
+</style>
+
 <section class="hero-section">
-    <div class="banner-bg-imgs">
-        <img src="{{ asset('assets/img/bg/banner-bg-01.png') }}" class="banner-bg-one" alt="img">
-        <img src="{{ asset('assets/img/bg/banner-bg-02.png') }}" class="banner-bg-two" alt="img">
-        <!-- <img src="{{ asset('assets/img/bg/banner-bg-04.png') }}" class="banner-bg-four" alt="img"> -->
-    </div>
     <div class="container p-4">
         <div class="row">
             <div class="col-lg-8">
                 <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                     <div class="banner-head">
-                        <h1 class="mb-2">Future Connector Shop</h1>
+                        <h1 class="mb-2">Explore our marketplace</h1>
                         <p class="d-inline-flex">Find everything you need from trusted local and global sellers.</p>
                     </div>
                     <div class="banner-form">
-                        <form action="#">
-                            <div class="banner-search-list">
-                                <div class="input-block">
-                                    <label>Category</label>
-                                    <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
-                                        <option data-select2-id="6">Select</option>
-                                        <option>Digital Marketing</option>
-                                        <option>Writing</option>
-                                        <option>Social Media</option>
-                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                </div>
-                                <div class="input-block">
-                                    <label>Location</label>
-                                    <div class="input-locaion">
-                                        <input type="text" class="form-control" placeholder="Miami, USA">
-                                        <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
-                                    </div>
-                                </div>
-                                <div class="input-block border-0">
-                                    <label>Keyword</label>
-                                    <input type="text" class="form-control" placeholder="Need Graphic Designer">
-                                </div>
-                            </div>
-                            <div class="input-block-btn">
-                                <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
-                                    <i class="ti ti-search"></i> Search
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="popular-search">
-                        <h5>Popular Searches : </h5>
-                        <ul>
-                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                        <!-- Tabs Navigation -->
+                        <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Explore Marketplace</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#seller" type="button" role="tab">Became a seller</button>
+                            </li>
                         </ul>
+                        <!-- Tabs Content -->
+                        <div class="tab-content" id="heroTabsContent">
+                            <!-- Skills Marketplace -->
+                            <div class="tab-pane hero-tab fade show active postLists" id="marketplace" role="tabpanel">
+                                <h4 class="text-black">Explore our marketplace</h4>
+                                <form action="#">
+                                    <div class="banner-search-list">
+                                        <div class="input-block border-0">
+                                            <input type="text" class="form-control" placeholder="Eg: Smartphone X200, Wireless Headphones, Smartwatch Pro">
+                                        </div>
+                                    </div>
+                                    <div class="input-block-btn">
+                                        <button class="btn btn-lg btn-primary d-inline-flex align-items-center rounded-pill" type="submit">
+                                            <i class="ti ti-search"></i> Search Products
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- seller Center -->
+                            <div class="tab-pane hero-tab fade postLists" id="seller" role="tabpanel">
+                                <h4 class="text-black">Unlock New Opportunities</h4>
+                                <p class="text-black">
+                                    Join the Future Connect Shop and start selling products that empower our members.
+                                </p>
+                                <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-outline-primary rounded-pill">Apply as Seller</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="banner-img">
-                    <!-- <div class="banner-img-right">
-                        <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
-                    </div> -->
-                    <img src="{{ asset('assets/img/bg/banner-small-bg-01.svg') }}" class="banner-small-bg-one" alt="img">
-                    <img src="{{ asset('assets/img/bg/banner-small-bg-02.png') }}" class="banner-small-bg-two" alt="img">
                 </div>
             </div>
         </div>
@@ -403,6 +457,77 @@
         </div>
         <!-- /Service -->
 
+    </div>
+</div>
+
+<!-- Seller Application Modal -->
+<div class="modal fade" id="applySellerModal" tabindex="-1" aria-labelledby="applySellerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <form action="{{ route('seller.store') }}" method="POST" class="p-2">
+                @csrf
+
+                <!-- Header -->
+                <div class="modal-header border-0 bg-gradient text-white"
+                    style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                    <h5 class="modal-title fw-bold" id="applySellerModalLabel">
+                        🌟 Apply to Become a Seller
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body py-4 px-3">
+                    <p class="text-muted mb-4">
+                        Join the <strong>Future Connect Shop</strong> and start selling products that empower our members.
+                    </p>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Company Name</label>
+                            <input type="text" name="company_name" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                placeholder="e.g. Creative Minds Ltd" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                placeholder="e.g. example@domain.com" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Phone</label>
+                            <input type="text" name="phone" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                placeholder="+250 700 123 456">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Address</label>
+                            <input type="text" name="address" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                placeholder="e.g. Kigali, Rwanda">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Company Description</label>
+                            <textarea name="description" rows="3"
+                                class="form-control form-control-lg rounded-3 border-0 shadow-sm"
+                                placeholder="Tell us more about your company, products, and goals..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
+                    <button type="button" class="btn btn-light border rounded-3 px-4 py-2 shadow-sm" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">
+                        Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
