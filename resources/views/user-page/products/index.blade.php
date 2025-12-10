@@ -33,10 +33,11 @@
 
     .nav-pills .nav-link {
         border-radius: 50px;
-        color: #fff;
+        color: #0d6efd;
         font-weight: 500;
         padding: 0.6rem 1.5rem;
         transition: all 0.3s ease;
+        border: 2px solid #0d6efd;
     }
 
     .nav-pills .nav-link.active {

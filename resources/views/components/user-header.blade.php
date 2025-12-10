@@ -434,12 +434,6 @@ return request()->routeIs($route) ? 'active' : '';
                         </ul> -->
                     </li>
 
-                    <li>
-                        <a href="{{ route('talent.connections-room') }}">
-                            <i class="ti ti-message-dots"></i> Diaspora Connect
-                        </a>
-                    </li>
-
                     <!-- Updates -->
                     <li>
                         <a href="{{ route('user.announcements') }}">

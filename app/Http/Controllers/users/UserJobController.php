@@ -7,6 +7,7 @@ use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobSection;
 use App\Models\JobSectionApplication;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +23,9 @@ class UserJobController extends Controller
         }
 
         $jobs = $query->latest()->paginate(10);
-        return view('user-page.jobs.index', compact('jobs'));
+
+        $projects = Project::latest()->take(5)->get();
+        return view('user-page.jobs.index', compact('jobs', 'projects'));
     }
 
     public function show($id)

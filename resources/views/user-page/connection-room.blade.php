@@ -181,11 +181,6 @@ $categories = \App\Models\Category::all();
 </style>
 
 <section class="hero-section">
-    <div class="banner-bg-imgs">
-        <img src="{{ asset('assets/img/bg/banner-bg-01.png') }}" class="banner-bg-one" alt="img">
-        <img src="{{ asset('assets/img/bg/banner-bg-02.png') }}" class="banner-bg-two" alt="img">
-        <!-- <img src="{{ asset('assets/img/bg/banner-bg-04.png') }}" class="banner-bg-four" alt="img"> -->
-    </div>
     <div class="container p-4">
         <div class="row">
             <div class="col-lg-8">
@@ -194,54 +189,24 @@ $categories = \App\Models\Category::all();
                         <h1 class="mb-2">Networking Hub – Connect with Talents & Opportunities</h1>
                         <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
                     </div>
-                    <div class="banner-form">
-                        <form action="#">
-                            <div class="banner-search-list">
-                                <div class="input-block">
-                                    <label>Category</label>
-                                    <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
-                                        <option data-select2-id="6">Select</option>
-                                        <option>Digital Marketing</option>
-                                        <option>Writing</option>
-                                        <option>Social Media</option>
-                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                </div>
-                                <div class="input-block">
-                                    <label>Location</label>
-                                    <div class="input-locaion">
-                                        <input type="text" class="form-control" placeholder="Miami, USA">
-                                        <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
-                                    </div>
-                                </div>
-                                <div class="input-block border-0">
-                                    <label>Keyword</label>
-                                    <input type="text" class="form-control" placeholder="Need Graphic Designer">
-                                </div>
-                            </div>
-                            <div class="input-block-btn">
-                                <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
-                                    <i class="ti ti-search"></i> Search
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    <a href="#" class="btn btn-lg btn-primary rounded-pill mb-3 d-inline-flex align-items-center">
+                        Explore Talents
+                    </a>
                     <div class="popular-search">
                         <h5>Popular Searches : </h5>
                         <ul>
-                            <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                            <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                            <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                            @foreach($categories as $cat)
+                            <li><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="banner-img">
-                    <!-- <div class="banner-img-right">
+                    <div class="banner-img-right">
                         <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
-                    </div> -->
-                    <img src="{{ asset('assets/img/bg/banner-small-bg-01.svg') }}" class="banner-small-bg-one" alt="img">
-                    <img src="{{ asset('assets/img/bg/banner-small-bg-02.png') }}" class="banner-small-bg-two" alt="img">
+                    </div>
                 </div>
             </div>
         </div>
