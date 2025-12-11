@@ -50,10 +50,11 @@ class User extends Authenticatable
             'is_verified' => 'boolean',
         ];
     }
-    public function talents()
-    {
-        return $this->hasMany(Talent::class);
-    }
+    public function talent()
+{
+    return $this->hasOne(Talent::class);
+}
+
 
     public function payments()
     {

@@ -3,17 +3,17 @@
 @section('content')
 
 <style>
-	.postLists {
-		display: flex;
-		flex-direction: column;
-		border: 1px solid #fff;
-		border-radius: 1em;
-		background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-		box-shadow: 0 1em 1em #1f2d3d26;
-		text-shadow: 0 1px #fff;
-		transition: .25s;
-		margin-bottom: 1.5rem;
-	}
+    .postLists {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #fff;
+        border-radius: 1em;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        box-shadow: 0 1em 1em #1f2d3d26;
+        text-shadow: 0 1px #fff;
+        transition: .25s;
+        margin-bottom: 1.5rem;
+    }
 </style>
 
 <div class="page-content" style="transform: none;">
@@ -31,12 +31,12 @@
                         <div class="blog-details">
                             <div class="blog-detail-img">
                                 <!-- <img src="{{ asset('assets/img/blog/blog-large-01.jpg') }}" class="img-fluid" alt="img"> -->
-                                 <h2 class="section-title mb-3">{{ $job->title }}</h2>
+                                <h2 class="section-title mb-3">{{ $job->title }}</h2>
                             </div>
                             <div class="blog-content border-bottom d-flex align-items-center justify-content-between pb-4 mb-4">
                                 <div class="user-info">
                                     <div class="d-flex align-items-center">
-                                        
+
                                         <p class="me-3"><a href="javascript:void(0);">{{ $job->company->name }}</a></p>
                                         <span class="d-flex align-items-center me-3"><i class="feather-calendar me-1"></i>Jan 20, 2025</span>
                                         <span class="d-flex align-items-center"><i class="feather-message-square me-1"></i>{{ $job->location ?? 'Remote' }}</span>
@@ -119,23 +119,14 @@
                             </div>
                             <div class="card-body">
                                 <ul class="categories">
-                                    <li><a href="categories.html">Programming &amp; Coding <span>05</span></a></li>
-                                    <li><a href="categories.html">Data Science &amp; Analysis <span>08</span></a></li>
-                                    <li><a href="categories.html">Databases <span>10</span></a></li>
-                                    <li><a href="categories.html">Mobile App Development <span>05</span></a></li>
-                                    <li class="mb-0">
-                                        <div class="view-content">
-                                            <div class="viewall-one" style="display: none;">
-                                                <ul>
-                                                    <li><a href="categories.html">Digital Marketing <span>01</span></a></li>
-                                                    <li><a href="categories.html">Future trends <span>10</span></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="view-all">
-                                                <a href="javascript:void(0);" class="viewall-button-one">More 20+ Categories</a>
-                                            </div>
-                                        </div>
+                                    @foreach($categories as $cat)
+                                    <li>
+                                        <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['category' => $cat->id])) }}"
+                                            class="{{ request('category') == $cat->id ? 'active' : '' }}">
+                                            {{ $cat->name }} ({{ $cat->job_sections_count }})
+                                        </a>
                                     </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -210,10 +201,11 @@
 
 <div class="modal fade" id="jobModal" tabindex="-1" aria-labelledby="jobModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
             {{-- Modal Header --}}
-            <div class="modal-header bg-gradient bg-primary text-white rounded-top-4">
+            <div class="modal-header border-0 bg-gradient text-white"
+                    style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
                 <h5 class="modal-title fw-bold" id="jobModalLabel{{ $job->id }}">
                     <i class="bi bi-job-detailed me-2"></i> Apply for this job
                 </h5>
@@ -226,13 +218,13 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Cover Letter</label>
-                        <textarea name="cover_letter" class="form-control" rows="4">{{ old('cover_letter') }}</textarea>
+                        <textarea name="cover_letter" class="form-control form-control-lg rounded-3 border-0 shadow-sm" rows="4">{{ old('cover_letter') }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Resume (PDF/DOC)</label>
-                        <input type="file" name="resume" class="form-control">
+                        <input type="file" name="resume" class="form-control form-control-lg rounded-3 border-0 shadow-sm">
                     </div>
-                    <button class="btn btn-success rounded-pill w-100">Submit Application</button>
+                    <button class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">Submit Application</button>
                 </form>
             </div>
 

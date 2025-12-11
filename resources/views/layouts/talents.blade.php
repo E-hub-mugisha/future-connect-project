@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Mirrored from demo.bootstrapdash.com/azia/src/template/dashboard-one.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Dec 2025 17:11:07 GMT -->
+
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90680653-2"></script>
@@ -19,59 +21,51 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Twitter -->
-    <!-- <meta name="twitter:site" content="@bootstrapdash">
-    <meta name="twitter:creator" content="@bootstrapdash">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Azia">
-    <meta name="twitter:description" content="Responsive Bootstrap 4 Dashboard Template">
-    <meta name="twitter:image" content="https://www.bootstrapdash.com/azia/img/azia-social.png"> -->
-
-    <!-- Facebook -->
-    <!-- <meta property="og:url" content="https://www.bootstrapdash.com/azia">
-    <meta property="og:title" content="Azia">
-    <meta property="og:description" content="Responsive Bootstrap 4 Dashboard Template">
-
-    <meta property="og:image" content="https://www.bootstrapdash.com/azia/img/azia-social.png">
-    <meta property="og:image:secure_url" content="https://www.bootstrapdash.com/azia/img/azia-social.png">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="600"> -->
 
     <!-- Meta -->
-    <meta name="description" content="Responsive Bootstrap 4 Dashboard Template">
+    <meta name="description" content="Responsive Bootstrap 5 Dashboard Template">
     <meta name="author" content="BootstrapDash">
 
-    <title>Azia Responsive Bootstrap 4 Dashboard Template</title>
+    <title>@yield('title') | Talent Dashboard</title>
 
     <!-- vendor css -->
-    <link href="../lib/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="../lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-    <link href="../lib/typicons.font/typicons.css" rel="stylesheet">
-    <link href="../lib/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
-
+    <link href="{{ asset('assets/talents/src/lib/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/talents/src/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/talents/src/lib/typicons.font/typicons.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/talents/src/lib/flag-icon-css/css/flag-icon.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/talents/src/lib/datatables.net-dt/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/talents/src/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <!-- azia CSS -->
-    <link rel="stylesheet" href="../css/azia.css">
+    <link rel="stylesheet" href="{{ asset('assets/talents/src/css/azia.css') }}">
 
 </head>
 
 <body>
 
-    @yield('content')
+    @include('talent-pages.header')
 
+    <div class="az-content az-content-dashboard">
+        @yield('content')
+    </div>
 
-    <script src="../lib/jquery/jquery.min.js"></script>
-    <script src="../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../lib/ionicons/ionicons.js"></script>
-    <script src="../lib/jquery.flot/jquery.flot.js"></script>
-    <script src="../lib/jquery.flot/jquery.flot.resize.js"></script>
-    <script src="../lib/chart.js/Chart.bundle.min.js"></script>
-    <script src="../lib/peity/jquery.peity.min.js"></script>
+    @include('talent-pages.footer')
+    <script src="{{ asset('assets/talents/src/lib/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/lib/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/lib/ionicons/ionicons.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/lib/jquery.flot/jquery.flot.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/lib/jquery.flot/jquery.flot.resize.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/lib/chart.js/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/lib/peity/jquery.peity.min.js') }}"></script>
 
-    <script src="../js/azia.js"></script>
-    <script src="../js/chart.flot.sampledata.js"></script>
-    <script src="../js/dashboard.sampledata.js"></script>
-    <script src="../js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="{{ asset('assets/talents/src/js/jquery.cookie.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/talents/src/js/azia.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/js/chart.flot.sampledata.js') }}"></script>
+    <script src="{{ asset('assets/talents/src/js/dashboard.sampledata.js') }}"></script>
+
+    <script src="{{ asset('assets/talents/src/lib/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ asset('assets/talents/src/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
+    <script src="{{ asset('assets/talents/src/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{ asset('assets/talents/src/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
     <script>
         $(function() {
             'use strict'
@@ -239,6 +233,9 @@
                     },
                     scales: {
                         yAxes: [{
+                            gridLines: {
+                                display: false
+                            },
                             display: false,
                             ticks: {
                                 beginAtZero: true,
@@ -247,6 +244,10 @@
                             }
                         }],
                         xAxes: [{
+                            gridLines: {
+                                display: false
+                            },
+                            display: false,
                             barPercentage: 0.6,
                             gridLines: {
                                 color: 'rgba(0,0,0,0.08)'
@@ -288,6 +289,35 @@
                 type: 'doughnut',
                 data: datapie,
                 options: optionpie
+            });
+
+        });
+    </script>
+
+    <script>
+        $(function() {
+            'use strict'
+
+            $('#example1').DataTable({
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: '_MENU_ items/page',
+                }
+            });
+
+            $('#example2').DataTable({
+                responsive: true,
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: '_MENU_ items/page',
+                }
+            });
+
+            // Select2
+            $('.dataTables_length select').select2({
+                minimumResultsForSearch: Infinity
             });
 
         });

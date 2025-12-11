@@ -654,7 +654,7 @@ return request()->routeIs($route) ? 'active' : '';
 
                 <!-- Footer -->
                 <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
-                    <button type="button" class="btn btn-light border rounded-3 px-4 py-2 shadow-sm" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-primary border rounded-3 px-4 py-2 shadow-sm" data-bs-dismiss="modal">
                         Cancel
                     </button>
                     <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">

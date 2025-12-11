@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Talent;
 
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
 class TalentDashboardController extends Controller
@@ -21,5 +22,11 @@ class TalentDashboardController extends Controller
         $announcements = Announcement::latest()->take(5)->get();
         $payments = \App\Models\StoryPayment::latest()->take(5)->get();
         return view('talent-pages.dashboard.index', compact('totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents','announcements','payments'));
+    }
+
+    public function testimonials()
+    {
+        $testimonials = Testimonial::all();
+        return view('talent-pages.testimonials.index', compact('testimonials'));
     }
 }

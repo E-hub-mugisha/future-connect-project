@@ -1,8 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.talents')
+@section('title', 'Testimonials')
 @section('content')
 
-<div class="page-wrapper">
-    <div class="page-content content pb-0 bg-light">
+<div class="container">
+    <div class="az-content-body pd-lg-l-40 d-flex flex-column">
 
         <div class="content">
             <div class="main-title mb-4">
@@ -104,21 +105,7 @@
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Talent</label>
-                                <select name="talent_id" class="form-select" required>
-                                    <option value="">Select Talent</option>
-                                    @foreach($talents as $talent)
-                                    <option value="{{ $talent->id }}"
-                                        {{ old('talent_id', $testimonial->talent_id) == $talent->id ? 'selected' : '' }}>
-                                        {{ $talent->name }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                                @error('talent_id')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+                            
                             <div class="mb-3">
                                 <label class="form-label">Content</label>
                                 <textarea name="content" class="form-control" required>{{ old('content', $testimonial->content) }}</textarea>
@@ -171,21 +158,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Talent</label>
-                                <select name="talent_id" class="form-select" required>
-                                    <option value="">Select Talent</option>
-                                    @foreach($talents as $talent)
-                                    <option value="{{ $talent->id }}"
-                                        {{ old('talent_id') == $talent->id ? 'selected' : '' }}>
-                                        {{ $talent->name }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                                @error('talent_id')
-                                <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+                            
 
                             <div class="mb-3">
                                 <label class="form-label">Content</label>

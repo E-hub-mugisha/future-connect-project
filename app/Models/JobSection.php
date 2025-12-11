@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobSection extends Model
 {
-    protected $fillable = ['title', 'description', 'location', 'type', 'experience_level', 'salary_range', 'skills', 'company_id','category_id'];
+    protected $fillable = ['title', 'description', 'location', 'type', 'experience_level', 'salary_range', 'skills', 'company_id', 'category_id'];
 
     public function company()
     {

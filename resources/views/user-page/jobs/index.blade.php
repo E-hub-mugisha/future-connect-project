@@ -290,7 +290,7 @@
                             <div class="carousel-item active">
                                 <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                                     <div class="banner-head mt-4">
-                                        <h1 class="mb-2 text-white">{{ $jobs->total() }}+ Available Jobs</h1>
+                                        <h1 class="mb-2 text-white">Explore {{ $jobs->total() }}+ Available work or gigs</h1>
                                         <p class="d-inline-flex text-white">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
                                     </div>
                                     <div class="banner-form">
@@ -300,7 +300,7 @@
                                                 <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Browse Jobs</button>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#opportunities" type="button" role="tab">Account</button>
+                                                <button class="nav-link" id="gig-tab" data-bs-toggle="pill" data-bs-target="#gig" type="button" role="tab">Post a Gig</button>
                                             </li>
                                         </ul>
 
@@ -308,31 +308,20 @@
                                         <div class="tab-content" id="heroTabsContent">
                                             <!-- Skills Marketplace -->
                                             <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                                <h4 class="text-white">Promote Your Skills</h4>
+                                                <h4 class="text-white">Find Work Today!</h4>
                                                 <p class="text-white">
-                                                    Stand out! Boost your profile and reach 3× more employers.<br>
-                                                    Get verified and feature your story on our homepage.
+                                                    Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
                                                 </p>
-                                                <a href="#skills" class="btn btn-light">Explore Marketplace</a>
+                                                <a href="#skills" class="btn btn-light">Explore Gigs</a>
                                             </div>
 
-                                            <!-- Opportunities Center -->
-                                            <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
-                                                <h4 class="text-white">Unlock New Opportunities</h4>
+                                            <!-- gig Center -->
+                                            <div class="tab-pane hero-tab fade" id="gig" role="tabpanel">
+                                                <h4 class="text-white">Showcase Your Skills & Find Work Today!</h4>
                                                 <p class="text-white">
-                                                    Discover tailored job listings, collaboration projects, and freelance gigs.<br>
-                                                    Set up alerts to never miss a chance to grow your career.
+                                                    Have a skill or service to offer? Share it with our community and get hired fast!
                                                 </p>
-                                                <a href="#opportunities" class="btn btn-light">Start Exploring</a>
-                                            </div>
-                                            <!-- Connection Room -->
-                                            <div class="tab-pane hero-tab fade" id="connection" role="tabpanel">
-                                                <h4 class="text-white">Expand Your Network</h4>
-                                                <p class="text-white">
-                                                    Connect with industry professionals, mentors, and peers.<br>
-                                                    Join groups, attend virtual events, and build relationships that matter.
-                                                </p>
-                                                <a href="#connections" class="btn btn-light">Join the Community</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Create Gig Now</a>
                                             </div>
                                         </div>
                                     </div>
@@ -353,7 +342,7 @@
                                                 <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">View Categories</button>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#opportunities" type="button" role="tab">Account</button>
+                                                <button class="nav-link" id="accounts-tab" data-bs-toggle="pill" data-bs-target="#accounts" type="button" role="tab">Account</button>
                                             </li>
                                         </ul>
 
@@ -370,22 +359,13 @@
                                             </div>
 
                                             <!-- Opportunities Center -->
-                                            <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
+                                            <div class="tab-pane hero-tab fade" id="accounts" role="tabpanel">
                                                 <h4 class="text-white">Unlock New Opportunities</h4>
                                                 <p class="text-white">
                                                     Discover tailored job listings, collaboration projects, and freelance gigs.<br>
                                                     Set up alerts to never miss a chance to grow your career.
                                                 </p>
                                                 <a href="#opportunities" class="btn btn-light">Start Exploring</a>
-                                            </div>
-                                            <!-- Connection Room -->
-                                            <div class="tab-pane hero-tab fade" id="connection" role="tabpanel">
-                                                <h4 class="text-white">Expand Your Network</h4>
-                                                <p class="text-white">
-                                                    Connect with industry professionals, mentors, and peers.<br>
-                                                    Join groups, attend virtual events, and build relationships that matter.
-                                                </p>
-                                                <a href="#connections" class="btn btn-light">Join the Community</a>
                                             </div>
                                         </div>
                                     </div>
@@ -609,6 +589,7 @@
                                                 </a>
                                             </li>
                                             @endforeach
+
                                         </ul>
 
                                     </div>
@@ -647,28 +628,27 @@
                             <div class="collapse-card">
                                 <h4 class="card-title">
                                     <a data-bs-toggle="collapse" href="#budget">
-                                        <img src="/assets/img/icons/money-icon.svg"> Budget
+                                        <img src="/assets/img/icons/money-icon.svg"> Salary Range
                                     </a>
                                 </h4>
 
                                 <div id="budget" class="collapse show">
                                     <div class="collapse-body">
                                         <ul class="checkbox-list">
-                                            @foreach($budgets as $b)
+                                            @foreach($salary as $b)
                                             <li>
-                                                <a href="{{ route('user.jobs.index', array_merge(request()->all(), [
-                                        'budget_min' => $b['min'], 'budget_max' => $b['max']
-                                    ])) }}"
-                                                    class="{{ request('budget_min') == $b['min'] ? 'active' : '' }}">
-                                                    {{ $b['label'] }}: ${{ number_format($b['max']) }}
+                                                <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['salary' => $b])) }}"
+                                                    class="{{ request('salary') == $b ? 'active' : '' }}">
+                                                    {{ $b }}
                                                 </a>
                                             </li>
                                             @endforeach
+
                                         </ul>
                                     </div>
                                 </div>
-
                             </div>
+
 
                             {{-- ================= SUBSCRIPTIONS ================= --}}
                             <div class="collapse-card">
@@ -766,4 +746,112 @@
         </div> <!-- /Service Details -->
     </div>
 </div>
+
+<div class="container">
+    <div class="trusted-customers-two">
+        <img src="./assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="trusted-customers-image position-relative d-lg-block d-none text-center aos-init aos-animate" data-aos="fade-up">
+                    <img src="./assets/img/home/jointeam.svg" alt="img" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-lg-5 aos-init aos-animate" data-aos="fade-left">
+                <h2 class="mb-3">Showcase Your Skills & Find Work Today!</h2>
+                <p>Post your gig in minutes and reach thousands of potential clients. Verified listings get more visibility and faster responses.</p>
+                <a role="button" data-bs-toggle="modal" data-bs-target="#postJobModal" class="btn btn-lg btn-white">Post Your Gig</a>
+                <span class="trusted-customers-shape d-lg-block d-none text-white mt-3">Takes less than 5 minutes — you stay in control of your work.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Post a Job/Gig Modal -->
+<div class="modal fade" id="postJobModal" tabindex="-1" aria-labelledby="postJobModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                <h5 class="modal-title" id="postJobModalLabel">Post a New Job / Gig</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="{{ route('user.jobs.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Job Title -->
+                        <div class="col-md-12 mb-3">
+                            <label for="jobTitle" class="form-label">Job Title</label>
+                            <input type="text" class="form-control form-control-lg rounded-3 border-0 shadow-sm" id="jobTitle" name="title" placeholder="Enter job title" required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-md-12 mb-3">
+                            <label for="jobDescription" class="form-label">Description</label>
+                            <textarea class="form-control form-control-lg rounded-3 border-0 shadow-sm" id="jobDescription" name="description" rows="4" placeholder="Describe the job" required></textarea>
+                        </div>
+
+                        <!-- Job Category -->
+                        <div class="col-md-4 mb-3">
+                            <label for="jobCategory" class="form-label">Category</label>
+                            <select class="form-select border-0 shadow-sm" id="jobCategory" name="job_category_id" required>
+                                <option value="">Select Category</option>
+                                @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="col-md-4 mb-3">
+                            <label for="jobLocation" class="form-label">Location</label>
+                            <input type="text" class="form-control form-control-lg rounded-3 border-0 shadow-sm" id="jobLocation" name="location" placeholder="Job location" required>
+                        </div>
+
+                        <!-- Type -->
+                        <div class="col-md-4 mb-3">
+                            <label for="jobType" class="form-label">Job Type</label>
+                            <select class="form-select border-0 shadow-sm" id="jobType" name="type">
+                                <option value="full-time">Full-time</option>
+                                <option value="part-time">Part-time</option>
+                                <option value="freelance">Freelance</option>
+                                <option value="internship">Internship</option>
+                            </select>
+                        </div>
+
+                        <!-- Experience Level -->
+                        <div class="col-md-4 mb-3">
+                            <label for="experienceLevel" class="form-label">Experience Level</label>
+                            <select class="form-select border-0 shadow-sm" id="experienceLevel" name="experience_level">
+                                <option value="entry">Entry Level</option>
+                                <option value="mid">Mid Level</option>
+                                <option value="senior">Senior Level</option>
+                            </select>
+                        </div>
+
+                        <!-- Salary -->
+                        <div class="col-md-4 mb-3">
+                            <label for="salaryRange" class="form-label">Salary Range</label>
+                            <input type="text" class="form-control form-control-lg rounded-3 border-0 shadow-sm" id="salaryRange" name="salary_range" placeholder="e.g., $500 - $2000">
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="col-md-4 mb-3">
+                            <label for="jobSkills" class="form-label">Skills (comma separated)</label>
+                            <input type="text" class="form-control form-control-lg rounded-3 border-0 shadow-sm" id="jobSkills" name="skills" placeholder="e.g., Laravel, VueJS, CSS">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary px-5 py-2 rounded-3 shadow-sm fw-semibold" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">Post Job</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 @endsection

@@ -32,6 +32,7 @@ use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\Seller\SellerProductController;
+use App\Http\Controllers\Talent\TalentCourseController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\CartController;
 use App\Http\Controllers\users\CheckoutController;
@@ -169,6 +170,7 @@ Route::get('/jobs', [UserJobController::class, 'index'])->name('user.jobs.index'
 Route::get('/job/{id}', [UserJobController::class, 'show'])->name('user.jobs.show');
 Route::post('/jobs/{job}/apply', [UserJobController::class, 'apply'])->name('user.jobs.apply');
 Route::get('/jobs/category/{id}', [UserJobController::class, 'category'])->name('user.jobs.category');
+Route::post('/jobs/store', [UserJobController::class, 'store'])->name('user.jobs.store');
 
 Route::post('/tickets/order', [UserEventTicketOrderController::class, 'checkout'])->name('event.orders.checkout');
 Route::get('/orders/{id}/tickets', [UserEventTicketOrderController::class, 'showticket'])->name('order.tickets');
@@ -437,8 +439,8 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('/announcements/{announcement}', [TalentDashboardController::class, 'show'])->name('announcements.show');
 
     // Testimonials
-    Route::get('/testimonials', [TalentDashboardController::class, 'index'])->name('testimonials.index');
-    Route::post('/testimonials', [TalentDashboardController::class, 'store'])->name('testimonials.store');
+    Route::get('/get/testimonials', [TalentDashboardController::class, 'testimonials'])->name('testimonials.index');
+    Route::post('/get/testimonials', [TalentDashboardController::class, 'store'])->name('testimonials.store');
 
     // Skills
     Route::get('/skills', [TalentSkillController::class, 'index'])->name('skills');
@@ -449,6 +451,41 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('get/talent/stories', [TalentStoryController::class, 'index'])
         ->name('page.stories');
     Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('page.stories.show');
+
+    Route::get('/pages/courses', [TalentCourseController::class, 'index'])->name('courses.index');
+    Route::get('/get/courses/{id}', [TalentCourseController::class, 'show'])->name('courses.show');
+    Route::get('/pages/courses/create', [TalentCourseController::class, 'create'])->name('courses.create');
+    Route::post('/pages/courses/store', [TalentCourseController::class, 'store'])->name('courses.store');
+    Route::get('/pages/courses/{id}/edit', [TalentCourseController::class, 'edit'])->name('courses.edit');
+    Route::put('/pages/courses/{id}/update', [TalentCourseController::class, 'update'])->name('courses.update');
+    Route::delete('/pages/courses/{id}/delete', [TalentCourseController::class, 'destroy'])->name('courses.destroy');
+    // payment routes
+    Route::get('/payments', [TalentDashboardController::class, 'payments'])->name('payments.index');
+    Route::get('/payments/invoice/{id}', [TalentDashboardController::class, 'invoiceShow'])->name('payments.invoice');
+    Route::get('/invoice/{id}/print', [TalentDashboardController::class, 'print'])->name('invoice.print');
+
+    // Talent Connections
+    Route::get('/connections', [TalentDashboardController::class, 'connections'])->name('connections.index');
+    Route::get('/connections/show/{id}', [TalentDashboardController::class, 'showConnection'])->name('connections.show');
+    Route::post('/connections/{id}/respond', [TalentDashboardController::class, 'respond'])->name('connections.respond');
+    Route::post('/connections/{id}/accept', [TalentDashboardController::class, 'accept'])->name('connections.accept');
+
+    // wallet routes
+    Route::get('/wallets', [TalentDashboardController::class, 'walletsIndex'])->name('wallets.index');
+
+    // jobs routes
+    Route::get('/jobs', [TalentDashboardController::class, 'jobsIndex'])->name('jobs.index');
+    Route::get('/jobs/{job}/applications', [TalentDashboardController::class, 'jobApplications'])->name('jobs.applications.index');
+    Route::post('/jobs/{job}/apply', [TalentDashboardController::class, 'applyJob'])->name('jobs.apply');
+
+    // events routes
+    Route::get('/events', [TalentDashboardController::class, 'eventsIndex'])->name('events.index');
+    Route::get('/events/{event}/tickets', [TalentDashboardController::class, 'eventTickets'])->name('events.tickets.index');    
+
+    // projects routes
+    Route::get('/projects', [TalentDashboardController::class, 'projectsIndex'])->name('projects.index');
+    Route::get('/projects/{project}/applications', [TalentDashboardController::class, 'projectApplications'])->name('projects.applications.index');
+    Route::post('/projects/{project}/apply', [TalentDashboardController::class, 'applyProject'])->name('projects.apply');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {

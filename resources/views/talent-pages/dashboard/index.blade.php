@@ -1,673 +1,398 @@
-@extends('layouts.app')
+@extends('layouts.talents')
 @section('title', 'Dashboard')
 @section('content')
 
-<div class="container-fluid">
-    <div class="nk-content-inner">
-        <div class="nk-content-body">
-            <div class="nk-block-head nk-block-head-sm">
-                <div class="nk-block-between">
-                    <div class="nk-block-head-content">
-                        <h3 class="nk-block-title page-title">{{ config('app.name')}} Overview</h3>
-                        <div class="nk-block-des text-soft">
-                            <p>Welcome to {{ config('app.name')}} Dashboard.</p>
-                        </div>
-                    </div>
-                    <div class="nk-block-head-content">
-                        <div class="toggle-wrap nk-block-tools-toggle"><a href="#"
-                                class="btn btn-icon btn-trigger toggle-expand me-n1"
-                                data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                            <div class="toggle-expand-content" data-content="pageMenu">
-                                <ul class="nk-block-tools g-3">
-                                    <li>
-                                        <div class="dropdown"><a href="#"
-                                                class="dropdown-toggle btn btn-white btn-dim btn-outline-light"
-                                                data-bs-toggle="dropdown"><em
-                                                    class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span
-                                                        class="d-none d-md-inline">Last</span> 30
-                                                    Days</span><em
-                                                    class="dd-indc icon ni ni-chevron-right"></em></a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#"><span>Last 30 Days</span></a>
-                                                    </li>
-                                                    <li><a href="#"><span>Last 6 Months</span></a>
-                                                    </li>
-                                                    <li><a href="#"><span>Last 1 Years</span></a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="nk-block-tools-opt"><a href="#"
-                                            class="btn btn-primary"><em
-                                                class="icon ni ni-reports"></em><span>Reports</span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="container">
+    <div class="az-content-body">
+        <div class="az-dashboard-one-title">
+            <div>
+                <h2 class="az-dashboard-title">Hi, welcome back!</h2>
+                <p class="az-dashboard-text">Your web analytics dashboard template.</p>
             </div>
-            <div class="nk-block">
-                <div class="row g-gs">
-                    <div class="col-xxl-6">
-                        <div class="row g-gs">
-                            <div class="col-lg-6 col-xxl-12">
-                                <div class="card card-bordered">
-                                    <div class="card-inner">
-                                        <div class="card-title-group align-start mb-2">
-                                            <div class="card-title">
-                                                <h6 class="title">Sales Revenue</h6>
-                                                <p>In last 30 days revenue from subscription.</p>
-                                            </div>
-                                            <div class="card-tools"><em
-                                                    class="card-hint icon ni ni-help-fill"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="left"
-                                                    title="Revenue from subscription"></em></div>
-                                        </div>
-                                        <div
-                                            class="align-end gy-3 gx-5 flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
-                                            <div class="nk-sale-data-group flex-md-nowrap g-4">
-                                                <div class="nk-sale-data"><span
-                                                        class="amount">14,299.59 <span
-                                                            class="change down text-danger"><em
-                                                                class="icon ni ni-arrow-long-down"></em>16.93%</span></span><span
-                                                        class="sub-title">This Month</span></div>
-                                                <div class="nk-sale-data"><span
-                                                        class="amount">7,299.59 <span
-                                                            class="change up text-success"><em
-                                                                class="icon ni ni-arrow-long-up"></em>4.26%</span></span><span
-                                                        class="sub-title">This Week</span></div>
-                                            </div>
-                                            <div class="nk-sales-ck sales-revenue"><canvas
-                                                    class="sales-bar-chart"
-                                                    id="salesRevenue"></canvas></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xxl-12">
-                                <div class="row g-gs">
-                                    <div class="col-sm-6 col-lg-12 col-xxl-6">
-                                        <div class="card card-bordered">
-                                            <div class="card-inner">
-                                                <div class="card-title-group align-start mb-2">
-                                                    <div class="card-title">
-                                                        <h6 class="title">Total Testimonials</h6>
-                                                    </div>
-                                                    <div class="card-tools"><em
-                                                            class="card-hint icon ni ni-help-fill"
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-placement="left"
-                                                            title="Total active subscription"></em>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="align-end flex-sm-wrap g-4 flex-md-nowrap">
-                                                    <div class="nk-sale-data"><span
-                                                            class="amount">{{ $totalTestimonials }}</span></div>
-                                                    <div class="nk-sales-ck"><canvas
-                                                            class="sales-bar-chart"
-                                                            id="activeSubscription"></canvas></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-12 col-xxl-6">
-                                        <div class="card card-bordered">
-                                            <div class="card-inner">
-                                                <div class="card-title-group align-start mb-2">
-                                                    <div class="card-title">
-                                                        <h6 class="title">Total Users</h6>
-                                                    </div>
-                                                    <div class="card-tools"><em
-                                                            class="card-hint icon ni ni-help-fill"
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-placement="left"
-                                                            title="Daily Avg. subscription"></em>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="align-end flex-sm-wrap g-4 flex-md-nowrap">
-                                                    <div class="nk-sale-data"><span
-                                                            class="amount">{{ $totalUsers }}</span></div>
-                                                    <div class="nk-sales-ck"><canvas
-                                                            class="sales-bar-chart"
-                                                            id="totalSubscription"></canvas></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xxl-6">
-                        <div class="card card-bordered h-100">
-                            <div class="card-inner">
-                                <div class="card-title-group align-start gx-3 mb-3">
-                                    <div class="card-title">
-                                        <h6 class="title">Sales Overview</h6>
-                                        <p>In 30 days sales of product subscription. <a href="#">See
-                                                Details</a></p>
-                                    </div>
-                                    <div class="card-tools">
-                                        <div class="dropdown"><a href="#"
-                                                class="btn btn-primary btn-dim d-none d-sm-inline-flex"
-                                                data-bs-toggle="dropdown"><em
-                                                    class="icon ni ni-download-cloud"></em><span><span
-                                                        class="d-none d-md-inline">Download</span>
-                                                    Report</span></a><a href="#"
-                                                class="btn btn-icon btn-primary btn-dim d-sm-none"
-                                                data-bs-toggle="dropdown"><em
-                                                    class="icon ni ni-download-cloud"></em></a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#"><span>Download Mini
-                                                                Version</span></a></li>
-                                                    <li><a href="#"><span>Download Full
-                                                                Version</span></a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#"><em
-                                                                class="icon ni ni-opt-alt"></em><span>More
-                                                                Options</span></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="nk-sale-data-group align-center justify-between gy-3 gx-5">
-                                    <div class="nk-sale-data"><span class="amount">$82,944.60</span>
-                                    </div>
-                                    <div class="nk-sale-data"><span class="amount sm">1,937
-                                            <small>Subscribers</small></span></div>
-                                </div>
-                                <div class="nk-sales-ck large pt-4"><canvas
-                                        class="sales-overview-chart" id="salesOverview"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xxl-8">
-                        <div class="card card-bordered card-full">
-                            <div class="card-inner">
-                                <div class="card-title-group">
-                                    <div class="card-title">
-                                        <h6 class="title"><span class="me-2">Talents</span> <a
-                                                href="{{ route('admin.talents')}}" class="link d-none d-sm-inline">See
-                                                All</a></h6>
-                                    </div>
-                                    <div class="card-tools">
-                                        <ul class="card-tools-nav">
-                                            <li><a href="#"><span>Pending</span></a></li>
-                                            <li><a href="#"><span>Approved</span></a></li>
-                                            <li class="active"><a href="#"><span>All</span></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-inner p-0 border-top">
-                                <div class="nk-tb-list nk-tb-orders">
-                                    <div class="nk-tb-item nk-tb-head">
-                                        <div class="nk-tb-col"><span>No.</span></div>
-                                        <div class="nk-tb-col tb-col-sm"><span>Name</span></div>
-                                        <div class="nk-tb-col tb-col-md"><span>Date</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span>Phone</span></div>
-                                        <div class="nk-tb-col"><span>Category</span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="d-none d-sm-inline">Status</span></div>
-                                        <div class="nk-tb-col"><span>&nbsp;</span></div>
-                                    </div>
-                                    @foreach ($talents as $talent)
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col"><span class="tb-lead"><a
-                                                    href="#">{{ $talent->id }}</a></span></div>
-                                        <div class="nk-tb-col tb-col-sm">
-                                            <div class="user-card">
-                                                <div class="user-avatar user-avatar-sm bg-purple">
-                                                    <img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('/assets/img/user/profile.jpg') }}"
-                                                        class="img-fluid rounded-pill" alt="img">
-                                                </div>
-                                                <div class="user-name"><span class="tb-lead">{{ $talent->name }}</span></div>
-                                            </div>
-                                        </div>
-                                        <div class="nk-tb-col tb-col-md"><span
-                                                class="tb-sub">{{ $talent->created_at->format('d M Y') }}</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span
-                                                class="tb-sub text-primary">{{ $talent->phone }}</span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="tb-sub tb-amount">{{ $talent->category->name ?? 'Uncategorized' }}</span></div>
-                                        <div class="nk-tb-col"><span
-                                                class="badge badge-dot badge-dot-xs bg-success">{{ $talent->status }}</span>
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-action">
-                                            <div class="dropdown"><a
-                                                    class="text-soft dropdown-toggle btn btn-icon btn-trigger"
-                                                    data-bs-toggle="dropdown"><em
-                                                        class="icon ni ni-more-h"></em></a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                                    <ul class="link-list-plain">
-                                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#quickViewModal{{ $talent->id }}">Quick View</a></li>
-                                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#statusModal{{ $talent->id }}">Status Update</a></li>
-                                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $talent->id }}">Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-
-                                    @foreach($talents as $talent)
-                                    <!-- Status Modal -->
-                                    <div class="modal fade" id="statusModal{{ $talent->id }}" tabindex="-1"
-                                        aria-labelledby="statusModalLabel{{ $talent->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <form method="POST"
-                                                action="{{ route('admin.talents.updateStatus', $talent->id ) }}">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="statusModalLabel{{ $talent->id }}">Update Status
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <select name="status" class="form-select" required>
-                                                            <option value="pending"
-                                                                {{ (isset($talent) && $talent->status == 'pending') ? 'selected' : '' }}>
-                                                                Pending</option>
-                                                            <option value="approved"
-                                                                {{ (isset($talent) && $talent->status == 'approved') ? 'selected' : '' }}>
-                                                                Approved</option>
-                                                            <option value="rejected"
-                                                                {{ (isset($talent) && $talent->status == 'rejected') ? 'selected' : '' }}>
-                                                                Rejected</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    @endforeach
-
-                                    @foreach($talents as $talent)
-                                    <!-- Quick View Modal -->
-                                    <div class="modal fade" id="quickViewModal{{ $talent->id }}" tabindex="-1"
-                                        aria-labelledby="quickViewLabel{{ $talent->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="quickViewLabel{{ $talent->id }}">Talent Quick View
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-
-                                                <div class="modal-body">
-
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <img src="{{ asset('image/talents/' . $talent->image) }}"
-                                                                alt="Talent Image" class="img-fluid rounded">
-
-
-                                                        </div>
-
-                                                        <div class="col-md-8">
-                                                            <h4>{{ $talent->name }}</h4>
-                                                            <p><strong>Address:</strong> {{ $talent->address }}</p>
-                                                            <p><strong>Phone:</strong> {{ $talent->phone }}</p>
-                                                            <p><strong>Email:</strong> {{ $talent->email }}</p>
-                                                            <p><strong>Category:</strong>
-                                                                {{ $talent->category->name ?? 'N/A' }}
-                                                            </p>
-                                                            <p><strong>Language:</strong> {{ $talent->language }}</p>
-                                                            <p><strong>Description:</strong> {{ $talent->description }}</p>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-
-                                    @foreach($talents as $talent)
-                                    <!-- Delete Modal -->
-                                    <div class="modal fade" id="deleteModal{{ $talent->id }}" tabindex="-1"
-                                        aria-labelledby="deleteModalLabel{{ $talent->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <form action="{{ route('admin.talents.destroy', $talent->id) }}"
-                                                method="POST" class="modal-content">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteModalLabel{{ $talent->id }}">
-                                                        Confirm Delete
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want to delete this talent? This action cannot be undone.
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="card-inner-sm border-top text-center d-sm-none"><a href="#"
-                                    class="btn btn-link btn-block">See History</a></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xxl-4">
-                        <div class="card card-bordered card-full">
-                            <div class="card-inner border-bottom">
-                                <div class="card-title-group">
-                                    <div class="card-title">
-                                        <h6 class="title">Recent Announcements</h6>
-                                    </div>
-                                    <div class="card-tools">
-                                        <ul class="card-tools-nav">
-                                            <li><a href="#"><span>Published</span></a></li>
-                                            <li class="active"><a href="#"><span>All</span></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <ul class="nk-activity">
-                                @foreach($announcements as $announcement)
-                                <li class="nk-activity-item">
-                                    <div class="nk-activity-media user-avatar bg-success"><img
-                                            src="images/avatar/c-sm.jpg" alt=""></div>
-                                    <div class="nk-activity-data">
-                                        <div class="label">{{ Str::limit($announcement->title, 50) }}
-                                        </div><span class="time">{{ $announcement->created_at->format('Y-m-d') }}</span>
-                                    </div>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xxl-4">
-                        <div class="card card-bordered card-full">
-                            <div class="card-inner-group">
-                                <div class="card-inner">
-                                    <div class="card-title-group">
-                                        <div class="card-title">
-                                            <h6 class="title">New Users</h6>
-                                        </div>
-                                        <div class="card-tools"><a href="{{ route('admin.users.index') }}"
-                                                class="link">View All</a></div>
-                                    </div>
-                                </div>
-                                @foreach ($users as $user)
-                                <div class="card-inner card-inner-md">
-                                    <div class="user-card">
-                                        <div class="user-avatar bg-primary-dim"><span>AB</span>
-                                        </div>
-                                        <div class="user-info"><span class="lead-text">{{ $user->name }}</span><span
-                                                class="sub-text">{{ $user->email }}</span></div>
-                                        <div class="user-action">
-                                            <div class="drodown"><a href="#"
-                                                    class="dropdown-toggle btn btn-icon btn-trigger me-n1"
-                                                    data-bs-toggle="dropdown"
-                                                    aria-expanded="false"><em
-                                                        class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em
-                                                                    class="icon ni ni-setting"></em><span>Action
-                                                                    Settings</span></a></li>
-                                                        <li>
-                                                            <a href="#"><em class="icon ni ni-notify"></em><span>Push
-                                                                    Notification</span></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xxl-4">
-                        <div class="card card-bordered h-100">
-                            <div class="card-inner border-bottom">
-                                <div class="card-title-group">
-                                    <div class="card-title">
-                                        <h6 class="title">Recent Story Payments</h6>
-                                    </div>
-                                    <div class="card-tools"><a href="{{ route('admin.payments.index') }}" class="link">All Payments</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <ul class="nk-support">
-                                @foreach($payments as $payment)
-                                <li class="nk-support-item">
-                                    <div class="user-avatar"><img src="images/avatar/a-sm.jpg"
-                                            alt=""></div>
-                                    <div class="nk-support-content">
-                                        <div class="title"><span>Vincent Lopez</span><span
-                                                class="badge badge-dot badge-dot-xs bg-warning ms-1">{{ $payment->status }}</span>
-                                            <a role="button" tabIndex="0" class="btn btn-primary btn-md"
-                                                data-bs-toggle="modal" data-bs-target="#transaction_details{{ $payment->id }}">View</a>
-                                        </div>
-                                        <p>{{ $payment->story->title }}</p><span
-                                            class="time">{{ \Carbon\Carbon::parse($payment->created_at)->format('d M Y') }}</span>
-                                    </div>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xxl-4">
-                        <div class="card card-bordered h-100">
-                            <div class="card-inner border-bottom">
-                                <div class="card-title-group">
-                                    <div class="card-title">
-                                        <h6 class="title">Notifications</h6>
-                                    </div>
-                                    <div class="card-tools"><a href="#" class="link">View All</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-inner">
-                                <div class="timeline">
-                                    <h6 class="timeline-head">November, 2019</h6>
-                                    <ul class="timeline-list">
-                                        <li class="timeline-item">
-                                            <div class="timeline-status bg-primary is-outline">
-                                            </div>
-                                            <div class="timeline-date">13 Nov <em
-                                                    class="icon ni ni-alarm-alt"></em></div>
-                                            <div class="timeline-data">
-                                                <h6 class="timeline-title">Submited KYC Application
-                                                </h6>
-                                                <div class="timeline-des">
-                                                    <p>Re-submitted KYC Application form.</p><span
-                                                        class="time">09:30am</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-status bg-primary"></div>
-                                            <div class="timeline-date">13 Nov <em
-                                                    class="icon ni ni-alarm-alt"></em></div>
-                                            <div class="timeline-data">
-                                                <h6 class="timeline-title">Submited KYC Application
-                                                </h6>
-                                                <div class="timeline-des">
-                                                    <p>Re-submitted KYC Application form.</p><span
-                                                        class="time">09:30am</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-status bg-pink"></div>
-                                            <div class="timeline-date">13 Nov <em
-                                                    class="icon ni ni-alarm-alt"></em></div>
-                                            <div class="timeline-data">
-                                                <h6 class="timeline-title">Submited KYC Application
-                                                </h6>
-                                                <div class="timeline-des">
-                                                    <p>Re-submitted KYC Application form.</p><span
-                                                        class="time">09:30am</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="az-content-header-right">
+                <div class="media">
+                    <div class="media-body">
+                        <label>Start Date</label>
+                        <h6>Oct 10, 2018</h6>
+                    </div><!-- media-body -->
+                </div><!-- media -->
+                <div class="media">
+                    <div class="media-body">
+                        <label>End Date</label>
+                        <h6>Oct 23, 2018</h6>
+                    </div><!-- media-body -->
+                </div><!-- media -->
+                <div class="media">
+                    <div class="media-body">
+                        <label>Event Category</label>
+                        <h6>All Categories</h6>
+                    </div><!-- media-body -->
+                </div><!-- media -->
+                <a href="#" class="btn btn-purple">Export</a>
             </div>
+        </div><!-- az-dashboard-one-title -->
+
+        <div class="az-dashboard-nav">
+            <nav class="nav">
+                <a class="nav-link active" data-bs-toggle="tab" href="#">Overview</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#">Audiences</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#">Demographics</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#">More</a>
+            </nav>
+
+            <nav class="nav">
+                <a class="nav-link" href="#"><i class="far fa-save"></i> Save Report</a>
+                <a class="nav-link" href="#"><i class="far fa-file-pdf"></i> Export to PDF</a>
+                <a class="nav-link" href="#"><i class="far fa-envelope"></i>Send to Email</a>
+                <a class="nav-link" href="#"><i class="fas fa-ellipsis-h"></i></a>
+            </nav>
         </div>
-    </div>
-</div>
 
-
-<!-- Withdraw -->
-<div class="modal new-modal fade" id="withdraw" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Withdraw Payment</h5>
-                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>x</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="amt-wrap">
-                            <div class="form-wrap">
-                                <label class="form-label">Enter Amount ($)<span
-                                        class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control">
+        <div class="row row-sm mg-b-20">
+            <div class="col-lg-7 ht-lg-100p">
+                <div class="card card-dashboard-one">
+                    <div class="card-header">
+                        <div>
+                            <h6 class="card-title">Website Audience Metrics</h6>
+                            <p class="card-text">Audience to which the users belonged while on the current date range.</p>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn active">Day</button>
+                            <button class="btn">Week</button>
+                            <button class="btn">Month</button>
+                        </div>
+                    </div><!-- card-header -->
+                    <div class="card-body">
+                        <div class="card-body-top">
+                            <div>
+                                <label class="mg-b-0">Users</label>
+                                <h2>13,956</h2>
                             </div>
-                            <ul class="amt-list">
-                                <li>Or</li>
-                                <li>
-                                    <a role="button" tabIndex="0" class="vary-amt">$50</a>
-                                </li>
-                                <li>
-                                    <a role="button" tabIndex="0" class="vary-amt">$100</a>
-                                </li>
-                                <li>
-                                    <a role="button" tabIndex="0" class="vary-amt">$150</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="buyer-method">
-                            <h6>Select Payment Gateway *</h6>
-                            <label class="custom_radio">
-                                <input type="radio" name="payment">
-                                <span class="checkmark"></span>Paypal
-                            </label>
-                            <label class="custom_radio">
-                                <input type="radio" name="payment">
-                                <span class="checkmark"></span>Stripe
-                            </label>
-                        </div>
-                        <div class="form-wrap form-item wallet-custom">
-                            <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div class="form-wrap form-item wallet-custom">
-                            <label class="form-label">Password<span class="text-danger ms-1">*</span></label>
-                            <input type="text" class="form-control">
+                            <div>
+                                <label class="mg-b-0">Bounce Rate</label>
+                                <h2>33.50%</h2>
+                            </div>
+                            <div>
+                                <label class="mg-b-0">Page Views</label>
+                                <h2>83,123</h2>
+                            </div>
+                            <div>
+                                <label class="mg-b-0">Sessions</label>
+                                <h2>16,869</h2>
+                            </div>
+                        </div><!-- card-body-top -->
+                        <div class="flot-chart-wrapper">
+                            <div id="flotChart" class="flot-chart"></div>
+                        </div><!-- flot-chart-wrapper -->
+                    </div><!-- card-body -->
+                </div><!-- card -->
+            </div><!-- col -->
+            <div class="col-lg-5 mg-t-20 mg-lg-t-0">
+                <div class="row row-sm">
+                    <div class="col-sm-6">
+                        <div class="card card-dashboard-two">
+                            <div class="card-header">
+                                <h6>33.50% <i class="icon ion-md-trending-up tx-success"></i> <small>18.02%</small></h6>
+                                <p>Bounce Rate</p>
+                            </div><!-- card-header -->
+                            <div class="card-body">
+                                <div class="chart-wrapper">
+                                    <div id="flotChart1" class="flot-chart"></div>
+                                </div><!-- chart-wrapper -->
+                            </div><!-- card-body -->
+                        </div><!-- card -->
+                    </div><!-- col -->
+                    <div class="col-sm-6 mg-t-20 mg-sm-t-0">
+                        <div class="card card-dashboard-two">
+                            <div class="card-header">
+                                <h6>86k <i class="icon ion-md-trending-down tx-danger"></i> <small>0.86%</small></h6>
+                                <p>Total Users</p>
+                            </div><!-- card-header -->
+                            <div class="card-body">
+                                <div class="chart-wrapper">
+                                    <div id="flotChart2" class="flot-chart"></div>
+                                </div><!-- chart-wrapper -->
+                            </div><!-- card-body -->
+                        </div><!-- card -->
+                    </div><!-- col -->
+                    <div class="col-sm-12 mg-t-20">
+                        <div class="card card-dashboard-three">
+                            <div class="card-header">
+                                <p>All Sessions</p>
+                                <h6>16,869 <small class="tx-success"><i class="icon ion-md-arrow-up"></i> 2.87%</small></h6>
+                                <small>The total number of sessions within the date range. It is the period time a user is actively
+                                    engaged with your website, page or app, etc.</small>
+                            </div><!-- card-header -->
+                            <div class="card-body">
+                                <div class="chart"><canvas id="chartBar5"></canvas></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <a role="button" tabIndex="0" data-bs-toggle="modal" data-bs-target="#success_credit"
-                            data-bs-dismiss="modal" class="btn btn-primary w-100">Withdraw</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div><!-- row -->
+            </div><!--col -->
+        </div><!-- row -->
+
+        <div class="row row-sm mg-b-20">
+            <div class="col-lg-4">
+                <div class="card card-dashboard-pageviews">
+                    <div class="card-header">
+                        <h6 class="card-title">Page Views by Page Title</h6>
+                        <p class="card-text">This report is based on 100% of sessions.</p>
+                    </div><!-- card-header -->
+                    <div class="card-body">
+                        <div class="az-list-item">
+                            <div>
+                                <h6>Admin Home</h6>
+                                <span>/demo/admin/index.html</span>
+                            </div>
+                            <div>
+                                <h6 class="tx-primary">7,755</h6>
+                                <span>31.74% (-100.00%)</span>
+                            </div>
+                        </div><!-- list-group-item -->
+                        <div class="az-list-item">
+                            <div>
+                                <h6>Form Elements</h6>
+                                <span>/demo/admin/forms.html</span>
+                            </div>
+                            <div>
+                                <h6 class="tx-primary">5,215</h6>
+                                <span>28.53% (-100.00%)</span>
+                            </div>
+                        </div><!-- list-group-item -->
+                        <div class="az-list-item">
+                            <div>
+                                <h6>Utilities</h6>
+                                <span>/demo/admin/util.html</span>
+                            </div>
+                            <div>
+                                <h6 class="tx-primary">4,848</h6>
+                                <span>25.35% (-100.00%)</span>
+                            </div>
+                        </div><!-- list-group-item -->
+                        <div class="az-list-item">
+                            <div>
+                                <h6>Form Validation</h6>
+                                <span>/demo/admin/validation.html</span>
+                            </div>
+                            <div>
+                                <h6 class="tx-primary">3,275</h6>
+                                <span>23.17% (-100.00%)</span>
+                            </div>
+                        </div><!-- list-group-item -->
+                        <div class="az-list-item">
+                            <div>
+                                <h6>Modals</h6>
+                                <span>/demo/admin/modals.html</span>
+                            </div>
+                            <div>
+                                <h6 class="tx-primary">3,003</h6>
+                                <span>22.21% (-100.00%)</span>
+                            </div>
+                        </div><!-- list-group-item -->
+                    </div><!-- card-body -->
+                </div><!-- card -->
+
+            </div><!-- col -->
+            <div class="col-lg-8 mg-t-20 mg-lg-t-0">
+                <div class="card card-dashboard-four">
+                    <div class="card-header">
+                        <h6 class="card-title">Sessions by Channel</h6>
+                    </div><!-- card-header -->
+                    <div class="card-body row">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="chart"><canvas id="chartDonut"></canvas></div>
+                        </div><!-- col -->
+                        <div class="col-md-6 col-lg-5 mg-lg-l-auto mg-t-20 mg-md-t-0">
+                            <div class="az-traffic-detail-item">
+                                <div>
+                                    <span>Organic Search</span>
+                                    <span>1,320 <span>(25%)</span></span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-purple wd-25p" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
+                                </div><!-- progress -->
+                            </div>
+                            <div class="az-traffic-detail-item">
+                                <div>
+                                    <span>Email</span>
+                                    <span>987 <span>(20%)</span></span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary wd-20p" role="progressbar" aria-valuenow="20"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div><!-- progress -->
+                            </div>
+                            <div class="az-traffic-detail-item">
+                                <div>
+                                    <span>Referral</span>
+                                    <span>2,010 <span>(30%)</span></span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info wd-30p" role="progressbar" aria-valuenow="30" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
+                                </div><!-- progress -->
+                            </div>
+                            <div class="az-traffic-detail-item">
+                                <div>
+                                    <span>Social</span>
+                                    <span>654 <span>(15%)</span></span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-teal wd-15p" role="progressbar" aria-valuenow="15" aria-valuemin="0"
+                                        aria-valuemax="100"></div>
+                                </div><!-- progress -->
+                            </div>
+                            <div class="az-traffic-detail-item">
+                                <div>
+                                    <span>Other</span>
+                                    <span>400 <span>(10%)</span></span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-gray-500 wd-10p" role="progressbar" aria-valuenow="10"
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                </div><!-- progress -->
+                            </div>
+                        </div><!-- col -->
+                    </div><!-- card-body -->
+                </div><!-- card-dashboard-four -->
+            </div><!-- col -->
+        </div><!-- row -->
+
+        <div class="row row-sm mg-b-20 mg-lg-b-0">
+            <div class="col-lg-5 col-xl-4">
+                <div class="row row-sm">
+                    <div class="col-md-6 col-lg-12 mg-b-20 mg-md-b-0 mg-lg-b-20">
+                        <div class="card card-dashboard-five">
+                            <div class="card-header">
+                                <h6 class="card-title">Acquisition</h6>
+                                <span class="card-text">Tells you where your visitors originated from, such as search engines,
+                                    social networks or website referrals.</span>
+                            </div><!-- card-header -->
+                            <div class="card-body row row-sm">
+                                <div class="col-6 d-sm-flex align-items-center">
+                                    <div class="card-chart bg-primary">
+                                        <span class="peity-bar"
+                                            data-peity='{"fill": ["#fff"], "width": 20, "height": 20 }'>6,4,7,5,7</span>
+                                    </div>
+                                    <div>
+                                        <label>Bounce Rate</label>
+                                        <h4>33.50%</h4>
+                                    </div>
+                                </div><!-- col -->
+                                <div class="col-6 d-sm-flex align-items-center">
+                                    <div class="card-chart bg-purple">
+                                        <span class="peity-bar"
+                                            data-peity='{"fill": ["#fff"], "width": 21, "height": 20 }'>7,4,5,7,2</span>
+                                    </div>
+                                    <div>
+                                        <label>Sessions</label>
+                                        <h4>9,065</h4>
+                                    </div>
+                                </div><!-- col -->
+                            </div><!-- card-body -->
+                        </div><!-- card-dashboard-five -->
+                    </div><!-- col -->
+                    <div class="col-md-6 col-lg-12">
+                        <div class="card card-dashboard-five">
+                            <div class="card-header">
+                                <h6 class="card-title">Sessions</h6>
+                                <span class="card-text"> A session is the period time a user is actively engaged with your website,
+                                    app, etc.</span>
+                            </div><!-- card-header -->
+                            <div class="card-body row row-sm">
+                                <div class="col-6 d-sm-flex align-items-center">
+                                    <div class="mg-b-10 mg-sm-b-0 mg-sm-r-10">
+                                        <span class="peity-donut"
+                                            data-peity='{ "fill": ["#007bff", "#cad0e8"],  "innerRadius": 14, "radius": 20 }'>4/7</span>
+                                    </div>
+                                    <div>
+                                        <label>% New Sessions</label>
+                                        <h4>26.80%</h4>
+                                    </div>
+                                </div><!-- col -->
+                                <div class="col-6 d-sm-flex align-items-center">
+                                    <div class="mg-b-10 mg-sm-b-0 mg-sm-r-10">
+                                        <span class="peity-donut"
+                                            data-peity='{ "fill": ["#00cccc", "#cad0e8"],  "innerRadius": 14, "radius": 20 }'>2/7</span>
+                                    </div>
+                                    <div>
+                                        <label>Pages/Session</label>
+                                        <h4>1,005</h4>
+                                    </div>
+                                </div><!-- col -->
+                            </div><!-- card-body -->
+                        </div><!-- card-dashboard-five -->
+                    </div><!-- col -->
+                </div><!-- row -->
+            </div><!-- col-lg-3 -->
+            <div class="col-lg-7 col-xl-8 mg-t-20 mg-lg-t-0">
+                <div class="card card-table-one">
+                    <h6 class="card-title">What pages do your users visit</h6>
+                    <p class="az-content-text mg-b-20">Part of this date range occurs before the new users metric had been
+                        calculated, so the old users metric is displayed.</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="wd-5p">&nbsp;</th>
+                                    <th class="wd-45p">Country</th>
+                                    <th>Entrances</th>
+                                    <th>Bounce Rate</th>
+                                    <th>Exits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="flag-icon flag-icon-us flag-icon-squared"></i></td>
+                                    <td><strong>United States</strong></td>
+                                    <td><strong>134</strong> (1.51%)</td>
+                                    <td>33.58%</td>
+                                    <td>15.47%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="flag-icon flag-icon-gb flag-icon-squared"></i></td>
+                                    <td><strong>United Kingdom</strong></td>
+                                    <td><strong>290</strong> (3.30%)</td>
+                                    <td>9.22%</td>
+                                    <td>7.99%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="flag-icon flag-icon-in flag-icon-squared"></i></td>
+                                    <td><strong>India</strong></td>
+                                    <td><strong>250</strong> (3.00%)</td>
+                                    <td>20.75%</td>
+                                    <td>2.40%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="flag-icon flag-icon-ca flag-icon-squared"></i></td>
+                                    <td><strong>Canada</strong></td>
+                                    <td><strong>216</strong> (2.79%)</td>
+                                    <td>32.07%</td>
+                                    <td>15.09%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="flag-icon flag-icon-fr flag-icon-squared"></i></td>
+                                    <td><strong>France</strong></td>
+                                    <td><strong>216</strong> (2.79%)</td>
+                                    <td>32.07%</td>
+                                    <td>15.09%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="flag-icon flag-icon-ph flag-icon-squared"></i></td>
+                                    <td><strong>Philippines</strong></td>
+                                    <td><strong>197</strong> (2.12%)</td>
+                                    <td>32.07%</td>
+                                    <td>15.09%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- table-responsive -->
+                </div><!-- card -->
+            </div><!-- col-lg -->
+
+        </div><!-- row -->
+    </div><!-- az-content-body -->
 </div>
-<!-- /Withdraw -->
-
-<!-- Transaction details  -->
-@foreach($payments as $payment)
-<div class="modal new-modal fade" id="transaction_details{{ $payment->id }}" data-keyboard="false" data-backdrop="static" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Transaction details </h5>
-                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
-            </div>
-            <div class="modal-body service-modal">
-                <h6 class="model-head-text"> Transaction Summary </h6>
-                <div class="sumary-widget">
-                    <div class="summary-info">
-                        <h6> Transaction ID</h6>
-                        <p> #{{ $payment->tx_ref }} </p>
-                    </div>
-                    <div class="summary-info">
-                        <h6> Transaction type </h6>
-                        <p> Purchase </p>
-                    </div>
-                    <div class="summary-info">
-                        <h6> Amount</h6>
-                        <p> ${{ $payment->amount }} </p>
-                    </div>
-                    <div class="summary-info">
-                        <h6> Currency</h6>
-                        <p> {{ $payment->currency }} </p>
-                    </div>
-                    <div class="summary-info">
-                        <h6> Processing Fee</h6>
-                        <p> $20 </p>
-                    </div>
-                    <div class="summary-info">
-                        <h6> Payment Method</h6>
-                        <p> Credit Card </p>
-                    </div>
-                    <div class="summary-info mb-0">
-                        <h6> Sender</h6>
-                        <p> {{ $payment->email }} </p>
-                    </div>
-                    <div class="summary-info mb-0">
-                        <h6> Receiver</h6>
-                        <p> kabosierik@gmail.com </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
-<!-- /Transaction details -->
-
-
 @endsection
