@@ -168,6 +168,7 @@ Route::get('/events/{id}', [UserEventController::class, 'show'])->name('user.eve
 Route::get('/jobs', [UserJobController::class, 'index'])->name('user.jobs.index');
 Route::get('/job/{id}', [UserJobController::class, 'show'])->name('user.jobs.show');
 Route::post('/jobs/{job}/apply', [UserJobController::class, 'apply'])->name('user.jobs.apply');
+Route::get('/jobs/category/{id}', [UserJobController::class, 'category'])->name('user.jobs.category');
 
 Route::post('/tickets/order', [UserEventTicketOrderController::class, 'checkout'])->name('event.orders.checkout');
 Route::get('/orders/{id}/tickets', [UserEventTicketOrderController::class, 'showticket'])->name('order.tickets');
@@ -407,6 +408,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/jobs/{job}', [AdminJobController::class, 'destroy'])->name('jobs.destroy');
     Route::get('{job}/applications', [AdminJobController::class, 'applications'])->name('jobs.applications');
     Route::patch('applications/{id}/status', [AdminJobController::class, 'updateApplicationStatus'])->name('jobs.updateApplicationStatus');
+
+    Route::get('job-categories', [AdminJobController::class, 'jobCategories'])->name('job-categories.index');
+    Route::post('job-categories', [AdminJobController::class, 'storeJobCategory'])->name('job-categories.store');
+    Route::put('job-categories/{id}', [AdminJobController::class, 'updateJobCategory'])->name('job-categories.update');
+    Route::delete('job-categories/{id}', [AdminJobController::class, 'deleteJobCategory'])->name('job-categories.destroy');
 
     // wallets
     Route::get('/wallets', [WalletController::class, 'walletsIndex'])->name('wallets.index');

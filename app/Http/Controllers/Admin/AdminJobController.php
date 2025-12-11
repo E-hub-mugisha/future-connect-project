@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\JobCategory;
 use App\Models\JobSection;
 use App\Models\JobSectionApplication;
 use Illuminate\Http\Request;
@@ -107,5 +108,55 @@ class AdminJobController extends Controller
         $applications = JobSectionApplication::where('job_section_id', $job->id)->latest()->get();
 
         return view('admin-pages.jobs.applications', compact('job', 'applications'));
+    }
+
+    public function jobCategories()
+    {
+        //
+        $categories = JobCategory::orderBy('name')->get();
+        return view('admin-pages.jobs.categories', compact('categories'));
+    }
+
+    public function storeJobCategory(Request $request)
+    {
+        $request->validate([
+            'name'      => 'required|string|max:255|unique:job_categories,name',
+            'parent_id' => 'nullable|exists:job_categories,id',
+        ]);
+
+        JobCategory::create([
+            'name'      => $request->name,
+            'parent_id' => $request->parent_id,
+        ]);
+
+        return redirect()->back()
+                ->with('success', 'Category created successfully!');
+    }
+
+    public function updateJobCategory(Request $request, $id)
+    {
+        $category = JobCategory::findOrFail($id);
+        $request->validate([
+            'name'      => 'required|string|max:255|unique:job_categories,name,' . $id,
+            'parent_id' => 'nullable|exists:job_categories,id|not_in:' . $id,
+        ]);
+
+        $category->update([
+            'name'      => $request->name,
+            'parent_id' => $request->parent_id,
+        ]);
+
+        return redirect()->back()->with('success', 'Job category updated successfully!');
+    }
+
+    public function deleteJobCategory($id)
+    {
+        $category = JobCategory::findOrFail($id);
+
+        // Optional: Reassign children to no parent before deleting
+        JobCategory::where('parent_id', $id)->update(['parent_id' => null]);
+
+        $category->delete();
+        return redirect()->back()->with('success', 'Job category deleted successfully!');
     }
 }

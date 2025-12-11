@@ -30,9 +30,12 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
 
             SellerSeeder::class,
-            
+
             ProductCategorySeeder::class,
             ProductSeeder::class,
+
+            JobCategorySeeder::class,
+            AssignJobCategoriesSeeder::class,
         ]);
     }
 }

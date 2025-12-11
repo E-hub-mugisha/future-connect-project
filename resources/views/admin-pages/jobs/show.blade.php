@@ -13,6 +13,8 @@
     <div class="card border-0 shadow-lg rounded-4">
         <div class="card-body p-4">
             <h3 class="fw-bold mb-3">{{ $job->title }}</h3>
+            <h5 class="mb-1">Company: {{ $job->company->name ?? 'N/A' }}</h5>
+            <h6 class="mb-3">Category: {{ $job->category->name ?? 'N/A' }}</h6>
             <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ $job->location ?? 'Not specified' }}</p>
             <p class="text-muted mb-3"><i class="bi bi-briefcase"></i> {{ $job->type ?? 'N/A' }} • {{ $job->experience_level ?? 'N/A' }}</p>
             <p><strong>Salary:</strong> {{ $job->salary_range ?? 'N/A' }}</p>

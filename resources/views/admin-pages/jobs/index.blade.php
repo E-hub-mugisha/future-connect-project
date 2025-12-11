@@ -8,11 +8,22 @@
     <div class="nk-content-inner">
         <div class="nk-content-body">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold">Job Listings</h2>
-                <a href="{{ route('admin.jobs.create') }}" class="btn btn-primary btn-sm rounded-pill">
-                    <i class="bi bi-plus-circle"></i> Add Job
-                </a>
+
+                <!-- Page Title -->
+                <h2 class="fw-bold mb-0">Job Listings</h2>
+
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2">
+                    <a href="{{ route('admin.jobs.create') }}" class="btn btn-primary btn-md rounded-pill">
+                        Add Job
+                    </a>
+
+                    <a href="{{ route('admin.job-categories.index') }}" class="btn btn-secondary btn-md rounded-pill">
+                        Job Categories
+                    </a>
+                </div>
             </div>
+
 
             <div class="card card-bordered card-preview">
                 <div class="card-inner">
@@ -22,6 +33,7 @@
                                 <th>#</th>
                                 <th>Title</th>
                                 <th>Type</th>
+                                <th>Category</th>
                                 <th>Location</th>
                                 <th>Experience</th>
                                 <th>Company</th>
@@ -34,6 +46,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $job->title }}</td>
                                 <td>{{ $job->type ?? '—' }}</td>
+                                <td>{{ $job->category->name ?? '—' }}</td>
                                 <td>{{ $job->location ?? '—' }}</td>
                                 <td>{{ $job->experience_level ?? '—' }}</td>
                                 <td>{{ $job->company->name ?? '—' }}</td>

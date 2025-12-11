@@ -21,6 +21,18 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label class="form-label fw-semibold">Category</label>
+                        <select name="category_id" class="form-select rounded-pill" required>
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">Job Type</label>
                         <select name="type" class="form-select rounded-pill">
                             <option value="">Select Type</option>

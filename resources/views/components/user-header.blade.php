@@ -414,7 +414,7 @@ return request()->routeIs($route) ? 'active' : '';
                         </ul>
                     </li>
 
-                    <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Opportunities</a></li>
+                    <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Work & Gigs</a></li>
 
                     <li>
                         <a href="{{ route('talent.connections-room') }}">
