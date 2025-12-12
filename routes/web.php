@@ -33,6 +33,7 @@ use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\Talent\TalentCourseController;
+use App\Http\Controllers\Talent\TalentProjectController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\CartController;
 use App\Http\Controllers\users\CheckoutController;
@@ -453,12 +454,18 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('page.stories.show');
 
     Route::get('/pages/courses', [TalentCourseController::class, 'index'])->name('courses.index');
-    Route::get('/get/courses/{id}', [TalentCourseController::class, 'show'])->name('courses.show');
+    Route::get('/pages/get/courses/{id}', [TalentCourseController::class, 'show'])->name('courses.show');
     Route::get('/pages/courses/create', [TalentCourseController::class, 'create'])->name('courses.create');
     Route::post('/pages/courses/store', [TalentCourseController::class, 'store'])->name('courses.store');
     Route::get('/pages/courses/{id}/edit', [TalentCourseController::class, 'edit'])->name('courses.edit');
     Route::put('/pages/courses/{id}/update', [TalentCourseController::class, 'update'])->name('courses.update');
     Route::delete('/pages/courses/{id}/delete', [TalentCourseController::class, 'destroy'])->name('courses.destroy');
+    Route::post('/pages/courses/lessons/store', [TalentCourseController::class, 'storeLesson'])
+        ->name('courses.lessons.store');
+    Route::put('/pages/courses/lessons/{id}/update', [TalentCourseController::class, 'updateLesson'])
+        ->name('courses.lessons.update');
+    Route::delete('/pages/courses/lessons/{id}/delete', [TalentCourseController::class, 'destroyLesson'])
+        ->name('courses.lessons.destroy');
     // payment routes
     Route::get('/payments', [TalentDashboardController::class, 'payments'])->name('payments.index');
     Route::get('/payments/invoice/{id}', [TalentDashboardController::class, 'invoiceShow'])->name('payments.invoice');
@@ -480,12 +487,24 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
 
     // events routes
     Route::get('/events', [TalentDashboardController::class, 'eventsIndex'])->name('events.index');
-    Route::get('/events/{event}/tickets', [TalentDashboardController::class, 'eventTickets'])->name('events.tickets.index');    
+    Route::get('/events/{event}/tickets', [TalentDashboardController::class, 'eventTickets'])->name('events.tickets.index');
 
     // projects routes
-    Route::get('/projects', [TalentDashboardController::class, 'projectsIndex'])->name('projects.index');
-    Route::get('/projects/{project}/applications', [TalentDashboardController::class, 'projectApplications'])->name('projects.applications.index');
-    Route::post('/projects/{project}/apply', [TalentDashboardController::class, 'applyProject'])->name('projects.apply');
+    Route::get('/pages/projects', [TalentProjectController::class, 'index'])->name('projects.index');
+    Route::get('/pages/projects/{project}/applications', [TalentProjectController::class, 'projectApplications'])->name('projects.applications.index');
+    Route::post('/pages/projects/{project}/apply', [TalentProjectController::class, 'applyProject'])->name('projects.apply');
+    Route::get('/pages/projects/create', [TalentProjectController::class, 'create'])->name('projects.create');
+    Route::post('/pages/projects/store', [TalentProjectController::class, 'store'])->name('projects.store');
+    Route::get('/pages/projects/{project}/show', [TalentProjectController::class, 'show'])->name('projects.show');
+    Route::get('/pages/projects/{project}/edit', [TalentProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('/pages/projects/{project}/update', [TalentProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/pages/projects/{project}/delete', [TalentProjectController::class, 'destroy'])->name('projects.destroy');
+    // accept or reject applications
+    Route::post('/applications/{id}/accept', [TalentProjectController::class, 'accept'])
+        ->name('applications.accept');
+
+    Route::post('/applications/{id}/reject', [TalentProjectController::class, 'reject'])
+        ->name('applications.reject');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {

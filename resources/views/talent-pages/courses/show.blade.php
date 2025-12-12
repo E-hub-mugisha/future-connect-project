@@ -3,29 +3,47 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="nk-content-inner">
-        <div class="nk-content-body">
-            <!-- Header -->
-            <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
-                <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-info rounded-pill">
-                    <em class="icon ni ni-edit"></em> Edit Course
-                </a>
-                <button class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addLessonModal">Add Lesson</button>
-                <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
-                    <em class="icon ni ni-chat"></em> Add Review
-                </button>
-                <a href="{{ route('admin.courses.index') }}" class="btn btn-outline-primary rounded-pill">
-                    <em class="icon ni ni-arrow-left"></em> Back to Courses
-                </a>
-            </div>
+    <div class="az-content-body az-content-body-profile">
+        <!-- NAV TABS -->
+        <ul class="nav nav-tabs az-nav-line mb-4 gap-3" id="courseTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab">Course Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab">Reviews</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="details-tab" data-bs-toggle="tab" href="#details" role="tab">Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lessons-tab" data-bs-toggle="tab" href="#lessons" role="tab">Lessons</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="author-tab" data-bs-toggle="tab" href="#author" role="tab">Author</a>
+            </li>
+        </ul>
 
-            <div class="row g-4">
-                <!-- Course Preview Section -->
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        @php
-                        $firstLesson = $course->lessons->first();
-                        @endphp
+        <div class="tab-content" id="courseTabContent">
+            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+
+                <!-- Header Buttons -->
+                <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+                    <a href="{{ route('talent.courses.edit', $course->id) }}" class="btn btn-info rounded-pill">
+                        <em class="icon ni ni-edit"></em> Edit Course
+                    </a>
+                    <button class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addLessonModal">Add Lesson</button>
+                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                        <em class="icon ni ni-chat"></em> Add Review
+                    </button>
+                    <a href="{{ route('talent.courses.index') }}" class="btn btn-outline-primary rounded-pill">
+                        <em class="icon ni ni-arrow-left"></em> Back to Courses
+                    </a>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Course Preview Section -->
+                    <div>
+                        @php $firstLesson = $course->lessons->first(); @endphp
 
                         @if($course->is_free && $firstLesson)
                         <video class="w-100" controls autoplay muted loop>
@@ -41,87 +59,30 @@
                         @endif
                         @endif
                     </div>
-                </div>
 
-                <!-- Course Info -->
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <div>
                         <h3 class="fw-semibold mb-3">{{ $course->title }}</h3>
-                        <p class="text-muted mb-0">Category: <span class="fw-semibold text-primary">{{ $course->category->name ?? '-' }}</span></p>
+
+                        <p class="text-muted mb-0">Category:
+                            <span class="fw-semibold text-primary">{{ $course->category->name ?? '-' }}</span>
+                        </p>
+
                         <p class="text-muted">{{ $course->description }}</p>
 
-                        <div class="d-flex align-items-center mb-3">
-                            <span class="text-light text-dark">{{ ucfirst($course->level ?? 'Beginner') }}</span>
+                        <div class="d-flex align-items-center mb-3 gap-3">
+                            <span class="text-dark">{{ ucfirst($course->level ?? 'Beginner') }}</span>
                             <span class="text-{{ $course->is_free ? 'success' : 'primary' }}">
                                 {{ $course->is_free ? 'Free' : '$' . number_format($course->price, 2) }}
                             </span>
                         </div>
-
-                        <div class="mt-3 mb-3">
-                            <div class="d-flex flex-wrap gap-3">
-                                <div>
-                                    <span class="text-muted d-block small">Author</span>
-                                    <span class="fw-semibold">{{ $course->talent->name }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-muted d-block small">Email</span>
-                                    <span class="fw-semibold">{{ $course->talent->email }}</span>
-                                </div>
-                                <div>
-                                    <span class="text-muted d-block small">Contact</span>
-                                    <span class="fw-semibold">{{ $course->talent->phone }}</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
-            </div>
-            <!-- Course Details Section -->
-            <div class="mt-5">
-                <h4 class="fw-bold mb-3">Course Details</h4>
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
-                        <p class="text-muted">{{ $course->description }}</p>
-                        <div class="d-flex flex-wrap gap-3">
-                            <span class="badge bg-light text-dark">Status: {{ ucfirst($course->status) }}</span>
-                            <span class="badge bg-light text-dark">Created: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- Course Lessons --}}
-            <div class="row mt-4">
-                <div class="col-12">
-                    <h4>Course Lessons</h4>
-                    @if($course->lessons->count())
-                    <div class="list-group">
-                        @foreach($course->lessons as $lesson)
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{ $loop->iteration }}. {{ $lesson->title }}</strong>
-                                <p class="mb-0 text-soft">{{ $lesson->description ?? '' }}</p>
-                            </div>
-                            @if($course->is_free)
-                            <video width="150" controls>
-                                <source src="{{ asset($lesson->video) }}" type="video/mp4">
-                            </video>
-                            @else
-                            <span class="badge bg-secondary">Premium</span>
-                            @endif
-                        </div>
-                        @endforeach
-                    </div>
-                    @else
-                    <p>No lessons available for this course.</p>
-                    @endif
                 </div>
             </div>
 
-            <!-- Feedback Section -->
-            <div class="mt-5">
+            <div class="tab-pane fade" id="reviews" role="tabpanel">
                 <h4 class="fw-bold mb-3">Student Feedback</h4>
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
+                <div>
+                    <div>
                         @forelse($course->feedback as $feedback)
                         <div class="border-bottom py-3 d-flex align-items-start justify-content-between">
                             <div>
@@ -143,13 +104,79 @@
                         @empty
                         <p class="text-muted m-3">No feedback available yet.</p>
                         @endforelse
+
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="tab-pane fade" id="details" role="tabpanel">
+                <h4 class="fw-bold mb-3">Course Details</h4>
+                <div>
+                    <p class="text-muted">{{ $course->description }}</p>
+
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge bg-light text-dark">Status: {{ ucfirst($course->status) }}</span>
+                        <span class="badge bg-light text-dark">Created: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="lessons" role="tabpanel">
+                <h4>Course Lessons</h4>
+
+                @if($course->lessons->count())
+                <div class="list-group">
+                    @foreach($course->lessons as $lesson)
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ $loop->iteration }}. {{ $lesson->title }}</strong>
+                            <p class="mb-0 text-soft">{{ $lesson->description ?? '' }}</p>
+                        </div>
+
+                        @if($course->is_free)
+                        <video width="150" controls>
+                            <source src="{{ asset($lesson->video) }}" type="video/mp4">
+                        </video>
+                        @else
+                        <span class="badge bg-secondary">Premium</span>
+                        @endif
+                        <div>
+                            <button class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#editLessonModal{{$lesson->id}}">
+                                Edit
+                            </button>
+
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLessonModal{{$lesson->id}}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p>No lessons available for this course.</p>
+                @endif
+            </div>
+
+            <div class="tab-pane fade" id="author" role="tabpanel">
+                <div class="card p-4 shadow-sm border-0 rounded-4">
+                    <h4 class="fw-bold mb-3">Course Author</h4>
+
+                    <div class="mb-3">
+                        <strong>Name:</strong> {{ $course->talent->name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong> {{ $course->talent->email }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Phone:</strong> {{ $course->talent->phone }}
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- END TAB CONTENT -->
+
     </div>
 </div>
-
 {{-- Add Review Modal --}}
 <div class="modal fade" id="addReviewModal" tabindex="-1" aria-labelledby="addReviewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -183,7 +210,7 @@
 {{-- Add Lesson Modal --}}
 <div class="modal fade" id="addLessonModal" tabindex="-1" aria-labelledby="addLessonModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('admin.courses.lessons.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('talent.courses.lessons.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -217,4 +244,71 @@
         </form>
     </div>
 </div>
+
+<!-- edit lesson modal -->
+@foreach($course->lessons as $lesson)
+<div class="modal fade" id="editLessonModal{{$lesson->id}}" tabindex="-1" aria-labelledby="editLessonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('talent.courses.lessons.update', $lesson->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editLessonModalLabel">Edit Lesson</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="lesson_id" id="edit_lesson_id">
+                    <div class="mb-3">
+                        <label for="edit_title" class="form-label">Lesson Title</label>
+                        <input type="text" name="title" id="edit_title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_description" class="form-label">Lesson Description</label>
+                        <textarea name="content" id="edit_description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_video_url" class="form-label">Lesson Video URL</label>
+                        <input type="text" name="video_url" id="edit_video_url" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_order" class="form-label">Lesson Order</label>
+                        <input type="number" name="order" id="edit_order" class="form-control" min="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Update Lesson</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
+<!-- delete lesson modal -->
+@foreach($course->lessons as $lesson)
+<div class="modal fade" id="deleteLessonModal{{$lesson->id}}" tabindex="-1" aria-labelledby="deleteLessonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('talent.courses.lessons.destroy', $lesson->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteLessonModalLabel">Delete Lesson</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this lesson?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
 @endsection

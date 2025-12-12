@@ -51,9 +51,9 @@ class User extends Authenticatable
         ];
     }
     public function talent()
-{
-    return $this->hasOne(Talent::class);
-}
+    {
+        return $this->hasOne(Talent::class);
+    }
 
 
     public function payments()

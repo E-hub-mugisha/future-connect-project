@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from demo.bootstrapdash.com/azia/src/template/dashboard-one.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 03 Dec 2025 17:11:07 GMT -->
-
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90680653-2"></script>
@@ -37,7 +35,8 @@
     <link href="{{ asset('assets/talents/src/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <!-- azia CSS -->
     <link rel="stylesheet" href="{{ asset('assets/talents/src/css/azia.css') }}">
-
+    <link href="{{ asset('assets/talents/src/lib/quill/quill.snow.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/talents/src/lib/quill/quill.bubble.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -50,6 +49,7 @@
 
     @include('talent-pages.footer')
     <script src="{{ asset('assets/talents/src/lib/jquery/jquery.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="{{ asset('assets/talents/src/lib/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/talents/src/lib/ionicons/ionicons.js') }}"></script>
     <script src="{{ asset('assets/talents/src/lib/jquery.flot/jquery.flot.js') }}"></script>
@@ -66,6 +66,8 @@
     <script src="{{ asset('assets/talents/src/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
     <script src="{{ asset('assets/talents/src/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
     <script src="{{ asset('assets/talents/src/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
+    <script src="{{ asset('assets/talents/src/lib/quill/quill.min.js') }}"></script>
+    
     <script>
         $(function() {
             'use strict'
@@ -318,6 +320,84 @@
             // Select2
             $('.dataTables_length select').select2({
                 minimumResultsForSearch: Infinity
+            });
+
+        });
+    </script>
+
+    <script>
+        $(function() {
+            'use strict'
+
+            var icons = Quill.import('ui/icons');
+            icons['bold'] = '<i class="la la-bold" aria-hidden="true"></i>';
+            icons['italic'] = '<i class="la la-italic" aria-hidden="true"></i>';
+            icons['underline'] = '<i class="la la-underline" aria-hidden="true"></i>';
+            icons['strike'] = '<i class="la la-strikethrough" aria-hidden="true"></i>';
+            icons['list']['ordered'] = '<i class="la la-list-ol" aria-hidden="true"></i>';
+            icons['list']['bullet'] = '<i class="la la-list-ul" aria-hidden="true"></i>';
+
+            icons['link'] = '<i class="la la-link" aria-hidden="true"></i>';
+            icons['image'] = '<i class="la la-image" aria-hidden="true"></i>';
+            icons['video'] = '<i class="la la-film" aria-hidden="true"></i>';
+            icons['code-block'] = '<i class="la la-code" aria-hidden="true"></i>';
+
+            var toolbarOptions = [
+                [{
+                    'header': [1, 2, 3, 4, 5, 6, false]
+                }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{
+                    'list': 'ordered'
+                }, {
+                    'list': 'bullet'
+                }],
+                ['link', 'image', 'video']
+            ];
+
+            var quill = new Quill('#quillEditor', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            var quillModal = new Quill('#quillEditorModal', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            var quillModal2 = new Quill('#quillEditorModal2', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            var toolbarInlineOptions = [
+                ['bold', 'italic', 'underline'],
+                [{
+                    'header': 1
+                }, {
+                    'header': 2
+                }, 'blockquote'],
+                ['link', 'image', 'code-block'],
+            ];
+
+            var quillInline = new Quill('#quillInline', {
+                modules: {
+                    toolbar: toolbarInlineOptions
+                },
+                bounds: '#quillInline',
+                scrollingContainer: '#scrolling-container',
+                placeholder: 'Write something...',
+                theme: 'bubble'
+            });
+
+            new PerfectScrollbar('#scrolling-container', {
+                suppressScrollX: true
             });
 
         });
