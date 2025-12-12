@@ -33,6 +33,7 @@ use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\Talent\TalentCourseController;
+use App\Http\Controllers\Talent\TalentJobController;
 use App\Http\Controllers\Talent\TalentProjectController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\CartController;
@@ -481,9 +482,15 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('/wallets', [TalentDashboardController::class, 'walletsIndex'])->name('wallets.index');
 
     // jobs routes
-    Route::get('/jobs', [TalentDashboardController::class, 'jobsIndex'])->name('jobs.index');
-    Route::get('/jobs/{job}/applications', [TalentDashboardController::class, 'jobApplications'])->name('jobs.applications.index');
-    Route::post('/jobs/{job}/apply', [TalentDashboardController::class, 'applyJob'])->name('jobs.apply');
+    Route::get('/page/jobs', [TalentJobController::class, 'index'])->name('jobs.index');
+    Route::get('/page/jobs/{job}/show', [TalentJobController::class, 'show'])->name('jobs.show');
+    Route::get('/page/jobs/create', [TalentJobController::class, 'create'])->name('jobs.create');
+    Route::post('/page/jobs/store', [TalentJobController::class, 'store'])->name('jobs.store');
+    Route::get('/page/jobs/{job}/edit', [TalentJobController::class, 'edit'])->name('jobs.edit');
+    Route::put('/page/jobs/{job}/update', [TalentJobController::class, 'update'])->name('jobs.update');
+    Route::delete('/page/jobs/{job}/delete', [TalentJobController::class, 'destroy'])->name('jobs.destroy');
+    Route::get('/page/jobs/{job}/applications', [TalentJobController::class, 'applications'])->name('jobs.applications.index');
+    Route::post('/page/jobs/{job}/apply', [TalentJobController::class, 'applyJob'])->name('jobs.apply');
 
     // events routes
     Route::get('/events', [TalentDashboardController::class, 'eventsIndex'])->name('events.index');
