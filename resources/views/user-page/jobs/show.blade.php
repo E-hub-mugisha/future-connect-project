@@ -232,4 +232,34 @@
     </div>
 </div>
 
+<!-- Subscribe Modal -->
+<div class="modal fade" id="subscribeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Subscription Required</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>To apply for jobs, you must have an active subscription.</p>
+                <p class="mb-0">Please subscribe to continue.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('pricing') }}" class="btn btn-primary rounded-pill">Subscribe Now</a>
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trigger modal if session has 'showSubscribeModal' -->
+@if(session('showSubscribeModal'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var subscribeModal = new bootstrap.Modal(document.getElementById('subscribeModal'));
+        subscribeModal.show();
+    });
+</script>
+@endif
+
 @endsection

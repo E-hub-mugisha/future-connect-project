@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Models\UserSubscription;
+use Illuminate\Console\Command;
+
+class ExpireTrials extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:expire-trials';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        UserSubscription::where('status', 'trialing')
+            ->where('trial_ends_at', '<=', now())
+            ->update([
+                'status' => 'expired'
+            ]);
+    }
+}

@@ -219,14 +219,14 @@ $categories = \App\Models\Category::all();
 <!-- Modern UI Styling -->
 <style>
     .modern-tabs .nav-link {
-        border: none !important;
+        border: 1px solid #319BF9;
         background: #f8f9fa;
         margin-right: 8px;
         padding: 10px 18px;
         border-radius: 10px;
         font-weight: 500;
         transition: all 0.2s ease;
-        color: #555;
+        color: #319BF9;
     }
 
     .modern-tabs .nav-link:hover {
@@ -235,9 +235,9 @@ $categories = \App\Models\Category::all();
     }
 
     .modern-tabs .nav-link.active {
-        background: #0d6efd;
+        background: #319BF9;
         color: #fff !important;
-        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        /* box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3); */
     }
 
     .modern-tab-content {

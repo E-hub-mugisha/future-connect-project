@@ -29,6 +29,12 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
+        // ✅ Auto-start trial if intended
+        if (session()->pull('start_trial_after_login')) {
+            app(\App\Http\Controllers\SubscriptionController::class)
+                ->activate(request());
+        }
+
         // ✅ Allow custom redirect via ?redirect_to=...
         if ($request->has('redirect_to')) {
             return redirect()->to($request->redirect_to);

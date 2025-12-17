@@ -87,11 +87,20 @@ class UserJobController extends Controller
         $categories = JobCategory::withCount('jobSections')
             ->having('job_sections_count', '>', 0)
             ->get();
-        return view('user-page.jobs.show', compact('job', 'recent','categories'));
+        return view('user-page.jobs.show', compact('job', 'recent', 'categories'));
     }
 
     public function apply(Request $request, JobSection $job)
     {
+        $user = Auth::user();
+
+        // ✅ Check if the user has an active subscription
+        if (!$user->activeSubscription) {
+            // Redirect back with a session key to trigger modal
+            return redirect()->route('user.jobs.show', $job->id)
+                ->with('warning', 'You must subscribe before applying to jobs.');
+        }
+        
         $request->validate([
             'cover_letter' => 'nullable|string',
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048'

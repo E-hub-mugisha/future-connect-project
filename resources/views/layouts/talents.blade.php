@@ -43,7 +43,7 @@
 
     @include('talent-pages.header')
 
-    <div class="az-content az-content-dashboard">
+    <div class="az-content">
         @yield('content')
     </div>
 

@@ -16,6 +16,7 @@ use App\Models\Event;
 use App\Models\Faq;
 use App\Models\JobSection;
 use App\Models\Partner;
+use App\Models\PricingPlan;
 use App\Models\Project;
 use App\Models\Skill;
 use App\Models\SkillReview;
@@ -634,5 +635,13 @@ class HomeController extends Controller
             'status' => $status,
             'output' => $output
         ]);
+    }
+
+    public function pricing()
+    {
+        $plans = PricingPlan::with('prices')
+        ->where('is_active', true)
+        ->get();
+        return view('user-page.pricing', compact('plans'));
     }
 }

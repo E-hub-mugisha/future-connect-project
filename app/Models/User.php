@@ -92,4 +92,32 @@ class User extends Authenticatable
     {
         return $this->hasOne(DiasporaAccount::class);
     }
+    public function subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(UserSubscription::class)
+            ->whereIn('status', ['active', 'trialing'])
+            ->latestOfMany();
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->activeSubscription()->exists();
+    }
+
+    public function hasUsedTrial(): bool
+    {
+        return !is_null($this->trial_used_at);
+    }
+
+    public function activeTrial()
+    {
+        return $this->hasOne(UserSubscription::class)
+            ->where('status', 'trial')
+            ->where('ends_at', '>', now());
+    }
 }

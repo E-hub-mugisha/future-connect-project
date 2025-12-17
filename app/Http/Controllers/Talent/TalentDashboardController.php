@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Talent;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\Testimonial;
+use App\Models\UserSubscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TalentDashboardController extends Controller
 {

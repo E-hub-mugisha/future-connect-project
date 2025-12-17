@@ -80,6 +80,11 @@ $role = Auth::check() ? Auth::user()->role : null;
                             <i class="ti ti-transition-top me-2"></i> <span>Story Payments</span> 
                         </a> 
                     </li>
+                    <li class="nk-menu-item"> 
+                        <a href="/user/subscription" class="nk-menu-link {{ isActiveRoute('user.subscription.*', 'user/subscriptions*') }}"> 
+                            <i class="ti ti-transition-top me-2"></i> <span>Subscriptions</span> 
+                        </a> 
+                    </li>
                 </ul>
             </div>
         </div>

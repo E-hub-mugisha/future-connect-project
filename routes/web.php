@@ -32,6 +32,7 @@ use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\Seller\SellerProductController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Talent\TalentCourseController;
 use App\Http\Controllers\Talent\TalentJobController;
 use App\Http\Controllers\Talent\TalentProjectController;
@@ -240,6 +241,20 @@ Route::prefix('diaspora')->group(function () {
     Route::post('/{id}/reject', [DiasporaAccountController::class, 'reject']);
 });
 
+Route::get('pricing_plan', [HomeController::class, 'pricing'])->name('pricing');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])
+        ->name('subscribe');
+});
+Route::get(
+    '/payment/subscription/checkout/{subscription}',
+    [SubscriptionController::class, 'checkout']
+)->middleware('auth')->name('payment.subscription.checkout');
+
+Route::get(
+    '/payment/subscription/callback',
+    [SubscriptionController::class, 'callback']
+)->name('payment.subscription.callback');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -528,7 +543,37 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
     Route::get('user/courses', [UserPanelController::class, 'userCourses'])->name('user.courses');
     Route::get('user/courses/{slug}', [UserPanelController::class, 'userCoursesShow'])->name('user-panel.courses.show');
+
+    Route::get('/user/subscription', [SubscriptionController::class, 'indexUser'])->name('user.subscription');
+    Route::get('/user/subscription/{subscription}', [SubscriptionController::class, 'showUser'])->name('user.subscription.show');
+    Route::post('/user/subscription/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('user.subscription.cancel');
+    Route::get('/user/subscription/{subscription}/upgrade', [SubscriptionController::class, 'upgradeForm'])->name('user.subscription.upgrade.form');
+    Route::post('/user/subscription/{subscription}/upgrade', [SubscriptionController::class, 'upgrade'])->name('user.subscription.upgrade');
+    Route::post('/user/subscription/{subscription}/renew', [SubscriptionController::class, 'renew'])->name('user.subscription.renew');
+    Route::post('/subscription/trial', [SubscriptionController::class, 'startTrial'])
+        ->middleware('auth')
+        ->name('subscription.trial');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/subscription', [SubscriptionController::class, 'index'])->name('user.subscription');
+    Route::get('/user/subscription/{subscription}', [SubscriptionController::class, 'show'])->name('user.subscription.show');
+    Route::post('/user/subscription/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('user.subscription.cancel');
+    Route::get('/user/subscription/{subscription}/upgrade', [SubscriptionController::class, 'upgradeForm'])->name('user.subscription.upgrade.form');
+    Route::post('/user/subscription/{subscription}/upgrade', [SubscriptionController::class, 'upgrade'])->name('user.subscription.upgrade');
+    Route::post('/user/subscription/{subscription}/renew', [SubscriptionController::class, 'renew'])->name('user.subscription.renew');
+    Route::post('/subscription/trial', [SubscriptionController::class, 'startTrial'])
+        ->middleware('auth')
+        ->name('subscription.trial');
+    Route::get('/user/get/subscription/plan', [SubscriptionController::class, 'plan'])->name('user.subscription.plan');
+});
+
+Route::get('/start-trial', [SubscriptionController::class, 'start'])
+    ->name('trial.start');
+
+Route::post('/activate-trial', [SubscriptionController::class, 'activate'])
+    ->middleware('auth')
+    ->name('trial.activate');
 
 Route::get('/deploy', function (Request $request) {
     // Secure token validation
@@ -581,12 +626,9 @@ Route::get('/run-migrations-seeders', function () {
         Artisan::call('migrate', ['--force' => true]);
 
         // Run seeders (example: ProductCategorySeeder)
-        // Artisan::call('db:seed', ['--class' => 'EventSeeder', '--force' => true]);
-        // Artisan::call('db:seed', ['--class' => 'EventTicketSeeder', '--force' => true]);
-        // Artisan::call('db:seed', ['--class' => 'JobSectionSeeder', '--force' => true]);
-        // Artisan::call('db:seed', ['--class' => 'ProjectSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
 
-        return "Migration and seeders ran successfully!";
+        return redirect()->route('user.home')->with('success', 'Migration and seeders ran successfully!');
     } catch (\Exception $e) {
         return "Error: " . $e->getMessage();
     }

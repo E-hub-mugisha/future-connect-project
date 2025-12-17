@@ -1,12 +1,12 @@
 <div class="az-header">
     <div class="container">
         <div class="az-header-left">
-            <a href="index.html" class="az-logo"><img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo" style="height: 50px;" /></a>
+            <a href="{{ route('user.home')}}" class="az-logo"><img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo" style="height: 50px;" /></a>
             <a href="#" id="azMenuShow" class="az-header-menu-icon d-lg-none"><span></span></a>
         </div><!-- az-header-left -->
         <div class="az-header-menu">
             <div class="az-header-menu-header">
-                <a href="index.html" class="az-logo"><img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo" style="height: 50px;" /></a>
+                <a href="{{ route('user.home')}}" class="az-logo"><img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo" style="height: 50px;" /></a>
                 <a href="#" class="close">&times;</a>
             </div><!-- az-header-menu-header -->
             <ul class="nav">
@@ -21,6 +21,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('talent.payments.index')}}" class="nav-link"><i class="typcn typcn-document"></i> Payments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('user.subscription') }}" class="nav-link">Subscription</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link with-sub"><i class="typcn typcn-tabs-outline"></i> Utilities</a>
@@ -95,7 +98,10 @@
                     <a href="{{ route('talent.wallets.index')}}" class="dropdown-item"><i class="typcn typcn-edit"></i> Wallet</a>
                     <a href="{{ route('talent.connections.index')}}" class="dropdown-item"><i class="typcn typcn-time"></i> Connections</a>
                     <a href="#" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Account Settings</a>
-                    <a href="page-signin.html" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign Out</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign Out</button>
+                    </form>
                 </div><!-- dropdown-menu -->
             </div>
         </div><!-- az-header-right -->

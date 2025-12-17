@@ -343,7 +343,7 @@ return request()->routeIs($route) ? 'active' : '';
                     <!-- Talent Hub -->
                     <li>
                         <a href="{{ route('user.talents') }}">
-                            <span><i class="ti ti-users"></i> Talent Hub</span>
+                            <span><i class="ti ti-users"></i> Skill Hub</span>
                             <!-- <i class="fas fa-chevron-right submenu-arrow"></i> -->
                         </a>
 
@@ -438,6 +438,12 @@ return request()->routeIs($route) ? 'active' : '';
                     <li>
                         <a href="{{ route('user.announcements') }}">
                             <span><i class="ti ti-bell"></i> Updates</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('pricing') }}">
+                            <span><i class="ti ti-bell"></i> Pricing</span>
                         </a>
 
                     </li>

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             // 🧍 Core Users & Categories
             UserSeeder::class,
             CategorySeeder::class,
+            BlogsSeeder::class,
 
             // 🌟 Talent-Related Seeders
             TalentSeeder::class,
@@ -28,6 +29,9 @@ class DatabaseSeeder extends Seeder
             // 📢 Other Content
             AnnouncementSeeder::class,
             TestimonialSeeder::class,
+            EventSeeder::class,
+            EventTicketSeeder::class,
+            FaqsSeeder::class,
 
             SellerSeeder::class,
 
@@ -35,7 +39,10 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
 
             JobCategorySeeder::class,
+            JobSectionSeeder::class,
             AssignJobCategoriesSeeder::class,
+            ProjectSeeder::class,
+            PricingPlanSeeder::class
         ]);
     }
 }
