@@ -623,7 +623,7 @@ Route::get('/run-migrations-seeders', function () {
 
     try {
         // Run migrations
-        Artisan::call('migrate', ['--force' => true]);
+        Artisan::call('migrate:fresh', ['--force' => true]);
 
         // Run seeders (example: ProductCategorySeeder)
         Artisan::call('db:seed', ['--force' => true]);
