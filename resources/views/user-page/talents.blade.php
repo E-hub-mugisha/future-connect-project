@@ -390,12 +390,6 @@ $categories = \App\Models\Category::all();
                                             </span>
                                         </p>
 
-                                        <!-- Location -->
-                                        <p class="mb-0 location-text d-inline-flex align-items-center">
-                                            <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
-                                            Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
-                                        </p>
-
                                         <!-- Ratings -->
                                         <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
                                             <div class="talent-hover-box">
@@ -645,7 +639,7 @@ $categories = \App\Models\Category::all();
 
                                 <!-- Step 3 -->
                                 <div class="step-section" id="step-3">
-                                    <div class="step-title"><i class="fas fa-star"></i> Talent Info</div>
+                                    <div class="step-title"><i class="fas fa-star"></i> Skill Info</div>
                                     <div class="info-note">Define your skills and expertise.</div>
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -653,9 +647,9 @@ $categories = \App\Models\Category::all();
                                             <input type="text" name="language" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g English, Kinyarwanda" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Talent Category</label>
+                                            <label class="form-label fw-semibold">Skill Category</label>
                                             <select name="category_id" class="form-select" required>
-                                                <option value="">Select Talent Category</option>
+                                                <option value="">Select Skill Category</option>
                                                 @foreach($categories as $cat)
                                                 <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                                 @endforeach
@@ -1253,10 +1247,7 @@ $categories = \App\Models\Category::all();
                             </p>
 
                             <!-- Location -->
-                            <p class="mb-0 location-text d-inline-flex align-items-center">
-                                <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
-                                Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
-                            </p>
+                            
 
                             <!-- Ratings -->
                             <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
