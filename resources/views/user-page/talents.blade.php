@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Talent Marketplace – Discover Skilled Professionals')
+@section('title', 'Skilled Marketplace – Discover Skilled Professionals')
 @section('content')
 
 <!-- SwiperJS for carousel -->
@@ -259,19 +259,19 @@ $categories = \App\Models\Category::all();
     <ul class="nav nav-tabs modern-tabs mb-4 justify-content-center" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active rounded-pill btn-outline-primary" id="marketplace-tab" data-bs-toggle="tab" data-bs-target="#marketplace" type="button" role="tab">
-                Talent Marketplace
+                Skill Marketplace
             </button>
         </li>
 
         <li class="nav-item" role="presentation">
             <button class="nav-link rounded-pill btn-outline-primary" id="become-tab" data-bs-toggle="tab" data-bs-target="#become" type="button" role="tab">
-                Become a Talent
+                Register your Skill
             </button>
         </li>
 
         <li class="nav-item" role="presentation">
             <button class="nav-link rounded-pill btn-outline-primary" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab">
-                Talent Categories
+                Skill Categories
             </button>
         </li>
 
@@ -289,9 +289,9 @@ $categories = \App\Models\Category::all();
             <div class="talent-section-two next-gen-section">
                 <div class="container">
                     <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-                        <h2 class="mb-2" style="color: #f9f9f9;"><span class="title-bg"></span>Meet the Next Generation of talents<span
+                        <h2 class="mb-2" style="color: #f9f9f9;"><span class="title-bg"></span>Meet the Next Generation of skilled people<span
                                 class="title-bg2"></span></h2>
-                        <p style="color: #f9f9f9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+                        <p style="color: #f9f9f9;">Connect with the next wave of skilled people, guiding you with fresh perspectives</p>
                     </div>
                     <div class="row seller-list postLists cards">
                         <!-- Filter -->
@@ -313,7 +313,7 @@ $categories = \App\Models\Category::all();
                                     <li class="nav-item" role="presentation">
                                         <!-- Search Modal Trigger -->
                                         <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                            <i class="ti ti-search me-1"></i> Search Talents
+                                            <i class="ti ti-search me-1"></i> Search skilled people
                                         </a>
                                     </li>
 
@@ -570,9 +570,9 @@ $categories = \App\Models\Category::all();
                         <div class="col-lg-6 d-flex">
                             <div class="seller-info-content w-100">
                                 <div class="seller-head">
-                                    <h3>Join Our Talent Hub</h3>
+                                    <h3>Join Our skill Hub</h3>
                                     <p>Showcase your skills, get verified, and connect with clients globally.
-                                        Our platform helps talents like you grow professionally and gain exposure.</p>
+                                        Our platform helps skilled people like you grow professionally and gain exposure.</p>
                                 </div>
                                 <div class="seller-feature-list d-flex w-100">
                                     <div class="sllers-list">
@@ -581,7 +581,7 @@ $categories = \App\Models\Category::all();
                                             <li><span><i class="feather-check-square"></i></span>Display your skills, experience, and achievements professionally.</li>
                                             <li><span><i class="feather-check-square"></i></span>Earn trust and credibility with verified profiles.</li>
                                         </ul>
-                                        <button class="btn btn-outline-primary rounded-pill w-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register as a Talent</button>
+                                        <button class="btn btn-outline-primary rounded-pill w-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skill</button>
                                     </div>
                                 </div>
                             </div>
@@ -595,7 +595,7 @@ $categories = \App\Models\Category::all();
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
                         <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
-                            <h5 class="modal-title fw-bold" id="talentModalLabel">Talent Registration</h5>
+                            <h5 class="modal-title fw-bold" id="talentModalLabel">Skill Registration</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -731,7 +731,7 @@ $categories = \App\Models\Category::all();
             <div class="popular-section-two">
                 <div class="container">
                     <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
-                        <h2 class="mb-2"><span class="title-bg"></span>Popular Categories<span class="title-bg2"></span></h2>
+                        <h2 class="mb-2"><span class="title-bg"></span>Popular skill Categories<span class="title-bg2"></span></h2>
                         <p>Unlock a world of opportunities and take control of your future</p>
                     </div>
                     <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
@@ -766,7 +766,7 @@ $categories = \App\Models\Category::all();
                         <div class="col-lg-8">
                             <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                                 <div class="banner-head">
-                                    <h1 class="mb-2">Networking Hub – Connect with Talents &amp; Opportunities</h1>
+                                    <h1 class="mb-2">Networking Hub – Connect with skills &amp; Opportunities</h1>
                                     <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
                                 </div>
                                 <div class="banner-form">
@@ -775,11 +775,11 @@ $categories = \App\Models\Category::all();
                                             <div class="input-block">
                                                 <label>Category</label>
                                                 <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
-                                                    <option data-select2-id="6">Select</option>
-                                                    <option>Digital Marketing</option>
-                                                    <option>Writing</option>
-                                                    <option>Social Media</option>
-                                                </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false" aria-labelledby="select2-tkto-container"><span class="select2-selection__rendered" id="select2-tkto-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span><span class="select2 select2-container select2-container--default select2-hidden-accessible" dir="ltr" data-select2-id="5" style="width: 100%;" tabindex="-1" aria-hidden="true"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-one5-container"><span class="select2-selection__rendered" id="select2-one5-container" role="textbox" aria-readonly="true" title="Select">Select</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="1" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-ywkf-container"><span class="select2-selection__rendered" id="select2-ywkf-container" role="textbox" aria-readonly="true"></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                                    <option >Select category</option>
+                                                    @foreach($categories as $cat)
+                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="input-block">
                                                 <label>Location</label>
@@ -800,14 +800,7 @@ $categories = \App\Models\Category::all();
                                         </div>
                                     </form>
                                 </div>
-                                <div class="popular-search">
-                                    <h5>Popular Searches : </h5>
-                                    <ul>
-                                        <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                                        <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                                        <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
-                                    </ul>
-                                </div>
+                                
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -855,7 +848,7 @@ $categories = \App\Models\Category::all();
                                     <h2>The <strong>Networking Hub</strong> gateway to meaningful professional connections.</h2>
                                     <p>
                                         your gateway to meaningful professional connections.
-                                        Whether you are a talent seeking opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network, this hub connects you with the right people.
+                                        Whether you are a skilled seeking opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network, this hub connects you with the right people.
                                     </p>
                                     <h5>Our Mission</h5>
                                     <p>At Future Connect, our mission is to empower individuals and businesses by facilitating easy access to a diverse range of high-quality services. We believe in creating a collaborative and inclusive marketplace that fosters growth,
@@ -889,8 +882,8 @@ $categories = \App\Models\Category::all();
     <div class="trend-section ">
         <div class="row align-items-center">
             <div class="col-sm-10">
-                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of talents<span class="title-bg2"></span></h5>
-                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative talent across Africa</p>
+                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of skilled people<span class="title-bg2"></span></h5>
+                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative people across Africa</p>
             </div>
             <div class="col-sm-2 text-sm-end">
                 <div class="owl-nav trend-nav nav-control nav-top"></div>
@@ -1158,9 +1151,9 @@ $categories = \App\Models\Category::all();
 <div class="talent-section-two next-gen-section">
     <div class="container">
         <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of talents<span
+            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of skilled people<span
                     class="title-bg2"></span></h2>
-            <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
+            <p style="color: #319BF9;">Connect with the next wave of skilled people, guiding you with fresh perspectives</p>
         </div>
         <div class="row seller-list postLists cards">
             <!-- Filter -->
@@ -1182,7 +1175,7 @@ $categories = \App\Models\Category::all();
                         <li class="nav-item" role="presentation">
                             <!-- Search Modal Trigger -->
                             <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="ti ti-search me-1"></i> Search Talents
+                                <i class="ti ti-search me-1"></i> Search skills
                             </a>
                         </li>
 
@@ -1318,9 +1311,9 @@ $categories = \App\Models\Category::all();
                 <div class="col-lg-4">
                     <div class="faq-heading aos" data-aos="fade-up">
                         <div class="section-header mb-2">
-                            <h2><span>Talent</span> Frequently Asked Questions</h2>
+                            <h2><span>Skilled People</span> Frequently Asked Questions</h2>
                         </div>
-                        <p>Don’t see your question? We’re here to help you connect with the right talent.</p>
+                        <p>Don’t see your question? We’re here to help you connect with the right skilled people.</p>
                         <a href="{{ route('user.contact') }}" class="btn btn-primary">Ask a Question <i class="ti ti-arrow-badge-right"></i></a>
                     </div>
                 </div>
@@ -1330,12 +1323,12 @@ $categories = \App\Models\Category::all();
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
                                 <a class="collapsed" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">
-                                    How can I find the right talent for my project?
+                                    How can I find the right skilled people for my project?
                                 </a>
                             </h4>
                             <div id="faqone" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>Our Talent Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
+                                    <p>Our skilled people Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
                                 </div>
                             </div>
                         </div>
@@ -1343,12 +1336,12 @@ $categories = \App\Models\Category::all();
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
                                 <a class="collapsed" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">
-                                    How do I hire a talent?
+                                    How do I hire a skilled people?
                                 </a>
                             </h4>
                             <div id="faqtwo" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>After browsing profiles, you can contact talents directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
+                                    <p>After browsing profiles, you can contact skilled peoples directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
                                 </div>
                             </div>
                         </div>
@@ -1356,12 +1349,12 @@ $categories = \App\Models\Category::all();
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
                                 <a class="collapsed" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">
-                                    Can talents showcase their past projects?
+                                    Can skilled peoples showcase their past projects?
                                 </a>
                             </h4>
                             <div id="faqthree" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>Yes! Talents can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
+                                    <p>Yes! skilled peoples can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
                                 </div>
                             </div>
                         </div>
@@ -1404,12 +1397,12 @@ $categories = \App\Models\Category::all();
                     <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-two" alt="img">
                 </div>
                 <div class="section-header mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <h2>Want to Showcase Your Talent?</h2>
-                    <p>Over 74K talents on the platform - available today for you.</p>
+                    <h2>Want to Showcase Your skills?</h2>
+                    <p>Over 74K skilled people on the platform - available today for you.</p>
                     <p>Join our community and take the first step towards your dream career.</p>
                 </div>
                 <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <a href="{{ url('/register_as_talent') }}" class="btn btn-lg btn-primary">Join Us a talent<i class="ti ti-chevron-right me-2"></i></a>
+                    <a href="{{ url('/register_as_talent') }}" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
                 </div>
             </div>
         </div>
@@ -1425,7 +1418,7 @@ $categories = \App\Models\Category::all();
             <div class="modal-header border-0 bg-gradient text-white"
                 style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
                 <h5 class="modal-title fw-bold" id="searchModalLabel">
-                    🔎 Find Your Talent
+                    🔎 Find Your skills
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -1461,7 +1454,7 @@ $categories = \App\Models\Category::all();
                             Cancel
                         </button>
                         <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">
-                            Search Talents
+                            Search
                         </button>
                     </div>
                 </form>
