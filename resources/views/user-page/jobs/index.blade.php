@@ -290,17 +290,17 @@
                             <div class="carousel-item active">
                                 <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                                     <div class="banner-head mt-4">
-                                        <h1 class="mb-2 text-white">Explore {{ $jobs->total() }}+ Available work or gigs</h1>
+                                        <h1 class="mb-2 text-white">Explore {{ $jobs->total() }}+ Available work</h1>
                                         <p class="d-inline-flex text-white">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
                                     </div>
                                     <div class="banner-form">
                                         <!-- Tabs Navigation -->
                                         <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Browse Jobs</button>
+                                                <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Work for your skills</button>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="gig-tab" data-bs-toggle="pill" data-bs-target="#gig" type="button" role="tab">Post a Gig</button>
+                                                <button class="nav-link" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#gig" type="button" role="tab">Ways to Earn</button>
                                             </li>
                                         </ul>
 
@@ -317,11 +317,11 @@
 
                                             <!-- gig Center -->
                                             <div class="tab-pane hero-tab fade" id="gig" role="tabpanel">
-                                                <h4 class="text-white">Showcase Your Skills & Find Work Today!</h4>
+                                                <h4 class="text-white">Ways to Earn through our platform</h4>
                                                 <p class="text-white">
-                                                    Have a skill or service to offer? Share it with our community and get hired fast!
+                                                    Learn how to earn through future connect platform.
                                                 </p>
-                                                <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Create Gig Now</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
                                             </div>
                                         </div>
                                     </div>

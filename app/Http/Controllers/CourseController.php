@@ -14,7 +14,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::with(['category', 'talent', 'feedback'])->paginate(12);
+        $courses = Course::with(['category', 'talent', 'feedback'])->paginate(8);
         $categories = Category::with('courses')->get();
         return view('user-page.courses', compact('courses', 'categories'));
     }

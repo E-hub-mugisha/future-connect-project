@@ -344,7 +344,7 @@ return request()->routeIs($route) ? 'active' : '';
                     <li>
                         <a href="{{ route('user.talents') }}">
                             <span><i class="ti ti-users"></i> Skills Hub</span>
-                            <!-- <i class="fas fa-chevron-right submenu-arrow"></i> -->
+
                         </a>
                     </li>
 
@@ -353,30 +353,13 @@ return request()->routeIs($route) ? 'active' : '';
                         <a href="{{ route('user.courses') }}">
                             <span><i class="ti ti-book"></i> Learning Center</span>
                         </a>
-
-                        <ul class="submenu">
-                            <!-- <li><a href="/courses"><i class="ti ti-list"></i> Browse Courses</a></li> -->
-
-                            <!-- <li class="has-submenu">
-                                <a role="button">
-                                    <span><i class="ti ti-category"></i> Categories</span>
-                                    <i class="fas fa-chevron-right submenu-arrow"></i>
-                                </a>
-
-                                <ul class="submenu">
-                                    @foreach($categories as $cat)
-                                    <li>
-                                        <a href="{{ url('/courses/category/' . $cat->slug) }}">
-                                            <i class="ti ti-circle"></i> {{ $cat->name }}
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </li> -->
-                        </ul>
                     </li>
 
-                    <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Work & Gigs</a></li>
+                    <li>
+                        <a href="{{ route('user.jobs.index') }}">
+                            <i class="ti ti-briefcase"></i> Find Work
+                        </a>
+                    </li>
 
                     <li>
                         <a href="{{ route('talent.connections-room') }}">
@@ -389,25 +372,18 @@ return request()->routeIs($route) ? 'active' : '';
                         <a href="{{ route('user.products.index') }}">
                             <span><i class="ti ti-shopping-cart"></i> Marketplace</span>
                         </a>
-
-                        <!-- <ul class="submenu">
-                            <li><a href="{{ route('user.products.index') }}"><i class="ti ti-box"></i> All Products</a></li>
-                            <li><a data-bs-toggle="modal" data-bs-target="#applySellerModal"><i class="ti ti-store"></i> Become a Seller</a></li>
-                        </ul> -->
                     </li>
 
                     <!-- Updates -->
                     <li>
                         <a href="{{ route('user.announcements') }}">
-                            <span><i class="ti ti-bell"></i> Updates</span>
+                            <span><i class="ti ti-bell"></i> What's New</span>
                         </a>
-
                     </li>
                     <li>
                         <a href="{{ route('pricing') }}">
                             <span><i class="ti ti-bell"></i> Pricing</span>
                         </a>
-
                     </li>
                 </ul>
             </div>
