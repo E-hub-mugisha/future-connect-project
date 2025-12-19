@@ -25,16 +25,16 @@ return request()->routeIs($route) ? 'active' : '';
         background: rgba(255, 255, 255, 0.45);
     }
 
-    .main-menu-wrapper {
+    /* .main-menu-wrapper {
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         padding: 5px -2rem;
         border-radius: 4rem;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    }
+    } */
 
     .main-menu-wrapper .main-nav a {
-        color: #319BF9;
+        color: #000;
         font-size: 13px;
         font-weight: 500;
         transition: all 0.3s ease-in-out;
