@@ -259,7 +259,7 @@ $categories = \App\Models\Category::all();
     <ul class="nav nav-tabs modern-tabs mb-4 justify-content-center" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active rounded-pill btn-outline-primary" id="marketplace-tab" data-bs-toggle="tab" data-bs-target="#marketplace" type="button" role="tab">
-                Skill Marketplace
+                Skills Marketplace
             </button>
         </li>
 
@@ -575,7 +575,7 @@ $categories = \App\Models\Category::all();
                                             <li><span><i class="feather-check-square"></i></span>Display your skills, experience, and achievements professionally.</li>
                                             <li><span><i class="feather-check-square"></i></span>Earn trust and credibility with verified profiles.</li>
                                         </ul>
-                                        <button class="btn btn-outline-primary rounded-pill w-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skill</button>
+                                        <button class="btn btn-outline-primary rounded-pill w-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
                                     </div>
                                 </div>
                             </div>
@@ -584,148 +584,13 @@ $categories = \App\Models\Category::all();
                 </div>
             </section>
 
-            <!-- Talent Modal -->
-            <div class="modal fade modal-glass" id="talentModal" tabindex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                        <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
-                            <h5 class="modal-title fw-bold" id="talentModalLabel">Skill Registration</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-
-                            <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-
-                                <!-- Step 1 -->
-                                <div class="step-section active" id="step-1">
-                                    <div class="step-title"><i class="fas fa-user"></i> Personal Info</div>
-                                    <div class="info-note">Fill your basic information for profile setup.</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Names</label>
-                                            <input type="text" name="name" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g John Doe" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Address</label>
-                                            <input type="text" name="address" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g Kigali, Rwanda" required>
-                                        </div>
-                                    </div>
-                                    <div class="text-end mt-4">
-                                        <button type="button" class="btn btn-primary btn-next">Next</button>
-                                    </div>
-                                </div>
-
-                                <!-- Step 2 -->
-                                <div class="step-section" id="step-2">
-                                    <div class="step-title"><i class="fas fa-phone"></i> Contact Info</div>
-                                    <div class="info-note">Provide your contact details for clients to reach you.</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Phone</label>
-                                            <input type="text" name="phone" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g +250 788 123 456" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Email</label>
-                                            <input type="email" name="email" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g john.doe@example.com" required>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-4">
-                                        <button type="button" class="btn btn-danger btn-prev">Back</button>
-                                        <button type="button" class="btn btn-primary btn-next">Next</button>
-                                    </div>
-                                </div>
-
-                                <!-- Step 3 -->
-                                <div class="step-section" id="step-3">
-                                    <div class="step-title"><i class="fas fa-star"></i> Skill Info</div>
-                                    <div class="info-note">Define your skills and expertise.</div>
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Languages Spoken</label>
-                                            <input type="text" name="language" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g English, Kinyarwanda" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-semibold">Skill Category</label>
-                                            <select name="category_id" class="form-select" required>
-                                                <option value="">Select Skill Category</option>
-                                                @foreach($categories as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fw-semibold">Description</label>
-                                            <textarea name="description" class="form-control rounded-3 border-0 shadow-sm" rows="3" placeholder="Describe your talent..."></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-4">
-                                        <button type="button" class="btn btn-danger btn-prev">Back</button>
-                                        <button type="button" class="btn btn-primary btn-next">Next</button>
-                                    </div>
-                                </div>
-
-                                <!-- Step 4 -->
-                                <div class="step-section" id="step-4">
-                                    <div class="step-title"><i class="fas fa-camera"></i> Upload Photo & Submit</div>
-                                    <div class="info-note">Add a professional photo for your profile.</div>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold">Profile Image</label>
-                                        <input type="file" name="image" class="form-control rounded-3 border-0 shadow-sm" accept="image/*" required>
-                                        <div class="invalid-feedback">Please upload a valid image file. Accepts: .jpg, .jpeg, .png</div>
-                                    </div>
-                                    <div class="form-check mt-3 mb-3">
-                                        <input type="checkbox" class="form-check-input" id="terms" required>
-                                        <label class="form-check-label" for="terms">
-                                            I accept the <a href="{{ route('user.terms-condition') }}" class="text-primary">Terms & Conditions</a>
-                                        </label>
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-4">
-                                        <button type="button" class="btn btn-danger btn-prev">Back</button>
-                                        <button type="submit" class="btn btn-success">Submit Registration</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                    const steps = document.querySelectorAll(".step-section");
-                    const nextBtns = document.querySelectorAll(".btn-next");
-                    const prevBtns = document.querySelectorAll(".btn-prev");
-                    const progressBar = document.getElementById("progressBar");
-
-                    let currentStep = 0;
-
-                    function showStep(step) {
-                        steps.forEach((s, i) => s.classList.toggle("active", i === step));
-                    }
-
-                    nextBtns.forEach(btn => btn.addEventListener("click", () => {
-                        if (currentStep < steps.length - 1) currentStep++;
-                        showStep(currentStep);
-                    }));
-
-                    prevBtns.forEach(btn => btn.addEventListener("click", () => {
-                        if (currentStep > 0) currentStep--;
-                        showStep(currentStep);
-                    }));
-
-                    showStep(currentStep);
-                });
-            </script>
         </div>
 
         <div class="tab-pane fade" id="categories" role="tabpanel">
             <div class="popular-section-two">
                 <div class="container">
                     <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
-                        <h2 class="mb-2"><span class="title-bg"></span>Popular skill Categories<span class="title-bg2"></span></h2>
+                        <h2 class="mb-2" style="color: #f9f9f9;"><span class="title-bg"></span>Popular skill Categories<span class="title-bg2"></span></h2>
                         <p>Unlock a world of opportunities and take control of your future</p>
                     </div>
                     <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
@@ -750,60 +615,14 @@ $categories = \App\Models\Category::all();
 
         <div class="tab-pane fade" id="networking" role="tabpanel">
             <section class="hero-section">
-                <div class="banner-bg-imgs">
-                    <img src="http://localhost:8000/assets/img/bg/banner-bg-01.png" class="banner-bg-one" alt="img">
-                    <img src="http://localhost:8000/assets/img/bg/banner-bg-02.png" class="banner-bg-two" alt="img">
-                    <!-- <img src="http://localhost:8000/assets/img/bg/banner-bg-04.png" class="banner-bg-four" alt="img"> -->
-                </div>
                 <div class="container p-4">
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                                 <div class="banner-head">
-                                    <h1 class="mb-2">Networking Hub – Connect with skills &amp; Opportunities</h1>
+                                    <h1 class="mb-2" style="color: #f9f9f9;">Networking Hub – Connect with skills &amp; Opportunities</h1>
                                     <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
                                 </div>
-                                <div class="banner-form">
-                                    <form action="#">
-                                        <div class="banner-search-list">
-                                            <div class="input-block">
-                                                <label>Category</label>
-                                                <select class="select select2-hidden-accessible" data-select2-id="4" tabindex="-1" aria-hidden="true">
-                                                    <option >Select category</option>
-                                                    @foreach($categories as $cat)
-                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="input-block">
-                                                <label>Location</label>
-                                                <div class="input-locaion">
-                                                    <input type="text" class="form-control" placeholder="Miami, USA">
-                                                    <img src="assets/img/icons/map-pin-heart.svg" alt="Icon">
-                                                </div>
-                                            </div>
-                                            <div class="input-block border-0">
-                                                <label>Keyword</label>
-                                                <input type="text" class="form-control" placeholder="Need Graphic Designer">
-                                            </div>
-                                        </div>
-                                        <div class="input-block-btn">
-                                            <button class="btn btn-lg btn-primary d-inline-flex align-items-center" type="submit">
-                                                <i class="ti ti-search"></i> Search
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="banner-img">
-                                <!-- <div class="banner-img-right">
-                        <img src="http://localhost:8000/assets/img/bg/provide-bg.jpg" class="img-fluid" alt="img">
-                    </div> -->
-                                <img src="http://localhost:8000/assets/img/bg/banner-small-bg-01.svg" class="banner-small-bg-one" alt="img">
-                                <img src="http://localhost:8000/assets/img/bg/banner-small-bg-02.png" class="banner-small-bg-two" alt="img">
                             </div>
                         </div>
                     </div>
@@ -811,56 +630,83 @@ $categories = \App\Models\Category::all();
             </section>
             <section class="about-us-section">
                 <div class="container">
+                    <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
+                        <h2 class="mb-4" style="color: #f9f9f9;"><span class="title-bg"></span>Top skilled people to connect<span class="title-bg2"></span></h2>
+                    </div>
                     <div class="row align-items-center">
-                        <div class="col-lg-6">
-                            <div class="row me-4">
-                                <div class="col-sm-6">
-                                    <div class="about-inner-img">
-                                        <img src="http://localhost:8000/assets/img/bg/provide-bg.jpg" class="img-fluid" alt="img">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="about-inner-img">
-                                                <img src="http://localhost:8000/assets/img/aboutus/about-us-02.jpg" class="img-fluid" alt="img">
+                        @foreach($talents as $talent)
+                        <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
+                            <div class="card post-item m-card">
+                                <div class="card-body text-center">
+
+                                    <!-- Image -->
+                                    <a href="{{ route('user.talent.details', $talent->id) }}">
+                                        <img
+                                            class="img rounded-3"
+                                            src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
+                                            alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
+                                    </a>
+
+                                    <!-- Name -->
+                                    <h6 class="mb-1">
+                                        <a href="{{ route('user.talent.details', $talent->id) }}">
+                                            {{ $talent->name }}
+                                            <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
+                                        </a>
+                                    </h6>
+
+                                    <!-- Category -->
+                                    <p>{{ $talent->category->name ?? 'Uncategorized' }}
+                                        @php
+                                        // Pick a color class based on the level
+                                        $badgeClass = match($talent->level) {
+                                        'advanced' => 'bg-success', // Green
+                                        'intermediate' => 'bg-warning text-dark', // Yellow/Orange
+                                        default => 'bg-secondary', // Gray for Beginner
+                                        };
+                                        @endphp
+
+                                        <span class="badge {{ $badgeClass }}">
+                                            {{ ucfirst($talent->level) }}
+                                        </span>
+                                    </p>
+
+                                    <!-- Ratings -->
+                                    <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
+                                        <div class="talent-hover-box">
+                                            <div class="default-badges">
+                                                <span class="badge bg-light">
+                                                    {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
+                                                </span>
+                                                <span class="badge bg-light">
+                                                    {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
+                                                </span>
+                                            </div>
+                                            <div class="hover-badges">
+                                                <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                                    {{ $talent->skill }}
+                                                </a>
+                                                <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                                    {{ $talent->language }}
+                                                </a>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <div class="about-inner-img">
-                                                <img src="http://localhost:8000/assets/img/aboutus/about-us-03.jpg" class="img-fluid" alt="img">
-                                            </div>
-                                        </div>
                                     </div>
+
+                                    <!-- View Button -->
+                                    <div class="text-center d-flex justify-content-center">
+                                        <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
+                                            <i class="feather-arrow-right"></i>View Profile
+                                            <span class="slide-line"></span>
+                                            <span class="slide-line"></span>
+                                            <span class="slide-line"></span>
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="about-us-info">
-                                <div class="about-us-head">
-                                    <h6>About the Networking Hub</h6>
-                                    <h2>The <strong>Networking Hub</strong> gateway to meaningful professional connections.</h2>
-                                    <p>
-                                        your gateway to meaningful professional connections.
-                                        Whether you are a skilled seeking opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network, this hub connects you with the right people.
-                                    </p>
-                                    <h5>Our Mission</h5>
-                                    <p>At Future Connect, our mission is to empower individuals and businesses by facilitating easy access to a diverse range of high-quality services. We believe in creating a collaborative and inclusive marketplace that fosters growth,
-                                        creativity, and mutual success.
-                                    </p>
-                                </div>
-                                <div class="about-features">
-                                    <ul class="list-one">
-                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>Diverse Network of Professionals</li>
-                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>Trust and Transparency</li>
-                                    </ul>
-                                    <ul class="list-two">
-                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>User Friendly Platform</li>
-                                        <li><span><img src="http://localhost:8000/assets/img/icons/target-arrow-icon.svg" alt="img"></span>Innovation In Technology</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </section>
@@ -1247,7 +1093,7 @@ $categories = \App\Models\Category::all();
                             </p>
 
                             <!-- Location -->
-                            
+
 
                             <!-- Ratings -->
                             <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
@@ -1393,7 +1239,7 @@ $categories = \App\Models\Category::all();
                     <p>Join our community and take the first step towards your dream career.</p>
                 </div>
                 <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <a href="{{ url('/register_as_talent') }}" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
+                    <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
                 </div>
             </div>
         </div>
@@ -1512,6 +1358,143 @@ $categories = \App\Models\Category::all();
                 });
             });
         });
+    });
+</script>
+
+
+<!-- Talent Modal -->
+<div class="modal fade modal-glass" id="talentModal" tabindex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+                <h5 class="modal-title fw-bold" id="talentModalLabel">Skill Registration</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <!-- Step 1 -->
+                    <div class="step-section active" id="step-1">
+                        <div class="step-title"><i class="fas fa-user"></i> Personal Info</div>
+                        <div class="info-note">Fill your basic information for profile setup.</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Names</label>
+                                <input type="text" name="name" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g John Doe" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Address</label>
+                                <input type="text" name="address" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g Kigali, Rwanda" required>
+                            </div>
+                        </div>
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-primary btn-next">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-section" id="step-2">
+                        <div class="step-title"><i class="fas fa-phone"></i> Contact Info</div>
+                        <div class="info-note">Provide your contact details for clients to reach you.</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Phone</label>
+                                <input type="text" name="phone" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g +250 788 123 456" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Email</label>
+                                <input type="email" name="email" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g john.doe@example.com" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-danger btn-prev">Back</button>
+                            <button type="button" class="btn btn-primary btn-next">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-section" id="step-3">
+                        <div class="step-title"><i class="fas fa-star"></i> Skill Info</div>
+                        <div class="info-note">Define your skills and expertise.</div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Languages Spoken</label>
+                                <input type="text" name="language" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g English, Kinyarwanda" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Skill Category</label>
+                                <select name="category_id" class="form-select" required>
+                                    <option value="">Select Skill Category</option>
+                                    @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Description</label>
+                                <textarea name="description" class="form-control rounded-3 border-0 shadow-sm" rows="3" placeholder="Describe your talent..."></textarea>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-danger btn-prev">Back</button>
+                            <button type="button" class="btn btn-primary btn-next">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="step-section" id="step-4">
+                        <div class="step-title"><i class="fas fa-camera"></i> Upload Photo & Submit</div>
+                        <div class="info-note">Add a professional photo for your profile.</div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Profile Image</label>
+                            <input type="file" name="image" class="form-control rounded-3 border-0 shadow-sm" accept="image/*" required>
+                            <div class="invalid-feedback">Please upload a valid image file. Accepts: .jpg, .jpeg, .png</div>
+                        </div>
+                        <div class="form-check mt-3 mb-3">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I accept the <a href="{{ route('user.terms-condition') }}" class="text-primary">Terms & Conditions</a>
+                            </label>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-danger btn-prev">Back</button>
+                            <button type="submit" class="btn btn-success">Submit Registration</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const steps = document.querySelectorAll(".step-section");
+        const nextBtns = document.querySelectorAll(".btn-next");
+        const prevBtns = document.querySelectorAll(".btn-prev");
+        const progressBar = document.getElementById("progressBar");
+
+        let currentStep = 0;
+
+        function showStep(step) {
+            steps.forEach((s, i) => s.classList.toggle("active", i === step));
+        }
+
+        nextBtns.forEach(btn => btn.addEventListener("click", () => {
+            if (currentStep < steps.length - 1) currentStep++;
+            showStep(currentStep);
+        }));
+
+        prevBtns.forEach(btn => btn.addEventListener("click", () => {
+            if (currentStep > 0) currentStep--;
+            showStep(currentStep);
+        }));
+
+        showStep(currentStep);
     });
 </script>
 @endsection

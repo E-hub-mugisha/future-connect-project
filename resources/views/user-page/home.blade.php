@@ -404,7 +404,7 @@
                                         Stand out! Boost your profile and reach 3× more employers.<br>
                                         Get verified and feature your story on our homepage.
                                     </p>
-                                    <a href="#skills" class="btn btn-light">Explore Marketplace</a>
+                                    <a href="{{ route('user.talents') }}" class="btn btn-light">Explore Marketplace</a>
                                 </div>
 
                                 <!-- Opportunities Center -->

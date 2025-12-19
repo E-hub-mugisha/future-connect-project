@@ -73,7 +73,7 @@ Route::post('/talent/register', [HomeController::class, 'storeTalent'])->name('t
 Route::get('/talent-matched', [HomeController::class, 'matchedTalents'])->name('talent.match');
 Route::post('/talent/feedback', [HomeController::class, 'storeFeedback'])->name('talent.feedback.store');
 Route::post('/support-talent', [HomeController::class, 'storeSupport'])->name('support.talent');
-Route::get('/talents', [HomeController::class, 'talents'])->name('user.talents');
+Route::get('/skills_hub', [HomeController::class, 'talents'])->name('user.talents');
 Route::get('/talent/{id}', [HomeController::class, 'showTalents'])->name('user.talent.details');
 Route::get('/talents/category/{slug}', [HomeController::class, 'getTalentByCategory'])->name('user.talents.category');
 Route::get('/search', [HomeController::class, 'search'])->name('talent.search');
@@ -123,7 +123,7 @@ Route::post('/connections/{id}/pay-now', [TalentConnectionController::class, 'pa
 Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, 'payLater'])->name('connections.payment.later');
 Route::get('/connection/payment/callback', [TalentConnectionController::class, 'handleCallback'])->name('connection.payment.callback');
 
-Route::get('/courses', [CourseController::class, 'index'])->name('user.courses');
+Route::get('/learning_center', [CourseController::class, 'index'])->name('user.courses');
 Route::get('/course/details/{slug}', [CourseController::class, 'show'])->name('user.courses.show');
 Route::get('/course/category/{slug}', [CourseController::class, 'category'])->name('user.courses.category');
 Route::post('/courses/{id}/review', [CourseController::class, 'storeReview'])

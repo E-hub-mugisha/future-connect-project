@@ -1,5 +1,7 @@
-@extends ('layouts.guest')
-@section('title', 'Courses')
+@extends('layouts.guest')
+
+@section('title', $categoryName . ' Learning Material')
+
 @section('content')
 
 <style>
@@ -27,27 +29,11 @@
 <!-- Page Content -->
 <div class="page-content">
     <div class="container">
-        <!-- Breadcrumb -->
-        <div class="breadcrumb-bar breadcrumb-bar-info postLists">
-            <div class="breadcrumb-img">
-                <div class="breadcrumb-left"> <img src="{{ asset('assets/img/bg/banner-bg-03.png') }}" alt="img"> </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 col-12">
-                        <nav aria-label="breadcrumb" class="page-breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"> <a href="{{ route('user.home') }}">Home</a> </li>
-                                <li class="breadcrumb-item"> <a href="{{ route('user.courses') }}">Courses</a> </li>
-                            </ol>
-                        </nav>
-                        <h2 class="breadcrumb-title mb-0"> Browse Listing & More <span class="text-primary">
-                                {{ $categoryName }} Courses </span> </h2>
-                    </div>
-                </div>
-            </div>
+        <div class="title-header">
+            <h3>Browse more Listing categories <span class="text-primary">
+                    {{ $categoryName }} Courses </span></h3>
+            <p>View all learning material and courses offered by skilled people</p>
         </div>
-
         <div class="trend-section server-grid-slider">
             <div class="service-sliders owl-carousel">
                 @foreach($categories as $category)
@@ -68,8 +54,9 @@
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <div class="title-header">
-                        <h3>Skills & Courses</h3>
-                        <p>View all skills and courses offered by talents</p>
+                        <h3>Learning center & Courses Browse Listing & More <span class="text-primary">
+                                {{ $categoryName }} Courses </span></h3>
+                        <p>View all learning material and courses offered by skilled people</p>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -84,6 +71,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="service-gigs">
             <div class="row">

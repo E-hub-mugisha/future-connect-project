@@ -343,52 +343,14 @@ return request()->routeIs($route) ? 'active' : '';
                     <!-- Talent Hub -->
                     <li>
                         <a href="{{ route('user.talents') }}">
-                            <span><i class="ti ti-users"></i> Skill Hub</span>
+                            <span><i class="ti ti-users"></i> Skills Hub</span>
                             <!-- <i class="fas fa-chevron-right submenu-arrow"></i> -->
                         </a>
-
-                        <!-- <ul class="submenu">
-
-                            <li>
-                                <a href="{{ route('user.talents') }}">
-                                    <i class="ti ti-briefcase"></i> Talent Marketplace
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="{{ url('/register_as_talent') }}">
-                                    <i class="ti ti-user-plus"></i> Become a Talent
-                                </a>
-                            </li>
-
-                            <li class="has-submenu">
-                                <a role="button">
-                                    <span><i class="ti ti-tag"></i> Talent Categories</span>
-                                    <i class="fas fa-chevron-right submenu-arrow"></i>
-                                </a>
-
-                                <ul class="submenu">
-                                    @foreach($categories as $cat)
-                                    <li>
-                                        <a href="{{ url('/talents/category/' . $cat->slug) }}">
-                                            <i class="ti ti-circle"></i> {{ $cat->name }}
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-
-                            <li>
-                                <a href="{{ route('talent.connections-room') }}">
-                                    <i class="ti ti-message-dots"></i> Networking Hub
-                                </a>
-                            </li>
-                        </ul> -->
                     </li>
 
                     <!-- Learning Center -->
                     <li>
-                        <a href="/courses">
+                        <a href="{{ route('user.courses') }}">
                             <span><i class="ti ti-book"></i> Learning Center</span>
                         </a>
 
