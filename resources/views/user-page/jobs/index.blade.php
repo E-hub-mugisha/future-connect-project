@@ -312,7 +312,7 @@
                                                 <p class="text-white">
                                                     Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
                                                 </p>
-                                                <a href="#skills" class="btn btn-light">Explore Gigs</a>
+                                                <a href="#skills" class="btn btn-light">Explore work</a>
                                             </div>
 
                                             <!-- gig Center -->
@@ -322,50 +322,6 @@
                                                     Learn how to earn through future connect platform.
                                                 </p>
                                                 <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Slide 1 -->
-                            <div class="carousel-item">
-                                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <div class="banner-head mt-4">
-                                        <h1 class="mb-2 text-white">{{ $categories->count() }}+ Job Categories</h1>
-                                        <p class="d-inline-flex text-white">Explore tech, marketing, design, management and more career fields.</p>
-                                    </div>
-                                    <div class="banner-form">
-                                        <!-- Tabs Navigation -->
-                                        <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">View Categories</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="accounts-tab" data-bs-toggle="pill" data-bs-target="#accounts" type="button" role="tab">Account</button>
-                                            </li>
-                                        </ul>
-
-                                        <!-- Tabs Content -->
-                                        <div class="tab-content" id="heroTabsContent">
-                                            <!-- Skills Marketplace -->
-                                            <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                                <h4 class="text-white">Promote Your Skills</h4>
-                                                <p class="text-white">
-                                                    Stand out! Boost your profile and reach 3× more employers.<br>
-                                                    Get verified and feature your story on our homepage.
-                                                </p>
-                                                <a href="#skills" class="btn btn-light">Explore Marketplace</a>
-                                            </div>
-
-                                            <!-- Opportunities Center -->
-                                            <div class="tab-pane hero-tab fade" id="accounts" role="tabpanel">
-                                                <h4 class="text-white">Unlock New Opportunities</h4>
-                                                <p class="text-white">
-                                                    Discover tailored job listings, collaboration projects, and freelance gigs.<br>
-                                                    Set up alerts to never miss a chance to grow your career.
-                                                </p>
-                                                <a href="#opportunities" class="btn btn-light">Start Exploring</a>
                                             </div>
                                         </div>
                                     </div>

@@ -7,7 +7,7 @@
         display: flex;
         /* align-items: center; */
         flex-direction: column;
-        border: 1px solid #fff;
+        /* border: 1px solid #fff; */
         border-radius: 1em;
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
         box-shadow: 0 1em 1em #1f2d3d26;
@@ -16,6 +16,211 @@
         transition: .25s;
         margin-bottom: 1.75rem;
 
+    }
+</style>
+
+<style>
+    #tranding {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        color: #fff;
+        padding: 1rem 0;
+        border-radius: 2rem;
+        margin-top: 2rem;
+        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        /* height: 22rem; */
+    }
+
+    .tranding-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        align-items: center;
+        gap: 2rem;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .tranding-image-slider {
+        width: 100%;
+        height: 20rem;
+        perspective: 1200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tranding-image-slider .swiper-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tranding-image-slider .swiper-slide {
+        height: 15rem;
+        width: 15rem;
+        transition: transform 0.5s ease, opacity 0.5s ease;
+        transform: scale(0.9);
+        z-index: 1;
+        opacity: 0.6;
+    }
+
+    .tranding-image-slider .swiper-slide.swiper-slide-active {
+        transform: scale(1.1);
+        z-index: 3;
+        opacity: 1;
+        margin: 0 auto;
+    }
+
+    .tranding-image-slider .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        border-radius: 1.5rem;
+        object-fit: cover;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .tranding-caption-slider {
+        width: 80%;
+        text-align: left;
+    }
+
+    .tranding-caption-slider .swiper-slide {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .tranding-caption-slider .swiper-slide-active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .tranding-slide-caption p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .tranding-line-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: #fff;
+        font-weight: 600;
+        border: 2px solid #fff;
+        border-radius: 30px;
+        padding: 0.5rem 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .tranding-line-btn:hover {
+        background-color: #fff;
+        color: #319BF9;
+    }
+
+    .tranding-slider-control {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4 ease;
+    }
+
+    .tranding-slider-control .slider-arrow {
+        background: var(--white);
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        left: 3%;
+        transform: translateX(-42%);
+        filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
+    }
+
+    .slider-arrow {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .slider-arrow:hover {
+        background: #fff;
+        color: #319BF9;
+    }
+
+    /* Bubbles */
+    .bubbles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .bubbles span {
+        position: absolute;
+        bottom: -150px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: bubbleUp 15s infinite;
+        opacity: 0.6;
+    }
+
+    .bubbles span:nth-child(1) {
+        left: 10%;
+        width: 60px;
+        height: 60px;
+        animation-duration: 20s;
+    }
+
+    .bubbles span:nth-child(2) {
+        left: 30%;
+        animation-delay: 2s;
+    }
+
+    .bubbles span:nth-child(3) {
+        left: 50%;
+        width: 80px;
+        height: 80px;
+        animation-duration: 25s;
+    }
+
+    .bubbles span:nth-child(4) {
+        left: 70%;
+        animation-delay: 1s;
+        width: 30px;
+        height: 30px;
+    }
+
+    .bubbles span:nth-child(5) {
+        left: 90%;
+        animation-duration: 18s;
+    }
+
+    @keyframes bubbleUp {
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 0.4;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
+
+        100% {
+            transform: translateY(-1000px) scale(1.3);
+            opacity: 0;
+        }
     }
 </style>
 
@@ -33,11 +238,10 @@
 
     .nav-pills .nav-link {
         border-radius: 50px;
-        color: #0d6efd;
+        color: #fff;
         font-weight: 500;
         padding: 0.6rem 1.5rem;
         transition: all 0.3s ease;
-        border: 2px solid #0d6efd;
     }
 
     .nav-pills .nav-link.active {
@@ -54,7 +258,7 @@
     .hero-tab {
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
-        border-radius: 16px;
+        /* border-radius: 16px; */
         padding: 2rem;
         color: #f1f1f1;
     }
@@ -89,59 +293,60 @@
     }
 </style>
 
-<section class="hero-section">
-    <div class="container p-4">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                    <div class="banner-head">
-                        <h1 class="mb-2">Explore our marketplace</h1>
-                        <p class="d-inline-flex">Find everything you need from trusted local and global sellers.</p>
-                    </div>
-                    <div class="banner-form">
-                        <!-- Tabs Navigation -->
-                        <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Explore Marketplace</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#seller" type="button" role="tab">Became a seller</button>
-                            </li>
-                        </ul>
-                        <!-- Tabs Content -->
-                        <div class="tab-content" id="heroTabsContent">
-                            <!-- Skills Marketplace -->
-                            <div class="tab-pane hero-tab fade show active postLists" id="marketplace" role="tabpanel">
-                                <h4 class="text-black">Explore our marketplace</h4>
-                                <form action="#">
-                                    <div class="banner-search-list">
-                                        <div class="input-block border-0">
-                                            <input type="text" class="form-control" placeholder="Eg: Smartphone X200, Wireless Headphones, Smartwatch Pro">
+<div class="container p-4">
+    <section id="tranding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                        <div class="banner-head">
+                            <h1 class="mb-2 text-white">Explore our marketplace</h1>
+                            <p class="d-inline-flex">Find everything you need from trusted local and global sellers.</p>
+                        </div>
+                        <div class="banner-form">
+                            <!-- Tabs Navigation -->
+                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Explore Marketplace</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#seller" type="button" role="tab">Became a seller</button>
+                                </li>
+                            </ul>
+                            <!-- Tabs Content -->
+                            <div class="tab-content" id="heroTabsContent">
+                                <!-- Skills Marketplace -->
+                                <div class="tab-pane hero-tab fade show active postLists" id="marketplace" role="tabpanel">
+                                    <h4 class="text-white">Explore our marketplace</h4>
+                                    <form action="#">
+                                        <div class="banner-search-list">
+                                            <div class="input-block border-0">
+                                                <input type="text" class="form-control" placeholder="Eg: Smartphone X200, Wireless Headphones, Smartwatch Pro">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="input-block-btn">
-                                        <button class="btn btn-lg btn-primary d-inline-flex align-items-center rounded-pill" type="submit">
-                                            <i class="ti ti-search"></i> Search Products
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                        <div class="input-block-btn">
+                                            <button class="btn btn-lg btn-primary d-inline-flex align-items-center rounded-pill" type="submit">
+                                                <i class="ti ti-search"></i> Search Products
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
 
-                            <!-- seller Center -->
-                            <div class="tab-pane hero-tab fade postLists" id="seller" role="tabpanel">
-                                <h4 class="text-black">Unlock New Opportunities</h4>
-                                <p class="text-black">
-                                    Join the Future Connect Shop and start selling products that empower our members.
-                                </p>
-                                <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-outline-primary rounded-pill">Apply as Seller</a>
+                                <!-- seller Center -->
+                                <div class="tab-pane hero-tab fade postLists" id="seller" role="tabpanel">
+                                    <h4 class="text-white">Unlock New Opportunities</h4>
+                                    <p class="text-white">
+                                        Join the Future Connect Shop and start selling products that empower our members.
+                                    </p>
+                                    <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-outline-primary rounded-pill">Apply as Seller</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+</div>
 
 <div class="page-content">
     <div class="container">
