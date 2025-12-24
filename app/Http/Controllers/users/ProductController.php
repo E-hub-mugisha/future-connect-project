@@ -13,7 +13,11 @@ class ProductController extends Controller
     {
         $products = Product::with('seller', 'category', 'reviews')->latest()->get();
         $categories = ProductCategory::withCount('products')->get();
-        return view('user-page.products.index', compact('products', 'categories'));
+        $featuredProducts = Product::where('status', 'active')
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('user-page.products.index', compact('products', 'categories', 'featuredProducts'));
     }
 
     public function details($id)

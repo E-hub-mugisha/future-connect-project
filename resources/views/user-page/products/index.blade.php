@@ -297,57 +297,43 @@
     <section id="tranding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                        <div class="banner-head">
-                            <h1 class="mb-2 text-white">Explore our marketplace</h1>
-                            <p class="d-inline-flex">Find everything you need from trusted local and global sellers.</p>
-                        </div>
-                        <div class="banner-form">
-                            <!-- Tabs Navigation -->
-                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Explore Marketplace</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#seller" type="button" role="tab">Became a seller</button>
-                                </li>
-                            </ul>
-                            <!-- Tabs Content -->
-                            <div class="tab-content" id="heroTabsContent">
-                                <!-- Skills Marketplace -->
-                                <div class="tab-pane hero-tab fade show active postLists" id="marketplace" role="tabpanel">
-                                    <h4 class="text-white">Explore our marketplace</h4>
-                                    <form action="#">
-                                        <div class="banner-search-list">
-                                            <div class="input-block border-0">
-                                                <input type="text" class="form-control" placeholder="Eg: Smartphone X200, Wireless Headphones, Smartwatch Pro">
-                                            </div>
+                <div id="jobInfoCarousel" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel" data-bs-interval="3000">
+                    <div class="carousel-inner">
+                        <!-- Slide 1 -->
+                        @foreach($featuredProducts as $key => $product)
+                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                                        <div class="banner-head">
+                                            <h1 class="mb-2 text-white">{{ $product->name }}</h1>
+                                            <p class="d-inline-flex">{{ $product->description ?? 'Top quality product available now' }}</p>
                                         </div>
-                                        <div class="input-block-btn">
-                                            <button class="btn btn-lg btn-primary d-inline-flex align-items-center rounded-pill" type="submit">
-                                                <i class="ti ti-search"></i> Search Products
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
 
-                                <!-- seller Center -->
-                                <div class="tab-pane hero-tab fade postLists" id="seller" role="tabpanel">
-                                    <h4 class="text-white">Unlock New Opportunities</h4>
-                                    <p class="text-white">
-                                        Join the Future Connect Shop and start selling products that empower our members.
-                                    </p>
-                                    <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-outline-primary rounded-pill">Apply as Seller</a>
+                                        <div class="input-block-btn">
+                                            <a href="{{ route('user.product-details', $product->id) }}" class="btn btn-lg btn-primary d-inline-flex align-items-center rounded-pill">
+                                                View Product
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="banner-img">
+                                        <div class="banner-img-right">
+                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 </div>
-
 <div class="page-content">
     <div class="container">
         <div class="row">
