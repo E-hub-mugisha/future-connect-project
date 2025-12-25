@@ -120,4 +120,9 @@ class User extends Authenticatable
             ->where('status', 'trial')
             ->where('ends_at', '>', now());
     }
+
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
 }

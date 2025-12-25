@@ -67,6 +67,15 @@ class TalentCourseController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        // ✅ Check if the user has an active subscription
+        if (!$user->activeSubscription) {
+            // Redirect back with a session key to trigger modal
+            return redirect()->back()
+                ->with('warning', 'You must subscribe before posting to course.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',

@@ -35,6 +35,7 @@ use App\Http\Controllers\Seller\SellerProductController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Talent\TalentCourseController;
 use App\Http\Controllers\Talent\TalentJobController;
+use App\Http\Controllers\Talent\TalentProductController;
 use App\Http\Controllers\Talent\TalentProjectController;
 use App\Http\Controllers\TalentConnectionController;
 use App\Http\Controllers\users\CartController;
@@ -527,6 +528,18 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
 
     Route::post('/applications/{id}/reject', [TalentProjectController::class, 'reject'])
         ->name('applications.reject');
+
+    Route::get('/pages/products', [TalentProductController::class, 'index'])->name('products.index');
+    Route::get('/pages/products/{id}', [TalentProductController::class, 'show'])->name('products.view');
+    Route::get('/pages/product/create', [TalentProductController::class, 'create'])->name('products.create');
+    Route::post('/pages/products', [TalentProductController::class, 'storeProduct'])->name('products.store');
+    Route::get('/pages/products/{id}/edit', [TalentProductController::class, 'edit'])->name('products.edit');
+    Route::put('/pages/products/{id}', [TalentProductController::class, 'update'])->name('products.update');
+    Route::put('/pages/products/{id}/status', [TalentProductController::class, 'updateStatus'])->name('products.updateStatus');
+    Route::delete('/pages/products/{id}', [TalentProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('/pages/became_seller', [TalentProductController::class, 'becameSeller'])->name('products.seller');
+    Route::post('/talent_seller/store', [TalentProductController::class, 'storeSeller'])
+    ->name('seller.register');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {

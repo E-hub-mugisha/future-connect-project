@@ -20,6 +20,9 @@
                     <a href="{{ route('talent.testimonials.index')}}" class="nav-link with-sub"><i class="typcn typcn-document"></i> Testimonials</a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('talent.products.index')}}" class="nav-link"><i class="typcn typcn-document"></i> Products</a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('talent.payments.index')}}" class="nav-link"><i class="typcn typcn-document"></i> Payments</a>
                 </li>
                 <li class="nav-item">

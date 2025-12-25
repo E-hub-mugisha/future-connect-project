@@ -37,6 +37,9 @@
     <link rel="stylesheet" href="{{ asset('assets/talents/src/css/azia.css') }}">
     <link href="{{ asset('assets/talents/src/lib/quill/quill.snow.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/talents/src/lib/quill/quill.bubble.css') }}" rel="stylesheet">
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -401,6 +404,26 @@
             });
 
         });
+    </script>
+
+<!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        @if(session('success'))
+        toastr.success("{{ session('success') }}");
+        @endif
+
+        @if(session('error'))
+        toastr.error("{{ session('error') }}");
+        @endif
+
+        @if(session('warning'))
+        toastr.warning("{{ session('warning') }}");
+        @endif
+
+        @if(session('info'))
+        toastr.info("{{ session('info') }}");
+        @endif
     </script>
 </body>
 
