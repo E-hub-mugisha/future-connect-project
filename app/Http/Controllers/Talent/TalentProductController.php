@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Talent;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ProductStatusMail;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Seller;
@@ -53,7 +54,8 @@ class TalentProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $sellers = Seller::all();
-        return view('talent-pages.products.edit', compact('product', 'sellers'));
+        $categories = Category::all();
+        return view('talent-pages.products.edit', compact('product', 'sellers','categories'));
     }
 
     public function storeProduct(Request $request)

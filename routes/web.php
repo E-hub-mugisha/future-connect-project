@@ -449,9 +449,12 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('/page/dashboard', [TalentDashboardController::class, 'dashboard'])->name('dashboard');
 
     // Profile
-    Route::get('/profile', [TalentProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [TalentProfileController::class, 'update'])->name('profile.update');
+    Route::get('/get/profile', [TalentProfileController::class, 'index'])->name('get.profile');
+    Route::put('/talent/profile/update/{id}', [TalentProfileController::class, 'update'])->name('profile.update');
 
+    // List all connection requests sent TO the logged-in talent
+    Route::get('/get/connections', [App\Http\Controllers\Talent\TalentConnectionController::class, 'connectionRequests'])
+        ->name('connections.index');
     // Announcements
     Route::get('/announcements', [TalentDashboardController::class, 'index'])->name('announcements.index');
     Route::get('/announcements/{announcement}', [TalentDashboardController::class, 'show'])->name('announcements.show');
@@ -539,7 +542,7 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::delete('/pages/products/{id}', [TalentProductController::class, 'destroy'])->name('products.destroy');
     Route::get('/pages/became_seller', [TalentProductController::class, 'becameSeller'])->name('products.seller');
     Route::post('/talent_seller/store', [TalentProductController::class, 'storeSeller'])
-    ->name('seller.register');
+        ->name('seller.register');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {

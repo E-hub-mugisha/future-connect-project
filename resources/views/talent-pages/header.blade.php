@@ -11,13 +11,10 @@
             </div><!-- az-header-menu-header -->
             <ul class="nav">
                 <li class="nav-item active show">
-                    <a href="{{ route('talent.dashboard')}}" class="nav-link with-sub"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
+                    <a href="{{ route('talent.dashboard')}}" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('talent.courses.index')}}" class="nav-link"><i class="typcn typcn-folder"></i> Courses</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('talent.testimonials.index')}}" class="nav-link with-sub"><i class="typcn typcn-document"></i> Testimonials</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('talent.products.index')}}" class="nav-link"><i class="typcn typcn-document"></i> Products</a>
@@ -97,10 +94,9 @@
                         <span>{{ Auth::user()->role }}</span>
                     </div><!-- az-header-profile -->
 
-                    <a href="#" class="dropdown-item"><i class="typcn typcn-user-outline"></i> My Profile</a>
+                    <a href="{{ route('talent.get.profile')}}" class="dropdown-item"><i class="typcn typcn-user-outline"></i> My Profile</a>
                     <a href="{{ route('talent.wallets.index')}}" class="dropdown-item"><i class="typcn typcn-edit"></i> Wallet</a>
                     <a href="{{ route('talent.connections.index')}}" class="dropdown-item"><i class="typcn typcn-time"></i> Connections</a>
-                    <a href="#" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Account Settings</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign Out</button>
