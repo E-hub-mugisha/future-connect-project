@@ -5,7 +5,7 @@
 
 <style>
     #tranding {
-        position: relative;
+        /* position: relative; */
         overflow: hidden;
         background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
         color: #fff;
@@ -653,7 +653,7 @@
         border: none;
         border-radius: 50px;
         padding: 0.6rem 1.5rem;
-        margin-top: 1.2rem;
+        /* margin-top: 1.2rem; */
         transition: 0.3s;
     }
 

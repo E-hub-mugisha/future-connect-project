@@ -11,137 +11,225 @@ return request()->routeIs($route) ? 'active' : '';
 @endphp
 
 <style>
-    .header {
+    .top-header {
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        height: 6rem;
-        /* Reduced height */
-        padding: 7px 5px;
+        border-bottom: 1px solid #4A91ED;
+        padding: 6px 0;
+        transition: transform .3s ease;
     }
 
-    .header.fixed {
-        backdrop-filter: blur(18px) saturate(160%);
-        -webkit-backdrop-filter: blur(18px) saturate(160%);
-        background: rgba(255, 255, 255, 0.45);
+    .top-header .top-text {
+        color: #4A91ED;
     }
 
-    /* .main-menu-wrapper {
+    .primary-header {
         background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        padding: 5px -2rem;
-        border-radius: 4rem;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    } */
-
-    .main-menu-wrapper .main-nav a {
-        color: #000;
-        font-size: 13px;
-        font-weight: 500;
-        transition: all 0.3s ease-in-out;
-        border: 2px solid transparent;
-        display: inline-block;
-        /* Prevents full-width behavior */
+        /* padding: 12px 0; */
     }
 
-    .main-menu-wrapper .main-nav a:hover,
-    .main-menu-wrapper .main-nav a.active {
-        color: #319BF9;
-        border-bottom: 2px solid #F0F2F7;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        border-radius: 10px;
-        padding: 6px 20px;
+    .primary-menu li {
+        list-style: none;
+        margin-right: 18px;
     }
 
-    /* Sticky Glassmorphism Navbar */
-    .navbar-glass {
-        position: sticky;
-        top: 0;
-        z-index: 9999;
-        backdrop-filter: blur(18px) saturate(160%);
-        -webkit-backdrop-filter: blur(18px) saturate(160%);
-        background: rgba(255, 255, 255, 0.45);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    .primary-menu li a {
+        padding: 10px;
+        /* font-weight: 500; */
+        color: #2d2d2d;
     }
 
-    /* Main navigation */
-    .main-nav>li>a {
-        padding: 10px 7px;
-        font-weight: 600;
-        color: #1a1a1a;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: 0.25s ease;
-        font-size: 15px;
+    .primary-menu li a:hover {
+        color: #4A91ED;
     }
 
-    .main-nav>li>a:hover {
-        color: #007bff;
-        transform: translateY(-2px);
-    }
-
-    /* Dropdown */
-    .main-nav li.has-submenu {
+    /* -------- CENTER PRIMARY MENU -------- */
+    .primary-header .navbar {
         position: relative;
     }
 
-    .submenu {
+    /* Center group */
+    .primary-menu {
         position: absolute;
-        top: 55px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* spacing stays clean */
+    .primary-menu li {
+        margin: 0 14px;
+    }
+
+    /* -------- CENTER SECONDARY MENU -------- */
+    .secondary-menu {
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* -------- MOBILE SAFE -------- */
+    @media(max-width:991px) {
+        .primary-menu {
+            position: static;
+            transform: none;
+        }
+    }
+
+    .secondary-header {
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        /* border-top: 1px solid #ececec;
+        border-bottom: 1px solid #4A91ED; */
+        /* position: sticky; */
+        top: 0;
+        z-index: 999;
+        transition: transform .3s ease;
+    }
+
+    .secondary-menu {
+        display: flex;
+        gap: 18px;
+        padding: 0;
+    }
+
+    .secondary-menu li {
+        list-style: none;
+    }
+
+    .secondary-menu li a {
+        padding: 13px 10px;
+        display: block;
+        color: #444;
+        /* font-weight: 500; */
+    }
+
+    .secondary-menu li a:hover {
+        color: #4A91ED;
+    }
+
+    .mega-parent {
+        position: relative;
+    }
+
+    .mega-menu {
+        position: absolute;
         left: 0;
-        min-width: 230px;
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 14px;
-        padding: 10px 0;
+        top: 100%;
+        width: 800px;
+        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, .08);
         opacity: 0;
         visibility: hidden;
         transform: translateY(10px);
-        transition: 0.25s ease;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        transition: .3s ease;
     }
 
-    .has-submenu:hover>.submenu {
+    .mega-parent:hover .mega-menu {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
     }
 
-    /* Dropdown items */
-    .submenu li a {
-        padding: 10px 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #1b1b1b;
-        font-size: 14px;
-        transition: 0.25s ease;
+    .mega-menu h6 {
+        font-weight: 700;
+        margin-bottom: 10px;
     }
 
-    .submenu li a:hover {
-        background: rgba(255, 255, 255, 0.35);
-        color: #007bff;
-        transform: translateX(4px);
-        border-radius: 8px;
+    .mega-menu ul {
+        list-style: none;
+        padding: 0;
     }
 
-    /* Nested submenu */
-    .submenu .has-submenu {
-        position: relative;
+    .mega-menu ul li a {
+        display: block;
+        padding: 6px 0;
+        color: #333;
     }
 
-    .submenu .has-submenu .submenu {
+    .mega-menu ul li a:hover {
+        color: #0d6efd;
+    }
+
+    @media(max-width:991px) {
+        .top-header {
+            display: none;
+        }
+
+        .primary-menu {
+            display: none !important;
+        }
+
+        .secondary-header {
+            display: none;
+        }
+    }
+
+    .mobile-menu {
+        position: fixed;
         top: 0;
-        left: 100%;
-        margin-left: 8px;
+        left: -100%;
+        width: 80%;
+        height: 100%;
+        background: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+        transition: .3s;
+        z-index: 9999;
     }
 
-    /* Theme toggler dropdown */
-    .theme-toggle {
-        cursor: pointer;
+    .mobile-menu.active {
+        left: 0;
+    }
+
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .mobile-nav {
+        list-style: none;
+        padding: 0;
+    }
+
+    .mobile-nav li a {
+        display: block;
+        padding: 14px 20px;
+        border-bottom: 1px solid #f1f1f1;
+        color: #333;
+    }
+
+    .mobile-nav li a:hover {
+        background: #f5f7ff;
+    }
+
+    /* Hide text on mobile */
+    .responsive-btn .btn-text {
+        display: inline;
+        /* desktop default */
+    }
+
+    @media(max-width:991px) {
+        .responsive-btn .btn-text {
+            display: none;
+            /* hide text on mobile */
+        }
+
+        .responsive-btn {
+            width: 40px;
+            padding: 8px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .responsive-btn i {
+            font-size: 18px;
+        }
     }
 </style>
 
@@ -298,100 +386,105 @@ return request()->routeIs($route) ? 'active' : '';
             opacity: 1;
         }
     }
+
+    .header {
+        position: sticky;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 1001;
+        background: var(--white);
+        transition: ease all 0.5s;
+        -webkit-transition: ease all 0.5s;
+        -ms-transition: ease all 0.5s;
+    }
 </style>
 
-<header class="header navbar-glass">
-    <div class="container">
-        <nav class="navbar navbar-expand-lg header-nav p-0">
+<header class="c-header">
 
-            <!-- Mobile Menu Button -->
-            <div class="navbar-header">
-                <a id="mobile_btn" role="button" tabindex="0">
-                    <span class="bar-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </a>
-
-                <a href="{{ route('user.home') }}">
-                    <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo" style="height: 50px;" />
-                </a>
+    {{-- ================= TOP HEADER ================= --}}
+    <div class="top-header" id="topHeader">
+        <div class="container d-flex justify-content-between align-items-center small">
+            <div class="top-text">
+                <i class="ti ti-mail"></i> support@example.com &nbsp; | &nbsp;
+                <i class="ti ti-phone"></i> +250 780 000 000
             </div>
 
-            <!-- MOBILE MENU OVERLAY -->
-            <div id="mobileMenuOverlay"></div>
+            <div class="d-flex gap-3">
+                <li class="me-2"><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+                <li class="me-2"><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
+                <li class="me-2"><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+                <li class="me-2"><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
+            </div>
+        </div>
+    </div>
 
-            <!-- Main Menu Wrapper -->
-            <div class="main-menu-wrapper">
+    {{-- ================= PRIMARY HEADER ================= --}}
+    <div class="primary-header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
 
-                <div class="menu-header">
-                    <a id="menu_close" class="menu-close" role="button" tabindex="0">
-                        <i class="fas fa-times"></i>
-                    </a>
-                </div>
+                {{-- Mobile Toggle --}}
+                <button class="navbar-toggler" type="button" onclick="openMobileMenu()">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                <ul class="main-nav navbar-nav">
+                {{-- Logo --}}
+                <a href="{{ route('user.home') }}" class="navbar-brand">
+                    <img src="{{ asset('assets/img/WORDMARK.png') }}" height="48">
+                </a>
 
-                    <!-- Home -->
-                    <li>
-                        <a href="{{ route('user.home') }}">
-                            <i class="ti ti-home"></i> Home
-                        </a>
+                {{-- PRIMARY MENU --}}
+                <ul class="nav primary-menu d-none d-lg-flex ms-4">
+
+                    <li><a href="{{ route('user.home') }}">Home</a></li>
+
+                    {{-- MEGA DROPDOWN --}}
+                    <li class="mega-parent">
+                        <a href="#">Skills Hub <i class="ti ti-chevron-down small"></i></a>
+
+                        <div class="mega-menu">
+                            <div class="row g-4">
+
+                                <div class="col-md-4">
+                                    <h6>Popular Categories</h6>
+                                    <ul>
+                                        <li><a href="#">Technology & IT</a></li>
+                                        <li><a href="#">Creative & Design</a></li>
+                                        <li><a href="#">Business & Finance</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <h6>Trending Skills</h6>
+                                    <ul>
+                                        <li><a href="#">Web Development</a></li>
+                                        <li><a href="#">Digital Marketing</a></li>
+                                        <li><a href="#">UI / UX Design</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <h6>Actions</h6>
+                                    <ul>
+                                        <li><a href="{{ route('user.talents') }}">Browse Skills</a></li>
+                                        <li><a href="#">Post Opportunity</a></li>
+                                        <li><a href="#">Register your Skills</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
                     </li>
 
-                    <!-- Talent Hub -->
-                    <li>
-                        <a href="{{ route('user.talents') }}">
-                            <span><i class="ti ti-users"></i> Skills Hub</span>
-
-                        </a>
-                    </li>
-
-                    <!-- Learning Center -->
-                    <li>
-                        <a href="{{ route('user.courses') }}">
-                            <span><i class="ti ti-book"></i> Learning Center</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('user.jobs.index') }}">
-                            <i class="ti ti-briefcase"></i> Find Work
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('talent.connections-room') }}">
-                            <i class="ti ti-message-dots"></i> Networking Hub
-                        </a>
-                    </li>
-
-                    <!-- Marketplace -->
-                    <li>
-                        <a href="{{ route('user.products.index') }}">
-                            <span><i class="ti ti-shopping-cart"></i> Marketplace</span>
-                        </a>
-                    </li>
-
-                    <!-- Updates -->
-                    <li>
-                        <a href="{{ route('user.announcements') }}">
-                            <span><i class="ti ti-bell"></i> What's New</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('pricing') }}">
-                            <span><i class="ti ti-bell"></i> Pricing</span>
-                        </a>
-                    </li>
+                    <li><a href="{{ route('user.courses') }}">Learning Center</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">About</a></li>
                 </ul>
-            </div>
 
-            <!-- Right Section (unchanged) -->
-            <div class="d-flex align-items-center">
-
-                <ul class="nav header-navbar-rht">
+                {{-- RIGHT --}}
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
 
                     @auth
 
@@ -408,31 +501,68 @@ return request()->routeIs($route) ? 'active' : '';
                     ];
                     @endphp
                     <li class="nav-item">
-                        <a class="btn btn-light" href="{{ route($dashboards[$role] ?? 'user.dashboard') }}">
-                            <i class="ti ti-dashboard me-1"></i> Dashboard
+                        <a href="{{ route($dashboards[$role] ?? 'user.dashboard') }}" class="btn btn-outline-dark responsive-btn">
+                            <i class="ti ti-dashboard"></i>
+                            <span class="btn-text"> Dashboard</span>
                         </a>
                     </li>
                     @endauth
 
                     @guest
                     <li class="nav-item">
-                        <a class="btn btn-light login" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="ti ti-lock me-1"></i> Sign In
+                        <a class="btn btn-outline-primary rounded-pill responsive-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="ti ti-lock"></i>
+                            <span class="btn-text"> Sign In</span>
                         </a>
                     </li>
                     @endguest
 
                     <li class="nav-item">
-                        <a class="btn btn-primary" href="#" onclick="toggleSearchOverlay(event)">
-                            <i class="ti ti-search me-1"></i> Search
+                        <a class="btn btn-primary rounded-pill responsive-btn" onclick="toggleSearchOverlay(event)">
+                            <i class="ti ti-search"></i>
+                            <span class="btn-text"> Search</span>
                         </a>
                     </li>
+
                 </ul>
 
-            </div>
 
-        </nav>
+            </nav>
+        </div>
     </div>
+
+    {{-- ================= SECONDARY STICKY NAV ================= --}}
+    <div class="secondary-header" id="secondaryHeader">
+        <div class="container">
+            <ul class="nav secondary-menu">
+                <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Find Work</a></li>
+                <li><a href="{{ route('talent.connections-room') }}"><i class="ti ti-message-dots"></i> Networking</a></li>
+                <li><a href="{{ route('user.products.index') }}"><i class="ti ti-shopping-cart"></i> Marketplace</a></li>
+                <li><a href="{{ route('user.announcements') }}"><i class="ti ti-bell"></i> What's New</a></li>
+                <li><a href="{{ route('pricing') }}"><i class="ti ti-currency-dollar"></i> Pricing</a></li>
+            </ul>
+        </div>
+    </div>
+
+    {{-- ================= MOBILE MENU ================= --}}
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-header">
+            <span>Menu</span>
+            <button onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
+        </div>
+
+        <ul class="mobile-nav">
+            <li><a href="{{ route('user.home') }}">Home</a></li>
+            <li><a href="{{ route('user.talents') }}">Skills Hub</a></li>
+            <li><a href="{{ route('user.courses') }}">Learning Center</a></li>
+            <li><a href="{{ route('user.jobs.index') }}">Find Work</a></li>
+            <li><a href="{{ route('talent.connections-room') }}">Networking</a></li>
+            <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
+            <li><a href="{{ route('user.announcements') }}">What's New</a></li>
+            <li><a href="{{ route('pricing') }}">Pricing</a></li>
+        </ul>
+    </div>
+
 </header>
 
 
@@ -445,7 +575,7 @@ return request()->routeIs($route) ? 'active' : '';
             <div class="modal-header border-0 bg-gradient text-white"
                 style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
                 <h5 class="modal-title fw-bold" id="loginModalLabel">
-                    🔐 Welcome Back
+                    Hi, Welcome Back!
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -456,8 +586,7 @@ return request()->routeIs($route) ? 'active' : '';
                     @csrf
 
                     <div class="text-center mb-4">
-                        <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" style="height: 50px;" class="mb-3" />
-                        <h4 class="fw-semibold mb-1">Hi, Welcome Back!</h4>
+                        <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" style="height: 30px;" class="mb-3" />
                         <p class="text-muted small">Fill in your credentials to continue</p>
                     </div>
 
@@ -633,4 +762,27 @@ return request()->routeIs($route) ? 'active' : '';
             overlay.classList.remove('active');
         }
     });
+</script>
+
+<script>
+    let lastScroll = 0;
+    const topHeader = document.getElementById("topHeader");
+
+    window.addEventListener("scroll", () => {
+        let current = window.pageYOffset;
+        if (current > lastScroll) {
+            topHeader.style.transform = "translateY(-100%)";
+        } else {
+            topHeader.style.transform = "translateY(0)";
+        }
+        lastScroll = current;
+    });
+
+    function openMobileMenu() {
+        document.getElementById("mobileMenu").classList.add("active");
+    }
+
+    function closeMobileMenu() {
+        document.getElementById("mobileMenu").classList.remove("active");
+    }
 </script>
