@@ -7,7 +7,7 @@
     <div class="az-content-body pd-lg-l-40 d-flex flex-column">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold">Manage Projects</h2>
-            <a href="{{ route('talent.projects.create') }}" class="btn btn-primary btn-sm rounded-pill">
+            <a href="{{ route('talent.projects.create') }}" class="btn btn-primary btn-sm ">
                 <i class="bi bi-plus-circle"></i> Add Project
             </a>
         </div>

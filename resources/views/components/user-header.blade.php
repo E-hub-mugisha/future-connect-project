@@ -442,35 +442,56 @@ return request()->routeIs($route) ? 'active' : '';
 
                     {{-- MEGA DROPDOWN --}}
                     <li class="mega-parent">
-                        <a href="#">Skills Hub <i class="ti ti-chevron-down small"></i></a>
+                        <a href="#">
+                            Skills Hub <i class="ti ti-chevron-down small"></i>
+                        </a>
 
                         <div class="mega-menu">
                             <div class="row g-4">
 
-                                <div class="col-md-4">
+                                {{-- Popular Categories --}}
+                                <div class="col-md-6">
                                     <h6>Popular Categories</h6>
                                     <ul>
-                                        <li><a href="#">Technology & IT</a></li>
-                                        <li><a href="#">Creative & Design</a></li>
-                                        <li><a href="#">Business & Finance</a></li>
+                                        @php
+                                        $popularCategories = \App\Models\Talent::with('category')
+                                        ->whereNotNull('category_id')
+                                        ->select('category_id')
+                                        ->selectRaw('COUNT(*) as total')
+                                        ->groupBy('category_id')
+                                        ->orderByDesc('total')
+                                        ->take(3)
+                                        ->get()
+                                        ->map(function($item){
+                                        return [
+                                        'name' => $item->category->name ?? '-',
+                                        'slug' => $item->category->slug ?? '#',
+                                        'total' => $item->total
+                                        ];
+                                        });
+                                        @endphp
+
+                                        @forelse($popularCategories as $category)
+                                        <li>
+                                            <a href="{{ route('user.talents.category', $category['slug']) }}">
+                                                {{ $category['name'] }}
+                                                <span class="text-muted small">({{ $category['total'] }})</span>
+                                            </a>
+                                        </li>
+                                        @empty
+                                        <li class="text-muted">No categories yet</li>
+                                        @endforelse
                                     </ul>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <h6>Trending Skills</h6>
-                                    <ul>
-                                        <li><a href="#">Web Development</a></li>
-                                        <li><a href="#">Digital Marketing</a></li>
-                                        <li><a href="#">UI / UX Design</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="col-md-4">
+                                {{-- Actions --}}
+                                <div class="col-md-6">
                                     <h6>Actions</h6>
                                     <ul>
-                                        <li><a href="{{ route('user.talents') }}">Browse Skills</a></li>
-                                        <li><a href="#">Post Opportunity</a></li>
-                                        <li><a href="#">Register your Skills</a></li>
+                                        <li><a href="{{ route('user.talents') }}">Browse Talents</a></li>
+                                        <li><a onclick="toggleSearchOverlay(event)">Search Skills</a></li>
+                                        <li><a href="{{ route('user.register_as_talent') }}">Register your skills</a></li>
+                                        
                                     </ul>
                                 </div>
 
@@ -478,9 +499,10 @@ return request()->routeIs($route) ? 'active' : '';
                         </div>
                     </li>
 
+
                     <li><a href="{{ route('user.courses') }}">Learning Center</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">About</a></li>
+                    <li><a href="{{ route('user.contact') }}">Contact</a></li>
+                    <li><a href="{{ route('user.about') }}">About</a></li>
                 </ul>
 
                 {{-- RIGHT --}}

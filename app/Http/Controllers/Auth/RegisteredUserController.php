@@ -51,6 +51,6 @@ class RegisteredUserController extends Controller
                 ->activate(request());
         }
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('user.dashboard', absolute: false));
     }
 }

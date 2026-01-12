@@ -69,7 +69,7 @@ Route::post('/contact/send', [HomeController::class, 'contactSend'])->name('cont
 Route::get('/categories', [HomeController::class, 'categories'])->name('user.categories');
 Route::get('/categories-with-talent-count', [HomeController::class, 'withTalentCount']);
 Route::get('/testimonials/random', [HomeController::class, 'random']);
-Route::get('/register_as_talent', [HomeController::class, 'RegisterAsTalent'])->name('user.register_as_talent');
+Route::get('/register_your_skills', [HomeController::class, 'RegisterAsTalent'])->name('user.register_as_talent');
 Route::post('/talent/register', [HomeController::class, 'storeTalent'])->name('talent.register');
 Route::get('/talent-matched', [HomeController::class, 'matchedTalents'])->name('talent.match');
 Route::post('/talent/feedback', [HomeController::class, 'storeFeedback'])->name('talent.feedback.store');
@@ -508,7 +508,7 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::get('/page/jobs/{job}/edit', [TalentJobController::class, 'edit'])->name('jobs.edit');
     Route::put('/page/jobs/{job}/update', [TalentJobController::class, 'update'])->name('jobs.update');
     Route::delete('/page/jobs/{job}/delete', [TalentJobController::class, 'destroy'])->name('jobs.destroy');
-    Route::get('/page/jobs/{job}/applications', [TalentJobController::class, 'applications'])->name('jobs.applications.index');
+    Route::get('/page/jobs/{job}/applications', [TalentJobController::class, 'applications'])->name('jobs.applications');
     Route::post('/page/jobs/{job}/apply', [TalentJobController::class, 'applyJob'])->name('jobs.apply');
 
     // events routes

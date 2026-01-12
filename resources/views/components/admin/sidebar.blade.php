@@ -119,53 +119,6 @@ $role = Auth::check() ? Auth::user()->role : null;
                     </li>
                     @endif
 
-                    {{-- ===================== TALENT ===================== --}}
-                    @if( $role === 'talent')
-                    <li class="nk-menu-item">
-                        <a href="{{ route('talent.dashboard') }}" class="nk-menu-link {{ isActiveRoute('talent.dashboard') }}">
-                            <i class="ti ti-stars me-2"></i><span>Talent Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('talent.page.stories') }}" class="nk-menu-link {{ isActiveRoute('talent.page.stories.*') }}">
-                            <i class="ti ti-microphone me-2"></i><span>My Stories</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('talent.skills') }}" class="nk-menu-link {{ isActiveRoute('talent.skills.*') }}">
-                            <i class="ti ti-brush me-2"></i><span>My Skills</span>
-                        </a>
-                    </li>
-                    @endif
-
-                    {{-- ===================== USER ===================== --}}
-                    @if( $role === 'user')
-                    <li class="nk-menu-item">
-                        <a href="{{ route('user.home') }}" class="nk-menu-link {{ isActiveRoute('user.home') }}">
-                            <i class="ti ti-home me-2"></i><span>User Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('user.stories') }}" class="nk-menu-link {{ isActiveRoute('user.stories.*') }}">
-                            <i class="ti ti-book me-2"></i><span>Browse Stories</span>
-                        </a>
-                    </li>
-                    @endrole
-
-                    {{-- ===================== AGENT ===================== --}}
-                    @if( $role === 'seller')
-                    <li class="nk-menu-item">
-                        <a href="{{ route('seller.dashboard') }}" class="nk-menu-link {{ isActiveRoute('seller.dashboard') }}">
-                            <i class="ti ti-briefcase me-2"></i><span>Seller Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nk-menu-item">
-                        <a href="{{ route('seller.products') }}" class="nk-menu-link {{ isActiveRoute('seller.products.*') }}">
-                            <i class="ti ti-users me-2"></i><span>Products</span>
-                        </a>
-                    </li>
-                    @endrole
-
                 </ul>
             </div>
         </div>

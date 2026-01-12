@@ -12,7 +12,7 @@
         <div class="az-content-header d-flex justify-content-between align-items-center">
             <h2 class="az-content-title">Courses</h2>
             <div class="d-flex justify-content-end az-content-header-right">
-                <a href="{{ route('talent.courses.create') }}" class="btn btn-primary rounded-pill mb-3 align-self-start">
+                <a href="{{ route('talent.courses.create') }}" class="btn btn-primary mb-3 align-self-start">
                     Create New Course
                 </a>
             </div>

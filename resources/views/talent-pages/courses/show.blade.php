@@ -28,14 +28,14 @@
 
                 <!-- Header Buttons -->
                 <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
-                    <a href="{{ route('talent.courses.edit', $course->id) }}" class="btn btn-info rounded-pill">
+                    <a href="{{ route('talent.courses.edit', $course->id) }}" class="btn btn-info">
                         <em class="icon ni ni-edit"></em> Edit Course
                     </a>
-                    <button class="btn btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addLessonModal">Add Lesson</button>
-                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addLessonModal">Add Lesson</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReviewModal">
                         <em class="icon ni ni-chat"></em> Add Review
                     </button>
-                    <a href="{{ route('talent.courses.index') }}" class="btn btn-outline-primary rounded-pill">
+                    <a href="{{ route('talent.courses.index') }}" class="btn btn-outline-primary">
                         <em class="icon ni ni-arrow-left"></em> Back to Courses
                     </a>
                 </div>

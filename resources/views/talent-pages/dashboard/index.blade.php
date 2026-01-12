@@ -6,28 +6,17 @@
     <div class="az-content-body">
         <div class="az-dashboard-one-title">
             <div>
-                <h2 class="az-dashboard-title">Hi, welcome back!</h2>
-                <p class="az-dashboard-text">Your web analytics dashboard template.</p>
+                <h2 class="az-dashboard-title">Hi, welcome back! {{ Auth::user()->name }}</h2>
+                <p class="az-dashboard-text">Your web analytics dashboard .</p>
+                <p class="az-dashboard-text">
+                    Level: <strong>{{ ucfirst($level) }}</strong> |
+                    Status: <strong>{{ ucfirst($status) }}</strong>
+                </p>
             </div>
             <div class="az-content-header-right">
-                <div class="media">
-                    <div class="media-body">
-                        <label>Start Date</label>
-                        <h6>Oct 10, 2018</h6>
-                    </div><!-- media-body -->
-                </div><!-- media -->
-                <div class="media">
-                    <div class="media-body">
-                        <label>End Date</label>
-                        <h6>Oct 23, 2018</h6>
-                    </div><!-- media-body -->
-                </div><!-- media -->
-                <div class="media">
-                    <div class="media-body">
-                        <label>Event Category</label>
-                        <h6>All Categories</h6>
-                    </div><!-- media-body -->
-                </div><!-- media -->
+                <span class="badge bg-success">
+                    {{ $matched ? 'Matched' : 'Not Matched' }}
+                </span>
                 <a href="#" class="btn btn-purple">Export</a>
             </div>
         </div><!-- az-dashboard-one-title -->
@@ -35,9 +24,6 @@
         <div class="az-dashboard-nav">
             <nav class="nav">
                 <a class="nav-link active" data-bs-toggle="tab" href="#">Overview</a>
-                <a class="nav-link" data-bs-toggle="tab" href="#">Audiences</a>
-                <a class="nav-link" data-bs-toggle="tab" href="#">Demographics</a>
-                <a class="nav-link" data-bs-toggle="tab" href="#">More</a>
             </nav>
 
             <nav class="nav">
@@ -53,8 +39,8 @@
                 <div class="card card-dashboard-one">
                     <div class="card-header">
                         <div>
-                            <h6 class="card-title">Website Audience Metrics</h6>
-                            <p class="card-text">Audience to which the users belonged while on the current date range.</p>
+                            <h6 class="card-title">Talent Overview</h6>
+                            <p class="card-text">Your Activity summary</p>
                         </div>
                         <div class="btn-group">
                             <button class="btn active">Day</button>
@@ -63,26 +49,26 @@
                         </div>
                     </div><!-- card-header -->
                     <div class="card-body">
-                        <div class="card-body-top">
+                        <div class="card-body-top mb-3 d-flex justify-content-between">
                             <div>
-                                <label class="mg-b-0">Users</label>
-                                <h2>13,956</h2>
+                                <label class="mg-b-0">Total Courses</label>
+                                <h2>{{ number_format($totals['courses']) }}</h2>
                             </div>
                             <div>
-                                <label class="mg-b-0">Bounce Rate</label>
-                                <h2>33.50%</h2>
+                                <label class="mg-b-0">Skills</label>
+                                <h2>{{ number_format($totals['skills']) }}</h2>
                             </div>
                             <div>
-                                <label class="mg-b-0">Page Views</label>
-                                <h2>83,123</h2>
+                                <label class="mg-b-0">Connections</label>
+                                <h2>{{ number_format($totals['connections']) }}</h2>
                             </div>
                             <div>
-                                <label class="mg-b-0">Sessions</label>
+                                <label class="mg-b-0">Feedback</label>
                                 <h2>16,869</h2>
                             </div>
                         </div><!-- card-body-top -->
-                        <div class="flot-chart-wrapper">
-                            <div id="flotChart" class="flot-chart"></div>
+                        <div class="flot-chart-wrapper" style="margin-top: 4.5rem;">
+                            <canvas id="talentBarChart" class="flot-chart"></canvas>
                         </div><!-- flot-chart-wrapper -->
                     </div><!-- card-body -->
                 </div><!-- card -->
@@ -92,12 +78,12 @@
                     <div class="col-sm-6">
                         <div class="card card-dashboard-two">
                             <div class="card-header">
-                                <h6>33.50% <i class="icon ion-md-trending-up tx-success"></i> <small>18.02%</small></h6>
-                                <p>Bounce Rate</p>
+                                <h6>{{ $totals['feedback'] }} <i class="icon ion-md-trending-up tx-success"></i> <small>{{ number_format($totals['feedback'] / $totals['stories'] * 100, 2) }}%</small></h6>
+                                <p>Feedback Received</p>
                             </div><!-- card-header -->
                             <div class="card-body">
                                 <div class="chart-wrapper">
-                                    <div id="flotChart1" class="flot-chart"></div>
+                                    <canvas id="engagementDonut" class="flot-chart"></canvas>
                                 </div><!-- chart-wrapper -->
                             </div><!-- card-body -->
                         </div><!-- card -->
@@ -133,134 +119,99 @@
         </div><!-- row -->
 
         <div class="row row-sm mg-b-20">
-            <div class="col-lg-4">
-                <div class="card card-dashboard-pageviews">
-                    <div class="card-header">
-                        <h6 class="card-title">Page Views by Page Title</h6>
-                        <p class="card-text">This report is based on 100% of sessions.</p>
-                    </div><!-- card-header -->
-                    <div class="card-body">
-                        <div class="az-list-item">
-                            <div>
-                                <h6>Admin Home</h6>
-                                <span>/demo/admin/index.html</span>
-                            </div>
-                            <div>
-                                <h6 class="tx-primary">7,755</h6>
-                                <span>31.74% (-100.00%)</span>
-                            </div>
-                        </div><!-- list-group-item -->
-                        <div class="az-list-item">
-                            <div>
-                                <h6>Form Elements</h6>
-                                <span>/demo/admin/forms.html</span>
-                            </div>
-                            <div>
-                                <h6 class="tx-primary">5,215</h6>
-                                <span>28.53% (-100.00%)</span>
-                            </div>
-                        </div><!-- list-group-item -->
-                        <div class="az-list-item">
-                            <div>
-                                <h6>Utilities</h6>
-                                <span>/demo/admin/util.html</span>
-                            </div>
-                            <div>
-                                <h6 class="tx-primary">4,848</h6>
-                                <span>25.35% (-100.00%)</span>
-                            </div>
-                        </div><!-- list-group-item -->
-                        <div class="az-list-item">
-                            <div>
-                                <h6>Form Validation</h6>
-                                <span>/demo/admin/validation.html</span>
-                            </div>
-                            <div>
-                                <h6 class="tx-primary">3,275</h6>
-                                <span>23.17% (-100.00%)</span>
-                            </div>
-                        </div><!-- list-group-item -->
-                        <div class="az-list-item">
-                            <div>
-                                <h6>Modals</h6>
-                                <span>/demo/admin/modals.html</span>
-                            </div>
-                            <div>
-                                <h6 class="tx-primary">3,003</h6>
-                                <span>22.21% (-100.00%)</span>
-                            </div>
-                        </div><!-- list-group-item -->
-                    </div><!-- card-body -->
-                </div><!-- card -->
-
-            </div><!-- col -->
-            <div class="col-lg-8 mg-t-20 mg-lg-t-0">
-                <div class="card card-dashboard-four">
-                    <div class="card-header">
-                        <h6 class="card-title">Sessions by Channel</h6>
-                    </div><!-- card-header -->
-                    <div class="card-body row">
-                        <div class="col-md-6 d-flex align-items-center">
-                            <div class="chart"><canvas id="chartDonut"></canvas></div>
-                        </div><!-- col -->
-                        <div class="col-md-6 col-lg-5 mg-lg-l-auto mg-t-20 mg-md-t-0">
-                            <div class="az-traffic-detail-item">
-                                <div>
-                                    <span>Organic Search</span>
-                                    <span>1,320 <span>(25%)</span></span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-purple wd-25p" role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                        aria-valuemax="100"></div>
-                                </div><!-- progress -->
-                            </div>
-                            <div class="az-traffic-detail-item">
-                                <div>
-                                    <span>Email</span>
-                                    <span>987 <span>(20%)</span></span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-primary wd-20p" role="progressbar" aria-valuenow="20"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div><!-- progress -->
-                            </div>
-                            <div class="az-traffic-detail-item">
-                                <div>
-                                    <span>Referral</span>
-                                    <span>2,010 <span>(30%)</span></span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info wd-30p" role="progressbar" aria-valuenow="30" aria-valuemin="0"
-                                        aria-valuemax="100"></div>
-                                </div><!-- progress -->
-                            </div>
-                            <div class="az-traffic-detail-item">
-                                <div>
-                                    <span>Social</span>
-                                    <span>654 <span>(15%)</span></span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-teal wd-15p" role="progressbar" aria-valuenow="15" aria-valuemin="0"
-                                        aria-valuemax="100"></div>
-                                </div><!-- progress -->
-                            </div>
-                            <div class="az-traffic-detail-item">
-                                <div>
-                                    <span>Other</span>
-                                    <span>400 <span>(10%)</span></span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-gray-500 wd-10p" role="progressbar" aria-valuenow="10"
-                                        aria-valuemin="0" aria-valuemax="100"></div>
-                                </div><!-- progress -->
-                            </div>
-                        </div><!-- col -->
-                    </div><!-- card-body -->
-                </div><!-- card-dashboard-four -->
-            </div><!-- col -->
+            
+            <div class="col-lg-12">
+                <div class="card card-dashboard-three">
+                    <div class="card-header mb-8">
+                        <p>Monthly Activity</p>
+                        <small>Last 6 months performance</small>
+                    </div>
+                    <div class="card-body" style="margin-top: 4rem;">
+                        <canvas id="monthlyLineChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
         </div><!-- row -->
 
-        
+
     </div><!-- az-content-body -->
 </div>
+
+{{-- CHART JS --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/* BAR CHART */
+new Chart(document.getElementById('talentBarChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Courses', 'Skills', 'Stories', 'Feedback', 'Connections'],
+        datasets: [{
+            data: [
+                {{ $totals['courses'] }},
+                {{ $totals['skills'] }},
+                {{ $totals['stories'] }},
+                {{ $totals['feedback'] }},
+                {{ $totals['connections'] }}
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+/* DONUT CHART */
+new Chart(document.getElementById('engagementDonut'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Stories', 'Feedback', 'Connections'],
+        datasets: [{
+            data: [
+                {{ $totals['stories'] }},
+                {{ $totals['feedback'] }},
+                {{ $totals['connections'] }}
+            ]
+        }]
+    },
+    options: {
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+
+/* LINE CHART */
+new Chart(document.getElementById('monthlyLineChart'), {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($months) !!},
+        datasets: [
+            {
+                label: 'Stories',
+                data: {!! json_encode($monthlyStories) !!},
+                tension: 0.4
+            },
+            {
+                label: 'Feedback',
+                data: {!! json_encode($monthlyFeedback) !!},
+                tension: 0.4
+            },
+            {
+                label: 'Connections',
+                data: {!! json_encode($monthlyConnections) !!},
+                tension: 0.4
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
 @endsection

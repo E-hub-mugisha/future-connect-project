@@ -1,4 +1,4 @@
-@extends('layouts.talent')
+@extends('layouts.talents')
 @section('title', 'Applications for: ' . $job->title)
 
 @section('content')
