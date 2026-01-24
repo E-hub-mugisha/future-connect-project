@@ -22,6 +22,7 @@ use App\Models\Skill;
 use App\Models\SkillReview;
 use App\Models\Story;
 use App\Models\StoryComment;
+use App\Models\SuccessStory;
 use App\Models\SupportTalent;
 use App\Models\Testimonial;
 use App\Models\TalentFeedback;
@@ -600,8 +601,8 @@ class HomeController extends Controller
 
     public function howItWorks()
     {
-        // If you want, pass dynamic data here (e.g., steps from DB)
-        return view('user-page.how-it-works');
+        $successStories = SuccessStory::inRandomOrder()->get();
+        return view('user-page.how-it-works', compact('successStories'));
     }
 
     public function privacyPolicy()

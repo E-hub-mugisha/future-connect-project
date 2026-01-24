@@ -11,9 +11,44 @@ $categories = \App\Models\Category::all();
 
 @endphp
 
+
+<!-- Modern UI Styling -->
+<style>
+    .modern-tabs .nav-link {
+        border: 1px solid #319BF9;
+        background: #f8f9fa;
+        margin-right: 8px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        color: #319BF9;
+    }
+
+    .modern-tabs .nav-link:hover {
+        background: #e9ecef;
+        color: #000;
+    }
+
+    .modern-tabs .nav-link.active {
+        background: #319BF9;
+        color: #fff !important;
+        /* box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3); */
+    }
+
+    .modern-tab-content {
+        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid #eee;
+    }
+</style>
+
 <style>
     #tranding {
-        position: relative;
+        /* position: relative; */
         overflow: hidden;
         background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
         color: #fff;
@@ -22,7 +57,7 @@ $categories = \App\Models\Category::all();
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
-        height: 22rem;
+        /* height: 22rem; */
     }
 
     .tranding-grid {
@@ -216,506 +251,275 @@ $categories = \App\Models\Category::all();
     }
 </style>
 
-<!-- Modern UI Styling -->
 <style>
-    .modern-tabs .nav-link {
-        border: 1px solid #319BF9;
-        background: #f8f9fa;
-        margin-right: 8px;
-        padding: 10px 18px;
-        border-radius: 10px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        color: #319BF9;
+    /* --- SWITCH-STYLE NAV PILLS --- */
+    .nav-pills {
+        display: inline-flex;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 50px;
+        padding: 5px;
+        margin-bottom: 2rem;
+        justify-content: center;
     }
 
-    .modern-tabs .nav-link:hover {
-        background: #e9ecef;
-        color: #000;
-    }
-
-    .modern-tabs .nav-link.active {
-        background: #319BF9;
-        color: #fff !important;
-        /* box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3); */
-    }
-
-    .modern-tab-content {
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+    .nav-pills .nav-link {
+        border-radius: 50px;
         color: #fff;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        border: 1px solid #eee;
+        font-weight: 500;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #0d6efd;
+        color: #fff;
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+    }
+
+    .nav-pills .nav-link:not(.active):hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+
+    .hero-tab {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 2rem;
+        color: #f1f1f1;
+    }
+
+    .hero-tab h4 {
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .hero-tab p {
+        font-size: 1rem;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .btn-light {
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+    }
+
+    #market-section {
+        position: relative;
+        /* background: #319bf9; */
+        color: #f1f1f1;
+        padding: 80px 0 56px;
+        z-index: 1;
+    }
+
+    #market-section .provide-box {
+        background: #d4e6f526;
+        backdrop-filter: blur(15px) saturate(180%);
     }
 </style>
 
-<!-- Modern Tabs Section -->
-<section class="container py-5">
+<style>
+    /* Smooth card */
+    .wizard-wrapper {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(15px) saturate(180%);
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 1.2rem;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
 
-    <!-- <h2 class="mb-4 fw-bold text-dark">Explore Opportunities</h2> -->
+    .progress {
+        height: 10px;
+        border-radius: 50px;
+        overflow: hidden;
+        background: #e9ecef;
+    }
 
-    <!-- Tabs -->
-    <ul class="nav nav-tabs modern-tabs mb-4 justify-content-center" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill btn-outline-primary" id="marketplace-tab" data-bs-toggle="tab" data-bs-target="#marketplace" type="button" role="tab">
-                Skills Marketplace
-            </button>
-        </li>
+    .progress-bar {
+        transition: width .4s ease-in-out;
+    }
 
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill btn-outline-primary" id="become-tab" data-bs-toggle="tab" data-bs-target="#become" type="button" role="tab">
-                Register your Skill
-            </button>
-        </li>
+    /* Step titles */
+    .step-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #34495e;
+        margin-bottom: .7rem;
+    }
 
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill btn-outline-primary" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab">
-                Skill Categories
-            </button>
-        </li>
+    /* Wizard step section */
+    .step-section {
+        display: none;
+    }
 
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill btn-outline-primary" id="networking-tab" data-bs-toggle="tab" data-bs-target="#networking" type="button" role="tab">
-                Networking Hub
-            </button>
-        </li>
-    </ul>
+    .step-section.active {
+        display: block;
+        animation: fadeStep .35s ease;
+    }
 
-    <!-- Tab Content -->
-    <div class="tab-content modern-tab-content" id="myTabContent">
+    @keyframes fadeStep {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
 
-        <div class="tab-pane fade show active" id="marketplace" role="tabpanel">
-            <div class="talent-section-two next-gen-section">
-                <div class="container">
-                    <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-                        <h2 class="mb-2" style="color: #f9f9f9;"><span class="title-bg"></span>Meet the Next Generation of skilled people<span
-                                class="title-bg2"></span></h2>
-                        <p style="color: #f9f9f9;">Connect with the next wave of skilled people, guiding you with fresh perspectives</p>
-                    </div>
-                    <div class="row seller-list postLists cards">
-                        <!-- Filter -->
-                        <div class="filters-section">
-                            <div class="listing-tab ">
-                                <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" data-filter="latest" type="button">Latest</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-filter="popular" type="button">Popular</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-filter="featured" type="button">Featured</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-filter="recommended" type="button">Recommended</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <!-- Search Modal Trigger -->
-                                        <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                            <i class="ti ti-search me-1"></i> Search skilled people
-                                        </a>
-                                    </li>
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-                                </ul>
+    /* Button styles */
+    .btn-primary,
+    .btn-success,
+    .btn-danger {
+        padding: .6rem 1.5rem;
+        font-weight: 600;
+        border-radius: .5rem;
+        transition: all 0.25s ease-in-out;
+    }
 
-                            </div>
+    .btn-primary:hover {
+        transform: translateY(-2px);
+    }
 
-                            <!-- /Filter -->
+    .btn-success:hover {
+        transform: translateY(-2px);
+    }
 
-                            <!-- Sort By -->
-                            <div class="filters-wrap sort-categories">
-                                <div class="collapse-card float-lg-end">
-                                    <div class="filter-header">
-                                        <a href="javascript:void(0);" class="sorts-list">
-                                            <i class="ti ti-sort-ascending"></i>Sorts by: <span>Categories</span>
-                                        </a>
-                                    </div>
-                                    <div id="categories2" class="collapse-body" style="display: none;">
-                                        <div class="form-group search-group">
-                                            <span class="search-icon"><i class="feather-search"></i></span>
-                                            <input type="text" class="form-control" placeholder="Search Category">
-                                        </div>
-                                        <ul class="checkbox-list categories-lists">
-                                            @foreach($categories as $cat)
-                                            <li class="active">
-                                                <label class="custom_check">
-                                                    <span class="checked-title">{{ $cat->name }}</span>
-                                                </label>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Sort By -->
+    .wizard-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
+    .wizard-header h2 {
+        font-weight: 800;
+        color: #2d3436;
+        letter-spacing: -.5px;
+    }
+
+    .wizard-header p {
+        font-size: 1rem;
+        color: #6c757d;
+    }
+
+    .info-note {
+        background: rgba(13, 110, 253, 0.1);
+        border-left: 4px solid #0d6efd;
+        padding: 1rem 1.2rem;
+        border-radius: .5rem;
+        margin-bottom: 1.3rem;
+        font-size: .95rem;
+    }
+
+    /* Modal glass style */
+    .modal-glass .modal-content {
+        background: rgba(255, 255, 255, 0.69);
+        backdrop-filter: blur(15px) saturate(180%);
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 1rem;
+    }
+
+    .seller-info-content {
+        background: #319bf970;
+        backdrop-filter: blur(15px) saturate(180%);
+        /* box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.36); */
+        border-radius: 10px;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        margin: auto 0 auto -100px;
+        height: 420px;
+    }
+</style>
+
+<div class="container p-4">
+    <section id="tranding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                        <div class="banner-head mt-4">
+                            <h1 class="mb-2 text-white">Your gateway to skills, opportunities, and growth.</h1>
+                            <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
-                        <!-- /Filter -->
-                        <div class="row" id="talentGrid">
-                            @foreach($talents as $talent)
-                            <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
-                                <div class="card post-item m-card">
-                                    <div class="card-body text-center">
+                        <div class="banner-form">
+                            <!-- Tabs Navigation -->
+                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Skills Marketplace</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#opportunities" type="button" role="tab">Register your Skill</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="connection-tab" data-bs-toggle="pill" data-bs-target="#connection" type="button" role="tab">Networking Hub</button>
+                                </li>
+                            </ul>
 
-                                        <!-- Image -->
-                                        <a href="{{ route('user.talent.details', $talent->id) }}">
-                                            <img
-                                                class="img rounded-3"
-                                                src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                                alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
-                                        </a>
-
-                                        <!-- Name -->
-                                        <h6 class="mb-1">
-                                            <a href="{{ route('user.talent.details', $talent->id) }}">
-                                                {{ $talent->name }}
-                                                <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
-                                            </a>
-                                        </h6>
-
-                                        <!-- Category -->
-                                        <p>{{ $talent->category->name ?? 'Uncategorized' }}
-                                            @php
-                                            // Pick a color class based on the level
-                                            $badgeClass = match($talent->level) {
-                                            'advanced' => 'bg-success', // Green
-                                            'intermediate' => 'bg-warning text-dark', // Yellow/Orange
-                                            default => 'bg-secondary', // Gray for Beginner
-                                            };
-                                            @endphp
-
-                                            <span class="badge {{ $badgeClass }}">
-                                                {{ ucfirst($talent->level) }}
-                                            </span>
-                                        </p>
-
-                                        <!-- Ratings -->
-                                        <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                                            <div class="talent-hover-box">
-                                                <div class="default-badges">
-                                                    <span class="badge bg-light">
-                                                        {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
-                                                    </span>
-                                                    <span class="badge bg-light">
-                                                        {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="hover-badges">
-                                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                                        {{ $talent->skill }}
-                                                    </a>
-                                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                                        {{ $talent->language }}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- View Button -->
-                                        <div class="text-center d-flex justify-content-center">
-                                            <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
-                                                <i class="feather-arrow-right"></i>View Profile
-                                                <span class="slide-line"></span>
-                                                <span class="slide-line"></span>
-                                                <span class="slide-line"></span>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="become" role="tabpanel">
-            <style>
-                /* Smooth card */
-                .wizard-wrapper {
-                    background: rgba(255, 255, 255, 0.25);
-                    backdrop-filter: blur(15px) saturate(180%);
-                    -webkit-backdrop-filter: blur(15px) saturate(180%);
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                    border-radius: 1.2rem;
-                    padding: 2.5rem;
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-                }
-
-                .progress {
-                    height: 10px;
-                    border-radius: 50px;
-                    overflow: hidden;
-                    background: #e9ecef;
-                }
-
-                .progress-bar {
-                    transition: width .4s ease-in-out;
-                }
-
-                /* Step titles */
-                .step-title {
-                    font-size: 1.25rem;
-                    font-weight: 700;
-                    color: #34495e;
-                    margin-bottom: .7rem;
-                }
-
-                /* Wizard step section */
-                .step-section {
-                    display: none;
-                }
-
-                .step-section.active {
-                    display: block;
-                    animation: fadeStep .35s ease;
-                }
-
-                @keyframes fadeStep {
-                    from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                /* Button styles */
-                .btn-primary,
-                .btn-success,
-                .btn-danger {
-                    padding: .6rem 1.5rem;
-                    font-weight: 600;
-                    border-radius: .5rem;
-                    transition: all 0.25s ease-in-out;
-                }
-
-                .btn-primary:hover {
-                    transform: translateY(-2px);
-                }
-
-                .btn-success:hover {
-                    transform: translateY(-2px);
-                }
-
-                .wizard-header {
-                    text-align: center;
-                    margin-bottom: 2rem;
-                }
-
-                .wizard-header h2 {
-                    font-weight: 800;
-                    color: #2d3436;
-                    letter-spacing: -.5px;
-                }
-
-                .wizard-header p {
-                    font-size: 1rem;
-                    color: #6c757d;
-                }
-
-                .info-note {
-                    background: rgba(13, 110, 253, 0.1);
-                    border-left: 4px solid #0d6efd;
-                    padding: 1rem 1.2rem;
-                    border-radius: .5rem;
-                    margin-bottom: 1.3rem;
-                    font-size: .95rem;
-                }
-
-                /* Modal glass style */
-                .modal-glass .modal-content {
-                    background: rgba(255, 255, 255, 0.69);
-                    backdrop-filter: blur(15px) saturate(180%);
-                    -webkit-backdrop-filter: blur(15px) saturate(180%);
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                    border-radius: 1rem;
-                }
-
-                .seller-info-content {
-                    background: #319bf970;
-                    backdrop-filter: blur(15px) saturate(180%);
-                    /* box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.36); */
-                    border-radius: 10px;
-                    padding: 40px;
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                    justify-content: center;
-                    margin: auto 0 auto -100px;
-                    height: 420px;
-                }
-            </style>
-
-            <section class="start-seller-sec">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 d-flex">
-                            <div class="seller-inner-img w-100">
-                                <img src="assets/img/aboutus/about-us-04.jpg" class="img-fluid" alt="img">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 d-flex">
-                            <div class="seller-info-content w-100">
-                                <div class="seller-head">
-                                    <h3>Join Our skill Hub</h3>
-                                    <p>Showcase your skills, get verified, and connect with clients globally.
-                                        Our platform helps skilled people like you grow professionally and gain exposure.</p>
-                                </div>
-                                <div class="seller-feature-list d-flex w-100">
-                                    <div class="sllers-list">
-                                        <ul>
-                                            <li><span><i class="feather-check-square"></i></span>Network with companies and clients seeking your expertise.</li>
-                                            <li><span><i class="feather-check-square"></i></span>Display your skills, experience, and achievements professionally.</li>
-                                            <li><span><i class="feather-check-square"></i></span>Earn trust and credibility with verified profiles.</li>
-                                        </ul>
-                                        <button class="btn btn-outline-primary rounded-pill w-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-
-        <div class="tab-pane fade" id="categories" role="tabpanel">
-            <div class="popular-section-two">
-                <div class="container">
-                    <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
-                        <h2 class="mb-2" style="color: #f9f9f9;"><span class="title-bg"></span>Popular skill Categories<span class="title-bg2"></span></h2>
-                        <p>Unlock a world of opportunities and take control of your future</p>
-                    </div>
-                    <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
-                        @foreach($categories as $cat)
-                        <div class="col d-flex">
-                            <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                                <span><i class="ti ti-speakerphone"></i></span>
-                                <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
-                                @if(isset($cat->talents_count))
-                                <p>{{ $cat->talents_count }} talents</p>
-                                @else
-                                <p>0 talents</p>
-                                @endif
-                            </div>
-                        </div>
-                        @endforeach
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="networking" role="tabpanel">
-            <section class="hero-section">
-                <div class="container p-4">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                <div class="banner-head">
-                                    <h1 class="mb-2" style="color: #f9f9f9;">Networking Hub – Connect with skills &amp; Opportunities</h1>
-                                    <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="about-us-section">
-                <div class="container">
-                    <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
-                        <h2 class="mb-4" style="color: #f9f9f9;"><span class="title-bg"></span>Top skilled people to connect<span class="title-bg2"></span></h2>
-                    </div>
-                    <div class="row align-items-center">
-                        @foreach($talents as $talent)
-                        <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
-                            <div class="card post-item m-card">
-                                <div class="card-body text-center">
-
-                                    <!-- Image -->
-                                    <a href="{{ route('user.talent.details', $talent->id) }}">
-                                        <img
-                                            class="img rounded-3"
-                                            src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                            alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
+                            <!-- Tabs Content -->
+                            <div class="tab-content" id="heroTabsContent">
+                                <!-- Skills Marketplace -->
+                                <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
+                                    <h4 class="text-white">Promote Your Skills</h4>
+                                    <p class="text-white">
+                                        Stand out! Boost your profile and reach 3× more employers.<br>
+                                        Get verified and feature your story on our homepage.
+                                    </p>
+                                    <a type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                        <i class="ti ti-search me-1"></i> Search skilled people
                                     </a>
 
-                                    <!-- Name -->
-                                    <h6 class="mb-1">
-                                        <a href="{{ route('user.talent.details', $talent->id) }}">
-                                            {{ $talent->name }}
-                                            <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
-                                        </a>
-                                    </h6>
+                                </div>
 
-                                    <!-- Category -->
-                                    <p>{{ $talent->category->name ?? 'Uncategorized' }}
-                                        @php
-                                        // Pick a color class based on the level
-                                        $badgeClass = match($talent->level) {
-                                        'advanced' => 'bg-success', // Green
-                                        'intermediate' => 'bg-warning text-dark', // Yellow/Orange
-                                        default => 'bg-secondary', // Gray for Beginner
-                                        };
-                                        @endphp
-
-                                        <span class="badge {{ $badgeClass }}">
-                                            {{ ucfirst($talent->level) }}
-                                        </span>
+                                <!-- Opportunities Center -->
+                                <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
+                                    <h4 class="text-white">Join Our skill Hub</h4>
+                                    <p class="text-white">
+                                        Showcase your skills, get verified, and connect with clients globally.
+                                        Our platform helps skilled people like you grow professionally and gain exposure.
                                     </p>
-
-                                    <!-- Ratings -->
-                                    <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                                        <div class="talent-hover-box">
-                                            <div class="default-badges">
-                                                <span class="badge bg-light">
-                                                    {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
-                                                </span>
-                                                <span class="badge bg-light">
-                                                    {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
-                                                </span>
-                                            </div>
-                                            <div class="hover-badges">
-                                                <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                                    {{ $talent->skill }}
-                                                </a>
-                                                <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                                    {{ $talent->language }}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- View Button -->
-                                    <div class="text-center d-flex justify-content-center">
-                                        <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
-                                            <i class="feather-arrow-right"></i>View Profile
-                                            <span class="slide-line"></span>
-                                            <span class="slide-line"></span>
-                                            <span class="slide-line"></span>
-                                        </a>
-                                    </div>
-
+                                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
+                                </div>
+                                <!-- Connection Room -->
+                                <div class="tab-pane hero-tab fade" id="connection" role="tabpanel">
+                                    <h4 class="text-white">Expand Your Network</h4>
+                                    <p class="text-white">
+                                        Connect with industry professionals, mentors, and peers.<br>
+                                        Join groups, attend virtual events, and build relationships that matter.
+                                    </p>
+                                    <a href="{{ route('register')}}" class="btn btn-light">Join the Community</a>
                                 </div>
                             </div>
+                            <!-- <div class="popular-search">
+                                <h5>Popular Searches : </h5>
+                                <ul>
+                                    <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
+                                    <li><a href="service-grid-sidebar.html">Carpentering</a></li>
+                                    <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                                </ul>
+                            </div> -->
                         </div>
-                        @endforeach
                     </div>
                 </div>
-            </section>
+                <div class="col-lg-4">
+                    <div class="banner-img">
+                        <div class="banner-img-right">
+                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-    </div>
-
-</section>
-
+    </section>
+</div>
 
 
 <div class="container" style="margin-top: 4.5rem;">
@@ -990,8 +794,8 @@ $categories = \App\Models\Category::all();
 <!-- next gen -->
 <div class="talent-section-two next-gen-section">
     <div class="container">
-        <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Meet the Next Generation of skilled people<span
+        <div class="section-header-two what-makes-left" data-aos="fade-up">
+            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Explore Generation of skilled people<span
                     class="title-bg2"></span></h2>
             <p style="color: #319BF9;">Connect with the next wave of skilled people, guiding you with fresh perspectives</p>
         </div>
@@ -1042,7 +846,7 @@ $categories = \App\Models\Category::all();
                                 @foreach($categories as $cat)
                                 <li class="active">
                                     <label class="custom_check">
-                                        <span class="checked-title">{{ $cat->name }}</span>
+                                        <a href="{{ route('user.talents.category', $cat->slug) }}"><span class="checked-title">{{ $cat->name }}</span></a>
                                     </label>
                                 </li>
                                 @endforeach
@@ -1077,19 +881,8 @@ $categories = \App\Models\Category::all();
                             </h6>
 
                             <!-- Category -->
-                            <p>{{ $talent->category->name ?? 'Uncategorized' }}
-                                @php
-                                // Pick a color class based on the level
-                                $badgeClass = match($talent->level) {
-                                'advanced' => 'bg-success', // Green
-                                'intermediate' => 'bg-warning text-dark', // Yellow/Orange
-                                default => 'bg-secondary', // Gray for Beginner
-                                };
-                                @endphp
-
-                                <span class="badge {{ $badgeClass }}">
-                                    {{ ucfirst($talent->level) }}
-                                </span>
+                            <p>
+                                {{ $talent->category->name ?? 'Uncategorized' }}
                             </p>
 
                             <!-- Location -->
@@ -1143,7 +936,24 @@ $categories = \App\Models\Category::all();
         <img src="{{ asset('assets/img/bg/section-bg-06.png') }}" class="explore-bg1" alt="img">
     </div>
     <div class="container">
-        <div class="faq-sec">
+        <div class="trusted-customers-sec ">
+            <div class="trusted-customers">
+                <div class="section-bg">
+                    <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-one" alt="img">
+                    <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-two" alt="img">
+                </div>
+                <div class="section-header mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
+                    <h2>Want to Showcase Your skills?</h2>
+                    <p>Over 74K skilled people on the platform - available today for you.</p>
+                    <p>Join our community and take the first step towards your dream career.</p>
+                </div>
+                <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
+                    <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-sec mt-4">
             <div class="row align-items-center">
                 <div class="col-lg-4">
                     <div class="faq-heading aos" data-aos="fade-up">
@@ -1223,23 +1033,6 @@ $categories = \App\Models\Category::all();
                         </div>
 
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="trusted-customers-sec">
-            <div class="trusted-customers">
-                <div class="section-bg">
-                    <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-one" alt="img">
-                    <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-two" alt="img">
-                </div>
-                <div class="section-header mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <h2>Want to Showcase Your skills?</h2>
-                    <p>Over 74K skilled people on the platform - available today for you.</p>
-                    <p>Join our community and take the first step towards your dream career.</p>
-                </div>
-                <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
                 </div>
             </div>
         </div>

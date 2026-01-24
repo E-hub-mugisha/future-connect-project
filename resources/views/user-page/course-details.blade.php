@@ -34,183 +34,222 @@
 		<div class="row">
 			<!-- Course Details -->
 			<div class="col-lg-8">
-				<div class="service-card w-100 mb-4 postLists">
-					<div class="service-video-wrap text-center">
-						<div class="video-wrapper position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
-							@if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
-							<div class="ratio ratio-16x9">
-								<iframe
-									src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->lessons->first()->video, 'v=') }}?autoplay=1&mute=1&playsinline=1"
-									title="{{ $course->lessons->first()->title }}"
-									allow="autoplay; encrypted-media"
-									allowfullscreen
-									class="rounded-3">
-								</iframe>
-							</div>
-							@elseif($course->video)
-							<div class="ratio ratio-16x9">
-								<iframe
-									src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->video, 'v=') }}"
-									title="{{ $course->title }}"
-									allow="autoplay; encrypted-media"
-									allowfullscreen
-									class="rounded-3">
-								</iframe>
-							</div>
-							@else
-							<img
-								src="{{ asset('images/thumbnails/'.$course->thumbnail) }}"
-								class="img-fluid w-100 rounded-3 shadow-sm"
-								alt="{{ $course->title }}">
-							@endif
-						</div>
-
-					</div>
-				</div>
-				<div class="service-wrap postLists">
-					<h3>About this course</h3>
-					<p>{{ $course->description }}</p>
-				</div>
-
-				<!-- Lessons Section -->
-				<div class="service-wrap course-lessons postLists mt-5">
-					<h3>Course Lessons</h3>
-
-					@if($course->lessons->count() > 0)
-					<ul class="list-group list-group-flush">
-						@foreach($course->lessons as $key => $lesson)
-						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<span>{{ $key + 1 }}. {{ $lesson->title ?? 'Untitled Lesson' }}</span>
-							<button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#lessonModal{{ $lesson->id }}">
-								<i class="fa-solid fa-eye"></i> View
-							</button>
-						</li>
-
-						<!-- Lesson Modal -->
-						<div class="modal fade" id="lessonModal{{ $lesson->id }}" tabindex="-1" aria-labelledby="lessonModalLabel{{ $lesson->id }}" aria-hidden="true">
-							<div class="modal-dialog modal-lg modal-dialog-centered">
-								<div class="modal-content postLists">
-									<div class="modal-header">
-										<h5 class="modal-title" id="lessonModalLabel{{ $lesson->id }}">
-											{{ $lesson->title ?? 'Untitled Lesson' }}
-										</h5>
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-									</div>
-									<div class="modal-body">
-										@if($lesson->video_url)
-										<div class="ratio ratio-16x9 mb-3">
-											<iframe src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($lesson->video_url, 'v=') }}?autoplay=0&playsinline=1"
-												title="{{ $lesson->title ?? 'Lesson Video' }}" allowfullscreen class="rounded-3">
-											</iframe>
-										</div>
-										@else
-										<p class="text-muted">No video available for this lesson.</p>
-										@endif
-										<p>{{ $lesson->description ?? '' }}</p>
-									</div>
-									<div class="modal-footer">
-										<span class="text-muted">Duration: {{ $lesson->duration ?? '-' }}</span>
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-									</div>
+				<div class="postLists p-4">
+					<div class="service-card w-100 mb-4">
+						<div class="service-video-wrap text-center">
+							<div class="video-wrapper position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
+								@if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
+								<div class="ratio ratio-16x9">
+									<iframe
+										src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->lessons->first()->video, 'v=') }}?autoplay=1&mute=1&playsinline=1"
+										title="{{ $course->lessons->first()->title }}"
+										allow="autoplay; encrypted-media"
+										allowfullscreen
+										class="rounded-3">
+									</iframe>
 								</div>
+								@elseif($course->video)
+								<div class="ratio ratio-16x9">
+									<iframe
+										src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->video, 'v=') }}"
+										title="{{ $course->title }}"
+										allow="autoplay; encrypted-media"
+										allowfullscreen
+										class="rounded-3">
+									</iframe>
+								</div>
+								@else
+								<img
+									src="{{ asset('images/thumbnails/'.$course->thumbnail) }}"
+									class="img-fluid w-100 rounded-3 shadow-sm"
+									alt="{{ $course->title }}">
+								@endif
 							</div>
+
 						</div>
-						<!-- /Lesson Modal -->
+					</div>
 
-						@endforeach
-					</ul>
-					@else
-					<p class="text-muted">No lessons available for this course yet.</p>
-					@endif
-				</div>
-				<!-- /Lessons Section -->
+					<div class="listing-tab">
+						<div class="listing-slider">
+							<ul class="nav nav-tabs" role="tablist">
+								<li class="nav-item" role="presentation">
+									<a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#description" aria-selected="true" role="tab">
+										Description
+									</a>
+								</li>
+								<li>
+									<a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#lesson" aria-selected="false" role="tab" tabindex="-1">
+										Course Lessons
+									</a>
+								</li>
+								<li>
+									<a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#review" aria-selected="false" role="tab" tabindex="-1">
+										Reviews
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
 
+					<div class="tab-content">
 
-				<!-- Reviews -->
-				<div class="review-widget postLists">
-					<div class="review-title sort-search-gigs">
-						<div class="row align-items-center">
-							<div class="col-sm-6">
-								<h3>Reviews ({{ $course->feedback->count() }})</h3>
+						<div class="tab-pane fade active show" id="description" role="tabpanel">
+							<!-- About Gigs -->
+							<div class="service-wrap">
+								<h3>About </h3>
+								<p>
+									{{ $course->description }}
+								</p>
 							</div>
-							<div class="col-sm-6">
-								<div class="filters-wrap sort-categories justify-content-end">
-									<div class="dropdown float-lg-end">
-										<button class="btn btn-light dropdown-toggle" type="button" id="sortReviewDropdown" data-bs-toggle="dropdown">
-											Sort By: Most Recent
+							<!-- /About Gigs -->
+						</div>
+						<div class="tab-pane fade" id="lesson" role="tabpanel">
+							<!-- Lessons Section -->
+							<div class="service-wrap course-lessons mt-5">
+								<h3>Course Lessons</h3>
+
+								@if($course->lessons->count() > 0)
+								<ul class="list-group list-group-flush">
+									@foreach($course->lessons as $key => $lesson)
+									<li class="list-group-item d-flex justify-content-between align-items-center">
+										<span>{{ $key + 1 }}. {{ $lesson->title ?? 'Untitled Lesson' }}</span>
+										<button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#lessonModal{{ $lesson->id }}">
+											<i class="fa-solid fa-eye"></i> View
 										</button>
-										<ul class="dropdown-menu" aria-labelledby="sortReviewDropdown">
-											<li><a class="dropdown-item active" href="#">Most Recent</a></li>
-											<li><a class="dropdown-item" href="#">Oldest</a></li>
-										</ul>
+									</li>
+
+									<!-- Lesson Modal -->
+									<div class="modal fade" id="lessonModal{{ $lesson->id }}" tabindex="-1" aria-labelledby="lessonModalLabel{{ $lesson->id }}" aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered">
+											<div class="modal-content postLists">
+												<div class="modal-header">
+													<h5 class="modal-title" id="lessonModalLabel{{ $lesson->id }}">
+														{{ $lesson->title ?? 'Untitled Lesson' }}
+													</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													@if($lesson->video_url)
+													<div class="ratio ratio-16x9 mb-3">
+														<iframe src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($lesson->video_url, 'v=') }}?autoplay=0&playsinline=1"
+															title="{{ $lesson->title ?? 'Lesson Video' }}" allowfullscreen class="rounded-3">
+														</iframe>
+													</div>
+													@else
+													<p class="text-muted">No video available for this lesson.</p>
+													@endif
+													<p>{{ $lesson->description ?? '' }}</p>
+												</div>
+												<div class="modal-footer">
+													<span class="text-muted">Duration: {{ $lesson->duration ?? '-' }}</span>
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
 									</div>
+									<!-- /Lesson Modal -->
+
+									@endforeach
+								</ul>
+								@else
+								<p class="text-muted">No lessons available for this course yet.</p>
+								@endif
+							</div>
+							<!-- /Lessons Section -->
+						</div>
+						<div class="tab-pane fade" id="review" role="tabpanel">
+
+							<div class="row">
+								<!-- Reviews -->
+								<div class="review-widget">
+									<div class="review-title sort-search-gigs">
+										<div class="row align-items-center">
+											<div class="col-sm-6">
+												<h3>Reviews ({{ $course->feedback->count() }})</h3>
+											</div>
+											<div class="col-sm-6">
+												<div class="filters-wrap sort-categories justify-content-end">
+													<div class="dropdown float-lg-end">
+														<button class="btn btn-light dropdown-toggle" type="button" id="sortReviewDropdown" data-bs-toggle="dropdown">
+															Sort By: Most Recent
+														</button>
+														<ul class="dropdown-menu" aria-labelledby="sortReviewDropdown">
+															<li><a class="dropdown-item active" href="#">Most Recent</a></li>
+															<li><a class="dropdown-item" href="#">Oldest</a></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<ul class="review-lists home-reviews">
+										@foreach($course->feedback as $feedback)
+										<li>
+											<div class="review-wrap">
+												<div class="review-user-info">
+													<div class="review-img">
+														<img src="{{ $feedback->user->profile_photo ? asset('uploads/'.$feedback->user->profile_photo) : asset('assets/img/user/profile.jpg') }}" alt="{{ $feedback->user->name }}">
+													</div>
+													<div class="reviewer-info">
+														<h6><a href="#">{{ $feedback->user->name }}</a></h6>
+														<div class="star-rate">
+															@for($i=1;$i<=5;$i++)
+																<i class="fa-solid fa-star{{ $i <= $feedback->rating ? ' filled' : '' }}"></i>
+																@endfor
+																<span class="rating-count">{{ $feedback->rating }}</span>
+														</div>
+														<p class="reviewer-time">{{ $feedback->created_at->diffForHumans() }}</p>
+													</div>
+												</div>
+												<div class="review-content">
+													<p>{{ $feedback->comment }}</p>
+												</div>
+											</div>
+										</li>
+										@endforeach
+									</ul>
+									<!-- Add a Review --><!-- Review Form -->
+									<div class="course-review mt-5">
+										<h4>Leave a Review</h4>
+
+										@auth
+										@if(session('success'))
+										<div class="alert alert-success">{{ session('success') }}</div>
+										@endif
+
+										<form action="{{ route('courses.review', $course->id) }}" method="POST">
+											@csrf
+											<div class="mb-3">
+												<label class="form-label">Rating</label>
+												<select name="rating" class="form-select" required>
+													<option value="">-- Select --</option>
+													@for($i = 1; $i <= 5; $i++)
+														<option value="{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</option>
+														@endfor
+												</select>
+												@error('rating') <small class="text-danger">{{ $message }}</small> @enderror
+											</div>
+
+											<div class="mb-3">
+												<label class="form-label">Comment</label>
+												<textarea name="comment" rows="4" class="form-control" placeholder="Write your review..."></textarea>
+												@error('comment') <small class="text-danger">{{ $message }}</small> @enderror
+											</div>
+
+											<button type="submit" class="btn btn-primary">Submit Review</button>
+										</form>
+										@else
+										<p><a href="{{ route('login') }}">Login</a> to leave a review.</p>
+										@endauth
+									</div>
+									<!-- /Review Form -->
+
 								</div>
 							</div>
+
 						</div>
 					</div>
-
-					<ul class="review-lists home-reviews">
-						@foreach($course->feedback as $feedback)
-						<li>
-							<div class="review-wrap">
-								<div class="review-user-info">
-									<div class="review-img">
-										<img src="{{ $feedback->user->profile_photo ? asset('uploads/'.$feedback->user->profile_photo) : asset('assets/img/user/profile.jpg') }}" alt="{{ $feedback->user->name }}">
-									</div>
-									<div class="reviewer-info">
-										<h6><a href="#">{{ $feedback->user->name }}</a></h6>
-										<div class="star-rate">
-											@for($i=1;$i<=5;$i++)
-												<i class="fa-solid fa-star{{ $i <= $feedback->rating ? ' filled' : '' }}"></i>
-												@endfor
-												<span class="rating-count">{{ $feedback->rating }}</span>
-										</div>
-										<p class="reviewer-time">{{ $feedback->created_at->diffForHumans() }}</p>
-									</div>
-								</div>
-								<div class="review-content">
-									<p>{{ $feedback->comment }}</p>
-								</div>
-							</div>
-						</li>
-						@endforeach
-					</ul>
-					<!-- Add a Review --><!-- Review Form -->
-					<div class="course-review mt-5">
-						<h4>Leave a Review</h4>
-
-						@auth
-						@if(session('success'))
-						<div class="alert alert-success">{{ session('success') }}</div>
-						@endif
-
-						<form action="{{ route('courses.review', $course->id) }}" method="POST">
-							@csrf
-							<div class="mb-3">
-								<label class="form-label">Rating</label>
-								<select name="rating" class="form-select" required>
-									<option value="">-- Select --</option>
-									@for($i = 1; $i <= 5; $i++)
-										<option value="{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</option>
-										@endfor
-								</select>
-								@error('rating') <small class="text-danger">{{ $message }}</small> @enderror
-							</div>
-
-							<div class="mb-3">
-								<label class="form-label">Comment</label>
-								<textarea name="comment" rows="4" class="form-control" placeholder="Write your review..."></textarea>
-								@error('comment') <small class="text-danger">{{ $message }}</small> @enderror
-							</div>
-
-							<button type="submit" class="btn btn-primary">Submit Review</button>
-						</form>
-						@else
-						<p><a href="{{ route('login') }}">Login</a> to leave a review.</p>
-						@endauth
-					</div>
-					<!-- /Review Form -->
-
 				</div>
 			</div>
 
@@ -319,13 +358,13 @@
 					<!-- Action Buttons -->
 					<div class="d-flex gap-2 flex-wrap">
 						<a href="{{ route('user.talent.details', $course->talent->id) }}"
-							class="btn btn-outline-primary rounded-pill flex-grow-1 modern-btn">
+							class="btn btn-outline-primary rounded-pill">
 							View Author Profile
 						</a>
 
 						@if($course->is_free)
 						<a href="#enrollModal"
-							class="btn btn-primary rounded-pill flex-grow-1 modern-btn"
+							class="btn btn-primary rounded-pill modern-btn"
 							data-bs-toggle="modal">
 							<i class="feather-book-open me-1"></i> Enroll for Free
 						</a>
@@ -478,7 +517,7 @@
 									</span>
 								</div>
 								<div class="gigs-card-footer">
-									<span class="badge">Delivery in {{ $related->delivery_days ?? 1 }} day(s)</span>
+									
 									<h5>
 										@if($related->is_free)
 										Free

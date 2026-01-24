@@ -1,6 +1,5 @@
 @php
-
-$categories = \App\Models\Category::all();
+$categories = \App\Models\Category::inRandomOrder()->take(3)->get();
 
 if (!function_exists('isActiveRoute')) {
 function isActiveRoute($route)
@@ -10,583 +9,171 @@ return request()->routeIs($route) ? 'active' : '';
 }
 @endphp
 
-<style>
-    .top-header {
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        border-bottom: 1px solid #4A91ED;
-        padding: 6px 0;
-        transition: transform .3s ease;
-    }
-
-    .top-header .top-text {
-        color: #4A91ED;
-    }
-
-    .primary-header {
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        /* padding: 12px 0; */
-    }
-
-    .primary-menu li {
-        list-style: none;
-        margin-right: 18px;
-    }
-
-    .primary-menu li a {
-        padding: 10px;
-        /* font-weight: 500; */
-        color: #2d2d2d;
-    }
-
-    .primary-menu li a:hover {
-        color: #4A91ED;
-    }
-
-    /* -------- CENTER PRIMARY MENU -------- */
-    .primary-header .navbar {
-        position: relative;
-    }
-
-    /* Center group */
-    .primary-menu {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* spacing stays clean */
-    .primary-menu li {
-        margin: 0 14px;
-    }
-
-    /* -------- CENTER SECONDARY MENU -------- */
-    .secondary-menu {
-        justify-content: center;
-        width: 100%;
-    }
-
-    /* -------- MOBILE SAFE -------- */
-    @media(max-width:991px) {
-        .primary-menu {
-            position: static;
-            transform: none;
-        }
-    }
-
-    .secondary-header {
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        /* border-top: 1px solid #ececec;
-        border-bottom: 1px solid #4A91ED; */
-        /* position: sticky; */
-        top: 0;
-        z-index: 999;
-        transition: transform .3s ease;
-    }
-
-    .secondary-menu {
-        display: flex;
-        gap: 18px;
-        padding: 0;
-    }
-
-    .secondary-menu li {
-        list-style: none;
-    }
-
-    .secondary-menu li a {
-        padding: 13px 10px;
-        display: block;
-        color: #444;
-        /* font-weight: 500; */
-    }
-
-    .secondary-menu li a:hover {
-        color: #4A91ED;
-    }
-
-    .mega-parent {
-        position: relative;
-    }
-
-    .mega-menu {
-        position: absolute;
-        left: 0;
-        top: 100%;
-        width: 800px;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        padding: 25px;
-        border-radius: 12px;
-        border: 1px solid #eaeaea;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, .08);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px);
-        transition: .3s ease;
-    }
-
-    .mega-parent:hover .mega-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-
-    .mega-menu h6 {
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .mega-menu ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .mega-menu ul li a {
-        display: block;
-        padding: 6px 0;
-        color: #333;
-    }
-
-    .mega-menu ul li a:hover {
-        color: #0d6efd;
-    }
-
-    @media(max-width:991px) {
-        .top-header {
-            display: none;
-        }
-
-        .primary-menu {
-            display: none !important;
-        }
-
-        .secondary-header {
-            display: none;
-        }
-    }
-
-    .mobile-menu {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 80%;
-        height: 100%;
-        background: #fff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, .2);
-        transition: .3s;
-        z-index: 9999;
-    }
-
-    .mobile-menu.active {
-        left: 0;
-    }
-
-    .mobile-header {
-        display: flex;
-        justify-content: space-between;
-        padding: 15px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .mobile-nav {
-        list-style: none;
-        padding: 0;
-    }
-
-    .mobile-nav li a {
-        display: block;
-        padding: 14px 20px;
-        border-bottom: 1px solid #f1f1f1;
-        color: #333;
-    }
-
-    .mobile-nav li a:hover {
-        background: #f5f7ff;
-    }
-
-    /* Hide text on mobile */
-    .responsive-btn .btn-text {
-        display: inline;
-        /* desktop default */
-    }
-
-    @media(max-width:991px) {
-        .responsive-btn .btn-text {
-            display: none;
-            /* hide text on mobile */
-        }
-
-        .responsive-btn {
-            width: 40px;
-            padding: 8px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .responsive-btn i {
-            font-size: 18px;
-        }
-    }
-</style>
-
-<style>
-    .search-overlay-section {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1055;
-        width: 100%;
-        height: 100vh;
-
-        /* ✅ Transparent + Blur Background */
-        background: rgba(53, 61, 93, 0.71);
-        /* Slight tint for contrast */
-        backdrop-filter: blur(5px);
-        /* Main blur effect */
-        -webkit-backdrop-filter: blur(5px);
-        /* Safari support */
-
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-    }
-
-    .search-overlay-section.active {
-        display: flex;
-    }
-
-    .search-content {
-        width: 55%;
-        /* max-width: 600px; */
-        /* padding: 20px; */
-        background: rgba(255, 255, 255, 0.67);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border-radius: 50px;
-    }
-
-    .search-input-group {
-        position: relative;
-    }
-
-    .search-input-group .input-icon {
-        position: absolute;
-        top: 50%;
-        left: 6px;
-        transform: translateY(-50%);
-        color: #ccc;
-    }
-
-    .search-input-group input {
-        padding-left: 40px;
-        border: none;
-        border-bottom: 2px solid #0d6efd;
-        background: transparent;
-        color: #fff;
-        font-size: 1.1rem;
-        width: 100%;
-    }
-
-    .search-input-group input:focus {
-        outline: none;
-        border-color: #0d6efd;
-    }
-
-    @media (max-width: 576px) {
-        .search-content {
-            padding: 10px;
-        }
-
-        .search-input-group input {
-            font-size: 1rem;
-        }
-    }
-
-    /* Style for the close button */
-    .btn-close-white {
-        filter: invert(1);
-        opacity: 0.8;
-    }
-
-    .btn-close-white:hover {
-        opacity: 1;
-    }
-
-    /* Close Button */
-    .btn-close-custom {
-        width: 36px;
-        height: 36px;
-        border: none;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.8);
-        color: #333;
-        font-size: 20px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-close-custom::before {
-        content: "×";
-        /* custom close icon */
-    }
-
-    .btn-close-custom:hover {
-        background: #0d6efd;
-        color: #fff;
-    }
-
-    /* Submit Button */
-    .btn-submit-custom {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        border: none;
-        background: #0d6efd;
-        color: #fff;
-        padding: 14px 14px;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-    .btn-submit-custom:hover {
-        background: #084298;
-    }
-
-    /* Modern Input Focus Effect */
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #0052D4 !important;
-        box-shadow: 0 0 0 0.2rem rgba(0, 82, 212, 0.25) !important;
-    }
-
-    /* Smooth modal appearance */
-    .modal-content {
-        animation: slideUp 0.35s ease-in-out;
-    }
-
-    @keyframes slideUp {
-        from {
-            transform: translateY(20px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .header {
-        position: sticky;
-        left: 0;
-        top: 0;
-        width: 100%;
-        z-index: 1001;
-        background: var(--white);
-        transition: ease all 0.5s;
-        -webkit-transition: ease all 0.5s;
-        -ms-transition: ease all 0.5s;
-    }
-</style>
-
-<header class="c-header">
-
-    {{-- ================= TOP HEADER ================= --}}
-    <div class="top-header" id="topHeader">
-        <div class="container d-flex justify-content-between align-items-center small">
-            <div class="top-text">
-                <i class="ti ti-mail"></i> support@example.com &nbsp; | &nbsp;
-                <i class="ti ti-phone"></i> +250 780 000 000
-            </div>
-
+<!-- Header -->
+<header class="header">
+    {{-- TOP INFO BAR --}}
+    <div class="top-header d-none d-lg-block">
+        <div class="container d-flex justify-content-between">
+            <div class="top-text">info@futureconnect.rw · +250 784 123 456</div>
             <div class="d-flex gap-3">
-                <li class="me-2"><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
-                <li class="me-2"><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-                <li class="me-2"><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                <li class="me-2"><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
             </div>
         </div>
     </div>
+    <div class="container">
 
-    {{-- ================= PRIMARY HEADER ================= --}}
-    <div class="primary-header">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg">
-
-                {{-- Mobile Toggle --}}
-                <button class="navbar-toggler" type="button" onclick="openMobileMenu()">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                {{-- Logo --}}
-                <a href="{{ route('user.home') }}" class="navbar-brand">
-                    <img src="{{ asset('assets/img/WORDMARK.png') }}" height="48">
+        <nav class="navbar navbar-expand-lg header-nav p-0">
+            <div class="navbar-header">
+                <a id="mobile_btn" href="javascript:void(0);">
+                    <span class="bar-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
                 </a>
+                <a href="{{ route('user.home') }}" class="navbar-brand logo">
+                    <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo">
+                </a>
+                <a href="{{ route('user.home') }}" class="dark-logo">
+                    <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" class="img-fluid">
+                </a>
+                <a href="{{ route('user.home') }}" class="navbar-brand logo-small">
+                    <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo">
+                </a>
+            </div>
+            <div class="main-menu-wrapper">
+                <div class="menu-header">
+                    <a href="{{ route('user.home') }}" class="menu-logo">
+                        <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo">
+                    </a>
+                    <a href="{{ route('user.home') }}" class="menu-logo dark-logo">
+                        <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" class="img-fluid">
+                    </a>
+                    <a id="menu_close" class="menu-close" href="#"> <i class="fas fa-times"></i></a>
+                </div>
+                <ul class="main-nav navbar-nav">
+                    <li><a href="{{ route('user.jobs.index') }}">Find Work</a></li>
 
-                {{-- PRIMARY MENU --}}
-                <ul class="nav primary-menu d-none d-lg-flex ms-4">
-
-                    <li><a href="{{ route('user.home') }}">Home</a></li>
-
-                    {{-- MEGA DROPDOWN --}}
-                    <li class="mega-parent">
-                        <a href="#">
-                            Skills Hub <i class="ti ti-chevron-down small"></i>
-                        </a>
-
-                        <div class="mega-menu">
-                            <div class="row g-4">
-
-                                {{-- Popular Categories --}}
-                                <div class="col-md-6">
-                                    <h6>Popular Categories</h6>
-                                    <ul>
-                                        @php
-                                        $popularCategories = \App\Models\Talent::with('category')
-                                        ->whereNotNull('category_id')
-                                        ->select('category_id')
-                                        ->selectRaw('COUNT(*) as total')
-                                        ->groupBy('category_id')
-                                        ->orderByDesc('total')
-                                        ->take(3)
-                                        ->get()
-                                        ->map(function($item){
-                                        return [
-                                        'name' => $item->category->name ?? '-',
-                                        'slug' => $item->category->slug ?? '#',
-                                        'total' => $item->total
-                                        ];
-                                        });
-                                        @endphp
-
-                                        @forelse($popularCategories as $category)
-                                        <li>
-                                            <a href="{{ route('user.talents.category', $category['slug']) }}">
-                                                {{ $category['name'] }}
-                                                <span class="text-muted small">({{ $category['total'] }})</span>
-                                            </a>
-                                        </li>
-                                        @empty
-                                        <li class="text-muted">No categories yet</li>
-                                        @endforelse
-                                    </ul>
+                    {{-- FIND TALENT --}}
+                    <li class="has-submenu megamenu">
+                        <a href="javascript:void(0)">Skills Hub <i class="ti ti-chevron-down small"></i></a>
+                        <ul class="submenu mega-submenu">
+                            <li>
+                                {{-- Desktop Mega Menu --}}
+                                <div class="megamenu-wrapper">
+                                    <div class="row g-2">
+                                        <div class="col-md-3">
+                                            <h6 class="mb-2">Skills Hub</h6>
+                                            <ul>
+                                                <li><a class="p-2" href="{{ route('user.talents') }}">Browse Skills</a></li>
+                                                <li><a class="p-2" href="#">Verified skills</a></li>
+                                                <li><a class="p-2" href="#">Top Rated</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="mb-2">Skills Categories</h6>
+                                            <ul>
+                                                @foreach($categories as $cat)
+                                                <li><a class="p-2" href="{{ url('/talents/category/' . $cat->slug) }}">{{ $cat->name }}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="mb-2">Hire</h6>
+                                            <ul>
+                                                <li><a class="p-2" href="#">Post a Job</a></li>
+                                                <li><a class="p-2" href="#">Hire for a Project</a></li>
+                                                <li><a class="p-2" href="#">Quick Hire</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h6 class="mb-2">Register Skills</h6>
+                                            <ul>
+                                                <li><a class="p-2" href="{{ route('user.register_as_talent') }}">Register Skills</a></li>
+                                                <li><a class="p-2" href="{{ route('user.how-it-works') }}">How It Works</a></li>
+                                                <li><a class="p-2" href="#">Success Stories</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {{-- Actions --}}
-                                <div class="col-md-6">
-                                    <h6>Actions</h6>
-                                    <ul>
-                                        <li><a href="{{ route('user.talents') }}">Browse Talents</a></li>
-                                        <li><a onclick="toggleSearchOverlay(event)">Search Skills</a></li>
-                                        <li><a href="{{ route('user.register_as_talent') }}">Register your skills</a></li>
-                                        
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
+                                {{-- Mobile Accordion Menu --}}
+                                <ul class="mobile-submenu d-lg-none collapse">
+                                    <li>
+                                        <a data-bs-toggle="collapse" href="#talentSub1" role="button" aria-expanded="false">
+                                            Skills Hub <i class="ti ti-chevron-down small"></i>
+                                        </a>
+                                        <ul class="collapse" id="talentSub1">
+                                            <li><a href="{{ route('user.talents') }}">Browse Skills</a></li>
+                                            <li><a href="#">Verified Skills</a></li>
+                                            <li><a href="#">Top Rated</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="collapse" href="#talentSub2" role="button" aria-expanded="false">
+                                            Hire <i class="ti ti-chevron-down small"></i>
+                                        </a>
+                                        <ul class="collapse" id="talentSub2">
+                                            <li><a href="#">Post a Job</a></li>
+                                            <li><a href="#">Hire for a Project</a></li>
+                                            <li><a href="#">Quick Hire</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="collapse" href="#talentSub3" role="button" aria-expanded="false">
+                                            Register Your Skills <i class="ti ti-chevron-down small"></i>
+                                        </a>
+                                        <ul class="collapse" id="talentSub3">
+                                            <li><a href="{{ route('user.register_as_talent') }}">Register Skills</a></li>
+                                            <li><a href="#">How It Works</a></li>
+                                            <li><a href="#">Success Stories</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </li>
+                    <li><a href="{{ route('user.courses') }}">Learning</a></li>
+                    <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
+                    <li><a href="{{ route('talent.connections-room') }}">Connect</a></li>
+                    <li><a href="{{ route('user.announcements') }}">Community</a></li>
+                    <li><a href="{{ route('pricing') }}">Pricing</a></li>
+                    <li><a href="{{ route('user.contact') }}">Help</a></li>
 
-
-                    <li><a href="{{ route('user.courses') }}">Learning Center</a></li>
-                    <li><a href="{{ route('user.contact') }}">Contact</a></li>
-                    <li><a href="{{ route('user.about') }}">About</a></li>
                 </ul>
+            </div>
 
-                {{-- RIGHT --}}
-                <ul class="navbar-nav ms-auto align-items-center gap-2">
-
+            <div class="d-flex align-items-center">
+                <ul class="nav header-navbar-rht">
                     @auth
-
                     @php
-                    $role = auth()->user()->role;
-
-                    // Define dashboard routes per role
                     $dashboards = [
-                    'admin' => 'admin.dashboard',
-                    'agent' => 'agent.dashboard',
-                    'talent' => 'talent.dashboard',
-                    'seller' => 'seller.dashboard',
-                    'user' => 'user.dashboard'
+                    'admin'=>'admin.dashboard',
+                    'agent'=>'agent.dashboard',
+                    'talent'=>'talent.dashboard',
+                    'seller'=>'seller.dashboard',
+                    'user'=>'user.dashboard'
                     ];
                     @endphp
                     <li class="nav-item">
-                        <a href="{{ route($dashboards[$role] ?? 'user.dashboard') }}" class="btn btn-outline-dark responsive-btn">
-                            <i class="ti ti-dashboard"></i>
-                            <span class="btn-text"> Dashboard</span>
-                        </a>
+                        <a class="btn btn-light d-inline-flex align-items-center" href="{{ route($dashboards[auth()->user()->role] ?? 'user.dashboard') }}"><i class="ti ti-lock me-1"></i>Dashboard</a>
                     </li>
                     @endauth
 
                     @guest
-                    <li class="nav-item">
-                        <a class="btn btn-outline-primary rounded-pill responsive-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="ti ti-lock"></i>
-                            <span class="btn-text"> Sign In</span>
-                        </a>
-                    </li>
+                    <li><a class="btn btn-outline-success rounded-pill d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a></li>
                     @endguest
-
                     <li class="nav-item">
-                        <a class="btn btn-primary rounded-pill responsive-btn" onclick="toggleSearchOverlay(event)">
-                            <i class="ti ti-search"></i>
-                            <span class="btn-text"> Search</span>
-                        </a>
+                        <a class="btn btn-primary d-inline-flex align-items-center" onclick="toggleSearchOverlay(event)"><i class="ti ti-user me-1"></i>Search</a>
                     </li>
-
                 </ul>
-
-
-            </nav>
-        </div>
+            </div>
+        </nav>
     </div>
-
-    {{-- ================= SECONDARY STICKY NAV ================= --}}
-    <div class="secondary-header" id="secondaryHeader">
-        <div class="container">
-            <ul class="nav secondary-menu">
-                <li><a href="{{ route('user.jobs.index') }}"><i class="ti ti-briefcase"></i> Find Work</a></li>
-                <li><a href="{{ route('talent.connections-room') }}"><i class="ti ti-message-dots"></i> Networking</a></li>
-                <li><a href="{{ route('user.products.index') }}"><i class="ti ti-shopping-cart"></i> Marketplace</a></li>
-                <li><a href="{{ route('user.announcements') }}"><i class="ti ti-bell"></i> What's New</a></li>
-                <li><a href="{{ route('pricing') }}"><i class="ti ti-currency-dollar"></i> Pricing</a></li>
-            </ul>
-        </div>
-    </div>
-
-    {{-- ================= MOBILE MENU ================= --}}
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-header">
-            <span>Menu</span>
-            <button onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
-        </div>
-
-        <ul class="mobile-nav">
-            <li><a href="{{ route('user.home') }}">Home</a></li>
-            <li><a href="{{ route('user.talents') }}">Skills Hub</a></li>
-            <li><a href="{{ route('user.courses') }}">Learning Center</a></li>
-            <li><a href="{{ route('user.jobs.index') }}">Find Work</a></li>
-            <li><a href="{{ route('talent.connections-room') }}">Networking</a></li>
-            <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
-            <li><a href="{{ route('user.announcements') }}">What's New</a></li>
-            <li><a href="{{ route('pricing') }}">Pricing</a></li>
-        </ul>
-    </div>
-
 </header>
-
+<!-- /Header -->
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -667,29 +254,6 @@ return request()->routeIs($route) ? 'active' : '';
     </div>
 </div>
 
-
-<section class="search-overlay-section">
-    <div class="search-overlay"></div>
-
-    <div class="search-content position-relative">
-        <!-- Close Button -->
-        <button type="button"
-            class="btn-close-custom position-absolute "
-            aria-label="Close"
-            onclick="closeSearchOverlay()">
-        </button>
-
-        <!-- Search Form -->
-        <form action="{{ route('talent.search') }}" method="GET" class="search-input-group position-relative">
-            <input type="text" class="form-control" name="keyword" placeholder="Search talents, skills or stories..." required>
-            <button type="submit" class="btn-submit-custom">
-                <i class="ti ti-search input-icon"></i>
-            </button>
-        </form>
-    </div>
-</section>
-
-
 <!-- Seller Application Modal -->
 <div class="modal fade" id="applySellerModal" tabindex="-1" aria-labelledby="applySellerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -761,45 +325,34 @@ return request()->routeIs($route) ? 'active' : '';
     </div>
 </div>
 
+{{-- SEARCH OVERLAY --}}
+<section class="search-overlay-section">
+    <div class="search-content position-relative">
+        <button type="button" class="btn-close-custom position-absolute" onclick="closeSearchOverlay()"></button>
+        <form action="{{ route('talent.search') }}" method="GET" class="search-input-group position-relative">
+            <input type="text" class="form-control" name="keyword" placeholder="Search talents, skills or stories..." required>
+            <button type="submit" class="btn-submit-custom"><i class="ti ti-search input-icon"></i></button>
+        </form>
+    </div>
+</section>
 
 <script>
     function toggleSearchOverlay(event) {
         event.preventDefault();
-        const overlaySection = document.querySelector('.search-overlay-section');
-        overlaySection.classList.toggle('active');
+        document.querySelector('.search-overlay-section').classList.toggle('active');
     }
 
     function closeSearchOverlay() {
         document.querySelector('.search-overlay-section').classList.remove('active');
     }
-
-    // Optional: close overlay when clicking outside the search box
     document.addEventListener('click', function(e) {
         const overlay = document.querySelector('.search-overlay-section');
-        if (
-            overlay.classList.contains('active') &&
-            !e.target.closest('.search-content') &&
-            !e.target.closest('.btn')
-        ) {
+        if (overlay.classList.contains('active') && !e.target.closest('.search-content') && !e.target.closest('.btn')) {
             overlay.classList.remove('active');
         }
     });
-</script>
 
-<script>
-    let lastScroll = 0;
-    const topHeader = document.getElementById("topHeader");
-
-    window.addEventListener("scroll", () => {
-        let current = window.pageYOffset;
-        if (current > lastScroll) {
-            topHeader.style.transform = "translateY(-100%)";
-        } else {
-            topHeader.style.transform = "translateY(0)";
-        }
-        lastScroll = current;
-    });
-
+    // Mobile menu open/close
     function openMobileMenu() {
         document.getElementById("mobileMenu").classList.add("active");
     }
@@ -807,4 +360,28 @@ return request()->routeIs($route) ? 'active' : '';
     function closeMobileMenu() {
         document.getElementById("mobileMenu").classList.remove("active");
     }
+
+    // Mobile submenu collapse toggle
+    document.querySelectorAll('.mobile-submenu a[data-bs-toggle="collapse"]').forEach(el => {
+        el.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(el.getAttribute('href'));
+            const bsCollapse = new bootstrap.Collapse(target, {
+                toggle: true
+            });
+        });
+    });
+
+    // Sticky header merge on scroll
+    const header = document.querySelector('.c-header');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        if (currentScroll > 80 && currentScroll > lastScroll) {
+            header.classList.add('merged');
+        } else if (currentScroll < 40) {
+            header.classList.remove('merged');
+        }
+        lastScroll = currentScroll;
+    });
 </script>

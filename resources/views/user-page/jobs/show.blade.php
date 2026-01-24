@@ -30,7 +30,7 @@
                     <div class="col-lg-10 mx-auto">
                         <div class="blog-details">
                             <div class="blog-detail-img">
-                                <!-- <img src="{{ asset('assets/img/blog/blog-large-01.jpg') }}" class="img-fluid" alt="img"> -->
+                                <img src="{{ asset('assets/img/blog/blog-large-01.jpg') }}" class="img-fluid" alt="img">
                                 <h2 class="section-title mb-3">{{ $job->title }}</h2>
                             </div>
                             <div class="blog-content border-bottom d-flex align-items-center justify-content-between pb-4 mb-4">
@@ -38,23 +38,17 @@
                                     <div class="d-flex align-items-center">
 
                                         <p class="me-3"><a href="javascript:void(0);">{{ $job->company->name }}</a></p>
-                                        <span class="d-flex align-items-center me-3"><i class="feather-calendar me-1"></i>Jan 20, 2025</span>
+                                        <span class="d-flex align-items-center me-3"><i class="feather-calendar me-1"></i>{{ $job->updated_at->format('M d, Y') }}</span>
                                         <span class="d-flex align-items-center"><i class="feather-message-square me-1"></i>{{ $job->location ?? 'Remote' }}</span>
                                     </div>
                                 </div>
                                 <span class="badge-text me-3">{{ $job->type ?? 'Full-time' }}</span>
                             </div>
                             <div class="blog-contents">
-                                <p>{{ $job->description }}</< /p>
-                                <p>Before diving into the sea of freelancers, it’s crucial to have a clear understanding of what your project entails. Defining the scope of work involves outlining specific tasks, deliverables, and deadlines. A well-articulated
-                                    project description not only helps you understand your own needs but also allows freelancers to accurately assess if they can fulfill your requirements.</p>
                                 <div class="blog-wrap">
-                                    <p>Once you’ve chosen a freelancer, ensure that there is a clear contract in place. This should outline project scope, payment terms, deadlines, and any other important details. A well-defined contract protects
-                                        both you and the freelancer and sets clear expectations.</p>
+                                    <p>{{ $job->description }}</p>
                                 </div>
-                                <p>If you’ve requested proposals, compare them not just on price, but also on the value each freelancer brings to the table. Look at their proposed timelines, strategies, and any additional benefits they offer.</p>
-                                <p>Choosing the right freelancer for your project requires a thoughtful approach. By clearly defining your project, carefully searching and evaluating candidates, and ensuring a solid contractual agreement, you can
-                                    establish a successful and productive working relationship. Remember, the right freelancer can not only help complete your project but also add immense value through their specialized skills and perspectives.</p>
+                                
                             </div>
                             <div class="d-flex align-items-center mb-4">
                                 <h3><strong>Skills Required:</strong></h3>
@@ -65,7 +59,7 @@
                             <div class="mb-2"><strong>Experience Level:</strong> {{ $job->experience_level ?? 'Any' }}</div>
                             <div class="mb-2"><strong>Salary:</strong> {{ $job->salary_range ?? 'Negotiable' }}</div>
                             <div class="blog-author">
-                                <h5 class="mb-4">Author</h5>
+                                <h5 class="mb-4">Company</h5>
                                 <div class="blog-author-text">
                                     <div class="author-img">
                                         <img src="{{ asset('assets/img/user/user-06.jpg') }}" class="img-fluid" alt="img">
@@ -78,7 +72,7 @@
                             </div>
 
                             <button
-                                class="btn btn-primary w-100 rounded-pill buy-job-btn"
+                                class="btn btn-primary w-50 rounded-pill buy-job-btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#jobModal">
                                 Apply for this job
@@ -95,22 +89,6 @@
 
                 <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px; left: 1189.5px;">
                     <div class="blog-sidebar mb-0">
-
-                        <!-- Search -->
-                        <div class="card search-widget postLists">
-                            <div class="card-header">
-                                <h6><img src="{{ asset('assets/img/icons/search-icon.svg') }}" alt="icon">Search</h6>
-                            </div>
-                            <div class="card-body">
-                                <form action="#">
-                                    <div class="form-group search-group mb-0">
-                                        <span class="search-icon"><i class="feather-search"></i></span>
-                                        <input type="text" class="form-control" placeholder="Enter Keyword">
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <!-- /Search -->
 
                         <!-- Categories -->
                         <div class="card category-widget postLists">
@@ -134,26 +112,24 @@
 
                         <!-- Recent Blogs -->
                         <div class="card recent-widget postLists">
-                            <div class="card-header">
-                                <h6><img src="{{ asset('assets/img/icons/blog-icon.svg') }}" alt="icon">Recent Jobs</h6>
-                            </div>
                             <div class="card-body">
+                                <h6><img src="{{ asset('assets/img/icons/blog-icon.svg') }}" alt="icon">Recent Jobs</h6>
                                 <ul class="latest-posts">
                                     @foreach( $recent as $job )
                                     <li>
                                         <div class="post-thumb">
-                                            <a href="blog-details.html">
+                                            <a href="{{ route('user.jobs.show',$job->id) }}">
                                                 <img class="img-fluid" src="{{ asset('assets/img/blog/blog-thumb-01.jpg') }}" alt="blog-image">
                                             </a>
                                         </div>
                                         <div class="post-info">
                                             <h6>
-                                                <a href="blog-details.html">{{ $job->title }}</a>
+                                                <a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a>
                                             </h6>
                                             <div class="blog-user">
                                                 <div class="blog-user-info">
                                                     <p>{{ $job->company->name }}</p>
-                                                    <p class="xs-text">Jan 23, 2024</p>
+                                                    <p class="xs-text">{{ $job->updated_at->format('M d, Y') }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -166,10 +142,8 @@
 
                         <!-- Popular Tags -->
                         <div class="card tag-widget mb-0 postLists">
-                            <div class="card-header">
-                                <h6><img src="{{ asset('assets/img/icons/tag-icon.svg') }}" alt="icon">Popular Tags</h6>
-                            </div>
                             <div class="card-body">
+                                <h6><img src="{{ asset('assets/img/icons/tag-icon.svg') }}" alt="icon">Popular Tags</h6>
                                 <ul class="tags-list">
                                     <li><a href="#">In-Demand Skills</a></li>
                                     <li><a href="#">Freelancing</a></li>

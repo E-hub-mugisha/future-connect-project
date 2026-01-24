@@ -337,7 +337,7 @@
                         </div>
                         <div class="carousel-item">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-8">
                                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                                         <div class="banner-head mt-4">
                                             <h1 class="mb-2 text-white">Discover full-time, part-time and remote work</h1>
@@ -377,10 +377,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="banner-img">
                                         <div class="banner-img-right">
-                                            <img src="assets/img/banner.jpg" class="img-fluid" alt="img">
+                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
                                         </div>
                                     </div>
                                 </div>
@@ -550,11 +550,6 @@
                                 <div id="categories2" class="collapse show">
                                     <div class="collapse-body">
 
-                                        <div class="form-group search-group">
-                                            <span class="search-icon"><i class="feather icon-search"></i></span>
-                                            <input type="text" class="form-control" placeholder="Search Category">
-                                        </div>
-
                                         <ul class="checkbox-list">
                                             @foreach($categories as $cat)
                                             <li>
@@ -581,11 +576,6 @@
                                 <div id="locations" class="collapse show">
                                     <div class="collapse-body">
 
-                                        <div class="form-group search-group">
-                                            <span class="search-icon"><i class="feather icon-search"></i></span>
-                                            <input type="text" class="form-control" placeholder="Search Locations">
-                                        </div>
-
                                         <ul class="checkbox-list">
                                             @foreach($locations as $loc)
                                             <li>
@@ -600,34 +590,6 @@
 
                                     </div>
                                 </div>
-                            </div>
-
-                            {{-- ================= RATINGS ================= --}}
-                            <div class="collapse-card">
-                                <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#ratings">
-                                        <img src="/assets/img/icons/rating-icon.svg"> Ratings
-                                    </a>
-                                </h4>
-
-                                <div id="ratings" class="collapse show">
-                                    <div class="collapse-body">
-                                        <ul class="checkbox-list star-rate">
-                                            @foreach($ratings as $rate)
-                                            <li>
-                                                <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['rating' => $rate])) }}"
-                                                    class="{{ request('rating') == $rate ? 'active' : '' }}">
-                                                    @for($i=1; $i<=5; $i++)
-                                                        <i class="fa-solid fa-star {{ $i <= $rate ? 'filled' : '' }}"></i>
-                                                        @endfor
-                                                        ({{ $rate }}+)
-                                                </a>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-
                             </div>
 
                             {{-- ================= BUDGET ================= --}}
@@ -654,58 +616,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            {{-- ================= SUBSCRIPTIONS ================= --}}
-                            <div class="collapse-card">
-                                <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#subscription">
-                                        <img src="/assets/img/icons/subscribe-icon.svg"> Subscription
-                                    </a>
-                                </h4>
-
-                                <div id="subscription" class="collapse show">
-                                    <div class="collapse-body">
-                                        <ul class="checkbox-list">
-                                            @foreach($subscriptionPlans as $plan)
-                                            <li>
-                                                <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['subscription' => $plan])) }}"
-                                                    class="{{ request('subscription') == $plan ? 'active' : '' }}">
-                                                    {{ $plan }}
-                                                </a>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            {{-- ================= DELIVERY TIME ================= --}}
-                            <div class="collapse-card">
-                                <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#delivery">
-                                        <img src="/assets/img/icons/time-icon.svg"> Delivery Time
-                                    </a>
-                                </h4>
-
-                                <div id="delivery" class="collapse show">
-                                    <div class="collapse-body">
-                                        <ul class="checkbox-list">
-                                            @foreach($deliveryTimes as $d)
-                                            <li>
-                                                <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['delivery' => $d])) }}"
-                                                    class="{{ request('delivery') == $d ? 'active' : '' }}">
-                                                    {{ $d }}
-                                                </a>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -721,7 +631,7 @@
                             <div class="gigs-grid">
                                 <div class="gigs-img">
                                     <a href="{{ route('user.jobs.show',$job->id) }}"><img src="assets/img/blog/blog-01.jpg" class="img-fluid" alt="img"></a>
-                                    <div class="card-overlay-badge"> <a href="service.html"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a> <a href="service.html"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a> </div>
+                                    <div class="card-overlay-badge"> <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a> <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a> </div>
                                     <div class="fav-selection"> <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a> </div>
                                 </div>
                                 <div class="gigs-content">
@@ -755,7 +665,7 @@
 
 <div class="container">
     <div class="trusted-customers-two">
-        <img src="./assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none">
+        <!-- <img src="./assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none"> -->
         <div class="row align-items-center">
             <div class="col-lg-7">
                 <div class="trusted-customers-image position-relative d-lg-block d-none text-center aos-init aos-animate" data-aos="fade-up">

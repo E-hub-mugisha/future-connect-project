@@ -42,7 +42,8 @@ class DatabaseSeeder extends Seeder
             JobSectionSeeder::class,
             AssignJobCategoriesSeeder::class,
             ProjectSeeder::class,
-            PricingPlanSeeder::class
+            PricingPlanSeeder::class,
+            SuccessStoriesSeeder::class
         ]);
     }
 }
