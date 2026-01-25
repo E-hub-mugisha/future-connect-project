@@ -305,17 +305,18 @@
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                        <div class="banner-head">
+                                        <div class="banner-head mt-4">
                                             <h1 class="mb-2 text-white">{{ $product->name }}</h1>
                                             <p class="d-inline-flex">{{ $product->description ?? 'Top quality product available now' }}</p>
                                         </div>
-
-                                        <div class="input-block-btn">
-                                            <a href="{{ route('user.product-details', $product->id) }}" class="btn btn-lg btn-primary d-inline-flex align-items-center rounded-pill">
+                                        <div class="banner-form">
+                                            <p class="text-white">
+                                                {{ $product->description ?? 'Top quality product available now' }}
+                                            </p>
+                                            <a href="{{ route('user.product-details', $product->id) }}" class="btn btn-light">
                                                 View Product
                                             </a>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="col-lg-4">

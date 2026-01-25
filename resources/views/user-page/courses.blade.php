@@ -334,7 +334,7 @@
                                     <p class="text-white">
                                         You can join the platform and share your skills with contribute to the community
                                     </p>
-                                    <a href="#opportunities" class="btn btn-light">Join Platform</a>
+                                    <a href="{{ route('register')}}" class="btn btn-light">Join Platform</a>
                                 </div>
                             </div>
                         </div>

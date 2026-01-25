@@ -29,261 +29,198 @@
 
 <div class="page-content content" style="transform: none;">
     <div class="container" style="transform: none;">
-        <div class="breadcrumb-bar postLists breadcrumb-bar-info breadcrumb-info">
-            <div class="breadcrumb-img">
-                <div class="breadcrumb-left">
-                    <img src="assets/img/bg/banner-bg-03.png" alt="img">
-                </div>
-            </div>
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-12 text-start">
-                        <nav aria-label="breadcrumb" class="page-breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="index.html">Home</a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="service.html">Gigs</a>
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">Gigs Detail</li>
-                            </ol>
-                        </nav>
-                        <h2 class="breadcrumb-title">
-                            {{ $product->name }}
-                        </h2>
-                        <ul class="info-links">
-                            <li>
-                                <i class="ti ti-star-filled text-warning"></i>5.0 (40 Reviews)
-                            </li>
-                            <li>
-                                <i class="ti ti-file"></i>{{ $product->stock }}
-                            </li>
-                            <li>
-                                <i class="ti ti-calendar-due"></i>Created On : 25 May 2025
-                            </li>
-                            <li>
-                                <i class="ti ti-home-shield"></i>{{ $product->category?->name ?? 'Uncategorized' }}
-                            </li>
-                            <li class="border-0">
-                                <div class="tranlator d-flex align-items-center">
-                                    <img src="assets/img/flags/us.svg" alt="flag" class="img-fluid img me-2 language">
-                                    {{ $product->seller->company_name }}
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <ul class="breadcrumb-links service-details">
-                            <li class="mb-3 me-0">
-                                <a href="#"><span><i class="feather-heart"></i></span>Add to Wishlist</a>
-                            </li>
-                            <li class="me-0">
-                                <div class="social-links d-flex align-items-center breadcrumb-social justify-content-lg-end"> Share
-                                    <ul class="ms-3">
-                                        <li><a href="javascript:void(0);"><i class="fa-brands fa-facebook"></i></a></li>
-                                        <li><a href="javascript:void(0);"><i class="fa-brands fa-x-twitter"></i></a></li>
-                                        <li><a href="javascript:void(0);"><i class="fa-brands fa-instagram"></i></a></li>
-                                        <li><a href="javascript:void(0);"><i class="fa-brands fa-google"></i></a></li>
-                                        <li><a href="javascript:void(0);"><i class="fa-brands fa-youtube"></i></a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row" style="transform: none;">
-
             <!-- Service Details -->
             <div class="col-lg-8">
+                <div class="postLists">
 
-                <!-- Slider -->
-                <div class="slider-card postLists service-slider-card">
-                    <div class="slide-part">
-                        <div class="slider service-slider slick-initialized slick-slider"><button class="slick-prev slick-arrow" aria-label="Previous" type="button" style="">Previous</button>
-                            <div class="slick-list draggable">
-                                <div class="slick-track" style="opacity: 1; width: 4280px;">
-                                    <div class="service-img-wrap slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="0" style="width: 836px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
-                                        <img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid" alt="Slider Img">
-                                    </div>
-                                    <div class="service-img-wrap slick-slide" data-slick-index="1" aria-hidden="true" tabindex="-1" style="width: 836px; position: relative; left: -856px; top: 0px; z-index: 998; opacity: 0;">
-                                        <img src="{{ asset('assets/img/service/service-slide-02.jpg') }}" class="img-fluid" alt="Slider Img">
-                                    </div>
-                                    <div class="service-img-wrap slick-slide" data-slick-index="2" aria-hidden="true" tabindex="-1" style="width: 836px; position: relative; left: -1712px; top: 0px; z-index: 998; opacity: 0;">
-                                        <img src="{{ asset('assets/img/service/service-slide-03.jpg') }}" class="img-fluid" alt="Slider Img">
-                                    </div>
-                                    <div class="service-img-wrap slick-slide" data-slick-index="3" aria-hidden="true" tabindex="-1" style="width: 836px; position: relative; left: -2568px; top: 0px; z-index: 998; opacity: 0;">
-                                        <img src="{{ asset('assets/img/service/service-slide-04.jpg') }}" class="img-fluid" alt="Slider Img">
-                                    </div>
-                                    <div class="service-img-wrap slick-slide" data-slick-index="4" aria-hidden="true" tabindex="-1" style="width: 836px; position: relative; left: -3424px; top: 0px; z-index: 998; opacity: 0;">
-                                        <img src="{{ asset('assets/img/service/service-slide-05.jpg') }}" class="img-fluid" alt="Slider Img">
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <button class="slick-next slick-arrow" aria-label="Next" type="button" style="">Next</button>
-                        </div>
-                    </div>
-                    <div class="slider slider-nav-thumbnails slick-initialized slick-slider">
-                        <div class="slick-list draggable">
-                            <div class="slick-track" style="opacity: 1; width: 2996px; transform: translate3d(-856px, 0px, 0px);">
-                                <div class="slick-slide slick-cloned" data-slick-index="-4" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-02.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="-3" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-03.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="-2" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-04.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="-1" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-05.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="0" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-active" data-slick-index="1" aria-hidden="false" tabindex="0" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-02.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-active" data-slick-index="2" aria-hidden="false" tabindex="0" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-03.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-active" data-slick-index="3" aria-hidden="false" tabindex="0" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-04.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide" data-slick-index="4" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-05.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="5" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="6" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-02.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="7" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-03.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="8" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-04.jpg') }}" class="img-fluid" alt="Slider Img"></div>
-                                <div class="slick-slide slick-cloned" data-slick-index="9" id="" aria-hidden="true" tabindex="-1" style="width: 194px;"><img src="{{ asset('assets/img/service/service-slide-05.jpg') }}" class="img-fluid" alt="Slider Img"></div>
+                    <!-- Slider -->
+                    <div class="service-card w-100 mb-4">
+                        <div class="service-video-wrap text-center">
+                            <div class="service-img-wrap position-relative overflow-hidden" style="width: 100%;">
+                                <img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid w-100 object-fit-cover rounded-4"
+                                    alt="Slider Img"
+                                    style="height: 30rem; object-fit: cover; transition: transform 0.3s ease;" />
                             </div>
                         </div>
-
-
-
-
                     </div>
-                </div>
-                <!-- /Slider -->
 
+                    <!-- /TAB Services -->
+                    <div class="listing-tab p-3">
+                        <div class="listing-slider">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#about_gigs" aria-selected="true" role="tab" tabindex="-1">
+                                        Description
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#review" aria-selected="false" role="tab" tabindex="-1">
+                                        Reviews
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                <!-- About Gigs -->
-                <div class="service-wrap postLists">
-                    <h3>About this {{ $product->name }}</h3>
-                    <p>
-                        {{ $product->description }}
-                    </p>
-                </div>
-                <!-- /About Gigs -->
+                    <div class="tab-content">
 
-                <!-- Product Reviews Section -->
-                <section class="product-reviews py-5" style="background: rgba(255,255,255,0.25); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border-radius: 1rem; box-shadow: 0 8px 28px rgba(0,0,0,0.08); margin: 3rem 0;">
-                    <div class="container">
-                        <!-- Header -->
-                        <div class="review-title sort-search-gigs mb-4">
-                            <div class="row align-items-center">
-                                <div class="col-sm-6">
-                                    <h3>Reviews ({{ $product->reviews ? $product->reviews->count() : 0 }})</h3>
+                        <div class="tab-pane fade show active" id="about_gigs" role="tabpanel">
+                            <!-- About Gigs -->
+                            <div class="service-wrap">
+                                <h3>{{ $product->name }} description</h3>
+                                <p>{{ $product->description }}</p>
+                            </div>
+                            <!-- /About Gigs -->
+                        </div>
+                        <div class="tab-pane fade " id="review" role="tabpanel">
+                            <!-- Review Lists -->
+                            <div class="review-widget">
+                                <div class="review-title sort-search-gigs">
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-6">
+                                            <h3>Reviews ({{ $product->reviews ? $product->reviews->count() : 0 }})</h3>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="filters-wrap sort-categories justify-content-end">
+                                                <div class="collapse-card float-lg-end">
+                                                    <div class="filter-header">
+                                                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+                                                            <i class="fas fa-plus me-1"></i> Write a Review
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 text-end">
-                                    <a href="javascript:void(0);" class="btn btn-outline-primary btn-lg rounded-pill" data-bs-toggle="modal" data-bs-target="#addReviewModal">
+
+                                <!-- Total Ratings -->
+                                <div class="total-rating align-items-center">
+                                    <div class="total-reviews text-center bg-white">
+                                        <h6> Customer Reviews &amp; Ratings </h6>
+                                        <h2> {{ number_format($product->reviews->avg('rating'), 1) }} / 5.0 </h2>
+                                        <div class="icons d-flex align-items-center justify-content-center gap-1 mb-2">
+                                            @for ($i = 0; $i < 5; $i++)
+                                                @if($i < round($product->reviews->avg('rating')))
+                                                <i class="ti ti-star-filled text-warning"></i>
+                                                @else
+                                                <i class="ti ti-star-filled text-light"></i>
+                                                @endif
+                                                @endfor
+                                        </div>
+                                        <p class="text-center">Based On {{ $product->reviews->count() }} Reviews</p>
+                                    </div>
+                                </div>
+                                <!-- Total Ratings -->
+
+                                <ul class="review-lists home-reviews">
+                                    @foreach($product->reviews as $review)
+                                    <li>
+                                        <div class="review-wrap">
+                                            <div class="review-user-info">
+                                                <div class="review-img">
+                                                    <img src="{{ $review->user->profile_photo_url ?? asset('assets/img/default-avatar.png') }}" alt="img">
+                                                </div>
+                                                <div class="reviewer-info">
+                                                    <div class="reviewer-loc">
+                                                        <h6><a href="javascript:void(0);">{{ $review->user->name }}</a></h6>
+                                                    </div>
+                                                    <div class="reviewer-rating">
+                                                        <div class="star-rate">
+                                                            <span class="ratings">
+                                                                @for($i = 0; $i < 5; $i++)
+                                                                    <i class="fa-solid fa-star {{ $i < $review->rating ? 'filled text-warning' : 'text-light' }}"></i>
+                                                                    @endfor
+                                                            </span>
+                                                            <span class="rating-count">{{ $review->rating }} </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="reviewer-time">
+                                                        <p>{{ $review->created_at->diffForHumans() }}</p>
+                                                        <p> Product review </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="review-content">
+                                                <p>{{ $review->comment }}</p>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                <div class="text-center dark-btn">
+                                    <a href="javascript:void(0);" class="btn btn-dark text-center fs-13" data-bs-toggle="modal" data-bs-target="#addReviewModal">
                                         <i class="fas fa-plus me-1"></i> Write a Review
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                            <!-- /Review Lists -->
 
-                        <!-- Average Rating -->
-                        <div class="total-rating align-items-center mb-4">
-                            <div class="total-reviews text-center bg-white p-4 rounded" style="box-shadow: 0 6px 20px rgba(0,0,0,0.08);">
-                                <h6>Customer Reviews & Ratings</h6>
-                                <h2>{{ number_format($product->reviews->avg('rating'), 1) }} / 5.0</h2>
-                                <div class="icons d-flex align-items-center justify-content-center gap-1 mb-2">
-                                    @for ($i = 0; $i < 5; $i++)
-                                        @if($i < round($product->reviews->avg('rating')))
-                                        <i class="ti ti-star-filled text-warning"></i>
-                                        @else
-                                        <i class="ti ti-star-filled text-light"></i>
-                                        @endif
-                                        @endfor
-                                </div>
-                                <p>Based on {{ $product->reviews->count() }} Reviews</p>
-                            </div>
-                        </div>
-
-                        <!-- Review List -->
-                        <ul class="review-lists home-reviews list-unstyled">
-                            @foreach($product->reviews as $review)
-                            <li class="mb-4">
-                                <div class="review-wrap p-3 rounded" style="background: rgba(255,255,255,0.35); backdrop-filter: blur(12px);">
-                                    <div class="review-user-info d-flex align-items-start mb-2">
-                                        <div class="review-img me-3">
-                                            <img src="{{ $review->user->profile_photo_url ?? asset('assets/img/default-avatar.png') }}" alt="img" class="rounded-circle" style="width:50px; height:50px; object-fit:cover;">
-                                        </div>
-                                        <div class="reviewer-info">
-                                            <h6>{{ $review->user->name }}</h6>
-                                            <div class="reviewer-rating mb-1">
-                                                <div class="star-rate">
-                                                    @for($i = 0; $i < 5; $i++)
-                                                        <i class="fa-solid fa-star {{ $i < $review->rating ? 'filled text-warning' : 'text-light' }}"></i>
-                                                        @endfor
-                                                        <span class="rating-count">{{ $review->rating }}.0</span>
-                                                </div>
-                                            </div>
-                                            <p class="text-muted">{{ $review->created_at->diffForHumans() }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="review-content">
-                                        <p>{{ $review->comment }}</p>
-                                        <a href="javascript:void(0);" class="reply-btn bg-light p-1 rounded"><i class="feather-corner-up-left"></i> Reply</a>
-                                    </div>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
-
-                        <div class="text-center mt-3">
-                            <a href="#" class="btn btn-dark fs-13">Load More</a>
                         </div>
                     </div>
-                </section>
-
+                </div>
+                <!-- /Service Details -->
             </div>
-            <!-- /Service Details -->
-
             <!-- Member Details -->
             <div class="col-lg-4 theiaStickySidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
-
-                <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; top: 0px; left: 1189.5px;">
-                    <div class="service-widget postLists">
-                        <div class="service-amt p-3 price-lvl price-lvl1 bg-light ">
-                            <h3 class="text-grey">
-                                <span class="d-block text-grey"> Price </span>
-                                ${{ $product->price }}
+                <div class="theiaStickySidebar postLists" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
+                    <div class="service-widget">
+                        <div class="service-amt p-3 price-lvl price-lvl bg-dark ">
+                            <h3 class="">
+                                <span class="d-block"> Price </span>
+                                {{ $product->price }} RWF
                             </h3>
                         </div>
-                        <!-- Add to Cart Button -->
-                        <a href="#" class="btn btn-primary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#addToCartModal{{ $product->id }}">
-                            <i class="bi bi-cart-plus"></i> Add to Cart
-                        </a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#addToCartModal{{ $product->id }}" class="btn btn-primary w-50 mb-0"><i class="feather-shopping-cart"></i> Buy this product</a>
 
                     </div>
-                    <div class="service-widget member-widget postLists">
+                    <div class="service-widget member-widget">
                         <div class="user-details">
                             <div class="user-img users-img">
                                 <img src="assets/img/user/user-05.jpg" alt="img">
                             </div>
                             <div class="user-info">
                                 <h5><span class="me-2">{{ $product->seller->company_name }}</span> <span class="badge badge-success"><i class="fa-solid fa-circle"></i> Online</span></h5>
-                                <p><i class="fa-solid fa-star"></i>5.0 (45 Reviews)</p>
+                                <p><i class="fa-solid fa-star"></i>{{ $product->reviews ? $product->reviews->count() : 0 }}.0 ({{ $product->reviews ? $product->reviews->count() : 0 }} Reviews)</p>
                             </div>
                         </div>
-                        <ul class="member-info">
-                            <li>
-                                From
-                                <span>{{ $product->seller->address }}</span>
-                            </li>
-                        </ul>
-                        <div class="about-me new-about">
-                            <h6>About Me</h6>
-                            <p>Hello, Greetings! My name is {{ $product->seller->company_name }}, and I am an experienced {{ $product->seller->description }}<span class="more-content" style="display: none;">I have over five years experience in digital affiliate marketing &amp; WordPress website development.</span></p>
-                            <a href="javascript:void(0);" class="read-more">Read More</a>
+                        <div class="member-info member-info-new">
+                            <div class="member-list d-flex align-items-center gap mb-3">
+                                <i class="ti ti-clock-hour-5"></i>
+                                <h6 class="mb-0">
+                                    Category
+                                    <span class="pt-2"> {{ $product->category?->name ?? 'Uncategorized' }}</span>
+                                </h6>
+                            </div>
+                            <div class="member-list d-flex align-items-center gap mb-3">
+                                <i class="ti ti-user"></i>
+                                <h6 class="mb-0">
+                                    Seller
+                                    <span class="pt-2"> {{ $product->seller->company_name }}</span>
+                                </h6>
+                            </div>
+                            <div class="member-list d-flex align-items-center gap mb-3">
+                                <i class="ti ti-calendar-check"></i>
+                                <h6 class="mb-0">
+                                    Last Delivery
+                                    <span class="pt-2"> {{ $product->created_at ? $product->created_at->diffForHumans() : '' }}</span>
+                                </h6>
+                            </div>
+                            <div class="member-list d-flex align-items-center gap">
+                                <i class="ti ti-world-check"></i>
+                                <h6 class="mb-0">
+                                    Language
+                                    <span class="pt-2"> {{ $product->stock }} Orders in Queue </span>
+                                </h6>
+                            </div>
                         </div>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#contact_me" class="btn btn-primary mb-0 w-100">Contact Me</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#contact_me" class="btn btn-primary mb-0 w-50">Contact seller</a>
                     </div>
                     <div class="resize-sensor" style="position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
                         <div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
-                            <div style="position: absolute; left: 0px; top: 0px; transition: all; width: 450px; height: 3735px;"></div>
+                            <div style="position: absolute; left: 0px; top: 0px; transition: all; width: 450px; height: 1513px;"></div>
                         </div>
                         <div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
                             <div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div>
@@ -292,350 +229,8 @@
                 </div>
             </div>
             <!-- /Member Details -->
-
         </div>
 
-        <!-- Recent Work -->
-        <div class="recent-works">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="title-sec">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h3>Recent Works</h3>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="owl-nav worknav nav-control nav-top"><button type="button" role="presentation" class="owl-prev disabled"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="gigs-slider owl-carousel owl-loaded owl-drag">
-                        <div class="owl-stage-outer">
-                            <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all; width: 1760px;">
-                                <div class="owl-item active" style="width: 416px; margin-right: 24px;">
-                                    <div class="gigs-grid">
-                                        <div class="gigs-img">
-                                            <div class="img-slider owl-loaded owl-drag">
-
-
-
-                                                <div class="owl-stage-outer">
-                                                    <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item active" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-13.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-13.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                                                <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
-                                            </div>
-                                            <div class="card-overlay-badge">
-                                                <a href="service.html"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
-                                            </div>
-                                            <div class="fav-selection">
-                                                <a href="javascript:void(0);" class="video-icon"><i class="feather-video"></i></a>
-                                                <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
-                                            </div>
-                                            <div class="user-thumb">
-                                                <a href="buyer-profile.html"><img src="assets/img/user/user-10.jpg" alt="img"></a>
-                                            </div>
-                                        </div>
-                                        <div class="gigs-content">
-                                            <div class="gigs-info">
-                                                <a href="service.html"><span class="badge bg-primary-light">Video Marketing</span></a>
-                                                <p><i class="ti ti-map-pin-check"></i>Chicago</p>
-                                            </div>
-                                            <div class="gigs-title">
-                                                <h3><a href="service-details.html">I will do creating and promoting video content to engage audiences</a></h3>
-                                            </div>
-                                            <div class="star-rate">
-                                                <span><i class="fa-solid fa-star"></i>4.2 (65 Reviews)</span>
-                                            </div>
-                                            <div class="gigs-card-footer">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
-                                                    <span class="badge">Delivery in 1 day</span>
-                                                </div>
-                                                <h5>$600</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="owl-item active" style="width: 416px; margin-right: 24px;">
-                                    <div class="gigs-grid">
-                                        <div class="gigs-img">
-                                            <div class="img-slider owl-loaded owl-drag">
-
-
-
-                                                <div class="owl-stage-outer">
-                                                    <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-08.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-09.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item active" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-14.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-08.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-09.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-14.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-08.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                                                <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
-                                            </div>
-                                            <div class="fav-selection">
-                                                <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
-                                            </div>
-                                            <div class="user-thumb">
-                                                <a href="buyer-profile.html"><img src="assets/img/user/user-06.jpg" alt="img"></a>
-                                            </div>
-                                        </div>
-                                        <div class="gigs-content">
-                                            <div class="gigs-info">
-                                                <a href="service.html"><span class="badge bg-primary-light">Local SEO</span></a>
-                                                <p><i class="ti ti-map-pin-check"></i>Moscow</p>
-                                            </div>
-                                            <div class="gigs-title">
-                                                <h3><a href="service-details.html">Optimizing online presence to enhance visibility in local search...</a></h3>
-                                            </div>
-                                            <div class="star-rate">
-                                                <span><i class="fa-solid fa-star"></i>4.3 (22 Reviews)</span>
-                                            </div>
-                                            <div class="gigs-card-footer">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
-                                                    <span class="badge">Delivery in 2 day</span>
-                                                </div>
-                                                <h5>$550</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="owl-item active" style="width: 416px; margin-right: 24px;">
-                                    <div class="gigs-grid">
-                                        <div class="gigs-img">
-                                            <div class="img-slider owl-loaded owl-drag">
-
-
-
-                                                <div class="owl-stage-outer">
-                                                    <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-10.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-11.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item active" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-15.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-10.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-11.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-15.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-10.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                                                <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
-                                            </div>
-                                            <div class="fav-selection">
-                                                <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
-                                            </div>
-                                            <div class="user-thumb">
-                                                <a href="buyer-profile.html"><img src="assets/img/user/user-03.jpg" alt="img"></a>
-                                            </div>
-                                        </div>
-                                        <div class="gigs-content">
-                                            <div class="gigs-info">
-                                                <a href="service.html"><span class="badge bg-primary-light">Mobile Marketing</span></a>
-                                                <p><i class="ti ti-map-pin-check"></i>Norwich</p>
-                                            </div>
-                                            <div class="gigs-title">
-                                                <h3><a href="service-details.html">Optimizing marketing strategies for mobiles &amp; app based promotions</a></h3>
-                                            </div>
-                                            <div class="star-rate">
-                                                <span><i class="fa-solid fa-star"></i>4.6 (475 Reviews)</span>
-                                            </div>
-                                            <div class="gigs-card-footer">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
-                                                    <span class="badge">Delivery in 1 day</span>
-                                                </div>
-                                                <h5>$720</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="owl-item" style="width: 416px; margin-right: 24px;">
-                                    <div class="gigs-grid">
-                                        <div class="gigs-img">
-                                            <div class="img-slider owl-loaded owl-drag">
-
-
-
-                                                <div class="owl-stage-outer">
-                                                    <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-01.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-02.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item active" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-04.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-01.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-02.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-04.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                            <div class="slide-images">
-                                                                <a href="service-details.html"><img src="assets/img/gigs/gigs-01.jpg" class="img-fluid" alt="img"></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                                                <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
-                                            </div>
-                                            <div class="card-overlay-badge">
-                                                <span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span>
-                                            </div>
-                                            <div class="fav-selection">
-                                                <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
-                                            </div>
-                                            <div class="user-thumb">
-                                                <a href="buyer-profile.html"><img src="assets/img/user/user-04.jpg" alt="img"></a>
-                                            </div>
-                                        </div>
-                                        <div class="gigs-content">
-                                            <div class="gigs-info">
-                                                <a href="service.html"><span class="badge bg-primary-light">Digital Marketing</span></a>
-                                                <p><i class="ti ti-map-pin-check"></i>Indonesia</p>
-                                            </div>
-                                            <div class="gigs-title">
-                                                <h3><a href="service-details.html">Embedded Android &amp; AOSP customizations</a></h3>
-                                            </div>
-                                            <div class="star-rate">
-                                                <span><i class="fa-solid fa-star"></i>4.5 (40 Reviews)</span>
-                                            </div>
-                                            <div class="gigs-card-footer">
-                                                <div>
-                                                    <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
-                                                    <span class="badge">Delivery in 2 day</span>
-                                                </div>
-                                                <h5>$900</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="owl-dots disabled"></div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!-- /Recent Work -->
 
     </div>
 </div>

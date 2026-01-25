@@ -28,6 +28,7 @@
 	}
 </style>
 
+
 <div class="page-content content">
 	<div class="container">
 
@@ -517,7 +518,7 @@
 									</span>
 								</div>
 								<div class="gigs-card-footer">
-									
+
 									<h5>
 										@if($related->is_free)
 										Free
