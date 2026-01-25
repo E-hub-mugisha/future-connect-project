@@ -384,70 +384,63 @@ $categories = \App\Models\Category::all();
 </div>
 <!-- /Trending Categories -->
 
-<section class="popular-section expert-section">
-    <div class="popular-img">
-        <div class="popular-img-left">
-            <img src="assets/img/bg/banner-bg-04.png" alt="Shape">
-        </div>
-        <div class="popular-img-right">
-            <img src="assets/img/bg/shape-08.png" alt="Shape">
-        </div>
-    </div>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="expert-header">
-                    <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                        <h2><span>Key</span> Benefits</h2>
+<div class="container">
+    <section class="popular-section expert-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="expert-header">
+                        <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
+                            <h2><span>Key</span> Benefits</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="section-header aos-init aos-animate" data-aos="fade-up">
+                        <h6 class="fw-medium text-white">Find professionals across various fields and expand your network effortlessly.</h6>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="section-header aos-init aos-animate" data-aos="fade-up">
-                    <h6 class="fw-medium text-white">Find professionals across various fields and expand your network effortlessly.</h6>
-                </div>
-            </div>
-        </div>
-        <div class="expert-wrapper">
-            <div class="row gx-0 justify-content-center">
-                <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
-                    <div class="expert-item">
-                        <div class="expert-icon">
-                            <img src="assets/img/icons/flag-icon.svg" alt="img">
-                        </div>
-                        <div class="expert-info">
-                            <h5>Collaborate on Projects</h5>
-                            <p>Work together with talented individuals to bring your ideas to life.</p>
+            <div class="expert-wrapper">
+                <div class="row gx-0 justify-content-center">
+                    <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
+                        <div class="expert-item">
+                            <div class="expert-icon">
+                                <img src="assets/img/icons/flag-icon.svg" alt="img">
+                            </div>
+                            <div class="expert-info">
+                                <h5>Collaborate on Projects</h5>
+                                <p>Work together with talented individuals to bring your ideas to life.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
-                    <div class="expert-item">
-                        <div class="expert-icon">
-                            <img src="assets/img/icons/expert-icon.svg" alt="img">
-                        </div>
-                        <div class="expert-info">
-                            <h5>Connect with Talents</h5>
-                            <p>Find professionals across various fields and expand your network effortlessly.</p>
+                    <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
+                        <div class="expert-item">
+                            <div class="expert-icon">
+                                <img src="assets/img/icons/expert-icon.svg" alt="img">
+                            </div>
+                            <div class="expert-info">
+                                <h5>Connect with Talents</h5>
+                                <p>Find professionals across various fields and expand your network effortlessly.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
-                    <div class="expert-item">
-                        <div class="expert-icon">
-                            <img src="assets/img/icons/users-icon.svg" alt="img">
-                        </div>
-                        <div class="expert-info">
-                            <h5>Attend Networking Events</h5>
-                            <p>Discover and participate in events designed to foster professional relationships.</p>
+                    <div class="col-lg-4 col-md-6 aos aos-init aos-animate" data-aos="fade-up">
+                        <div class="expert-item">
+                            <div class="expert-icon">
+                                <img src="assets/img/icons/users-icon.svg" alt="img">
+                            </div>
+                            <div class="expert-info">
+                                <h5>Attend Networking Events</h5>
+                                <p>Discover and participate in events designed to foster professional relationships.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
+</div>
 <!-- next gen -->
 <div class="talent-section-two next-gen-section">
     <div class="container">

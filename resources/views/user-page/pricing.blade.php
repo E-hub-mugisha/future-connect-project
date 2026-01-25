@@ -4,7 +4,7 @@
 
 <div class="container mt-4">
     <div class="trusted-customers-two">
-        <img src="./assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none">
+        <!-- <img src="./assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none"> -->
         <div class="row align-items-center">
             <div class="col-lg-7">
                 <div class="trusted-customers-image position-relative d-lg-block d-none text-center aos-init aos-animate" data-aos="fade-up">

@@ -1,4 +1,5 @@
 @extends('layouts.guest')
+@section('title', 'Contact Us')
 @section('content')
 
 <style>
@@ -27,33 +28,16 @@
 </style>
 
 <div class="container">
-    <div class="breadcrumb-bar postLists mt-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-12">
-                    <nav aria-label="breadcrumb" class="page-breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('user.home') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item" aria-current="page">Contact Us</li>
-                        </ol>
-                    </nav>
-                    <h2 class="breadcrumb-title">
-                        Contact Us
-                    </h2>
-                </div>
-            </div>
-        </div>
-    </div>
     <section class="contact-section">
         <div class="contact-bottom bg-white">
+            <div class="about-us-header">
+                <h2>Let's Talk</h2>
+                <p>Have a question, idea, or feedback? Drop us a message we’d love to hear from you!</p>
+            </div>
             <div class="container">
                 <div class="row justify-content-center">
-
-
                     <div class="col-lg-4 col-md-6 d-flex">
-                        <div class="contact-grid w-100 postLists">
+                        <div class="contact-grid w-100">
                             <div class="contact-content">
                                 <div class="contact-icon">
                                     <span>
@@ -70,7 +54,7 @@
 
 
                     <div class="col-lg-4 col-md-6 d-flex">
-                        <div class="contact-grid w-100 postLists">
+                        <div class="contact-grid w-100">
                             <div class="contact-content">
                                 <div class="contact-icon">
                                     <span>
@@ -87,7 +71,7 @@
 
 
                     <div class="col-lg-4 col-md-6 d-flex">
-                        <div class="contact-grid w-100 postLists">
+                        <div class="contact-grid w-100">
                             <div class="contact-content">
                                 <div class="contact-icon">
                                     <span>
@@ -111,17 +95,16 @@
             <div class="container">
                 <div class="row align-items-center">
 
-
                     <div class="col-lg-6 col-md-12 d-flex">
-                        <div class="contact-img postLists">
-                            <img src="assets/img/Future Connect-connect.jpg" class="img-fluid"
-                                alt="Connect with Future Connect" />
+                        <div class="contact-map map-v3 w-100">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1983.8594561078528!2d30.097123416047607!3d-1.9440729322966414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca6ddf3b71f67%3A0x7d91d3b6169b4f11!2sKigali%20Innovation%20City!5e0!3m2!1sen!2srw!4v1684567890123!5m2!1sen!2srw"
+                                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
 
-
                     <div class="col-lg-6 col-md-12 d-flex">
-                        <div class="team-form w-100 mt-4 postLists">
+                        <div class="team-form w-100 mt-4">
                             <div class="team-form-heading">
                                 <h3>Connect With Future Connect</h3>
                                 <p>Have a question, idea, or feedback? Drop us a message we’d love to hear from you!
@@ -148,17 +131,6 @@
                         </div>
                     </div>
 
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="contact-map map-v3 w-100 postLists">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1983.8594561078528!2d30.097123416047607!3d-1.9440729322966414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca6ddf3b71f67%3A0x7d91d3b6169b4f11!2sKigali%20Innovation%20City!5e0!3m2!1sen!2srw!4v1684567890123!5m2!1sen!2srw"
-                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>

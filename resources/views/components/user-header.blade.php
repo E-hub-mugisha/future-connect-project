@@ -166,7 +166,7 @@ return request()->routeIs($route) ? 'active' : '';
                     <li><a class="btn btn-outline-success rounded-pill d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a></li>
                     @endguest
                     <li class="nav-item">
-                        <a class="btn btn-primary d-inline-flex align-items-center" onclick="toggleSearchOverlay(event)"><i class="ti ti-user me-1"></i>Search</a>
+                        <a class="btn btn-primary rounded-pill d-inline-flex align-items-center" onclick="toggleSearchOverlay(event)"><i class="ti ti-user me-1"></i>Search</a>
                     </li>
                 </ul>
             </div>
