@@ -6,7 +6,7 @@
   --dark: #011E34;
   --black: #319BF9;
   --light: #F9F9F9;
-  --white: #EFF1F8;
+  --white: #184776;
   --light-100: #FDFEFE;
   --light-200: #FDFDFD;
   --light-300: #FCFCFD;
@@ -1774,7 +1774,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  color: var(--gray-900);
+  color: #FFFDFB;
   font-family: "IBM Plex Sans", sans-serif;
   font-weight: 700;
   margin-bottom: 0;
@@ -2230,7 +2230,7 @@ h6,
 }
 
 .text-white {
-  color: var(--white) !important;
+  color: #FFFDFB !important;
 }
 
 .text-fixed-white {
@@ -2942,7 +2942,7 @@ hr.text-danger {
   top: 0;
   width: 100%;
   z-index: 1001;
-  /* background-color: rgba(185, 169, 147, 0.94); */
+  background-color: #184776;
   transition: ease all 0.5s;
   -webkit-transition: ease all 0.5s;
   -ms-transition: ease all 0.5s;
@@ -3130,8 +3130,8 @@ hr.text-danger {
 }
 
 .main-nav>li>a {
-  color: var(--gray-900);
-  font-size: 14px;
+  color: #FFFDFB;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -10603,8 +10603,8 @@ div.dt-container .dt-paging .dt-paging-button.current {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
   color: #fff;
-  margin: 3rem 0rem;
-  border-radius: 1.5rem;
+  /* margin: 3rem 0rem;
+  border-radius: 1.5rem; */
 }
 
 .footer-two a {
@@ -25814,14 +25814,17 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 
 /* Slim info bar */
 .top-header {
-  background: #f9fafb;
+  background: #184776;
   padding: 6px 0;
   font-size: 13px;
-  border-bottom: 1px solid #eee;
+  /* border-bottom: 1px solid #eee; */
 }
 
 .top-header .top-text {
-  color: #5e6d55;
+  color: #FFFDFB;
+}
+.top-header .top-link a {
+  color: #FFFDFB;
 }
 
 /* Navbar */

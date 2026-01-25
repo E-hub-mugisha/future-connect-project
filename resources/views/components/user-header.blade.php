@@ -15,7 +15,7 @@ return request()->routeIs($route) ? 'active' : '';
     <div class="top-header d-none d-lg-block">
         <div class="container d-flex justify-content-between">
             <div class="top-text">info@futureconnect.rw · +250 784 123 456</div>
-            <div class="d-flex gap-3">
+            <div class="top-link d-flex gap-3">
                 <a href="#"><i class="fa-brands fa-facebook"></i></a>
                 <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
                 <a href="#"><i class="fa-brands fa-linkedin"></i></a>
@@ -34,22 +34,22 @@ return request()->routeIs($route) ? 'active' : '';
                     </span>
                 </a>
                 <a href="{{ route('user.home') }}" class="navbar-brand logo">
-                    <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo">
+                    <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" class="img-fluid" alt="Logo">
                 </a>
                 <a href="{{ route('user.home') }}" class="dark-logo">
-                    <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" class="img-fluid">
+                    <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" alt="Logo" class="img-fluid">
                 </a>
                 <a href="{{ route('user.home') }}" class="navbar-brand logo-small">
-                    <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo">
+                    <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" class="img-fluid" alt="Logo">
                 </a>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">
                     <a href="{{ route('user.home') }}" class="menu-logo">
-                        <img src="{{ asset('assets/img/WORDMARK.png') }}" class="img-fluid" alt="Logo">
+                        <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" class="img-fluid" alt="Logo">
                     </a>
                     <a href="{{ route('user.home') }}" class="menu-logo dark-logo">
-                        <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" class="img-fluid">
+                        <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" alt="Logo" class="img-fluid">
                     </a>
                     <a id="menu_close" class="menu-close" href="#"> <i class="fas fa-times"></i></a>
                 </div>
@@ -163,10 +163,10 @@ return request()->routeIs($route) ? 'active' : '';
                     @endauth
 
                     @guest
-                    <li><a class="btn btn-outline-success rounded-pill d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a></li>
+                    <li><a class="btn btn-outline-light rounded-pill d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</a></li>
                     @endguest
                     <li class="nav-item">
-                        <a class="btn btn-primary rounded-pill d-inline-flex align-items-center" onclick="toggleSearchOverlay(event)"><i class="ti ti-user me-1"></i>Search</a>
+                        <a class="btn btn-light rounded-pill d-inline-flex align-items-center" onclick="toggleSearchOverlay(event)"><i class="ti ti-user me-1"></i>Search</a>
                     </li>
                 </ul>
             </div>
@@ -195,7 +195,7 @@ return request()->routeIs($route) ? 'active' : '';
                     @csrf
 
                     <div class="text-center mb-4">
-                        <img src="{{ asset('assets/img/WORDMARK.png') }}" alt="Logo" style="height: 30px;" class="mb-3" />
+                        <img src="{{ asset('assets/img/WORDMARK - WHITE.png')}}" alt="Logo" style="height: 30px;" class="mb-3" />
                         <p class="text-muted small">Fill in your credentials to continue</p>
                     </div>
 
@@ -362,15 +362,15 @@ return request()->routeIs($route) ? 'active' : '';
     }
 
     // Mobile submenu collapse toggle
-    document.querySelectorAll('.mobile-submenu a[data-bs-toggle="collapse"]').forEach(el => {
-        el.addEventListener('click', e => {
-            e.preventDefault();
-            const target = document.querySelector(el.getAttribute('href'));
-            const bsCollapse = new bootstrap.Collapse(target, {
-                toggle: true
-            });
-        });
-    });
+    // document.querySelectorAll('.mobile-submenu a[data-bs-toggle="collapse"]').forEach(el => {
+    //     el.addEventListener('click', e => {
+    //         e.preventDefault();
+    //         const target = document.querySelector(el.getAttribute('href'));
+    //         const bsCollapse = new bootstrap.Collapse(target, {
+    //             toggle: true
+    //         });
+    //     });
+    // });
 
     // Sticky header merge on scroll
     const header = document.querySelector('.c-header');

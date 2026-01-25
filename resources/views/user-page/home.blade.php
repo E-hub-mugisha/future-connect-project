@@ -226,12 +226,15 @@
         font-weight: 500;
         padding: 0.6rem 1.5rem;
         transition: all 0.3s ease;
+        border: 1px solid #FFFDFB;
+
     }
 
     .nav-pills .nav-link.active {
         background-color: #0d6efd;
         color: #fff;
         box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+        border: 1px solid #0d6efd;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -371,7 +374,157 @@
     }
 </style>
 
-<div class="container p-4">
+<style>
+    .hero-with-bg {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-bg-carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-bg-carousel .carousel-inner,
+.hero-bg-carousel .carousel-item {
+    height: 100%;
+}
+
+.hero-bg-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Video full cover */
+.hero-bg-media video,
+.hero-bg-carousel video.hero-bg-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Dark overlay for readability */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(15, 23, 42, 0.85) 0%,
+        rgba(15, 23, 42, 0.65) 50%,
+        rgba(15, 23, 42, 0.4) 100%
+    );
+    z-index: 1;
+}
+
+/* Ensure content stays above background */
+.hero-with-bg .container {
+    position: relative;
+    z-index: 2;
+}
+</style>
+
+<div class="hero-section-two hero-with-bg">
+    
+    <!-- Background Carousel -->
+    <div id="heroBgCarousel" class="carousel slide hero-bg-carousel" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+            <!-- Image slide -->
+            <div class="carousel-item active">
+                <div class="hero-bg-media" style="background-image: url('assets/img/banner-hero.jpg');"></div>
+            </div>
+
+            <!-- Video slide -->
+            <div class="carousel-item">
+                <video class="hero-bg-media" autoplay muted loop playsinline>
+                    <source src="assets/img/banner-video.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- Image slide -->
+            <div class="carousel-item">
+                <div class="hero-bg-media" style="background-image: url('assets/img/provide-bg.jpg');"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Overlay (keeps text readable) -->
+    <div class="hero-overlay"></div>
+
+    <!-- EXISTING CONTENT (UNCHANGED) -->
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                    <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
+                    <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Freelance Marketplace</span>
+                    <h1 class="mb-2">On-Demand <span>Services</span> for Your Every Need</h1>
+                    <p class="mb-4">We pride ourselves on offering a seamless, secure, and efficient experience. Browse through thousands of trusted service providers, read reviews, compare prices.</p>
+                    <a href="service.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore Services<i class="ti ti-chevron-right ms-1"></i></a>
+                    <div class="banner-users d-flex align-items-center flex-wrap gap-3">
+                        <div class="avatar-list-stacked me-2">
+                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-01.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
+                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-02.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
+                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-03.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
+                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-04.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
+                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-05.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center mb-1">
+                                <i class="ti ti-star-filled text-warning"></i>
+                                <i class="ti ti-star-filled text-warning"></i>
+                                <i class="ti ti-star-filled text-warning"></i>
+                                <i class="ti ti-star-filled text-warning"></i>
+                                <i class="ti ti-star-filled text-warning"></i>
+                                <h6 class="mb-0 ms-2">4.8/5</h6>
+                            </div>
+                            <p class="mb-0">Trusted by 5,300+ customers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="banner-image">
+                    <img src="assets/img/home/banner-shape-2.svg" alt="img" class="img-fluid banner-bg-2 d-none d-lg-flex">
+                    <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
+                    <div class="trustpilot">
+                        <h6 class="d-inline-flex align-items-center"><img src="assets/img/home/star1.svg" class="me-2" alt="img">Trustpilot</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <span>Excellent</span>
+                            <div class="ms-2 d-inline-flex align-items-center">
+                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
+                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
+                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
+                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
+                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
+                            </div>
+                        </div>
+                        <p class="mb-0">Based on 456 reviews</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const heroCarousel = document.querySelector('#heroBgCarousel');
+    if (heroCarousel) {
+        new bootstrap.Carousel(heroCarousel, {
+            interval: 6000,
+            pause: false,
+            ride: 'carousel'
+        });
+    }
+</script>
+
+
+<div class="container">
     <section id="tranding">
         <div class="container">
             <div class="row">
@@ -383,7 +536,7 @@
                         </div>
                         <div class="banner-form">
                             <!-- Tabs Navigation -->
-                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
+                            <ul class="nav nav-pills mb-3 gap-2" id="heroTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Skills Marketplace</button>
                                 </li>
@@ -455,7 +608,7 @@
         <div class="row align-items-center">
             <div class="col-sm-10">
                 <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories for our skills marketplace<span class="title-bg2"></span></h5>
-                <p data-aos="fade-up"> Explore the most sought-after skills and connections in today's job market.</p>
+                <p data-aos="fade-up" style="color: #FFFDFB;"> Explore the most sought-after skills and connections in today's job market.</p>
             </div>
             <div class="col-sm-2 text-sm-end">
                 <div class="owl-nav trend-nav nav-control nav-top"></div>
