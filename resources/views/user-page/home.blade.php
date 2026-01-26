@@ -7,7 +7,7 @@
     #tranding {
         /* position: relative; */
         overflow: hidden;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        background: #1c2225;
         color: #fff;
         padding: 1rem 0;
         border-radius: 2rem;
@@ -231,10 +231,10 @@
     }
 
     .nav-pills .nav-link.active {
-        background-color: #0d6efd;
+        background-color: #122322;
         color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
-        border: 1px solid #0d6efd;
+        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
+        border: 1px solid #00d992;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -411,12 +411,7 @@
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        90deg,
-        rgba(15, 23, 42, 0.85) 0%,
-        rgba(15, 23, 42, 0.65) 50%,
-        rgba(15, 23, 42, 0.4) 100%
-    );
+    background: #12232293;
     z-index: 1;
 }
 
@@ -463,7 +458,7 @@
                 <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                     <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
                     <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Freelance Marketplace</span>
-                    <h1 class="mb-2">On-Demand <span>Services</span> for Your Every Need</h1>
+                    <h1 class="mb-2" style="color:#ffffff;">On-Demand <span>Services</span> for Your Every Need</h1>
                     <p class="mb-4">We pride ourselves on offering a seamless, secure, and efficient experience. Browse through thousands of trusted service providers, read reviews, compare prices.</p>
                     <a href="service.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore Services<i class="ti ti-chevron-right ms-1"></i></a>
                     <div class="banner-users d-flex align-items-center flex-wrap gap-3">
@@ -488,7 +483,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5">
+            <!-- <div class="col-lg-5">
                 <div class="banner-image">
                     <img src="assets/img/home/banner-shape-2.svg" alt="img" class="img-fluid banner-bg-2 d-none d-lg-flex">
                     <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
@@ -507,7 +502,7 @@
                         <p class="mb-0">Based on 456 reviews</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -531,7 +526,7 @@
                 <div class="col-lg-8">
                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                         <div class="banner-head mt-4">
-                            <h1 class="mb-2 text-white">Your gateway to skills, opportunities, and growth.</h1>
+                            <h1 class="mb-2" style="color:#ffffff;">Your gateway to skills, opportunities, and growth.</h1>
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
@@ -552,8 +547,8 @@
                             <div class="tab-content" id="heroTabsContent">
                                 <!-- Skills Marketplace -->
                                 <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                    <h4 class="text-white">Promote Your Skills</h4>
-                                    <p class="text-white">
+                                    <h4 style="color:#ffffff;">Promote Your Skills</h4>
+                                    <p style="color:#7d8385;">
                                         Stand out! Boost your profile and reach 3× more employers.<br>
                                         Get verified and feature your story on our homepage.
                                     </p>
@@ -562,8 +557,8 @@
 
                                 <!-- Opportunities Center -->
                                 <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
-                                    <h4 class="text-white">Unlock New Opportunities</h4>
-                                    <p class="text-white">
+                                    <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
+                                    <p style="color:#7d8385;">
                                         Discover tailored job listings, collaboration projects, and freelance gigs.<br>
                                         Set up alerts to never miss a chance to grow your career.
                                     </p>
@@ -571,8 +566,8 @@
                                 </div>
                                 <!-- Connection Room -->
                                 <div class="tab-pane hero-tab fade" id="connection" role="tabpanel">
-                                    <h4 class="text-white">Expand Your Network</h4>
-                                    <p class="text-white">
+                                    <h4 style="color:#ffffff;">Expand Your Network</h4>
+                                    <p style="color:#7d8385;">
                                         Connect with industry professionals, mentors, and peers.<br>
                                         Join groups, attend virtual events, and build relationships that matter.
                                     </p>
@@ -639,7 +634,7 @@
                                             gap: 6px;
                                             padding: 6px 16px;
                                             color: #fff;
-                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                            background: #1c2225;
                                             border-radius: 30px;
                                             text-decoration: none;
                                             overflow: hidden;
@@ -753,7 +748,7 @@
     /* Switch Tabs Container */
     .feature-switch {
         display: inline-flex;
-        background: #f1f5ff;
+        background: #ffffff26;
         border-radius: 50px;
         padding: 5px;
         flex-wrap: wrap;
@@ -765,19 +760,21 @@
     .feature-switch .nav-link {
         border-radius: 50px;
         font-weight: 500;
-        color: #0d6efd;
+        color: #fff;
         padding: 0.5rem 1rem;
         transition: all 0.3s ease;
+        border: 1px solid #7d8385;
     }
 
     .feature-switch .nav-link.active {
-        background-color: #0d6efd;
+        background-color: #122322;
         color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.4);
+        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.4); */
+        border:1px solid #00d992;
     }
 
     .feature-switch .nav-link:hover:not(.active) {
-        background-color: rgba(13, 110, 253, 0.1);
+        background-color: #7d8385;
     }
 
     /* Tab Content */
@@ -802,7 +799,7 @@
     }
 
     .btn-primary {
-        background-color: #0d6efd;
+        /* background-color: #0d6efd; */
         border: none;
         border-radius: 50px;
         padding: 0.6rem 1.5rem;
@@ -811,7 +808,7 @@
     }
 
     .btn-primary:hover {
-        background-color: #084298;
+        /* background-color: #084298; */
         transform: translateY(-2px);
     }
 
@@ -825,7 +822,7 @@
 
 <section class="features-section" id="features">
     <div class="container">
-        <h2>Explore Future Connect Features</h2>
+        <h2 style="color:#ffffff;">Explore Future Connect Features</h2>
 
         <!-- Switch Tabs -->
         <ul class="nav feature-switch" id="featuresTab" role="tablist">
@@ -1107,7 +1104,7 @@
         gap: 6px;
         padding: 16px 16px;
         color: #fff;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        background: #1c2225;
         border-radius: 30px;
         text-decoration: none;
         overflow: hidden;
@@ -1245,7 +1242,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-9">
                 <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                    <h2><span>We’r</span> Empowering skills, Creators and Innovators</h2>
+                    <h2 style="color:#ffffff;"><span>We’r</span> Empowering skills, Creators and Innovators</h2>
                     <p>Discover opportunities, grow your skills, showcase your skills and connect with a community built for your success.</p>
                 </div>
             </div>
@@ -1256,7 +1253,7 @@
                     <div class="provide-icon">
                         <img src="assets/img/icons/ipad-icon.svg" alt="icon">
                     </div>
-                    <h6 class="mb-1">Create Your skills Profile</h6>
+                    <h6 class="mb-1" style="color:#ffffff;">Create Your skills Profile</h6>
                     <p>Sign up and showcase your story, skills, and aspirations through text, images, and videos.</p>
                     <a href="{{ route('register') }}" class="btn btn-primary">Get started<i class="ti ti-chevron-right"></i></a>
                 </div>
@@ -1266,7 +1263,7 @@
                     <div class="provide-icon">
                         <img src="assets/img/icons/service-icon.svg" alt="icon">
                     </div>
-                    <h6 class="mb-1">Get Discovered & Rated</h6>
+                    <h6 class="mb-1" style="color:#ffffff;">Get Discovered & Rated</h6>
                     <p>Users browse skills by category, like your story, rate your skills,and share feedback to help you grow.</p>
                     <a href="{{ route('user.talents') }}" class="btn btn-primary">Explore Skills Hub<i class="ti ti-chevron-right"></i></a>
                 </div>
@@ -1276,7 +1273,7 @@
                     <div class="provide-icon">
                         <img src="assets/img/icons/user-icon-01.svg" alt="icon">
                     </div>
-                    <h6 class="mb-1">Grow With Us</h6>
+                    <h6 class="mb-1" style="color:#ffffff;">Grow With Us</h6>
                     <p>Shop or sell tools, digital kits and creative products from local sellers.</p>
                     <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary"><i class="ti ti-store"></i>Apply to Sell</a>
                 </div>
@@ -1304,7 +1301,7 @@
 
 
 <!-- what makes Future Connect -->
-<div class="container">
+<!-- <div class="container">
     <div class="what-makes-dream-gigs mt-5">
 
         <div class="row align-items-center">
@@ -1358,13 +1355,13 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- what makes Future Connect -->
 
 
 <style>
     .talent-card {
-        background: linear-gradient(to bottom right, #011E34, #319BF9);
+        background: #1c2225;
         color: #ffffff;
         border-radius: 16px;
         padding: 1.5rem;
@@ -1429,11 +1426,11 @@
         <div class="row align-items-center row-gap-4">
             <div class="col-lg-6">
                 <div class="section-header-two" data-aos="fade-up">
-                    <h2 class="mb-2 p-0">What Talents Say About Future Connect</h2>
+                    <h2 class="mb-2 p-0" style="color:#ffffff;">What Talents Say About Future Connect</h2>
                     <p>Discover the voices of passionate individuals whose lives have been impacted by sharing
                         their stories and skills on Future Connect.</p>
                 </div>
-                <h6 class="mb-3" data-aos="fade-up">We’re Building a Global Talent Community</h6>
+                <h6 class="mb-3" data-aos="fade-up" style="color:#ffffff;">We’re Building a Global Talent Community</h6>
                 <div class="avatar-list-stacked me-2" data-aos="fade-up">
                     @foreach($testimonials as $testimonial)
                     <span class="avatar avatar-md rounded-circle border-0"><img

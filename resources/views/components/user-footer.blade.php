@@ -87,7 +87,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 
     {{-- Footer Bottom Section --}}
     <div class="footer-bottom-two border-secondary py-4">
-        <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3">
+        <div class="container d-flex flex-column flex-lg-row justify-content-between gap-3">
 
             {{-- Logo --}}
             <a href="{{ route('user.home') }}" class="footer-logo mb-2 mb-lg-0">
