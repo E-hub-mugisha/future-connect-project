@@ -135,13 +135,13 @@ return request()->routeIs($route) ? 'active' : '';
                             </li>
                         </ul>
                     </li>
-                    <li><a href="{{ route('user.courses') }}">Learning</a></li>
+                    <li><a href="{{ route('user.courses') }}">Learning Hub</a></li>
                     <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
-                    <li><a href="{{ route('talent.connections-room') }}">Connect</a></li>
-                    <li><a href="{{ route('user.announcements') }}">Community</a></li>
+                    <li><a href="{{ route('talent.connections-room') }}">Connection Room</a></li>
+                    <li><a href="{{ route('user.announcements') }}">Updates</a></li>
                     <li><a href="{{ route('pricing') }}">Pricing</a></li>
                     <li><a href="{{ route('user.contact') }}">Help</a></li>
-
+                    <li><a href="#">How It Works</a></li>
                 </ul>
             </div>
 

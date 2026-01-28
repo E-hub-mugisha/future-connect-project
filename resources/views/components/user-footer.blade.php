@@ -2,7 +2,7 @@
 $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 @endphp
 
-<footer class="footer-two text-light pt-5 position-relative">
+<footer class="footer-two text-light pt-5 position-relative footer-glass">
 
     {{-- Footer Top Menu --}}
     <div class="footer-top-menu border-secondary py-3">

@@ -26058,3 +26058,87 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 .btn-submit-custom:hover {
   background: #084298;
 }
+
+/* Footer background */
+.footer-glass {
+    background: 
+        linear-gradient(
+            rgba(10, 15, 30, 0.75),
+            rgba(10, 15, 30, 0.85)
+        ),
+        url("../img/banner-hero.jpg") center/cover no-repeat;
+    overflow: hidden;
+}
+
+/* Glassmorphism overlay */
+.footer-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 0;
+}
+
+/* Keep footer content above glass */
+.footer-glass > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Optional: subtle top border glow */
+.footer-top-menu,
+.footer-bottom-two {
+    /* background: rgba(255, 255, 255, 0.04); */
+    backdrop-filter: blur(6px);
+}
+
+/* Links polish */
+.footer-two a {
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.3s ease;
+}
+
+.footer-two a:hover {
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateX(2px);
+}
+
+/* Social icons glass effect */
+.social-links a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+
+.social-links a:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.accordion-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+}
+
+.accordion-button {
+    background: transparent;
+    color: #fff;
+    font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.accordion-body {
+    color: #eaeaea;
+}
