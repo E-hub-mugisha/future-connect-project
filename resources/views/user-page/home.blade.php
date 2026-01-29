@@ -275,7 +275,7 @@
     }
 
     #market-section .provide-box {
-        background: #d4e6f526;
+        background: #0d1618bd;
         backdrop-filter: blur(15px) saturate(180%);
     }
 </style>
@@ -352,11 +352,11 @@
 
     .btn-events {
         background-color: #fff;
-        color: #0d6efd;
+        color: #fff;
     }
 
     .btn-events:hover {
-        background-color: #0d6efd;
+        background-color: #fff;
         color: #fff;
         transform: translateY(-2px);
     }
@@ -369,61 +369,61 @@
 
     .btn-announcements:hover {
         background-color: #fff;
-        color: #0d6efd;
+        color: #fff;
         transform: translateY(-2px);
     }
 </style>
 
 <style>
     .hero-with-bg {
-    position: relative;
-    overflow: hidden;
-}
+        position: relative;
+        overflow: hidden;
+    }
 
-.hero-bg-carousel {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
+    .hero-bg-carousel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
 
-.hero-bg-carousel .carousel-inner,
-.hero-bg-carousel .carousel-item {
-    height: 100%;
-}
+    .hero-bg-carousel .carousel-inner,
+    .hero-bg-carousel .carousel-item {
+        height: 100%;
+    }
 
-.hero-bg-media {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background-size: cover;
-    background-position: center;
-}
+    .hero-bg-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+    }
 
-/* Video full cover */
-.hero-bg-media video,
-.hero-bg-carousel video.hero-bg-media {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    /* Video full cover */
+    .hero-bg-media video,
+    .hero-bg-carousel video.hero-bg-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-/* Dark overlay for readability */
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: #12232293;
-    z-index: 1;
-}
+    /* Dark overlay for readability */
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: #12232293;
+        z-index: 1;
+    }
 
-/* Ensure content stays above background */
-.hero-with-bg .container {
-    position: relative;
-    z-index: 2;
-}
+    /* Ensure content stays above background */
+    .hero-with-bg .container {
+        position: relative;
+        z-index: 2;
+    }
 </style>
 
 <div class="hero-section-two hero-with-bg">
-    
+
     <!-- Background Carousel -->
     <div id="heroBgCarousel" class="carousel slide hero-bg-carousel" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -534,32 +534,38 @@
                             <!-- Tabs Content -->
                             <div class="tab-content row">
                                 <!-- Skills Marketplace -->
-                                <div class="col-md-4 hero-tab" id="marketplace" role="tabpanel">
-                                    <h4 style="color:#ffffff;">Skills Marketplace</h4>
-                                    <p style="color:#7d8385;">
-                                        Stand out! Boost your profile and reach 3× more employers.<br>
-                                        Get verified and feature your story on our homepage.
-                                    </p>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-light">Explore Marketplace</a>
+                                <div class="col-md-4" id="marketplace" role="tabpanel">
+                                    <div class="hero-tab">
+                                        <h4 style="color:#ffffff;">Skills Marketplace</h4>
+                                        <p style="color:#7d8385;">
+                                            Stand out! Boost your profile and reach 3× more employers.<br>
+                                            Get verified and feature your story on our homepage.
+                                        </p>
+                                        <a href="{{ route('user.talents') }}" class="btn btn-light">Explore Marketplace</a>
+                                    </div>
                                 </div>
 
                                 <!-- Opportunities Center -->
-                                <div class="col-md-4 hero-tab" id="opportunities" role="tabpanel">
-                                    <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
-                                    <p style="color:#7d8385;">
-                                        Discover tailored job listings, collaboration projects, and freelance gigs.<br>
-                                        Set up alerts to never miss a chance to grow your career.
-                                    </p>
-                                    <a href="#opportunities" class="btn btn-light">Start Exploring</a>
+                                <div class="col-md-4" id="opportunities" role="tabpanel">
+                                    <div class="hero-tab">
+                                        <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
+                                        <p style="color:#7d8385;">
+                                            Discover tailored job listings, collaboration projects, and freelance gigs.<br>
+                                            Set up alerts to never miss a chance to grow your career.
+                                        </p>
+                                        <a href="#opportunities" class="btn btn-light">Start Exploring</a>
+                                    </div>
                                 </div>
                                 <!-- Connection Room -->
-                                <div class="col-md-4 hero-tab" id="connection" role="tabpanel">
-                                    <h4 style="color:#ffffff;">Expand Your Network</h4>
-                                    <p style="color:#7d8385;">
-                                        Connect with industry professionals, mentors, and peers.<br>
-                                        Join groups, attend virtual events, and build relationships that matter.
-                                    </p>
-                                    <a href="#connections" class="btn btn-light">Join the Community</a>
+                                <div class="col-md-4" id="connection" role="tabpanel">
+                                    <div class="hero-tab">
+                                        <h4 style="color:#ffffff;">Expand Your Network</h4>
+                                        <p style="color:#7d8385;">
+                                            Connect with industry professionals, mentors, and peers.<br>
+                                            Join groups, attend virtual events, and build relationships that matter.
+                                        </p>
+                                        <a href="#connections" class="btn btn-light">Join the Community</a>
+                                    </div>
                                 </div>
                             </div>
                             <!-- <div class="popular-search">
@@ -723,7 +729,7 @@
     .features-section h2 {
         font-weight: 700;
         margin-bottom: 2rem;
-        color: #0d6efd;
+        color: #fff;
     }
 
     /* Switch Tabs Container */
@@ -751,7 +757,7 @@
         background-color: #122322;
         color: #fff;
         /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.4); */
-        border:1px solid #00d992;
+        border: 1px solid #00d992;
     }
 
     .feature-switch .nav-link:hover:not(.active) {
@@ -762,7 +768,7 @@
     .tab-pane.feature-tab {
         /* max-width: 750px; */
         margin: 0 auto;
-        background: #f8faff;
+        background: #1c2225;
         border-radius: 16px;
         padding: 2rem;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -770,7 +776,7 @@
     }
 
     .tab-pane h4 {
-        color: #0d6efd;
+        color: #fff;
         font-weight: 600;
     }
 
@@ -780,7 +786,7 @@
     }
 
     .btn-primary {
-        /* background-color: #0d6efd; */
+        /* background-color: #fff; */
         border: none;
         border-radius: 50px;
         padding: 0.6rem 1.5rem;
@@ -796,12 +802,12 @@
     .coin-note {
         margin-top: 1rem;
         font-size: 0.9rem;
-        color: #0d6efd;
+        color: #fff;
     }
 </style>
 
 
-<section class="features-section" id="features">
+<section class="features-section d-none d-lg-block" id="features">
     <div class="container">
         <h2 style="color:#ffffff;">Explore Future Connect Features</h2>
 
@@ -1019,50 +1025,52 @@
 </section>
 
 <!-- MOBILE ACCORDION -->
-<div class="accordion d-lg-none" id="featuresAccordion">
-
-    <!-- Skills -->
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accSkills">
-                Skills Marketplace
-            </button>
-        </h2>
-        <div id="accSkills" class="accordion-collapse collapse show" data-bs-parent="#featuresAccordion">
-            <div class="accordion-body">
-                <div class="hero-section-two">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-7">
-                                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
-                                    <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Skills Marketplace</span>
-                                    <h1 class="mb-2">Showcase your talent <span>and</span> reach verified employers.</h1>
-                                    <p class="mb-4">Future Connect’s Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore skills marketplace<i class="ti ti-chevron-right ms-1"></i></a>
-                                    <div class="banner-users d-flex align-items-center flex-wrap gap-3">
-                                        <div class="avatar-list-stacked me-2">
-                                            @foreach($featuredTalents as $talent)
-                                            <span class="avatar avatar-md rounded-circle border-0"><img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                                            @endforeach
-                                        </div>
-                                        <div>
-                                            <div class="d-flex align-items-center mb-1">
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <h6 class="mb-0 ms-2">4.8/5</h6>
+<div class="accordion d-lg-none" id="featuresAccordion" style="margin-top: 3rem;">
+    <div class="container">
+        <h2 class="mb-4" style="color:#ffffff;">Explore Future Connect Features</h2>
+        <!-- Skills -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accSkills">
+                    Skills Marketplace
+                </button>
+            </h2>
+            <div id="accSkills" class="accordion-collapse collapse show" data-bs-parent="#featuresAccordion">
+                <div class="accordion-body">
+                    <div class="hero-section-two">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-7">
+                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                                        <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
+                                        <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Skills Marketplace</span>
+                                        <h1 class="mb-2">Showcase your talent <span>and</span> reach verified employers.</h1>
+                                        <p class="mb-4">Future Connect’s Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
+                                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore skills marketplace<i class="ti ti-chevron-right ms-1"></i></a>
+                                        <div class="banner-users d-flex align-items-center flex-wrap gap-3">
+                                            <div class="avatar-list-stacked me-2">
+                                                @foreach($featuredTalents as $talent)
+                                                <span class="avatar avatar-md rounded-circle border-0"><img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-circle border border-white" alt="Img"></span>
+                                                @endforeach
                                             </div>
-                                            <p class="mb-0">over {{ $totalTalents}}+ skilled professionals</p>
+                                            <div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <i class="ti ti-star-filled text-warning"></i>
+                                                    <i class="ti ti-star-filled text-warning"></i>
+                                                    <i class="ti ti-star-filled text-warning"></i>
+                                                    <i class="ti ti-star-filled text-warning"></i>
+                                                    <i class="ti ti-star-filled text-warning"></i>
+                                                    <h6 class="mb-0 ms-2">4.8/5</h6>
+                                                </div>
+                                                <p class="mb-0">over {{ $totalTalents}}+ skilled professionals</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="banner-image">
-                                    <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
+                                <div class="col-lg-5">
+                                    <div class="banner-image">
+                                        <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1070,107 +1078,198 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Learning -->
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accLearning">
-                Learning Center
-            </button>
-        </h2>
-        <div id="accLearning" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-            <div class="accordion-body">
-                
-            </div>
-        </div>
-    </div>
+        <!-- Learning -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accLearning">
+                    Learning Center
+                </button>
+            </h2>
+            <div id="accLearning" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                <div class="accordion-body">
+                    <section class="hero-section">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                                        <div class="banner-head">
+                                            <h1 class="mb-2">Upskill with short, impactful professional courses.</h1>
+                                            <p class="d-inline-flex">The Learning Center brings together experts and learners for short, affordable, high-quality learning experiences. Each course is designed for practical application — so you can implement your knowledge immediately.</p>
+                                        </div>
+                                        <a href="{{ route('user.courses') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center mb-3">Explore courses<i class="ti ti-chevron-right ms-1"></i></a>
 
-    <!-- Opportunities -->
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accOpportunity">
-                Opportunities
-            </button>
-        </h2>
-        <div id="accOpportunity" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-            <div class="accordion-body">
-                
-            </div>
-        </div>
-    </div>
-
-    <!-- Connect -->
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accConnect">
-                
-            </button>
-        </h2>
-        <div id="accConnect" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-            <div class="accordion-body">
-               
-            </div>
-        </div>
-    </div>
-
-    <!-- Marketplace -->
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accMarketplace">
-                Marketplace
-            </button>
-        </h2>
-        <div id="accMarketplace" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-            <div class="accordion-body">
-                <section class="provide-section" id="market-section">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-9">
-                                <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                                    <h2><span>We’r</span> here help to find your Needs.</h2>
-                                    <p>Our Marketplace lets creators showcase digital products from templates to software tools with full payment protection via our platform.</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="banner-img">
+                                        <div class="banner-img-right">
+                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/ipad-icon.svg" alt="icon">
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opportunities -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accOpportunity">
+                    Opportunities
+                </button>
+            </h2>
+            <div id="accOpportunity" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                <div class="accordion-body">
+                    <section class="hero-section-two">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="banner-content">
+                                        <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Future Connect Opportunities</span>
+                                        <h1 class="mb-2">Post work, find collaborators, <span>and</span> build your dream team in one verified network.</h1>
+                                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore works<i class="ti ti-chevron-right ms-1"></i></a>
                                     </div>
-                                    <h6 class="mb-1">Browse a product</h6>
-                                    <p>Everything you need for your craft — safe payments through Future Connect.</p>
-                                    <a href="{{ route('user.products.index') }}" class="btn btn-primary rounded-pill">Explore products<i class="ti ti-chevron-right"></i></a>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/service-icon.svg" alt="icon">
+                                <div class="col-lg-4">
+                                    <div class="banner-img">
+                                        <div class="banner-img-right">
+                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
+                                        </div>
                                     </div>
-                                    <h6 class="mb-1">Sell a product</h6>
-                                    <p>Our Marketplace lets creators showcase digital products</p>
-                                    <a href="#" class="btn btn-primary rounded-pill">Find a product<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/user-icon-01.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Become a seller</h6>
-                                    <p>Sellers earn instantly — FC keeps a small fee for logistics & support.</p>
-                                    <a class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connect -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accConnect">
+                    Connection Room
+                </button>
+            </h2>
+            <div id="accConnect" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                <div class="accordion-body">
+                    <section class="about-us-section">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6">
+                                    <div class="row me-4">
+                                        <div class="col-sm-6">
+                                            <div class="about-inner-img">
+                                                <img src="assets/img/aboutus/about-us-01.jpg" class="img-fluid" alt="img">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="about-inner-img">
+                                                        <img src="assets/img/aboutus/about-us-02.jpg" class="img-fluid" alt="img">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="about-inner-img">
+                                                        <img src="assets/img/aboutus/about-us-03.jpg" class="img-fluid" alt="img">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="about-us-info">
+                                        <div class="about-us-head">
+                                            <h6>Connection Room</h6>
+                                            <h2>Network and collaborate securely with verified users.</h2>
+                                            <p>
+                                                The Connect Room offers a secure messaging and meeting system for verified professionals. Build meaningful relationships, exchange ideas, or schedule mentorship calls with trusted peers.
+                                            </p>
+                                        </div>
+                                        <div class="about-features">
+                                            <ul class="list-one">
+                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Diverse Network of Professionals</li>
+                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Trust and Transparency</li>
+                                            </ul>
+                                            <ul class="list-two">
+                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>User Friendly Platform</li>
+                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Innovation In Technology</li>
+                                            </ul>
+                                        </div>
+                                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Join community<i class="ti ti-chevron-right ms-1"></i></a>
+                                        <div class="coin-note">Each connection supports skill programs and platform growth.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marketplace -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accMarketplace">
+                    Marketplace
+                </button>
+            </h2>
+            <div id="accMarketplace" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
+                <div class="accordion-body">
+                    <section class="provide-section" id="market-section">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-9">
+                                    <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
+                                        <h2><span>We’r</span> here help to find your Needs.</h2>
+                                        <p>Our Marketplace lets creators showcase digital products from templates to software tools with full payment protection via our platform.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                                        <div class="provide-icon">
+                                            <img src="assets/img/icons/ipad-icon.svg" alt="icon">
+                                        </div>
+                                        <h6 class="mb-1">Browse a product</h6>
+                                        <p>Everything you need for your craft — safe payments through Future Connect.</p>
+                                        <a href="{{ route('user.products.index') }}" class="btn btn-primary rounded-pill">Explore products<i class="ti ti-chevron-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                                        <div class="provide-icon">
+                                            <img src="assets/img/icons/service-icon.svg" alt="icon">
+                                        </div>
+                                        <h6 class="mb-1">Sell a product</h6>
+                                        <p>Our Marketplace lets creators showcase digital products</p>
+                                        <a href="#" class="btn btn-primary rounded-pill">Find a product<i class="ti ti-chevron-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                                        <div class="provide-icon">
+                                            <img src="assets/img/icons/user-icon-01.svg" alt="icon">
+                                        </div>
+                                        <h6 class="mb-1">Become a seller</h6>
+                                        <p>Sellers earn instantly — FC keeps a small fee for logistics & support.</p>
+                                        <a class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
 
 <style>

@@ -56,8 +56,12 @@ return request()->routeIs($route) ? 'active' : '';
                 <ul class="main-nav navbar-nav">
                     <li><a href="{{ route('user.jobs.index') }}">Find Work</a></li>
 
+                    <li class="d-lg-none">
+                        <a href="{{ route('user.talents') }}">Skills Hub</a>
+                    </li>
+
                     {{-- FIND TALENT --}}
-                    <li class="has-submenu megamenu">
+                    <li class="has-submenu megamenu d-lg-block">
                         <a href="javascript:void(0)">Skills Hub <i class="ti ti-chevron-down small"></i></a>
                         <ul class="submenu mega-submenu">
                             <li>
