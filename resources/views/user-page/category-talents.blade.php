@@ -308,7 +308,7 @@
         display: flex;
         align-items: center;
         flex-direction: column;
-        border: 1px solid #fff;
+        /* border: 1px solid #fff; */
         border-radius: 1em;
         /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
         box-shadow: 0 1em 1em #1f2d3d26;
