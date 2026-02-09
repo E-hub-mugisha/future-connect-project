@@ -310,7 +310,7 @@
         flex-direction: column;
         border: 1px solid #fff;
         border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+        /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
         box-shadow: 0 1em 1em #1f2d3d26;
         text-align: center;
         text-shadow: 0 1px #fff;
@@ -518,12 +518,12 @@
             <div class="filters-section">
                 <div class="listing-tab">
                     <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
-                        <li class="nav-item"><a class="nav-link active" data-filter="latest" type="button">Latest</a></li>
-                        <li class="nav-item"><a class="nav-link" data-filter="popular" type="button">Popular</a></li>
-                        <li class="nav-item"><a class="nav-link" data-filter="featured" type="button">Featured</a></li>
-                        <li class="nav-item"><a class="nav-link" data-filter="recommended" type="button">Recommended</a></li>
+                        <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" data-filter="latest" type="button">Latest</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color:#ffffff;" data-filter="popular" type="button">Popular</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color:#ffffff;" data-filter="featured" type="button">Featured</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color:#ffffff;" data-filter="recommended" type="button">Recommended</a></li>
                         <li class="nav-item">
-                            <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            <a type="button" class="nav-link" style="color:#ffffff;" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <i class="ti ti-search me-1"></i> Search skills
                             </a>
                         </li>
@@ -560,177 +560,9 @@
             </div>
             <!-- /Filter -->
 
-            <!-- Cards Wrapper -->
-            <div id="talentWrapper" class="w-100">
-                <div class="row" id="talentGrid">
-                    @forelse($talents as $talent)
-                    <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
-                        <div class="card post-item m-card">
-                            <div class="card-body text-center">
+            <!-- Cards -->
 
-                                <a href="{{ route('user.talent.details', $talent->id) }}">
-                                    <img class="img rounded-3"
-                                         src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                         alt="img"
-                                         style="height:120px;object-fit:cover;transition:transform 0.3s ease;">
-                                </a>
-
-                                <h6 class="mb-1">
-                                    <a href="{{ route('user.talent.details', $talent->id) }}">
-                                        {{ $talent->name }}
-                                        <i class="ti ti-discount-check-filled verify-icon" style="color:#319BF9;"></i>
-                                    </a>
-                                </h6>
-
-                                <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
-
-                                <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                                    <span class="badge bg-light">{{ number_format($talent->feedback->avg('rating'),1) }} ⭐</span>
-                                    <span class="badge bg-light">{{ $talent->feedback->count() }} 💬</span>
-                                </div>
-
-                                <div class="text-center d-flex justify-content-center">
-                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i> View Profile
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    @empty
-                    <p class="text-center">No skills found.</p>
-                    @endforelse
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- /next gen -->
-<style>
-@media (max-width: 991px) {
-    .filters-section {
-        display: none;
-    }
-
-    #talentGrid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 12px;
-        padding-bottom: 10px;
-    }
-
-    .talent-item {
-        min-width: 80%;
-        flex: 0 0 auto;
-        scroll-snap-align: start;
-    }
-}
-</style>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const filters = document.querySelector('.filters-section');
-    const mobileFilters = document.getElementById('mobileFiltersContainer');
-    const sellerList = document.querySelector('.seller-list');
-
-    function toggleFilters() {
-        if (window.innerWidth < 992) {
-            if (filters && mobileFilters && !mobileFilters.contains(filters)) {
-                mobileFilters.appendChild(filters);
-            }
-        } else {
-            if (filters && sellerList && !sellerList.contains(filters)) {
-                sellerList.prepend(filters);
-            }
-        }
-    }
-
-    toggleFilters();
-    window.addEventListener('resize', toggleFilters);
-});
-</script>
-
-
-
-<!-- next gen -->
-<div class="talent-section-two next-gen-section">
-    <div class="container">
-        <div class="section-header-two what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #ffffff;"><span class="title-bg"></span>Explore Generation of {{ $categoryName }} skilled people<span
-                    class="title-bg2"></span></h2>
-            <p style="color: #ffffff;">Connect with the next wave of skilled people, guiding you with fresh perspectives</p>
-        </div>
-        <div class="row seller-list postLists cards">
-            <!-- Filter -->
-            <div class="filters-section">
-                <div class="listing-tab ">
-                    <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-filter="latest" type="button">Latest</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="popular" type="button">Popular</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="featured" type="button">Featured</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="recommended" type="button">Recommended</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <!-- Search Modal Trigger -->
-                            <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="ti ti-search me-1"></i> Search skills
-                            </a>
-                        </li>
-
-                    </ul>
-
-                </div>
-
-                <!-- /Filter -->
-
-                <!-- Sort By -->
-                <div class="filters-wrap sort-categories">
-                    <div class="collapse-card float-lg-end">
-                        <div class="filter-header">
-                            <a href="javascript:void(0);" class="sorts-list">
-                                <i class="ti ti-sort-ascending"></i>Sorts by: <span>Categories</span>
-                            </a>
-                        </div>
-                        <div id="categories2" class="collapse-body" style="display: none;">
-                            <div class="form-group search-group">
-                                <span class="search-icon"><i class="feather-search"></i></span>
-                                <input type="text" class="form-control" placeholder="Search Category">
-                            </div>
-                            <ul class="checkbox-list categories-lists">
-                                @foreach($categories as $cat)
-                                <li class="active">
-                                    <label class="custom_check">
-                                        <a href="{{ route('user.talents.category', $cat->slug) }}"><span class="checked-title">{{ $cat->name }}</span></a>
-                                    </label>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Sort By -->
-
-            </div>
-            <!-- /Filter -->
-
-            @if($loading ?? false)
-            <p class="text-center">Loading...</p>
-            @else
-
-            <div class="row" id="talentGrid">
+            <div class="row d-none d-md-flex">
                 @forelse($talents as $talent)
                 <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
                     <div class="card post-item m-card">
@@ -798,11 +630,174 @@ document.addEventListener("DOMContentLoaded", function () {
                 @empty
                 <p class="text-center">No skills found.</p>
                 @endforelse
+
             </div>
-            @endif
+
+            <div id="talentsCarousel" class="carousel slide d-md-none w-100" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @forelse($talents as $index => $talent)
+                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }} post-card-wrapper talent-item">
+                        <div class="card post-item m-card">
+                            <div class="card-body text-center">
+
+                                <!-- Image -->
+                                <a href="{{ route('user.talent.details', $talent->id) }}">
+                                    <img
+                                        class="img rounded-3"
+                                        src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
+                                        alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
+                                </a>
+
+                                <!-- Name -->
+                                <h6 class="mb-1">
+                                    <a href="{{ route('user.talent.details', $talent->id) }}">
+                                        {{ $talent->name }}
+                                        <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
+                                    </a>
+                                </h6>
+
+                                <!-- Category -->
+                                <p>
+                                    {{ $talent->category->name ?? 'Uncategorized' }}
+                                </p>
+
+                                <!-- Location -->
+
+
+                                <!-- Ratings -->
+                                <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
+                                    <div class="talent-hover-box">
+                                        <div class="default-badges">
+                                            <span class="badge bg-light">
+                                                {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
+                                            </span>
+                                            <span class="badge bg-light">
+                                                {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
+                                            </span>
+                                        </div>
+                                        <div class="hover-badges">
+                                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                                {{ $talent->skill }}
+                                            </a>
+                                            <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
+                                                {{ $talent->language }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Button -->
+                                <div class="text-center d-flex justify-content-center">
+                                    <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
+                                        <i class="feather-arrow-right"></i>View Profile
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                        <span class="slide-line"></span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-center">No skills found.</p>
+                    @endforelse
+
+                    <!-- Controls -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#talentsCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#talentsCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="carousel-indicators mt-2">
+                        @foreach($talents as $index => $talent)
+                        <button type="button" data-bs-target="#talentsCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
-<!-- next gen -->
+<!-- /next gen -->
+
+<!-- /next gen -->
+
+<style>
+    /* Glassmorphism Offcanvas */
+    #mobileFilters .offcanvas-body,
+    #mobileFilters .offcanvas-header {
+        background: #0e1618;
+        /* dark glass */
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: #fff;
+    }
+
+    /* Glass border + glow */
+    #mobileFilters .offcanvas-content,
+    #mobileFilters {
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Improve text contrast inside filters */
+    #mobileFilters a,
+    #mobileFilters span,
+    #mobileFilters li,
+    #mobileFilters .nav-link {
+        color: #fff !important;
+    }
+
+    /* Search input style in glass */
+    #mobileFilters input.form-control {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+    }
+
+    #mobileFilters input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    #mobileFilters {
+        transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const filters = document.querySelector('.filters-section');
+        const mobileFilters = document.getElementById('mobileFiltersContainer');
+        const sellerList = document.querySelector('.seller-list');
+        const offcanvasEl = document.getElementById('mobileFilters');
+        const offcanvasInstance = offcanvasEl ? new bootstrap.Offcanvas(offcanvasEl) : null;
+
+        function toggleFilters() {
+            if (window.innerWidth < 992) {
+                if (filters && mobileFilters && !mobileFilters.contains(filters)) {
+                    mobileFilters.appendChild(filters);
+                }
+            } else {
+                // Move filters back to desktop
+                if (filters && sellerList && !sellerList.contains(filters)) {
+                    sellerList.prepend(filters);
+                }
+
+                // Auto close offcanvas when switching to desktop
+                if (offcanvasInstance) {
+                    offcanvasInstance.hide();
+                }
+            }
+        }
+
+        toggleFilters();
+        window.addEventListener('resize', toggleFilters);
+    });
+</script>
 
 @endsection
