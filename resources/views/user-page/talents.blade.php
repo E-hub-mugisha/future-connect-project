@@ -50,7 +50,7 @@ $categories = \App\Models\Category::all();
     #tranding {
         /* position: relative; */
         overflow: hidden;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        background: #1c2225;
         color: #fff;
         padding: 1rem 0;
         border-radius: 2rem;
@@ -444,75 +444,114 @@ $categories = \App\Models\Category::all();
     <section id="tranding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                         <div class="banner-head mt-4">
-                            <h1 class="mb-2 text-white">Your gateway to skills, opportunities, and growth.</h1>
+                            <h1 class="mb-2" style="color:#ffffff;">Your gateway to skills, opportunities, and growth.</h1>
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
-                            <!-- Tabs Navigation -->
-                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Skills Marketplace</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#opportunities" type="button" role="tab">Register your Skill</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="connection-tab" data-bs-toggle="pill" data-bs-target="#connection" type="button" role="tab">Networking Hub</button>
-                                </li>
-                            </ul>
+                            <!-- Mobile & Tablet Carousel -->
+                            <div id="skillCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+                                <!-- Indicators -->
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#skillCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                                    <button type="button" data-bs-target="#skillCarousel" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#skillCarousel" data-bs-slide-to="2"></button>
+                                </div>
+                                <style>
+                                    .carousel-indicators {
+                                        bottom: -15px;
+                                    }
+                                </style>
+                                <!-- Slides -->
+                                <div class="carousel-inner">
+
+                                    <div class="carousel-item active">
+                                        <!-- Skills Marketplace -->
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color:#ffffff;">Promote Your Skills</h4>
+                                            <p style="color:#ffffff;">
+                                                Stand out! Boost your profile and reach 3× more employers.<br>
+                                                Get verified and feature your story on our homepage.
+                                            </p>
+                                            <a type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                                <i class="ti ti-search me-1"></i> Search skilled people
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- gig Center -->
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color:#ffffff;">Join Our skill Hub</h4>
+                                            <p style="color:#ffffff;">
+                                                Showcase your skills, get verified, and connect with clients globally.
+                                                Our platform helps skilled people like you grow professionally and gain exposure.
+                                            </p>
+                                            <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color:#ffffff;">Expand Your Network</h4>
+                                            <p style="color:#ffffff;">
+                                                Connect with industry professionals, mentors, and peers.
+                                                Join groups, attend virtual events, and build relationships that matter.
+                                            </p>
+                                            <a href="{{ route('register')}}" class="btn btn-light">Join the Community</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <!-- Tabs Content -->
-                            <div class="tab-content" id="heroTabsContent">
+                            <div class="tab-content row d-none d-md-flex">
                                 <!-- Skills Marketplace -->
-                                <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                    <h4 class="text-white">Promote Your Skills</h4>
-                                    <p class="text-white">
-                                        Stand out! Boost your profile and reach 3× more employers.<br>
-                                        Get verified and feature your story on our homepage.
-                                    </p>
-                                    <a type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                        <i class="ti ti-search me-1"></i> Search skilled people
-                                    </a>
-
+                                <div class="col-md-4" id="marketplace">
+                                    <div class="tab-pane hero-tab" id="marketplace" role="tabpanel">
+                                        <h4 style="color:#ffffff;">Promote Your Skills</h4>
+                                        <p style="color:#ffffff;">
+                                            Stand out! Boost your profile and reach 3× more employers.<br>
+                                            Get verified and feature your story on our homepage.
+                                        </p>
+                                        <a type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                            <i class="ti ti-search me-1"></i> Search skilled people
+                                        </a>
+                                    </div>
                                 </div>
 
                                 <!-- Opportunities Center -->
-                                <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
-                                    <h4 class="text-white">Join Our skill Hub</h4>
-                                    <p class="text-white">
-                                        Showcase your skills, get verified, and connect with clients globally.
-                                        Our platform helps skilled people like you grow professionally and gain exposure.
-                                    </p>
-                                    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
+                                <div class="col-md-4" id="marketplace">
+                                    <div class="tab-pane hero-tab" id="opportunities" role="tabpanel">
+                                        <h4 style="color:#ffffff;">Join Our skill Hub</h4>
+                                        <p style="color:#ffffff;">
+                                            Showcase your skills, get verified, and connect with clients globally.
+                                            Our platform helps skilled people like you grow professionally and gain exposure.
+                                        </p>
+                                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
+                                    </div>
                                 </div>
                                 <!-- Connection Room -->
-                                <div class="tab-pane hero-tab fade" id="connection" role="tabpanel">
-                                    <h4 class="text-white">Expand Your Network</h4>
-                                    <p class="text-white">
-                                        Connect with industry professionals, mentors, and peers.<br>
-                                        Join groups, attend virtual events, and build relationships that matter.
-                                    </p>
-                                    <a href="{{ route('register')}}" class="btn btn-light">Join the Community</a>
+                                <div class="col-md-4" id="marketplace">
+                                    <div class="tab-pane hero-tab" id="connection" role="tabpanel">
+                                        <h4 style="color:#ffffff;">Expand Your Network</h4>
+                                        <p style="color:#ffffff;">
+                                            Connect with industry professionals, mentors, and peers.
+                                            Join groups, attend virtual events, and build relationships that matter.
+                                        </p>
+                                        <a href="{{ route('register')}}" class="btn btn-light">Join the Community</a>
+                                    </div>
                                 </div>
                             </div>
                             <!-- <div class="popular-search">
                                 <h5>Popular Searches : </h5>
                                 <ul>
-                                    <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                                    <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                                    <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
+                                    @foreach($categories as $cat)
+                                    <li><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                    @endforeach
                                 </ul>
                             </div> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="banner-img">
-                        <div class="banner-img-right">
-                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
                         </div>
                     </div>
                 </div>
@@ -522,7 +561,7 @@ $categories = \App\Models\Category::all();
 </div>
 
 
-<div class="container" style="margin-top: 4.5rem;">
+<div class="container d-md-none" style="margin-top: 4.5rem;">
     <div class="trend-section ">
         <div class="row align-items-center">
             <div class="col-sm-10">
@@ -544,11 +583,7 @@ $categories = \App\Models\Category::all();
                                     <div class="trend-info">
 
                                         <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
-                                        @if(isset($cat->talents_count))
-                                        <p>{{ $cat->talents_count }} talents</p>
-                                        @else
-                                        <p>0 talents</p>
-                                        @endif
+                                        <p>{{ optional($cat->talents)->count() ?? 0 }} talents</p>
                                     </div>
                                     <style>
                                         .slide-line-btn {
@@ -792,160 +827,38 @@ $categories = \App\Models\Category::all();
 </style>
 
 <!-- next gen -->
-<div class="talent-section-two next-gen-section">
+<div class="popular-section-two d-none d-md-flex">
     <div class="container">
-        <div class="section-header-two what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>Explore Generation of skilled people<span
-                    class="title-bg2"></span></h2>
-            <p style="color: #319BF9;">Connect with the next wave of skilled people, guiding you with fresh perspectives</p>
+        <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
+            <h2 class="mb-2"><span class="title-bg"></span>Trending Categories of skilled people<span class="title-bg2"></span></h2>
+            <p>Discover inspiring stories, impactful skills, and creative people across Africa</p>
         </div>
-        <div class="row seller-list postLists cards">
-            <!-- Filter -->
-            <div class="filters-section">
-                <div class="listing-tab ">
-                    <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-filter="latest" type="button">Latest</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="popular" type="button">Popular</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="featured" type="button">Featured</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="recommended" type="button">Recommended</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <!-- Search Modal Trigger -->
-                            <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="ti ti-search me-1"></i> Search skills
-                            </a>
-                        </li>
-
-                    </ul>
-
+        <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
+            @foreach($categories as $cat)
+            <div class="col d-flex">
+                <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                    <span><i class="ti ti-speakerphone"></i></span>
+                    <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+                    <p>{{ optional($cat->talents)->count() ?? 0 }} skills</p>
                 </div>
-
-                <!-- /Filter -->
-
-                <!-- Sort By -->
-                <div class="filters-wrap sort-categories">
-                    <div class="collapse-card float-lg-end">
-                        <div class="filter-header">
-                            <a href="javascript:void(0);" class="sorts-list">
-                                <i class="ti ti-sort-ascending"></i>Sorts by: <span>Categories</span>
-                            </a>
-                        </div>
-                        <div id="categories2" class="collapse-body" style="display: none;">
-                            <div class="form-group search-group">
-                                <span class="search-icon"><i class="feather-search"></i></span>
-                                <input type="text" class="form-control" placeholder="Search Category">
-                            </div>
-                            <ul class="checkbox-list categories-lists">
-                                @foreach($categories as $cat)
-                                <li class="active">
-                                    <label class="custom_check">
-                                        <a href="{{ route('user.talents.category', $cat->slug) }}"><span class="checked-title">{{ $cat->name }}</span></a>
-                                    </label>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Sort By -->
-
             </div>
-            <!-- /Filter -->
-            <div class="row" id="talentGrid">
-                @foreach($talents as $talent)
-                <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
-                    <div class="card post-item m-card">
-                        <div class="card-body text-center">
-
-                            <!-- Image -->
-                            <a href="{{ route('user.talent.details', $talent->id) }}">
-                                <img
-                                    class="img rounded-3"
-                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
-                            </a>
-
-                            <!-- Name -->
-                            <h6 class="mb-1">
-                                <a href="{{ route('user.talent.details', $talent->id) }}">
-                                    {{ $talent->name }}
-                                    <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
-                                </a>
-                            </h6>
-
-                            <!-- Category -->
-                            <p>
-                                {{ $talent->category->name ?? 'Uncategorized' }}
-                            </p>
-
-                            <!-- Location -->
-
-
-                            <!-- Ratings -->
-                            <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                                <div class="talent-hover-box">
-                                    <div class="default-badges">
-                                        <span class="badge bg-light">
-                                            {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
-                                        </span>
-                                        <span class="badge bg-light">
-                                            {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
-                                        </span>
-                                    </div>
-                                    <div class="hover-badges">
-                                        <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                            {{ $talent->skill }}
-                                        </a>
-                                        <a href="{{ route('user.talent.details', $talent->id) }}" class="badge bg-light">
-                                            {{ $talent->language }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- View Button -->
-                            <div class="text-center d-flex justify-content-center">
-                                <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
-                                    <i class="feather-arrow-right"></i>View Profile
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                @endforeach
-            </div>
+            @endforeach
         </div>
     </div>
 </div>
 <!-- next gen -->
 
 <section class="explore-services-sec">
-    <div class="section-bg">
+    <!-- <div class="section-bg">
         <img src="{{ asset('assets/img/bg/section-bg-06.png') }}" class="explore-bg1" alt="img">
-    </div>
+    </div> -->
     <div class="container">
         <div class="trusted-customers-sec ">
             <div class="trusted-customers">
-                <div class="section-bg">
-                    <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-one" alt="img">
-                    <img src="{{ asset('assets/img/bg/section-bg-03.png') }}" class="trusted-bg-two" alt="img">
-                </div>
                 <div class="section-header mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <h2>Want to Showcase Your skills?</h2>
-                    <p>Over 74K skilled people on the platform - available today for you.</p>
-                    <p>Join our community and take the first step towards your dream career.</p>
+                    <h2 style="color:#ffffff;">Want to Showcase Your skills?</h2>
+                    <p style="color:#ffffff;">Over 74K skilled people on the platform - available today for you.</p>
+                    <p style="color:#ffffff;">Join our community and take the first step towards your dream career.</p>
                 </div>
                 <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
                     <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
@@ -958,9 +871,9 @@ $categories = \App\Models\Category::all();
                 <div class="col-lg-4">
                     <div class="faq-heading aos" data-aos="fade-up">
                         <div class="section-header mb-2">
-                            <h2><span>Skilled People</span> Frequently Asked Questions</h2>
+                            <h2 style="color:#ffffff;"><span>Skilled People</span> Frequently Asked Questions</h2>
                         </div>
-                        <p>Don’t see your question? We’re here to help you connect with the right skilled people.</p>
+                        <p style="color:#ffffff;">Don’t see your question? We’re here to help you connect with the right skilled people.</p>
                         <a href="{{ route('user.contact') }}" class="btn btn-primary">Ask a Question <i class="ti ti-arrow-badge-right"></i></a>
                     </div>
                 </div>
@@ -969,65 +882,65 @@ $categories = \App\Models\Category::all();
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">
+                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">
                                     How can I find the right skilled people for my project?
                                 </a>
                             </h4>
                             <div id="faqone" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>Our skilled people Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
+                                    <p style="color:#ffffff;">Our skilled people Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">
+                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">
                                     How do I hire a skilled people?
                                 </a>
                             </h4>
                             <div id="faqtwo" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>After browsing profiles, you can contact skilled peoples directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
+                                    <p style="color:#ffffff;">After browsing profiles, you can contact skilled peoples directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">
+                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">
                                     Can skilled peoples showcase their past projects?
                                 </a>
                             </h4>
                             <div id="faqthree" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>Yes! skilled peoples can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
+                                    <p style="color:#ffffff;">Yes! skilled peoples can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" data-bs-toggle="collapse" href="#faqfour" aria-expanded="false">
+                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqfour" aria-expanded="false">
                                     Is there a verification process for talents?
                                 </a>
                             </h4>
                             <div id="faqfour" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you confidence in your collaboration.</p>
+                                    <p style="color:#ffffff;">We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you confidence in your collaboration.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" data-bs-toggle="collapse" href="#faqfive" aria-expanded="false">
+                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqfive" aria-expanded="false">
                                     How much does it cost to hire a talent?
                                 </a>
                             </h4>
                             <div id="faqfive" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p>Costs vary depending on the talent’s experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.</p>
+                                    <p style="color:#ffffff;">Costs vary depending on the talent’s experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.</p>
                                 </div>
                             </div>
                         </div>
