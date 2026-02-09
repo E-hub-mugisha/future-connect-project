@@ -7419,9 +7419,9 @@ div.dt-container .dt-paging .dt-paging-button.disabled:active {
 }
 
 .gigs-grid {
-  background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+  /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
   box-shadow: 0 1em 1em #1f2d3d26;
-  border: 1px solid var(--gray-100);
+  /* border: 1px solid var(--gray-100); */
   border-radius: 10px;
   margin-bottom: 24px;
 }
@@ -26067,12 +26067,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 
 /* Footer background */
 .footer-glass {
-    background: 
-        linear-gradient(
-            rgba(10, 15, 30, 0.75),
-            rgba(10, 15, 30, 0.85)
-        ),
-        url("../img/banner-hero.jpg") center/cover no-repeat;
+    background: #0e1618 url("../img/banner-hero.jpg") center/cover no-repeat;
     overflow: hidden;
 }
 
@@ -26081,7 +26076,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.06);
+    background: #0e1618eb;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     z-index: 0;

@@ -530,14 +530,77 @@
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
+                            <!-- Mobile & Tablet Carousel -->
+                            <div id="heroCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+
+                                <!-- Indicators -->
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+                                </div>
+                                <style>
+                                    .carousel-indicators {
+                                        bottom: -15px;
+                                    }
+                                </style>
+                                <!-- Slides -->
+                                <div class="carousel-inner">
+
+                                    <div class="carousel-item active">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 class="text-white">Skills Marketplace</h4>
+                                            <p class="text-muted">
+                                                Stand out! Boost your profile and reach 3× more employers.<br>
+                                                Get verified and feature your story on our homepage.
+                                            </p>
+                                            <a href="{{ route('user.talents') }}" class="btn btn-light">Explore Marketplace</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 class="text-white">Unlock New Opportunities</h4>
+                                            <p class="text-muted">
+                                                Discover tailored job listings, collaboration projects, and freelance gigs.<br>
+                                                Set up alerts to never miss a chance to grow your career.
+                                            </p>
+                                            <a href="#opportunities" class="btn btn-light">Start Exploring</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 class="text-white">Expand Your Network</h4>
+                                            <p class="text-muted">
+                                                Connect with industry professionals, mentors, and peers.<br>
+                                                Join groups, attend virtual events, and build relationships that matter.
+                                            </p>
+                                            <a href="#connections" class="btn btn-light">Join the Community</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Controls -->
+                                <!-- <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+
+                                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button> -->
+
+                            </div>
 
                             <!-- Tabs Content -->
-                            <div class="tab-content row">
-                                <!-- Skills Marketplace -->
-                                <div class="col-md-4" id="marketplace" role="tabpanel">
+                            <!-- Desktop Grid -->
+                            <div class="tab-content row d-none d-md-flex">
+
+                                <div class="col-md-4" id="marketplace">
                                     <div class="hero-tab">
-                                        <h4 style="color:#ffffff;">Skills Marketplace</h4>
-                                        <p style="color:#7d8385;">
+                                        <h4 class="text-white">Skills Marketplace</h4>
+                                        <p class="text-muted">
                                             Stand out! Boost your profile and reach 3× more employers.<br>
                                             Get verified and feature your story on our homepage.
                                         </p>
@@ -545,29 +608,30 @@
                                     </div>
                                 </div>
 
-                                <!-- Opportunities Center -->
-                                <div class="col-md-4" id="opportunities" role="tabpanel">
+                                <div class="col-md-4" id="opportunities">
                                     <div class="hero-tab">
-                                        <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
-                                        <p style="color:#7d8385;">
+                                        <h4 class="text-white">Unlock New Opportunities</h4>
+                                        <p class="text-muted">
                                             Discover tailored job listings, collaboration projects, and freelance gigs.<br>
                                             Set up alerts to never miss a chance to grow your career.
                                         </p>
                                         <a href="#opportunities" class="btn btn-light">Start Exploring</a>
                                     </div>
                                 </div>
-                                <!-- Connection Room -->
-                                <div class="col-md-4" id="connection" role="tabpanel">
+
+                                <div class="col-md-4" id="connection">
                                     <div class="hero-tab">
-                                        <h4 style="color:#ffffff;">Expand Your Network</h4>
-                                        <p style="color:#7d8385;">
+                                        <h4 class="text-white">Expand Your Network</h4>
+                                        <p class="text-muted">
                                             Connect with industry professionals, mentors, and peers.<br>
                                             Join groups, attend virtual events, and build relationships that matter.
                                         </p>
                                         <a href="#connections" class="btn btn-light">Join the Community</a>
                                     </div>
                                 </div>
+
                             </div>
+
                             <!-- <div class="popular-search">
                                 <h5>Popular Searches : </h5>
                                 <ul>
@@ -1482,38 +1546,115 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <!-- Mobile & Tablet Carousel -->
+        <div id="provideCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#provideCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                <button type="button" data-bs-target="#provideCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#provideCarousel" data-bs-slide-to="2"></button>
+            </div>
+
+            <!-- Slides -->
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <div class="provide-box text-center p-4">
+                        <div class="provide-icon mb-3">
+                            <img src="assets/img/icons/ipad-icon.svg" alt="icon">
+                        </div>
+                        <h6 class="mb-1 text-white">Create Your Skills Profile</h6>
+                        <p>Sign up and showcase your story, skills, and aspirations through text, images, and videos.</p>
+                        <a href="{{ route('register') }}" class="btn btn-primary">
+                            Get started <i class="ti ti-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="provide-box text-center p-4">
+                        <div class="provide-icon mb-3">
+                            <img src="assets/img/icons/service-icon.svg" alt="icon">
+                        </div>
+                        <h6 class="mb-1 text-white">Get Discovered & Rated</h6>
+                        <p>Users browse skills by category, like your story, rate your skills, and share feedback to help you grow.</p>
+                        <a href="{{ route('user.talents') }}" class="btn btn-primary">
+                            Explore Skills Hub <i class="ti ti-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="provide-box text-center p-4">
+                        <div class="provide-icon mb-3">
+                            <img src="assets/img/icons/user-icon-01.svg" alt="icon">
+                        </div>
+                        <h6 class="mb-1 text-white">Grow With Us</h6>
+                        <p>Shop or sell tools, digital kits and creative products from local sellers.</p>
+                        <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary">
+                            <i class="ti ti-store"></i> Apply to Sell
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Controls -->
+            <!-- <button class="carousel-control-prev" type="button" data-bs-target="#provideCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#provideCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button> -->
+
+        </div>
+
+        <!-- Desktop Grid -->
+        <div class="row justify-content-center d-none d-md-flex">
+
             <div class="col-lg-4 col-md-6">
-                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                <div class="provide-box" data-aos="fade-up">
                     <div class="provide-icon">
                         <img src="assets/img/icons/ipad-icon.svg" alt="icon">
                     </div>
-                    <h6 class="mb-1" style="color:#ffffff;">Create Your skills Profile</h6>
+                    <h6 class="mb-1 text-white">Create Your Skills Profile</h6>
                     <p>Sign up and showcase your story, skills, and aspirations through text, images, and videos.</p>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Get started<i class="ti ti-chevron-right"></i></a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">
+                        Get started <i class="ti ti-chevron-right"></i>
+                    </a>
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6">
-                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                <div class="provide-box" data-aos="fade-up">
                     <div class="provide-icon">
                         <img src="assets/img/icons/service-icon.svg" alt="icon">
                     </div>
-                    <h6 class="mb-1" style="color:#ffffff;">Get Discovered & Rated</h6>
-                    <p>Users browse skills by category, like your story, rate your skills,and share feedback to help you grow.</p>
-                    <a href="{{ route('user.talents') }}" class="btn btn-primary">Explore Skills Hub<i class="ti ti-chevron-right"></i></a>
+                    <h6 class="mb-1 text-white">Get Discovered & Rated</h6>
+                    <p>Users browse skills by category, like your story, rate your skills, and share feedback to help you grow.</p>
+                    <a href="{{ route('user.talents') }}" class="btn btn-primary">
+                        Explore Skills Hub <i class="ti ti-chevron-right"></i>
+                    </a>
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6">
-                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
+                <div class="provide-box" data-aos="fade-up">
                     <div class="provide-icon">
                         <img src="assets/img/icons/user-icon-01.svg" alt="icon">
                     </div>
-                    <h6 class="mb-1" style="color:#ffffff;">Grow With Us</h6>
+                    <h6 class="mb-1 text-white">Grow With Us</h6>
                     <p>Shop or sell tools, digital kits and creative products from local sellers.</p>
-                    <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary"><i class="ti ti-store"></i>Apply to Sell</a>
+                    <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary">
+                        <i class="ti ti-store"></i> Apply to Sell
+                    </a>
                 </div>
             </div>
+
         </div>
+
     </div>
 </section>
 
@@ -1675,25 +1816,97 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-lg-6">
+
+            <!-- Mobile & Tablet Carousel -->
+            <div id="testimonialCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="6000">
+
+                <!-- Indicators -->
+                <div class="carousel-indicators">
+                    @foreach($testimonials as $index => $test)
+                    <button type="button"
+                        data-bs-target="#testimonialCarousel"
+                        data-bs-slide-to="{{ $index }}"
+                        class="{{ $index === 0 ? 'active' : '' }}"
+                        aria-current="{{ $index === 0 ? 'true' : 'false' }}">
+                    </button>
+                    @endforeach
+                </div>
+
+                <!-- Slides -->
+                <div class="carousel-inner">
+
+                    @foreach($testimonials as $index => $test)
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                        <div class="talent-card mb-4">
+                            <img src="{{ $test->talent->image 
+                        ? asset('image/talents/' . $test->talent->image) 
+                        : asset('assets/img/user/profile.jpg') }}" alt="Talent Photo">
+
+                            <div class="talent-info">
+                                <h4>{{ $test->talent->name ?? 'Jacob Rivera' }}</h4>
+                                <p>{{ $test->title ?? 'Creative Writer' }}</p>
+
+                                <div class="rating">
+                                    @for($i = 0; $i < 5; $i++)
+                                        <i class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                        @endfor
+                                </div>
+
+                                <p class="description">
+                                    {{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}
+                                </p>
+
+                                <div class="location">
+                                    <i class="ti ti-location-pin"></i> {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+
+                </div>
+
+                <!-- Controls -->
+                <!-- <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button> -->
+
+            </div>
+
+            <!-- Desktop Testimonials -->
+            <div class="col-lg-6 d-none d-md-block">
                 @foreach($testimonials as $test)
                 <div class="talent-card mb-4">
                     <img src="{{ $test->talent->image 
-        ? asset('image/talents/' . $test->talent->image) 
-        : asset('assets/img/user/profile.jpg') }}" alt="Talent Photo">
+                ? asset('image/talents/' . $test->talent->image) 
+                : asset('assets/img/user/profile.jpg') }}" alt="Talent Photo">
+
                     <div class="talent-info">
                         <h4>{{ $test->talent->name ?? 'Jacob Rivera' }}</h4>
                         <p>{{ $test->title ?? 'Creative Writer' }}</p>
-                        <div class="rating">@for($i = 0; $i < 5; $i++)
-                                <i
-                                class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
-                                @endfor</div>
-                        <p class="description">{{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}</p>
-                        <div class="location"><i class="ti ti-location-pin"></i> {{ $test->talent->address ?? 'Kigali, Rwanda' }}</div>
+
+                        <div class="rating">
+                            @for($i = 0; $i < 5; $i++)
+                                <i class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                @endfor
+                        </div>
+
+                        <p class="description">
+                            {{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}
+                        </p>
+
+                        <div class="location">
+                            <i class="ti ti-location-pin"></i> {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                        </div>
                     </div>
                 </div>
                 @endforeach
             </div>
+
         </div>
     </div>
 </div>

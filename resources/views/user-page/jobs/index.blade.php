@@ -6,7 +6,7 @@
     #tranding {
         position: relative;
         overflow: hidden;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        background: #1c2225;
         color: #fff;
         padding: 1rem 0;
         border-radius: 2rem;
@@ -228,9 +228,10 @@
     }
 
     .nav-pills .nav-link.active {
-        background-color: #0d6efd;
+        background-color: #122322;
         color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
+        border: 1px solid #00d992;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -271,7 +272,7 @@
     }
 
     #market-section .provide-box {
-        background: #d4e6f526;
+        background: #0d1618bd;
         backdrop-filter: blur(15px) saturate(180%);
     }
 </style>
@@ -281,110 +282,97 @@
     <section id="tranding">
         <div class="container">
             <div class="row">
-                <div id="jobInfoCarousel" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel" data-bs-interval="3000">
-                    <div class="carousel-inner">
-                        <!-- Slide 1 -->
-                        <div class="carousel-item active">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                        <div class="banner-head mt-4">
-                                            <h1 class="mb-2 text-white">Explore {{ $jobs->total() }}+ Available work</h1>
-                                            <p class="d-inline-flex text-white">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
-                                        </div>
-                                        <div class="banner-form">
-                                            <!-- Tabs Navigation -->
-                                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Work for your skills</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#gig" type="button" role="tab">Ways to Earn</button>
-                                                </li>
-                                            </ul>
-
-                                            <!-- Tabs Content -->
-                                            <div class="tab-content" id="heroTabsContent">
-                                                <!-- Skills Marketplace -->
-                                                <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                                    <h4 class="text-white">Find Work Today!</h4>
-                                                    <p class="text-white">
-                                                        Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
-                                                    </p>
-                                                    <a href="#skills" class="btn btn-light">Explore work</a>
-                                                </div>
-
-                                                <!-- gig Center -->
-                                                <div class="tab-pane hero-tab fade" id="gig" role="tabpanel">
-                                                    <h4 class="text-white">Ways to Earn through our platform</h4>
-                                                    <p class="text-white">
-                                                        Learn how to earn through future connect platform.
-                                                    </p>
-                                                    <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="banner-img">
-                                        <div class="banner-img-right">
-                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="col-lg-12">
+                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                        <div class="banner-head mt-4">
+                            <h1 class="mb-2" style="color:#ffffff;">Explore {{ $jobs->total() }}+ Available work</h1>
+                            <p class="d-inline-flex" style="color:#ffffff;">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
                         </div>
-                        <div class="carousel-item">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                        <div class="banner-head mt-4">
-                                            <h1 class="mb-2 text-white">Discover full-time, part-time and remote work</h1>
-                                            <p class="d-inline-flex text-white">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
-                                        </div>
-                                        <div class="banner-form">
-                                            <!-- Tabs Navigation -->
-                                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Work for your skills</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#gig" type="button" role="tab">Ways to Earn</button>
-                                                </li>
-                                            </ul>
+                        <div class="banner-form">
+                            <!-- Mobile & Tablet Carousel -->
+                            <div id="jobCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+                                <!-- Indicators -->
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#jobCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                                    <button type="button" data-bs-target="#jobCarousel" data-bs-slide-to="1"></button>
+                                    <button type="button" data-bs-target="#jobCarousel" data-bs-slide-to="2"></button>
+                                </div>
+                                <style>
+                                    .carousel-indicators {
+                                        bottom: -15px;
+                                    }
+                                </style>
+                                <!-- Slides -->
+                                <div class="carousel-inner">
 
-                                            <!-- Tabs Content -->
-                                            <div class="tab-content" id="heroTabsContent">
-                                                <!-- Skills Marketplace -->
-                                                <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                                    <h4 class="text-white">Find Work Today!</h4>
-                                                    <p class="text-white">
-                                                        Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
-                                                    </p>
-                                                    <a href="#skills" class="btn btn-light">Explore work</a>
-                                                </div>
-
-                                                <!-- gig Center -->
-                                                <div class="tab-pane hero-tab fade" id="gig" role="tabpanel">
-                                                    <h4 class="text-white">Ways to Earn through our platform</h4>
-                                                    <p class="text-white">
-                                                        Learn how to earn through future connect platform.
-                                                    </p>
-                                                    <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
-                                                </div>
-                                            </div>
+                                    <div class="carousel-item active">
+                                        <!-- Skills Marketplace -->
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color:#ffffff;">Find Work Today!</h4>
+                                            <p style="color:#ffffff;">
+                                                Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
+                                            </p>
+                                            <a href="#skills" class="btn btn-light">Explore work</a>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="banner-img">
-                                        <div class="banner-img-right">
-                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
+                                    <!-- gig Center -->
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color:#ffffff;">Ways to Earn through our platform</h4>
+                                            <p style="color:#ffffff;">
+                                                Learn how to earn through future connect platform.
+                                            </p>
+                                            <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
+                                            <p class="text-muted" style="color:#ffffff;">
+                                                Discover tailored job listings, collaboration projects, and freelance gigs.
+
+                                            </p>
+                                            <a href="#opportunities" class="btn btn-light">Start Exploring</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tab-content row d-none d-md-flex">
+
+                                <div class="col-md-4" id="marketplace">
+                                    <div class="hero-tab text-center p-4">
+                                        <h4 style="color:#ffffff;">Find Work Today!</h4>
+                                        <p style="color:#ffffff;">
+                                            Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
+                                        </p>
+                                        <a href="#skills" class="btn btn-light">Explore work</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" id="opportunities">
+                                    <div class="hero-tab p-4 text-center">
+                                        <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
+                                        <p class="text-muted" style="color:#ffffff;">
+                                            Discover tailored job listings, collaboration projects, and freelance gigs.
+
+                                        </p>
+                                        <a href="#opportunities" class="btn btn-light">Start Exploring</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" id="connection">
+                                    <div class="hero-tab text-center p-4">
+                                        <h4 style="color:#ffffff;">Ways to Earn through our platform</h4>
+                                        <p style="color:#ffffff;">
+                                            Learn how to earn through future connect platform and Ways to Earn through our platform.
+                                        </p>
+                                        <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -399,10 +387,11 @@
         <div class="trend-section server-grid-slider">
             <div class="row">
                 <div class="col-sm-10">
-                    <h5>Trending Categories of work and gigs</h5>
+                    <h5 data-aos="fade-up">Trending Categories of work and gigs</h5>
+                    <p data-aos="fade-up" style="color: #FFFDFB;"> Explore the most sought-after skills and connections in today's job market.</p>
                 </div>
                 <div class="col-sm-2 text-end">
-                    <div class="owl-nav service-nav nav-control nav-top"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
+                    <div class="owl-nav service-nav nav-control nav-top"></div>
                 </div>
             </div>
             <div class="service-sliders owl-carousel owl-loaded owl-drag">
@@ -426,7 +415,7 @@
                                         gap: 6px;
                                         padding: 6px 16px;
                                         color: #fff;
-                                        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+                                        background: #1c2225;
                                         border-radius: 30px;
                                         text-decoration: none;
                                         overflow: hidden;
@@ -500,36 +489,81 @@
             </div> <!-- /Service Slider -->
         </div> <!-- Title -->
         <div class="title-section">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="title-header">
-                        <h3>Works &amp; Gigs </h3>
-                        <p>View all Works &amp; Gigs</p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <!-- Sort By -->
-                    <div class="filters-wrap sort-categories  justify-content-lg-end">
-                        <div class="collapse-card float-lg-end">
-                            <div class="filter-header"> <a href="javascript:void(0);" class="sorts-list"> <i class="ti ti-sort-ascending"></i>Sorts by: <span>New Arrivals</span> </a> </div>
-                            <div id="categories" class="collapse-body" style="display: none;">
-                                <ul class="checkbox-list categories-lists">
-                                    <li class="active"> <label class="custom_check"> <span class="checked-title"> New Arrivals</span> </label> </li>
-                                    <li> <label class="custom_check"> <span class="checked-title"> Features</span> </label> </li>
-                                    <li> <label class="custom_check"> <span class="checked-title">Price: Low to High </span> </label> </li>
-                                    <li> <label class="custom_check"> <span class="checked-title"> Price: High to Low </span> </label> </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> <!-- /Sort By -->
+            <div class="align-items-center">
+                <div class="title-header">
+                    <h3 style="color: #ffffff;">Works &amp; Gigs </h3>
+                    <p style="color: #ffffff;">View all Works &amp; Gigs</p>
                 </div>
             </div>
         </div> <!-- /Title -->
         <!-- Search Details -->
-        <div class="service-gigs" style="transform: none;">
-            <div class="row" style="transform: none;">
-                <div class="col-lg-3 theiaStickySidebar">
+        <!-- Mobile Filter Dropdown -->
+        <div class="service-gigs">
 
+            <!-- ================== MOBILE FILTER DROPDOWN ================== -->
+            <div class="d-md-none mb-3">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="mobileFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter Jobs
+                    </button>
+                    <ul class="dropdown-menu w-100" aria-labelledby="mobileFilterDropdown">
+
+                        <!-- Categories -->
+                        <li class="px-3 py-2">
+                            <strong>Categories</strong>
+                            <ul class="list-unstyled mt-1 mb-2">
+                                @foreach($categories as $cat)
+                                <li>
+                                    <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['category' => $cat->id])) }}"
+                                        class="dropdown-item {{ request('category') == $cat->id ? 'active' : '' }}">
+                                        {{ $cat->name }} ({{ $cat->job_sections_count }})
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </li>
+
+                        <!-- Locations -->
+                        <li class="px-3 py-2">
+                            <strong>Locations</strong>
+                            <ul class="list-unstyled mt-1 mb-2">
+                                @foreach($locations as $loc)
+                                <li>
+                                    <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['location' => $loc])) }}"
+                                        class="dropdown-item {{ request('location') == $loc ? 'active' : '' }}">
+                                        {{ $loc }}
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </li>
+
+                        <!-- Salary Range -->
+                        <li class="px-3 py-2">
+                            <strong>Salary Range</strong>
+                            <ul class="list-unstyled mt-1 mb-0">
+                                @foreach($salary as $b)
+                                <li>
+                                    <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['salary' => $b])) }}"
+                                        class="dropdown-item {{ request('salary') == $b ? 'active' : '' }}">
+                                        {{ $b }}
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </li>
+
+                        <li class="px-3 py-2 text-center">
+                            <a href="{{ route('user.jobs.index') }}" class="btn btn-light w-100">Reset Filter</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <!-- ================== SIDEBAR (DESKTOP ONLY) ================== -->
+                <div class="col-lg-3 theiaStickySidebar d-none d-md-block">
                     <div class="sidebar-widget">
 
                         <div class="sidebar-header">
@@ -539,67 +573,59 @@
 
                         <div class="sidebar-body p-0">
 
-                            {{-- ================= CATEGORIES ================= --}}
+                            <!-- Categories -->
                             <div class="collapse-card">
                                 <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#categories2">
+                                    <a data-bs-toggle="collapse" href="#categories2" style="color: #ffffff;">
                                         <img src="/assets/img/icons/category-icon.svg"> Categories
                                     </a>
                                 </h4>
-
                                 <div id="categories2" class="collapse show">
                                     <div class="collapse-body">
-
                                         <ul class="checkbox-list">
                                             @foreach($categories as $cat)
                                             <li>
                                                 <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['category' => $cat->id])) }}"
                                                     class="{{ request('category') == $cat->id ? 'active' : '' }}">
-                                                    {{ $cat->name }} ({{ $cat->job_sections_count }})
+                                                    <i class="fas fa-chevron-right me-2"></i> {{ $cat->name }} ({{ $cat->job_sections_count }})
                                                 </a>
                                             </li>
                                             @endforeach
                                         </ul>
-
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- ================= LOCATIONS ================= --}}
+                            <!-- Locations -->
                             <div class="collapse-card">
                                 <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#locations">
+                                    <a data-bs-toggle="collapse" href="#locations" style="color: #ffffff;">
                                         <img src="/assets/img/icons/map-icon.svg"> Locations
                                     </a>
                                 </h4>
-
                                 <div id="locations" class="collapse show">
                                     <div class="collapse-body">
-
                                         <ul class="checkbox-list">
                                             @foreach($locations as $loc)
                                             <li>
                                                 <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['location' => $loc])) }}"
                                                     class="{{ request('location') == $loc ? 'active' : '' }}">
-                                                    {{ $loc }}
+                                                    <i class="fas fa-chevron-right me-2"></i> {{ $loc }}
                                                 </a>
                                             </li>
                                             @endforeach
-
                                         </ul>
-
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- ================= BUDGET ================= --}}
+                            <!-- Salary Range -->
                             <div class="collapse-card">
                                 <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#budget">
+                                    <a data-bs-toggle="collapse" href="#budget" style="color: #ffffff;">
                                         <img src="/assets/img/icons/money-icon.svg"> Salary Range
                                     </a>
                                 </h4>
-
                                 <div id="budget" class="collapse show">
                                     <div class="collapse-body">
                                         <ul class="checkbox-list">
@@ -607,42 +633,47 @@
                                             <li>
                                                 <a href="{{ route('user.jobs.index', array_merge(request()->all(), ['salary' => $b])) }}"
                                                     class="{{ request('salary') == $b ? 'active' : '' }}">
-                                                    {{ $b }}
+                                                    <i class="fas fa-chevron-right me-2"></i> {{ $b }}
                                                 </a>
                                             </li>
                                             @endforeach
-
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-
                     </div>
-
                 </div>
-
                 <!-- /Sidebar -->
+
+                <!-- ================== JOBS GRID / CAROUSEL ================== -->
                 <div class="col-lg-9">
-                    <div class="row">
+
+                    <!-- Desktop Grid -->
+                    <div class="row d-none d-md-flex">
                         @foreach($jobs as $job)
-                        <!-- Service List -->
                         <div class="col-xl-4 col-md-6">
                             <div class="gigs-grid">
                                 <div class="gigs-img">
                                     <a href="{{ route('user.jobs.show',$job->id) }}"><img src="assets/img/blog/blog-01.jpg" class="img-fluid" alt="img"></a>
-                                    <div class="card-overlay-badge"> <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a> <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a> </div>
-                                    <div class="fav-selection"> <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a> </div>
+                                    <div class="card-overlay-badge">
+                                        <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a>
+                                        <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
+                                    </div>
+                                    <div class="fav-selection"><a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a></div>
                                 </div>
                                 <div class="gigs-content">
-                                    <div class="gigs-info"> <a href="{{ route('user.jobs.show',$job->id) }}" class="badge bg-primary-light">{{ $job->category->name ?? 'Website Promotion' }}</a>
-                                        <div class="star-rate"> <span><i class="fa-solid fa-star"></i>5.0</span> </div>
+                                    <div class="gigs-info">
+                                        <a href="{{ route('user.jobs.show',$job->id) }}" class="badge bg-primary-light">{{ $job->category->name ?? 'Website Promotion' }}</a>
+                                        <div class="star-rate"><span><i class="fa-solid fa-star"></i>5.0</span></div>
                                     </div>
                                     <div class="gigs-title">
-                                        <h3> <a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a> </h3>
+                                        <h3><a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a></h3>
                                     </div>
                                     <ul class="gigs-user-info">
-                                        <li class="gigs-user"> <img src="assets/img/user/user-01.jpg" alt="img">
+                                        <li class="gigs-user">
+                                            <img src="assets/img/user/user-01.jpg" alt="img">
                                             <p>By {{ $job->company->name }}</p>
                                         </li>
                                         <li class="gigs-loc">
@@ -650,21 +681,88 @@
                                         </li>
                                     </ul>
                                     <div class="gigs-card-footer gap-2">
-                                        <h5>${{ $job->salary_range }}</h5> <span class="badge">Delivery in {{ $job->delivery_time ?? '1 day' }}</span>
+                                        <h5>${{ $job->salary_range }}</h5>
+                                        <span class="badge">view details</span>
                                     </div>
                                 </div>
                             </div>
-                        </div> <!-- /Service List -->
+                        </div>
                         @endforeach
+
+                        <!-- paginatio -->
+                        <div class="col-12">
+                            <div class="pagination-wrap d-flex justify-content-center">
+                                {{ $jobs->links() }}
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Mobile / Tablet Carousel -->
+                    <div id="jobsCarousel" class="carousel slide d-md-none" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach($jobs as $index => $job)
+                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                <div class="gigs-grid">
+                                    <div class="gigs-img">
+                                        <a href="{{ route('user.jobs.show',$job->id) }}"><img src="assets/img/blog/blog-01.jpg" class="img-fluid" alt="img"></a>
+                                        <div class="card-overlay-badge">
+                                            <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a>
+                                            <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
+                                        </div>
+                                        <div class="fav-selection"><a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a></div>
+                                    </div>
+                                    <div class="gigs-content">
+                                        <div class="gigs-info">
+                                            <a href="{{ route('user.jobs.show',$job->id) }}" class="badge bg-primary-light">{{ $job->category->name ?? 'Website Promotion' }}</a>
+                                            <div class="star-rate"><span><i class="fa-solid fa-star"></i>5.0</span></div>
+                                        </div>
+                                        <div class="gigs-title">
+                                            <h3><a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a></h3>
+                                        </div>
+                                        <ul class="gigs-user-info">
+                                            <li class="gigs-user">
+                                                <img src="assets/img/user/user-01.jpg" alt="img">
+                                                <p>By {{ $job->company->name }}</p>
+                                            </li>
+                                            <li class="gigs-loc">
+                                                <p><i class="ti ti-map-pin-check"></i>{{ $job->location ?? 'Remote' }}</p>
+                                            </li>
+                                        </ul>
+                                        <div class="gigs-card-footer gap-2">
+                                            <h5>${{ $job->salary_range }}</h5>
+                                            <span class="badge">view details</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#jobsCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#jobsCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+
+                        <!-- Indicators -->
+                        <div class="carousel-indicators mt-2">
+                            @foreach($jobs as $index => $job)
+                            <button type="button" data-bs-target="#jobsCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}"></button>
+                            @endforeach
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div> <!-- /Service Details -->
+        </div>
+        <!-- /Service Details -->
     </div>
 </div>
 
 <div class="container">
-    <div class="trusted-customers-two">
+    <div class="trusted-customers-two mb-4">
         <!-- <img src="./assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none"> -->
         <div class="row align-items-center">
             <div class="col-lg-7">
