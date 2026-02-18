@@ -51,7 +51,7 @@ $(function() {
     'featureType': 'road',
     'elementType': 'labels.text.stroke',
     'stylers': [{
-      'color': '#ffffff'
+      'color': '#afafaf'
     }]
   }, {
     'featureType': 'poi',

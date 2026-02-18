@@ -37,7 +37,7 @@
   width: 96%;
   max-width: 620px;
   margin: 0 auto;
-  background: #ffffff;
+  background: #afafaf;
 }
 .email-success {
   border-bottom: #1ee0ac;
@@ -48,7 +48,7 @@
 .email-btn {
   background: #6576ff;
   border-radius: 4px;
-  color: #ffffff !important;
+  color: #afafaf !important;
   display: inline-block;
   font-size: 13px;
   font-weight: 600;
@@ -129,7 +129,7 @@
   height: 30px;
   width: 30px;
   border-radius: 50%;
-  background: #ffffff;
+  background: #afafaf;
 }
 .email-social li a img {
   width: 30px;

@@ -6633,16 +6633,16 @@ div.dt-container .dt-paging .dt-paging-button.disabled:active {
 }
 
 .banner-head h1 {
-    font-size: 52px;
+    font-size: 25px;
     margin-bottom: 24px;
     position: relative;
-    max-width: 660px;
+    /* max-width: 660px; */
 }
 
 @media (max-width: 1399.98px) {
     .banner-head h1 {
-        font-size: 52px;
-        max-width: 570px;
+        font-size: 25px;
+        /* max-width: 570px; */
     }
 }
 
@@ -9942,7 +9942,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
     z-index: 0;
     transition: 0.3s;
     border-radius: 1em;
-    background: #1c2225;
+    background: #060f11;
     box-shadow: 0 1em 1em #1f2d3d26;
     /* color: var(--white); */
 }
@@ -9963,7 +9963,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .pop-category:hover::before {
     height: 100%;
-    color: #ffffff;
+    color: #afafaf;
 }
 
 .pop-category:hover span {
@@ -9975,15 +9975,15 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .pop-category::before h6 a {
-    color: #ffffff;
+    color: #afafaf;
 }
 
 .pop-category:hover h6 a {
-    color: #ffffff;
+    color: #afafaf;
 }
 
 .pop-category:hover p {
-    color: #ffffff;
+    color: #afafaf;
 }
 
 .pop-category p {
@@ -10295,7 +10295,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .trusted-customers-two {
     position: relative;
-    background: #1c2225;
+    background: #060f11;
     border-radius: 30px;
     padding: 0 15px;
     z-index: 0;
@@ -10316,11 +10316,11 @@ div.dt-container .dt-paging .dt-paging-button.current {
 }
 
 .trusted-customers-two h2 {
-    color: #ffffff;
+    color: #afafaf;
 }
 
 .trusted-customers-two p {
-    color: #ffffff;
+    color: #afafaf;
 }
 
 .trusted-customers-image::before {
@@ -10872,7 +10872,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
 /****** Utils ******/
 .breadcrumb-bar {
     background: linear-gradient(180deg, #011E34 41% 35%, #00d992 131%);
-    color: #ffffff;
+    color: #afafaf;
     position: relative;
     overflow: hidden;
     padding: 40px 0;
@@ -12080,8 +12080,8 @@ div.dt-container .dt-paging .dt-paging-button.current {
 
 .form-control {
     border-radius: 5px;
-    border: 1px solid #161d21;
-    /* background: var(--white); */
+    border: 1px solid #425055;
+    background: var(--white);
     font-size: 14px;
     font-weight: 400;
     padding: 10px 12px;
@@ -14193,9 +14193,9 @@ div.dt-container .dt-paging .dt-paging-button.current {
     display: flex;
     justify-content: space-between;
     -webkit-justify-content: space-between;
-    border: 1px solid #fff;
-    border-radius: 1em;
-    background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
+    border: 1px solid #afafaf;
+    border-radius: 1px;
+    /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
     box-shadow: 0 1em 1em #1f2d3d26;
     padding: 20px;
     margin-bottom: 2rem;
@@ -25818,7 +25818,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: #ffffff;
+    background: #afafaf;
     border-bottom: 1px solid #eaeaea;
 }
 
@@ -26106,7 +26106,7 @@ div.dt-container.dt-empty-footer tbody>tr:last-child>* {
 }
 
 .footer-two a:hover {
-    color: #ffffff;
+    color: #afafaf;
     text-decoration: none;
     transform: translateX(2px);
 }

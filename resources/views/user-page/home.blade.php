@@ -7,10 +7,11 @@
     #tranding {
         /* position: relative; */
         overflow: hidden;
-        background: #1c2225;
+        background: #060f11;
         color: #fff;
         padding: 1rem 0;
-        border-radius: 2rem;
+        border-radius: 0.1rem;
+        border: 1px solid #3d4648;
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -243,9 +244,10 @@
 
 
     .hero-tab {
-        background: rgba(255, 255, 255, 0.1);
+        /* background: rgba(255, 255, 255, 0.1); */
         backdrop-filter: blur(10px);
-        border-radius: 16px;
+        border-radius: 2px;
+        border: 1px solid #3d4648;
         padding: 2rem;
         color: #f1f1f1;
     }
@@ -261,7 +263,10 @@
     }
 
     .btn-light {
-        border-radius: 50px;
+        border-radius: 5px;
+        border: 1px solid #3d4648;
+        background: #060f11;
+        color: #afafaf;
         font-weight: 600;
         padding: 0.6rem 1.5rem;
     }
@@ -458,29 +463,10 @@
                 <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                     <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
                     <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Freelance Marketplace</span>
-                    <h1 class="mb-2" style="color:#ffffff;">On-Demand <span>Services</span> for Your Every Need</h1>
+                    <h1 class="mb-2" style="color:#afafaf;">On-Demand <span>Services</span> for Your Every Need</h1>
                     <p class="mb-4">We pride ourselves on offering a seamless, secure, and efficient experience. Browse through thousands of trusted service providers, read reviews, compare prices.</p>
                     <a href="service.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore Services<i class="ti ti-chevron-right ms-1"></i></a>
-                    <div class="banner-users d-flex align-items-center flex-wrap gap-3">
-                        <div class="avatar-list-stacked me-2">
-                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-01.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-02.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-03.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-04.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                            <span class="avatar avatar-md rounded-circle border-0"><img src="assets/img/user/user-05.jpg" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                        </div>
-                        <div>
-                            <div class="d-flex align-items-center mb-1">
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <i class="ti ti-star-filled text-warning"></i>
-                                <h6 class="mb-0 ms-2">4.8/5</h6>
-                            </div>
-                            <p class="mb-0">Trusted by 5,300+ customers</p>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
             <!-- <div class="col-lg-5">
@@ -526,7 +512,7 @@
                 <div class="col-lg-12">
                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                         <div class="banner-head mt-4">
-                            <h1 class="mb-2" style="color:#ffffff;">Your gateway to skills, opportunities, and growth.</h1>
+                            <h1 class="mb-2" style="color:#afafaf;">Your gateway to skills, opportunities, and growth.</h1>
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
@@ -685,7 +671,7 @@
                                             gap: 6px;
                                             padding: 6px 16px;
                                             color: #fff;
-                                            background: #1c2225;
+                                            background: #060f11;
                                             border-radius: 30px;
                                             text-decoration: none;
                                             overflow: hidden;
@@ -799,7 +785,7 @@
     /* Switch Tabs Container */
     .feature-switch {
         display: inline-flex;
-        background: #ffffff26;
+        background: #afafaf26;
         border-radius: 50px;
         padding: 5px;
         flex-wrap: wrap;
@@ -832,7 +818,7 @@
     .tab-pane.feature-tab {
         /* max-width: 750px; */
         margin: 0 auto;
-        background: #1c2225;
+        background: #060f11;
         border-radius: 16px;
         padding: 2rem;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -873,7 +859,7 @@
 
 <section class="features-section d-none d-lg-block" id="features">
     <div class="container">
-        <h2 style="color:#ffffff;">Explore Future Connect Features</h2>
+        <h2 style="color:#afafaf;">Explore Future Connect Features</h2>
 
         <!-- Switch Tabs -->
         <ul class="nav feature-switch" id="featuresTab" role="tablist">
@@ -1091,7 +1077,7 @@
 <!-- MOBILE ACCORDION -->
 <div class="accordion d-lg-none" id="featuresAccordion" style="margin-top: 3rem;">
     <div class="container">
-        <h2 class="mb-4" style="color:#ffffff;">Explore Future Connect Features</h2>
+        <h2 class="mb-4" style="color:#afafaf;">Explore Future Connect Features</h2>
         <!-- Skills -->
         <div class="accordion-item">
             <h2 class="accordion-header">
@@ -1403,7 +1389,7 @@
         gap: 6px;
         padding: 16px 16px;
         color: #fff;
-        background: #1c2225;
+        background: #060f11;
         border-radius: 30px;
         text-decoration: none;
         overflow: hidden;
@@ -1541,7 +1527,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-9">
                 <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                    <h2 style="color:#ffffff;"><span>We’r</span> Empowering skills, Creators and Innovators</h2>
+                    <h2 style="color:#afafaf;"><span>We’r</span> Empowering skills, Creators and Innovators</h2>
                     <p>Discover opportunities, grow your skills, showcase your skills and connect with a community built for your success.</p>
                 </div>
             </div>
@@ -1737,8 +1723,8 @@
 
 <style>
     .talent-card {
-        background: #1c2225;
-        color: #ffffff;
+        background: #060f11;
+        color: #afafaf;
         border-radius: 16px;
         padding: 1.5rem;
         text-align: left;
@@ -1759,7 +1745,7 @@
         height: 80px;
         object-fit: cover;
         border-radius: 50%;
-        border: 3px solid #ffffff33;
+        border: 3px solid #afafaf33;
     }
 
     /* Talent Info */
@@ -1802,11 +1788,11 @@
         <div class="row align-items-center row-gap-4">
             <div class="col-lg-6">
                 <div class="section-header-two" data-aos="fade-up">
-                    <h2 class="mb-2 p-0" style="color:#ffffff;">What Talents Say About Future Connect</h2>
+                    <h2 class="mb-2 p-0" style="color:#afafaf;">What Talents Say About Future Connect</h2>
                     <p>Discover the voices of passionate individuals whose lives have been impacted by sharing
                         their stories and skills on Future Connect.</p>
                 </div>
-                <h6 class="mb-3" data-aos="fade-up" style="color:#ffffff;">We’re Building a Global Talent Community</h6>
+                <h6 class="mb-3" data-aos="fade-up" style="color:#afafaf;">We’re Building a Global Talent Community</h6>
                 <div class="avatar-list-stacked me-2" data-aos="fade-up">
                     @foreach($testimonials as $testimonial)
                     <span class="avatar avatar-md rounded-circle border-0"><img

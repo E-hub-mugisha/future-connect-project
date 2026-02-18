@@ -5,7 +5,7 @@
 <style>
     .story-card {
         border-radius: 1.3rem;
-        background: #ffffff;
+        background: #afafaf;
         padding: 2rem;
         box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         transition: .3s ease;

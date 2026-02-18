@@ -502,12 +502,12 @@
         </div>
 
         <div class="section-header-two what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #ffffff;">
+            <h2 class="mb-2" style="color: #afafaf;">
                 <span class="title-bg"></span>
                 Explore Generation of {{ $categoryName }} skilled people
                 <span class="title-bg2"></span>
             </h2>
-            <p style="color: #ffffff;">
+            <p style="color: #afafaf;">
                 Connect with the next wave of skilled people, guiding you with fresh perspectives
             </p>
         </div>
@@ -518,12 +518,12 @@
             <div class="filters-section">
                 <div class="listing-tab">
                     <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
-                        <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" data-filter="latest" type="button">Latest</a></li>
-                        <li class="nav-item"><a class="nav-link" style="color:#ffffff;" data-filter="popular" type="button">Popular</a></li>
-                        <li class="nav-item"><a class="nav-link" style="color:#ffffff;" data-filter="featured" type="button">Featured</a></li>
-                        <li class="nav-item"><a class="nav-link" style="color:#ffffff;" data-filter="recommended" type="button">Recommended</a></li>
+                        <li class="nav-item"><a class="nav-link active" style="color:#afafaf;" data-filter="latest" type="button">Latest</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color:#afafaf;" data-filter="popular" type="button">Popular</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color:#afafaf;" data-filter="featured" type="button">Featured</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color:#afafaf;" data-filter="recommended" type="button">Recommended</a></li>
                         <li class="nav-item">
-                            <a type="button" class="nav-link" style="color:#ffffff;" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            <a type="button" class="nav-link" style="color:#afafaf;" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <i class="ti ti-search me-1"></i> Search skills
                             </a>
                         </li>

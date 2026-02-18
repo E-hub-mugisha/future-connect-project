@@ -49,7 +49,7 @@
 }
 
 .datepicker > .datepicker_header > a:active {
-	color: #ffffff;
+	color: #afafaf;
 	background-color:	#808080;
 }
 
@@ -118,7 +118,7 @@
 	margin-left: -1px;
 	margin-bottom: -2px;
 	
-	background-color:	#ffffff;
+	background-color:	#afafaf;
 	border: 1px solid #c8c8c8;
 	
 	border-top:none;
@@ -194,7 +194,7 @@
 }
 
 .datepicker > .datepicker_inner_container > .datepicker_calendar > .datepicker_table > tbody > tr > td.active {
-	color: #ffffff;
+	color: #afafaf;
 	background-color:	#808080;
 }
 
@@ -220,7 +220,7 @@
 	overflow: auto;
 	overflow-x: hidden; 
 	
-	background-color:	#ffffff;
+	background-color:	#afafaf;
 	
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
@@ -305,7 +305,7 @@
 	color: #cccccc;
 }
 .datepicker > .datepicker_inner_container > .datepicker_timelist > div.timelist_item.active {
-	color: #ffffff;
+	color: #afafaf;
 	background-color:	#808080;
 }
 

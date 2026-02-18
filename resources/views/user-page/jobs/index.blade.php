@@ -6,7 +6,7 @@
     #tranding {
         position: relative;
         overflow: hidden;
-        background: #1c2225;
+        background: #060f11;
         color: #fff;
         padding: 1rem 0;
         border-radius: 2rem;
@@ -285,8 +285,8 @@
                 <div class="col-lg-12">
                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                         <div class="banner-head mt-4">
-                            <h1 class="mb-2" style="color:#ffffff;">Explore {{ $jobs->total() }}+ Available work</h1>
-                            <p class="d-inline-flex" style="color:#ffffff;">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
+                            <h1 class="mb-2" style="color:#afafaf;">Explore {{ $jobs->total() }}+ Available work</h1>
+                            <p class="d-inline-flex" style="color:#afafaf;">Discover full-time, part-time and remote job opportunities tailored for your skills.</p>
                         </div>
                         <div class="banner-form">
                             <!-- Mobile & Tablet Carousel -->
@@ -308,8 +308,8 @@
                                     <div class="carousel-item active">
                                         <!-- Skills Marketplace -->
                                         <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#ffffff;">Find Work Today!</h4>
-                                            <p style="color:#ffffff;">
+                                            <h4 style="color:#afafaf;">Find Work Today!</h4>
+                                            <p style="color:#afafaf;">
                                                 Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
                                             </p>
                                             <a href="#skills" class="btn btn-light">Explore work</a>
@@ -318,8 +318,8 @@
                                     <!-- gig Center -->
                                     <div class="carousel-item">
                                         <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#ffffff;">Ways to Earn through our platform</h4>
-                                            <p style="color:#ffffff;">
+                                            <h4 style="color:#afafaf;">Ways to Earn through our platform</h4>
+                                            <p style="color:#afafaf;">
                                                 Learn how to earn through future connect platform.
                                             </p>
                                             <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
@@ -327,8 +327,8 @@
                                     </div>
                                     <div class="carousel-item">
                                         <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
-                                            <p class="text-muted" style="color:#ffffff;">
+                                            <h4 style="color:#afafaf;">Unlock New Opportunities</h4>
+                                            <p class="text-muted" style="color:#afafaf;">
                                                 Discover tailored job listings, collaboration projects, and freelance gigs.
 
                                             </p>
@@ -342,8 +342,8 @@
 
                                 <div class="col-md-4" id="marketplace">
                                     <div class="hero-tab text-center p-4">
-                                        <h4 style="color:#ffffff;">Find Work Today!</h4>
-                                        <p style="color:#ffffff;">
+                                        <h4 style="color:#afafaf;">Find Work Today!</h4>
+                                        <p style="color:#afafaf;">
                                             Every day, thousands of people browse our marketplace for services like yours. Don’t miss out!
                                         </p>
                                         <a href="#skills" class="btn btn-light">Explore work</a>
@@ -352,8 +352,8 @@
 
                                 <div class="col-md-4" id="opportunities">
                                     <div class="hero-tab p-4 text-center">
-                                        <h4 style="color:#ffffff;">Unlock New Opportunities</h4>
-                                        <p class="text-muted" style="color:#ffffff;">
+                                        <h4 style="color:#afafaf;">Unlock New Opportunities</h4>
+                                        <p class="text-muted" style="color:#afafaf;">
                                             Discover tailored job listings, collaboration projects, and freelance gigs.
 
                                         </p>
@@ -363,8 +363,8 @@
 
                                 <div class="col-md-4" id="connection">
                                     <div class="hero-tab text-center p-4">
-                                        <h4 style="color:#ffffff;">Ways to Earn through our platform</h4>
-                                        <p style="color:#ffffff;">
+                                        <h4 style="color:#afafaf;">Ways to Earn through our platform</h4>
+                                        <p style="color:#afafaf;">
                                             Learn how to earn through future connect platform and Ways to Earn through our platform.
                                         </p>
                                         <a data-bs-toggle="modal" data-bs-target="#postJobModal" role="button" class="btn btn-light">Get Started</a>
@@ -415,7 +415,7 @@
                                         gap: 6px;
                                         padding: 6px 16px;
                                         color: #fff;
-                                        background: #1c2225;
+                                        background: #060f11;
                                         border-radius: 30px;
                                         text-decoration: none;
                                         overflow: hidden;
@@ -491,8 +491,8 @@
         <div class="title-section">
             <div class="align-items-center">
                 <div class="title-header">
-                    <h3 style="color: #ffffff;">Works &amp; Gigs </h3>
-                    <p style="color: #ffffff;">View all Works &amp; Gigs</p>
+                    <h3 style="color: #afafaf;">Works &amp; Gigs </h3>
+                    <p style="color: #afafaf;">View all Works &amp; Gigs</p>
                 </div>
             </div>
         </div> <!-- /Title -->
@@ -576,7 +576,7 @@
                             <!-- Categories -->
                             <div class="collapse-card">
                                 <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#categories2" style="color: #ffffff;">
+                                    <a data-bs-toggle="collapse" href="#categories2" style="color: #afafaf;">
                                         <img src="/assets/img/icons/category-icon.svg"> Categories
                                     </a>
                                 </h4>
@@ -599,7 +599,7 @@
                             <!-- Locations -->
                             <div class="collapse-card">
                                 <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#locations" style="color: #ffffff;">
+                                    <a data-bs-toggle="collapse" href="#locations" style="color: #afafaf;">
                                         <img src="/assets/img/icons/map-icon.svg"> Locations
                                     </a>
                                 </h4>
@@ -622,7 +622,7 @@
                             <!-- Salary Range -->
                             <div class="collapse-card">
                                 <h4 class="card-title">
-                                    <a data-bs-toggle="collapse" href="#budget" style="color: #ffffff;">
+                                    <a data-bs-toggle="collapse" href="#budget" style="color: #afafaf;">
                                         <img src="/assets/img/icons/money-icon.svg"> Salary Range
                                     </a>
                                 </h4>

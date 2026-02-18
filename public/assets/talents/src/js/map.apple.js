@@ -72,7 +72,7 @@ $(function() {
     'featureType': 'road.arterial',
     'elementType': 'geometry.fill',
     'stylers': [{
-      'color': '#ffffff'
+      'color': '#afafaf'
     }]
   }, {
     'featureType': 'road.local',

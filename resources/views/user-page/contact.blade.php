@@ -31,7 +31,7 @@
     <section class="contact-section">
         <div class="contact-bottom bg-white">
             <div class="about-us-header">
-                <h2 style="color:#ffffff;">Let's Talk</h2>
+                <h2 style="color:#afafaf;">Let's Talk</h2>
                 <p>Have a question, idea, or feedback? Drop us a message we’d love to hear from you!</p>
             </div>
             <div class="container">
@@ -45,7 +45,7 @@
                                     </span>
                                 </div>
                                 <div class="contact-details">
-                                    <h6 style="color:#ffffff;">Email Us</h6>
+                                    <h6 style="color:#afafaf;">Email Us</h6>
                                     <p><a href="mailto:info@futureconnect.rw">info@futureconnect.rw</a></p>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                                     </span>
                                 </div>
                                 <div class="contact-details">
-                                    <h6 style="color:#ffffff;">Call Us</h6>
+                                    <h6 style="color:#afafaf;">Call Us</h6>
                                     <p>+250 788 123 456</p>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     </span>
                                 </div>
                                 <div class="contact-details contact-details-address">
-                                    <h6 style="color:#ffffff;">Visit Us</h6>
+                                    <h6 style="color:#afafaf;">Visit Us</h6>
                                     <p>Future Connect HQ, Kigali City, Rwanda</p>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                     <div class="col-lg-6 col-md-12 d-flex">
                         <div class="team-form w-100 mt-4">
                             <div class="team-form-heading">
-                                <h3 style="color:#ffffff;">Connect With Future Connect</h3>
+                                <h3 style="color:#afafaf;">Connect With Future Connect</h3>
                                 <p>Have a question, idea, or feedback? Drop us a message we’d love to hear from you!
                                 </p>
                             </div>

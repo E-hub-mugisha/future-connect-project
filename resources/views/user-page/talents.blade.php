@@ -50,7 +50,7 @@ $categories = \App\Models\Category::all();
     #tranding {
         /* position: relative; */
         overflow: hidden;
-        background: #1c2225;
+        background: #060f11;
         color: #fff;
         padding: 1rem 0;
         border-radius: 2rem;
@@ -447,7 +447,7 @@ $categories = \App\Models\Category::all();
                 <div class="col-lg-12">
                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                         <div class="banner-head mt-4">
-                            <h1 class="mb-2" style="color:#ffffff;">Your gateway to skills, opportunities, and growth.</h1>
+                            <h1 class="mb-2" style="color:#afafaf;">Your gateway to skills, opportunities, and growth.</h1>
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
@@ -470,8 +470,8 @@ $categories = \App\Models\Category::all();
                                     <div class="carousel-item active">
                                         <!-- Skills Marketplace -->
                                         <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#ffffff;">Promote Your Skills</h4>
-                                            <p style="color:#ffffff;">
+                                            <h4 style="color:#afafaf;">Promote Your Skills</h4>
+                                            <p style="color:#afafaf;">
                                                 Stand out! Boost your profile and reach 3× more employers.<br>
                                                 Get verified and feature your story on our homepage.
                                             </p>
@@ -483,8 +483,8 @@ $categories = \App\Models\Category::all();
                                     <!-- gig Center -->
                                     <div class="carousel-item">
                                         <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#ffffff;">Join Our skill Hub</h4>
-                                            <p style="color:#ffffff;">
+                                            <h4 style="color:#afafaf;">Join Our skill Hub</h4>
+                                            <p style="color:#afafaf;">
                                                 Showcase your skills, get verified, and connect with clients globally.
                                                 Our platform helps skilled people like you grow professionally and gain exposure.
                                             </p>
@@ -493,8 +493,8 @@ $categories = \App\Models\Category::all();
                                     </div>
                                     <div class="carousel-item">
                                         <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#ffffff;">Expand Your Network</h4>
-                                            <p style="color:#ffffff;">
+                                            <h4 style="color:#afafaf;">Expand Your Network</h4>
+                                            <p style="color:#afafaf;">
                                                 Connect with industry professionals, mentors, and peers.
                                                 Join groups, attend virtual events, and build relationships that matter.
                                             </p>
@@ -510,8 +510,8 @@ $categories = \App\Models\Category::all();
                                 <!-- Skills Marketplace -->
                                 <div class="col-md-4" id="marketplace">
                                     <div class="tab-pane hero-tab" id="marketplace" role="tabpanel">
-                                        <h4 style="color:#ffffff;">Promote Your Skills</h4>
-                                        <p style="color:#ffffff;">
+                                        <h4 style="color:#afafaf;">Promote Your Skills</h4>
+                                        <p style="color:#afafaf;">
                                             Stand out! Boost your profile and reach 3× more employers.<br>
                                             Get verified and feature your story on our homepage.
                                         </p>
@@ -524,8 +524,8 @@ $categories = \App\Models\Category::all();
                                 <!-- Opportunities Center -->
                                 <div class="col-md-4" id="marketplace">
                                     <div class="tab-pane hero-tab" id="opportunities" role="tabpanel">
-                                        <h4 style="color:#ffffff;">Join Our skill Hub</h4>
-                                        <p style="color:#ffffff;">
+                                        <h4 style="color:#afafaf;">Join Our skill Hub</h4>
+                                        <p style="color:#afafaf;">
                                             Showcase your skills, get verified, and connect with clients globally.
                                             Our platform helps skilled people like you grow professionally and gain exposure.
                                         </p>
@@ -535,8 +535,8 @@ $categories = \App\Models\Category::all();
                                 <!-- Connection Room -->
                                 <div class="col-md-4" id="marketplace">
                                     <div class="tab-pane hero-tab" id="connection" role="tabpanel">
-                                        <h4 style="color:#ffffff;">Expand Your Network</h4>
-                                        <p style="color:#ffffff;">
+                                        <h4 style="color:#afafaf;">Expand Your Network</h4>
+                                        <p style="color:#afafaf;">
                                             Connect with industry professionals, mentors, and peers.
                                             Join groups, attend virtual events, and build relationships that matter.
                                         </p>
@@ -856,9 +856,9 @@ $categories = \App\Models\Category::all();
         <div class="trusted-customers-sec ">
             <div class="trusted-customers">
                 <div class="section-header mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <h2 style="color:#ffffff;">Want to Showcase Your skills?</h2>
-                    <p style="color:#ffffff;">Over 74K skilled people on the platform - available today for you.</p>
-                    <p style="color:#ffffff;">Join our community and take the first step towards your dream career.</p>
+                    <h2 style="color:#afafaf;">Want to Showcase Your skills?</h2>
+                    <p style="color:#afafaf;">Over 74K skilled people on the platform - available today for you.</p>
+                    <p style="color:#afafaf;">Join our community and take the first step towards your dream career.</p>
                 </div>
                 <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
                     <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
@@ -871,9 +871,9 @@ $categories = \App\Models\Category::all();
                 <div class="col-lg-4">
                     <div class="faq-heading aos" data-aos="fade-up">
                         <div class="section-header mb-2">
-                            <h2 style="color:#ffffff;"><span>Skilled People</span> Frequently Asked Questions</h2>
+                            <h2 style="color:#afafaf;"><span>Skilled People</span> Frequently Asked Questions</h2>
                         </div>
-                        <p style="color:#ffffff;">Don’t see your question? We’re here to help you connect with the right skilled people.</p>
+                        <p style="color:#afafaf;">Don’t see your question? We’re here to help you connect with the right skilled people.</p>
                         <a href="{{ route('user.contact') }}" class="btn btn-primary">Ask a Question <i class="ti ti-arrow-badge-right"></i></a>
                     </div>
                 </div>
@@ -882,65 +882,65 @@ $categories = \App\Models\Category::all();
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">
+                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">
                                     How can I find the right skilled people for my project?
                                 </a>
                             </h4>
                             <div id="faqone" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p style="color:#ffffff;">Our skilled people Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
+                                    <p style="color:#afafaf;">Our skilled people Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">
+                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">
                                     How do I hire a skilled people?
                                 </a>
                             </h4>
                             <div id="faqtwo" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p style="color:#ffffff;">After browsing profiles, you can contact skilled peoples directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
+                                    <p style="color:#afafaf;">After browsing profiles, you can contact skilled peoples directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">
+                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">
                                     Can skilled peoples showcase their past projects?
                                 </a>
                             </h4>
                             <div id="faqthree" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p style="color:#ffffff;">Yes! skilled peoples can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
+                                    <p style="color:#afafaf;">Yes! skilled peoples can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqfour" aria-expanded="false">
+                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqfour" aria-expanded="false">
                                     Is there a verification process for talents?
                                 </a>
                             </h4>
                             <div id="faqfour" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p style="color:#ffffff;">We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you confidence in your collaboration.</p>
+                                    <p style="color:#afafaf;">We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you confidence in your collaboration.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="faq-card aos" data-aos="fade-up">
                             <h4 class="faq-title">
-                                <a class="collapsed" style="color:#ffffff;" data-bs-toggle="collapse" href="#faqfive" aria-expanded="false">
+                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqfive" aria-expanded="false">
                                     How much does it cost to hire a talent?
                                 </a>
                             </h4>
                             <div id="faqfive" class="card-collapse collapse">
                                 <div class="faq-content">
-                                    <p style="color:#ffffff;">Costs vary depending on the talent’s experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.</p>
+                                    <p style="color:#afafaf;">Costs vary depending on the talent’s experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.</p>
                                 </div>
                             </div>
                         </div>

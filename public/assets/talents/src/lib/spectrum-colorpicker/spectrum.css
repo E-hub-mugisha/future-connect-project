@@ -157,8 +157,8 @@ License: MIT
     background-image: -o-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
     background-image: -ms-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
     background-image: linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr=#FFFFFFFF, endColorstr=#00CC9A81)";
-    filter : progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr='#FFFFFFFF', endColorstr='#00CC9A81');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr=#afafafFF, endColorstr=#00CC9A81)";
+    filter : progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr='#afafafFF', endColorstr='#00CC9A81');
 }
 .sp-val {
     background-image: -webkit-gradient(linear, 0 100%, 0 0, from(#000000), to(rgba(204, 154, 129, 0)));
