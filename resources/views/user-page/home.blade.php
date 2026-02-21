@@ -235,7 +235,7 @@
         background-color: #122322;
         color: #fff;
         /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
-        border: 1px solid #00d992;
+        border: 1px solid #00a667;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -466,7 +466,7 @@
                     <h1 class="mb-2" style="color:#afafaf;">On-Demand <span>Services</span> for Your Every Need</h1>
                     <p class="mb-4">We pride ourselves on offering a seamless, secure, and efficient experience. Browse through thousands of trusted service providers, read reviews, compare prices.</p>
                     <a href="service.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore Services<i class="ti ti-chevron-right ms-1"></i></a>
-                    
+
                 </div>
             </div>
             <!-- <div class="col-lg-5">
@@ -672,58 +672,13 @@
                                             padding: 6px 16px;
                                             color: #fff;
                                             background: #060f11;
-                                            border-radius: 30px;
+                                            border: 1px solid #3d4648;
+                                            border-radius: 3px;
                                             text-decoration: none;
                                             overflow: hidden;
                                             z-index: 1;
                                         }
 
-                                        .slide-line {
-                                            position: absolute;
-                                            top: 100%;
-                                            left: -100%;
-                                            width: 200%;
-                                            height: 100%;
-                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                            transform: rotate(45deg);
-                                            animation: slideRightUp 2s ease-in-out infinite;
-                                            z-index: 0;
-                                        }
-
-                                        .slide-line:nth-child(2) {
-                                            animation-delay: 0s;
-                                            opacity: 0;
-                                            width: 50%;
-                                        }
-
-                                        .slide-line:nth-child(3) {
-                                            animation-delay: 0s;
-                                            opacity: 0.5;
-                                            width: 150%;
-                                        }
-
-                                        .slide-line:nth-child(4) {
-                                            animation-delay: 0.8s;
-                                            opacity: 0.7;
-                                            width: 200%;
-                                        }
-
-                                        @keyframes slideRightUp {
-                                            0% {
-                                                top: 100%;
-                                                left: -100%;
-                                            }
-
-                                            50% {
-                                                top: 0%;
-                                                left: 0%;
-                                            }
-
-                                            100% {
-                                                top: -100%;
-                                                left: 100%;
-                                            }
-                                        }
 
                                         .slide-line-btn span {
                                             pointer-events: none;
@@ -732,9 +687,6 @@
 
                                     <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
                                         <i class="feather-arrow-right"></i>Read More
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
                                     </a>
 
                                 </div>
@@ -786,7 +738,7 @@
     .feature-switch {
         display: inline-flex;
         background: #afafaf26;
-        border-radius: 50px;
+        border-radius: 3px;
         padding: 5px;
         flex-wrap: wrap;
         justify-content: center;
@@ -795,19 +747,19 @@
     }
 
     .feature-switch .nav-link {
-        border-radius: 50px;
+        border-radius: 3px;
         font-weight: 500;
         color: #fff;
         padding: 0.5rem 1rem;
         transition: all 0.3s ease;
-        border: 1px solid #7d8385;
+        border: 1px solid #3d4648;
     }
 
     .feature-switch .nav-link.active {
-        background-color: #122322;
+        background-color: #060f11;
         color: #fff;
         /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.4); */
-        border: 1px solid #00d992;
+        border: 1px solid #3d4648;
     }
 
     .feature-switch .nav-link:hover:not(.active) {
@@ -819,7 +771,8 @@
         /* max-width: 750px; */
         margin: 0 auto;
         background: #060f11;
-        border-radius: 16px;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
         padding: 2rem;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
@@ -836,9 +789,10 @@
     }
 
     .btn-primary {
-        /* background-color: #fff; */
-        border: none;
-        border-radius: 50px;
+        background-color: #060f11;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
+        color: #afafaf;
         padding: 0.6rem 1.5rem;
         /* margin-top: 1.2rem; */
         transition: 0.3s;
@@ -880,8 +834,6 @@
                         <div class="row align-items-center">
                             <div class="col-lg-7">
                                 <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
-                                    <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Skills Marketplace</span>
                                     <h1 class="mb-2">Showcase your talent <span>and</span> reach verified employers.</h1>
                                     <p class="mb-4">Future Connect’s Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
                                     <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore skills marketplace<i class="ti ti-chevron-right ms-1"></i></a>
@@ -1042,7 +994,7 @@
                                     </div>
                                     <h6 class="mb-1">Browse a product</h6>
                                     <p>Everything you need for your craft — safe payments through Future Connect.</p>
-                                    <a href="{{ route('user.products.index') }}" class="btn btn-primary rounded-pill">Explore products<i class="ti ti-chevron-right"></i></a>
+                                    <a href="{{ route('user.products.index') }}" class="btn btn-primary">Explore products<i class="ti ti-chevron-right"></i></a>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -1052,7 +1004,7 @@
                                     </div>
                                     <h6 class="mb-1">Sell a product</h6>
                                     <p>Our Marketplace lets creators showcase digital products</p>
-                                    <a href="#" class="btn btn-primary rounded-pill">Find a product<i class="ti ti-chevron-right"></i></a>
+                                    <a href="#" class="btn btn-primary">Find a product<i class="ti ti-chevron-right"></i></a>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">
@@ -1062,7 +1014,7 @@
                                     </div>
                                     <h6 class="mb-1">Become a seller</h6>
                                     <p>Sellers earn instantly — FC keeps a small fee for logistics & support.</p>
-                                    <a class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
+                                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -1725,7 +1677,8 @@
     .talent-card {
         background: #060f11;
         color: #afafaf;
-        border-radius: 16px;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
         padding: 1.5rem;
         text-align: left;
         display: flex;

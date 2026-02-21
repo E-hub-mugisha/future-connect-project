@@ -53,7 +53,8 @@ $categories = \App\Models\Category::all();
         background: #060f11;
         color: #fff;
         padding: 1rem 0;
-        border-radius: 2rem;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -283,9 +284,10 @@ $categories = \App\Models\Category::all();
 
 
     .hero-tab {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
+        /* background: rgba(255, 255, 255, 0.1); */
+        /* backdrop-filter: blur(10px); */
+        border-radius: 3px;
+        border: 1px solid #3d4648;
         padding: 2rem;
         color: #f1f1f1;
     }
@@ -301,9 +303,11 @@ $categories = \App\Models\Category::all();
     }
 
     .btn-light {
-        border-radius: 50px;
+        border-radius: 3px;
         font-weight: 600;
         padding: 0.6rem 1.5rem;
+        background: #060f11;
+        color: #afafaf;
     }
 
     #market-section {
@@ -347,7 +351,7 @@ $categories = \App\Models\Category::all();
     .step-title {
         font-size: 1.25rem;
         font-weight: 700;
-        color: #34495e;
+        color: #afafaf;
         margin-bottom: .7rem;
     }
 
@@ -379,7 +383,7 @@ $categories = \App\Models\Category::all();
     .btn-danger {
         padding: .6rem 1.5rem;
         font-weight: 600;
-        border-radius: .5rem;
+        border-radius: 3px;
         transition: all 0.25s ease-in-out;
     }
 
@@ -416,13 +420,20 @@ $categories = \App\Models\Category::all();
         font-size: .95rem;
     }
 
+    .form-control,
+    .form-select {
+        color: #afafaf;
+        background: #161d21;
+    }
+
     /* Modal glass style */
     .modal-glass .modal-content {
-        background: rgba(255, 255, 255, 0.69);
-        backdrop-filter: blur(15px) saturate(180%);
+        /* background: rgba(255, 255, 255, 0.69); */
+        /* backdrop-filter: blur(15px) saturate(180%); */
         -webkit-backdrop-filter: blur(15px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 1rem;
+        border: 1px solid #3d4648;
+        ;
+        border-radius: 3px;
     }
 
     .seller-info-content {
@@ -593,58 +604,12 @@ $categories = \App\Models\Category::all();
                                             gap: 6px;
                                             padding: 6px 16px;
                                             color: #fff;
-                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-                                            border-radius: 30px;
+                                            background: #060f11;
+                                            border: 1px solid #3d4648;
+                                            border-radius: 3px;
                                             text-decoration: none;
                                             overflow: hidden;
                                             z-index: 1;
-                                        }
-
-                                        .slide-line {
-                                            position: absolute;
-                                            top: 100%;
-                                            left: -100%;
-                                            width: 200%;
-                                            height: 100%;
-                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                            transform: rotate(45deg);
-                                            animation: slideRightUp 2s ease-in-out infinite;
-                                            z-index: 0;
-                                        }
-
-                                        .slide-line:nth-child(2) {
-                                            animation-delay: 0s;
-                                            opacity: 0;
-                                            width: 50%;
-                                        }
-
-                                        .slide-line:nth-child(3) {
-                                            animation-delay: 0s;
-                                            opacity: 0.5;
-                                            width: 150%;
-                                        }
-
-                                        .slide-line:nth-child(4) {
-                                            animation-delay: 0.8s;
-                                            opacity: 0.7;
-                                            width: 200%;
-                                        }
-
-                                        @keyframes slideRightUp {
-                                            0% {
-                                                top: 100%;
-                                                left: -100%;
-                                            }
-
-                                            50% {
-                                                top: 0%;
-                                                left: 0%;
-                                            }
-
-                                            100% {
-                                                top: -100%;
-                                                left: 100%;
-                                            }
                                         }
 
                                         .slide-line-btn span {
@@ -653,10 +618,7 @@ $categories = \App\Models\Category::all();
                                     </style>
 
                                     <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i>Read More
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
+                                        <i class="feather-arrow-right"></i>view skills
                                     </a>
 
                                 </div>
@@ -840,6 +802,9 @@ $categories = \App\Models\Category::all();
                     <span><i class="ti ti-speakerphone"></i></span>
                     <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
                     <p>{{ optional($cat->talents)->count() ?? 0 }} skills</p>
+                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
+                        <i class="feather-arrow-right"></i>view skills
+                    </a>
                 </div>
             </div>
             @endforeach
@@ -955,11 +920,10 @@ $categories = \App\Models\Category::all();
 <!-- Glassmorphic Search Modal -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+        <div class="modal-content overflow-hidden">
 
             <!-- Modal Header -->
-            <div class="modal-header border-0 bg-gradient text-white"
-                style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+            <div class="modal-header text-white">
                 <h5 class="modal-title fw-bold" id="searchModalLabel">
                     🔎 Find Your skills
                 </h5>
@@ -975,13 +939,13 @@ $categories = \App\Models\Category::all();
                             <span class="input-group-text bg-transparent border-0">
                                 <i class="ti ti-search text-primary"></i>
                             </span>
-                            <input type="text" name="keyword" class="form-control rounded-3 border-0 shadow-sm"
+                            <input type="text" name="keyword" class="form-control"
                                 placeholder="Search talents, skills, or names..." value="{{ request('keyword') }}">
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <select name="category" class="form-select form-select-lg rounded-3 border-0 shadow-sm">
+                        <select name="category" class="form-select form-select-lg" style="background: #161d21;color: aliceblue;">
                             <option value="">All Categories</option>
                             @foreach($categories as $cat)
                             <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
@@ -993,10 +957,10 @@ $categories = \App\Models\Category::all();
 
                     <!-- Footer -->
                     <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
-                        <button type="button" class="btn btn-light border rounded-3 px-4 py-2 shadow-sm" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-light border rounded-3 px-4 py-2" data-bs-dismiss="modal">
                             Cancel
                         </button>
-                        <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">
+                        <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 fw-semibold">
                             Search
                         </button>
                     </div>
@@ -1071,8 +1035,8 @@ $categories = \App\Models\Category::all();
 <!-- Talent Modal -->
 <div class="modal fade modal-glass" id="talentModal" tabindex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-            <div class="modal-header border-0 bg-gradient text-white" style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+        <div class="modal-content overflow-hidden">
+            <div class="modal-header  text-white">
                 <h5 class="modal-title fw-bold" id="talentModalLabel">Skill Registration</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -1089,11 +1053,11 @@ $categories = \App\Models\Category::all();
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Names</label>
-                                <input type="text" name="name" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g John Doe" required>
+                                <input type="text" name="name" class="form-control" placeholder="e.g John Doe" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Address</label>
-                                <input type="text" name="address" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g Kigali, Rwanda" required>
+                                <input type="text" name="address" class="form-control" placeholder="e.g Kigali, Rwanda" required>
                             </div>
                         </div>
                         <div class="text-end mt-4">
@@ -1108,11 +1072,11 @@ $categories = \App\Models\Category::all();
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Phone</label>
-                                <input type="text" name="phone" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g +250 788 123 456" required>
+                                <input type="text" name="phone" class="form-control" placeholder="e.g +250 788 123 456" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Email</label>
-                                <input type="email" name="email" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g john.doe@example.com" required>
+                                <input type="email" name="email" class="form-control" placeholder="e.g john.doe@example.com" required>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-4">
@@ -1128,7 +1092,7 @@ $categories = \App\Models\Category::all();
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Languages Spoken</label>
-                                <input type="text" name="language" class="form-control rounded-3 border-0 shadow-sm" placeholder="e.g English, Kinyarwanda" required>
+                                <input type="text" name="language" class="form-control" placeholder="e.g English, Kinyarwanda" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Skill Category</label>
@@ -1141,7 +1105,7 @@ $categories = \App\Models\Category::all();
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-semibold">Description</label>
-                                <textarea name="description" class="form-control rounded-3 border-0 shadow-sm" rows="3" placeholder="Describe your talent..."></textarea>
+                                <textarea name="description" class="form-control" rows="3" placeholder="Describe your talent..." style="color: #afafaf;"></textarea>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-4">
@@ -1156,7 +1120,7 @@ $categories = \App\Models\Category::all();
                         <div class="info-note">Add a professional photo for your profile.</div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Profile Image</label>
-                            <input type="file" name="image" class="form-control rounded-3 border-0 shadow-sm" accept="image/*" required>
+                            <input type="file" name="image" class="form-control" accept="image/*" required>
                             <div class="invalid-feedback">Please upload a valid image file. Accepts: .jpg, .jpeg, .png</div>
                         </div>
                         <div class="form-check mt-3 mb-3">

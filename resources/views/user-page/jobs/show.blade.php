@@ -6,14 +6,15 @@
     .postLists {
         display: flex;
         flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-shadow: 0 1px #fff;
+        border: 1px solid #3d4648;
+        border-radius: 3px;
+        /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
+        /* box-shadow: 0 1em 1em #1f2d3d26; */
+        /* text-shadow: 0 1px #fff; */
         transition: .25s;
         margin-bottom: 1.5rem;
     }
+
 </style>
 
 <div class="page-content" style="transform: none;">
@@ -48,7 +49,7 @@
                                 <div class="blog-wrap">
                                     <p>{{ $job->description }}</p>
                                 </div>
-                                
+
                             </div>
                             <div class="d-flex align-items-center mb-4">
                                 <h3><strong>Skills Required:</strong></h3>
@@ -65,14 +66,14 @@
                                         <img src="{{ asset('assets/img/user/user-06.jpg') }}" class="img-fluid" alt="img">
                                     </div>
                                     <div class="author-detail">
-                                        <h6>{{ $job->company->name }}</h6>
+                                        <h6 style="color: #afafaf;">{{ $job->company->name }}</h6>
                                         <p>I am experienced project manager and consultant with a rich background in digital project execution and freelance talent acquisition. </p>
                                     </div>
                                 </div>
                             </div>
 
                             <button
-                                class="btn btn-primary w-50 rounded-pill buy-job-btn"
+                                class="btn btn-primary w-50 buy-job-btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#jobModal">
                                 Apply for this job
@@ -124,12 +125,12 @@
                                         </div>
                                         <div class="post-info">
                                             <h6>
-                                                <a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a>
+                                                <a href="{{ route('user.jobs.show',$job->id) }}" style="color: #afafaf;">{{ $job->title }}</a>
                                             </h6>
                                             <div class="blog-user">
                                                 <div class="blog-user-info">
-                                                    <p>{{ $job->company->name }}</p>
-                                                    <p class="xs-text">{{ $job->updated_at->format('M d, Y') }}</p>
+                                                    <p style="color: #afafaf;">{{ $job->company->name }}</p>
+                                                    <p style="color: #afafaf;">{{ $job->updated_at->format('M d, Y') }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,11 +176,10 @@
 
 <div class="modal fade" id="jobModal" tabindex="-1" aria-labelledby="jobModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="modal-content overflow-hidden">
 
             {{-- Modal Header --}}
-            <div class="modal-header border-0 bg-gradient text-white"
-                    style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
+            <div class="modal-header text-white">
                 <h5 class="modal-title fw-bold" id="jobModalLabel{{ $job->id }}">
                     <i class="bi bi-job-detailed me-2"></i> Apply for this job
                 </h5>
@@ -192,13 +192,13 @@
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Cover Letter</label>
-                        <textarea name="cover_letter" class="form-control form-control-lg rounded-3 border-0 shadow-sm" rows="4">{{ old('cover_letter') }}</textarea>
+                        <textarea name="cover_letter" class="form-control form-control-lg" rows="4" style="color: #afafaf;">{{ old('cover_letter') }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Resume (PDF/DOC)</label>
-                        <input type="file" name="resume" class="form-control form-control-lg rounded-3 border-0 shadow-sm">
+                        <input type="file" name="resume" class="form-control form-control-lg">
                     </div>
-                    <button class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">Submit Application</button>
+                    <button class="btn btn-primary px-5 py-2 fw-semibold">Submit Application</button>
                 </form>
             </div>
 

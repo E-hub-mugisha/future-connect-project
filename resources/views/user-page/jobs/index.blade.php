@@ -9,7 +9,8 @@
         background: #060f11;
         color: #fff;
         padding: 1rem 0;
-        border-radius: 2rem;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -231,7 +232,7 @@
         background-color: #122322;
         color: #fff;
         /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
-        border: 1px solid #00d992;
+        border: 1px solid #00a667;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -240,9 +241,10 @@
 
 
     .hero-tab {
-        background: rgba(255, 255, 255, 0.1);
+        /* background: rgba(255, 255, 255, 0.1); */
         backdrop-filter: blur(10px);
-        border-radius: 16px;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
         padding: 2rem;
         color: #f1f1f1;
     }
@@ -258,7 +260,10 @@
     }
 
     .btn-light {
-        border-radius: 50px;
+        border-radius: 3px;
+        border: 1px solid #3d4648;
+        background: #060f11;
+        color: #afafaf;
         font-weight: 600;
         padding: 0.6rem 1.5rem;
     }
@@ -416,7 +421,8 @@
                                         padding: 6px 16px;
                                         color: #fff;
                                         background: #060f11;
-                                        border-radius: 30px;
+                                        border-radius: 3px;
+                                        border: 1px solid #3d4648;
                                         text-decoration: none;
                                         overflow: hidden;
                                         z-index: 1;
@@ -434,40 +440,7 @@
                                         z-index: 0;
                                     }
 
-                                    .slide-line:nth-child(2) {
-                                        animation-delay: 0s;
-                                        opacity: 0;
-                                        width: 50%;
-                                    }
-
-                                    .slide-line:nth-child(3) {
-                                        animation-delay: 0s;
-                                        opacity: 0.5;
-                                        width: 150%;
-                                    }
-
-                                    .slide-line:nth-child(4) {
-                                        animation-delay: 0.8s;
-                                        opacity: 0.7;
-                                        width: 200%;
-                                    }
-
-                                    @keyframes slideRightUp {
-                                        0% {
-                                            top: 100%;
-                                            left: -100%;
-                                        }
-
-                                        50% {
-                                            top: 0%;
-                                            left: 0%;
-                                        }
-
-                                        100% {
-                                            top: -100%;
-                                            left: 100%;
-                                        }
-                                    }
+                                    
 
                                     .slide-line-btn span {
                                         pointer-events: none;
@@ -476,9 +449,6 @@
 
                                 <a href="{{ route('user.jobs.index', ['category' => $cat->id]) }}" class="slide-line-btn">
                                     <i class="feather-arrow-right"></i>Read More
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
                                 </a>
                             </div>
                         </div>
@@ -657,17 +627,8 @@
                             <div class="gigs-grid">
                                 <div class="gigs-img">
                                     <a href="{{ route('user.jobs.show',$job->id) }}"><img src="assets/img/blog/blog-01.jpg" class="img-fluid" alt="img"></a>
-                                    <div class="card-overlay-badge">
-                                        <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a>
-                                        <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
-                                    </div>
-                                    <div class="fav-selection"><a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a></div>
                                 </div>
                                 <div class="gigs-content">
-                                    <div class="gigs-info">
-                                        <a href="{{ route('user.jobs.show',$job->id) }}" class="badge bg-primary-light">{{ $job->category->name ?? 'Website Promotion' }}</a>
-                                        <div class="star-rate"><span><i class="fa-solid fa-star"></i>5.0</span></div>
-                                    </div>
                                     <div class="gigs-title">
                                         <h3><a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a></h3>
                                     </div>
@@ -682,7 +643,7 @@
                                     </ul>
                                     <div class="gigs-card-footer gap-2">
                                         <h5>${{ $job->salary_range }}</h5>
-                                        <span class="badge">view details</span>
+                                        <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge">view details</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -705,17 +666,8 @@
                                 <div class="gigs-grid">
                                     <div class="gigs-img">
                                         <a href="{{ route('user.jobs.show',$job->id) }}"><img src="assets/img/blog/blog-01.jpg" class="img-fluid" alt="img"></a>
-                                        <div class="card-overlay-badge">
-                                            <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-warning"><i class="feather-star"></i>{{ $job->location ?? 'Remote' }}</span></a>
-                                            <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>Hot</span></a>
-                                        </div>
-                                        <div class="fav-selection"><a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a></div>
                                     </div>
                                     <div class="gigs-content">
-                                        <div class="gigs-info">
-                                            <a href="{{ route('user.jobs.show',$job->id) }}" class="badge bg-primary-light">{{ $job->category->name ?? 'Website Promotion' }}</a>
-                                            <div class="star-rate"><span><i class="fa-solid fa-star"></i>5.0</span></div>
-                                        </div>
                                         <div class="gigs-title">
                                             <h3><a href="{{ route('user.jobs.show',$job->id) }}">{{ $job->title }}</a></h3>
                                         </div>
@@ -730,7 +682,7 @@
                                         </ul>
                                         <div class="gigs-card-footer gap-2">
                                             <h5>${{ $job->salary_range }}</h5>
-                                            <span class="badge">view details</span>
+                                            <a href="{{ route('user.jobs.show',$job->id) }}"><span class="badge">view details</span></a>
                                         </div>
                                     </div>
                                 </div>

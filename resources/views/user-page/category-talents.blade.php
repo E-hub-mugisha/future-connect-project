@@ -35,20 +35,7 @@
 
 
 <style>
-    .postLists.cards .post-item.m-card {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-align: center;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 4.75rem;
 
-    }
 
     .postLists.cards .post-item.m-card .img {
         position: relative;
@@ -134,7 +121,7 @@
         padding: 6px 16px;
         color: #fff;
         background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-        border-radius: 30px;
+        border-radius: 2px;
         text-decoration: none;
         overflow: hidden;
         z-index: 1;
@@ -224,58 +211,12 @@
                                             gap: 6px;
                                             padding: 6px 16px;
                                             color: #fff;
-                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-                                            border-radius: 30px;
+                                            background: #060f11;
+                                            border: 1px solid #3d4648;
+                                            border-radius: 3px;
                                             text-decoration: none;
                                             overflow: hidden;
                                             z-index: 1;
-                                        }
-
-                                        .slide-line {
-                                            position: absolute;
-                                            top: 100%;
-                                            left: -100%;
-                                            width: 200%;
-                                            height: 100%;
-                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                            transform: rotate(45deg);
-                                            animation: slideRightUp 2s ease-in-out infinite;
-                                            z-index: 0;
-                                        }
-
-                                        .slide-line:nth-child(2) {
-                                            animation-delay: 0s;
-                                            opacity: 0;
-                                            width: 50%;
-                                        }
-
-                                        .slide-line:nth-child(3) {
-                                            animation-delay: 0s;
-                                            opacity: 0.5;
-                                            width: 150%;
-                                        }
-
-                                        .slide-line:nth-child(4) {
-                                            animation-delay: 0.8s;
-                                            opacity: 0.7;
-                                            width: 200%;
-                                        }
-
-                                        @keyframes slideRightUp {
-                                            0% {
-                                                top: 100%;
-                                                left: -100%;
-                                            }
-
-                                            50% {
-                                                top: 0%;
-                                                left: 0%;
-                                            }
-
-                                            100% {
-                                                top: -100%;
-                                                left: 100%;
-                                            }
                                         }
 
                                         .slide-line-btn span {
@@ -284,10 +225,7 @@
                                     </style>
 
                                     <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i>Read More
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
+                                        <i class="feather-arrow-right"></i>view skills
                                     </a>
 
                                 </div>
@@ -308,12 +246,12 @@
         display: flex;
         align-items: center;
         flex-direction: column;
-        /* border: 1px solid #fff; */
-        border-radius: 1em;
+        border: 1px solid #3d4648;
+        border-radius: 3px;
         /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
-        box-shadow: 0 1em 1em #1f2d3d26;
+        /* box-shadow: 0 1em 1em #1f2d3d26; */
         text-align: center;
-        text-shadow: 0 1px #fff;
+        /* text-shadow: 0 1px #fff; */
         transition: .25s;
         margin-bottom: 4.75rem;
 
@@ -471,6 +409,30 @@
                     <span><i class="ti ti-speakerphone"></i></span>
                     <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
                     <p>{{ optional($cat->talents)->count() ?? 0 }} skills</p>
+                    <style>
+                        .slide-line-btn {
+                            position: relative;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 6px;
+                            padding: 6px 16px;
+                            color: #fff;
+                            background: #060f11;
+                            border: 1px solid #3d4648;
+                            border-radius: 3px;
+                            text-decoration: none;
+                            overflow: hidden;
+                            z-index: 1;
+                        }
+
+                        .slide-line-btn span {
+                            pointer-events: none;
+                        }
+                    </style>
+
+                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
+                        <i class="feather-arrow-right"></i>view skills
+                    </a>
                 </div>
             </div>
             @endforeach
@@ -618,9 +580,7 @@
                             <div class="text-center d-flex justify-content-center">
                                 <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
                                     <i class="feather-arrow-right"></i>View Profile
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
+                                    
                                 </a>
                             </div>
 
@@ -690,9 +650,7 @@
                                 <div class="text-center d-flex justify-content-center">
                                     <a href="{{ route('user.talent.details', $talent->id) }}" class="slide-line-btn">
                                         <i class="feather-arrow-right"></i>View Profile
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
+                                        
                                     </a>
                                 </div>
 
