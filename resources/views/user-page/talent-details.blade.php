@@ -15,14 +15,15 @@
         display: flex;
         /* align-items: center; */
         /* flex-direction: column; */
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
+        border: 1px solid #3d4648;
+        border-radius: 3px;
+        background: #060f11;
+        /* box-shadow: 0 1em 1em #1f2d3d26; */
         /* text-align: center; */
-        text-shadow: 0 1px #fff;
+        /* text-shadow: 0 1px #fff; */
         transition: .25s;
         margin-bottom: 1.75rem;
+        color: #afafaf;
 
     }
 </style>
@@ -108,58 +109,12 @@
                                         gap: 6px;
                                         padding: 6px 16px;
                                         color: #fff;
-                                        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-                                        border-radius: 30px;
+                                        /* background: linear-gradient(165deg, #011E34 15%, #319BF9 100%); */
+                                        border-radius: 3px;
+                                        border: 1px solid #3d4648;
                                         text-decoration: none;
                                         overflow: hidden;
                                         z-index: 1;
-                                    }
-
-                                    .slide-line {
-                                        position: absolute;
-                                        top: 100%;
-                                        left: -100%;
-                                        width: 200%;
-                                        height: 100%;
-                                        background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                        transform: rotate(45deg);
-                                        animation: slideRightUp 2s ease-in-out infinite;
-                                        z-index: 0;
-                                    }
-
-                                    .slide-line:nth-child(2) {
-                                        animation-delay: 0s;
-                                        opacity: 0;
-                                        width: 50%;
-                                    }
-
-                                    .slide-line:nth-child(3) {
-                                        animation-delay: 0s;
-                                        opacity: 0.5;
-                                        width: 150%;
-                                    }
-
-                                    .slide-line:nth-child(4) {
-                                        animation-delay: 0.8s;
-                                        opacity: 0.7;
-                                        width: 200%;
-                                    }
-
-                                    @keyframes slideRightUp {
-                                        0% {
-                                            top: 100%;
-                                            left: -100%;
-                                        }
-
-                                        50% {
-                                            top: 0%;
-                                            left: 0%;
-                                        }
-
-                                        100% {
-                                            top: -100%;
-                                            left: 100%;
-                                        }
                                     }
 
                                     .slide-line-btn span {
@@ -168,16 +123,8 @@
                                 </style>
                                 <a role="button" tabindex="0" data-bs-toggle="modal" data-bs-target="#support_talent"
                                     class="btn slide-line-btn mb-0">Support Talent
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
+                                    
                                 </a>
-                                <!-- <a role="button" tabindex="0" href="{{ route('talent.stories', $talent->id) }}"
-                                    class="btn slide-line-btn mb-0">My Stories
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                </a> -->
                             </div>
                             <div class="service-widget mt-4">
                                 <h5 class="">Share Talent Profile</h5>
@@ -364,24 +311,7 @@
                                                                             </div>
 
                                                                         </div>
-                                                                        <div class="card-overlay-badge">
-                                                                            <a href="{{ url('/course/category/'.$course->slug) }}">
-                                                                                <span class="badge bg-warning">
-                                                                                    <i class="feather-star"></i>{{ $course->category->name ?? 'Uncategorized' }}
-                                                                                </span>
-                                                                            </a>
-                                                                            <a href="{{ url('/course/category/'.$course->slug) }}">
-                                                                                <span class="badge bg-danger">
-                                                                                    <i class="fa-solid fa-meteor"></i>
-                                                                                    {{ $course->category->name ?? 'Uncategorized' }}
-                                                                                </span>
-                                                                            </a>
-                                                                        </div>
-                                                                        <div class="fav-selection">
-                                                                            <a role="button" tabindex="0"><i class="feather-video"></i></a>
-                                                                            <a role="button" tabindex="0" class="fav-icon"><i
-                                                                                    class="feather-heart"></i></a>
-                                                                        </div>
+                                                                        
                                                                     </div>
                                                                     <div class="gigs-content">
                                                                         <div class="gigs-info">
@@ -390,7 +320,6 @@
                                                                                     class="badge bg-light">
                                                                                     {{ $course->category->name ?? 'Uncategorized' }}
                                                                                 </a>
-                                                                                <span class="ms-2">+1</span>
                                                                             </div>
                                                                             <div class="star-rate">
                                                                                 <span>
@@ -442,7 +371,7 @@
                             </div>
                             <div class="tab-pane fade" id="review" role="tabpanel">
 
-                                <div class="row">
+                                <div class="row p-4">
                                     <div class="review-widget col-md-6">
 
                                         {{-- Reviews Title --}}
@@ -551,7 +480,7 @@
                                             </div>
 
                                             <div class="form-wrap form-focus mb-3">
-                                                <label class="mb-1 fw-medium text-dark">Your Rating <span class="text-primary">*</span></label>
+                                                <label class="mb-1 fw-medium">Your Rating <span class="text-primary">*</span></label>
 
                                                 <div class="star-rating">
                                                     <input type="radio" name="rating" id="star5" value="5" required>
@@ -575,19 +504,19 @@
                                             <div class="row">
                                                 <div class="col-lg-6 mb-3">
                                                     <div class="form-wrap form-focus">
-                                                        <label class="mb-1 fw-medium text-dark">Name <span class="text-primary">*</span></label>
+                                                        <label class="mb-1 fw-medium">Name <span class="text-primary">*</span></label>
                                                         <input type="text" name="name" class="form-control" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 mb-3">
                                                     <div class="form-wrap form-focus">
-                                                        <label class="mb-1 fw-medium text-dark">Email <span class="text-primary">*</span></label>
+                                                        <label class="mb-1 fw-medium">Email <span class="text-primary">*</span></label>
                                                         <input type="email" name="email" class="form-control" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 mb-3">
                                                     <div class="form-wrap form-focus">
-                                                        <label class="mb-1 fw-medium text-dark">Write a Review <span class="text-primary">*</span></label>
+                                                        <label class="mb-1 fw-medium">Write a Review <span class="text-primary">*</span></label>
                                                         <textarea name="comment" class="form-control text-area" required></textarea>
                                                     </div>
                                                 </div>

@@ -6,11 +6,9 @@
     .postLists {
         display: flex;
         flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-shadow: 0 1px #fff;
+        border: 1px solid #3d4648;
+        border-radius: 3px;
+        background: #060f11;
         transition: .25s;
         margin-bottom: 1.5rem;
     }
@@ -18,7 +16,7 @@
 
 <!-- Sign In -->
 <div class="row gx-0 justify-content-center">
-    <div class="col-md-9">
+    <div class="col-md-6">
         <div class="login-wrapper">
             <div class="login-content">
                 <form method="POST" action="{{ route('register') }}">
