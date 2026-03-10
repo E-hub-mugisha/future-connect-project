@@ -25,12 +25,13 @@
 </style>
 <style>
     #tranding {
-        position: relative;
+        /* position: relative; */
         overflow: hidden;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        background: #060f11;
         color: #fff;
         padding: 1rem 0;
-        border-radius: 2rem;
+        border-radius: 0.1rem;
+        border: 1px solid #3d4648;
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -260,12 +261,13 @@
 
 
     .hero-tab {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
-        padding: 2rem;
-        color: #f1f1f1;
-    }
+    /* background: rgba(255, 255, 255, 0.1); */
+    backdrop-filter: blur(10px);
+    border-radius: 2px;
+    border: 1px solid #3d4648;
+    padding: 2rem;
+    color: #f1f1f1;
+}
 
     .hero-tab h4 {
         font-weight: 600;
@@ -303,7 +305,7 @@
                 <div class="col-lg-8">
                     <div class="banner-content aos-init aos-animate" data-aos="fade-up">
                         <div class="banner-head mt-4">
-                            <h1 class="mb-2 text-white">Your gateway to share skills, opportunities, and grow your skills.</h1>
+                            <h1 class="mb-2" style="color: #afafaf;">Your gateway to share skills, opportunities, and grow your skills.</h1>
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
