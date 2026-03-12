@@ -3,15 +3,29 @@
 @section('content')
 
 <style>
+    html, body, .main-wrapper {
+        height: 100%;
+    }
 
+    .main-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        width: 100%;
+    }
     .postLists {
         display: flex;
         flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-shadow: 0 1px #fff;
+        border: 1px solid #3d4648;
+        border-radius: 3px;
+        background: #060f11;
         transition: .25s;
         margin-bottom: 1.5rem;
     }
@@ -19,7 +33,7 @@
 
 <!-- Sign In -->
 <div class="row gx-0 justify-content-center">
-    <div class="col-lg-6">
+    <div class="col-md-6">
         <div class="login-wrapper">
             <div class="login-content">
                 <form method="POST" action="{{ route('login') }}">
@@ -28,7 +42,7 @@
                         <div class="login-logo">
                             <img src="assets/img/logo.svg" alt="img">
                         </div>
-                        <div class="login-card">
+                        <div class="login-card row">
                             <div class="login-heading">
                                 <h3>Hi, Welcome Back!</h3>
                                 <p>Fill the fields to get into your account</p>

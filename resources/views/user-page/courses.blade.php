@@ -3,27 +3,6 @@
 @section('content')
 
 <style>
-    .talent-story-info {
-        background: #011E34;
-        color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .postLists {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 1.5rem;
-    }
-</style>
-<style>
     #tranding {
         /* position: relative; */
         overflow: hidden;
@@ -247,12 +226,15 @@
         font-weight: 500;
         padding: 0.6rem 1.5rem;
         transition: all 0.3s ease;
+        border: 1px solid #FFFDFB;
+
     }
 
     .nav-pills .nav-link.active {
-        background-color: #0d6efd;
+        background-color: #122322;
         color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
+        border: 1px solid #00a667;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -261,13 +243,13 @@
 
 
     .hero-tab {
-    /* background: rgba(255, 255, 255, 0.1); */
-    backdrop-filter: blur(10px);
-    border-radius: 2px;
-    border: 1px solid #3d4648;
-    padding: 2rem;
-    color: #f1f1f1;
-}
+        /* background: rgba(255, 255, 255, 0.1); */
+        backdrop-filter: blur(10px);
+        border-radius: 2px;
+        border: 1px solid #3d4648;
+        padding: 2rem;
+        color: #f1f1f1;
+    }
 
     .hero-tab h4 {
         font-weight: 600;
@@ -280,7 +262,10 @@
     }
 
     .btn-light {
-        border-radius: 50px;
+        border-radius: 5px;
+        border: 1px solid #3d4648;
+        background: #060f11;
+        color: #afafaf;
         font-weight: 600;
         padding: 0.6rem 1.5rem;
     }
@@ -294,58 +279,237 @@
     }
 
     #market-section .provide-box {
-        background: #d4e6f526;
+        background: #0d1618bd;
         backdrop-filter: blur(15px) saturate(180%);
+    }
+</style>
+
+<style>
+    /* HERO SECTION */
+    .announcement-hero {
+        position: relative;
+        height: 90vh;
+        background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
+            url('assets/img/creative.png') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        padding: 2rem;
+    }
+
+    .announcement-content {
+        z-index: 2;
+        max-width: 800px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 3rem;
+        border-radius: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 1.2s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .announcement-hero h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .announcement-hero p {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+    }
+
+    .highlight {
+        color: #ffdd57;
+        font-weight: 600;
+    }
+
+    /* CTA BUTTONS */
+    .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-hero {
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.8rem 1.6rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-events {
+        background-color: #fff;
+        color: #fff;
+    }
+
+    .btn-events:hover {
+        background-color: #fff;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .btn-announcements {
+        border: 2px solid #fff;
+        color: #fff;
+        background: transparent;
+    }
+
+    .btn-announcements:hover {
+        background-color: #fff;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+</style>
+
+<style>
+    .hero-with-bg {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-bg-carousel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .hero-bg-carousel .carousel-inner,
+    .hero-bg-carousel .carousel-item {
+        height: 100%;
+    }
+
+    .hero-bg-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Video full cover */
+    .hero-bg-media video,
+    .hero-bg-carousel video.hero-bg-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Dark overlay for readability */
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: #12232293;
+        z-index: 1;
+    }
+
+    /* Ensure content stays above background */
+    .hero-with-bg .container {
+        position: relative;
+        z-index: 2;
     }
 </style>
 <div class="container p-4">
     <section id="tranding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                <div class="col-lg-12">
+                    <div class="banner-content">
                         <div class="banner-head mt-4">
                             <h1 class="mb-2" style="color: #afafaf;">Your gateway to share skills, opportunities, and grow your skills.</h1>
                             <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
                         </div>
                         <div class="banner-form">
-                            <!-- Tabs Navigation -->
-                            <ul class="nav nav-pills mb-3" id="heroTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="marketplace-tab" data-bs-toggle="pill" data-bs-target="#marketplace" type="button" role="tab">Learning</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="opportunities-tab" data-bs-toggle="pill" data-bs-target="#opportunities" type="button" role="tab">Opportunities</button>
-                                </li>
-                            </ul>
+                            <!-- Mobile & Tablet Carousel -->
+                            <div id="heroCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
+
+                                <!-- Indicators -->
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                                </div>
+                                <style>
+                                    .carousel-indicators {
+                                        bottom: -15px;
+                                    }
+                                </style>
+                                <!-- Slides -->
+                                <div class="carousel-inner">
+
+                                    <div class="carousel-item active">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color: #afafaf;">Learning center where knowledge meets opportunity</h4>
+                                            <p style="color: #afafaf;">
+                                                Explore our courses and categories to enhance your skills and advance your career.
+                                            </p>
+                                            <a href="#courses" class="btn btn-light">Explore courses</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <div class="hero-tab text-center p-4">
+                                            <h4 style="color: #afafaf;">Unlock New Opportunities</h4>
+                                            <p style="color: #afafaf;">
+                                                You can join the platform and share your skills with contribute to the community
+                                            </p>
+                                            <a href="{{ route('register')}}" class="btn btn-light">Join Platform</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Controls -->
+                                <!-- <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+
+                                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button> -->
+
+                            </div>
+
 
                             <!-- Tabs Content -->
-                            <div class="tab-content" id="heroTabsContent">
+                            <div class="tab-content  row d-none d-md-flex">
                                 <!-- Skills Marketplace -->
-                                <div class="tab-pane hero-tab fade show active" id="marketplace" role="tabpanel">
-                                    <h4 class="text-white">Learning center where knowledge meets opportunity</h4>
-                                    <p class="text-white">
-                                        Explore our courses and categories to enhance your skills and advance your career.
-                                    </p>
-                                    <a href="#courses" class="btn btn-light">Explore courses</a>
+                                <div class="col-md-6" id="marketplace">
+                                    <div class="hero-tab">
+                                        <h4 style="color: #afafaf;">Learning center where knowledge meets opportunity</h4>
+                                        <p style="color: #afafaf;">
+                                            Explore our courses and categories to enhance your skills and advance your career.
+                                        </p>
+                                        <a href="#courses" class="btn btn-light">Explore courses</a>
+                                    </div>
                                 </div>
 
                                 <!-- Opportunities Center -->
-                                <div class="tab-pane hero-tab fade" id="opportunities" role="tabpanel">
-                                    <h4 class="text-white">Unlock New Opportunities</h4>
-                                    <p class="text-white">
-                                        You can join the platform and share your skills with contribute to the community
-                                    </p>
-                                    <a href="{{ route('register')}}" class="btn btn-light">Join Platform</a>
+                                <div class="col-md-6" id="opportunities">
+                                    <div class="hero-tab">
+                                        <h4 style="color: #afafaf;">Unlock New Opportunities</h4>
+                                        <p style="color: #afafaf;">
+                                            You can join the platform and share your skills with contribute to the community
+                                        </p>
+                                        <a href="{{ route('register')}}" class="btn btn-light">Join Platform</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="banner-img">
-                        <div class="banner-img-right">
-                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
                         </div>
                     </div>
                 </div>
@@ -359,7 +523,7 @@
 <div class="page-content">
     <div class="container">
         <div class="title-header">
-            <h3>Trending Learning materials<span class="text-primary">
+            <h3 style="color: #afafaf;">Trending Learning materials<span class="text-primary">
                     categories</span></h3>
             <p>View all learning material and courses offered by skilled people</p>
         </div>
@@ -383,7 +547,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <div class="title-header">
-                        <h3>Learning center & Courses Browse Listing & More <span class="text-primary">
+                        <h3 style="color: #afafaf;">Learning center & Courses Browse Listing & More <span class="text-primary">
                                 {{ $courses->count() }} Courses </span></h3>
                         <p>View all learning material and courses offered by skilled people</p>
                     </div>
@@ -434,11 +598,6 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="card-overlay-badge">
-                                        <a href="{{ route('user.courses', ['category' => $course->category->slug]) }}">
-                                            <span class="badge bg-primary"><i class="feather-star"></i>{{ $course->category->name }}</span>
-                                        </a>
-                                    </div>
                                 </div>
 
                                 <div class="gigs-content">
@@ -477,7 +636,7 @@
                                             ${{ number_format($course->price, 2) }}
                                             @endif
                                         </h5>
-                                        <span class="badge">Delivery in 1 day</span>
+                                        <span class="badge"><a href="{{ route('user.courses.show', $course->slug) }}">View Details</a></span>
                                     </div>
                                 </div>
                             </div>
@@ -487,7 +646,38 @@
                         @endforelse
 
                         <div class="col-md-12">
-                            {{ $courses->links() }}
+                            <!-- Pagination -->
+                            @if ($courses->hasPages())
+                            <div class="pagination">
+                                <ul>
+                                    {{-- Previous --}}
+                                    <li>
+                                        @if ($courses->onFirstPage())
+                                        <a href="javascript:void(0);" class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
+                                        @else
+                                        <a href="{{ $courses->previousPageUrl() }}" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
+                                        @endif
+                                    </li>
+
+                                    {{-- Pages --}}
+                                    @foreach ($courses->getUrlRange(1, $courses->lastPage()) as $page => $url)
+                                    <li>
+                                        <a href="{{ $url }}" @if($page==$courses->currentPage()) class="active" @endif>{{ $page }}</a>
+                                    </li>
+                                    @endforeach
+
+                                    {{-- Next --}}
+                                    <li>
+                                        @if ($courses->hasMorePages())
+                                        <a href="{{ $courses->nextPageUrl() }}" class="next"><i class="fa-solid fa-chevron-right"></i></a>
+                                        @else
+                                        <a href="javascript:void(0);" class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
+                                        @endif
+                                    </li>
+                                </ul>
+                            </div>
+                            @endif
+                            <!-- /Pagination -->
                         </div>
                     </div>
                 </div>

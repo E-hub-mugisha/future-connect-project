@@ -3,6 +3,23 @@
 @section('content')
 
 <style>
+    html, body, .main-wrapper {
+        height: 100%;
+    }
+
+    .main-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        width: 100%;
+    }
     .postLists {
         display: flex;
         flex-direction: column;

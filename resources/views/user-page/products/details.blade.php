@@ -12,19 +12,16 @@
     }
 
     .postLists {
-        display: flex;
-        /* align-items: center; */
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        /* text-align: center; */
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 1.75rem;
-
-    }
+		display: flex;
+		flex-direction: column;
+		border: 1px solid #afafaf;
+		border-radius: 3px;
+		/* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
+		/* box-shadow: 0 1em 1em #1f2d3d26; */
+		/* text-shadow: 0 1px #fff; */
+		transition: .25s;
+		margin-bottom: 1.5rem;
+	}
 </style>
 
 <div class="page-content content" style="transform: none;">
@@ -38,7 +35,7 @@
                     <div class="service-card w-100 mb-4">
                         <div class="service-video-wrap text-center">
                             <div class="service-img-wrap position-relative overflow-hidden" style="width: 100%;">
-                                <img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid w-100 object-fit-cover rounded-4"
+                                <img src="{{ asset('assets/img/service/service-slide-01.jpg') }}" class="img-fluid w-100 object-fit-cover"
                                     alt="Slider Img"
                                     style="height: 30rem; object-fit: cover; transition: transform 0.3s ease;" />
                             </div>
@@ -167,7 +164,7 @@
             <div class="col-lg-4 theiaStickySidebar" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
                 <div class="theiaStickySidebar postLists" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
                     <div class="service-widget">
-                        <div class="service-amt p-3 price-lvl price-lvl bg-dark ">
+                        <div class="service-amt p-3 price-lvl price-lvl">
                             <h3 class="">
                                 <span class="d-block"> Price </span>
                                 {{ $product->price }} RWF
@@ -304,7 +301,7 @@
                                 </p>
                                 <p class="mb-2"><strong>Stock:</strong> {{ $product->stock ?? 'Unlimited' }}</p>
 
-                                <p class="fs-5 text-primary fw-bold mb-3">
+                                <p class="text-primary fw-bold mb-3">
                                     Price: $<span id="modal-price-{{ $product->id }}">{{ number_format($product->price, 2) }}</span>
                                 </p>
 
@@ -341,7 +338,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const modalId = {
             {
-                $product - > id
+                $product -> id
             }
         };
         const qtyInput = document.querySelector('#addToCartModal' + modalId + ' .quantity-input');

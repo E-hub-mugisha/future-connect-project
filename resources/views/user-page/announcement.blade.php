@@ -1,8 +1,22 @@
 @extends('layouts.guest')
-@section('title', 'Announcements')
+@section('title', 'Stay Updated with Future Connect - Latest Announcements and News')
 @section('content')
 
 <style>
+    #tranding {
+        /* position: relative; */
+        overflow: hidden;
+        background: #060f11;
+        color: #fff;
+        padding: 1rem 0;
+        border-radius: 0.1rem;
+        border: 1px solid #3d4648;
+        margin-top: 2rem;
+        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        /* height: 22rem; */
+    }
+
     .talent-story-info {
         background: #011E34;
         color: #fff;
@@ -15,12 +29,12 @@
         display: flex;
         /* align-items: center; */
         flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
+        border: 1px solid #afafaf;
+        border-radius: 3px;
+        /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
+        /* box-shadow: 0 1em 1em #1f2d3d26; */
         /* text-align: center; */
-        text-shadow: 0 1px #fff;
+        /* text-shadow: 0 1px #fff; */
         transition: .25s;
         margin-bottom: 1.5rem;
 
@@ -94,25 +108,35 @@
     }
 </style>
 
-<div class="container">
-    <div class="breadcrumb-bar mt-4 breadcrumb-bar-info postLists">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <nav aria-label="breadcrumb" class="page-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Announcements</li>
-                    </ol>
-                </nav>
-                <h2 class="breadcrumb-title mb-0">
-                    Announcements <span class="text-primary"></span>
-                </h2>
+<div class="container p-4">
+    <section id="tranding">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                        <div class="banner-head">
+                            <h1 class="mb-2">Get latest updates</h1>
+                            <p class="d-inline-flex">Stay informed about the latest news and developments.</p>
+                            <p class="d-inline-flex">Discover new features, upcoming events, and important announcements.</p>
+                        </div>
+                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary mb-3 d-inline-flex align-items-center">
+                            Explore Updates below
+                            <i class="feather-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="banner-img">
+                        <div class="banner-img-right">
+                            <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
+
 
 <div class="page-content content">
     <div class="container">
@@ -135,11 +159,8 @@
                                     <p>{{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}</p>
                                 </div>
                             </div>
-                            <a href="{{ route('user.announcement.details', $ann->id ) }}" class="slide-line-btn">
-                                <i class="feather-arrow-right"></i>Read More
-                                <span class="slide-line"></span>
-                                <span class="slide-line"></span>
-                                <span class="slide-line"></span>
+                            <a href="{{ route('user.announcement.details', $ann->id ) }}" class="btn btn-lg btn-primary mb-3 d-inline-flex align-items-center">
+                                Read More<i class="feather-arrow-right"></i>
                             </a>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     {{-- Footer Top Section --}}
     <div class="footer-top-two py-5">
         <div class="container">
-            <div class="row row-gap-5" data-aos="fade-up">
+            <div class="row row-gap-5">
 
                 {{-- About --}}
                 <div class="col-lg-3 col-sm-6 footer-links">

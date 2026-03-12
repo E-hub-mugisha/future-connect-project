@@ -5,11 +5,11 @@
 <style>
     /* Main container styling */
     .announcement-card {
-        background: #f9f9fb;
-        border-radius: 15px;
+        /* background: #f9f9fb; */
+        border-radius: 3px;
         padding: 30px;
         margin-bottom: 30px;
-        box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.08);
+        /* box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.08); */
         transition: transform 0.3s, box-shadow 0.3s;
     }
 
@@ -42,7 +42,7 @@
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 20px;
-        color: #011E34;
+        /* color: #011E34; */
     }
 
     .announcement-image {
@@ -77,10 +77,10 @@
     }
 
     .related-announcements {
-        background: #fff;
+        /* background: #fff; */
         border-radius: 15px;
         padding: 20px;
-        box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.08);
+        /* box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.08); */
     }
 
     .related-announcement-card {
@@ -113,60 +113,39 @@
         display: flex;
         /* align-items: center; */
         flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
+        border: 1px solid #afafaf;
+        border-radius: 3px;
+        /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
+        /* box-shadow: 0 1em 1em #1f2d3d26; */
         /* text-align: center; */
-        text-shadow: 0 1px #fff;
+        /* text-shadow: 0 1px #fff; */
         transition: .25s;
         margin-bottom: 1.5rem;
 
     }
 </style>
 
-<div class="container">
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-bar mt-4 postLists">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav aria-label="breadcrumb" class="page-breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('user.home') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">Announcement</li>
-                        </ol>
-                    </nav>
-                    <h2 class="breadcrumb-title">{{ $announcement->title }}</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Announcement Content -->
+
 <section class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <!-- Main announcement -->
             <div class="col-lg-8 col-md-12">
                 <div class="announcement-card postLists">
-                    <div class="announcement-meta mb-3">
-                        <span class="badge {{ $announcement->is_active ? 'bg-success' : 'bg-secondary' }}">
-                            {{ $announcement->is_active ? 'Active' : 'Inactive' }}
-                        </span>
-                        <span class="badge bg-info text-dark">{{ $announcement->category->name }}</span>
-                        <span class="author">By {{ $announcement->user->name }}</span>
-                    </div>
-
-                    <h3 class="announcement-title">{{ $announcement->title }}</h3>
-
                     @if($announcement->image)
                     <img src="{{ asset('storage/' . $announcement->image) }}" alt="Announcement Image" class="announcement-image">
                     @else
                     <img src="{{ asset('assets/img/announcement/image.jpg') }}" alt="Default Image" class="announcement-image">
                     @endif
+
+                    <h3 class="announcement-title">{{ $announcement->title }}</h3>
+                    <div class="announcement-meta mb-3">
+                        <span class="badge {{ $announcement->is_active ? 'bg-success' : 'bg-secondary' }}">
+                            {{ $announcement->is_active ? 'Active' : 'Inactive' }}
+                        </span>
+                        <span class="badge" style="color: #afafaf;">{{ $announcement->category->name }}</span>
+                        <span class="author">By {{ $announcement->user->name }}</span>
+                    </div>
 
                     <div class="announcement-content">
                         <p>{!! nl2br(e($announcement->content)) !!}</p>

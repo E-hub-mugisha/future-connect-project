@@ -18,17 +18,27 @@
 	.postLists {
 		display: flex;
 		flex-direction: column;
-		border: 1px solid #fff;
-		border-radius: 1em;
-		background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-		box-shadow: 0 1em 1em #1f2d3d26;
-		text-shadow: 0 1px #fff;
+		border: 1px solid #afafaf;
+		border-radius: 3px;
+		/* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
+		/* box-shadow: 0 1em 1em #1f2d3d26; */
+		/* text-shadow: 0 1px #fff; */
 		transition: .25s;
 		margin-bottom: 1.5rem;
 	}
 </style>
 
-
+<style>
+	.course-list-group-item {
+		position: relative;
+		display: block;
+		padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+		color: var(--bs-list-group-color);
+		text-decoration: none;
+		/* background-color: var(--bs-list-group-bg); */
+		/* border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color); */
+	}
+</style>
 <div class="page-content content">
 	<div class="container">
 
@@ -97,7 +107,7 @@
 						<div class="tab-pane fade active show" id="description" role="tabpanel">
 							<!-- About Gigs -->
 							<div class="service-wrap">
-								<h3>About </h3>
+								<h3 style="color: #afafaf;">About </h3>
 								<p>
 									{{ $course->description }}
 								</p>
@@ -106,58 +116,326 @@
 						</div>
 						<div class="tab-pane fade" id="lesson" role="tabpanel">
 							<!-- Lessons Section -->
-							<div class="service-wrap course-lessons mt-5">
-								<h3>Course Lessons</h3>
+							<div class="service-wrap course-lessons">
+
+								<div class="lessons-header mb-4">
+									<h3 class="lessons-title" style="color: #afafaf;">
+										<i class="fa-solid fa-book-open me-2"></i> Course Lessons
+									</h3>
+									@if($course->lessons->count() > 0)
+									<span class="lessons-count badge" style="background: #afafaf; color: #2e7d32">{{ $course->lessons->count() }} Lessons</span>
+									@endif
+								</div>
 
 								@if($course->lessons->count() > 0)
-								<ul class="list-group list-group-flush">
+								<ul class="lessons-list">
 									@foreach($course->lessons as $key => $lesson)
-									<li class="list-group-item d-flex justify-content-between align-items-center">
-										<span>{{ $key + 1 }}. {{ $lesson->title ?? 'Untitled Lesson' }}</span>
-										<button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#lessonModal{{ $lesson->id }}">
-											<i class="fa-solid fa-eye"></i> View
-										</button>
-									</li>
-
-									<!-- Lesson Modal -->
-									<div class="modal fade" id="lessonModal{{ $lesson->id }}" tabindex="-1" aria-labelledby="lessonModalLabel{{ $lesson->id }}" aria-hidden="true">
-										<div class="modal-dialog modal-lg modal-dialog-centered">
-											<div class="modal-content postLists">
-												<div class="modal-header">
-													<h5 class="modal-title" id="lessonModalLabel{{ $lesson->id }}">
-														{{ $lesson->title ?? 'Untitled Lesson' }}
-													</h5>
-													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-												</div>
-												<div class="modal-body">
-													@if($lesson->video_url)
-													<div class="ratio ratio-16x9 mb-3">
-														<iframe src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($lesson->video_url, 'v=') }}?autoplay=0&playsinline=1"
-															title="{{ $lesson->title ?? 'Lesson Video' }}" allowfullscreen class="rounded-3">
-														</iframe>
-													</div>
-													@else
-													<p class="text-muted">No video available for this lesson.</p>
-													@endif
-													<p>{{ $lesson->description ?? '' }}</p>
-												</div>
-												<div class="modal-footer">
-													<span class="text-muted">Duration: {{ $lesson->duration ?? '-' }}</span>
-													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-												</div>
+									<li class="lesson-item">
+										<div class="lesson-left">
+											<div class="lesson-number">{{ $key + 1 }}</div>
+											<div class="lesson-info">
+												<span class="lesson-title-text">{{ $lesson->title ?? 'Untitled Lesson' }}</span>
+												@if($lesson->duration)
+												<span class="lesson-meta">
+													<i class="fa-regular fa-clock me-1"></i>{{ $lesson->duration }}
+												</span>
+												@endif
 											</div>
 										</div>
-									</div>
-									<!-- /Lesson Modal -->
+										<div class="lesson-right">
+											@if($lesson->video_url)
+											<span class="lesson-type-badge video"><i class="fa-solid fa-play me-1"></i>Video</span>
+											@else
+											<span class="lesson-type-badge text"><i class="fa-solid fa-file-lines me-1"></i>Text</span>
+											@endif
+											<button class="nav-link" data-bs-toggle="modal" data-bs-target="#lessonModal{{ $lesson->id }}">
+												<i class="fa-solid fa-eye me-1"></i> Preview
+											</button>
+										</div>
+									</li>
 
 									@endforeach
 								</ul>
+
 								@else
-								<p class="text-muted">No lessons available for this course yet.</p>
+								<div class="no-lessons-placeholder">
+									<i class="fa-solid fa-book-open"></i>
+									<h5>No Lessons Yet</h5>
+									<p>Lessons for this course haven't been added yet. Check back soon!</p>
+								</div>
 								@endif
+
 							</div>
 							<!-- /Lessons Section -->
 						</div>
+
+						<style>
+							/* Lessons Header */
+							.lessons-header {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+								border-bottom: 1px solid #f0f0f0;
+								padding-bottom: 4px;
+							}
+
+							.lessons-title {
+								font-size: 1.2rem;
+								font-weight: 700;
+								color: #2d2d2d;
+								margin: 0;
+							}
+
+							.lessons-count.badge {
+								background: linear-gradient(135deg, #1d85f5, #0d6efd);
+								color: #fff;
+								font-size: 0.78rem;
+								padding: 6px 14px;
+								border-radius: 50px;
+								font-weight: 600;
+								letter-spacing: 0.3px;
+							}
+
+							/* Lessons List */
+							.lessons-list {
+								list-style: none;
+								padding: 0;
+								margin: 0;
+								display: flex;
+								flex-direction: column;
+								gap: 10px;
+							}
+
+							.lesson-item {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+								/* background: #f8faff; */
+								border: 1px solid #e8efff;
+								border-radius: 3px;
+								padding: 14px 18px;
+								transition: all 0.25s ease;
+							}
+
+							.lesson-item:hover {
+								background: #eef4ff;
+								border-color: #b3ceff;
+								transform: translateY(-1px);
+								box-shadow: 0 4px 16px rgba(13, 110, 253, 0.08);
+							}
+
+							.lesson-left {
+								display: flex;
+								align-items: center;
+								gap: 14px;
+							}
+
+							.lesson-number {
+								width: 36px;
+								height: 36px;
+								border-radius: 50%;
+								/* background: linear-gradient(135deg, #1d85f5, #0d6efd); */
+								color: #fff;
+								border: 1px solid #afafaf;
+								font-size: 0.82rem;
+								font-weight: 700;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								flex-shrink: 0;
+							}
+
+							.lesson-info {
+								display: flex;
+								flex-direction: column;
+								gap: 3px;
+							}
+
+							.lesson-title-text {
+								font-size: 0.95rem;
+								font-weight: 600;
+								color: #afafaf;
+							}
+
+							.lesson-meta {
+								font-size: 0.78rem;
+								color: #afafaf;
+							}
+
+							/* Right Side */
+							.lesson-right {
+								display: flex;
+								align-items: center;
+								gap: 10px;
+							}
+
+							.lesson-type-badge {
+								font-size: 0.73rem;
+								font-weight: 600;
+								padding: 4px 10px;
+								border-radius: 50px;
+								letter-spacing: 0.3px;
+							}
+
+							.lesson-type-badge.video {
+								background: #afafaf;
+								color: #2e7d32;
+							}
+
+							.lesson-type-badge.text {
+								background: #e8f5e9;
+								color: #2e7d32;
+							}
+
+							.btn-view-lesson {
+								/* background: linear-gradient(135deg, #1d85f5, #0d6efd); */
+								color: #fff;
+								border: 1px solid #afafaf;
+								/* border: none; */
+								border-radius: 3px;
+								padding: 7px 16px;
+								font-size: 0.82rem;
+								font-weight: 600;
+								cursor: pointer;
+								transition: all 0.2s ease;
+								white-space: nowrap;
+							}
+
+							.btn-view-lesson:hover {
+								/* background: linear-gradient(135deg, #0d6efd, #0a58ca); */
+								box-shadow: 0 4px 12px rgba(13, 110, 253, 0.35);
+								transform: translateY(-1px);
+							}
+
+							/* Modal */
+							.lesson-modal-content {
+								border: none;
+								border-radius: 16px;
+								overflow: hidden;
+								box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+							}
+
+							.lesson-modal-header {
+								/* background: linear-gradient(135deg, #1d85f5, #0d6efd); */
+								padding: 20px 24px;
+								border: none;
+								display: flex;
+								align-items: flex-start;
+								justify-content: space-between;
+							}
+
+							.modal-title-wrap {
+								display: flex;
+								flex-direction: column;
+								gap: 4px;
+							}
+
+							.modal-lesson-number {
+								font-size: 0.75rem;
+								font-weight: 600;
+								color: rgba(255, 255, 255, 0.7);
+								text-transform: uppercase;
+								letter-spacing: 1px;
+							}
+
+							.lesson-modal-header .modal-title {
+								font-size: 1.1rem;
+								font-weight: 700;
+								color: #fff;
+								margin: 0;
+							}
+
+							.lesson-modal-body {
+								padding: 24px;
+								/* background: #fff; */
+							}
+
+							.video-wrapper {
+								border-radius: 12px;
+								overflow: hidden;
+								box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+							}
+
+							.no-video-placeholder {
+								background: #f8faff;
+								border: 2px dashed #d0dff5;
+								border-radius: 12px;
+								padding: 40px;
+								text-align: center;
+								color: #8a94a6;
+							}
+
+							.no-video-placeholder i {
+								font-size: 2rem;
+								margin-bottom: 10px;
+								display: block;
+							}
+
+							.lesson-description {
+								font-size: 0.93rem;
+								color: #4a4a6a;
+								line-height: 1.7;
+								background: #f8faff;
+								border-left: 3px solid #0d6efd;
+								padding: 14px 18px;
+								border-radius: 0 10px 10px 0;
+							}
+
+							.lesson-modal-footer {
+								/* background: #f8faff; */
+								border-top: 1px solid #eef0f5;
+								padding: 14px 24px;
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+							}
+
+							.duration-badge {
+								font-size: 0.82rem;
+								color: #8a94a6;
+								font-weight: 500;
+							}
+
+							.btn-close-modal {
+								background: #f0f2f5;
+								color: #4a4a6a;
+								border: none;
+								border-radius: 8px;
+								padding: 7px 16px;
+								font-size: 0.82rem;
+								font-weight: 600;
+								cursor: pointer;
+								transition: all 0.2s ease;
+							}
+
+							.btn-close-modal:hover {
+								background: #e2e6ea;
+							}
+
+							/* Empty State */
+							.no-lessons-placeholder {
+								text-align: center;
+								padding: 50px 20px;
+								color: #8a94a6;
+							}
+
+							.no-lessons-placeholder i {
+								font-size: 3rem;
+								margin-bottom: 16px;
+								display: block;
+								color: #c5d0e6;
+							}
+
+							.no-lessons-placeholder h5 {
+								font-weight: 700;
+								color: #4a4a6a;
+								margin-bottom: 8px;
+							}
+
+							.no-lessons-placeholder p {
+								font-size: 0.9rem;
+							}
+						</style>
 						<div class="tab-pane fade" id="review" role="tabpanel">
 
 							<div class="row">
@@ -166,7 +444,7 @@
 									<div class="review-title sort-search-gigs">
 										<div class="row align-items-center">
 											<div class="col-sm-6">
-												<h3>Reviews ({{ $course->feedback->count() }})</h3>
+												<h3 style="color: #afafaf;">Reviews ({{ $course->feedback->count() }})</h3>
 											</div>
 											<div class="col-sm-6">
 												<div class="filters-wrap sort-categories justify-content-end">
@@ -256,10 +534,10 @@
 
 			<!-- Sidebar -->
 			<div class="col-lg-4 theiaStickySidebar">
-				<div class="service-widget member-widget postLists p-4 shadow-sm rounded-4 bg-white">
-					<div class="course-header shadow-sm rounded-4 p-4 mb-4">
+				<div class="service-widget member-widget postLists p-4">
+					<div class="course-header p-4 mb-4">
 						<!-- Course Title -->
-						<h2 class="breadcrumb-title fw-bold mb-3">{{ $course->title }}</h2>
+						<h2 class="breadcrumb-title fw-bold mb-3" style="color: #afafaf;">{{ $course->title }}</h2>
 
 						<!-- Course Info -->
 						<ul class="info-links d-flex flex-wrap gap-3 mb-4 list-unstyled p-0">
@@ -324,7 +602,7 @@
 
 					<style>
 						.course-header {
-							background: #fff;
+							/* background: #fff; */
 							transition: all 0.3s ease;
 						}
 
@@ -334,7 +612,7 @@
 						}
 
 						.info-links li {
-							background: #f7f9fc;
+							/* background: #f7f9fc; */
 							border-radius: 0.5rem;
 							padding: 0.5rem 0.75rem;
 							display: flex;
@@ -344,7 +622,7 @@
 						}
 
 						.info-links li:hover {
-							background: #e6f0ff;
+							/* background: #e6f0ff; */
 						}
 
 						.user-img img {
@@ -359,19 +637,19 @@
 					<!-- Action Buttons -->
 					<div class="d-flex gap-2 flex-wrap">
 						<a href="{{ route('user.talent.details', $course->talent->id) }}"
-							class="btn btn-outline-primary rounded-pill">
+							class="btn btn-outline-primary modern-btn">
 							View Author Profile
 						</a>
 
 						@if($course->is_free)
 						<a href="#enrollModal"
-							class="btn btn-primary rounded-pill modern-btn"
+							class="btn modern-btn"
 							data-bs-toggle="modal">
 							<i class="feather-book-open me-1"></i> Enroll for Free
 						</a>
 						@else
 						<a href="#paymentModal"
-							class="btn btn-primary rounded-pill flex-grow-1 modern-btn"
+							class="btn flex-grow-1 modern-btn"
 							data-bs-toggle="modal">
 							<i class="feather-book-open me-1"></i> Enroll for ${{ number_format($course->price, 2) }}
 						</a>
@@ -407,15 +685,15 @@
 							padding: 0.625rem 1.5rem;
 							font-weight: 600;
 							transition: all 0.3s ease;
-							background: linear-gradient(135deg, #6C63FF, #5CC1FF);
+							/* background: linear-gradient(135deg, #6C63FF, #5CC1FF); */
 							color: #fff;
-							border: none;
-							box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+							border: 1px solid #afafaf;
+							/* box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3); */
 						}
 
 						.modern-btn.btn-outline-primary {
-							color: #6C63FF;
-							border: 2px solid #6C63FF;
+							color: #afafaf;
+							border: 1px solid #afafaf;
 							background: transparent;
 						}
 
@@ -481,54 +759,58 @@
 					</div>
 
 					<div class="gigs-slider owl-carousel">
-						@forelse($relatedCourses as $related)
+						@forelse($relatedCourses as $course)
 						<div class="gigs-grid postLists">
-							<div class="gigs-img">
-								<div class="img-slider">
-									<a href="{{ route('user.courses.show', $related->slug) }}">
-										<img src="{{ asset('image/thumbnails/'.$related->thumbnail) }}" class="img-fluid" alt="{{ $related->title }}">
-									</a>
-								</div>
-								@if($related->is_hot)
-								<div class="card-overlay-badge">
-									<span class="badge bg-danger"><i class="fa-solid fa-meteor"></i> Hot</span>
-								</div>
-								@endif
-								<div class="user-thumb">
-									<a href="{{ route('user.talent.details', $related->talent->id) }}">
-										<img src="{{ $related->talent->image ? asset('image/talents/'.$related->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="{{ $related->talent->name }}">
-									</a>
-								</div>
-							</div>
+                                <div class="gigs-img">
+                                    <div class="img-slider owl-carousel">
+                                        <div class="slide-images">
+                                            <a href="{{ route('user.courses.show', $course->slug) }}">
+                                                <img src="{{ asset('image/thumbnails/'.$course->thumbnail) }}" class="img-fluid" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="{{ $course->title }}">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
 
-							<div class="gigs-content">
-								<div class="gigs-info">
-									<a href="{{ route('user.courses.show', $related->slug) }}">
-										<span class="badge bg-primary-light">{{ $related->category->name }}</span>
-									</a>
-								</div>
-								<div class="gigs-title">
-									<h3><a href="{{ route('user.courses.show', $related->slug) }}">{{ $related->title }}</a></h3>
-								</div>
-								<div class="star-rate">
-									<span>
-										<i class="fa-solid fa-star"></i>
-										{{ number_format($related->feedback->avg('rating') ?? 0, 1) }}
-										({{ $related->feedback->count() }} Reviews)
-									</span>
-								</div>
-								<div class="gigs-card-footer">
+                                <div class="gigs-content">
+                                    <div class="gigs-info">
+                                        <a href="{{ route('user.courses', ['category' => $course->category->slug]) }}" class="badge bg-primary-light">
+                                            {{ $course->category->name }}
+                                        </a>
+                                        <div class="star-rate">
+                                            <span>
+                                                <i class="fa-solid fa-star"></i>
+                                                {{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
+                                                ({{ $course->feedback->count() }} feedback)
+                                            </span>
+                                        </div>
+                                    </div>
 
-									<h5>
-										@if($related->is_free)
-										Free
-										@else
-										${{ number_format($related->price, 2) }}
-										@endif
-									</h5>
-								</div>
-							</div>
-						</div>
+                                    <div class="gigs-title">
+                                        <h3><a href="{{ route('user.courses.show', $course->slug) }}">{{ $course->title }}</a></h3>
+                                    </div>
+
+                                    <ul class="gigs-user-info">
+                                        <li class="gigs-user">
+                                            <img src="{{ $course->talent->image ? asset('image/talents/'.$course->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="img">
+                                            <p>{{ $course->talent->name ?? 'Unknown' }}</p>
+                                        </li>
+                                        <li class="gigs-loc">
+                                            <p><i class="ti ti-map-pin-check"></i>{{ $course->talent->region ?? 'N/A' }}</p>
+                                        </li>
+                                    </ul>
+
+                                    <div class="gigs-card-footer d-flex justify-content-between align-items-center">
+                                        <h5>
+                                            @if($course->is_free)
+                                            Free
+                                            @else
+                                            ${{ number_format($course->price, 2) }}
+                                            @endif
+                                        </h5>
+                                        <span class="badge"><a href="{{ route('user.courses.show', $course->slug) }}">View Details</a></span>
+                                    </div>
+                                </div>
+                            </div>
 						@empty
 						<p class="text-muted">No related courses found.</p>
 						@endforelse
@@ -590,6 +872,59 @@
 	</div>
 </div>
 
+@foreach($course->lessons as $key => $lesson)
+<!-- Lesson Modal -->
+<div class="modal fade" id="lessonModal{{ $lesson->id }}" tabindex="-1"
+	aria-labelledby="lessonModalLabel{{ $lesson->id }}" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content lesson-modal-content">
+			<div class="modal-header lesson-modal-header">
+				<div class="modal-title-wrap">
+					<span class="modal-lesson-number">Lesson {{ $key + 1 }}</span>
+					<h5 class="modal-title" id="lessonModalLabel{{ $lesson->id }}">
+						{{ $lesson->title ?? 'Untitled Lesson' }}
+					</h5>
+				</div>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body lesson-modal-body">
+				@if($lesson->video_url)
+				<div class="ratio ratio-16x9 mb-4 video-wrapper">
+					<iframe
+						src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast(\Illuminate\Support\Str::before($lesson->video_url, '&'), 'v=') }}?autoplay=0&playsinline=1"
+						title="{{ $lesson->title ?? 'Lesson Video' }}"
+						allowfullscreen
+						class="rounded-3">
+					</iframe>
+				</div>
+				@else
+				<div class="no-video-placeholder mb-4">
+					<i class="fa-solid fa-video-slash"></i>
+					<p>No video available for this lesson.</p>
+				</div>
+				@endif
+
+				@if($lesson->description)
+				<div class="lesson-description">
+					<p>{{ $lesson->description }}</p>
+				</div>
+				@endif
+			</div>
+			<div class="modal-footer lesson-modal-footer">
+				@if($lesson->duration)
+				<span class="duration-badge">
+					<i class="fa-regular fa-clock me-1"></i> {{ $lesson->duration }}
+				</span>
+				@endif
+				<button type="button" class="btn-close-modal" data-bs-dismiss="modal">
+					<i class="fa-solid fa-xmark me-1"></i> Close
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Lesson Modal -->
+@endforeach
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		const payBtn = document.getElementById("payBtn");

@@ -9,6 +9,20 @@ $categories = \App\Models\Category::all();
 @endphp
 
 <style>
+    #tranding {
+        /* position: relative; */
+        overflow: hidden;
+        background: #060f11;
+        color: #fff;
+        padding: 1rem 0;
+        border-radius: 0.1rem;
+        border: 1px solid #3d4648;
+        margin-top: 2rem;
+        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        /* height: 22rem; */
+    }
+
     .postLists.cards .post-item.m-card {
         display: flex;
         align-items: center;
@@ -178,41 +192,51 @@ $categories = \App\Models\Category::all();
     .talent-hover-box:hover .hover-badges {
         display: inline-block;
     }
+
+    .hero-section {
+        /* background: #3E96F3; */
+        /* border-bottom-right-radius: 150px; */
+        padding: 60px 0 60px;
+        position: relative;
+        z-index: 1;
+    }
 </style>
 
-<section class="hero-section">
-    <div class="container p-4">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                    <div class="banner-head">
-                        <h1 class="mb-2">Networking Hub – Connect with Talents & Opportunities</h1>
-                        <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
-                    </div>
-                    <a href="#" class="btn btn-lg btn-primary rounded-pill mb-3 d-inline-flex align-items-center">
-                        Explore Talents
-                    </a>
-                    <div class="popular-search">
-                        <h5>Popular Searches : </h5>
-                        <ul>
-                            @foreach($categories as $cat)
-                            <li><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></li>
-                            @endforeach
-                        </ul>
+<div class="container p-4">
+    <section id="tranding">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
+                        <div class="banner-head">
+                            <h1 class="mb-2">Networking Hub – Connect with Talents & Opportunities</h1>
+                            <p class="d-inline-flex">A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.</p>
+                        </div>
+                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary mb-3 d-inline-flex align-items-center">
+                            Explore Skills
+                            <i class="feather-arrow-right ms-2"></i>
+                        </a>
+                        <div class="popular-search">
+                            <h5>Popular Searches : </h5>
+                            <ul>
+                                @foreach($categories as $cat)
+                                <li><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="banner-img">
-                    <div class="banner-img-right">
-                        <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                <div class="col-lg-4">
+                    <div class="banner-img">
+                        <div class="banner-img-right">
+                            <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
+</div>
 <section class="about-us-section">
     <div class="container">
         <div class="row align-items-center">
@@ -269,12 +293,12 @@ $categories = \App\Models\Category::all();
     </div>
 </section>
 
-<div class="container" style="margin-top: 4.5rem;">
+<div class="container d-md-none" style="margin-top: 4.5rem;">
     <div class="trend-section ">
         <div class="row align-items-center">
             <div class="col-sm-10">
-                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of talents<span class="title-bg2"></span></h5>
-                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative talent across Africa</p>
+                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of skilled people<span class="title-bg2"></span></h5>
+                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative people across Africa</p>
             </div>
             <div class="col-sm-2 text-sm-end">
                 <div class="owl-nav trend-nav nav-control nav-top"></div>
@@ -291,11 +315,7 @@ $categories = \App\Models\Category::all();
                                     <div class="trend-info">
 
                                         <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
-                                        @if(isset($cat->talents_count))
-                                        <p>{{ $cat->talents_count }} talents</p>
-                                        @else
-                                        <p>0 talents</p>
-                                        @endif
+                                        <p>{{ optional($cat->talents)->count() ?? 0 }} talents</p>
                                     </div>
                                     <style>
                                         .slide-line-btn {
@@ -305,58 +325,12 @@ $categories = \App\Models\Category::all();
                                             gap: 6px;
                                             padding: 6px 16px;
                                             color: #fff;
-                                            background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-                                            border-radius: 30px;
+                                            background: #060f11;
+                                            border: 1px solid #3d4648;
+                                            border-radius: 3px;
                                             text-decoration: none;
                                             overflow: hidden;
                                             z-index: 1;
-                                        }
-
-                                        .slide-line {
-                                            position: absolute;
-                                            top: 100%;
-                                            left: -100%;
-                                            width: 200%;
-                                            height: 100%;
-                                            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-                                            transform: rotate(45deg);
-                                            animation: slideRightUp 2s ease-in-out infinite;
-                                            z-index: 0;
-                                        }
-
-                                        .slide-line:nth-child(2) {
-                                            animation-delay: 0s;
-                                            opacity: 0;
-                                            width: 50%;
-                                        }
-
-                                        .slide-line:nth-child(3) {
-                                            animation-delay: 0s;
-                                            opacity: 0.5;
-                                            width: 150%;
-                                        }
-
-                                        .slide-line:nth-child(4) {
-                                            animation-delay: 0.8s;
-                                            opacity: 0.7;
-                                            width: 200%;
-                                        }
-
-                                        @keyframes slideRightUp {
-                                            0% {
-                                                top: 100%;
-                                                left: -100%;
-                                            }
-
-                                            50% {
-                                                top: 0%;
-                                                left: 0%;
-                                            }
-
-                                            100% {
-                                                top: -100%;
-                                                left: 100%;
-                                            }
                                         }
 
                                         .slide-line-btn span {
@@ -365,10 +339,7 @@ $categories = \App\Models\Category::all();
                                     </style>
 
                                     <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i>Read More
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
-                                        <span class="slide-line"></span>
+                                        <i class="feather-arrow-right"></i>view skills
                                     </a>
 
                                 </div>
@@ -384,6 +355,31 @@ $categories = \App\Models\Category::all();
 </div>
 <!-- /Trending Categories -->
 
+<!-- next gen -->
+<div class="popular-section-two d-none d-md-flex">
+    <div class="container">
+        <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
+            <h2 class="mb-2"><span class="title-bg"></span>Trending Categories of skilled people<span class="title-bg2"></span></h2>
+            <p>Discover inspiring stories, impactful skills, and creative people across Africa</p>
+        </div>
+        <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
+            @foreach($categories as $cat)
+            <div class="col d-flex">
+                <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
+                    <span><i class="ti ti-speakerphone"></i></span>
+                    <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+                    <p>{{ optional($cat->talents)->count() ?? 0 }} skills</p>
+                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
+                        <i class="feather-arrow-right"></i>view skills
+                    </a>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+<!-- next gen -->
+
 <div class="container">
     <section class="popular-section expert-section">
         <div class="container">
@@ -391,7 +387,7 @@ $categories = \App\Models\Category::all();
                 <div class="col-lg-6">
                     <div class="expert-header">
                         <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                            <h2><span>Key</span> Benefits</h2>
+                            <h2 style="color: #afafaf;"><span>Key</span> Benefits</h2>
                         </div>
                     </div>
                 </div>
@@ -441,140 +437,6 @@ $categories = \App\Models\Category::all();
         </div>
     </section>
 </div>
-<!-- next gen -->
-<div class="talent-section-two next-gen-section">
-    <div class="container">
-        <div class="section-header-two text-center what-makes-left" data-aos="fade-up">
-            <h2 class="mb-2" style="color: #011E34;"><span class="title-bg"></span>verified talents ready for Connection<span
-                    class="title-bg2"></span></h2>
-            <p style="color: #319BF9;">Connect with the next wave of talents, guiding you with fresh perspectives</p>
-        </div>
-        <div class="row seller-list postLists cards">
-            <!-- Filter -->
-            <div class="filters-section">
-                <div class="listing-tab ">
-                    <ul class="nav nav-tabs justify-content-center flex-wrap gap-2" id="talentTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-filter="latest" type="button">Latest</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="popular" type="button">Popular</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="featured" type="button">Featured</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-filter="recommended" type="button">Recommended</a>
-                        </li>
-                    </ul>
-
-                </div>
-
-                <!-- /Filter -->
-
-                <!-- Sort By -->
-                <div class="filters-wrap sort-categories">
-                    <div class="collapse-card float-lg-end">
-                        <div class="filter-header">
-                            <a href="javascript:void(0);" class="sorts-list">
-                                <i class="ti ti-sort-ascending"></i>Sorts by: <span>Categories</span>
-                            </a>
-                        </div>
-                        <div id="categories2" class="collapse-body" style="display: none;">
-                            <div class="form-group search-group">
-                                <span class="search-icon"><i class="feather-search"></i></span>
-                                <input type="text" class="form-control" placeholder="Search Category">
-                            </div>
-                            <ul class="checkbox-list categories-lists">
-                                @foreach($categories as $cat)
-                                <li class="active">
-                                    <label class="custom_check">
-                                        <span class="checked-title">{{ $cat->name }}</span>
-                                    </label>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Sort By -->
-
-            </div>
-            <!-- /Filter -->
-            <div class="row" id="talentGrid">
-                @foreach($talents as $talent)
-                <div class="col-xl-3 col-lg-4 col-md-6 post-card-wrapper talent-item" data-category="{{ strtolower($talent->tag ?? 'featured') }}">
-                    <div class="card post-item m-card">
-                        <div class="card-body text-center">
-
-                            <!-- Image -->
-                            <a href="{{ route('talent.profile.show',$talent->id) }}">
-                                <img
-                                    class="img rounded-3"
-                                    src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}"
-                                    alt="img" style="height: 120px; object-fit: cover; transition: transform 0.3s ease;" />
-                            </a>
-
-                            <!-- Name -->
-                            <h6 class="mb-1">
-                                <a href="{{ route('talent.profile.show',$talent->id) }}">
-                                    {{ $talent->name }}
-                                    <i class="ti ti-discount-check-filled verify-icon" style="color: #319BF9;"></i>
-                                </a>
-                            </h6>
-
-                            <!-- Category -->
-                            <p>{{ $talent->category->name ?? 'Uncategorized' }}</p>
-
-                            <!-- Location -->
-                            <p class="mb-0 location-text d-inline-flex align-items-center">
-                                <img src="/assets/img/flags/flag-for-rwanda.svg" alt="flag" class="me-1">
-                                Rwanda <i class="ti ti-point-filled mx-1"></i> Total Stories: {{ $talent->stories_count ?? 0 }}
-                            </p>
-
-                            <!-- Ratings -->
-                            <div class="d-flex gap-2 align-items-center flex-wrap mt-3 mb-3 justify-content-center">
-                                <div class="talent-hover-box">
-                                    <div class="default-badges">
-                                        <span class="badge bg-light">
-                                            {{ number_format($talent->feedback->avg('rating'), 1) }} <i class="ti ti-star"></i>
-                                        </span>
-                                        <span class="badge bg-light">
-                                            {{ $talent->feedback->count() }} <i class="ti ti-message-2"></i>
-                                        </span>
-                                    </div>
-                                    <div class="hover-badges">
-                                        <a href="{{ route('talent.profile.show',$talent->id) }}" class="badge bg-light">
-                                            {{ $talent->skill }}
-                                        </a>
-                                        <a href="{{ route('talent.profile.show',$talent->id) }}" class="badge bg-light">
-                                            {{ $talent->language }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- View Button -->
-
-                            <div class="text-center d-flex justify-content-center">
-                                <a href="{{ route('talent.profile.show', $talent->id) }}" class="slide-line-btn">
-                                    <i class="feather-arrow-right"></i>See Profile
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                    <span class="slide-line"></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                @endforeach
-            </div>
-        </div>
-    </div>
-</div>
-<!-- next gen -->
-
 
 
 <!-- SwiperJS Scripts -->

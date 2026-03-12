@@ -3,30 +3,14 @@
 @section('content')
 
 <style>
-    .postLists {
-        display: flex;
-        /* align-items: center; */
-        flex-direction: column;
-        /* border: 1px solid #fff; */
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        /* text-align: center; */
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 1.75rem;
-
-    }
-</style>
-
-<style>
     #tranding {
-        position: relative;
+        /* position: relative; */
         overflow: hidden;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
+        background: #060f11;
         color: #fff;
         padding: 1rem 0;
-        border-radius: 2rem;
+        border-radius: 0.1rem;
+        border: 1px solid #3d4648;
         margin-top: 2rem;
         box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -242,12 +226,15 @@
         font-weight: 500;
         padding: 0.6rem 1.5rem;
         transition: all 0.3s ease;
+        border: 1px solid #FFFDFB;
+
     }
 
     .nav-pills .nav-link.active {
-        background-color: #0d6efd;
+        background-color: #122322;
         color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
+        border: 1px solid #00a667;
     }
 
     .nav-pills .nav-link:not(.active):hover {
@@ -256,9 +243,10 @@
 
 
     .hero-tab {
-        background: rgba(255, 255, 255, 0.1);
+        /* background: rgba(255, 255, 255, 0.1); */
         backdrop-filter: blur(10px);
-        /* border-radius: 16px; */
+        border-radius: 2px;
+        border: 1px solid #3d4648;
         padding: 2rem;
         color: #f1f1f1;
     }
@@ -274,7 +262,10 @@
     }
 
     .btn-light {
-        border-radius: 50px;
+        border-radius: 5px;
+        border: 1px solid #3d4648;
+        background: #060f11;
+        color: #afafaf;
         font-weight: 600;
         padding: 0.6rem 1.5rem;
     }
@@ -288,8 +279,150 @@
     }
 
     #market-section .provide-box {
-        background: #d4e6f526;
+        background: #0d1618bd;
         backdrop-filter: blur(15px) saturate(180%);
+    }
+</style>
+
+<style>
+    /* HERO SECTION */
+    .announcement-hero {
+        position: relative;
+        height: 90vh;
+        background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
+            url('assets/img/creative.png') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        padding: 2rem;
+    }
+
+    .announcement-content {
+        z-index: 2;
+        max-width: 800px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 3rem;
+        border-radius: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 1.2s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .announcement-hero h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .announcement-hero p {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+    }
+
+    .highlight {
+        color: #ffdd57;
+        font-weight: 600;
+    }
+
+    /* CTA BUTTONS */
+    .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-hero {
+        border-radius: 50px;
+        font-weight: 600;
+        padding: 0.8rem 1.6rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-events {
+        background-color: #fff;
+        color: #fff;
+    }
+
+    .btn-events:hover {
+        background-color: #fff;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .btn-announcements {
+        border: 2px solid #fff;
+        color: #fff;
+        background: transparent;
+    }
+
+    .btn-announcements:hover {
+        background-color: #fff;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+</style>
+
+<style>
+    .hero-with-bg {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-bg-carousel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .hero-bg-carousel .carousel-inner,
+    .hero-bg-carousel .carousel-item {
+        height: 100%;
+    }
+
+    .hero-bg-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Video full cover */
+    .hero-bg-media video,
+    .hero-bg-carousel video.hero-bg-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Dark overlay for readability */
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: #12232293;
+        z-index: 1;
+    }
+
+    /* Ensure content stays above background */
+    .hero-with-bg .container {
+        position: relative;
+        z-index: 2;
     }
 </style>
 
@@ -576,17 +709,6 @@
                                         <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
                                         <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
                                     </div>
-                                    <div class="card-overlay-badge">
-                                        <a href="service.html"><span class="badge bg-warning"><i class="feather-star"></i>{{ $product->stock }}</span></a>
-                                        <a href="service.html"><span class="badge bg-danger"><i class="fa-solid fa-meteor"></i>{{ $product->status }}</span></a>
-                                    </div>
-                                    <div class="fav-selection">
-                                        <a href="javascript:void(0);" class="video-icon"><i class="feather-video"></i></a>
-                                        <a href="javascript:void(0);" class="fav-icon"><i class="feather-heart"></i></a>
-                                    </div>
-                                    <div class="user-thumb">
-                                        <a href="buyer-profile.html"><img src="assets/img/user/user-01.jpg" alt="img"></a>
-                                    </div>
                                 </div>
                                 <div class="gigs-content">
                                     <div class="gigs-info">
@@ -601,12 +723,13 @@
                                     <div class="star-rate">
                                         <span><i class="fa-solid fa-star"></i>5.0 (28 Reviews)</span>
                                     </div>
-                                    <div class="gigs-card-footer">
-                                        <div>
-                                            <a href="javascript:void(0);" class="share-icon"><i class="feather-share-2"></i></a>
-                                            <span class="badge">Delivery in 1 day</span>
-                                        </div>
+                                    <div class="gigs-card-footer gap-2">
                                         <h5>${{ $product->price }}</h5>
+                                        <div>
+                                            
+                                            <span class="badge"><a href="{{ route('user.product-details', $product->id )}}">View Details</a></span>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -614,35 +737,38 @@
                         <!-- /Service List -->
                         @endforeach
                         <div class="col-md-12">
-
                             <!-- Pagination -->
+                            @if ($products->hasPages())
                             <div class="pagination">
                                 <ul>
+                                    {{-- Previous --}}
                                     <li>
-                                        <a href="javascript:void(0);" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
+                                        @if ($products->onFirstPage())
+                                        <a href="javascript:void(0);" class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
+                                        @else
+                                        <a href="{{ $products->previousPageUrl() }}" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
+                                        @endif
                                     </li>
+
+                                    {{-- Pages --}}
+                                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
                                     <li>
-                                        <a href="javascript:void(0);" class="active">1</a>
+                                        <a href="{{ $url }}" @if($page==$products->currentPage()) class="active" @endif>{{ $page }}</a>
                                     </li>
+                                    @endforeach
+
+                                    {{-- Next --}}
                                     <li>
-                                        <a href="javascript:void(0);">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">5</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="next"><i class="fa-solid fa-chevron-right"></i></a>
+                                        @if ($products->hasMorePages())
+                                        <a href="{{ $products->nextPageUrl() }}" class="next"><i class="fa-solid fa-chevron-right"></i></a>
+                                        @else
+                                        <a href="javascript:void(0);" class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
+                                        @endif
                                     </li>
                                 </ul>
                             </div>
+                            @endif
                             <!-- /Pagination -->
-
                         </div>
                     </div>
                 </div>

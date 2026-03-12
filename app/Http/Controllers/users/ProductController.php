@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('seller', 'category', 'reviews')->latest()->get();
+        $products = Product::with('seller', 'category', 'reviews')->latest()->paginate(9);
         $categories = ProductCategory::withCount('products')->get();
         $featuredProducts = Product::where('status', 'active')
             ->latest()

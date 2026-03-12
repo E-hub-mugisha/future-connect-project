@@ -48,6 +48,18 @@
 </head>
 
 <style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    .main-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .auth-content {
         display: flex;
         align-items: center;
