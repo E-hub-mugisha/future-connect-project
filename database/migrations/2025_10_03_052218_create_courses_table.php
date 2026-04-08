@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('talent_id')->constrained('talents')->onDelete('cascade');
             $table->string('title');
+            $table->string('slug')->nullable();
             $table->text('description');
             $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->boolean('is_free')->default(true); // free or paid
             $table->decimal('price', 10, 2)->nullable(); // only if not free
             $table->enum('level', ['Beginner', 'Intermediate', 'Advanced'])->default('Beginner');
             $table->string('thumbnail')->nullable();
+            $table->string('video')->nullable(); // intro video
             $table->enum('status', ['draft', 'published'])->default('draft');
             $table->timestamps();
         });

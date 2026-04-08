@@ -16,6 +16,10 @@ return new class extends Migration
             $table->foreignId('seller_id')->constrained('sellers')->onDelete('cascade');
             $table->string('name');
             $table->string('slug');
+            $table->foreignId('product_category_id')
+                ->nullable()
+                ->constrained('product_categories')
+                ->onDelete('set null');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->integer('stock')->default(0);

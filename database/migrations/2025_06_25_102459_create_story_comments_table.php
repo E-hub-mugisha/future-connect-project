@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->text('comment');
+            $table->unsignedTinyInteger('rating')->nullable();
             $table->timestamps();
 
             $table->foreign('story_id')->references('id')->on('stories')->onDelete('cascade');

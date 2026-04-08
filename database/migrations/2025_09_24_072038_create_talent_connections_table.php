@@ -17,7 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');      // The requester (sponsor/visitor)
             $table->string('status')->default('pending'); // pending, accepted, declined
             $table->decimal('amount', 10, 2)->default(0); // payment amount
+            $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid');
             $table->text('message');
+            $table->text('response')->nullable();
             $table->timestamps();
 
             $table->foreign('talent_id')->references('id')->on('talents')->onDelete('cascade');
