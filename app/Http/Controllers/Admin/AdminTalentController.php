@@ -16,18 +16,58 @@ use Illuminate\Support\Facades\Mail;
 
 class AdminTalentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $talents = Talent::all();
-        $categories = Category::all();
-        $totalRatings = Talent::with('rating')->count();
-        $totalStories = Talent::with('story')->count();
-        $totalComments = Talent::with('feedback')->count();
-        $totalSkills = Talent::with('skill')->count();
+        $query = Talent::with('category')
+            ->withCount(['skills', 'courses', 'connections', 'feedback']);
 
-        return view('admin-pages.talents.index', compact('talents', 'categories', 'totalRatings', 'totalStories', 'totalComments', 'totalSkills'));
+        // Search
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('phone', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by level
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+
+        // Filter by featured
+        if ($request->filled('featured')) {
+            $query->where('featured', $request->featured);
+        }
+
+        $talents    = $query->latest()->paginate(15)->withQueryString();
+        $categories = Category::orderBy('name')->get();
+
+        $stats = [
+            'total'    => Talent::count(),
+            'active'   => Talent::where('status', 'active')->count(),
+            'featured' => Talent::where('featured', true)->count(),
+            'matched'  => Talent::where('matched', true)->count(),
+        ];
+
+        return view('admin-pages.talents.index', compact('talents', 'categories', 'stats'));
     }
 
+    public function create()
+    {
+        $categories = Category::orderBy('name')->get();
+        return view('admin-pages.talents.create', compact('categories'));
+    }
 
     public function store(Request $request)
     {
@@ -78,17 +118,30 @@ class AdminTalentController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Talent $talent)
     {
-        $talent = Talent::withCount('stories')->findOrFail($id);
-        $categories = Category::all();
-        return view('admin-pages.talents.talent-profile', compact('talent', 'categories'));
+        $talent->load([
+            'category',
+            'skills',
+            'courses',
+            'connections',
+            'feedback',
+            'stories',
+            'supports',
+            'user',
+        ]);
+
+        return view('admin.talents.show', compact('talent'));
     }
 
-    public function update(Request $request, $id)
+    public function edit(Talent $talent)
     {
-        $talent = Talent::findOrFail($id);
+        $categories = Category::orderBy('name')->get();
+        return view('admin.talents.edit', compact('talent', 'categories'));
+    }
 
+    public function update(Request $request, Talent $talent)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'featured' => 'sometimes|boolean',
@@ -208,5 +261,47 @@ class AdminTalentController extends Controller
         Mail::to(auth()->user()->email)->send(new TalentApprovalNotification($talent));
 
         return back()->with('success', 'Talent approved and notifications sent.');
+    }
+
+    public function toggleFeatured(Talent $talent)
+    {
+        $talent->update(['featured' => !$talent->featured]);
+ 
+        return back()->with('success', 'Featured status updated.');
+    }
+ 
+    /**
+     * Toggle the status of a talent.
+     */
+    public function toggleStatus(Talent $talent)
+    {
+        $newStatus = $talent->status === 'active' ? 'inactive' : 'active';
+        $talent->update(['status' => $newStatus]);
+ 
+        return back()->with('success', 'Status updated to ' . $newStatus . '.');
+    }
+ 
+    /**
+     * Bulk actions on talents.
+     */
+    public function bulkAction(Request $request)
+    {
+        $request->validate([
+            'action'  => 'required|in:delete,activate,deactivate,feature,unfeature',
+            'ids'     => 'required|array',
+            'ids.*'   => 'exists:talents,id',
+        ]);
+ 
+        $talents = Talent::whereIn('id', $request->ids);
+ 
+        match ($request->action) {
+            'delete'     => $talents->each(fn($t) => $t->delete()),
+            'activate'   => $talents->update(['status' => 'active']),
+            'deactivate' => $talents->update(['status' => 'inactive']),
+            'feature'    => $talents->update(['featured' => true]),
+            'unfeature'  => $talents->update(['featured' => false]),
+        };
+ 
+        return back()->with('success', 'Bulk action applied to ' . count($request->ids) . ' talent(s).');
     }
 }

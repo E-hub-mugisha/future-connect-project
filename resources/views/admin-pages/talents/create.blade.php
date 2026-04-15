@@ -204,13 +204,10 @@
     }
 </style>
 
-
-
-
 <div class="form-header">
     <div class="header-inner">
         <div class="breadcrumb">
-            <a href="{{ route('talents.index') }}">Talents</a>
+            <a href="{{ route('admin.talents.index') }}">Talents</a>
             <span class="breadcrumb-sep">›</span>
             <span>New Talent</span>
         </div>
@@ -227,7 +224,7 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('talents.store') }}" enctype="multipart/form-data" id="talentForm">
+    <form method="POST" action="{{ route('admin.talents.store') }}" enctype="multipart/form-data" id="talentForm">
         @csrf
 
         <div class="form-card">
@@ -381,7 +378,7 @@
 
             {{-- ─── Footer ─── --}}
             <div class="form-footer">
-                <a href="{{ route('talents.index') }}" class="btn-cancel">Cancel</a>
+                <a href="{{ route('admin.talents.index') }}" class="btn-cancel">Cancel</a>
                 <button type="submit" class="btn-submit">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14m-7-7 7 7 7-7"/></svg>
                     Save Talent

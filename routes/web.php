@@ -277,6 +277,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/talents/{id}', [AdminTalentController::class, 'show'])->name('talents.show');
     Route::get('/talents/{id}/edit', [AdminTalentController::class, 'edit'])->name('talents.edit');
     Route::put('/talents/{id}/approve', [AdminTalentController::class, 'approve'])->name('talents.approve');
+    Route::post('talents/bulk', [AdminTalentController::class, 'bulkAction'])
+        ->name('talents.bulk');
 
     // Users
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');

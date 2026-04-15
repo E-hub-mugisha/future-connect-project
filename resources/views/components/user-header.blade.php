@@ -784,7 +784,7 @@ if (!function_exists('isActiveRoute')) {
         <ul class="fc-nav">
 
             <li>
-                <a href="{{ route('user.jobs.index') }}">Find Work</a>
+                <a href="{{ route('user.jobs.index') }}">Find Opportunities</a>
             </li>
 
             {{-- Skills Hub — mega menu --}}

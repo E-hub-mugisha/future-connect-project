@@ -1,455 +1,321 @@
 @extends('layouts.app')
-@section('title', 'Talents')
+
+@section('title', 'Talents — Future Connect Admin')
+
 @section('content')
 
-<!-- Page Content -->
-<div class="container-fluid">
-    <div class="nk-content-inner">
-        <div class="nk-content-body">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Talent Management</h2>
-                <div class="d-flex justify-content-between align-items-center mb-4 gap-2">
-                    <button type="button" class="btn btn-primary rounded-pill btn-md" data-bs-toggle="modal"
-                        data-bs-target="#talentAddModal">
-                        Add Talent
-                    </button>
-                    <a href="/admin/connections" class="rounded-pill btn-md btn-warning btn">
-                            <i class="ti ti-user-bolt me-2"></i><span>Connections</span>
-                        </a>
-                </div>
-            </div>
-            <div class="card card-bordered card-preview">
-                <div class="card-inner">
-                    <table class="datatable-init nowrap table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Image</th>
-                                <th>User info</th>
-                                <th>Contact</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Featured</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($talents as $talent)
-                            <tr>
-                                <td>{{ $talent->id }}</td>
-                                <td>
-                                    <img src="{{ asset('image/talents/' . $talent->image) }}" alt="Talent Image" width="50" height="50" class="rounded-circle">
-                                </td>
-                                <td>{{ $talent->name }} </br><small>{{ $talent->email }}</small></td>
-                                <td>{{ $talent->phone }}</br><small>{{ $talent->address }}</small></td>
-                                <td>
-                                    {{ $talent->category ? $talent->category->name : 'N/A' }}</br>
-                                    <small>{{ $talent->language }}</small>
-                                </td>
-                                <td>
-                                    @if ($talent->status !== 'approved')
-                                    <!-- Button to open modal -->
-                                    <span class="text-info">
-                                        Not Approved
-                                    </span>
+@include('admin-pages.talents._layout')
+<style>
+  /* Stats bar */
+  .fc-stat-card {
+    background: var(--fc-card); border: 1px solid var(--fc-border);
+    border-radius: var(--fc-radius); padding: 1.25rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.25rem; position: relative; overflow: hidden;
+  }
+  .fc-stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .fc-stat-card.accent-green::before  { background: var(--fc-accent); }
+  .fc-stat-card.accent-blue::before   { background: var(--fc-accent2); }
+  .fc-stat-card.accent-yellow::before { background: var(--fc-warn); }
+  .fc-stat-card.accent-purple::before { background: #a78bfa; }
+  .fc-stat-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700; line-height: 1; }
+  .fc-stat-label { font-size: 0.8rem; color: var(--fc-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
 
+  /* Filters bar */
+  .fc-filters {
+    background: var(--fc-card); border: 1px solid var(--fc-border);
+    border-radius: var(--fc-radius); padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+  }
+  .fc-search-wrap { position: relative; flex: 1; min-width: 200px; }
+  .fc-search-wrap svg { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--fc-muted); pointer-events: none; }
+  .fc-search-wrap input { padding-left: 2.2rem; }
+  .fc-filter-select { min-width: 140px; }
 
-                                    @else
-                                    <span class="text-success">Approved</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($talent->featured)
-                                    <span class="badge bg-primary">Yes</span>
-                                    @else
-                                    <span class="badge bg-secondary">No</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="actionsDropdown{{ $talent->id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $talent->id }}">
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#quickViewModal{{ $talent->id }}">Quick View</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#talentEditModal{{ $talent->id }}">Edit</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#approveTalentModal{{ $talent->id }}">
-                                                    Approve
-                                                </a>
-                                            </li>
+  /* Table */
+  .fc-table-wrap { background: var(--fc-card); border: 1px solid var(--fc-border); border-radius: var(--fc-radius); overflow: hidden; }
+  .fc-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .fc-table thead th {
+    background: var(--fc-surface); padding: 0.75rem 1rem; text-align: left;
+    font-size: 0.75rem; font-weight: 600; color: var(--fc-muted);
+    text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--fc-border);
+  }
+  .fc-table tbody tr { border-bottom: 1px solid var(--fc-border); transition: background .1s; }
+  .fc-table tbody tr:last-child { border-bottom: none; }
+  .fc-table tbody tr:hover { background: rgba(255,255,255,.02); }
+  .fc-table td { padding: 0.9rem 1rem; vertical-align: middle; }
 
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#statusModal{{ $talent->id }}">Update Status</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#featureModal{{ $talent->id }}">
-                                                    {{ $talent->featured ? 'Unfeature' : 'Feature' }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $talent->id }}">Delete</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+  /* Talent cell */
+  .fc-talent-cell { display: flex; align-items: center; gap: 0.75rem; }
+  .fc-avatar {
+    width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+    background: var(--fc-border); flex-shrink: 0; font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--fc-text-dim); font-weight: 600; border: 1px solid var(--fc-border);
+  }
+  .fc-talent-name { font-weight: 500; color: var(--fc-text); }
+  .fc-talent-email { font-size: 0.78rem; color: var(--fc-muted); }
 
-                                </td>
-                            </tr>
-                            @endforeach
+  /* Actions */
+  .fc-actions { display: flex; align-items: center; gap: 0.35rem; }
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @foreach($talents as $talent)
-            <!-- Modal -->
-            <div class="modal fade" id="approveTalentModal{{ $talent->id }}" tabindex="-1" aria-labelledby="approveTalentLabel{{ $talent->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('admin.talents.approve', $talent->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="approveTalentLabel{{ $talent->id }}">Approve Talent</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Are you sure you want to approve <strong>{{ $talent->name }}</strong>?</p>
-                                <p>This will create a user account for them with a generated password.</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-success">Approve</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            @endforeach
+  /* Bulk bar */
+  .fc-bulk-bar {
+    background: var(--fc-surface); border: 1px solid var(--fc-accent);
+    border-radius: var(--fc-radius-sm); padding: 0.6rem 1rem;
+    display: none; align-items: center; gap: 1rem; margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+  .fc-bulk-bar.visible { display: flex; }
+  .fc-bulk-count { color: var(--fc-accent); font-weight: 600; }
 
-            @foreach($talents as $talent)
-            <!-- Feature/Unfeature Modal -->
-            <div class="modal fade" id="featureModal{{ $talent->id }}" tabindex="-1"
-                aria-labelledby="featureModalLabel{{ $talent->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form action="{{ route('admin.talents.feature', $talent->id) }}"
-                        method="POST" class="modal-content">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="featured" value="{{ $talent->featured ? 0 : 1 }}">
+  /* Pagination */
+  .fc-pagination { display: flex; align-items: center; justify-content: between; gap: 0.5rem; padding: 1rem 1.25rem; border-top: 1px solid var(--fc-border); }
+  .fc-pagination a, .fc-pagination span {
+    padding: 0.4rem 0.75rem; border-radius: var(--fc-radius-sm); font-size: 0.85rem;
+    text-decoration: none; color: var(--fc-text-dim); border: 1px solid transparent;
+  }
+  .fc-pagination a:hover { background: var(--fc-border); color: var(--fc-text); }
+  .fc-pagination .active { background: var(--fc-accent); color: #0d0f14; font-weight: 600; }
 
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="featureModalLabel{{ $talent->id }}">
-                                Confirm
-                                {{ $talent->featured ? 'Unfeature' : 'Feature' }}
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you want to
-                            {{ $talent->featured ? 'unfeature' : 'feature' }}
-                            this talent?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-warning">Yes,
-                                {{ $talent->featured ? 'Unfeature' : 'Feature' }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            @endforeach
+  /* Check all */
+  .fc-checkbox {
+    width: 16px; height: 16px; accent-color: var(--fc-accent); cursor: pointer;
+  }
 
-            @foreach($talents as $talent)
-            <!-- Delete Modal -->
-            <div class="modal fade" id="deleteModal{{ $talent->id }}" tabindex="-1"
-                aria-labelledby="deleteModalLabel{{ $talent->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form action="{{ route('admin.talents.destroy', $talent->id) }}"
-                        method="POST" class="modal-content">
-                        @csrf
-                        @method('DELETE')
+  /* Empty state */
+  .fc-empty { text-align: center; padding: 4rem 2rem; color: var(--fc-muted); }
+  .fc-empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+</style>
 
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModalLabel{{ $talent->id }}">
-                                Confirm Delete
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you want to delete this talent? This action cannot be undone.
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            @endforeach
+<div class="fc-wrap">
 
-            @foreach($talents as $talent)
-            <!-- Quick View Modal -->
-            <div class="modal fade" id="quickViewModal{{ $talent->id }}" tabindex="-1"
-                aria-labelledby="quickViewLabel{{ $talent->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="quickViewLabel{{ $talent->id }}">Talent Quick View
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <img src="{{ asset('image/talents/' . $talent->image) }}"
-                                        alt="Talent Image" class="img-fluid rounded">
-
-
-                                </div>
-
-                                <div class="col-md-8">
-                                    <h4>{{ $talent->name }}</h4>
-                                    <p><strong>Address:</strong> {{ $talent->address }}</p>
-                                    <p><strong>Phone:</strong> {{ $talent->phone }}</p>
-                                    <p><strong>Email:</strong> {{ $talent->email }}</p>
-                                    <p><strong>Category:</strong>
-                                        {{ $talent->category->name ?? 'N/A' }}
-                                    </p>
-                                    <p><strong>Language:</strong> {{ $talent->language }}</p>
-                                    <p><strong>Description:</strong> {{ $talent->description }}</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Close</button>
-                            <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            @endforeach
-
-            <!-- Create/Edit Talent Modal -->
-            @foreach($talents as $talent)
-            <!-- Edit Talent Modal -->
-            <div class="modal fade" id="talentEditModal{{ $talent->id }}" tabindex="-1" aria-labelledby="talentEditModalLabel{{ $talent->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <form method="POST" action="{{ route('admin.talents.update', $talent->id) }}" enctype="multipart/form-data" class="modal-content">
-                        @csrf
-                        @method('PATCH')
-
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="talentEditModalLabel{{ $talent->id }}">Edit Talent - {{ $talent->name }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="row g-3">
-                                <!-- Name & Email -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $talent->name }}" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="email" class="form-control" value="{{ $talent->email }}" required>
-                                </div>
-
-                                <!-- Address & Phone -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Address</label>
-                                    <input type="text" name="address" class="form-control" value="{{ $talent->address }}">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Phone</label>
-                                    <input type="text" name="phone" class="form-control" value="{{ $talent->phone }}">
-                                </div>
-
-                                <!-- Category & Language -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Category</label>
-                                    <select name="category_id" class="form-select" required>
-                                        <option value="">Select Category</option>
-                                        @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $talent->category_id == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Language</label>
-                                    <input type="text" name="language" class="form-control" value="{{ $talent->language }}">
-                                </div>
-
-                                <!-- Image & Featured -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Image</label>
-                                    <input type="file" name="image" class="form-control">
-                                    @if($talent->image)
-                                    <img src="{{ asset('image/talents/' . $talent->image) }}" alt="Talent Image" class="img-thumbnail mt-2" width="100">
-                                    @endif
-                                </div>
-                                <div class="col-md-6 d-flex align-items-center mt-4">
-                                    <input type="hidden" name="featured" value="0">
-                                    <div class="form-check form-switch">
-                                        <input type="checkbox" name="featured" class="form-check-input" id="featured{{ $talent->id }}" value="1" {{ $talent->featured ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="featured{{ $talent->id }}">Featured</label>
-                                    </div>
-                                </div>
-
-                                <!-- Description -->
-                                <div class="col-12">
-                                    <label class="form-label">Description</label>
-                                    <textarea name="description" class="form-control" rows="3">{{ $talent->description }}</textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Update Talent</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            @endforeach
-
-
-            @foreach($talents as $talent)
-            <!-- Status Modal -->
-            <div class="modal fade" id="statusModal{{ $talent->id }}" tabindex="-1"
-                aria-labelledby="statusModalLabel{{ $talent->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form method="POST"
-                        action="{{ route('admin.talents.updateStatus', $talent->id ) }}">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="statusModalLabel{{ $talent->id }}">Update Status
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <select name="status" class="form-select" required>
-                                    <option value="pending"
-                                        {{ (isset($talent) && $talent->status == 'pending') ? 'selected' : '' }}>
-                                        Pending</option>
-                                    <option value="approved"
-                                        {{ (isset($talent) && $talent->status == 'approved') ? 'selected' : '' }}>
-                                        Approved</option>
-                                    <option value="rejected"
-                                        {{ (isset($talent) && $talent->status == 'rejected') ? 'selected' : '' }}>
-                                        Rejected</option>
-                                </select>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            @endforeach
-
-            <!-- Create/Edit Talent Modal -->
-            <div class="modal fade" id="talentAddModal" tabindex="-1" aria-labelledby="talentAddModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <form method="POST" action="{{ route('admin.talents.store') }}" enctype="multipart/form-data" class="modal-content">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="talentAddModalLabel">Add Talent</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="row g-3">
-                                <!-- Name & Email -->
-                                <div class="col-md-6">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input id="name" type="text" name="name" class="form-control" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input id="email" type="email" name="email" class="form-control" required>
-                                </div>
-
-                                <!-- Address & Phone -->
-                                <div class="col-md-6">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input id="address" type="text" name="address" class="form-control" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input id="phone" type="text" name="phone" class="form-control" required>
-                                </div>
-
-                                <!-- Category & Language -->
-                                <div class="col-md-6">
-                                    <label for="category_id" class="form-label">Category</label>
-                                    <select id="category_id" name="category_id" class="form-select" required>
-                                        <option value="">Select Category</option>
-                                        @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="language" class="form-label">Language</label>
-                                    <input id="language" type="text" name="language" class="form-control" required>
-                                </div>
-
-                                <!-- Image Upload -->
-                                <div class="col-md-6">
-                                    <label for="image" class="form-label">Image</label>
-                                    <input id="image" type="file" name="image" class="form-control">
-                                </div>
-
-                                <!-- Featured Toggle -->
-                                <div class="col-md-6 d-flex align-items-center mt-4">
-                                    <div class="form-check form-switch">
-                                        <input id="featured" type="checkbox" name="featured" class="form-check-input" value="1">
-                                        <label for="featured" class="form-check-label">Featured</label>
-                                    </div>
-                                </div>
-
-                                <!-- Description -->
-                                <div class="col-12">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea id="description" name="description" class="form-control" rows="3"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Create Talent</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
+  {{-- Header --}}
+  <div class="fc-header">
+    <div class="fc-header-left">
+      <div class="fc-breadcrumb">
+        <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+        <span>›</span>
+        <span>Talents</span>
+      </div>
+      <h1>Talents</h1>
+      <p>Manage all registered talent profiles on the platform.</p>
     </div>
+    <div style="display:flex;gap:0.75rem;align-items:center;">
+      <a href="{{ route('admin.talents.create') }}" class="fc-btn fc-btn-primary">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Add talent
+      </a>
+    </div>
+  </div>
+
+  {{-- Alert --}}
+  @if(session('success'))
+    <div class="fc-alert fc-alert-success">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      {{ session('success') }}
+    </div>
+  @endif
+
+  {{-- Stats --}}
+  <div class="fc-grid-4" style="margin-bottom:1.5rem;">
+    <div class="fc-stat-card accent-green">
+      <div class="fc-stat-value">{{ number_format($stats['total']) }}</div>
+      <div class="fc-stat-label">Total talents</div>
+    </div>
+    <div class="fc-stat-card accent-blue">
+      <div class="fc-stat-value">{{ number_format($stats['active']) }}</div>
+      <div class="fc-stat-label">Active</div>
+    </div>
+    <div class="fc-stat-card accent-yellow">
+      <div class="fc-stat-value">{{ number_format($stats['featured']) }}</div>
+      <div class="fc-stat-label">Featured</div>
+    </div>
+    <div class="fc-stat-card accent-purple">
+      <div class="fc-stat-value">{{ number_format($stats['matched']) }}</div>
+      <div class="fc-stat-label">Matched</div>
+    </div>
+  </div>
+
+  {{-- Filters --}}
+  <form method="GET" action="{{ route('admin.talents.index') }}">
+    <div class="fc-filters">
+      <div class="fc-search-wrap">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search name, email, phone…" class="fc-input">
+      </div>
+      <select name="status" class="fc-select fc-filter-select">
+        <option value="">All statuses</option>
+        <option value="active"   {{ request('status') === 'active'   ? 'selected' : '' }}>Active</option>
+        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+        <option value="pending"  {{ request('status') === 'pending'  ? 'selected' : '' }}>Pending</option>
+      </select>
+      <select name="category_id" class="fc-select fc-filter-select">
+        <option value="">All categories</option>
+        @foreach($categories as $cat)
+          <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+        @endforeach
+      </select>
+      <select name="level" class="fc-select fc-filter-select">
+        <option value="">All levels</option>
+        <option value="beginner"     {{ request('level') === 'beginner'     ? 'selected' : '' }}>Beginner</option>
+        <option value="intermediate" {{ request('level') === 'intermediate' ? 'selected' : '' }}>Intermediate</option>
+        <option value="expert"       {{ request('level') === 'expert'       ? 'selected' : '' }}>Expert</option>
+      </select>
+      <select name="featured" class="fc-select" style="min-width:120px;">
+        <option value="">Featured?</option>
+        <option value="1" {{ request('featured') === '1' ? 'selected' : '' }}>Featured</option>
+        <option value="0" {{ request('featured') === '0' ? 'selected' : '' }}>Not featured</option>
+      </select>
+      <button type="submit" class="fc-btn fc-btn-secondary">Filter</button>
+      @if(request()->hasAny(['search','status','category_id','level','featured']))
+        <a href="{{ route('admin.talents.index') }}" class="fc-btn fc-btn-ghost">Clear</a>
+      @endif
+    </div>
+  </form>
+
+  {{-- Bulk action bar --}}
+  <form id="bulk-form" method="POST" action="{{ route('admin.talents.bulk') }}">
+    @csrf
+    <div class="fc-bulk-bar" id="bulk-bar">
+      <span class="fc-bulk-count" id="bulk-count">0 selected</span>
+      <select name="action" class="fc-select" style="width:auto;min-width:160px;">
+        <option value="">Choose action…</option>
+        <option value="activate">Activate</option>
+        <option value="deactivate">Deactivate</option>
+        <option value="feature">Mark featured</option>
+        <option value="unfeature">Remove featured</option>
+        <option value="delete">Delete</option>
+      </select>
+      <button type="submit" class="fc-btn fc-btn-secondary fc-btn-sm" onclick="return confirm('Apply bulk action?')">Apply</button>
+      <button type="button" class="fc-btn fc-btn-ghost fc-btn-sm" onclick="clearSelection()">Cancel</button>
+    </div>
+
+    {{-- Table --}}
+    <div class="fc-table-wrap">
+      <table class="fc-table">
+        <thead>
+          <tr>
+            <th style="width:40px;"><input type="checkbox" class="fc-checkbox" id="check-all" onchange="toggleAll(this)"></th>
+            <th>Talent</th>
+            <th>Category</th>
+            <th>Level</th>
+            <th>Status</th>
+            <th>Skills</th>
+            <th>Featured</th>
+            <th>Joined</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($talents as $talent)
+            <tr>
+              <td>
+                <input type="checkbox" class="fc-checkbox row-check" name="ids[]" value="{{ $talent->id }}" onchange="updateBulkBar()">
+              </td>
+              <td>
+                <div class="fc-talent-cell">
+                  @if($talent->image)
+                    <img src="{{ Storage::url($talent->image) }}" alt="{{ $talent->name }}" class="fc-avatar">
+                  @else
+                    <div class="fc-avatar">{{ strtoupper(substr($talent->name, 0, 2)) }}</div>
+                  @endif
+                  <div>
+                    <div class="fc-talent-name">{{ $talent->name }}</div>
+                    <div class="fc-talent-email">{{ $talent->email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                @if($talent->category)
+                  <span class="fc-badge fc-badge-blue">{{ $talent->category->name }}</span>
+                @else
+                  <span style="color:var(--fc-muted);font-size:.8rem;">—</span>
+                @endif
+              </td>
+              <td>
+                @php $lvl = $talent->level; @endphp
+                <span class="fc-badge {{ $lvl === 'expert' ? 'fc-badge-green' : ($lvl === 'intermediate' ? 'fc-badge-yellow' : 'fc-badge-gray') }}">
+                  {{ ucfirst($lvl) }}
+                </span>
+              </td>
+              <td>
+                @php $s = $talent->status; @endphp
+                <span class="fc-badge {{ $s === 'active' ? 'fc-badge-green' : ($s === 'pending' ? 'fc-badge-yellow' : 'fc-badge-red') }}">
+                  {{ ucfirst($s) }}
+                </span>
+              </td>
+              <td style="color:var(--fc-text-dim);font-size:.85rem;">{{ $talent->skills_count }}</td>
+              <td>
+                @if($talent->featured)
+                  <span style="color:var(--fc-warn);font-size:.85rem;">★ Yes</span>
+                @else
+                  <span style="color:var(--fc-muted);font-size:.85rem;">—</span>
+                @endif
+              </td>
+              <td style="color:var(--fc-text-dim);font-size:.8rem;white-space:nowrap;">
+                {{ $talent->created_at->format('d M Y') }}
+              </td>
+              <td>
+                <div class="fc-actions">
+                  <a href="{{ route('admin.talents.show', $talent) }}" class="fc-btn fc-btn-ghost fc-btn-icon" title="View">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </a>
+                  <a href="{{ route('admin.talents.edit', $talent) }}" class="fc-btn fc-btn-ghost fc-btn-icon" title="Edit">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </a>
+                  <form method="POST" action="{{ route('admin.talents.destroy', $talent) }}" onsubmit="return confirm('Delete {{ addslashes($talent->name) }}?')">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="fc-btn fc-btn-ghost fc-btn-icon" title="Delete" style="color:var(--fc-danger);">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="9">
+                <div class="fc-empty">
+                  <div class="fc-empty-icon">◎</div>
+                  <p style="font-weight:500;color:var(--fc-text-dim);">No talents found</p>
+                  <p style="font-size:.85rem;margin-top:.4rem;">Try adjusting your filters or <a href="{{ route('admin.talents.create') }}" style="color:var(--fc-accent);">add a new talent</a>.</p>
+                </div>
+              </td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+
+      {{-- Pagination --}}
+      @if($talents->hasPages())
+        <div class="fc-pagination">
+          <span style="font-size:.8rem;color:var(--fc-muted);flex:1;">
+            Showing {{ $talents->firstItem() }}–{{ $talents->lastItem() }} of {{ $talents->total() }} talents
+          </span>
+          {{ $talents->links('admin.talents._pagination') }}
+        </div>
+      @endif
+    </div>
+  </form>
+
 </div>
+
+<script>
+function toggleAll(master) {
+  document.querySelectorAll('.row-check').forEach(cb => cb.checked = master.checked);
+  updateBulkBar();
+}
+function updateBulkBar() {
+  const checked = document.querySelectorAll('.row-check:checked');
+  const bar = document.getElementById('bulk-bar');
+  document.getElementById('bulk-count').textContent = checked.length + ' selected';
+  bar.classList.toggle('visible', checked.length > 0);
+}
+function clearSelection() {
+  document.querySelectorAll('.row-check, #check-all').forEach(cb => cb.checked = false);
+  document.getElementById('bulk-bar').classList.remove('visible');
+}
+</script>
 @endsection
