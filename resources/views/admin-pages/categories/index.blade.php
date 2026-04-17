@@ -6,7 +6,7 @@
 <style>
     /* ── CSS Variables & Theme ── */
     :root {
-        --bg-deep:       #071b2e;
+        --bg-deep:       #060f11;
         --bg-card:       #0c2540;
         --bg-surface:    #0f2d4a;
         --bg-hover:      #163558;

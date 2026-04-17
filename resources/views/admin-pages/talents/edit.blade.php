@@ -1,565 +1,530 @@
 @extends('layouts.app')
 
-@push('styles')
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-    :root {
-        --growth:       #0D5C3A;
-        --growth-light: #1A7A4E;
-        --growth-pale:  #E8F5EE;
-        --opp:          #E8630A;
-        --opp-light:    #FF7A20;
-        --opp-pale:     #FEF0E6;
-        --gold:         #F5C842;
-        --cream:        #FAF7F2;
-        --ink:          #1A1A1A;
-        --muted:        #6B7280;
-        --border:       #E5DDD0;
-        --danger:       #DC2626;
-        --danger-pale:  #FEF2F2;
-    }
-    body { background: var(--cream); font-family: 'Outfit', sans-serif; }
-
-    /* ─── Header ─── */
-    .form-header {
-        background:var(--ink); padding:2.5rem 2rem;
-        position:relative; overflow:hidden;
-    }
-    .form-header::before {
-        content:''; position:absolute; top:-80px; right:-80px;
-        width:300px; height:300px; border-radius:50%;
-        background:rgba(13,92,58,.25);
-    }
-    .form-header::after {
-        content:''; position:absolute; bottom:-60px; left:15%;
-        width:180px; height:180px; border-radius:50%;
-        background:rgba(232,99,10,.15);
-    }
-    .header-inner { max-width:960px; margin:0 auto; position:relative; z-index:1; display:flex; align-items:flex-start; gap:1.5rem; }
-
-    /* Avatar beside title */
-    .header-avatar {
-        width:72px; height:72px; border-radius:12px;
-        object-fit:cover; border:3px solid rgba(255,255,255,.15);
-        flex-shrink:0;
-    }
-    .avatar-placeholder-sm {
-        width:72px; height:72px; border-radius:12px;
-        background:rgba(255,255,255,.08); border:3px solid rgba(255,255,255,.15);
-        display:flex; align-items:center; justify-content:center;
-        font-size:2rem; flex-shrink:0;
-    }
-    .header-text { flex:1; }
-    .breadcrumb {
-        display:flex; align-items:center; gap:.4rem;
-        font-size:.78rem; color:rgba(255,255,255,.5);
-        margin-bottom:.6rem;
-    }
-    .breadcrumb a { color:rgba(255,255,255,.5); text-decoration:none; }
-    .breadcrumb a:hover { color:#fff; }
-    .edit-badge {
-        display:inline-block;
-        background:rgba(232,99,10,.2); border:1px solid rgba(232,99,10,.4);
-        color:var(--opp-light); font-size:.7rem; font-weight:700;
-        letter-spacing:.1em; text-transform:uppercase;
-        padding:.2rem .65rem; border-radius:100px; margin-bottom:.5rem;
-    }
-    .form-title {
-        font-family:'Playfair Display',serif;
-        font-size:1.8rem; font-weight:900; color:#fff; margin:0 0 .25rem;
-    }
-    .form-subtitle { color:rgba(255,255,255,.5); font-size:.85rem; }
-    .header-meta { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:.85rem; }
-    .meta-tag {
-        font-size:.75rem; font-weight:600; padding:.2rem .65rem;
-        border-radius:100px;
-        background:rgba(255,255,255,.08); color:rgba(255,255,255,.7);
-        border:1px solid rgba(255,255,255,.1);
-    }
-
-    /* ─── Tabs ─── */
-    .tabs-wrap { max-width:960px; margin:0 auto; padding:0 2rem; }
-    .tabs {
-        display:flex; gap:0;
-        border-bottom:2px solid var(--border);
-        margin-top:0; background:#fff;
-        border-radius:0; overflow-x:auto;
-    }
-    .tab-btn {
-        padding:.75rem 1.25rem; border:none; background:transparent; cursor:pointer;
-        font-family:'Outfit',sans-serif; font-size:.85rem; font-weight:600;
-        color:var(--muted); border-bottom:2px solid transparent; margin-bottom:-2px;
-        display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap;
-        transition:color .2s;
-    }
-    .tab-btn.active { color:var(--growth); border-bottom-color:var(--growth); }
-    .tab-btn:hover:not(.active) { color:var(--ink); }
-
-    /* ─── Form Layout ─── */
-    .form-wrap { max-width:960px; margin:1.5rem auto 3rem; padding:0 2rem; }
-    .tab-panel { display:none; }
-    .tab-panel.active { display:block; }
-
-    .form-card {
-        background:#fff; border:1px solid var(--border); border-radius:16px;
-        overflow:hidden; box-shadow:0 2px 16px rgba(13,92,58,.06);
-    }
-    .form-section { padding:1.75rem 2rem; border-bottom:1px solid var(--border); }
-    .form-section:last-of-type { border-bottom:none; }
-    .section-head { display:flex; align-items:center; gap:.65rem; margin-bottom:1.25rem; }
-    .section-dot { width:10px; height:10px; border-radius:50%; background:var(--opp); flex-shrink:0; }
-    .section-heading { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--ink); }
-
-    /* ─── Fields ─── */
-    .fields-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-    .field-full { grid-column:1 / -1; }
-    @media(max-width:600px){ .fields-grid { grid-template-columns:1fr; } .field-full { grid-column:auto; } }
-
-    .field-group { display:flex; flex-direction:column; gap:.4rem; }
-    .field-label { font-size:.75rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); }
-    .field-label .req { color:var(--opp); margin-left:.15em; }
-    .field-hint { font-size:.75rem; color:var(--muted); }
-    .field-control {
-        border:1.5px solid var(--border); border-radius:9px;
-        padding:.65rem .9rem; font-family:'Outfit',sans-serif;
-        font-size:.9rem; color:var(--ink); background:var(--cream);
-        outline:none; transition:border-color .2s,background .2s;
-        width:100%; box-sizing:border-box;
-        appearance:none; -webkit-appearance:none;
-    }
-    .field-control:focus { border-color:var(--growth); background:#fff; box-shadow:0 0 0 3px rgba(13,92,58,.08); }
-    .field-control.is-error { border-color:var(--danger); background:var(--danger-pale); }
-    .field-error { font-size:.75rem; color:var(--danger); }
-    textarea.field-control { resize:vertical; min-height:110px; }
-
-    /* ─── Current Image + Upload ─── */
-    .image-panel { display:grid; grid-template-columns:auto 1fr; gap:1.25rem; align-items:start; }
-    @media(max-width:500px) { .image-panel { grid-template-columns:1fr; } }
-    .current-img-wrap { text-align:center; }
-    .current-img {
-        width:120px; height:120px; object-fit:cover; border-radius:12px;
-        border:3px solid var(--border); display:block; margin-bottom:.5rem;
-    }
-    .current-img-placeholder {
-        width:120px; height:120px; border-radius:12px;
-        background:var(--growth-pale); border:3px solid var(--border);
-        display:flex; align-items:center; justify-content:center; font-size:3rem;
-    }
-    .current-label { font-size:.72rem; color:var(--muted); font-weight:600; }
-    .upload-zone {
-        border:2px dashed var(--border); border-radius:12px;
-        padding:1.5rem; text-align:center; cursor:pointer;
-        transition:all .25s; background:var(--cream); position:relative;
-    }
-    .upload-zone:hover { border-color:var(--growth); background:var(--growth-pale); }
-    .upload-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-    .upload-text { font-size:.85rem; color:var(--muted); }
-    .upload-text strong { color:var(--growth); }
-    .new-preview { max-width:100%; max-height:160px; border-radius:8px; margin-top:.75rem; display:none; }
-
-    /* ─── Toggle Group ─── */
-    .toggle-group { display:flex; gap:.5rem; flex-wrap:wrap; }
-    .toggle-option { display:none; }
-    .toggle-label {
-        display:inline-flex; align-items:center; gap:.4rem;
-        padding:.5rem 1.1rem; border-radius:100px;
-        border:1.5px solid var(--border); cursor:pointer;
-        font-size:.85rem; font-weight:500; color:var(--muted);
-        transition:all .2s; background:#fff;
-    }
-    .toggle-option:checked + .toggle-label { border-color:var(--growth); background:var(--growth); color:#fff; }
-    .toggle-option[value="inactive"]:checked + .toggle-label { background:var(--muted); border-color:var(--muted); }
-    .toggle-option[value="pending"]:checked  + .toggle-label { background:var(--gold); border-color:var(--gold); color:var(--ink); }
-
-    /* ─── Switch ─── */
-    .switch-wrap { display:flex; align-items:center; gap:.85rem; }
-    .switch { position:relative; width:46px; height:26px; }
-    .switch input { opacity:0; width:0; height:0; }
-    .slider { position:absolute; cursor:pointer; inset:0; background:var(--border); border-radius:100px; transition:.3s; }
-    .slider::before { content:''; position:absolute; height:20px; width:20px; border-radius:50%; left:3px; bottom:3px; background:#fff; transition:.3s; }
-    .switch input:checked + .slider { background:var(--growth); }
-    .switch input:checked + .slider::before { transform:translateX(20px); }
-
-    /* ─── Change indicator ─── */
-    .changed-indicator {
-        display:none; position:fixed; bottom:1.5rem; right:1.5rem; z-index:100;
-        background:var(--ink); color:#fff; border-radius:12px;
-        padding:.75rem 1.25rem; font-size:.85rem; font-weight:500;
-        box-shadow:0 8px 24px rgba(0,0,0,.2); animation:slideUp .3s ease;
-        align-items:center; gap:.6rem;
-    }
-    .changed-indicator.show { display:flex; }
-    @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-
-    /* ─── Form Footer ─── */
-    .form-footer {
-        padding:1.25rem 2rem; background:var(--cream);
-        border-top:1px solid var(--border);
-        display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.75rem;
-    }
-    .btn-group { display:flex; gap:.6rem; flex-wrap:wrap; }
-    .btn-submit {
-        background:var(--growth); color:#fff;
-        border:none; border-radius:10px; cursor:pointer;
-        padding:.75rem 2rem; font-family:'Outfit',sans-serif;
-        font-size:.95rem; font-weight:700;
-        display:inline-flex; align-items:center; gap:.5rem;
-        transition:background .2s, transform .15s;
-    }
-    .btn-submit:hover { background:var(--growth-light); transform:translateY(-1px); }
-    .btn-view {
-        background:var(--opp-pale); color:var(--opp);
-        border:1.5px solid rgba(232,99,10,.2); border-radius:10px;
-        padding:.72rem 1.25rem; font-family:'Outfit',sans-serif;
-        font-size:.88rem; font-weight:600; text-decoration:none;
-        display:inline-flex; align-items:center; gap:.4rem; cursor:pointer;
-        transition:all .2s;
-    }
-    .btn-view:hover { background:var(--opp); color:#fff; }
-    .btn-cancel {
-        background:transparent; color:var(--muted);
-        border:1.5px solid var(--border); border-radius:10px;
-        padding:.72rem 1.25rem; font-family:'Outfit',sans-serif;
-        font-size:.9rem; font-weight:600; cursor:pointer;
-        text-decoration:none; transition:color .2s, border-color .2s;
-    }
-    .btn-cancel:hover { color:var(--ink); border-color:var(--ink); }
-    .btn-danger {
-        background:var(--danger-pale); color:var(--danger);
-        border:1.5px solid rgba(220,38,38,.15); border-radius:10px;
-        padding:.72rem 1.25rem; font-family:'Outfit',sans-serif;
-        font-size:.88rem; font-weight:600; cursor:pointer;
-        display:inline-flex; align-items:center; gap:.4rem; transition:all .2s;
-    }
-    .btn-danger:hover { background:var(--danger); color:#fff; }
-
-    .form-alert {
-        background:var(--danger-pale); border:1px solid rgba(220,38,38,.2);
-        border-radius:10px; padding:1rem 1.25rem;
-        color:var(--danger); font-size:.88rem; margin-bottom:1rem;
-    }
-    .form-success {
-        background:var(--growth-pale); border:1px solid rgba(13,92,58,.2);
-        border-radius:10px; padding:1rem 1.25rem;
-        color:var(--growth); font-size:.88rem; margin-bottom:1rem;
-    }
-</style>
-@endpush
-
 @section('content')
 
-{{-- Header --}}
-<div class="form-header">
-    <div class="header-inner">
-        @if($talent->image)
-            <img src="{{ asset('image/' . $talent->image) }}" alt="{{ $talent->name }}" class="header-avatar">
-        @else
-            <div class="avatar-placeholder-sm">👤</div>
-        @endif
-        <div class="header-text">
-            <div class="breadcrumb">
-                <a href="{{ route('talents.index') }}">Talents</a>
-                <span>›</span>
-                <a href="{{ route('talents.show', $talent) }}">{{ $talent->name }}</a>
-                <span>›</span>
-                <span>Edit</span>
-            </div>
-            <span class="edit-badge">✏ Editing</span>
-            <h1 class="form-title">{{ $talent->name }}</h1>
-            <p class="form-subtitle">Last updated {{ $talent->updated_at?->diffForHumans() ?? 'never' }}</p>
-            <div class="header-meta">
-                <span class="meta-tag">{{ $talent->category->name ?? 'Uncategorized' }}</span>
-                @if($talent->level)<span class="meta-tag">⚡ {{ ucfirst($talent->level) }}</span>@endif
-                <span class="meta-tag">{{ ucfirst($talent->status ?? 'active') }}</span>
-            </div>
+<style>
+    :root {
+        --bg-base:      #060f11;
+        --bg-surface:   #0b1a1e;
+        --bg-elevated:  #0f2228;
+        --bg-card:      #122630;
+        --border:       #1a3340;
+        --border-light: #1f3d4d;
+        --text-muted:   #3d4648;
+        --text-mid:     #6b8a90;
+        --text-body:    #a8c5cb;
+        --text-head:    #d6eaed;
+        --accent:       #00c9a7;
+        --accent-dim:   #009e84;
+        --accent-glow:  rgba(0,201,167,0.15);
+        --gold:         #e8a838;
+        --danger:       #e05a6b;
+        --warning:      #f0a830;
+        --radius:       10px;
+        --radius-lg:    16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-base); color: var(--text-body); font-family: 'Sora','DM Sans',sans-serif; min-height: 100vh; }
+
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 36px 32px; }
+
+    .breadcrumb {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 12px; color: var(--text-muted); margin-bottom: 28px;
+    }
+    .breadcrumb a { color: var(--text-mid); text-decoration: none; transition: color .2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb .sep { color: var(--text-muted); font-size: 10px; }
+    .breadcrumb .current { color: var(--text-body); }
+
+    .page-header {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+    }
+    .page-title-group small {
+        display: block; font-size: 11px; letter-spacing: .14em;
+        text-transform: uppercase; color: var(--warning); margin-bottom: 6px; font-weight: 600;
+    }
+    .page-title-group h1 {
+        font-size: 26px; font-weight: 700; color: var(--text-head); letter-spacing: -.4px;
+    }
+    .page-title-group .talent-id {
+        font-size: 12px; color: var(--text-muted); margin-top: 4px;
+    }
+
+    .header-actions { display: flex; gap: 10px; }
+    .btn-back {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-mid); font-size: 13px; text-decoration: none;
+        border: 1px solid var(--border); padding: 8px 16px;
+        border-radius: var(--radius); transition: all .2s;
+    }
+    .btn-back:hover { border-color: var(--border-light); color: var(--text-body); }
+    .btn-view {
+        display: inline-flex; align-items: center; gap: 6px;
+        color: var(--text-mid); font-size: 13px; text-decoration: none;
+        border: 1px solid var(--border); padding: 8px 16px;
+        border-radius: var(--radius); transition: all .2s;
+    }
+    .btn-view:hover { border-color: #3bb8d8; color: #3bb8d8; }
+
+    /* Change indicator */
+    .edit-notice {
+        background: rgba(240,168,48,.07);
+        border: 1px solid rgba(240,168,48,.2);
+        border-radius: var(--radius);
+        padding: 11px 16px;
+        font-size: 12.5px;
+        color: var(--warning);
+        display: flex; align-items: center; gap: 9px;
+        margin-bottom: 24px;
+    }
+
+    /* Form layout */
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 24px;
+        align-items: start;
+    }
+    @media (max-width: 860px) {
+        .form-layout { grid-template-columns: 1fr; }
+    }
+
+    .form-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+    .form-card:last-child { margin-bottom: 0; }
+    .card-header {
+        padding: 16px 22px; border-bottom: 1px solid var(--border);
+        display: flex; align-items: center; gap: 10px;
+    }
+    .card-header-icon {
+        width: 28px; height: 28px;
+        background: var(--accent-glow);
+        border: 1px solid rgba(0,201,167,.2);
+        border-radius: 7px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--accent); flex-shrink: 0;
+    }
+    .card-header-icon svg { width: 14px; height: 14px; }
+    .card-header h2 { font-size: 13.5px; font-weight: 700; color: var(--text-head); }
+
+    .card-body { padding: 22px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 600px) {
+        .form-row, .form-row.triple { grid-template-columns: 1fr; }
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label {
+        font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+        color: var(--text-muted); font-weight: 700;
+    }
+    .field label .req { color: var(--danger); margin-left: 2px; }
+    .field input, .field select, .field textarea {
+        background: var(--bg-card); border: 1px solid var(--border);
+        color: var(--text-body); border-radius: 8px; padding: 10px 14px;
+        font-size: 13.5px; font-family: inherit; outline: none;
+        transition: border-color .2s, box-shadow .2s; width: 100%; line-height: 1.4;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+        border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
+    .field select option { background: #0d1e22; }
+    .field textarea { resize: vertical; min-height: 110px; }
+    .field .error-msg { font-size: 11.5px; color: var(--danger); }
+    .field input.is-error, .field select.is-error, .field textarea.is-error {
+        border-color: var(--danger); box-shadow: 0 0 0 3px rgba(224,90,107,.12);
+    }
+
+    /* Current image display */
+    .current-image-block {
+        margin-bottom: 16px;
+        padding: 12px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        display: flex; align-items: center; gap: 12px;
+    }
+    .current-image-block img {
+        width: 64px; height: 64px; border-radius: 8px;
+        object-fit: cover; border: 1px solid var(--border-light);
+        flex-shrink: 0;
+    }
+    .current-image-block .img-info { flex: 1; }
+    .current-image-block .img-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+    .current-image-block .img-name { font-size: 12.5px; color: var(--text-body); word-break: break-all; }
+
+    .img-upload-zone {
+        border: 2px dashed var(--border); border-radius: var(--radius);
+        padding: 22px 16px; text-align: center; cursor: pointer;
+        transition: border-color .2s, background .2s; position: relative; overflow: hidden;
+    }
+    .img-upload-zone:hover { border-color: var(--accent); background: var(--accent-glow); }
+    .img-upload-zone input[type="file"] {
+        position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .img-upload-zone .upload-icon {
+        width: 36px; height: 36px; background: var(--bg-elevated);
+        border: 1px solid var(--border); border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center;
+        color: var(--text-mid); margin-bottom: 8px;
+    }
+    .img-upload-zone p { font-size: 12px; color: var(--text-mid); }
+    .img-upload-zone small { font-size: 11px; color: var(--text-muted); margin-top: 3px; display: block; }
+    #imagePreview { width: 100%; border-radius: 8px; margin-top: 10px; display: none; max-height: 180px; object-fit: cover; border: 1px solid var(--border); }
+
+    /* Toggles */
+    .toggle-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .toggle-label { font-size: 13px; color: var(--text-body); }
+    .toggle-label small { display: block; font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .toggle-switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+        position: absolute; cursor: pointer; inset: 0;
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: 24px; transition: .2s;
+    }
+    .toggle-slider::before {
+        content: ''; position: absolute;
+        width: 16px; height: 16px; left: 3px; top: 3px;
+        background: var(--text-muted); border-radius: 50%; transition: .2s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--accent-glow); border-color: var(--accent); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); background: var(--accent); }
+
+    /* Relation stats */
+    .relation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .relation-stat {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 14px;
+        text-align: center;
+    }
+    .relation-stat .r-value { font-size: 22px; font-weight: 800; color: var(--text-head); line-height: 1; }
+    .relation-stat .r-label { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+
+    /* Submit bar */
+    .submit-bar {
+        background: var(--bg-surface); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); padding: 18px 22px;
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; flex-wrap: wrap; margin-top: 24px;
+    }
+    .submit-bar .meta { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+    .submit-bar .meta strong { color: var(--text-mid); }
+    .submit-actions { display: flex; gap: 10px; }
+    .btn-save {
+        background: var(--accent); color: #060f11;
+        border: none; border-radius: 8px; padding: 11px 28px;
+        font-size: 13.5px; font-weight: 700; font-family: inherit; cursor: pointer;
+        transition: background .2s, transform .15s, box-shadow .2s;
+    }
+    .btn-save:hover {
+        background: #00e8c2; transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(0,201,167,.3);
+    }
+    .btn-cancel {
+        background: transparent; color: var(--text-mid);
+        border: 1px solid var(--border); border-radius: 8px; padding: 11px 22px;
+        font-size: 13.5px; font-family: inherit; cursor: pointer;
+        text-decoration: none; display: inline-flex; align-items: center;
+        transition: border-color .2s, color .2s;
+    }
+    .btn-cancel:hover { border-color: var(--border-light); color: var(--text-body); }
+
+    .validation-banner {
+        background: rgba(224,90,107,.1); border: 1px solid rgba(224,90,107,.25);
+        color: var(--danger); padding: 12px 18px; border-radius: var(--radius);
+        font-size: 13px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+    }
+</style>
+
+
+<div class="page-wrap">
+
+    <div class="breadcrumb">
+        <a href="{{ route('admin.talents.index') }}">Talents</a>
+        <span class="sep">›</span>
+        <a href="{{ route('admin.talents.show', $talent) }}">{{ $talent->name }}</a>
+        <span class="sep">›</span>
+        <span class="current">Edit</span>
+    </div>
+
+    <div class="page-header">
+        <div class="page-title-group">
+            <small>Editing Record</small>
+            <h1>{{ $talent->name }}</h1>
+            <div class="talent-id">ID #{{ $talent->id }} · Created {{ $talent->created_at->format('d M Y') }}</div>
+        </div>
+        <div class="header-actions">
+            <a href="{{ route('admin.talents.show', $talent) }}" class="btn-view">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                View Profile
+            </a>
+            <a href="{{ route('admin.talents.index') }}" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                Back
+            </a>
         </div>
     </div>
-</div>
 
-{{-- Tabs --}}
-<div style="background:#fff;border-bottom:1px solid var(--border);">
-    <div class="tabs-wrap">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('basic', this)">📋 Basic Info</button>
-            <button class="tab-btn" onclick="switchTab('contact', this)">📞 Contact</button>
-            <button class="tab-btn" onclick="switchTab('photo', this)">🖼️ Photo</button>
-            <button class="tab-btn" onclick="switchTab('settings', this)">⚙️ Status & Settings</button>
-        </div>
+    <div class="edit-notice">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+        </svg>
+        You are editing an existing talent. Changes will be saved when you click <strong>"Update Talent"</strong>.
     </div>
-</div>
-
-<div class="form-wrap">
 
     @if($errors->any())
-    <div class="form-alert">⚠ {{ $errors->first() }}</div>
+    <div class="validation-banner">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+        </svg>
+        Please fix the {{ $errors->count() }} error(s) below.
+    </div>
     @endif
 
-    @if(session('success'))
-    <div class="form-success">✓ {{ session('success') }}</div>
-    @endif
+    <form method="POST" action="{{ route('admin.talents.update', $talent) }}" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-    <form method="POST" action="{{ route('talents.update', $talent) }}" enctype="multipart/form-data" id="editForm">
-        @csrf @method('PUT')
+        <div class="form-layout">
 
-        {{-- ─── Tab: Basic ─── --}}
-        <div id="panel-basic" class="tab-panel active">
-            <div class="form-card">
-                <div class="form-section">
-                    <div class="section-head">
-                        <div class="section-dot"></div>
-                        <h2 class="section-heading">Basic Information</h2>
+            {{-- LEFT COLUMN --}}
+            <div>
+                <div class="form-card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                        </div>
+                        <h2>Basic Information</h2>
                     </div>
-                    <div class="fields-grid">
-
-                        <div class="field-group field-full">
-                            <label class="field-label">Full Name <span class="req">*</span></label>
-                            <input type="text" name="name" class="field-control @error('name') is-error @enderror"
-                                value="{{ old('name', $talent->name) }}" required>
-                            @error('name')<span class="field-error">⚠ {{ $message }}</span>@enderror
+                    <div class="card-body">
+                        <div class="form-row single" style="margin-bottom:16px;">
+                            <div class="field">
+                                <label>Full Name <span class="req">*</span></label>
+                                <input type="text" name="name" value="{{ old('name', $talent->name) }}" placeholder="Enter talent name"
+                                       class="{{ $errors->has('name') ? 'is-error' : '' }}">
+                                @error('name') <span class="error-msg">{{ $message }}</span> @enderror
+                            </div>
                         </div>
-
-                        <div class="field-group">
-                            <label class="field-label">Category <span class="req">*</span></label>
-                            <select name="category_id" class="field-control @error('category_id') is-error @enderror" required>
-                                <option value="">Select category…</option>
-                                @foreach($categories ?? [] as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('category_id', $talent->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('category_id')<span class="field-error">⚠ {{ $message }}</span>@enderror
+                        <div class="form-row">
+                            <div class="field">
+                                <label>Email Address</label>
+                                <input type="email" name="email" value="{{ old('email', $talent->email) }}" placeholder="email@example.com"
+                                       class="{{ $errors->has('email') ? 'is-error' : '' }}">
+                                @error('email') <span class="error-msg">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="field">
+                                <label>Phone Number</label>
+                                <input type="text" name="phone" value="{{ old('phone', $talent->phone) }}" placeholder="+250 7XX XXX XXX">
+                            </div>
                         </div>
-
-                        <div class="field-group">
-                            <label class="field-label">Experience Level</label>
-                            <select name="level" class="field-control">
-                                <option value="">Select level…</option>
-                                @foreach(['junior','mid','senior','expert'] as $lvl)
-                                <option value="{{ $lvl }}" {{ old('level', $talent->level) == $lvl ? 'selected' : '' }}>{{ ucfirst($lvl) }}</option>
-                                @endforeach
-                            </select>
+                        <div class="form-row single" style="margin-bottom:0;">
+                            <div class="field">
+                                <label>Address / Location</label>
+                                <input type="text" name="address" value="{{ old('address', $talent->address) }}" placeholder="City, Country">
+                            </div>
                         </div>
-
-                        <div class="field-group field-full">
-                            <label class="field-label">Description <span class="req">*</span></label>
-                            <textarea name="description" class="field-control @error('description') is-error @enderror" required>{{ old('description', $talent->description) }}</textarea>
-                            @error('description')<span class="field-error">⚠ {{ $message }}</span>@enderror
-                        </div>
-
                     </div>
                 </div>
-                <div class="form-footer">
-                    <a href="{{ route('talents.show', $talent) }}" class="btn-cancel">Cancel</a>
-                    <div class="btn-group">
-                        <a href="{{ route('talents.show', $talent) }}" class="btn-view">View Profile</a>
-                        <button type="submit" class="btn-submit">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                            Save Changes
-                        </button>
+
+                <div class="form-card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+                        </div>
+                        <h2>Profile Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row triple" style="margin-bottom:16px;">
+                            <div class="field">
+                                <label>Category <span class="req">*</span></label>
+                                <select name="category_id" class="{{ $errors->has('category_id') ? 'is-error' : '' }}">
+                                    <option value="">Select category</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->id }}"
+                                            {{ old('category_id', $talent->category_id) == $cat->id ? 'selected' : '' }}>
+                                            {{ $cat->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id') <span class="error-msg">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="field">
+                                <label>Level</label>
+                                <select name="level">
+                                    <option value="">Select level</option>
+                                    @foreach(['beginner','intermediate','advanced','expert'] as $lv)
+                                        <option value="{{ $lv }}"
+                                            {{ old('level', $talent->level) == $lv ? 'selected' : '' }}>
+                                            {{ ucfirst($lv) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Language</label>
+                                <input type="text" name="language" value="{{ old('language', $talent->language) }}" placeholder="English, French…">
+                            </div>
+                        </div>
+                        <div class="form-row single" style="margin-bottom:0;">
+                            <div class="field">
+                                <label>Bio / Description</label>
+                                <textarea name="description">{{ old('description', $talent->description) }}</textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- ─── Tab: Contact ─── --}}
-        <div id="panel-contact" class="tab-panel">
-            <div class="form-card">
-                <div class="form-section">
-                    <div class="section-head">
-                        <div class="section-dot" style="background:var(--growth);"></div>
-                        <h2 class="section-heading">Contact Details</h2>
+            {{-- RIGHT COLUMN --}}
+            <div>
+                {{-- Image --}}
+                <div class="form-card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                        </div>
+                        <h2>Profile Image</h2>
                     </div>
-                    <div class="fields-grid">
-
-                        <div class="field-group">
-                            <label class="field-label">Email Address</label>
-                            <input type="email" name="email" class="field-control @error('email') is-error @enderror"
-                                value="{{ old('email', $talent->email) }}">
-                            @error('email')<span class="field-error">⚠ {{ $message }}</span>@enderror
+                    <div class="card-body">
+                        @if($talent->image)
+                        <div class="current-image-block">
+                            <img src="{{ asset($talent->image) }}" alt="{{ $talent->name }}">
+                            <div class="img-info">
+                                <div class="img-label">Current Image</div>
+                                <div class="img-name">{{ basename($talent->image) }}</div>
+                            </div>
                         </div>
-
-                        <div class="field-group">
-                            <label class="field-label">Phone Number</label>
-                            <input type="text" name="phone" class="field-control @error('phone') is-error @enderror"
-                                value="{{ old('phone', $talent->phone) }}" placeholder="+250 7XX XXX XXX">
-                            @error('phone')<span class="field-error">⚠ {{ $message }}</span>@enderror
+                        @endif
+                        <div class="img-upload-zone">
+                            <input type="file" name="image" accept="image/*" onchange="previewImage(this)">
+                            <div class="upload-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                            </div>
+                            <p>{{ $talent->image ? 'Replace image' : 'Upload image' }}</p>
+                            <small>PNG, JPG, WEBP · Max 2MB</small>
                         </div>
+                        <img id="imagePreview" src="#" alt="New preview">
+                    </div>
+                </div>
 
-                        <div class="field-group field-full">
-                            <label class="field-label">Address</label>
-                            <input type="text" name="address" class="field-control"
-                                value="{{ old('address', $talent->address) }}" placeholder="e.g. Kigali, Gasabo District">
+                {{-- Settings --}}
+                <div class="form-card">
+                    <div class="card-header">
+                        <div class="card-header-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
-
-                        <div class="field-group">
-                            <label class="field-label">Primary Language</label>
-                            <select name="language" class="field-control">
-                                <option value="">Select language…</option>
-                                @foreach(['kinyarwanda','english','french','swahili'] as $lang)
-                                <option value="{{ $lang }}" {{ old('language', $talent->language) == $lang ? 'selected' : '' }}>{{ ucfirst($lang) }}</option>
-                                @endforeach
+                        <h2>Settings</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="field" style="margin-bottom:16px;">
+                            <label>Status</label>
+                            <select name="status">
+                                <option value="active"   {{ old('status', $talent->status) == 'active'   ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ old('status', $talent->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="pending"  {{ old('status', $talent->status) == 'pending'  ? 'selected' : '' }}>Pending</option>
                             </select>
                         </div>
-
-                    </div>
-                </div>
-                <div class="form-footer">
-                    <a href="{{ route('talents.show', $talent) }}" class="btn-cancel">Cancel</a>
-                    <button type="submit" class="btn-submit">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                        Save Changes
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        {{-- ─── Tab: Photo ─── --}}
-        <div id="panel-photo" class="tab-panel">
-            <div class="form-card">
-                <div class="form-section">
-                    <div class="section-head">
-                        <div class="section-dot" style="background:var(--gold);"></div>
-                        <h2 class="section-heading">Profile Photo</h2>
-                    </div>
-                    <div class="image-panel">
-                        <div class="current-img-wrap">
-                            @if($talent->image)
-                                <img src="{{ asset('image/' . $talent->image) }}" alt="Current photo" class="current-img" id="currentImg">
-                            @else
-                                <div class="current-img-placeholder">👤</div>
-                            @endif
-                            <div class="current-label">Current Photo</div>
-                        </div>
-                        <div>
-                            <label class="upload-zone">
-                                <input type="file" name="image" accept="image/*" onchange="previewNew(this)">
-                                <div style="font-size:1.75rem;margin-bottom:.4rem;">📤</div>
-                                <p class="upload-text"><strong>Click to upload new photo</strong><br>PNG, JPG, WEBP — max 2MB</p>
-                                <img id="newPreview" class="new-preview" alt="New preview">
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                Featured Profile
+                                <small>Highlight on homepage</small>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="featured" value="1"
+                                    {{ old('featured', $talent->featured) ? 'checked' : '' }}>
+                                <span class="toggle-slider"></span>
                             </label>
-                            <p class="field-hint" style="margin-top:.5rem;">Leave empty to keep the current photo</p>
-                            @error('image')<span class="field-error">⚠ {{ $message }}</span>@enderror
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                Matched
+                                <small>Successfully placed</small>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="matched" value="1"
+                                    {{ old('matched', $talent->matched) ? 'checked' : '' }}>
+                                <span class="toggle-slider"></span>
+                            </label>
                         </div>
                     </div>
                 </div>
-                <div class="form-footer">
-                    <a href="{{ route('talents.show', $talent) }}" class="btn-cancel">Cancel</a>
-                    <button type="submit" class="btn-submit">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                        Save Photo
-                    </button>
+
+                {{-- Relations summary --}}
+                <div class="form-card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:rgba(232,168,56,.12); border-color:rgba(232,168,56,.2); color:var(--gold);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/></svg>
+                        </div>
+                        <h2>Activity Overview</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="relation-grid">
+                            <div class="relation-stat">
+                                <div class="r-value">{{ $talent->skills->count() }}</div>
+                                <div class="r-label">Skills</div>
+                            </div>
+                            <div class="relation-stat">
+                                <div class="r-value">{{ $talent->stories->count() }}</div>
+                                <div class="r-label">Stories</div>
+                            </div>
+                            <div class="relation-stat">
+                                <div class="r-value">{{ $talent->feedback->count() }}</div>
+                                <div class="r-label">Feedback</div>
+                            </div>
+                            <div class="relation-stat">
+                                <div class="r-value">{{ $talent->connections->count() }}</div>
+                                <div class="r-label">Connections</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
-        {{-- ─── Tab: Settings ─── --}}
-        <div id="panel-settings" class="tab-panel">
-            <div class="form-card">
-                <div class="form-section">
-                    <div class="section-head">
-                        <div class="section-dot" style="background:var(--growth-light);"></div>
-                        <h2 class="section-heading">Status & Visibility</h2>
-                    </div>
-                    <div class="fields-grid">
-
-                        <div class="field-group">
-                            <label class="field-label">Status <span class="req">*</span></label>
-                            <div class="toggle-group" style="margin-top:.2rem;">
-                                @foreach(['active' => '● Active', 'inactive' => '○ Inactive', 'pending' => '◌ Pending'] as $val => $label)
-                                <input type="radio" name="status" id="e_status_{{ $val }}" value="{{ $val }}" class="toggle-option"
-                                    {{ old('status', $talent->status) == $val ? 'checked' : '' }}>
-                                <label for="e_status_{{ $val }}" class="toggle-label">{{ $label }}</label>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="field-group">
-                            <label class="field-label">Featured</label>
-                            <div class="switch-wrap" style="margin-top:.35rem;">
-                                <label class="switch">
-                                    <input type="hidden" name="featured" value="0">
-                                    <input type="checkbox" name="featured" value="1" {{ old('featured', $talent->featured) ? 'checked' : '' }}>
-                                    <span class="slider"></span>
-                                </label>
-                                <span style="font-size:.9rem;font-weight:500;color:var(--ink);">Mark as Featured Talent</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                {{-- Danger Zone --}}
-                <div class="form-section" style="background:#fff8f8;">
-                    <div class="section-head">
-                        <div class="section-dot" style="background:var(--danger);"></div>
-                        <h2 class="section-heading" style="color:var(--danger);">Danger Zone</h2>
-                    </div>
-                    <p style="font-size:.88rem;color:var(--muted);margin-bottom:1rem;">
-                        Permanently delete this talent and all associated data. This action cannot be undone.
-                    </p>
-                    <form method="POST" action="{{ route('talents.destroy', $talent) }}"
-                        onsubmit="return confirm('⚠ Delete {{ addslashes($talent->name) }}? All data will be permanently removed.')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="btn-danger">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                            Delete Talent Permanently
-                        </button>
-                    </form>
-                </div>
-
-                <div class="form-footer">
-                    <a href="{{ route('talents.show', $talent) }}" class="btn-cancel">Cancel</a>
-                    <button type="submit" class="btn-submit">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                        Save Settings
-                    </button>
-                </div>
+        <div class="submit-bar">
+            <div class="meta">
+                Last updated: <strong>{{ $talent->updated_at->diffForHumans() }}</strong><br>
+                Created: <strong>{{ $talent->created_at->format('d M Y, H:i') }}</strong>
+            </div>
+            <div class="submit-actions">
+                <a href="{{ route('admin.talents.index') }}" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-save">Update Talent</button>
             </div>
         </div>
 
     </form>
 </div>
 
-{{-- Unsaved changes indicator --}}
-<div class="changed-indicator" id="changedBadge">
-    ● Unsaved changes
-    <button onclick="document.getElementById('editForm').requestSubmit()" style="background:var(--opp);color:#fff;border:none;border-radius:6px;padding:.3rem .75rem;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;">Save</button>
-</div>
-
-@push('scripts')
 <script>
-function switchTab(name, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + name).classList.add('active');
-    btn.classList.add('active');
-}
-
-function previewNew(input) {
-    const img = document.getElementById('newPreview');
-    const cur = document.getElementById('currentImg');
+function previewImage(input) {
+    const preview = document.getElementById('imagePreview');
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = e => {
-            img.src = e.target.result;
-            img.style.display = 'block';
-            if (cur) cur.style.opacity = '.5';
-        };
+        reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
         reader.readAsDataURL(input.files[0]);
     }
 }
-
-// Unsaved changes indicator
-let changed = false;
-document.getElementById('editForm').addEventListener('change', () => {
-    if (!changed) {
-        changed = true;
-        document.getElementById('changedBadge').classList.add('show');
-    }
-});
-window.addEventListener('beforeunload', e => {
-    if (changed) { e.preventDefault(); e.returnValue = ''; }
-});
-document.getElementById('editForm').addEventListener('submit', () => { changed = false; });
 </script>
-@endpush
 @endsection

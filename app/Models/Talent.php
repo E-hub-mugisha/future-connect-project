@@ -32,6 +32,15 @@ class Talent extends Model
         'level'
     ];
 
+    // cast attributes
+    protected $casts = [
+        'featured' => 'boolean',
+        'matched' => 'boolean',
+        'level' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class,'category_id');

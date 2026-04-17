@@ -13,10 +13,46 @@ use Illuminate\Support\Str;
 
 class AdminCoursesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::with(['category', 'talent'])->latest()->get();
-        return view('admin-pages.courses.index', compact('courses'));
+        $query = Course::with(['talent', 'category'])
+            ->withCount('enrollments');
+ 
+        // Filters
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+ 
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+ 
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+ 
+        if ($request->filled('is_free')) {
+            $query->where('is_free', (bool) $request->is_free);
+        }
+ 
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+ 
+        $perPage = $request->get('per_page', 15);
+        $courses = $query->latest()->paginate($perPage);
+ 
+        // Stats for the stat cards
+        $stats = [
+            'total'       => Course::count(),
+            'published'   => Course::where('status', 'published')->count(),
+            'draft'       => Course::where('status', 'draft')->count(),
+            'enrollments' => \App\Models\CourseEnrollment::count(),
+        ];
+ 
+        $categories = Category::orderBy('name')->get();
+
+        return view('admin-pages.courses.index', compact('courses', 'stats', 'categories'));
     }
 
     public function create()

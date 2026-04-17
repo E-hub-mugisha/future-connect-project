@@ -131,13 +131,13 @@ class AdminTalentController extends Controller
             'user',
         ]);
 
-        return view('admin.talents.show', compact('talent'));
+        return view('admin-pages.talents.show', compact('talent'));
     }
 
     public function edit(Talent $talent)
     {
         $categories = Category::orderBy('name')->get();
-        return view('admin.talents.edit', compact('talent', 'categories'));
+        return view('admin-pages.talents.edit', compact('talent', 'categories'));
     }
 
     public function update(Request $request, Talent $talent)

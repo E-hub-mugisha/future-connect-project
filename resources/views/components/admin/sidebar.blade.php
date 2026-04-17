@@ -20,7 +20,7 @@ $isActive = fn(string $pattern): string =>
 /* ── FC Sidebar ───────────────────────────────────────── */
 :root {
     --fc-bg:            #051321;
-    --fc-bg-2:          #071b2e;
+    --fc-bg-2:          #060f11;
     --fc-bg-3:          #0b2540;
     --fc-green:         #00a667;
     --fc-green-dim:     rgba(0,166,103,0.12);
@@ -218,7 +218,7 @@ $isActive = fn(string $pattern): string =>
                         </li>
 
                         <li class="nk-menu-item">
-                            <a href="/admin/talents" class="nk-menu-link {{ $isActive('admin.talents.*') }}">
+                            <a href="/admin/talents" class="nk-menu-link {{ $isActive('admin.talents.index*') }}">
                                 <span class="fc-nav-icon">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                 </span>

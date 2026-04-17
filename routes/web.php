@@ -270,13 +270,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents.index');
     Route::get('/talent/create', [AdminTalentController::class, 'create'])->name('talents.create');
     Route::post('/talents', [AdminTalentController::class, 'store'])->name('talents.store');
-    Route::patch('/talent/update/{id}', [AdminTalentController::class, 'update'])->name('talents.update');
-    Route::put('/talents/{id}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
-    Route::put('/talents/{id}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
-    Route::delete('/talents/{id}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
-    Route::get('/talents/{id}', [AdminTalentController::class, 'show'])->name('talents.show');
-    Route::get('/talents/{id}/edit', [AdminTalentController::class, 'edit'])->name('talents.edit');
-    Route::put('/talents/{id}/approve', [AdminTalentController::class, 'approve'])->name('talents.approve');
+    Route::put('/talent/update/{talent}', [AdminTalentController::class, 'update'])->name('talents.update');
+    Route::put('/talents/{talent}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
+    Route::put('/talents/{talent}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
+    Route::delete('/talents/delete/{talent}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
+    Route::get('/talents/{talent}', [AdminTalentController::class, 'show'])->name('talents.show');
+    Route::get('/talents/edit/{talent}', [AdminTalentController::class, 'edit'])->name('talents.edit');
+    Route::put('/talents/{talent}/approve', [AdminTalentController::class, 'approve'])->name('talents.approve');
     Route::post('talents/bulk', [AdminTalentController::class, 'bulkAction'])
         ->name('talents.bulk');
 
