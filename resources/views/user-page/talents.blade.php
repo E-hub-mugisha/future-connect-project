@@ -4,1167 +4,1242 @@
 
 <!-- SwiperJS for carousel -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 @php
-
 $categories = \App\Models\Category::all();
-
 @endphp
 
-
-<!-- Modern UI Styling -->
 <style>
-    .modern-tabs .nav-link {
-        border: 1px solid #319BF9;
-        background: #f8f9fa;
-        margin-right: 8px;
-        padding: 10px 18px;
-        border-radius: 10px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        color: #319BF9;
-    }
+  :root {
+    --bg:        #0e1618;
+    --bg2:       #131d20;
+    --bg3:       #18242a;
+    --border:    rgba(255,255,255,0.07);
+    --green:     #00a667;
+    --green-dim: rgba(0,166,103,0.15);
+    --green-glow:rgba(0,166,103,0.35);
+    --text:      #e8eef0;
+    --muted:     #7a9199;
+    --white:     #ffffff;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius:    12px;
+    --radius-lg: 20px;
+    --transition:.25s ease;
+  }
 
-    .modern-tabs .nav-link:hover {
-        background: #e9ecef;
-        color: #000;
-    }
+  *, *::before, *::after { box-sizing: border-box; }
 
-    .modern-tabs .nav-link.active {
-        background: #319BF9;
-        color: #fff !important;
-        /* box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3); */
-    }
+  body {
+    background: var(--bg);
+    font-family: var(--font-body);
+    color: var(--text);
+  }
 
-    .modern-tab-content {
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-        color: #fff;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        border: 1px solid #eee;
-    }
+  /* ─── HERO ─── */
+  #hero-section {
+    position: relative;
+    background: var(--bg);
+    padding: 80px 0 60px;
+    overflow: hidden;
+  }
+
+  #hero-section::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(0,166,103,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-dim);
+    border: 1px solid rgba(0,166,103,0.3);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--green);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero-eyebrow span {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:.4; transform:scale(1.5); }
+  }
+
+  .hero-headline {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 18px;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-headline .accent {
+    color: var(--green);
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-headline .accent::after {
+    content: '';
+    position: absolute;
+    bottom: 4px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    border-radius: 2px;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn-green {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+    box-shadow: 0 0 0 0 var(--green-glow);
+  }
+
+  .btn-green:hover {
+    background: #00bf76;
+    color: #fff;
+    box-shadow: 0 0 20px var(--green-glow);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+    transform: translateY(-2px);
+  }
+
+  /* ─── HERO CARDS ─── */
+  .hero-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .hero-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .hero-card:hover {
+    border-color: rgba(0,166,103,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .hero-card:hover::before { opacity: 1; }
+
+  .hero-card-icon {
+    width: 42px; height: 42px;
+    background: var(--green-dim);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    color: var(--green);
+    font-size: 18px;
+  }
+
+  .hero-card h5 {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .hero-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 0 16px;
+  }
+
+  .hero-card .card-link {
+    font-size: 0.83rem;
+    color: var(--green);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap var(--transition);
+  }
+
+  .hero-card .card-link:hover { gap: 10px; }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 0 20px;
+    border-right: 1px solid var(--border);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--green);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── SECTION COMMON ─── */
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 2px;
+    background: var(--green);
+    border-radius: 1px;
+  }
+
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 500px;
+  }
+
+  /* ─── CATEGORIES ─── */
+  #categories-section {
+    padding: 80px 0;
+    background: var(--bg);
+  }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 40px;
+  }
+
+  .cat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+    text-decoration: none;
+    display: block;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--green-dim);
+    transition: height var(--transition);
+  }
+
+  .cat-card:hover {
+    border-color: rgba(0,166,103,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .cat-card:hover::after { height: 100%; }
+
+  .cat-card:hover .cat-icon { background: var(--green); color: #fff; }
+  .cat-card:hover .cat-name { color: var(--green); }
+
+  .cat-icon {
+    width: 36px; height: 36px;
+    background: var(--green-dim);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green);
+    font-size: 15px;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+    transition: var(--transition);
+  }
+
+  .cat-name {
+    font-family: var(--font-head);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    position: relative; z-index: 1;
+    transition: var(--transition);
+  }
+
+  .cat-count {
+    font-size: 0.75rem;
+    color: var(--muted);
+    position: relative; z-index: 1;
+  }
+
+  /* ─── CTA BAND ─── */
+  #cta-band {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #cta-band::before {
+    content: '';
+    position: absolute;
+    left: -100px; top: 50%;
+    transform: translateY(-50%);
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,166,103,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-number {
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .cta-plus { color: var(--muted); }
+
+  /* ─── FAQ ─── */
+  #faq-section {
+    padding: 80px 0;
+    background: var(--bg);
+  }
+
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .faq-item:hover { border-color: rgba(0,166,103,0.3); }
+  .faq-item.open  { border-color: rgba(0,166,103,0.4); }
+
+  .faq-q {
+    width: 100%;
+    background: var(--bg2);
+    border: none;
+    padding: 18px 22px;
+    text-align: left;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: var(--transition);
+  }
+
+  .faq-q:hover { color: var(--white); }
+
+  .faq-icon {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: var(--green-dim);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green);
+    font-size: 12px;
+    transition: transform var(--transition);
+  }
+
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--green); color: #fff; }
+
+  .faq-a {
+    background: var(--bg3);
+    padding: 0 22px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.25s ease;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .faq-item.open .faq-a { max-height: 200px; padding: 16px 22px; }
+
+  /* ─── MODALS ─── */
+  .modal-content {
+    background: var(--bg2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  .modal-header {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 28px;
+  }
+
+  .modal-title {
+    font-family: var(--font-head);
+    color: var(--white);
+  }
+
+  .modal-body { padding: 28px; }
+
+  /* Form controls */
+  .form-control, .form-select {
+    background: var(--bg3) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: var(--radius) !important;
+    padding: 11px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    transition: border-color var(--transition);
+  }
+
+  .form-control::placeholder { color: var(--muted); }
+
+  .form-control:focus, .form-select:focus {
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 3px var(--green-dim) !important;
+    outline: none;
+  }
+
+  .form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+
+  /* Step wizard */
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 28px;
+  }
+
+  .step-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bg3);
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: var(--transition);
+  }
+
+  .step-dot.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+    box-shadow: 0 0 12px var(--green-glow);
+  }
+
+  .step-dot.done {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    transition: background var(--transition);
+  }
+
+  .step-line.done { background: var(--green); }
+
+  .step-section { display: none; }
+  .step-section.active {
+    display: block;
+    animation: fadeUp .3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(12px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .step-title {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .step-sub {
+    font-size: 0.83rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .info-note {
+    background: var(--green-dim);
+    border-left: 3px solid var(--green);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    color: var(--green);
+    margin-bottom: 20px;
+  }
+
+  /* Carousel (mobile) */
+  .m-hero-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .m-hero-card h4 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .m-hero-card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .carousel-indicators [data-bs-target] {
+    background-color: var(--green);
+    border-radius: 2px;
+    width: 18px; height: 3px;
+    border: none;
+    opacity: 0.4;
+    transition: opacity var(--transition), width var(--transition);
+  }
+
+  .carousel-indicators .active {
+    opacity: 1;
+    width: 28px;
+  }
+
+  /* mobile category strip */
+  .cat-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .cat-scroll::-webkit-scrollbar { display: none; }
+
+  .cat-chip {
+    flex-shrink: 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: var(--transition);
+  }
+
+  .cat-chip:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* Popular Section */
+  .pop-category {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pop-category::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--green-dim);
+    transition: height var(--transition);
+    z-index: 0;
+  }
+
+  .pop-category:hover {
+    border-color: rgba(0,166,103,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  .pop-category:hover::before { height: 100%; }
+
+  .pop-category * { position: relative; z-index: 1; }
+
+  .pop-category span {
+    width: 44px; height: 44px;
+    background: var(--green-dim);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    color: var(--green);
+    font-size: 18px;
+    transition: var(--transition);
+  }
+
+  .pop-category:hover span { background: var(--green); color: #fff; }
+
+  .pop-category h6 a {
+    font-family: var(--font-head);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .pop-category:hover h6 a { color: var(--green); }
+
+  .pop-category p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin: 4px 0 12px;
+  }
+
+  .slide-line-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: var(--green);
+    text-decoration: none;
+    font-weight: 600;
+    transition: gap var(--transition);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .slide-line-btn:hover { gap: 10px; color: var(--green); }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
 </style>
 
-<style>
-    #tranding {
-        /* position: relative; */
-        overflow: hidden;
-        background: #060f11;
-        color: #fff;
-        padding: 1rem 0;
-        border-radius: 3px;
-        border: 1px solid #3d4648;
-        margin-top: 2rem;
-        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        /* height: 22rem; */
-    }
+<!-- ═══ HERO ═══ -->
+<section id="hero-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
 
-    .tranding-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        align-items: center;
-        gap: 2rem;
-        width: 80%;
-        margin: 0 auto;
-    }
-
-    .tranding-image-slider {
-        width: 100%;
-        height: 20rem;
-        perspective: 1200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .tranding-image-slider .swiper-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .tranding-image-slider .swiper-slide {
-        height: 15rem;
-        width: 15rem;
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        transform: scale(0.9);
-        z-index: 1;
-        opacity: 0.6;
-    }
-
-    .tranding-image-slider .swiper-slide.swiper-slide-active {
-        transform: scale(1.1);
-        z-index: 3;
-        opacity: 1;
-        margin: 0 auto;
-    }
-
-    .tranding-image-slider .swiper-slide img {
-        width: 100%;
-        height: 100%;
-        border-radius: 1.5rem;
-        object-fit: cover;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    .tranding-caption-slider {
-        width: 80%;
-        text-align: left;
-    }
-
-    .tranding-caption-slider .swiper-slide {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .tranding-caption-slider .swiper-slide-active {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .tranding-slide-caption p {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-    }
-
-    .tranding-line-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        color: #fff;
-        font-weight: 600;
-        border: 2px solid #fff;
-        border-radius: 30px;
-        padding: 0.5rem 1.2rem;
-        transition: all 0.3s ease;
-    }
-
-    .tranding-line-btn:hover {
-        background-color: #fff;
-        color: #319BF9;
-    }
-
-    .tranding-slider-control {
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.4 ease;
-    }
-
-    .tranding-slider-control .slider-arrow {
-        background: var(--white);
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 50%;
-        left: 3%;
-        transform: translateX(-42%);
-        filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
-    }
-
-    .slider-arrow {
-        width: 3rem;
-        height: 3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        background: rgba(255, 255, 255);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .slider-arrow:hover {
-        background: #fff;
-        color: #319BF9;
-    }
-
-    /* Bubbles */
-    .bubbles {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        z-index: 0;
-    }
-
-    .bubbles span {
-        position: absolute;
-        bottom: -150px;
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        animation: bubbleUp 15s infinite;
-        opacity: 0.6;
-    }
-
-    .bubbles span:nth-child(1) {
-        left: 10%;
-        width: 60px;
-        height: 60px;
-        animation-duration: 20s;
-    }
-
-    .bubbles span:nth-child(2) {
-        left: 30%;
-        animation-delay: 2s;
-    }
-
-    .bubbles span:nth-child(3) {
-        left: 50%;
-        width: 80px;
-        height: 80px;
-        animation-duration: 25s;
-    }
-
-    .bubbles span:nth-child(4) {
-        left: 70%;
-        animation-delay: 1s;
-        width: 30px;
-        height: 30px;
-    }
-
-    .bubbles span:nth-child(5) {
-        left: 90%;
-        animation-duration: 18s;
-    }
-
-    @keyframes bubbleUp {
-        0% {
-            transform: translateY(0) scale(1);
-            opacity: 0.4;
-        }
-
-        50% {
-            opacity: 0.8;
-        }
-
-        100% {
-            transform: translateY(-1000px) scale(1.3);
-            opacity: 0;
-        }
-    }
-</style>
-
-<style>
-    /* --- SWITCH-STYLE NAV PILLS --- */
-    .nav-pills {
-        display: inline-flex;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 50px;
-        padding: 5px;
-        margin-bottom: 2rem;
-        justify-content: center;
-    }
-
-    .nav-pills .nav-link {
-        border-radius: 50px;
-        color: #fff;
-        font-weight: 500;
-        padding: 0.6rem 1.5rem;
-        transition: all 0.3s ease;
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #0d6efd;
-        color: #fff;
-        box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
-    }
-
-    .nav-pills .nav-link:not(.active):hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-
-    .hero-tab {
-        /* background: rgba(255, 255, 255, 0.1); */
-        /* backdrop-filter: blur(10px); */
-        border-radius: 3px;
-        border: 1px solid #3d4648;
-        padding: 2rem;
-        color: #f1f1f1;
-    }
-
-    .hero-tab h4 {
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .hero-tab p {
-        font-size: 1rem;
-        margin: 1rem 0 1.5rem;
-    }
-
-    .btn-light {
-        border-radius: 3px;
-        font-weight: 600;
-        padding: 0.6rem 1.5rem;
-        background: #060f11;
-        color: #afafaf;
-    }
-
-    #market-section {
-        position: relative;
-        /* background: #319bf9; */
-        color: #f1f1f1;
-        padding: 80px 0 56px;
-        z-index: 1;
-    }
-
-    #market-section .provide-box {
-        background: #d4e6f526;
-        backdrop-filter: blur(15px) saturate(180%);
-    }
-</style>
-
-<style>
-    /* Smooth card */
-    .wizard-wrapper {
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(15px) saturate(180%);
-        -webkit-backdrop-filter: blur(15px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 1.2rem;
-        padding: 2.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    .progress {
-        height: 10px;
-        border-radius: 50px;
-        overflow: hidden;
-        background: #e9ecef;
-    }
-
-    .progress-bar {
-        transition: width .4s ease-in-out;
-    }
-
-    /* Step titles */
-    .step-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #afafaf;
-        margin-bottom: .7rem;
-    }
-
-    /* Wizard step section */
-    .step-section {
-        display: none;
-    }
-
-    .step-section.active {
-        display: block;
-        animation: fadeStep .35s ease;
-    }
-
-    @keyframes fadeStep {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Button styles */
-    .btn-primary,
-    .btn-success,
-    .btn-danger {
-        padding: .6rem 1.5rem;
-        font-weight: 600;
-        border-radius: 3px;
-        transition: all 0.25s ease-in-out;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-    }
-
-    .btn-success:hover {
-        transform: translateY(-2px);
-    }
-
-    .wizard-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .wizard-header h2 {
-        font-weight: 800;
-        color: #2d3436;
-        letter-spacing: -.5px;
-    }
-
-    .wizard-header p {
-        font-size: 1rem;
-        color: #6c757d;
-    }
-
-    .info-note {
-        background: rgba(13, 110, 253, 0.1);
-        border-left: 4px solid #0d6efd;
-        padding: 1rem 1.2rem;
-        border-radius: .5rem;
-        margin-bottom: 1.3rem;
-        font-size: .95rem;
-    }
-
-    .form-control,
-    .form-select {
-        color: #afafaf;
-        background: #161d21;
-    }
-
-    /* Modal glass style */
-    .modal-glass .modal-content {
-        /* background: rgba(255, 255, 255, 0.69); */
-        /* backdrop-filter: blur(15px) saturate(180%); */
-        -webkit-backdrop-filter: blur(15px) saturate(180%);
-        border: 1px solid #3d4648;
-        ;
-        border-radius: 3px;
-    }
-
-    .seller-info-content {
-        background: #319bf970;
-        backdrop-filter: blur(15px) saturate(180%);
-        /* box-shadow: 0px 4.4px 12px -1px rgba(222, 222, 222, 0.36); */
-        border-radius: 10px;
-        padding: 40px;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-        margin: auto 0 auto -100px;
-        height: 420px;
-    }
-</style>
-
-<div class="container p-4">
-    <section id="tranding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                        <div class="banner-head mt-4">
-                            <h1 class="mb-2" style="color:#afafaf;">Your gateway to skills, opportunities, and growth.</h1>
-                            <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
-                        </div>
-                        <div class="banner-form">
-                            <!-- Mobile & Tablet Carousel -->
-                            <div id="skillCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
-                                <!-- Indicators -->
-                                <div class="carousel-indicators">
-                                    <button type="button" data-bs-target="#skillCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
-                                    <button type="button" data-bs-target="#skillCarousel" data-bs-slide-to="1"></button>
-                                    <button type="button" data-bs-target="#skillCarousel" data-bs-slide-to="2"></button>
-                                </div>
-                                <style>
-                                    .carousel-indicators {
-                                        bottom: -15px;
-                                    }
-                                </style>
-                                <!-- Slides -->
-                                <div class="carousel-inner">
-
-                                    <div class="carousel-item active">
-                                        <!-- Skills Marketplace -->
-                                        <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#afafaf;">Promote Your Skills</h4>
-                                            <p style="color:#afafaf;">
-                                                Stand out! Boost your profile and reach 3× more employers.<br>
-                                                Get verified and feature your story on our homepage.
-                                            </p>
-                                            <a type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                                <i class="ti ti-search me-1"></i> Search skilled people
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- gig Center -->
-                                    <div class="carousel-item">
-                                        <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#afafaf;">Join Our skill Hub</h4>
-                                            <p style="color:#afafaf;">
-                                                Showcase your skills, get verified, and connect with clients globally.
-                                                Our platform helps skilled people like you grow professionally and gain exposure.
-                                            </p>
-                                            <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="hero-tab text-center p-4">
-                                            <h4 style="color:#afafaf;">Expand Your Network</h4>
-                                            <p style="color:#afafaf;">
-                                                Connect with industry professionals, mentors, and peers.
-                                                Join groups, attend virtual events, and build relationships that matter.
-                                            </p>
-                                            <a href="{{ route('register')}}" class="btn btn-light">Join the Community</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- Tabs Content -->
-                            <div class="tab-content row d-none d-md-flex">
-                                <!-- Skills Marketplace -->
-                                <div class="col-md-4" id="marketplace">
-                                    <div class="tab-pane hero-tab" id="marketplace" role="tabpanel">
-                                        <h4 style="color:#afafaf;">Promote Your Skills</h4>
-                                        <p style="color:#afafaf;">
-                                            Stand out! Boost your profile and reach 3× more employers.<br>
-                                            Get verified and feature your story on our homepage.
-                                        </p>
-                                        <a type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                            <i class="ti ti-search me-1"></i> Search skilled people
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <!-- Opportunities Center -->
-                                <div class="col-md-4" id="marketplace">
-                                    <div class="tab-pane hero-tab" id="opportunities" role="tabpanel">
-                                        <h4 style="color:#afafaf;">Join Our skill Hub</h4>
-                                        <p style="color:#afafaf;">
-                                            Showcase your skills, get verified, and connect with clients globally.
-                                            Our platform helps skilled people like you grow professionally and gain exposure.
-                                        </p>
-                                        <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#talentModal">Register your skills</button>
-                                    </div>
-                                </div>
-                                <!-- Connection Room -->
-                                <div class="col-md-4" id="marketplace">
-                                    <div class="tab-pane hero-tab" id="connection" role="tabpanel">
-                                        <h4 style="color:#afafaf;">Expand Your Network</h4>
-                                        <p style="color:#afafaf;">
-                                            Connect with industry professionals, mentors, and peers.
-                                            Join groups, attend virtual events, and build relationships that matter.
-                                        </p>
-                                        <a href="{{ route('register')}}" class="btn btn-light">Join the Community</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div class="popular-search">
-                                <h5>Popular Searches : </h5>
-                                <ul>
-                                    @foreach($categories as $cat)
-                                    <li><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Left -->
+      <div class="col-lg-6">
+        <div class="hero-eyebrow">
+          <span></span> Africa's Top Skills Marketplace
         </div>
-    </section>
-</div>
-
-
-<div class="container d-md-none" style="margin-top: 4.5rem;">
-    <div class="trend-section ">
-        <div class="row align-items-center">
-            <div class="col-sm-10">
-                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories of skilled people<span class="title-bg2"></span></h5>
-                <p data-aos="fade-up">Discover inspiring stories, impactful skills, and creative people across Africa</p>
-            </div>
-            <div class="col-sm-2 text-sm-end">
-                <div class="owl-nav trend-nav nav-control nav-top"></div>
-            </div>
+        <h1 class="hero-headline">
+          Your gateway to <span class="accent">skills</span>, opportunities &amp; growth.
+        </h1>
+        <p class="hero-sub">
+          Connect with verified professionals, showcase your expertise, and build the career you deserve — all in one platform.
+        </p>
+        <div class="hero-cta-group">
+          <a class="btn-green" data-bs-toggle="modal" data-bs-target="#searchModal">
+            <i class="ti ti-search"></i> Find Talent
+          </a>
+          <a class="btn-outline" data-bs-toggle="modal" data-bs-target="#talentModal">
+            <i class="ti ti-star"></i> Register Skills
+          </a>
+          <a class="btn-outline" href="{{ route('register') }}">
+            <i class="ti ti-users"></i> Join Community
+          </a>
         </div>
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="trend-items owl-carousel owl-loaded owl-drag">
-                    <div class="owl-stage-outer">
-                        <div class="owl-stage" style="transform: translate3d(-1977px, 0px, 0px); transition: 2s; width: 4284px;">
-                            @foreach($categories as $cat)
-                            <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                <div class="trend-box">
-                                    <div class="trend-info">
+      </div>
 
-                                        <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
-                                        <p>{{ optional($cat->talents)->count() ?? 0 }} talents</p>
-                                    </div>
-                                    <style>
-                                        .slide-line-btn {
-                                            position: relative;
-                                            display: inline-flex;
-                                            align-items: center;
-                                            gap: 6px;
-                                            padding: 6px 16px;
-                                            color: #fff;
-                                            background: #060f11;
-                                            border: 1px solid #3d4648;
-                                            border-radius: 3px;
-                                            text-decoration: none;
-                                            overflow: hidden;
-                                            z-index: 1;
-                                        }
+      <!-- Right — 3 feature cards (desktop) -->
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="hero-cards">
+          <div class="hero-card">
+            <div class="hero-card-icon"><i class="ti ti-speakerphone"></i></div>
+            <h5>Promote Your Skills</h5>
+            <p>Boost your profile and reach 3× more employers. Get verified and feature your story on our homepage.</p>
+            <a class="card-link" data-bs-toggle="modal" data-bs-target="#searchModal">
+              Search skilled people <i class="ti ti-arrow-right"></i>
+            </a>
+          </div>
 
-                                        .slide-line-btn span {
-                                            pointer-events: none;
-                                        }
-                                    </style>
-
-                                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i>view skills
-                                    </a>
-
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="owl-dots disabled"></div>
-                </div>
+          <div class="row g-4">
+            <div class="col-6">
+              <div class="hero-card">
+                <div class="hero-card-icon"><i class="ti ti-badge"></i></div>
+                <h5>Join Our Skill Hub</h5>
+                <p>Showcase skills, get verified, and connect with global clients.</p>
+                <a class="card-link" data-bs-toggle="modal" data-bs-target="#talentModal">
+                  Register now <i class="ti ti-arrow-right"></i>
+                </a>
+              </div>
             </div>
+            <div class="col-6">
+              <div class="hero-card">
+                <div class="hero-card-icon"><i class="ti ti-world"></i></div>
+                <h5>Expand Network</h5>
+                <p>Join groups, attend virtual events, and build connections that matter.</p>
+                <a class="card-link" href="{{ route('register') }}">
+                  Get started <i class="ti ti-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Mobile carousel -->
+      <div class="col-12 d-lg-none">
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+          <div class="carousel-indicators" style="bottom:-30px;">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="m-hero-card">
+                <div class="hero-card-icon mx-auto mb-3"><i class="ti ti-speakerphone"></i></div>
+                <h4>Promote Your Skills</h4>
+                <p>Stand out! Boost your profile and reach 3× more employers. Get verified today.</p>
+                <a class="btn-green mx-auto" data-bs-toggle="modal" data-bs-target="#searchModal">
+                  <i class="ti ti-search"></i> Search Talent
+                </a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="m-hero-card">
+                <div class="hero-card-icon mx-auto mb-3"><i class="ti ti-badge"></i></div>
+                <h4>Join Our Skill Hub</h4>
+                <p>Showcase your skills, get verified, and connect with clients globally.</p>
+                <a class="btn-green mx-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register Skills</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="m-hero-card">
+                <div class="hero-card-icon mx-auto mb-3"><i class="ti ti-world"></i></div>
+                <h4>Expand Your Network</h4>
+                <p>Connect with industry professionals, mentors, and peers across Africa.</p>
+                <a class="btn-green mx-auto" href="{{ route('register') }}">Join Community</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:36px;"></div>
+      </div>
+
     </div>
-</div>
-<!-- /Trending Categories -->
-
-<style>
-    .postLists.cards .post-item.m-card {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-align: center;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 4.75rem;
-
-    }
-
-    .postLists.cards .post-item.m-card .img {
-        position: relative;
-        /* display: block; */
-        /* margin-top: -1.75em; */
-        /* width: calc(100% - .85em); */
-        /* padding-top: calc(89.45% - .67em); */
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        border-radius: .75em;
-        box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        -webkit-box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        transform: translateZ(0);
-        transition: .25s;
-        margin-bottom: 1em;
-    }
-
-    .postLists.cards .post-item.m-card .infos {
-        width: 100%;
-    }
-
-    .postLists.cards .post-item.m-card .title {
-        font-size: 16px;
-        /* padding: 0 .5em; */
-        margin: 1em 0 .5em;
-        overflow: hidden;
-        max-width: 100%;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        text-overflow: ellipsis;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        white-space: normal;
-    }
-
-    /* .postLists.cards .post-card-wrapper {
-        width: 20%;
-    } */
-
-    .postLists .post-card-wrapper {
-        z-index: 1;
-    }
-
-    .postLists.cards .post-item.m-card .go {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 16px 16px;
-        color: #fff;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-        border-radius: 30px;
-        text-decoration: none;
-        overflow: hidden;
-        z-index: 1;
-        justify-content: center;
-        min-width: 50%;
-        /* Green to navy */
-        box-shadow: 0 0.5em 1.2em rgba(1, 30, 52, 0.6);
-        font-size: 14px;
-        margin: 1em auto;
-        text-shadow: 0 2px 3px rgba(1, 30, 52, 0.5);
-        height: auto;
-        line-height: 1.5em;
-        transition: all 0.3s ease;
-    }
-
-    .postLists.cards .post-item.m-card .go-text,
-    .postLists.cards .post-item.m-card .go::after {
-        display: block;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        transition: transform 0.4s ease, opacity 0.4s ease;
-        white-space: nowrap;
-    }
-
-    .postLists.cards .post-item.m-card .go-text {
-        top: 0;
-        opacity: 1;
-    }
-
-    .postLists.cards .post-item.m-card .go::after {
-        content: "profile detail";
-        top: 100%;
-        opacity: 0;
-        color: #fff;
-        font-weight: 600;
-    }
-
-    .postLists.cards .post-item.m-card .go:hover .go-text {
-        transform: translate(-50%, -100%);
-        opacity: 0;
-    }
-
-    .postLists.cards .post-item.m-card .go:hover::after {
-        top: 0;
-        opacity: 1;
-        transform: translateX(-50%);
-    }
-
-
-    .card.post-item.m-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card.post-item.m-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-    }
-
-
-
-    .talent-hover-box {
-        display: inline-block;
-        position: relative;
-    }
-
-    .default-badges,
-    .hover-badges {
-        transition: opacity 0.3s ease;
-    }
-
-    .hover-badges {
-        display: none;
-    }
-
-    .talent-hover-box:hover .default-badges {
-        display: none;
-    }
-
-    .talent-hover-box:hover .hover-badges {
-        display: inline-block;
-    }
-</style>
-
-<!-- next gen -->
-<div class="popular-section-two d-none d-md-flex">
-    <div class="container">
-        <div class="section-header-two text-center aos-init aos-animate" data-aos="fade-up">
-            <h2 class="mb-2"><span class="title-bg"></span>Trending Categories of skilled people<span class="title-bg2"></span></h2>
-            <p>Discover inspiring stories, impactful skills, and creative people across Africa</p>
-        </div>
-        <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 align-items-center">
-            @foreach($categories as $cat)
-            <div class="col d-flex">
-                <div class="pop-category flex-fill aos-init aos-animate" data-aos="flip-left">
-                    <span><i class="ti ti-speakerphone"></i></span>
-                    <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
-                    <p>{{ optional($cat->talents)->count() ?? 0 }} skills</p>
-                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
-                        <i class="feather-arrow-right"></i>view skills
-                    </a>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</div>
-<!-- next gen -->
-
-<section class="explore-services-sec">
-    <!-- <div class="section-bg">
-        <img src="{{ asset('assets/img/bg/section-bg-06.png') }}" class="explore-bg1" alt="img">
-    </div> -->
-    <div class="container">
-        <div class="trusted-customers-sec ">
-            <div class="trusted-customers">
-                <div class="section-header mb-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <h2 style="color:#afafaf;">Want to Showcase Your skills?</h2>
-                    <p style="color:#afafaf;">Over 74K skilled people on the platform - available today for you.</p>
-                    <p style="color:#afafaf;">Join our community and take the first step towards your dream career.</p>
-                </div>
-                <div class="more-btn text-center aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
-                    <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn btn-lg btn-primary">Register your skills<i class="ti ti-chevron-right me-2"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="faq-sec mt-4">
-            <div class="row align-items-center">
-                <div class="col-lg-4">
-                    <div class="faq-heading aos" data-aos="fade-up">
-                        <div class="section-header mb-2">
-                            <h2 style="color:#afafaf;"><span>Skilled People</span> Frequently Asked Questions</h2>
-                        </div>
-                        <p style="color:#afafaf;">Don’t see your question? We’re here to help you connect with the right skilled people.</p>
-                        <a href="{{ route('user.contact') }}" class="btn btn-primary">Ask a Question <i class="ti ti-arrow-badge-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="faq-wrapper faq-lists">
-
-                        <div class="faq-card aos" data-aos="fade-up">
-                            <h4 class="faq-title">
-                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqone" aria-expanded="false">
-                                    How can I find the right skilled people for my project?
-                                </a>
-                            </h4>
-                            <div id="faqone" class="card-collapse collapse">
-                                <div class="faq-content">
-                                    <p style="color:#afafaf;">Our skilled people Marketplace allows you to filter professionals by skills, categories, experience, and location, making it easy to find the perfect match for your project.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="faq-card aos" data-aos="fade-up">
-                            <h4 class="faq-title">
-                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqtwo" aria-expanded="false">
-                                    How do I hire a skilled people?
-                                </a>
-                            </h4>
-                            <div id="faqtwo" class="card-collapse collapse">
-                                <div class="faq-content">
-                                    <p style="color:#afafaf;">After browsing profiles, you can contact skilled peoples directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="faq-card aos" data-aos="fade-up">
-                            <h4 class="faq-title">
-                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqthree" aria-expanded="false">
-                                    Can skilled peoples showcase their past projects?
-                                </a>
-                            </h4>
-                            <div id="faqthree" class="card-collapse collapse">
-                                <div class="faq-content">
-                                    <p style="color:#afafaf;">Yes! skilled peoples can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="faq-card aos" data-aos="fade-up">
-                            <h4 class="faq-title">
-                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqfour" aria-expanded="false">
-                                    Is there a verification process for talents?
-                                </a>
-                            </h4>
-                            <div id="faqfour" class="card-collapse collapse">
-                                <div class="faq-content">
-                                    <p style="color:#afafaf;">We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you confidence in your collaboration.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="faq-card aos" data-aos="fade-up">
-                            <h4 class="faq-title">
-                                <a class="collapsed" style="color:#afafaf;" data-bs-toggle="collapse" href="#faqfive" aria-expanded="false">
-                                    How much does it cost to hire a talent?
-                                </a>
-                            </h4>
-                            <div id="faqfive" class="card-collapse collapse">
-                                <div class="faq-content">
-                                    <p style="color:#afafaf;">Costs vary depending on the talent’s experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </section>
 
-<!-- Glassmorphic Search Modal -->
+<!-- ═══ STATS BAR ═══ -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="row g-0">
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <span class="stat-num">74K<span style="color:var(--green);">+</span></span>
+          <span class="stat-label">Skilled People</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <span class="stat-num">120<span style="color:var(--green);">+</span></span>
+          <span class="stat-label">Categories</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <span class="stat-num">98<span style="color:var(--green);">%</span></span>
+          <span class="stat-label">Satisfaction Rate</span>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <span class="stat-num">30+</span>
+          <span class="stat-label">Countries</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══ CATEGORIES (Mobile scroll) ═══ -->
+<div class="container d-lg-none py-5">
+  <div class="mb-3">
+    <div class="section-label">Browse</div>
+    <div class="section-title">Trending Categories</div>
+  </div>
+  <div class="cat-scroll">
+    @foreach($categories as $cat)
+      <a href="{{ route('user.talents.category', $cat->slug) }}" class="cat-chip">
+        {{ $cat->name }}
+      </a>
+    @endforeach
+  </div>
+</div>
+
+<!-- ═══ CATEGORIES (Desktop grid) ═══ -->
+<section id="categories-section" class="d-none d-lg-block">
+  <div class="container">
+    <div class="d-flex align-items-end justify-content-between mb-8 flex-wrap gap-3">
+      <div>
+        <div class="section-label">Explore</div>
+        <div class="section-title">Trending Categories of Skilled People</div>
+        <p class="section-sub">Discover inspiring stories, impactful skills, and creative people across Africa</p>
+      </div>
+    </div>
+
+    <div class="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 mt-4">
+      @foreach($categories as $cat)
+      <div class="col d-flex">
+        <div class="pop-category flex-fill">
+          <span><i class="ti ti-speakerphone"></i></span>
+          <h6 class="mb-1"><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
+          <p>{{ optional($cat->talents)->count() ?? 0 }} skills</p>
+          <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
+            <i class="feather-arrow-right"></i> View Skills
+          </a>
+        </div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ CTA BAND ═══ -->
+<section id="cta-band">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-md-8">
+        <div class="section-label">Join Today</div>
+        <div class="section-title">Want to Showcase Your Skills?</div>
+        <p class="section-sub mt-2">
+          Over 74K skilled people on the platform, available today for employers and clients. Join our community and take the first step towards your dream career.
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn-green" style="font-size:1rem; padding:14px 32px;">
+          Register Your Skills <i class="ti ti-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══ FAQ ═══ -->
+<section id="faq-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <div class="section-label">FAQ</div>
+        <div class="section-title">Skilled People Frequently Asked Questions</div>
+        <p class="section-sub mt-3">
+          Don't see your question? We're here to help you connect with the right skilled people.
+        </p>
+        <a href="{{ route('user.contact') }}" class="btn-green mt-4 d-inline-flex">
+          Ask a Question <i class="ti ti-arrow-badge-right ms-1"></i>
+        </a>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="faq-item" id="faq-1">
+          <button class="faq-q" onclick="toggleFaq('faq-1')">
+            How can I find the right skilled people for my project?
+            <span class="faq-icon"><i class="ti ti-plus"></i></span>
+          </button>
+          <div class="faq-a">Our Skilled People Marketplace lets you filter professionals by skills, categories, experience, and location — making it easy to find the perfect match for your project.</div>
+        </div>
+
+        <div class="faq-item" id="faq-2">
+          <button class="faq-q" onclick="toggleFaq('faq-2')">
+            How do I hire a skilled person?
+            <span class="faq-icon"><i class="ti ti-plus"></i></span>
+          </button>
+          <div class="faq-a">After browsing profiles, you can contact skilled people directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.</div>
+        </div>
+
+        <div class="faq-item" id="faq-3">
+          <button class="faq-q" onclick="toggleFaq('faq-3')">
+            Can skilled people showcase their past projects?
+            <span class="faq-icon"><i class="ti ti-plus"></i></span>
+          </button>
+          <div class="faq-a">Yes! Skilled people can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.</div>
+        </div>
+
+        <div class="faq-item" id="faq-4">
+          <button class="faq-q" onclick="toggleFaq('faq-4')">
+            Is there a verification process for talents?
+            <span class="faq-icon"><i class="ti ti-plus"></i></span>
+          </button>
+          <div class="faq-a">We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you full confidence in your collaboration.</div>
+        </div>
+
+        <div class="faq-item" id="faq-5">
+          <button class="faq-q" onclick="toggleFaq('faq-5')">
+            How much does it cost to hire a talent?
+            <span class="faq-icon"><i class="ti ti-plus"></i></span>
+          </button>
+          <div class="faq-a">Costs vary depending on the talent's experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SEARCH MODAL ═══ -->
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content overflow-hidden">
-
-            <!-- Modal Header -->
-            <div class="modal-header text-white">
-                <h5 class="modal-title fw-bold" id="searchModalLabel">
-                    🔎 Find Your skills
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body py-4 px-4">
-                <form method="GET" action="{{ route('user.talents') }}" class="row g-3">
-
-                    <div class="col-md-6">
-                        <div class="input-group input-group-lg glass-input shadow-sm">
-                            <span class="input-group-text bg-transparent border-0">
-                                <i class="ti ti-search text-primary"></i>
-                            </span>
-                            <input type="text" name="keyword" class="form-control"
-                                placeholder="Search talents, skills, or names..." value="{{ request('keyword') }}">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <select name="category" class="form-select form-select-lg" style="background: #161d21;color: aliceblue;">
-                            <option value="">All Categories</option>
-                            @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
-                                {{ $cat->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
-                        <button type="button" class="btn btn-light border rounded-3 px-4 py-2" data-bs-dismiss="modal">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 fw-semibold">
-                            Search
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="ti ti-search me-2" style="color:var(--green);"></i>Find Your Skills</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form method="GET" action="{{ route('user.talents') }}" class="row g-4">
+          <div class="col-md-6">
+            <label class="form-label">Keyword</label>
+            <input type="text" name="keyword" class="form-control"
+              placeholder="Search talents, skills, or names..." value="{{ request('keyword') }}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select">
+              <option value="">All Categories</option>
+              @foreach($categories as $cat)
+              <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                {{ $cat->name }}
+              </option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-12 d-flex justify-content-end gap-3">
+            <button type="button" class="btn-outline" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn-green">
+              <i class="ti ti-search"></i> Search
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
-<!-- SwiperJS Scripts -->
+
+<!-- ═══ TALENT REGISTRATION MODAL ═══ -->
+<div class="modal fade" id="talentModal" tabindex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Skill Registration</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Step indicator -->
+        <div class="step-indicator" id="stepIndicator">
+          <div class="step-dot active" data-step="0">1</div>
+          <div class="step-line" data-line="0"></div>
+          <div class="step-dot" data-step="1">2</div>
+          <div class="step-line" data-line="1"></div>
+          <div class="step-dot" data-step="2">3</div>
+          <div class="step-line" data-line="2"></div>
+          <div class="step-dot" data-step="3">4</div>
+        </div>
+
+        <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+
+          <!-- Step 1 -->
+          <div class="step-section active" id="step-1">
+            <div class="step-title">Personal Info</div>
+            <div class="step-sub">Fill your basic information for profile setup.</div>
+            <div class="info-note">This information will appear on your public profile.</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. John Doe" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Address</label>
+                <input type="text" name="address" class="form-control" placeholder="e.g. Kigali, Rwanda" required>
+              </div>
+            </div>
+            <div class="text-end mt-4">
+              <button type="button" class="btn-green btn-next">Next <i class="ti ti-arrow-right ms-1"></i></button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-section" id="step-2">
+            <div class="step-title">Contact Info</div>
+            <div class="step-sub">Provide your contact details for clients to reach you.</div>
+            <div class="info-note">Your email will not be shared publicly.</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control" placeholder="e.g. +250 788 123 456" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="e.g. john@example.com" required>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn-outline btn-prev"><i class="ti ti-arrow-left me-1"></i> Back</button>
+              <button type="button" class="btn-green btn-next">Next <i class="ti ti-arrow-right ms-1"></i></button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-section" id="step-3">
+            <div class="step-title">Skill Info</div>
+            <div class="step-sub">Define your skills and expertise to attract the right clients.</div>
+            <div class="info-note">Be specific — detailed descriptions get 2× more views.</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Languages Spoken</label>
+                <input type="text" name="language" class="form-control" placeholder="e.g. English, Kinyarwanda" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Skill Category</label>
+                <select name="category_id" class="form-select" required>
+                  <option value="">Select Category</option>
+                  @foreach($categories as $cat)
+                  <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="4" placeholder="Describe your talent and experience..."></textarea>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn-outline btn-prev"><i class="ti ti-arrow-left me-1"></i> Back</button>
+              <button type="button" class="btn-green btn-next">Next <i class="ti ti-arrow-right ms-1"></i></button>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-section" id="step-4">
+            <div class="step-title">Profile Photo</div>
+            <div class="step-sub">Add a professional photo to complete your profile.</div>
+            <div class="info-note">A clear headshot increases profile views by 40%.</div>
+            <div class="mb-3">
+              <label class="form-label">Profile Image</label>
+              <input type="file" name="image" class="form-control" accept="image/*" required>
+            </div>
+            <div class="form-check mt-3 mb-3">
+              <input type="checkbox" class="form-check-input" id="terms" required
+                style="accent-color: var(--green);">
+              <label class="form-check-label" for="terms" style="font-size:.88rem; color:var(--muted);">
+                I accept the <a href="{{ route('user.terms-condition') }}" style="color:var(--green);">Terms &amp; Conditions</a>
+              </label>
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn-outline btn-prev"><i class="ti ti-arrow-left me-1"></i> Back</button>
+              <button type="submit" class="btn-green" style="background:#00a667;">
+                <i class="ti ti-check me-1"></i> Submit Registration
+              </button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ SCRIPTS ═══ -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-    new Swiper('.talentSwiper', {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        loop: true,
-        grabCursor: true,
-        effect: 'coverflow',
-        coverflowEffect: {
-            rotate: 30,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
-        },
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        breakpoints: {
-            0: {
-                slidesPerView: 1
-            },
-            768: {
-                slidesPerView: 2
-            },
-            1024: {
-                slidesPerView: 3
-            },
-        },
-    });
-</script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const buttons = document.querySelectorAll('#talentTabs .nav-link');
-        const items = document.querySelectorAll('.talent-item');
+  /* ── FAQ accordion ── */
+  function toggleFaq(id) {
+    const item = document.getElementById(id);
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
 
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Activate clicked tab
-                buttons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+  /* ── Step wizard ── */
+  document.addEventListener("DOMContentLoaded", () => {
+    const steps   = document.querySelectorAll(".step-section");
+    const dots    = document.querySelectorAll(".step-dot");
+    const lines   = document.querySelectorAll(".step-line");
+    let current   = 0;
 
-                const filter = this.dataset.filter;
+    function render(step) {
+      steps.forEach((s, i) => s.classList.toggle("active", i === step));
+      dots.forEach((d, i) => {
+        d.classList.remove('active','done');
+        if (i === step)   d.classList.add('active');
+        if (i < step)     d.classList.add('done');
+      });
+      lines.forEach((l, i) => l.classList.toggle('done', i < step));
+    }
 
-                items.forEach(item => {
-                    const category = item.dataset.category;
-                    if (filter === category) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
-    });
+    document.querySelectorAll(".btn-next").forEach(btn =>
+      btn.addEventListener("click", () => {
+        if (current < steps.length - 1) { current++; render(current); }
+      })
+    );
+
+    document.querySelectorAll(".btn-prev").forEach(btn =>
+      btn.addEventListener("click", () => {
+        if (current > 0) { current--; render(current); }
+      })
+    );
+
+    render(current);
+  });
 </script>
 
-
-<!-- Talent Modal -->
-<div class="modal fade modal-glass" id="talentModal" tabindex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content overflow-hidden">
-            <div class="modal-header  text-white">
-                <h5 class="modal-title fw-bold" id="talentModalLabel">Skill Registration</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-
-                <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <!-- Step 1 -->
-                    <div class="step-section active" id="step-1">
-                        <div class="step-title"><i class="fas fa-user"></i> Personal Info</div>
-                        <div class="info-note">Fill your basic information for profile setup.</div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Names</label>
-                                <input type="text" name="name" class="form-control" placeholder="e.g John Doe" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Address</label>
-                                <input type="text" name="address" class="form-control" placeholder="e.g Kigali, Rwanda" required>
-                            </div>
-                        </div>
-                        <div class="text-end mt-4">
-                            <button type="button" class="btn btn-primary btn-next">Next</button>
-                        </div>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="step-section" id="step-2">
-                        <div class="step-title"><i class="fas fa-phone"></i> Contact Info</div>
-                        <div class="info-note">Provide your contact details for clients to reach you.</div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Phone</label>
-                                <input type="text" name="phone" class="form-control" placeholder="e.g +250 788 123 456" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Email</label>
-                                <input type="email" name="email" class="form-control" placeholder="e.g john.doe@example.com" required>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="button" class="btn btn-danger btn-prev">Back</button>
-                            <button type="button" class="btn btn-primary btn-next">Next</button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="step-section" id="step-3">
-                        <div class="step-title"><i class="fas fa-star"></i> Skill Info</div>
-                        <div class="info-note">Define your skills and expertise.</div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Languages Spoken</label>
-                                <input type="text" name="language" class="form-control" placeholder="e.g English, Kinyarwanda" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Skill Category</label>
-                                <select name="category_id" class="form-select" required>
-                                    <option value="">Select Skill Category</option>
-                                    @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">Description</label>
-                                <textarea name="description" class="form-control" rows="3" placeholder="Describe your talent..." style="color: #afafaf;"></textarea>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="button" class="btn btn-danger btn-prev">Back</button>
-                            <button type="button" class="btn btn-primary btn-next">Next</button>
-                        </div>
-                    </div>
-
-                    <!-- Step 4 -->
-                    <div class="step-section" id="step-4">
-                        <div class="step-title"><i class="fas fa-camera"></i> Upload Photo & Submit</div>
-                        <div class="info-note">Add a professional photo for your profile.</div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Profile Image</label>
-                            <input type="file" name="image" class="form-control" accept="image/*" required>
-                            <div class="invalid-feedback">Please upload a valid image file. Accepts: .jpg, .jpeg, .png</div>
-                        </div>
-                        <div class="form-check mt-3 mb-3">
-                            <input type="checkbox" class="form-check-input" id="terms" required>
-                            <label class="form-check-label" for="terms">
-                                I accept the <a href="{{ route('user.terms-condition') }}" class="text-primary">Terms & Conditions</a>
-                            </label>
-                        </div>
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="button" class="btn btn-danger btn-prev">Back</button>
-                            <button type="submit" class="btn btn-success">Submit Registration</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const steps = document.querySelectorAll(".step-section");
-        const nextBtns = document.querySelectorAll(".btn-next");
-        const prevBtns = document.querySelectorAll(".btn-prev");
-        const progressBar = document.getElementById("progressBar");
-
-        let currentStep = 0;
-
-        function showStep(step) {
-            steps.forEach((s, i) => s.classList.toggle("active", i === step));
-        }
-
-        nextBtns.forEach(btn => btn.addEventListener("click", () => {
-            if (currentStep < steps.length - 1) currentStep++;
-            showStep(currentStep);
-        }));
-
-        prevBtns.forEach(btn => btn.addEventListener("click", () => {
-            if (currentStep > 0) currentStep--;
-            showStep(currentStep);
-        }));
-
-        showStep(currentStep);
-    });
-</script>
 @endsection

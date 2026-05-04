@@ -2,1895 +2,895 @@
 @section('title', 'Empowering Talent, Opportunities & Growth')
 @section('content')
 
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 
 <style>
-    #tranding {
-        /* position: relative; */
-        overflow: hidden;
-        background: #060f11;
-        color: #fff;
-        padding: 1rem 0;
-        border-radius: 0.1rem;
-        border: 1px solid #3d4648;
-        margin-top: 2rem;
-        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        /* height: 22rem; */
-    }
+/* ╔══════════════════════════════════╗
+   ║        DESIGN TOKENS             ║
+   ╚══════════════════════════════════╝ */
+:root {
+    --bg:          #0e1618;
+    --bg-card:     #131e21;
+    --bg-glass:    rgba(255,255,255,0.035);
+    --bg-glass2:   rgba(0,166,103,0.08);
+    --accent:      #00a667;
+    --accent-dim:  #008f59;
+    --accent-glow: rgba(0,166,103,0.22);
+    --accent-line: rgba(0,166,103,0.35);
+    --border:      rgba(255,255,255,0.07);
+    --border-h:    rgba(0,166,103,0.3);
+    --text-1:      #f0f4f3;
+    --text-2:      #8da4a0;
+    --text-3:      #4d6460;
+    --font-head:   'Syne', sans-serif;
+    --font-body:   'DM Sans', sans-serif;
+    --r-sm:        8px;
+    --r-md:        14px;
+    --r-lg:        20px;
+    --r-pill:      50px;
+}
+body { background: var(--bg) !important; color: var(--text-1); font-family: var(--font-body); }
 
-    .tranding-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        align-items: center;
-        gap: 2rem;
-        width: 80%;
-        margin: 0 auto;
-    }
+/* ── SHARED UTILITIES ── */
+.fc-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--bg-glass2); border: 1px solid var(--border-h);
+    color: var(--accent); border-radius: var(--r-pill);
+    padding: 4px 14px; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+}
+.fc-section-head {
+    margin-bottom: 48px;
+}
+.fc-section-head .eyebrow {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 600; margin-bottom: 12px; display: block;
+}
+.fc-section-head h2 {
+    font-family: var(--font-head); font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800; color: var(--text-1); margin-bottom: 14px; line-height: 1.15;
+}
+.fc-section-head p { color: var(--text-2); font-size: 0.95rem; max-width: 560px; line-height: 1.7; }
 
-    .tranding-image-slider {
-        width: 100%;
-        height: 20rem;
-        perspective: 1200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.btn-fc-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff; border: none;
+    border-radius: var(--r-pill); padding: 12px 28px;
+    font-family: var(--font-head); font-size: 0.875rem; font-weight: 700;
+    text-decoration: none; cursor: pointer;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 22px var(--accent-glow);
+}
+.btn-fc-primary:hover { background: var(--accent-dim); transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); color: #fff; }
 
-    .tranding-image-slider .swiper-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.btn-fc-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--text-1);
+    border: 1px solid var(--border); border-radius: var(--r-pill);
+    padding: 11px 26px; font-family: var(--font-head); font-size: 0.875rem;
+    font-weight: 600; text-decoration: none; cursor: pointer;
+    transition: border-color .2s, color .2s, background .2s;
+}
+.btn-fc-outline:hover { border-color: var(--border-h); color: var(--accent); background: var(--bg-glass2); }
 
-    .tranding-image-slider .swiper-slide {
-        height: 15rem;
-        width: 15rem;
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        transform: scale(0.9);
-        z-index: 1;
-        opacity: 0.6;
-    }
+/* ══════════════════════════════════════
+   1. HERO
+══════════════════════════════════════ */
+.fc-hero {
+    position: relative; min-height: 92vh;
+    display: flex; align-items: center; overflow: hidden;
+}
+.fc-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+}
+.fc-hero-bg .carousel, .fc-hero-bg .carousel-inner, .fc-hero-bg .carousel-item { height: 100%; }
+.fc-hero-bg-slide {
+    width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+}
+.fc-hero-bg-slide video { width: 100%; height: 100%; object-fit: cover; }
+.fc-hero-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(135deg,
+        rgba(14,22,24,0.92) 0%,
+        rgba(14,22,24,0.75) 50%,
+        rgba(0,166,103,0.08) 100%);
+}
+/* animated grid lines */
+.fc-hero-grid {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background-image:
+        linear-gradient(rgba(0,166,103,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,166,103,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+.fc-hero-content {
+    position: relative; z-index: 2; padding: 80px 0;
+}
+.hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent); font-weight: 600; margin-bottom: 20px;
+}
+.hero-eyebrow::before {
+    content: ''; display: inline-block;
+    width: 24px; height: 2px; background: var(--accent); border-radius: 2px;
+}
+.fc-hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800; line-height: 1.08;
+    color: var(--text-1); margin-bottom: 22px;
+}
+.fc-hero h1 .hl { color: var(--accent); }
+.fc-hero p {
+    font-size: 1.05rem; color: var(--text-2); max-width: 520px;
+    line-height: 1.75; margin-bottom: 36px;
+}
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
 
-    .tranding-image-slider .swiper-slide.swiper-slide-active {
-        transform: scale(1.1);
-        z-index: 3;
-        opacity: 1;
-        margin: 0 auto;
-    }
+.hero-stats {
+    display: flex; gap: 36px; flex-wrap: wrap;
+    border-top: 1px solid var(--border); padding-top: 28px;
+}
+.hero-stat-val {
+    font-family: var(--font-head); font-size: 1.7rem; font-weight: 800; color: var(--accent);
+}
+.hero-stat-lbl { font-size: 0.78rem; color: var(--text-3); margin-top: 2px; }
 
-    .tranding-image-slider .swiper-slide img {
-        width: 100%;
-        height: 100%;
-        border-radius: 1.5rem;
-        object-fit: cover;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
+/* Avatar stack in hero */
+.avatar-stack { display: flex; }
+.avatar-stack img {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--bg); object-fit: cover;
+    margin-left: -10px;
+}
+.avatar-stack img:first-child { margin-left: 0; }
 
-    .tranding-caption-slider {
-        width: 80%;
-        text-align: left;
-    }
+/* ══════════════════════════════════════
+   2. TRENDING FEATURE STRIP
+══════════════════════════════════════ */
+.fc-feature-strip {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+}
+.feature-strip-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+}
+@media(max-width: 767px) { .feature-strip-grid { grid-template-columns: 1fr; } }
+.feature-strip-item {
+    background: var(--bg-card);
+    padding: 28px 32px;
+    transition: background .2s;
+}
+.feature-strip-item:hover { background: var(--bg-glass2); }
+.feature-strip-item h5 {
+    font-family: var(--font-head); font-size: 1rem; font-weight: 700;
+    color: var(--text-1); margin-bottom: 8px;
+}
+.feature-strip-item p { font-size: 0.83rem; color: var(--text-2); margin-bottom: 14px; line-height: 1.6; }
+.strip-link {
+    font-size: 0.8rem; font-weight: 600; color: var(--accent);
+    text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+    transition: gap .2s;
+}
+.strip-link:hover { gap: 8px; }
+.strip-icon {
+    width: 40px; height: 40px; border-radius: var(--r-sm);
+    background: var(--bg-glass2); border: 1px solid var(--border-h);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); font-size: 1rem; margin-bottom: 16px;
+}
 
-    .tranding-caption-slider .swiper-slide {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-    }
+/* ══════════════════════════════════════
+   3. TRENDING CATEGORIES
+══════════════════════════════════════ */
+.fc-categories { padding: 80px 0; }
+.category-scroll {
+    display: flex; gap: 14px; overflow-x: auto;
+    padding-bottom: 12px; scrollbar-width: none;
+}
+.category-scroll::-webkit-scrollbar { display: none; }
+.cat-pill {
+    display: flex; flex-direction: column; gap: 4px; flex-shrink: 0;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 18px 22px;
+    text-decoration: none; transition: border-color .2s, transform .2s, background .2s;
+    min-width: 160px;
+}
+.cat-pill:hover { border-color: var(--border-h); background: var(--bg-glass2); transform: translateY(-3px); }
+.cat-pill-name {
+    font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; color: var(--text-1);
+}
+.cat-pill-count { font-size: 0.75rem; color: var(--text-3); }
+.cat-pill-arrow { color: var(--accent); font-size: 0.75rem; margin-top: 8px; }
 
-    .tranding-caption-slider .swiper-slide-active {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* ══════════════════════════════════════
+   4. FEATURES TABS SECTION
+══════════════════════════════════════ */
+.fc-features { padding: 80px 0; }
+.fc-tab-bar {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 6px; margin-bottom: 32px;
+}
+.fc-tab-btn {
+    flex: 1; min-width: 100px;
+    background: transparent; border: none;
+    border-radius: var(--r-sm); padding: 10px 20px;
+    font-family: var(--font-head); font-size: 0.8rem; font-weight: 600;
+    color: var(--text-3); cursor: pointer;
+    transition: background .2s, color .2s;
+    white-space: nowrap;
+}
+.fc-tab-btn.active {
+    background: var(--bg-glass2); color: var(--accent);
+    border: 1px solid var(--border-h);
+}
+.fc-tab-btn:hover:not(.active) { color: var(--text-2); }
 
-    .tranding-slide-caption p {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-    }
+.fc-tab-panel { display: none; animation: panelIn .3s ease; }
+.fc-tab-panel.active { display: block; }
+@keyframes panelIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
-    .tranding-line-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        color: #fff;
-        font-weight: 600;
-        border: 2px solid #fff;
-        border-radius: 30px;
-        padding: 0.5rem 1.2rem;
-        transition: all 0.3s ease;
-    }
+.feature-panel-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 40px; overflow: hidden; position: relative;
+}
+.feature-panel-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.feature-panel-card h2 {
+    font-family: var(--font-head); font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 800; color: var(--text-1); margin-bottom: 16px; line-height: 1.2;
+}
+.feature-panel-card h2 span { color: var(--accent); }
+.feature-panel-card p { color: var(--text-2); line-height: 1.75; margin-bottom: 28px; max-width: 520px; }
 
-    .tranding-line-btn:hover {
-        background-color: #fff;
-        color: #319BF9;
-    }
+.feature-img-wrap { text-align: center; }
+.feature-img-wrap img { max-height: 260px; }
 
-    .tranding-slider-control {
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.4 ease;
-    }
+/* Provide boxes in marketplace tab */
+.fc-provide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 24px; }
+.fc-provide-box {
+    background: var(--bg-glass); border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 24px; transition: border-color .2s, transform .2s;
+}
+.fc-provide-box:hover { border-color: var(--border-h); transform: translateY(-3px); }
+.fc-provide-box .provide-icon { margin-bottom: 14px; }
+.fc-provide-box .provide-icon img { height: 36px; filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(130deg) brightness(104%) contrast(101%); }
+.fc-provide-box h6 { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; color: var(--text-1); margin-bottom: 8px; }
+.fc-provide-box p { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; }
 
-    .tranding-slider-control .slider-arrow {
-        background: var(--white);
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 50%;
-        left: 3%;
-        transform: translateX(-42%);
-        filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
-    }
+/* Feature list */
+.feature-list { list-style: none; padding: 0; margin: 0 0 28px; display: flex; flex-direction: column; gap: 12px; }
+.feature-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.87rem; color: var(--text-2); line-height: 1.5;
+}
+.feature-list li::before {
+    content: ''; flex-shrink: 0; margin-top: 5px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg-glass2); border: 1px solid var(--border-h);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300a667' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-size: 10px; background-repeat: no-repeat; background-position: center;
+}
 
-    .slider-arrow {
-        width: 3rem;
-        height: 3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        background: rgba(255, 255, 255);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
+/* ══════════════════════════════════════
+   5. HOW IT WORKS
+══════════════════════════════════════ */
+.fc-how { padding: 80px 0; background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; background: var(--border); }
+.step-card {
+    background: var(--bg-card); padding: 36px 28px;
+    transition: background .2s;
+}
+.step-card:hover { background: var(--bg-glass2); }
+.step-num {
+    font-family: var(--font-head); font-size: 3rem; font-weight: 800;
+    color: var(--accent); opacity: 0.15; line-height: 1; margin-bottom: 16px;
+    display: block;
+}
+.step-card h5 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--text-1); margin-bottom: 10px; }
+.step-card p { font-size: 0.83rem; color: var(--text-2); line-height: 1.65; margin-bottom: 16px; }
 
-    .slider-arrow:hover {
-        background: #fff;
-        color: #319BF9;
-    }
+/* ══════════════════════════════════════
+   6. PARTNERS
+══════════════════════════════════════ */
+.fc-partners { padding: 60px 0; }
+.partners-label {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-3); font-weight: 600; text-align: center; margin-bottom: 32px;
+}
+.partners-scroll {
+    display: flex; align-items: center; gap: 48px;
+    overflow-x: auto; scrollbar-width: none; padding-bottom: 8px;
+}
+.partners-scroll::-webkit-scrollbar { display: none; }
+.partners-scroll img {
+    height: 36px; width: auto; object-fit: contain;
+    filter: brightness(0) invert(1); opacity: 0.25;
+    flex-shrink: 0; transition: opacity .2s;
+}
+.partners-scroll img:hover { opacity: 0.6; }
 
-    /* Bubbles */
-    .bubbles {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        z-index: 0;
-    }
+/* ══════════════════════════════════════
+   7. TESTIMONIALS
+══════════════════════════════════════ */
+.fc-testimonials { padding: 80px 0; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.testimonial-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+    transition: border-color .2s, transform .2s;
+}
+.testimonial-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+.testimonial-head { display: flex; align-items: center; gap: 14px; }
+.testimonial-head img {
+    width: 48px; height: 48px; border-radius: 50%;
+    object-fit: cover; border: 2px solid var(--border-h); flex-shrink: 0;
+}
+.testimonial-name { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; color: var(--text-1); }
+.testimonial-role { font-size: 0.75rem; color: var(--text-3); }
+.testimonial-stars { color: var(--accent); font-size: 0.8rem; margin-left: auto; }
+.testimonial-body p { font-size: 0.85rem; color: var(--text-2); line-height: 1.7; }
+.testimonial-loc { font-size: 0.75rem; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
 
-    .bubbles span {
-        position: absolute;
-        bottom: -150px;
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        animation: bubbleUp 15s infinite;
-        opacity: 0.6;
-    }
+/* ══════════════════════════════════════
+   8. CTA BANNER
+══════════════════════════════════════ */
+.fc-cta {
+    margin: 0 0 80px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 56px 48px;
+    position: relative; overflow: hidden;
+}
+.fc-cta::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.fc-cta-glow {
+    position: absolute; top: -60px; right: -60px;
+    width: 280px; height: 280px; border-radius: 50%;
+    background: var(--accent-glow); filter: blur(80px); pointer-events: none;
+}
+.fc-cta h2 {
+    font-family: var(--font-head); font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800; color: var(--text-1); margin-bottom: 12px;
+}
+.fc-cta p { color: var(--text-2); font-size: 0.95rem; max-width: 480px; margin-bottom: 28px; }
 
-    .bubbles span:nth-child(1) {
-        left: 10%;
-        width: 60px;
-        height: 60px;
-        animation-duration: 20s;
-    }
-
-    .bubbles span:nth-child(2) {
-        left: 30%;
-        animation-delay: 2s;
-    }
-
-    .bubbles span:nth-child(3) {
-        left: 50%;
-        width: 80px;
-        height: 80px;
-        animation-duration: 25s;
-    }
-
-    .bubbles span:nth-child(4) {
-        left: 70%;
-        animation-delay: 1s;
-        width: 30px;
-        height: 30px;
-    }
-
-    .bubbles span:nth-child(5) {
-        left: 90%;
-        animation-duration: 18s;
-    }
-
-    @keyframes bubbleUp {
-        0% {
-            transform: translateY(0) scale(1);
-            opacity: 0.4;
-        }
-
-        50% {
-            opacity: 0.8;
-        }
-
-        100% {
-            transform: translateY(-1000px) scale(1.3);
-            opacity: 0;
-        }
-    }
+/* ══════════════════════════════════════
+   MOBILE ACCORDION
+══════════════════════════════════════ */
+.fc-accordion { padding: 48px 0; }
+.fc-accordion .accordion-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-md) !important; margin-bottom: 8px; overflow: hidden;
+}
+.fc-accordion .accordion-button {
+    background: var(--bg-card); color: var(--text-1);
+    font-family: var(--font-head); font-weight: 600; font-size: 0.9rem;
+    box-shadow: none; padding: 18px 22px;
+}
+.fc-accordion .accordion-button:not(.collapsed) { color: var(--accent); background: var(--bg-glass2); }
+.fc-accordion .accordion-button::after { filter: invert(1); }
+.fc-accordion .accordion-collapse { border-top: 1px solid var(--border); }
+.fc-accordion .accordion-body { padding: 24px; }
 </style>
 
-<style>
-    /* --- SWITCH-STYLE NAV PILLS --- */
-    .nav-pills {
-        display: inline-flex;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 50px;
-        padding: 5px;
-        margin-bottom: 2rem;
-        justify-content: center;
-    }
-
-    .nav-pills .nav-link {
-        border-radius: 50px;
-        color: #fff;
-        font-weight: 500;
-        padding: 0.6rem 1.5rem;
-        transition: all 0.3s ease;
-        border: 1px solid #FFFDFB;
-
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #122322;
-        color: #fff;
-        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
-        border: 1px solid #00a667;
-    }
-
-    .nav-pills .nav-link:not(.active):hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-
-    .hero-tab {
-        /* background: rgba(255, 255, 255, 0.1); */
-        backdrop-filter: blur(10px);
-        border-radius: 2px;
-        border: 1px solid #3d4648;
-        padding: 2rem;
-        color: #f1f1f1;
-    }
-
-    .hero-tab h4 {
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .hero-tab p {
-        font-size: 1rem;
-        margin: 1rem 0 1.5rem;
-    }
-
-    .btn-light {
-        border-radius: 5px;
-        border: 1px solid #3d4648;
-        background: #060f11;
-        color: #afafaf;
-        font-weight: 600;
-        padding: 0.6rem 1.5rem;
-    }
-
-    #market-section {
-        position: relative;
-        /* background: #319bf9; */
-        color: #f1f1f1;
-        padding: 80px 0 56px;
-        z-index: 1;
-    }
-
-    #market-section .provide-box {
-        background: #0d1618bd;
-        backdrop-filter: blur(15px) saturate(180%);
-    }
-</style>
-
-<style>
-    /* HERO SECTION */
-    .announcement-hero {
-        position: relative;
-        height: 90vh;
-        background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
-            url('assets/img/creative.png') center/cover no-repeat;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: #fff;
-        padding: 2rem;
-    }
-
-    .announcement-content {
-        z-index: 2;
-        max-width: 800px;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        padding: 3rem;
-        border-radius: 25px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        animation: fadeInUp 1.2s ease;
-    }
-
-    @keyframes fadeInUp {
-        from {
-            transform: translateY(20px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .announcement-hero h1 {
-        font-size: 2.8rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
-
-    .announcement-hero p {
-        font-size: 1.1rem;
-        color: #e0e0e0;
-        margin-bottom: 2rem;
-    }
-
-    .highlight {
-        color: #ffdd57;
-        font-weight: 600;
-    }
-
-    /* CTA BUTTONS */
-    .hero-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 1.2rem;
-        flex-wrap: wrap;
-    }
-
-    .btn-hero {
-        border-radius: 50px;
-        font-weight: 600;
-        padding: 0.8rem 1.6rem;
-        transition: all 0.3s ease;
-    }
-
-    .btn-events {
-        background-color: #fff;
-        color: #fff;
-    }
-
-    .btn-events:hover {
-        background-color: #fff;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-
-    .btn-announcements {
-        border: 2px solid #fff;
-        color: #fff;
-        background: transparent;
-    }
-
-    .btn-announcements:hover {
-        background-color: #fff;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-</style>
-
-<style>
-    .hero-with-bg {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero-bg-carousel {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-    }
-
-    .hero-bg-carousel .carousel-inner,
-    .hero-bg-carousel .carousel-item {
-        height: 100%;
-    }
-
-    .hero-bg-media {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        background-size: cover;
-        background-position: center;
-    }
-
-    /* Video full cover */
-    .hero-bg-media video,
-    .hero-bg-carousel video.hero-bg-media {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Dark overlay for readability */
-    .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: #12232293;
-        z-index: 1;
-    }
-
-    /* Ensure content stays above background */
-    .hero-with-bg .container {
-        position: relative;
-        z-index: 2;
-    }
-</style>
-
-<div class="hero-section-two hero-with-bg">
-
-    <!-- Background Carousel -->
-    <div id="heroBgCarousel" class="carousel slide hero-bg-carousel" data-bs-ride="carousel">
-        <div class="carousel-inner">
-
-            <!-- Image slide -->
-            <div class="carousel-item active">
-                <div class="hero-bg-media" style="background-image: url('assets/img/banner-hero.jpg');"></div>
-            </div>
-
-            <!-- Video slide -->
-            <div class="carousel-item">
-                <video class="hero-bg-media" autoplay muted loop playsinline>
-                    <source src="assets/img/banner-video.mp4" type="video/mp4">
-                </video>
-            </div>
-
-            <!-- Image slide -->
-            <div class="carousel-item">
-                <div class="hero-bg-media" style="background-image: url('assets/img/provide-bg.jpg');"></div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Overlay (keeps text readable) -->
-    <div class="hero-overlay"></div>
-
-    <!-- EXISTING CONTENT (UNCHANGED) -->
-    <div class="container position-relative">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                    <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
-                    <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Freelance Marketplace</span>
-                    <h1 class="mb-2" style="color:#afafaf;">On-Demand <span>Services</span> for Your Every Need</h1>
-                    <p class="mb-4">We pride ourselves on offering a seamless, secure, and efficient experience. Browse through thousands of trusted service providers, read reviews, compare prices.</p>
-                    <a href="service.html" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore Services<i class="ti ti-chevron-right ms-1"></i></a>
-
+{{-- ════════════════════════════════════
+     1. HERO
+════════════════════════════════════ --}}
+<section class="fc-hero">
+    <div class="fc-hero-bg">
+        <div id="heroBgCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="fc-hero-bg-slide" style="background-image: url('assets/img/banner-hero.jpg');"></div>
                 </div>
-            </div>
-            <!-- <div class="col-lg-5">
-                <div class="banner-image">
-                    <img src="assets/img/home/banner-shape-2.svg" alt="img" class="img-fluid banner-bg-2 d-none d-lg-flex">
-                    <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
-                    <div class="trustpilot">
-                        <h6 class="d-inline-flex align-items-center"><img src="assets/img/home/star1.svg" class="me-2" alt="img">Trustpilot</h6>
-                        <div class="d-flex align-items-center mb-2">
-                            <span>Excellent</span>
-                            <div class="ms-2 d-inline-flex align-items-center">
-                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
-                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
-                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
-                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
-                                <span class="excellent-star"><img src="assets/img/home/star2.svg" alt="img"></span>
-                            </div>
-                        </div>
-                        <p class="mb-0">Based on 456 reviews</p>
+                <div class="carousel-item">
+                    <div class="fc-hero-bg-slide">
+                        <video autoplay muted loop playsinline>
+                            <source src="assets/img/banner-video.mp4" type="video/mp4">
+                        </video>
                     </div>
                 </div>
-            </div> -->
+                <div class="carousel-item">
+                    <div class="fc-hero-bg-slide" style="background-image: url('assets/img/provide-bg.jpg');"></div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+    <div class="fc-hero-overlay"></div>
+    <div class="fc-hero-grid"></div>
+
+    <div class="container fc-hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <p class="hero-eyebrow">Skills Marketplace</p>
+                <h1>On-Demand <span class="hl">Services</span> for Your Every Need</h1>
+                <p>We pride ourselves on offering a seamless, secure, and efficient experience. Browse thousands of verified talents, read reviews, and grow with a community built for your success.</p>
+                <div class="hero-ctas">
+                    <a href="{{ route('user.talents') }}" class="btn-fc-primary">
+                        Explore Services <i class="ti ti-arrow-right"></i>
+                    </a>
+                    <a href="{{ route('register') }}" class="btn-fc-outline">
+                        Join Free <i class="ti ti-user-plus"></i>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-val">{{ $totalTalents }}+</div>
+                        <div class="hero-stat-lbl">Skilled Professionals</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-val">{{ $partners->count() }}+</div>
+                        <div class="hero-stat-lbl">Trusted Partners</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-val">4.8</div>
+                        <div class="hero-stat-lbl">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <script>
-    const heroCarousel = document.querySelector('#heroBgCarousel');
-    if (heroCarousel) {
-        new bootstrap.Carousel(heroCarousel, {
-            interval: 6000,
-            pause: false,
-            ride: 'carousel'
-        });
-    }
+    new bootstrap.Carousel(document.querySelector('#heroBgCarousel'), { interval: 6000, pause: false });
 </script>
 
-
-<div class="container">
-    <section id="tranding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                        <div class="banner-head mt-4">
-                            <h1 class="mb-2" style="color:#afafaf;">Your gateway to skills, opportunities, and growth.</h1>
-                            <!-- <p class="d-inline-flex text-white">Your gateway to skills, opportunities, and growth — all in one place.</p> -->
-                        </div>
-                        <div class="banner-form">
-                            <!-- Mobile & Tablet Carousel -->
-                            <div id="heroCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
-
-                                <!-- Indicators -->
-                                <div class="carousel-indicators">
-                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
-                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-                                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-                                </div>
-                                <style>
-                                    .carousel-indicators {
-                                        bottom: -15px;
-                                    }
-                                </style>
-                                <!-- Slides -->
-                                <div class="carousel-inner">
-
-                                    <div class="carousel-item active">
-                                        <div class="hero-tab text-center p-4">
-                                            <h4 class="text-white">Skills Marketplace</h4>
-                                            <p class="text-muted">
-                                                Stand out! Boost your profile and reach 3× more employers.<br>
-                                                Get verified and feature your story on our homepage.
-                                            </p>
-                                            <a href="{{ route('user.talents') }}" class="btn btn-light">Explore Marketplace</a>
-                                        </div>
-                                    </div>
-
-                                    <div class="carousel-item">
-                                        <div class="hero-tab text-center p-4">
-                                            <h4 class="text-white">Unlock New Opportunities</h4>
-                                            <p class="text-muted">
-                                                Discover tailored job listings, collaboration projects, and freelance gigs.<br>
-                                                Set up alerts to never miss a chance to grow your career.
-                                            </p>
-                                            <a href="#opportunities" class="btn btn-light">Start Exploring</a>
-                                        </div>
-                                    </div>
-
-                                    <div class="carousel-item">
-                                        <div class="hero-tab text-center p-4">
-                                            <h4 class="text-white">Expand Your Network</h4>
-                                            <p class="text-muted">
-                                                Connect with industry professionals, mentors, and peers.<br>
-                                                Join groups, attend virtual events, and build relationships that matter.
-                                            </p>
-                                            <a href="#connections" class="btn btn-light">Join the Community</a>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <!-- Controls -->
-                                <!-- <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon"></span>
-                                </button>
-
-                                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon"></span>
-                                </button> -->
-
-                            </div>
-
-                            <!-- Tabs Content -->
-                            <!-- Desktop Grid -->
-                            <div class="tab-content row d-none d-md-flex">
-
-                                <div class="col-md-4" id="marketplace">
-                                    <div class="hero-tab">
-                                        <h4 class="text-white">Skills Marketplace</h4>
-                                        <p class="text-muted">
-                                            Stand out! Boost your profile and reach 3× more employers.<br>
-                                            Get verified and feature your story on our homepage.
-                                        </p>
-                                        <a href="{{ route('user.talents') }}" class="btn btn-light">Explore Marketplace</a>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4" id="opportunities">
-                                    <div class="hero-tab">
-                                        <h4 class="text-white">Unlock New Opportunities</h4>
-                                        <p class="text-muted">
-                                            Discover tailored job listings, collaboration projects, and freelance gigs.<br>
-                                            Set up alerts to never miss a chance to grow your career.
-                                        </p>
-                                        <a href="#opportunities" class="btn btn-light">Start Exploring</a>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4" id="connection">
-                                    <div class="hero-tab">
-                                        <h4 class="text-white">Expand Your Network</h4>
-                                        <p class="text-muted">
-                                            Connect with industry professionals, mentors, and peers.<br>
-                                            Join groups, attend virtual events, and build relationships that matter.
-                                        </p>
-                                        <a href="#connections" class="btn btn-light">Join the Community</a>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <!-- <div class="popular-search">
-                                <h5>Popular Searches : </h5>
-                                <ul>
-                                    <li><a href="service-grid-sidebar.html">Online Mockup</a></li>
-                                    <li><a href="service-grid-sidebar.html">Carpentering</a></li>
-                                    <li><a href="service-grid-sidebar.html">Event Organiser</a></li>
-                                </ul>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-
-
-<div class="container" style="margin-top: 4.5rem;">
-    <div class="trend-section ">
-        <div class="row align-items-center">
-            <div class="col-sm-10">
-                <h5 data-aos="fade-up"><span class="title-bg"></span>Trending Categories for our skills marketplace<span class="title-bg2"></span></h5>
-                <p data-aos="fade-up" style="color: #FFFDFB;"> Explore the most sought-after skills and connections in today's job market.</p>
-            </div>
-            <div class="col-sm-2 text-sm-end">
-                <div class="owl-nav trend-nav nav-control nav-top"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="trend-items owl-carousel owl-loaded owl-drag">
-                    <div class="owl-stage-outer">
-                        <div class="owl-stage" style="transform: translate3d(-1977px, 0px, 0px); transition: 2s; width: 4284px;">
-                            @foreach($categories as $cat)
-                            <div class="owl-item cloned" style="width: 307.5px; margin-right: 22px;">
-                                <div class="trend-box">
-                                    <div class="trend-info">
-
-                                        <h6><a href="{{ route('user.talents.category', $cat->slug) }}">{{ $cat->name }}</a></h6>
-                                        @if(isset($cat->talents_count))
-                                        <p>{{ $cat->talents_count }} talents</p>
-                                        @else
-                                        <p>0 talents</p>
-                                        @endif
-                                    </div>
-                                    <style>
-                                        .slide-line-btn {
-                                            position: relative;
-                                            display: inline-flex;
-                                            align-items: center;
-                                            gap: 6px;
-                                            padding: 6px 16px;
-                                            color: #fff;
-                                            background: #060f11;
-                                            border: 1px solid #3d4648;
-                                            border-radius: 3px;
-                                            text-decoration: none;
-                                            overflow: hidden;
-                                            z-index: 1;
-                                        }
-
-
-                                        .slide-line-btn span {
-                                            pointer-events: none;
-                                        }
-                                    </style>
-
-                                    <a href="{{ route('user.talents.category', $cat->slug) }}" class="slide-line-btn">
-                                        <i class="feather-arrow-right"></i>Read More
-                                    </a>
-
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="owl-dots disabled"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Trending Categories -->
-
-<div class="container">
-    <div class="trusted-customers-two">
-        <!-- <img src="assets/img/home/shape-2.svg" alt="img" class="trusted-bg img-fluid d-lg-flex d-none"> -->
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <div class="trusted-customers-image position-relative d-lg-block d-none text-center aos-init aos-animate" data-aos="fade-up">
-                    <img src="assets/img/home/jointeam.svg" alt="img" class="img-fluid">
-                </div>
-            </div>
-            <div class="col-lg-5 aos-init aos-animate" data-aos="fade-left">
-                <h2 class="mb-3">Find the right skills for your needs</h2>
-                <p>Over {{ $totalTalents }}K skills available today for you.</p>
-                <a href="{{ route('user.talents') }}" class="btn btn-lg btn-white">Explore skills hub</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    /* Section base */
-    .features-section {
-        padding: 5rem 1rem;
-        /* background: #fff; */
-        /* text-align: right; */
-    }
-
-    .features-section h2 {
-        font-weight: 700;
-        margin-bottom: 2rem;
-        color: #fff;
-    }
-
-    /* Switch Tabs Container */
-    .feature-switch {
-        display: inline-flex;
-        background: #afafaf26;
-        border-radius: 3px;
-        padding: 5px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 2.5rem;
-        gap: 0.5rem;
-    }
-
-    .feature-switch .nav-link {
-        border-radius: 3px;
-        font-weight: 500;
-        color: #fff;
-        padding: 0.5rem 1rem;
-        transition: all 0.3s ease;
-        border: 1px solid #3d4648;
-    }
-
-    .feature-switch .nav-link.active {
-        background-color: #060f11;
-        color: #fff;
-        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.4); */
-        border: 1px solid #3d4648;
-    }
-
-    .feature-switch .nav-link:hover:not(.active) {
-        background-color: #7d8385;
-    }
-
-    /* Tab Content */
-    .tab-pane.feature-tab {
-        /* max-width: 750px; */
-        margin: 0 auto;
-        background: #060f11;
-        border-radius: 3px;
-        border: 1px solid #3d4648;
-        padding: 2rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .tab-pane h4 {
-        color: #fff;
-        font-weight: 600;
-    }
-
-    .tab-pane p {
-        margin-top: 1rem;
-        color: #555;
-    }
-
-    .btn-primary {
-        background-color: #060f11;
-        border-radius: 3px;
-        border: 1px solid #3d4648;
-        color: #afafaf;
-        padding: 0.6rem 1.5rem;
-        /* margin-top: 1.2rem; */
-        transition: 0.3s;
-    }
-
-    .btn-primary:hover {
-        /* background-color: #084298; */
-        transform: translateY(-2px);
-    }
-
-    .coin-note {
-        margin-top: 1rem;
-        font-size: 0.9rem;
-        color: #fff;
-    }
-</style>
-
-
-<section class="features-section d-none d-lg-block" id="features">
+{{-- ════════════════════════════════════
+     2. FEATURE STRIP
+════════════════════════════════════ --}}
+<div class="fc-feature-strip">
     <div class="container">
-        <h2 style="color:#afafaf;">Explore Future Connect Features</h2>
+        <div class="feature-strip-grid">
+            <div class="feature-strip-item">
+                <div class="strip-icon"><i class="ti ti-rocket"></i></div>
+                <h5>Skills Marketplace</h5>
+                <p>Stand out and reach 3× more employers. Boost your profile, get verified, and feature your story.</p>
+                <a href="{{ route('user.talents') }}" class="strip-link">Explore Marketplace <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="feature-strip-item">
+                <div class="strip-icon"><i class="ti ti-briefcase"></i></div>
+                <h5>Unlock Opportunities</h5>
+                <p>Discover tailored job listings, collaboration projects, and freelance gigs matched to your skills.</p>
+                <a href="#features" class="strip-link">Start Exploring <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="feature-strip-item">
+                <div class="strip-icon"><i class="ti ti-users"></i></div>
+                <h5>Expand Your Network</h5>
+                <p>Connect with professionals, mentors, and peers. Join groups and build relationships that matter.</p>
+                <a href="#features" class="strip-link">Join Community <i class="ti ti-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- Switch Tabs -->
-        <ul class="nav feature-switch" id="featuresTab" role="tablist">
-            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#skills">Skills</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#learning-section">Learning</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#opportunity">Opportunities</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#connect">Connect</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#marketplace-features">Marketplace</button></li>
-        </ul>
-
-        <!-- Tab Content -->
-        <div class="tab-content">
-
-            <!-- 1. Skills Marketplace -->
-            <div class="tab-pane feature-tab fade show active" id="skills">
-                <div class="hero-section-two">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-7">
-                                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <h1 class="mb-2">Showcase your talent <span>and</span> reach verified employers.</h1>
-                                    <p class="mb-4">Future Connect’s Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore skills marketplace<i class="ti ti-chevron-right ms-1"></i></a>
-                                    <div class="banner-users d-flex align-items-center flex-wrap gap-3">
-                                        <div class="avatar-list-stacked me-2">
-                                            @foreach($featuredTalents as $talent)
-                                            <span class="avatar avatar-md rounded-circle border-0"><img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                                            @endforeach
-                                        </div>
-                                        <div>
-                                            <div class="d-flex align-items-center mb-1">
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <i class="ti ti-star-filled text-warning"></i>
-                                                <h6 class="mb-0 ms-2">4.8/5</h6>
-                                            </div>
-                                            <p class="mb-0">over {{ $totalTalents}}+ skilled professionals</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="banner-image">
-                                    <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{{-- ════════════════════════════════════
+     3. TRENDING CATEGORIES
+════════════════════════════════════ --}}
+<section class="fc-categories">
+    <div class="container">
+        <div class="row align-items-end mb-5">
+            <div class="col-md-8">
+                <div class="fc-section-head" style="margin-bottom:0">
+                    <span class="eyebrow">Browse Categories</span>
+                    <h2>Trending Skills for Today's Market</h2>
+                    <p>Explore the most sought-after skills and connections in today's job market.</p>
                 </div>
             </div>
-
-            <!-- 2. Learning Center -->
-            <div class="tab-pane feature-tab fade" id="learning-section">
-                <section class="hero-section">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                    <div class="banner-head">
-                                        <h1 class="mb-2">Upskill with short, impactful professional courses.</h1>
-                                        <p class="d-inline-flex">The Learning Center brings together experts and learners for short, affordable, high-quality learning experiences. Each course is designed for practical application — so you can implement your knowledge immediately.</p>
-                                    </div>
-                                    <a href="{{ route('user.courses') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center mb-3">Explore courses<i class="ti ti-chevron-right ms-1"></i></a>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="banner-img">
-                                    <div class="banner-img-right">
-                                        <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <div class="col-md-4 text-md-end">
+                <a href="{{ route('user.talents') }}" class="btn-fc-outline" style="font-size:0.8rem; padding:9px 20px;">
+                    All Categories <i class="ti ti-arrow-right"></i>
+                </a>
             </div>
-
-            <!-- 3. Opportunities -->
-            <div class="tab-pane feature-tab fade" id="opportunity">
-                <section class="hero-section-two">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="banner-content">
-                                    <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Future Connect Opportunities</span>
-                                    <h1 class="mb-2">Post work, find collaborators, <span>and</span> build your dream team in one verified network.</h1>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore works<i class="ti ti-chevron-right ms-1"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="banner-img">
-                                    <div class="banner-img-right">
-                                        <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 4. Connect Room -->
-            <div class="tab-pane feature-tab fade" id="connect">
-                <section class="about-us-section">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6">
-                                <div class="row me-4">
-                                    <div class="col-sm-6">
-                                        <div class="about-inner-img">
-                                            <img src="assets/img/aboutus/about-us-01.jpg" class="img-fluid" alt="img">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="about-inner-img">
-                                                    <img src="assets/img/aboutus/about-us-02.jpg" class="img-fluid" alt="img">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="about-inner-img">
-                                                    <img src="assets/img/aboutus/about-us-03.jpg" class="img-fluid" alt="img">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="about-us-info">
-                                    <div class="about-us-head">
-                                        <h6>Connection Room</h6>
-                                        <h2>Network and collaborate securely with verified users.</h2>
-                                        <p>
-                                            The Connect Room offers a secure messaging and meeting system for verified professionals. Build meaningful relationships, exchange ideas, or schedule mentorship calls with trusted peers.
-                                        </p>
-                                    </div>
-                                    <div class="about-features">
-                                        <ul class="list-one">
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Diverse Network of Professionals</li>
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Trust and Transparency</li>
-                                        </ul>
-                                        <ul class="list-two">
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>User Friendly Platform</li>
-                                            <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Innovation In Technology</li>
-                                        </ul>
-                                    </div>
-                                    <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Join community<i class="ti ti-chevron-right ms-1"></i></a>
-                                    <div class="coin-note">Each connection supports skill programs and platform growth.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- 5. Marketplace -->
-            <div class="tab-pane feature-tab fade" id="marketplace-features">
-                <section class="provide-section" id="market-section">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-9">
-                                <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                                    <h2><span>We’r</span> here help to find your Needs.</h2>
-                                    <p>Our Marketplace lets creators showcase digital products from templates to software tools with full payment protection via our platform.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/ipad-icon.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Browse a product</h6>
-                                    <p>Everything you need for your craft — safe payments through Future Connect.</p>
-                                    <a href="{{ route('user.products.index') }}" class="btn btn-primary">Explore products<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/service-icon.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Sell a product</h6>
-                                    <p>Our Marketplace lets creators showcase digital products</p>
-                                    <a href="#" class="btn btn-primary">Find a product<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                    <div class="provide-icon">
-                                        <img src="assets/img/icons/user-icon-01.svg" alt="icon">
-                                    </div>
-                                    <h6 class="mb-1">Become a seller</h6>
-                                    <p>Sellers earn instantly — FC keeps a small fee for logistics & support.</p>
-                                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
+        </div>
+        <div class="category-scroll">
+            @foreach($categories as $cat)
+            <a href="{{ route('user.talents.category', $cat->slug) }}" class="cat-pill">
+                <span class="cat-pill-name">{{ $cat->name }}</span>
+                <span class="cat-pill-count">{{ $cat->talents_count ?? 0 }} talents</span>
+                <span class="cat-pill-arrow"><i class="ti ti-arrow-right"></i></span>
+            </a>
+            @endforeach
         </div>
     </div>
 </section>
 
-<!-- MOBILE ACCORDION -->
-<div class="accordion d-lg-none" id="featuresAccordion" style="margin-top: 3rem;">
+{{-- ════════════════════════════════════
+     4. FEATURES TABS (DESKTOP)
+════════════════════════════════════ --}}
+<section class="fc-features d-none d-lg-block" id="features">
     <div class="container">
-        <h2 class="mb-4" style="color:#afafaf;">Explore Future Connect Features</h2>
-        <!-- Skills -->
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accSkills">
-                    Skills Marketplace
-                </button>
-            </h2>
-            <div id="accSkills" class="accordion-collapse collapse show" data-bs-parent="#featuresAccordion">
-                <div class="accordion-body">
-                    <div class="hero-section-two">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-lg-7">
-                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                        <img src="assets/img/home/banner-shape-1.svg" alt="img" class="img-fluid banner-bg-1 d-none d-lg-flex">
-                                        <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Skills Marketplace</span>
-                                        <h1 class="mb-2">Showcase your talent <span>and</span> reach verified employers.</h1>
-                                        <p class="mb-4">Future Connect’s Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
-                                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore skills marketplace<i class="ti ti-chevron-right ms-1"></i></a>
-                                        <div class="banner-users d-flex align-items-center flex-wrap gap-3">
-                                            <div class="avatar-list-stacked me-2">
-                                                @foreach($featuredTalents as $talent)
-                                                <span class="avatar avatar-md rounded-circle border-0"><img src="{{ $talent->image ? asset('image/talents/' . $talent->image) : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                                                @endforeach
-                                            </div>
-                                            <div>
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <i class="ti ti-star-filled text-warning"></i>
-                                                    <i class="ti ti-star-filled text-warning"></i>
-                                                    <i class="ti ti-star-filled text-warning"></i>
-                                                    <i class="ti ti-star-filled text-warning"></i>
-                                                    <i class="ti ti-star-filled text-warning"></i>
-                                                    <h6 class="mb-0 ms-2">4.8/5</h6>
-                                                </div>
-                                                <p class="mb-0">over {{ $totalTalents}}+ skilled professionals</p>
-                                            </div>
-                                        </div>
-                                    </div>
+        <div class="fc-section-head">
+            <span class="eyebrow">Platform Features</span>
+            <h2>Explore Future Connect</h2>
+            <p>Everything you need to grow your career, showcase your skills, and connect with the right people.</p>
+        </div>
+
+        <div class="fc-tab-bar" role="tablist">
+            <button class="fc-tab-btn active" data-fctab="skills">Skills</button>
+            <button class="fc-tab-btn" data-fctab="learning">Learning</button>
+            <button class="fc-tab-btn" data-fctab="opportunity">Opportunities</button>
+            <button class="fc-tab-btn" data-fctab="connect">Connect</button>
+            <button class="fc-tab-btn" data-fctab="marketplace">Marketplace</button>
+        </div>
+
+        {{-- Skills --}}
+        <div class="fc-tab-panel active" id="fctab-skills">
+            <div class="feature-panel-card">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <span class="fc-badge mb-3"><i class="ti ti-sparkles"></i> Skills Marketplace</span>
+                        <h2>Showcase your talent <span>and</span> reach verified employers.</h2>
+                        <p>Future Connect's Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
+                        <ul class="feature-list">
+                            <li>Get verified and build trust with employers</li>
+                            <li>Feature your story on our homepage</li>
+                            <li>Reach 3× more clients with a boosted profile</li>
+                        </ul>
+                        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+                            <a href="{{ route('user.talents') }}" class="btn-fc-primary">Explore Marketplace <i class="ti ti-arrow-right"></i></a>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div class="avatar-stack">
+                                    @foreach($featuredTalents as $t)
+                                    <img src="{{ $t->image ? asset('image/talents/'.$t->image) : asset('assets/img/user/profile.jpg') }}" alt="">
+                                    @endforeach
                                 </div>
-                                <div class="col-lg-5">
-                                    <div class="banner-image">
-                                        <img src="assets/img/home/banner-image.svg" alt="img" class="img-fluid banner-img">
-                                    </div>
+                                <div>
+                                    <div style="color:var(--accent); font-size:0.8rem;">★★★★★ 4.8/5</div>
+                                    <div style="font-size:0.72rem; color:var(--text-3);">{{ $totalTalents }}+ professionals</div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-6 feature-img-wrap">
+                        <img src="assets/img/home/banner-image.svg" alt="" class="img-fluid">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Learning -->
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accLearning">
-                    Learning Center
-                </button>
-            </h2>
-            <div id="accLearning" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-                <div class="accordion-body">
-                    <section class="hero-section">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                        <div class="banner-head">
-                                            <h1 class="mb-2">Upskill with short, impactful professional courses.</h1>
-                                            <p class="d-inline-flex">The Learning Center brings together experts and learners for short, affordable, high-quality learning experiences. Each course is designed for practical application — so you can implement your knowledge immediately.</p>
-                                        </div>
-                                        <a href="{{ route('user.courses') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center mb-3">Explore courses<i class="ti ti-chevron-right ms-1"></i></a>
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="banner-img">
-                                        <div class="banner-img-right">
-                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+        {{-- Learning --}}
+        <div class="fc-tab-panel" id="fctab-learning">
+            <div class="feature-panel-card">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <span class="fc-badge mb-3"><i class="ti ti-school"></i> Learning Center</span>
+                        <h2>Upskill with short, impactful <span>professional courses.</span></h2>
+                        <p>The Learning Center brings together experts and learners for short, affordable, high-quality experiences — designed for practical application so you can implement knowledge immediately.</p>
+                        <ul class="feature-list">
+                            <li>Short, high-impact micro-courses</li>
+                            <li>Expert instructors from your industry</li>
+                            <li>Certificates you can share on your profile</li>
+                        </ul>
+                        <a href="{{ route('user.courses') }}" class="btn-fc-primary">Explore Courses <i class="ti ti-arrow-right"></i></a>
+                    </div>
+                    <div class="col-lg-6 feature-img-wrap">
+                        <img src="assets/img/banner-img.png" alt="" class="img-fluid">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Opportunities -->
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accOpportunity">
-                    Opportunities
-                </button>
-            </h2>
-            <div id="accOpportunity" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-                <div class="accordion-body">
-                    <section class="hero-section-two">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="banner-content">
-                                        <span class="d-inline-flex mb-3 align-items-center hero-title"><i class="ti ti-point-filled me-1"></i>Future Connect Opportunities</span>
-                                        <h1 class="mb-2">Post work, find collaborators, <span>and</span> build your dream team in one verified network.</h1>
-                                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Explore works<i class="ti ti-chevron-right ms-1"></i></a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="banner-img">
-                                        <div class="banner-img-right">
-                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+        {{-- Opportunities --}}
+        <div class="fc-tab-panel" id="fctab-opportunity">
+            <div class="feature-panel-card">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <span class="fc-badge mb-3"><i class="ti ti-briefcase"></i> Opportunities</span>
+                        <h2>Post work, find collaborators, <span>and build</span> your dream team.</h2>
+                        <ul class="feature-list">
+                            <li>Post freelance gigs and full-time roles</li>
+                            <li>Find verified collaborators in one network</li>
+                            <li>Set job alerts so you never miss a match</li>
+                        </ul>
+                        <a href="{{ route('user.talents') }}" class="btn-fc-primary">Explore Works <i class="ti ti-arrow-right"></i></a>
+                    </div>
+                    <div class="col-lg-6 feature-img-wrap">
+                        <img src="assets/img/banner-img.png" alt="" class="img-fluid">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Connect -->
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accConnect">
-                    Connection Room
-                </button>
-            </h2>
-            <div id="accConnect" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-                <div class="accordion-body">
-                    <section class="about-us-section">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-lg-6">
-                                    <div class="row me-4">
-                                        <div class="col-sm-6">
-                                            <div class="about-inner-img">
-                                                <img src="assets/img/aboutus/about-us-01.jpg" class="img-fluid" alt="img">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="about-inner-img">
-                                                        <img src="assets/img/aboutus/about-us-02.jpg" class="img-fluid" alt="img">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="about-inner-img">
-                                                        <img src="assets/img/aboutus/about-us-03.jpg" class="img-fluid" alt="img">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="about-us-info">
-                                        <div class="about-us-head">
-                                            <h6>Connection Room</h6>
-                                            <h2>Network and collaborate securely with verified users.</h2>
-                                            <p>
-                                                The Connect Room offers a secure messaging and meeting system for verified professionals. Build meaningful relationships, exchange ideas, or schedule mentorship calls with trusted peers.
-                                            </p>
-                                        </div>
-                                        <div class="about-features">
-                                            <ul class="list-one">
-                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Diverse Network of Professionals</li>
-                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Trust and Transparency</li>
-                                            </ul>
-                                            <ul class="list-two">
-                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>User Friendly Platform</li>
-                                                <li><span><img src="assets/img/icons/target-arrow-icon.svg" alt="img"></span>Innovation In Technology</li>
-                                            </ul>
-                                        </div>
-                                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary d-inline-flex align-items-center">Join community<i class="ti ti-chevron-right ms-1"></i></a>
-                                        <div class="coin-note">Each connection supports skill programs and platform growth.</div>
-                                    </div>
-                                </div>
+        {{-- Connect --}}
+        <div class="fc-tab-panel" id="fctab-connect">
+            <div class="feature-panel-card">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-5">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <img src="assets/img/aboutus/about-us-01.jpg" alt="" class="img-fluid" style="border-radius: var(--r-md);">
                             </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-
-        <!-- Marketplace -->
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#accMarketplace">
-                    Marketplace
-                </button>
-            </h2>
-            <div id="accMarketplace" class="accordion-collapse collapse" data-bs-parent="#featuresAccordion">
-                <div class="accordion-body">
-                    <section class="provide-section" id="market-section">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-6 col-md-9">
-                                    <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                                        <h2><span>We’r</span> here help to find your Needs.</h2>
-                                        <p>Our Marketplace lets creators showcase digital products from templates to software tools with full payment protection via our platform.</p>
-                                    </div>
-                                </div>
+                            <div class="col-6 d-flex flex-column gap-3">
+                                <img src="assets/img/aboutus/about-us-02.jpg" alt="" class="img-fluid" style="border-radius: var(--r-md);">
+                                <img src="assets/img/aboutus/about-us-03.jpg" alt="" class="img-fluid" style="border-radius: var(--r-md);">
                             </div>
-                            <div class="row justify-content-center">
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                        <div class="provide-icon">
-                                            <img src="assets/img/icons/ipad-icon.svg" alt="icon">
-                                        </div>
-                                        <h6 class="mb-1">Browse a product</h6>
-                                        <p>Everything you need for your craft — safe payments through Future Connect.</p>
-                                        <a href="{{ route('user.products.index') }}" class="btn btn-primary rounded-pill">Explore products<i class="ti ti-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                        <div class="provide-icon">
-                                            <img src="assets/img/icons/service-icon.svg" alt="icon">
-                                        </div>
-                                        <h6 class="mb-1">Sell a product</h6>
-                                        <p>Our Marketplace lets creators showcase digital products</p>
-                                        <a href="#" class="btn btn-primary rounded-pill">Find a product<i class="ti ti-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="provide-box aos-init aos-animate" data-aos="fade-up">
-                                        <div class="provide-icon">
-                                            <img src="assets/img/icons/user-icon-01.svg" alt="icon">
-                                        </div>
-                                        <h6 class="mb-1">Become a seller</h6>
-                                        <p>Sellers earn instantly — FC keeps a small fee for logistics & support.</p>
-                                        <a class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#applySellerModal">Became a Seller<i class="ti ti-chevron-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .postLists.cards .post-item.m-card {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #1f2d3d26;
-        text-align: center;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        margin-bottom: 4.75rem;
-
-    }
-
-    .postLists.cards .post-item.m-card .img {
-        position: relative;
-        display: block;
-        margin-top: -1.75em;
-        width: calc(100% - .85em);
-        /* padding-top: calc(89.45% - .67em); */
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        border-radius: .75em;
-        box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        -webkit-box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        transform: translateZ(0);
-        transition: .25s;
-        margin-bottom: 1em;
-    }
-
-    .postLists.cards .post-item.m-card .infos {
-        width: 100%;
-    }
-
-    .postLists.cards .post-item.m-card .title {
-        font-size: 16px;
-        /* padding: 0 .5em; */
-        margin: 1em 0 .5em;
-        overflow: hidden;
-        max-width: 100%;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        text-overflow: ellipsis;
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        white-space: normal;
-    }
-
-    /* .postLists.cards .post-card-wrapper {
-        width: 20%;
-    } */
-
-    .postLists .post-card-wrapper {
-        z-index: 1;
-    }
-
-    .postLists.cards .post-item.m-card .go {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 16px 16px;
-        color: #fff;
-        background: #060f11;
-        border-radius: 30px;
-        text-decoration: none;
-        overflow: hidden;
-        z-index: 1;
-        justify-content: center;
-        min-width: 50%;
-        /* Green to navy */
-        box-shadow: 0 0.5em 1.2em rgba(1, 30, 52, 0.6);
-        font-size: 14px;
-        margin: 1em auto;
-        text-shadow: 0 2px 3px rgba(1, 30, 52, 0.5);
-        height: auto;
-        line-height: 1.5em;
-        transition: all 0.3s ease;
-    }
-
-    .postLists.cards .post-item.m-card .go-text,
-    .postLists.cards .post-item.m-card .go::after {
-        display: block;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        transition: transform 0.4s ease, opacity 0.4s ease;
-        white-space: nowrap;
-    }
-
-    .postLists.cards .post-item.m-card .go-text {
-        top: 0;
-        opacity: 1;
-    }
-
-    .postLists.cards .post-item.m-card .go::after {
-        content: "profile detail";
-        top: 100%;
-        opacity: 0;
-        color: #fff;
-        font-weight: 600;
-    }
-
-    .postLists.cards .post-item.m-card .go:hover .go-text {
-        transform: translate(-50%, -100%);
-        opacity: 0;
-    }
-
-    .postLists.cards .post-item.m-card .go:hover::after {
-        top: 0;
-        opacity: 1;
-        transform: translateX(-50%);
-    }
-
-
-    .card.post-item.m-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card.post-item.m-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-    }
-
-    .card.post-item.m-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        z-index: 10;
-        position: relative;
-        display: block;
-        /* margin-top: -1.75em; */
-        width: calc(100% - .85em);
-        /* padding-top: calc(28.45% - 1.67em); */
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
-        border-radius: .75em;
-        box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        -webkit-box-shadow: 1px 0 rgba(255, 255, 255, .5), -1px 0 rgba(255, 255, 255, .5), 0 1px rgba(255, 255, 255, .5), 0 .5em 1.2em var(--s-color);
-        transform: translateZ(0);
-        transition: .25s;
-        margin-bottom: 1em;
-    }
-
-    .talent-hover-box {
-        display: inline-block;
-        position: relative;
-    }
-
-    .default-badges,
-    .hover-badges {
-        transition: opacity 0.3s ease;
-    }
-
-    .hover-badges {
-        display: none;
-    }
-
-    .talent-hover-box:hover .default-badges {
-        display: none;
-    }
-
-    .talent-hover-box:hover .hover-badges {
-        display: inline-block;
-    }
-</style>
-
-
-@if($partners->count() != 0)
-<div class="container">
-    <div class="client-slider-sec px-2 px-md-4 px-lg-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <div class="section-header text-center aos" data-aos="fade-up">
-                    <h3 class="text-white">Trusted by {{ $partners->count() }}+ partners Around Globe</h3>
-                </div>
-
-                <div class="row mt-4">
-                    @foreach($partners as $partner)
-                    <div class="col-6 col-sm-2 col-md-2 col-lg-2 mb-4 text-center">
-                        <div class="client-logo">
-                            <img src="{{ $partner->logo ? asset('image/partners/' . $partner->logo) : asset('/assets/img/company/logo.svg') }}"
-                                class="img-fluid"
-                                alt="Client Logo" style="height: 50px; width: auto;">
                         </div>
                     </div>
-                    @endforeach
+                    <div class="col-lg-7">
+                        <span class="fc-badge mb-3"><i class="ti ti-users"></i> Connection Room</span>
+                        <h2>Network and collaborate <span>securely</span> with verified users.</h2>
+                        <p>The Connect Room offers a secure messaging and meeting system for verified professionals. Build meaningful relationships, exchange ideas, or schedule mentorship calls.</p>
+                        <ul class="feature-list">
+                            <li>Diverse network of verified professionals</li>
+                            <li>Trust and transparency at every step</li>
+                            <li>User-friendly, innovation-driven platform</li>
+                        </ul>
+                        <a href="{{ route('user.talents') }}" class="btn-fc-primary">Join Community <i class="ti ti-arrow-right"></i></a>
+                    </div>
                 </div>
-
             </div>
+        </div>
+
+        {{-- Marketplace --}}
+        <div class="fc-tab-panel" id="fctab-marketplace">
+            <div class="feature-panel-card">
+                <span class="fc-badge mb-3"><i class="ti ti-shopping-bag"></i> Marketplace</span>
+                <h2>We're here to help <span>find your needs.</span></h2>
+                <p>Our Marketplace lets creators showcase digital products — from templates to tools — with full payment protection via the platform.</p>
+                <div class="fc-provide-grid">
+                    <div class="fc-provide-box">
+                        <div class="provide-icon"><img src="assets/img/icons/ipad-icon.svg" alt=""></div>
+                        <h6>Browse Products</h6>
+                        <p>Everything you need for your craft — safe payments through Future Connect.</p>
+                        <a href="{{ route('user.products.index') }}" class="btn-fc-primary" style="font-size:0.8rem; padding:9px 18px;">Explore <i class="ti ti-arrow-right"></i></a>
+                    </div>
+                    <div class="fc-provide-box">
+                        <div class="provide-icon"><img src="assets/img/icons/service-icon.svg" alt=""></div>
+                        <h6>Sell a Product</h6>
+                        <p>Showcase your digital products to thousands of buyers on the platform.</p>
+                        <a href="#" class="btn-fc-outline" style="font-size:0.8rem; padding:9px 18px;">Learn More <i class="ti ti-arrow-right"></i></a>
+                    </div>
+                    <div class="fc-provide-box">
+                        <div class="provide-icon"><img src="assets/img/icons/user-icon-01.svg" alt=""></div>
+                        <h6>Become a Seller</h6>
+                        <p>Sellers earn instantly — FC keeps a small fee for logistics and support.</p>
+                        <a class="btn-fc-primary" data-bs-toggle="modal" data-bs-target="#applySellerModal" style="font-size:0.8rem; padding:9px 18px;">Apply <i class="ti ti-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{{-- ════════════════════════════════════
+     4b. FEATURES ACCORDION (MOBILE)
+════════════════════════════════════ --}}
+<div class="fc-accordion d-lg-none">
+    <div class="container">
+        <div class="fc-section-head">
+            <span class="eyebrow">Platform Features</span>
+            <h2>Explore Future Connect</h2>
+        </div>
+        <div class="accordion" id="fcAccordion">
+            @php
+            $panels = [
+                ['id'=>'accSkills',   'label'=>'Skills Marketplace',  'icon'=>'ti-sparkles',  'route'=>route('user.talents'),  'cta'=>'Explore Marketplace'],
+                ['id'=>'accLearn',    'label'=>'Learning Center',      'icon'=>'ti-school',    'route'=>route('user.courses'),  'cta'=>'Explore Courses'],
+                ['id'=>'accOpp',      'label'=>'Opportunities',        'icon'=>'ti-briefcase', 'route'=>route('user.talents'),  'cta'=>'Explore Works'],
+                ['id'=>'accConnect',  'label'=>'Connection Room',      'icon'=>'ti-users',     'route'=>route('user.talents'),  'cta'=>'Join Community'],
+            ];
+            $descs = [
+                'Stand out and reach 3× more employers. Get verified and feature your story on our homepage.',
+                'Short, affordable, high-quality learning designed for practical application.',
+                'Post work, find collaborators, and build your dream team in one verified network.',
+                'Secure messaging and meeting system for verified professionals.',
+            ];
+            @endphp
+            @foreach($panels as $i => $panel)
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button {{ $i !== 0 ? 'collapsed' : '' }}"
+                        data-bs-toggle="collapse" data-bs-target="#{{ $panel['id'] }}">
+                        <i class="ti {{ $panel['icon'] }} me-2" style="color:var(--accent)"></i>
+                        {{ $panel['label'] }}
+                    </button>
+                </h2>
+                <div id="{{ $panel['id'] }}" class="accordion-collapse collapse {{ $i === 0 ? 'show' : '' }}" data-bs-parent="#fcAccordion">
+                    <div class="accordion-body">
+                        <p style="font-size:0.85rem; color:var(--text-2); margin-bottom:16px;">{{ $descs[$i] }}</p>
+                        <a href="{{ $panel['route'] }}" class="btn-fc-primary" style="font-size:0.82rem; padding:10px 20px;">
+                            {{ $panel['cta'] }} <i class="ti ti-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
     </div>
 </div>
+
+{{-- ════════════════════════════════════
+     5. HOW IT WORKS
+════════════════════════════════════ --}}
+<section class="fc-how">
+    <div class="container">
+        <div class="fc-section-head text-center" style="max-width:600px; margin:0 auto 48px;">
+            <span class="eyebrow">How It Works</span>
+            <h2>Get Started in 3 Simple Steps</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <span class="step-num">01</span>
+                <h5>Create Your Profile</h5>
+                <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
+                <a href="{{ route('register') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="step-card">
+                <span class="step-num">02</span>
+                <h5>Get Discovered & Rated</h5>
+                <p>Employers browse skills by category, rate your profile, and share feedback to help you grow.</p>
+                <a href="{{ route('user.talents') }}" class="strip-link">Explore Skills <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="step-card">
+                <span class="step-num">03</span>
+                <h5>Grow with the Community</h5>
+                <p>Connect, collaborate, and access learning resources. Shop or sell tools from local creators.</p>
+                <a href="{{ route('user.talents') }}" class="strip-link">Join Now <i class="ti ti-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ════════════════════════════════════
+     6. PARTNERS
+════════════════════════════════════ --}}
+@if($partners->count())
+<section class="fc-partners">
+    <div class="container">
+        <p class="partners-label">Trusted by {{ $partners->count() }}+ Partners Worldwide</p>
+        <div class="partners-scroll">
+            @foreach($partners as $partner)
+            <img src="{{ $partner->logo ? asset('image/partners/'.$partner->logo) : asset('/assets/img/company/logo.svg') }}"
+                 alt="{{ $partner->name ?? 'Partner' }}">
+            @endforeach
+        </div>
+    </div>
+</section>
 @endif
 
-<section class="provide-section">
+{{-- ════════════════════════════════════
+     7. TESTIMONIALS
+════════════════════════════════════ --}}
+<section class="fc-testimonials">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-9">
-                <div class="section-header aos aos-init aos-animate" data-aos="fade-up">
-                    <h2 style="color:#afafaf;"><span>We’r</span> Empowering skills, Creators and Innovators</h2>
-                    <p>Discover opportunities, grow your skills, showcase your skills and connect with a community built for your success.</p>
+        <div class="row align-items-end mb-5">
+            <div class="col-md-7">
+                <div class="fc-section-head" style="margin-bottom:0">
+                    <span class="eyebrow">Testimonials</span>
+                    <h2>What Talents Say About Future Connect</h2>
+                    <p>Voices of passionate individuals whose lives have been impacted by sharing their skills and stories.</p>
                 </div>
             </div>
-        </div>
-        <!-- Mobile & Tablet Carousel -->
-        <div id="provideCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="5000">
-
-            <!-- Indicators -->
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#provideCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
-                <button type="button" data-bs-target="#provideCarousel" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#provideCarousel" data-bs-slide-to="2"></button>
+            <div class="col-md-5 text-md-end">
+                <div class="avatar-stack" style="justify-content: flex-end; margin-bottom:8px;">
+                    @foreach($testimonials as $t)
+                    <img src="{{ $t->talent->image ? asset('image/talents/'.$t->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="">
+                    @endforeach
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-3);">Building a Global Talent Community</p>
             </div>
+        </div>
 
-            <!-- Slides -->
+        {{-- Desktop grid --}}
+        <div class="testimonial-grid d-none d-md-grid">
+            @foreach($testimonials as $test)
+            <div class="testimonial-card">
+                <div class="testimonial-head">
+                    <img src="{{ $test->talent->image ? asset('image/talents/'.$test->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="">
+                    <div>
+                        <div class="testimonial-name">{{ $test->talent->name ?? 'Talent' }}</div>
+                        <div class="testimonial-role">{{ $test->title ?? 'Creative Professional' }}</div>
+                    </div>
+                    <div class="testimonial-stars">
+                        @for($i=0;$i<5;$i++){{ $i<$test->rating?'★':'☆' }}@endfor
+                    </div>
+                </div>
+                <div class="testimonial-body">
+                    <p>{{ $test->content ?? 'Passionate professional making a difference on Future Connect.' }}</p>
+                </div>
+                <div class="testimonial-loc">
+                    <i class="ti ti-map-pin" style="color:var(--accent)"></i>
+                    {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        {{-- Mobile carousel --}}
+        <div id="testimonialCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="6000">
             <div class="carousel-inner">
-
-                <div class="carousel-item active">
-                    <div class="provide-box text-center p-4">
-                        <div class="provide-icon mb-3">
-                            <img src="assets/img/icons/ipad-icon.svg" alt="icon">
-                        </div>
-                        <h6 class="mb-1 text-white">Create Your Skills Profile</h6>
-                        <p>Sign up and showcase your story, skills, and aspirations through text, images, and videos.</p>
-                        <a href="{{ route('register') }}" class="btn btn-primary">
-                            Get started <i class="ti ti-chevron-right"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <div class="provide-box text-center p-4">
-                        <div class="provide-icon mb-3">
-                            <img src="assets/img/icons/service-icon.svg" alt="icon">
-                        </div>
-                        <h6 class="mb-1 text-white">Get Discovered & Rated</h6>
-                        <p>Users browse skills by category, like your story, rate your skills, and share feedback to help you grow.</p>
-                        <a href="{{ route('user.talents') }}" class="btn btn-primary">
-                            Explore Skills Hub <i class="ti ti-chevron-right"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <div class="provide-box text-center p-4">
-                        <div class="provide-icon mb-3">
-                            <img src="assets/img/icons/user-icon-01.svg" alt="icon">
-                        </div>
-                        <h6 class="mb-1 text-white">Grow With Us</h6>
-                        <p>Shop or sell tools, digital kits and creative products from local sellers.</p>
-                        <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary">
-                            <i class="ti ti-store"></i> Apply to Sell
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Controls -->
-            <!-- <button class="carousel-control-prev" type="button" data-bs-target="#provideCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-
-            <button class="carousel-control-next" type="button" data-bs-target="#provideCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button> -->
-
-        </div>
-
-        <!-- Desktop Grid -->
-        <div class="row justify-content-center d-none d-md-flex">
-
-            <div class="col-lg-4 col-md-6">
-                <div class="provide-box" data-aos="fade-up">
-                    <div class="provide-icon">
-                        <img src="assets/img/icons/ipad-icon.svg" alt="icon">
-                    </div>
-                    <h6 class="mb-1 text-white">Create Your Skills Profile</h6>
-                    <p>Sign up and showcase your story, skills, and aspirations through text, images, and videos.</p>
-                    <a href="{{ route('register') }}" class="btn btn-primary">
-                        Get started <i class="ti ti-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="provide-box" data-aos="fade-up">
-                    <div class="provide-icon">
-                        <img src="assets/img/icons/service-icon.svg" alt="icon">
-                    </div>
-                    <h6 class="mb-1 text-white">Get Discovered & Rated</h6>
-                    <p>Users browse skills by category, like your story, rate your skills, and share feedback to help you grow.</p>
-                    <a href="{{ route('user.talents') }}" class="btn btn-primary">
-                        Explore Skills Hub <i class="ti ti-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="provide-box" data-aos="fade-up">
-                    <div class="provide-icon">
-                        <img src="assets/img/icons/user-icon-01.svg" alt="icon">
-                    </div>
-                    <h6 class="mb-1 text-white">Grow With Us</h6>
-                    <p>Shop or sell tools, digital kits and creative products from local sellers.</p>
-                    <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn btn-primary">
-                        <i class="ti ti-store"></i> Apply to Sell
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-<style>
-    .postLists-bg-white {
-        display: flex;
-        /* align-items: center; */
-        flex-direction: column;
-        border: 1px solid #fff;
-        border-radius: 1em;
-        background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4);
-        box-shadow: 0 1em 1em #011e3461;
-        /* text-align: center; */
-        text-shadow: 0 1px #fff;
-        transition: .25s;
-        /* margin-bottom: 4.75rem; */
-
-    }
-</style>
-
-
-<!-- what makes Future Connect -->
-<!-- <div class="container">
-    <div class="what-makes-dream-gigs mt-5">
-
-        <div class="row align-items-center">
-            <div class="col-lg-4">
-                <div class="what-makes-left" data-aos="fade-right">
-                    <h2 class="mb-3">What Makes <span>Future Connect</span> Unique</h2>
-                    <p class="mb-0">Future Connect is more than just a platform — it’s a launchpad for young
-                        talents to share their stories, showcase their skills, and inspire impact. From
-                        storytellers to creators and dreamers, we bring their potential to the spotlight.</p>
-                </div>
-            </div>
-            <div class="col-lg-8">
-                <div class="row row-gap-3" data-aos="fade-left">
-                    <div class="col-lg-4">
-                        <div class="what-makes-item bg-white rounded-2">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="what-makes-icon bg-primary-transparent rounded"><i
-                                        class="ti ti-sparkles"></i></span>
-                                <h2>01</h2>
+                @foreach($testimonials as $i => $test)
+                <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+                    <div class="testimonial-card" style="margin:0 auto; max-width:380px;">
+                        <div class="testimonial-head">
+                            <img src="{{ $test->talent->image ? asset('image/talents/'.$test->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="">
+                            <div>
+                                <div class="testimonial-name">{{ $test->talent->name ?? 'Talent' }}</div>
+                                <div class="testimonial-role">{{ $test->title ?? 'Creative Professional' }}</div>
                             </div>
-                            <h6 class="mb-2">Authentic Talent Stories</h6>
-                            <p class="mb-0">Real stories from real talents. Discover inspiring journeys that
-                                reflect resilience, creativity, and growth.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="what-makes-item bg-white rounded-2">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="what-makes-icon bg-pink-transparent rounded"><i
-                                        class="ti ti-certificate"></i></span>
-                                <h2>02</h2>
-                            </div>
-                            <h6 class="mb-2">Skill-Focused Opportunities</h6>
-                            <p class="mb-0">Explore a curated space where talents can connect with mentors,
-                                showcase skills, and access paid opportunities.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="what-makes-item bg-white rounded-2">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="what-makes-icon bg-success-transparent rounded"><i
-                                        class="ti ti-users-group"></i></span>
-                                <h2>03</h2>
-                            </div>
-                            <h6 class="mb-2">Community of Changemakers</h6>
-                            <p class="mb-0">Join a growing community driven by purpose, collaboration, and
-                                positive social impact.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-<!-- what makes Future Connect -->
-
-
-<style>
-    .talent-card {
-        background: #060f11;
-        color: #afafaf;
-        border-radius: 3px;
-        border: 1px solid #3d4648;
-        padding: 1.5rem;
-        text-align: left;
-        display: flex;
-        gap: 1.5rem;
-        align-items: center;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease;
-    }
-
-    .talent-card:hover {
-        transform: translateY(-5px);
-    }
-
-    /* Talent Image */
-    .talent-card img {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #afafaf33;
-    }
-
-    /* Talent Info */
-    .talent-info h4 {
-        margin: 0;
-        color: #dcdcdc;
-        font-size: 1.25rem;
-        font-weight: 700;
-    }
-
-    .talent-info p {
-        margin: 4px 0;
-        font-size: 0.95rem;
-    }
-
-    .talent-info .rating {
-        color: #FFD700;
-        font-size: 0.9rem;
-    }
-
-    .talent-info .location {
-        color: #dcdcdc;
-        font-size: 0.85rem;
-    }
-
-    .talent-info .tag {
-        background-color: rgba(255, 255, 255, 0.2);
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 0.75rem;
-        margin-right: 5px;
-    }
-</style>
-
-
-<!-- testimonials -->
-<div class="testimonials-section-two">
-
-    <div class="container">
-        <div class="row align-items-center row-gap-4">
-            <div class="col-lg-6">
-                <div class="section-header-two" data-aos="fade-up">
-                    <h2 class="mb-2 p-0" style="color:#afafaf;">What Talents Say About Future Connect</h2>
-                    <p>Discover the voices of passionate individuals whose lives have been impacted by sharing
-                        their stories and skills on Future Connect.</p>
-                </div>
-                <h6 class="mb-3" data-aos="fade-up" style="color:#afafaf;">We’re Building a Global Talent Community</h6>
-                <div class="avatar-list-stacked me-2" data-aos="fade-up">
-                    @foreach($testimonials as $testimonial)
-                    <span class="avatar avatar-md rounded-circle border-0"><img
-                            src="{{ $testimonial->talent->image 
-        ? asset('image/talents/' . $testimonial->talent->image) 
-        : asset('assets/img/user/profile.jpg') }}" class="img-fluid rounded-circle border border-white" alt="Img"></span>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Mobile & Tablet Carousel -->
-            <div id="testimonialCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="6000">
-
-                <!-- Indicators -->
-                <div class="carousel-indicators">
-                    @foreach($testimonials as $index => $test)
-                    <button type="button"
-                        data-bs-target="#testimonialCarousel"
-                        data-bs-slide-to="{{ $index }}"
-                        class="{{ $index === 0 ? 'active' : '' }}"
-                        aria-current="{{ $index === 0 ? 'true' : 'false' }}">
-                    </button>
-                    @endforeach
-                </div>
-
-                <!-- Slides -->
-                <div class="carousel-inner">
-
-                    @foreach($testimonials as $index => $test)
-                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                        <div class="talent-card mb-4">
-                            <img src="{{ $test->talent->image 
-                        ? asset('image/talents/' . $test->talent->image) 
-                        : asset('assets/img/user/profile.jpg') }}" alt="Talent Photo">
-
-                            <div class="talent-info">
-                                <h4>{{ $test->talent->name ?? 'Jacob Rivera' }}</h4>
-                                <p>{{ $test->title ?? 'Creative Writer' }}</p>
-
-                                <div class="rating">
-                                    @for($i = 0; $i < 5; $i++)
-                                        <i class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
-                                        @endfor
-                                </div>
-
-                                <p class="description">
-                                    {{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}
-                                </p>
-
-                                <div class="location">
-                                    <i class="ti ti-location-pin"></i> {{ $test->talent->address ?? 'Kigali, Rwanda' }}
-                                </div>
+                            <div class="testimonial-stars">
+                                @for($i2=0;$i2<5;$i2++){{ $i2<$test->rating?'★':'☆' }}@endfor
                             </div>
                         </div>
-                    </div>
-                    @endforeach
-
-                </div>
-
-                <!-- Controls -->
-                <!-- <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button> -->
-
-            </div>
-
-            <!-- Desktop Testimonials -->
-            <div class="col-lg-6 d-none d-md-block">
-                @foreach($testimonials as $test)
-                <div class="talent-card mb-4">
-                    <img src="{{ $test->talent->image 
-                ? asset('image/talents/' . $test->talent->image) 
-                : asset('assets/img/user/profile.jpg') }}" alt="Talent Photo">
-
-                    <div class="talent-info">
-                        <h4>{{ $test->talent->name ?? 'Jacob Rivera' }}</h4>
-                        <p>{{ $test->title ?? 'Creative Writer' }}</p>
-
-                        <div class="rating">
-                            @for($i = 0; $i < 5; $i++)
-                                <i class="ti ti-star-filled {{ $i < $test->rating ? 'text-warning' : 'text-muted' }}"></i>
-                                @endfor
+                        <div class="testimonial-body">
+                            <p>{{ $test->content ?? 'Passionate professional making a difference on Future Connect.' }}</p>
                         </div>
-
-                        <p class="description">
-                            {{ $test->content ?? 'Passionate writer with a flair for storytelling and compelling narratives.' }}
-                        </p>
-
-                        <div class="location">
-                            <i class="ti ti-location-pin"></i> {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                        <div class="testimonial-loc">
+                            <i class="ti ti-map-pin" style="color:var(--accent)"></i>
+                            {{ $test->talent->address ?? 'Kigali, Rwanda' }}
                         </div>
                     </div>
                 </div>
                 @endforeach
             </div>
+        </div>
+    </div>
+</section>
 
+{{-- ════════════════════════════════════
+     8. FIND SKILLS CTA BAND
+════════════════════════════════════ --}}
+<div class="container">
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-lg); padding:40px 36px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom:60px; position:relative; overflow:hidden;">
+        <div style="position:absolute;top:-40px;left:-40px;width:200px;height:200px;background:var(--accent-glow);filter:blur(60px);border-radius:50%;pointer-events:none;"></div>
+        <div style="position:relative;">
+            <h3 style="font-family:var(--font-head);font-weight:800;color:var(--text-1);margin-bottom:8px;">Find the right skills for your needs</h3>
+            <p style="color:var(--text-2);font-size:0.9rem;margin:0;">Over {{ $totalTalents }}K skills available today for you.</p>
+        </div>
+        <a href="{{ route('user.talents') }}" class="btn-fc-primary" style="position:relative;">
+            Explore Skills Hub <i class="ti ti-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+{{-- ════════════════════════════════════
+     9. CTA JOIN BANNER
+════════════════════════════════════ --}}
+<div class="container">
+    <div class="fc-cta">
+        <div class="fc-cta-glow"></div>
+        <div class="row align-items-center">
+            <div class="col-md-7" style="position:relative;">
+                <span class="eyebrow" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); font-weight:600; display:block; margin-bottom:12px;">Join Future Connect</span>
+                <h2>Showcase your talent, share your story, and inspire others.</h2>
+                <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
+                <div class="hero-ctas" style="margin-bottom:0;">
+                    <a href="{{ route('register') }}" class="btn-fc-primary">Get Started <i class="ti ti-arrow-right"></i></a>
+                    <a href="{{ route('user.talents') }}" class="btn-fc-outline">Browse Talents</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<!-- testimonials -->
-
-
-<!-- <div class="container">
-    <div class="join-with-us">
-        <div class="d-sm-flex align-items-center justify-content-between">
-            <div data-aos="fade-right" class="aos-init aos-animate">
-                <h2 class="text-white">Join Future Connect</h2>
-                <p class="mb-0">Showcase your talent, share your story, and inspire others. Be part of a
-                    community that empowers growth and recognition.</p>
-            </div>
-            <a href="{{ route('register') }}" class="btn btn-lg btn-primary join-us flex-shrink-0 aos-init aos-animate"
-                data-aos="fade-left">Get
-                Started</a>
-        </div>
-    </div>
-</div> -->
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const buttons = document.querySelectorAll('#talentTabs .nav-link');
-        const items = document.querySelectorAll('.talent-item');
-
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Activate clicked tab
-                buttons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                const filter = this.dataset.filter;
-
-                items.forEach(item => {
-                    const category = item.dataset.category;
-                    if (filter === category) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
+document.addEventListener('DOMContentLoaded', function () {
+    // ── Feature tabs ──
+    document.querySelectorAll('.fc-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.fc-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.fc-tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            const panel = document.getElementById('fctab-' + btn.dataset.fctab);
+            if (panel) panel.classList.add('active');
         });
     });
+});
 </script>
 
 @endsection
