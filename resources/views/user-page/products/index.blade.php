@@ -3,851 +3,484 @@
 @section('content')
 
 <style>
-    #tranding {
-        /* position: relative; */
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+        --bg-deep:    #0e1618;
+        --bg-card:    #121d1f;
+        --bg-raised:  #172224;
+        --accent:     #00a667;
+        --accent-dim: rgba(0,166,103,.15);
+        --accent-glow:rgba(0,166,103,.35);
+        --border:     rgba(255,255,255,.07);
+        --text:       #f0f4f3;
+        --muted:      #7a9490;
+        --white:      #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { background: var(--bg-deep); color: var(--text); font-family: 'DM Sans', sans-serif; }
+
+    /* ── HERO ── */
+    .hero-banner {
+        position: relative;
+        background: var(--bg-deep);
+        padding: 3.5rem 0 2rem;
         overflow: hidden;
-        background: #060f11;
-        color: #fff;
-        padding: 1rem 0;
-        border-radius: 0.1rem;
-        border: 1px solid #3d4648;
-        margin-top: 2rem;
-        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        /* height: 22rem; */
     }
-
-    .tranding-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        align-items: center;
-        gap: 2rem;
-        width: 80%;
-        margin: 0 auto;
-    }
-
-    .tranding-image-slider {
-        width: 100%;
-        height: 20rem;
-        perspective: 1200px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .tranding-image-slider .swiper-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .tranding-image-slider .swiper-slide {
-        height: 15rem;
-        width: 15rem;
-        transition: transform 0.5s ease, opacity 0.5s ease;
-        transform: scale(0.9);
-        z-index: 1;
-        opacity: 0.6;
-    }
-
-    .tranding-image-slider .swiper-slide.swiper-slide-active {
-        transform: scale(1.1);
-        z-index: 3;
-        opacity: 1;
-        margin: 0 auto;
-    }
-
-    .tranding-image-slider .swiper-slide img {
-        width: 100%;
-        height: 100%;
-        border-radius: 1.5rem;
-        object-fit: cover;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    .tranding-caption-slider {
-        width: 80%;
-        text-align: left;
-    }
-
-    .tranding-caption-slider .swiper-slide {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .tranding-caption-slider .swiper-slide-active {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .tranding-slide-caption p {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-    }
-
-    .tranding-line-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        color: #fff;
-        font-weight: 600;
-        border: 2px solid #fff;
-        border-radius: 30px;
-        padding: 0.5rem 1.2rem;
-        transition: all 0.3s ease;
-    }
-
-    .tranding-line-btn:hover {
-        background-color: #fff;
-        color: #319BF9;
-    }
-
-    .tranding-slider-control {
-        opacity: 0;
+    .hero-banner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 70% 60% at 60% 50%, rgba(0,166,103,.12) 0%, transparent 70%);
         pointer-events: none;
-        transition: opacity 0.4 ease;
     }
-
-    .tranding-slider-control .slider-arrow {
-        background: var(--white);
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 50%;
-        left: 3%;
-        transform: translateX(-42%);
-        filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
-    }
-
-    .slider-arrow {
-        width: 3rem;
-        height: 3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        background: rgba(255, 255, 255);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .slider-arrow:hover {
-        background: #fff;
-        color: #319BF9;
-    }
-
-    /* Bubbles */
-    .bubbles {
+    .hero-grid-lines {
         position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        z-index: 0;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(0,166,103,.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,166,103,.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
     }
-
-    .bubbles span {
-        position: absolute;
-        bottom: -150px;
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        animation: bubbleUp 15s infinite;
-        opacity: 0.6;
-    }
-
-    .bubbles span:nth-child(1) {
-        left: 10%;
-        width: 60px;
-        height: 60px;
-        animation-duration: 20s;
-    }
-
-    .bubbles span:nth-child(2) {
-        left: 30%;
-        animation-delay: 2s;
-    }
-
-    .bubbles span:nth-child(3) {
-        left: 50%;
-        width: 80px;
-        height: 80px;
-        animation-duration: 25s;
-    }
-
-    .bubbles span:nth-child(4) {
-        left: 70%;
-        animation-delay: 1s;
-        width: 30px;
-        height: 30px;
-    }
-
-    .bubbles span:nth-child(5) {
-        left: 90%;
-        animation-duration: 18s;
-    }
-
-    @keyframes bubbleUp {
-        0% {
-            transform: translateY(0) scale(1);
-            opacity: 0.4;
-        }
-
-        50% {
-            opacity: 0.8;
-        }
-
-        100% {
-            transform: translateY(-1000px) scale(1.3);
-            opacity: 0;
-        }
-    }
-</style>
-
-<style>
-    /* --- SWITCH-STYLE NAV PILLS --- */
-    .nav-pills {
-        display: inline-flex;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 50px;
-        padding: 5px;
-        margin-bottom: 2rem;
-        justify-content: center;
-    }
-
-    .nav-pills .nav-link {
-        border-radius: 50px;
-        color: #fff;
-        font-weight: 500;
-        padding: 0.6rem 1.5rem;
-        transition: all 0.3s ease;
-        border: 1px solid #FFFDFB;
-
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #122322;
-        color: #fff;
-        /* box-shadow: 0 0 10px rgba(13, 110, 253, 0.6); */
-        border: 1px solid #00a667;
-    }
-
-    .nav-pills .nav-link:not(.active):hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-
-    .hero-tab {
-        /* background: rgba(255, 255, 255, 0.1); */
-        backdrop-filter: blur(10px);
-        border-radius: 2px;
-        border: 1px solid #3d4648;
-        padding: 2rem;
-        color: #f1f1f1;
-    }
-
-    .hero-tab h4 {
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .hero-tab p {
-        font-size: 1rem;
-        margin: 1rem 0 1.5rem;
-    }
-
-    .btn-light {
-        border-radius: 5px;
-        border: 1px solid #3d4648;
-        background: #060f11;
-        color: #afafaf;
-        font-weight: 600;
-        padding: 0.6rem 1.5rem;
-    }
-
-    #market-section {
+    .hero-inner {
         position: relative;
-        /* background: #319bf9; */
-        color: #f1f1f1;
-        padding: 80px 0 56px;
-        z-index: 1;
-    }
-
-    #market-section .provide-box {
-        background: #0d1618bd;
-        backdrop-filter: blur(15px) saturate(180%);
-    }
-</style>
-
-<style>
-    /* HERO SECTION */
-    .announcement-hero {
-        position: relative;
-        height: 90vh;
-        background: linear-gradient(to right, #073055d4, rgb(6 53 123 / 97%)),
-            url('assets/img/creative.png') center/cover no-repeat;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: #fff;
-        padding: 2rem;
-    }
-
-    .announcement-content {
         z-index: 2;
-        max-width: 800px;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        padding: 3rem;
-        border-radius: 25px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        animation: fadeInUp 1.2s ease;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
     }
-
-    @keyframes fadeInUp {
-        from {
-            transform: translateY(20px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
+    .hero-carousel-item { display: none; }
+    .hero-carousel-item.active { display: flex; align-items: center; gap: 3rem; }
+    .hero-text { flex: 1; }
+    .hero-text .tag {
+        display: inline-flex; align-items: center; gap: .5rem;
+        background: var(--accent-dim); border: 1px solid rgba(0,166,103,.3);
+        color: var(--accent); font-family: 'Syne', sans-serif; font-size: .75rem;
+        font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+        padding: .35rem .9rem; border-radius: 50px; margin-bottom: 1.25rem;
     }
-
-    .announcement-hero h1 {
-        font-size: 2.8rem;
-        font-weight: 700;
+    .hero-text h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800; line-height: 1.15; color: var(--white);
         margin-bottom: 1rem;
     }
-
-    .announcement-hero p {
-        font-size: 1.1rem;
-        color: #e0e0e0;
-        margin-bottom: 2rem;
+    .hero-text h1 span { color: var(--accent); }
+    .hero-text p { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 480px; }
+    .btn-hero-primary {
+        display: inline-flex; align-items: center; gap: .5rem;
+        background: var(--accent); color: var(--white);
+        font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem;
+        padding: .75rem 1.75rem; border-radius: 8px; text-decoration: none;
+        border: none; cursor: pointer;
+        box-shadow: 0 0 24px var(--accent-glow);
+        transition: all .25s ease;
     }
-
-    .highlight {
-        color: #ffdd57;
-        font-weight: 600;
+    .btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 0 36px var(--accent-glow); color: var(--white); }
+    .hero-visual { flex: 0 0 300px; text-align: center; }
+    .hero-visual img { max-width: 100%; filter: drop-shadow(0 20px 40px rgba(0,166,103,.2)); }
+    .hero-dots { display: flex; gap: .5rem; margin-top: 2rem; }
+    .hero-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--border); border: 1px solid rgba(0,166,103,.3);
+        cursor: pointer; transition: all .25s;
     }
+    .hero-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
 
-    /* CTA BUTTONS */
-    .hero-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 1.2rem;
-        flex-wrap: wrap;
+    /* ── SECTION WRAPPER ── */
+    .section-wrap { max-width: 1280px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+    /* ── TRENDING CATEGORIES ── */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--white); }
+    .section-title span { color: var(--accent); }
+    .nav-arrows { display: flex; gap: .5rem; }
+    .nav-arrow-btn {
+        width: 36px; height: 36px; border-radius: 8px;
+        background: var(--bg-card); border: 1px solid var(--border);
+        color: var(--muted); display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all .2s;
     }
+    .nav-arrow-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    .btn-hero {
-        border-radius: 50px;
-        font-weight: 600;
-        padding: 0.8rem 1.6rem;
-        transition: all 0.3s ease;
+    .trend-scroll { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: .5rem; scrollbar-width: none; }
+    .trend-scroll::-webkit-scrollbar { display: none; }
+    .trend-pill {
+        flex: 0 0 auto;
+        display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: 12px; padding: .75rem 1.25rem;
+        text-decoration: none; transition: all .25s;
+        min-width: 180px;
     }
+    .trend-pill:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
+    .trend-pill-info h6 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem; color: var(--white); margin: 0 0 .2rem; }
+    .trend-pill-info p { font-size: .75rem; color: var(--muted); margin: 0; }
+    .trend-pill-arrow { color: var(--accent); font-size: 1.1rem; }
 
-    .btn-events {
-        background-color: #fff;
-        color: #fff;
+    /* ── FILTERS ── */
+    .filter-bar {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: 14px; padding: 1rem 1.5rem;
+        display: flex; align-items: center; flex-wrap: wrap; gap: 1rem;
+        margin: 1.5rem 0;
     }
-
-    .btn-events:hover {
-        background-color: #fff;
-        color: #fff;
-        transform: translateY(-2px);
+    .filter-group { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .filter-label { font-size: .78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-right: .25rem; }
+    .filter-chip {
+        display: inline-flex; align-items: center; gap: .35rem;
+        background: var(--bg-raised); border: 1px solid var(--border);
+        color: var(--muted); font-size: .8rem; font-weight: 500;
+        padding: .35rem .9rem; border-radius: 50px; cursor: pointer;
+        transition: all .2s;
     }
-
-    .btn-announcements {
-        border: 2px solid #fff;
-        color: #fff;
-        background: transparent;
+    .filter-chip:hover, .filter-chip.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .filter-divider { width: 1px; height: 28px; background: var(--border); }
+    .sort-select {
+        background: var(--bg-raised); border: 1px solid var(--border);
+        color: var(--text); font-size: .8rem; padding: .4rem .9rem;
+        border-radius: 8px; outline: none; cursor: pointer;
     }
+    .sort-select:focus { border-color: var(--accent); }
+    .search-input-wrap { display: flex; align-items: center; gap: .5rem; background: var(--bg-raised); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .9rem; flex: 1; min-width: 200px; }
+    .search-input-wrap i { color: var(--muted); }
+    .search-input-wrap input { background: none; border: none; outline: none; color: var(--text); font-size: .85rem; width: 100%; }
+    .search-input-wrap input::placeholder { color: var(--muted); }
 
-    .btn-announcements:hover {
-        background-color: #fff;
-        color: #fff;
-        transform: translateY(-2px);
+    /* ── PRODUCTS GRID ── */
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+
+    .product-card {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: 16px; overflow: hidden;
+        transition: all .3s ease;
+        position: relative;
+    }
+    .product-card:hover { border-color: rgba(0,166,103,.4); transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,.4), 0 0 0 1px rgba(0,166,103,.1); }
+
+    .product-img-wrap { position: relative; height: 200px; overflow: hidden; background: var(--bg-raised); }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+    .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+    .product-img-overlay {
+        position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,22,24,.9) 0%, transparent 60%);
+        opacity: 0; transition: opacity .3s;
+    }
+    .product-card:hover .product-img-overlay { opacity: 1; }
+    .product-quick-view {
+        position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%) translateY(8px);
+        background: var(--accent); color: var(--white); font-size: .8rem; font-weight: 600;
+        padding: .45rem 1.2rem; border-radius: 50px; white-space: nowrap;
+        opacity: 0; transition: all .3s; text-decoration: none;
+    }
+    .product-card:hover .product-quick-view { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .product-badge {
+        position: absolute; top: .75rem; left: .75rem;
+        background: var(--accent-dim); border: 1px solid rgba(0,166,103,.4);
+        color: var(--accent); font-size: .7rem; font-weight: 700;
+        padding: .2rem .65rem; border-radius: 50px;
+        font-family: 'Syne', sans-serif; letter-spacing: .05em;
+    }
+    .product-fav {
+        position: absolute; top: .75rem; right: .75rem;
+        width: 32px; height: 32px; background: rgba(14,22,24,.8);
+        border: 1px solid var(--border); border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--muted); cursor: pointer; transition: all .2s;
+        font-size: .85rem;
+    }
+    .product-fav:hover { border-color: #e05c5c; color: #e05c5c; }
+
+    .product-body { padding: 1.25rem; }
+    .product-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+    .product-category {
+        background: var(--accent-dim); color: var(--accent);
+        font-size: .72rem; font-weight: 700; padding: .2rem .65rem; border-radius: 50px;
+        font-family: 'Syne', sans-serif; text-decoration: none; letter-spacing: .04em;
+    }
+    .product-seller { font-size: .78rem; color: var(--muted); display: flex; align-items: center; gap: .3rem; }
+    .product-seller i { font-size: .7rem; }
+    .product-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: .5rem; line-height: 1.3; text-decoration: none; display: block; }
+    .product-title:hover { color: var(--accent); }
+    .product-rating { display: flex; align-items: center; gap: .4rem; font-size: .8rem; margin-bottom: 1rem; }
+    .product-rating .stars { color: #f59e0b; }
+    .product-rating .count { color: var(--muted); }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .product-price { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--white); }
+    .product-price span { font-size: .75rem; font-weight: 400; color: var(--muted); }
+    .btn-view-product {
+        background: var(--accent-dim); border: 1px solid rgba(0,166,103,.3);
+        color: var(--accent); font-size: .8rem; font-weight: 600;
+        padding: .45rem 1rem; border-radius: 8px; text-decoration: none;
+        transition: all .2s;
+    }
+    .btn-view-product:hover { background: var(--accent); color: var(--white); }
+
+    /* ── PAGINATION ── */
+    .pagination-wrap { display: flex; justify-content: center; align-items: center; gap: .5rem; padding: 2.5rem 0 1rem; }
+    .page-btn {
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--bg-card); border: 1px solid var(--border);
+        color: var(--muted); font-size: .85rem; font-weight: 600;
+        cursor: pointer; transition: all .2s; text-decoration: none;
+    }
+    .page-btn:hover, .page-btn.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
+    .page-btn.disabled { opacity: .35; pointer-events: none; }
+
+    /* ── SELLER MODAL ── */
+    .modal-content { background: var(--bg-card) !important; border: 1px solid var(--border) !important; border-radius: 18px !important; color: var(--text) !important; }
+    .modal-header-custom { background: linear-gradient(135deg, #0a2e22, #0d3d29); border-bottom: 1px solid rgba(0,166,103,.2) !important; padding: 1.5rem 2rem; }
+    .modal-header-custom h5 { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--white); font-size: 1.2rem; }
+    .modal .form-control, .modal .form-select {
+        background: var(--bg-raised) !important; border: 1px solid var(--border) !important;
+        color: var(--text) !important; border-radius: 10px !important;
+    }
+    .modal .form-control:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 3px var(--accent-dim) !important; }
+    .modal .form-label { color: var(--muted); font-size: .85rem; font-weight: 500; }
+    .btn-accent {
+        background: var(--accent); color: var(--white); border: none;
+        padding: .7rem 2rem; border-radius: 10px; font-weight: 700;
+        font-family: 'Syne', sans-serif; cursor: pointer; transition: all .2s;
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .btn-accent:hover { transform: translateY(-1px); box-shadow: 0 0 28px var(--accent-glow); color: var(--white); }
+
+    /* ── APPLY SELLER FLOATING BTN ── */
+    .apply-seller-fab {
+        position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+        background: var(--accent); color: var(--white);
+        display: flex; align-items: center; gap: .6rem;
+        padding: .8rem 1.5rem; border-radius: 50px;
+        font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem;
+        box-shadow: 0 8px 32px var(--accent-glow);
+        text-decoration: none; transition: all .25s; border: none; cursor: pointer;
+    }
+    .apply-seller-fab:hover { transform: translateY(-3px); box-shadow: 0 12px 40px var(--accent-glow); color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+        .hero-carousel-item.active { flex-direction: column; text-align: center; }
+        .hero-visual { flex: 0 0 auto; }
+        .hero-dots { justify-content: center; }
+        .hero-text p { max-width: 100%; }
+        .filter-bar { flex-direction: column; align-items: flex-start; }
+        .products-grid { grid-template-columns: 1fr; }
     }
 </style>
 
-<style>
-    .hero-with-bg {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero-bg-carousel {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-    }
-
-    .hero-bg-carousel .carousel-inner,
-    .hero-bg-carousel .carousel-item {
-        height: 100%;
-    }
-
-    .hero-bg-media {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        background-size: cover;
-        background-position: center;
-    }
-
-    /* Video full cover */
-    .hero-bg-media video,
-    .hero-bg-carousel video.hero-bg-media {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Dark overlay for readability */
-    .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: #12232293;
-        z-index: 1;
-    }
-
-    /* Ensure content stays above background */
-    .hero-with-bg .container {
-        position: relative;
-        z-index: 2;
-    }
-</style>
-
-<div class="container p-4">
-    <section id="tranding">
-        <div class="container">
-            <div class="row">
-                <div id="jobInfoCarousel" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel" data-bs-interval="3000">
-                    <div class="carousel-inner">
-                        <!-- Slide 1 -->
-                        @foreach($featuredProducts as $key => $product)
-                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                                        <div class="banner-head mt-4">
-                                            <h1 class="mb-2 text-white">{{ $product->name }}</h1>
-                                            <p class="d-inline-flex">{{ $product->description ?? 'Top quality product available now' }}</p>
-                                        </div>
-                                        <div class="banner-form">
-                                            <p class="text-white">
-                                                {{ $product->description ?? 'Top quality product available now' }}
-                                            </p>
-                                            <a href="{{ route('user.product-details', $product->id) }}" class="btn btn-light">
-                                                View Product
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="banner-img">
-                                        <div class="banner-img-right">
-                                            <img src="assets/img/banner-img.png" class="img-fluid" alt="img">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
+<!-- HERO -->
+<section class="hero-banner">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-inner">
+        @foreach($featuredProducts as $key => $product)
+        <div class="hero-carousel-item {{ $key == 0 ? 'active' : '' }}" data-index="{{ $key }}">
+            <div class="hero-text">
+                <span class="tag">✦ Featured Product</span>
+                <h1>{{ $product->name }}<br><span>Available Now</span></h1>
+                <p>{{ $product->description ?? 'Top quality product available now on the Future Connect Shop marketplace.' }}</p>
+                <a href="{{ route('user.product-details', $product->id) }}" class="btn-hero-primary">
+                    View Product <i class="feather-arrow-right"></i>
+                </a>
+            </div>
+            <div class="hero-visual">
+                <img src="assets/img/banner-img.png" alt="{{ $product->name }}">
             </div>
         </div>
-    </section>
-</div>
-<div class="page-content">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-
-                <!-- Trending Categories -->
-                <div class="trend-section mt-4">
-                    <div class="row align-items-center mb-3">
-                        <div class="col-sm-10">
-                            <h5>Trending Categories</h5>
-                        </div>
-                        <div class="col-sm-2 text-sm-end">
-                            <div class="owl-nav trend-nav nav-control nav-top">
-                                <button type="button" role="presentation" class="owl-prev">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </button>
-                                <button type="button" role="presentation" class="owl-next">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="trend-items owl-carousel">
-                        @foreach($categories->take(8) as $category)
-                        <div class="trend-box">
-                            <div class="trend-info">
-                                <h6>
-                                    <a href="{{ route('user.product.category', $category->id) }}">{{ $category->name }}</a>
-                                </h6>
-                                <p>({{ $category->products_count ?? 0 }} Products)</p>
-                            </div>
-                            <a href="{{ route('user.product.category', $category->id) }}">
-                                <i class="feather-arrow-up-right"></i>
-                            </a>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                <!-- /Trending Categories -->
-
-                <!-- Filter Section -->
-                <div class="filters-section mt-5">
-                    <ul class="filters-wrap">
-
-                        <!-- Categories Filter -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-list"></i> Categories
-                                    </a>
-                                </div>
-                                <div id="categories" class="collapse-body">
-                                    <div class="form-group search-group mb-3">
-                                        <span class="search-icon"><i class="feather-search"></i></span>
-                                        <input type="text" class="form-control" placeholder="Search Category">
-                                    </div>
-                                    <ul class="checkbox-list categories-lists">
-                                        @foreach($categories as $category)
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox" name="category[]" value="{{ $category->id }}">
-                                                <span class="checkmark"></span>
-                                                <span class="checked-title">{{ $category->name }}</span>
-                                            </label>
-                                        </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Categories Filter -->
-
-                        <!-- Ratings -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-stars"></i> Customer Ratings
-                                    </a>
-                                </div>
-                                <div id="ratings" class="collapse-body">
-                                    <ul class="checkbox-list star-rate">
-                                        @for ($i = 5; $i >= 1; $i--)
-                                        <li>
-                                            <label class="custom_check">
-                                                <input type="checkbox" name="rating[]" value="{{ $i }}">
-                                                <span class="checkmark"></span>
-                                                <span class="ratings ms-3">
-                                                    @for ($j = 1; $j <= 5; $j++)
-                                                        <i class="fa-solid fa-star {{ $j <= $i ? 'filled' : '' }}"></i>
-                                                        @endfor
-                                                </span>
-                                                <span class="rating-count">({{ $i }}.0)</span>
-                                            </label>
-                                        </li>
-                                        @endfor
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Ratings -->
-
-                        <!-- Budget -->
-                        <li>
-                            <div class="collapse-card">
-                                <div class="filter-header">
-                                    <a href="javascript:void(0);">
-                                        <i class="ti ti-moneybag"></i> Price Range
-                                    </a>
-                                </div>
-                                <div id="budget" class="collapse-body">
-                                    <div class="form-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Enter Max Price">
-                                    </div>
-                                    <ul class="checkbox-list">
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget" value="under-100">
-                                                <span class="checkmark"></span>Under $100
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget" value="100-500">
-                                                <span class="checkmark"></span>$100 - $500
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="custom_radio">
-                                                <input type="radio" name="budget" value="500-1000">
-                                                <span class="checkmark"></span>$500 - $1000
-                                            </label>
-                                        </li>
-                                    </ul>
-                                    <div class="filter-btn mt-2">
-                                        <a href="javascript:void(0);" class="me-2">Reset</a>
-                                        <button class="btn btn-primary btn-sm">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- /Budget -->
-
-                    </ul>
-
-                    <!-- Sort By -->
-                    <div class="filters-wrap sort-categories mt-4">
-                        <div class="collapse-card float-lg-end">
-                            <div class="filter-header">
-                                <a href="javascript:void(0);" class="sorts-list">
-                                    <i class="ti ti-sort-ascending"></i> Sort By: <span>Newest</span>
-                                </a>
-                            </div>
-                            <div id="categories2" class="collapse-body">
-                                <ul class="checkbox-list categories-lists">
-                                    <li><label class="custom_check"><span class="checked-title">Newest Arrivals</span></label></li>
-                                    <li><label class="custom_check"><span class="checked-title">Price: Low to High</span></label></li>
-                                    <li><label class="custom_check"><span class="checked-title">Price: High to Low</span></label></li>
-                                    <li><label class="custom_check"><span class="checked-title">Top Rated</span></label></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /Sort By -->
-                </div>
-                <!-- /Filter Section -->
-
-            </div>
+        @endforeach
+        <div class="hero-dots">
+            @foreach($featuredProducts as $key => $product)
+            <div class="hero-dot {{ $key == 0 ? 'active' : '' }}" data-target="{{ $key }}"></div>
+            @endforeach
         </div>
-
-
-        <!-- Service -->
-        <div class="service-gigs">
-            <div class="row">
-
-                <div class="col-lg-12">
-                    <div class="row">
-                        @foreach($products as $product)
-                        <!-- Service List -->
-                        <div class="col-lg-4 col-md-6">
-                            <div class="gigs-grid">
-                                <div class="gigs-img">
-                                    <div class="img-slider owl-carousel owl-loaded owl-drag">
-                                        <div class="owl-stage-outer">
-                                            <div class="owl-stage" style="transform: translate3d(-876px, 0px, 0px); transition: all; width: 3066px;">
-                                                <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item active" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-01.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-07.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-01.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item cloned" style="width: 414px; margin-right: 24px;">
-                                                    <div class="slide-images">
-                                                        <a href="{{ route('user.product-details', $product->id )}}">
-                                                            <img src="assets/img/gigs/gigs-06.jpg" class="img-fluid" alt="img">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"><i class="fa-solid fa-chevron-left"></i></button><button type="button" role="presentation" class="owl-next"><i class="fa-solid fa-chevron-right"></i></button></div>
-                                        <div class="owl-dots"><button role="button" class="owl-dot active"><span></span></button><button role="button" class="owl-dot"><span></span></button><button role="button" class="owl-dot"><span></span></button></div>
-                                    </div>
-                                </div>
-                                <div class="gigs-content">
-                                    <div class="gigs-info">
-                                        <a href="{{ route('user.product.category', $product->category->id) }}" class="badge bg-primary-light">{{ $product->category?->name ?? 'Uncategorized' }}</a>
-                                        <p><i class="ti ti-user"></i>{{ $product->seller->company_name }}</p>
-                                    </div>
-                                    <div class="gigs-title">
-                                        <h3>
-                                            <a href="{{ route('user.product-details', $product->id )}}">{{ $product->name }}</a>
-                                        </h3>
-                                    </div>
-                                    <div class="star-rate">
-                                        <span><i class="fa-solid fa-star"></i>5.0 (28 Reviews)</span>
-                                    </div>
-                                    <div class="gigs-card-footer gap-2">
-                                        <h5>${{ $product->price }}</h5>
-                                        <div>
-                                            
-                                            <span class="badge"><a href="{{ route('user.product-details', $product->id )}}">View Details</a></span>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /Service List -->
-                        @endforeach
-                        <div class="col-md-12">
-                            <!-- Pagination -->
-                            @if ($products->hasPages())
-                            <div class="pagination">
-                                <ul>
-                                    {{-- Previous --}}
-                                    <li>
-                                        @if ($products->onFirstPage())
-                                        <a href="javascript:void(0);" class="previous disabled"><i class="fa-solid fa-chevron-left"></i></a>
-                                        @else
-                                        <a href="{{ $products->previousPageUrl() }}" class="previous"><i class="fa-solid fa-chevron-left"></i></a>
-                                        @endif
-                                    </li>
-
-                                    {{-- Pages --}}
-                                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-                                    <li>
-                                        <a href="{{ $url }}" @if($page==$products->currentPage()) class="active" @endif>{{ $page }}</a>
-                                    </li>
-                                    @endforeach
-
-                                    {{-- Next --}}
-                                    <li>
-                                        @if ($products->hasMorePages())
-                                        <a href="{{ $products->nextPageUrl() }}" class="next"><i class="fa-solid fa-chevron-right"></i></a>
-                                        @else
-                                        <a href="javascript:void(0);" class="next disabled"><i class="fa-solid fa-chevron-right"></i></a>
-                                        @endif
-                                    </li>
-                                </ul>
-                            </div>
-                            @endif
-                            <!-- /Pagination -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Service -->
-
     </div>
+</section>
+
+<!-- TRENDING CATEGORIES -->
+<div class="section-wrap">
+    <div class="section-header">
+        <h2 class="section-title">Trending <span>Categories</span></h2>
+        <div class="nav-arrows">
+            <button class="nav-arrow-btn" id="trendPrev"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="nav-arrow-btn" id="trendNext"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="trend-scroll" id="trendScroll">
+        @foreach($categories->take(8) as $category)
+        <a href="{{ route('user.product.category', $category->id) }}" class="trend-pill">
+            <div class="trend-pill-info">
+                <h6>{{ $category->name }}</h6>
+                <p>{{ $category->products_count ?? 0 }} Products</p>
+            </div>
+            <span class="trend-pill-arrow"><i class="feather-arrow-up-right"></i></span>
+        </a>
+        @endforeach
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        <div class="search-input-wrap">
+            <i class="feather-search"></i>
+            <input type="text" placeholder="Search products...">
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+            <span class="filter-label">Category</span>
+            @foreach($categories->take(5) as $category)
+            <label class="filter-chip">
+                <input type="checkbox" name="category[]" value="{{ $category->id }}" style="display:none">
+                {{ $category->name }}
+            </label>
+            @endforeach
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+            <span class="filter-label">Rating</span>
+            @for ($i = 5; $i >= 3; $i--)
+            <label class="filter-chip">
+                <input type="checkbox" name="rating[]" value="{{ $i }}" style="display:none">
+                @for ($j = 1; $j <= $i; $j++)<i class="fa-solid fa-star" style="color:#f59e0b;font-size:.7rem"></i>@endfor
+            </label>
+            @endfor
+        </div>
+        <div class="filter-divider"></div>
+        <select class="sort-select">
+            <option>Newest Arrivals</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Top Rated</option>
+        </select>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="products-grid">
+        @foreach($products as $product)
+        <div class="product-card">
+            <div class="product-img-wrap">
+                <img src="assets/img/gigs/gigs-01.jpg" alt="{{ $product->name }}">
+                <div class="product-img-overlay"></div>
+                <a href="{{ route('user.product-details', $product->id) }}" class="product-quick-view">Quick View →</a>
+                <span class="product-badge">{{ $product->category?->name ?? 'General' }}</span>
+                <div class="product-fav"><i class="feather-heart"></i></div>
+            </div>
+            <div class="product-body">
+                <div class="product-meta">
+                    <a href="{{ route('user.product.category', $product->category->id) }}" class="product-category">{{ $product->category?->name ?? 'Uncategorized' }}</a>
+                    <span class="product-seller"><i class="ti ti-user"></i>{{ $product->seller->company_name }}</span>
+                </div>
+                <a href="{{ route('user.product-details', $product->id) }}" class="product-title">{{ $product->name }}</a>
+                <div class="product-rating">
+                    <span class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
+                    <span class="count">5.0 (28 reviews)</span>
+                </div>
+                <div class="product-footer">
+                    <div class="product-price">${{ $product->price }} <span>RWF</span></div>
+                    <a href="{{ route('user.product-details', $product->id) }}" class="btn-view-product">View Details</a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+    <!-- PAGINATION -->
+    @if ($products->hasPages())
+    <div class="pagination-wrap">
+        @if ($products->onFirstPage())
+        <a class="page-btn disabled"><i class="fa-solid fa-chevron-left"></i></a>
+        @else
+        <a href="{{ $products->previousPageUrl() }}" class="page-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        @endif
+        @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+        <a href="{{ $url }}" class="page-btn {{ $page == $products->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+        @endforeach
+        @if ($products->hasMorePages())
+        <a href="{{ $products->nextPageUrl() }}" class="page-btn"><i class="fa-solid fa-chevron-right"></i></a>
+        @else
+        <a class="page-btn disabled"><i class="fa-solid fa-chevron-right"></i></a>
+        @endif
+    </div>
+    @endif
 </div>
 
-<!-- Seller Application Modal -->
-<div class="modal fade" id="applySellerModal" tabindex="-1" aria-labelledby="applySellerModalLabel" aria-hidden="true">
+<!-- APPLY SELLER FAB -->
+<button class="apply-seller-fab" data-bs-toggle="modal" data-bs-target="#applySellerModal">
+    <i class="feather-plus"></i> Become a Seller
+</button>
+
+<!-- SELLER MODAL -->
+<div class="modal fade" id="applySellerModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-
-            <form action="{{ route('seller.store') }}" method="POST" class="p-2">
+        <div class="modal-content">
+            <form action="{{ route('seller.store') }}" method="POST" class="p-0">
                 @csrf
-
-                <!-- Header -->
-                <div class="modal-header border-0 bg-gradient text-white"
-                    style="background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);">
-                    <h5 class="modal-title fw-bold" id="applySellerModalLabel">
-                        🌟 Apply to Become a Seller
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header-custom" style="border-radius: 18px 18px 0 0; padding: 1.5rem 2rem; border-bottom: 1px solid rgba(0,166,103,.2);">
+                    <h5 style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;margin:0;">🌿 Apply to Become a Seller</h5>
+                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
                 </div>
-
-                <!-- Body -->
-                <div class="modal-body py-4 px-3">
-                    <p class="text-muted mb-4">
-                        Join the <strong>Future Connect Shop</strong> and start selling products that empower our members.
-                    </p>
-
+                <div class="modal-body p-4">
+                    <p style="color:var(--muted);margin-bottom:1.5rem;">Join the <strong style="color:var(--accent)">Future Connect Shop</strong> and start selling products that empower our members.</p>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Company Name</label>
-                            <input type="text" name="company_name" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                placeholder="e.g. Creative Minds Ltd" required>
+                            <label class="form-label">Company Name</label>
+                            <input type="text" name="company_name" class="form-control" placeholder="e.g. Creative Minds Ltd" required>
                         </div>
-
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Email</label>
-                            <input type="email" name="email" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                placeholder="e.g. example@domain.com" required>
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control" placeholder="e.g. hello@company.com" required>
                         </div>
-
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Phone</label>
-                            <input type="text" name="phone" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                placeholder="+250 700 123 456">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" name="phone" class="form-control" placeholder="+250 700 123 456">
                         </div>
-
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Address</label>
-                            <input type="text" name="address" class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                placeholder="e.g. Kigali, Rwanda">
+                            <label class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control" placeholder="e.g. Kigali, Rwanda">
                         </div>
-
                         <div class="col-12">
-                            <label class="form-label fw-semibold">Company Description</label>
-                            <textarea name="description" rows="3"
-                                class="form-control form-control-lg rounded-3 border-0 shadow-sm"
-                                placeholder="Tell us more about your company, products, and goals..."></textarea>
+                            <label class="form-label">Company Description</label>
+                            <textarea name="description" rows="3" class="form-control" placeholder="Tell us about your company, products, and goals..."></textarea>
                         </div>
                     </div>
                 </div>
-
-                <!-- Footer -->
-                <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
-                    <button type="button" class="btn btn-light border rounded-3 px-4 py-2 shadow-sm" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm fw-semibold">
-                        Submit Application
-                    </button>
+                <div class="modal-footer" style="border-top:1px solid var(--border);padding:1.25rem 2rem;justify-content:space-between;">
+                    <button type="button" class="btn" style="background:var(--bg-raised);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:.6rem 1.5rem;" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn-accent">Submit Application</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+// Hero carousel
+const items = document.querySelectorAll('.hero-carousel-item');
+const dots = document.querySelectorAll('.hero-dot');
+let current = 0;
+let timer;
+
+function goTo(idx) {
+    items[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = idx;
+    items[current].classList.add('active');
+    dots[current].classList.add('active');
+}
+function autoPlay() { timer = setInterval(() => goTo((current + 1) % items.length), 4000); }
+dots.forEach(d => d.addEventListener('click', () => { clearInterval(timer); goTo(+d.dataset.target); autoPlay(); }));
+if (items.length > 1) autoPlay();
+
+// Trend scroll arrows
+const ts = document.getElementById('trendScroll');
+document.getElementById('trendPrev')?.addEventListener('click', () => ts.scrollBy({ left: -220, behavior: 'smooth' }));
+document.getElementById('trendNext')?.addEventListener('click', () => ts.scrollBy({ left: 220, behavior: 'smooth' }));
+
+// Filter chip toggle
+document.querySelectorAll('.filter-chip').forEach(c => {
+    c.addEventListener('click', () => c.classList.toggle('active'));
+});
+</script>
 
 @endsection

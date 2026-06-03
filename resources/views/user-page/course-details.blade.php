@@ -3,982 +3,823 @@
 
 @section('content')
 
-<!-- Flutterwave Script -->
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 
 <style>
-	.talent-story-info {
-		background: #011E34;
-		color: #fff;
-		border-radius: 10px;
-		padding: 20px;
-		margin-bottom: 20px;
-	}
+    /* ── Design Tokens ─────────────────────────────────────────── */
+    :root {
+        --bg-base:       #0e1618;
+        --bg-card:       #131e21;
+        --bg-card-alt:   #192429;
+        --bg-elevated:   #1e2d32;
+        --accent:        #00a667;
+        --accent-dim:    #00a66720;
+        --accent-muted:  #00a66740;
+        --accent-hover:  #00c27a;
+        --text-primary:  #f0f4f5;
+        --text-secondary:#8fa8ad;
+        --text-muted:    #4d6b72;
+        --border:        #1f3038;
+        --border-hover:  #2a4550;
+        --radius-sm:     6px;
+        --radius-md:     10px;
+        --radius-lg:     16px;
+        --radius-xl:     22px;
+    }
 
-	.postLists {
-		display: flex;
-		flex-direction: column;
-		border: 1px solid #afafaf;
-		border-radius: 3px;
-		/* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
-		/* box-shadow: 0 1em 1em #1f2d3d26; */
-		/* text-shadow: 0 1px #fff; */
-		transition: .25s;
-		margin-bottom: 1.5rem;
-	}
+    /* ── Base ──────────────────────────────────────────────────── */
+    body { background: var(--bg-base) !important; color: var(--text-primary) !important; }
+
+    /* ── Page Wrapper ───────────────────────────────────────────── */
+    .cs-page { padding: 2rem 0 4rem; }
+
+    /* ── Card ───────────────────────────────────────────────────── */
+    .cs-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        transition: border-color .25s, transform .25s;
+    }
+    .cs-card:hover { border-color: var(--border-hover); }
+
+    /* ── Video Block ─────────────────────────────────────────────  */
+    .cs-video-wrap {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
+
+    /* ── Tabs ────────────────────────────────────────────────────  */
+    .cs-tabs { border-bottom: 1px solid var(--border); margin-bottom: 1.75rem; gap: .25rem; display: flex; }
+    .cs-tab-link {
+        background: none; border: none; color: var(--text-secondary);
+        font-size: .875rem; font-weight: 600; letter-spacing: .4px;
+        padding: .75rem 1.25rem; cursor: pointer; position: relative;
+        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+        transition: color .2s;
+    }
+    .cs-tab-link::after {
+        content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+        height: 2px; background: var(--accent); opacity: 0; transition: opacity .2s;
+    }
+    .cs-tab-link.active, .cs-tab-link:hover { color: var(--text-primary); }
+    .cs-tab-link.active::after { opacity: 1; }
+
+    /* ── Section Heading ─────────────────────────────────────────  */
+    .cs-section-title {
+        font-size: 1rem; font-weight: 700; color: var(--text-secondary);
+        text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 1.25rem;
+        display: flex; align-items: center; gap: .5rem;
+    }
+    .cs-section-title::before {
+        content: ''; display: inline-block; width: 3px; height: 1rem;
+        background: var(--accent); border-radius: 2px;
+    }
+
+    /* ── Lessons ─────────────────────────────────────────────────  */
+    .cs-lessons-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 1.25rem;
+    }
+    .cs-lessons-badge {
+        background: var(--accent-dim); color: var(--accent);
+        font-size: .75rem; font-weight: 700; padding: 4px 12px;
+        border-radius: 50px; border: 1px solid var(--accent-muted);
+        letter-spacing: .3px;
+    }
+    .cs-lesson-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .cs-lesson-item {
+        display: flex; align-items: center; justify-content: space-between;
+        background: var(--bg-card-alt); border: 1px solid var(--border);
+        border-radius: var(--radius-md); padding: 14px 18px;
+        transition: border-color .2s, background .2s;
+    }
+    .cs-lesson-item:hover { border-color: var(--accent-muted); background: var(--bg-elevated); }
+    .cs-lesson-left { display: flex; align-items: center; gap: 14px; }
+    .cs-lesson-num {
+        width: 34px; height: 34px; border-radius: 50%;
+        background: var(--accent-dim); border: 1px solid var(--accent-muted);
+        color: var(--accent); font-size: .8rem; font-weight: 700;
+        display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .cs-lesson-title { font-size: .9rem; font-weight: 600; color: var(--text-primary); }
+    .cs-lesson-meta { font-size: .75rem; color: var(--text-muted); margin-top: 2px; }
+    .cs-lesson-right { display: flex; align-items: center; gap: 8px; }
+    .cs-type-badge {
+        font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
+        letter-spacing: .3px;
+    }
+    .cs-type-badge.video { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-muted); }
+    .cs-type-badge.text  { background: #1a2d3a; color: #5ab8d4; border: 1px solid #2a4a5a; }
+    .cs-preview-btn {
+        background: none; border: 1px solid var(--border); color: var(--text-secondary);
+        border-radius: var(--radius-sm); padding: 5px 14px; font-size: .78rem; font-weight: 600;
+        cursor: pointer; transition: border-color .2s, color .2s;
+    }
+    .cs-preview-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Empty State ─────────────────────────────────────────────  */
+    .cs-empty {
+        text-align: center; padding: 3rem 1rem;
+        color: var(--text-muted); border: 1px dashed var(--border);
+        border-radius: var(--radius-md);
+    }
+    .cs-empty i { font-size: 2.5rem; margin-bottom: 1rem; display: block; color: var(--text-muted); }
+
+    /* ── Reviews ─────────────────────────────────────────────────  */
+    .cs-review-item {
+        padding: 1.25rem 0; border-bottom: 1px solid var(--border);
+    }
+    .cs-review-item:last-child { border-bottom: none; }
+    .cs-reviewer-avatar {
+        width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
+        border: 2px solid var(--border);
+    }
+    .cs-stars i { color: var(--text-muted); font-size: .8rem; }
+    .cs-stars i.filled { color: #f5a623; }
+    .cs-review-form-card {
+        background: var(--bg-elevated); border: 1px solid var(--border);
+        border-radius: var(--radius-md); padding: 1.5rem; margin-top: 1.5rem;
+    }
+    .cs-form-control {
+        background: var(--bg-base) !important; border: 1px solid var(--border) !important;
+        color: var(--text-primary) !important; border-radius: var(--radius-sm) !important;
+    }
+    .cs-form-control:focus {
+        border-color: var(--accent) !important; box-shadow: 0 0 0 3px var(--accent-dim) !important;
+        outline: none !important;
+    }
+    .cs-form-select {
+        background: var(--bg-base) !important; border: 1px solid var(--border) !important;
+        color: var(--text-primary) !important; border-radius: var(--radius-sm) !important;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────────  */
+    .cs-sidebar-card {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); overflow: hidden;
+        position: sticky; top: 1.5rem;
+    }
+    .cs-sidebar-top {
+        background: linear-gradient(135deg, #0e1d21 0%, #0e1618 100%);
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+    .cs-course-title {
+        font-size: 1.2rem; font-weight: 800; color: var(--text-primary);
+        line-height: 1.35; margin-bottom: 1rem;
+        font-family: 'Syne', sans-serif;
+    }
+    .cs-meta-pill {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: var(--bg-elevated); border: 1px solid var(--border);
+        border-radius: 50px; padding: 4px 12px; font-size: .75rem; color: var(--text-secondary);
+        margin: 3px;
+    }
+    .cs-meta-pill i { color: var(--accent); font-size: .8rem; }
+    .cs-price-row {
+        display: flex; align-items: baseline; gap: 10px; margin: 1.25rem 0 1rem;
+    }
+    .cs-price {
+        font-size: 2rem; font-weight: 900; color: var(--accent);
+        font-family: 'Syne', sans-serif; line-height: 1;
+    }
+    .cs-price-label { font-size: .8rem; color: var(--text-muted); }
+
+    /* ── Author Strip ────────────────────────────────────────────  */
+    .cs-author-strip {
+        display: flex; align-items: center; gap: 12px;
+        padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+        background: var(--bg-card-alt);
+    }
+    .cs-author-avatar {
+        width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
+        border: 2px solid var(--accent-muted); flex-shrink: 0;
+    }
+    .cs-author-name { font-size: .95rem; font-weight: 700; color: var(--text-primary); }
+    .cs-author-meta { font-size: .78rem; color: var(--text-secondary); margin-top: 2px; }
+    .cs-status-dot {
+        display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+        background: var(--accent); margin-right: 4px; vertical-align: middle;
+    }
+
+    /* ── CTA Buttons ─────────────────────────────────────────────  */
+    .cs-btn-primary {
+        display: block; width: 100%; padding: .9rem 1.5rem; text-align: center;
+        background: var(--accent); color: #fff; border: none;
+        border-radius: var(--radius-md); font-weight: 700; font-size: .95rem;
+        cursor: pointer; text-decoration: none; transition: background .2s, transform .15s;
+        letter-spacing: .3px;
+    }
+    .cs-btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); color: #fff; }
+    .cs-btn-outline {
+        display: block; width: 100%; padding: .8rem 1.5rem; text-align: center;
+        background: transparent; color: var(--accent);
+        border: 1px solid var(--accent-muted); border-radius: var(--radius-md);
+        font-weight: 700; font-size: .88rem; cursor: pointer; text-decoration: none;
+        transition: border-color .2s, background .2s;
+    }
+    .cs-btn-outline:hover { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+    .cs-sidebar-actions { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── Share Row ───────────────────────────────────────────────  */
+    .cs-share-row {
+        display: flex; align-items: center; gap: 10px;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--border);
+        font-size: .8rem; color: var(--text-muted);
+    }
+    .cs-share-icon {
+        width: 32px; height: 32px; display: inline-flex; align-items: center;
+        justify-content: center; border-radius: 50%;
+        background: var(--bg-elevated); border: 1px solid var(--border);
+        color: var(--text-secondary); font-size: .85rem;
+        transition: border-color .2s, color .2s; text-decoration: none;
+    }
+    .cs-share-icon:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Related Courses ─────────────────────────────────────────  */
+    .cs-related-section { margin-top: 3rem; }
+    .cs-related-title {
+        font-size: 1.3rem; font-weight: 800; color: var(--text-primary);
+        margin-bottom: 1.5rem; font-family: 'Syne', sans-serif;
+        display: flex; align-items: center; gap: .75rem;
+    }
+    .cs-related-title::after {
+        content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .cs-course-card {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); overflow: hidden;
+        transition: border-color .25s, transform .25s;
+    }
+    .cs-course-card:hover { border-color: var(--accent-muted); transform: translateY(-3px); }
+    .cs-course-thumb { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .cs-course-body { padding: 1.1rem; }
+    .cs-cat-tag {
+        display: inline-block; background: var(--accent-dim); color: var(--accent);
+        font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
+        margin-bottom: .75rem; letter-spacing: .3px; border: 1px solid var(--accent-muted);
+    }
+    .cs-course-name {
+        font-size: .95rem; font-weight: 700; color: var(--text-primary);
+        line-height: 1.4; margin-bottom: .75rem; display: -webkit-box;
+        -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        text-decoration: none;
+    }
+    .cs-course-name:hover { color: var(--accent); }
+    .cs-course-foot {
+        display: flex; align-items: center; justify-content: space-between;
+        border-top: 1px solid var(--border); padding-top: .75rem; margin-top: .75rem;
+    }
+    .cs-course-price { font-size: 1rem; font-weight: 800; color: var(--accent); }
+    .cs-course-price.free { color: #5ab8d4; }
+
+    /* ── Lesson Modal ────────────────────────────────────────────  */
+    .cs-modal .modal-content {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); color: var(--text-primary);
+    }
+    .cs-modal .modal-header {
+        background: var(--bg-elevated); border-bottom: 1px solid var(--border);
+        padding: 1.25rem 1.5rem; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .cs-modal .modal-title { color: var(--text-primary); font-weight: 700; }
+    .cs-modal .modal-body { padding: 1.5rem; background: var(--bg-card); }
+    .cs-modal .modal-footer {
+        background: var(--bg-card-alt); border-top: 1px solid var(--border);
+        padding: 1rem 1.5rem;
+    }
+    .cs-modal .btn-close { filter: invert(1) opacity(.6); }
+    .cs-lesson-desc {
+        background: var(--bg-elevated); border-left: 3px solid var(--accent);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        padding: 1rem 1.25rem; font-size: .88rem; color: var(--text-secondary); line-height: 1.7;
+        margin-top: 1rem;
+    }
+
+    /* ── Enroll / Pay Modals ─────────────────────────────────────  */
+    .cs-pay-modal .modal-content {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); color: var(--text-primary);
+    }
+    .cs-pay-modal .modal-header {
+        background: var(--bg-elevated); border-bottom: 1px solid var(--border);
+    }
+    .cs-pay-modal .modal-footer {
+        background: var(--bg-card-alt); border-top: 1px solid var(--border);
+    }
+    .cs-pay-modal .btn-close { filter: invert(1) opacity(.6); }
+
+    /* ── Alerts ──────────────────────────────────────────────────  */
+    .cs-alert-success {
+        background: var(--accent-dim); border: 1px solid var(--accent-muted);
+        color: var(--accent); border-radius: var(--radius-sm); padding: .75rem 1rem;
+        margin-bottom: 1rem; font-size: .875rem;
+    }
+    .cs-login-prompt { color: var(--text-secondary); font-size: .88rem; }
+    .cs-login-prompt a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+    /* ── Tabs panel ──────────────────────────────────────────────  */
+    .tab-pane { display: none; }
+    .tab-pane.active.show { display: block; }
+
+    /* ── Responsive ──────────────────────────────────────────────  */
+    @media (max-width: 768px) {
+        .cs-price { font-size: 1.5rem; }
+    }
 </style>
 
-<style>
-	.course-list-group-item {
-		position: relative;
-		display: block;
-		padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
-		color: var(--bs-list-group-color);
-		text-decoration: none;
-		/* background-color: var(--bs-list-group-bg); */
-		/* border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color); */
-	}
-</style>
-<div class="page-content content">
-	<div class="container">
-
-		<div class="row">
-			<!-- Course Details -->
-			<div class="col-lg-8">
-				<div class="postLists p-4">
-					<div class="service-card w-100 mb-4">
-						<div class="service-video-wrap text-center">
-							<div class="video-wrapper position-relative overflow-hidden rounded-4 shadow" style="width: 100%;">
-								@if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
-								<div class="ratio ratio-16x9">
-									<iframe
-										src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->lessons->first()->video, 'v=') }}?autoplay=1&mute=1&playsinline=1"
-										title="{{ $course->lessons->first()->title }}"
-										allow="autoplay; encrypted-media"
-										allowfullscreen
-										class="rounded-3">
-									</iframe>
-								</div>
-								@elseif($course->video)
-								<div class="ratio ratio-16x9">
-									<iframe
-										src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->video, 'v=') }}"
-										title="{{ $course->title }}"
-										allow="autoplay; encrypted-media"
-										allowfullscreen
-										class="rounded-3">
-									</iframe>
-								</div>
-								@else
-								<img
-									src="{{ asset('images/thumbnails/'.$course->thumbnail) }}"
-									class="img-fluid w-100 rounded-3 shadow-sm"
-									alt="{{ $course->title }}">
-								@endif
-							</div>
-
-						</div>
-					</div>
-
-					<div class="listing-tab">
-						<div class="listing-slider">
-							<ul class="nav nav-tabs" role="tablist">
-								<li class="nav-item" role="presentation">
-									<a href="javascript:void(0);" class="nav-link active" data-bs-toggle="tab" data-bs-target="#description" aria-selected="true" role="tab">
-										Description
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#lesson" aria-selected="false" role="tab" tabindex="-1">
-										Course Lessons
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0);" class="nav-link" data-bs-toggle="tab" data-bs-target="#review" aria-selected="false" role="tab" tabindex="-1">
-										Reviews
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="tab-content">
-
-						<div class="tab-pane fade active show" id="description" role="tabpanel">
-							<!-- About Gigs -->
-							<div class="service-wrap">
-								<h3 style="color: #afafaf;">About </h3>
-								<p>
-									{{ $course->description }}
-								</p>
-							</div>
-							<!-- /About Gigs -->
-						</div>
-						<div class="tab-pane fade" id="lesson" role="tabpanel">
-							<!-- Lessons Section -->
-							<div class="service-wrap course-lessons">
-
-								<div class="lessons-header mb-4">
-									<h3 class="lessons-title" style="color: #afafaf;">
-										<i class="fa-solid fa-book-open me-2"></i> Course Lessons
-									</h3>
-									@if($course->lessons->count() > 0)
-									<span class="lessons-count badge" style="background: #afafaf; color: #2e7d32">{{ $course->lessons->count() }} Lessons</span>
-									@endif
-								</div>
-
-								@if($course->lessons->count() > 0)
-								<ul class="lessons-list">
-									@foreach($course->lessons as $key => $lesson)
-									<li class="lesson-item">
-										<div class="lesson-left">
-											<div class="lesson-number">{{ $key + 1 }}</div>
-											<div class="lesson-info">
-												<span class="lesson-title-text">{{ $lesson->title ?? 'Untitled Lesson' }}</span>
-												@if($lesson->duration)
-												<span class="lesson-meta">
-													<i class="fa-regular fa-clock me-1"></i>{{ $lesson->duration }}
-												</span>
-												@endif
-											</div>
-										</div>
-										<div class="lesson-right">
-											@if($lesson->video_url)
-											<span class="lesson-type-badge video"><i class="fa-solid fa-play me-1"></i>Video</span>
-											@else
-											<span class="lesson-type-badge text"><i class="fa-solid fa-file-lines me-1"></i>Text</span>
-											@endif
-											<button class="nav-link" data-bs-toggle="modal" data-bs-target="#lessonModal{{ $lesson->id }}">
-												<i class="fa-solid fa-eye me-1"></i> Preview
-											</button>
-										</div>
-									</li>
-
-									@endforeach
-								</ul>
-
-								@else
-								<div class="no-lessons-placeholder">
-									<i class="fa-solid fa-book-open"></i>
-									<h5>No Lessons Yet</h5>
-									<p>Lessons for this course haven't been added yet. Check back soon!</p>
-								</div>
-								@endif
-
-							</div>
-							<!-- /Lessons Section -->
-						</div>
-
-						<style>
-							/* Lessons Header */
-							.lessons-header {
-								display: flex;
-								align-items: center;
-								justify-content: space-between;
-								border-bottom: 1px solid #f0f0f0;
-								padding-bottom: 4px;
-							}
-
-							.lessons-title {
-								font-size: 1.2rem;
-								font-weight: 700;
-								color: #2d2d2d;
-								margin: 0;
-							}
-
-							.lessons-count.badge {
-								background: linear-gradient(135deg, #1d85f5, #0d6efd);
-								color: #fff;
-								font-size: 0.78rem;
-								padding: 6px 14px;
-								border-radius: 50px;
-								font-weight: 600;
-								letter-spacing: 0.3px;
-							}
-
-							/* Lessons List */
-							.lessons-list {
-								list-style: none;
-								padding: 0;
-								margin: 0;
-								display: flex;
-								flex-direction: column;
-								gap: 10px;
-							}
-
-							.lesson-item {
-								display: flex;
-								align-items: center;
-								justify-content: space-between;
-								/* background: #f8faff; */
-								border: 1px solid #e8efff;
-								border-radius: 3px;
-								padding: 14px 18px;
-								transition: all 0.25s ease;
-							}
-
-							.lesson-item:hover {
-								background: #eef4ff;
-								border-color: #b3ceff;
-								transform: translateY(-1px);
-								box-shadow: 0 4px 16px rgba(13, 110, 253, 0.08);
-							}
-
-							.lesson-left {
-								display: flex;
-								align-items: center;
-								gap: 14px;
-							}
-
-							.lesson-number {
-								width: 36px;
-								height: 36px;
-								border-radius: 50%;
-								/* background: linear-gradient(135deg, #1d85f5, #0d6efd); */
-								color: #fff;
-								border: 1px solid #afafaf;
-								font-size: 0.82rem;
-								font-weight: 700;
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								flex-shrink: 0;
-							}
-
-							.lesson-info {
-								display: flex;
-								flex-direction: column;
-								gap: 3px;
-							}
-
-							.lesson-title-text {
-								font-size: 0.95rem;
-								font-weight: 600;
-								color: #afafaf;
-							}
-
-							.lesson-meta {
-								font-size: 0.78rem;
-								color: #afafaf;
-							}
-
-							/* Right Side */
-							.lesson-right {
-								display: flex;
-								align-items: center;
-								gap: 10px;
-							}
-
-							.lesson-type-badge {
-								font-size: 0.73rem;
-								font-weight: 600;
-								padding: 4px 10px;
-								border-radius: 50px;
-								letter-spacing: 0.3px;
-							}
-
-							.lesson-type-badge.video {
-								background: #afafaf;
-								color: #2e7d32;
-							}
-
-							.lesson-type-badge.text {
-								background: #e8f5e9;
-								color: #2e7d32;
-							}
-
-							.btn-view-lesson {
-								/* background: linear-gradient(135deg, #1d85f5, #0d6efd); */
-								color: #fff;
-								border: 1px solid #afafaf;
-								/* border: none; */
-								border-radius: 3px;
-								padding: 7px 16px;
-								font-size: 0.82rem;
-								font-weight: 600;
-								cursor: pointer;
-								transition: all 0.2s ease;
-								white-space: nowrap;
-							}
-
-							.btn-view-lesson:hover {
-								/* background: linear-gradient(135deg, #0d6efd, #0a58ca); */
-								box-shadow: 0 4px 12px rgba(13, 110, 253, 0.35);
-								transform: translateY(-1px);
-							}
-
-							/* Modal */
-							.lesson-modal-content {
-								border: none;
-								border-radius: 16px;
-								overflow: hidden;
-								box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-							}
-
-							.lesson-modal-header {
-								/* background: linear-gradient(135deg, #1d85f5, #0d6efd); */
-								padding: 20px 24px;
-								border: none;
-								display: flex;
-								align-items: flex-start;
-								justify-content: space-between;
-							}
-
-							.modal-title-wrap {
-								display: flex;
-								flex-direction: column;
-								gap: 4px;
-							}
-
-							.modal-lesson-number {
-								font-size: 0.75rem;
-								font-weight: 600;
-								color: rgba(255, 255, 255, 0.7);
-								text-transform: uppercase;
-								letter-spacing: 1px;
-							}
-
-							.lesson-modal-header .modal-title {
-								font-size: 1.1rem;
-								font-weight: 700;
-								color: #fff;
-								margin: 0;
-							}
-
-							.lesson-modal-body {
-								padding: 24px;
-								/* background: #fff; */
-							}
-
-							.video-wrapper {
-								border-radius: 12px;
-								overflow: hidden;
-								box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-							}
-
-							.no-video-placeholder {
-								background: #f8faff;
-								border: 2px dashed #d0dff5;
-								border-radius: 12px;
-								padding: 40px;
-								text-align: center;
-								color: #8a94a6;
-							}
-
-							.no-video-placeholder i {
-								font-size: 2rem;
-								margin-bottom: 10px;
-								display: block;
-							}
-
-							.lesson-description {
-								font-size: 0.93rem;
-								color: #4a4a6a;
-								line-height: 1.7;
-								background: #f8faff;
-								border-left: 3px solid #0d6efd;
-								padding: 14px 18px;
-								border-radius: 0 10px 10px 0;
-							}
-
-							.lesson-modal-footer {
-								/* background: #f8faff; */
-								border-top: 1px solid #eef0f5;
-								padding: 14px 24px;
-								display: flex;
-								align-items: center;
-								justify-content: space-between;
-							}
-
-							.duration-badge {
-								font-size: 0.82rem;
-								color: #8a94a6;
-								font-weight: 500;
-							}
-
-							.btn-close-modal {
-								background: #f0f2f5;
-								color: #4a4a6a;
-								border: none;
-								border-radius: 8px;
-								padding: 7px 16px;
-								font-size: 0.82rem;
-								font-weight: 600;
-								cursor: pointer;
-								transition: all 0.2s ease;
-							}
-
-							.btn-close-modal:hover {
-								background: #e2e6ea;
-							}
-
-							/* Empty State */
-							.no-lessons-placeholder {
-								text-align: center;
-								padding: 50px 20px;
-								color: #8a94a6;
-							}
-
-							.no-lessons-placeholder i {
-								font-size: 3rem;
-								margin-bottom: 16px;
-								display: block;
-								color: #c5d0e6;
-							}
-
-							.no-lessons-placeholder h5 {
-								font-weight: 700;
-								color: #4a4a6a;
-								margin-bottom: 8px;
-							}
-
-							.no-lessons-placeholder p {
-								font-size: 0.9rem;
-							}
-						</style>
-						<div class="tab-pane fade" id="review" role="tabpanel">
-
-							<div class="row">
-								<!-- Reviews -->
-								<div class="review-widget">
-									<div class="review-title sort-search-gigs">
-										<div class="row align-items-center">
-											<div class="col-sm-6">
-												<h3 style="color: #afafaf;">Reviews ({{ $course->feedback->count() }})</h3>
-											</div>
-											<div class="col-sm-6">
-												<div class="filters-wrap sort-categories justify-content-end">
-													<div class="dropdown float-lg-end">
-														<button class="btn btn-light dropdown-toggle" type="button" id="sortReviewDropdown" data-bs-toggle="dropdown">
-															Sort By: Most Recent
-														</button>
-														<ul class="dropdown-menu" aria-labelledby="sortReviewDropdown">
-															<li><a class="dropdown-item active" href="#">Most Recent</a></li>
-															<li><a class="dropdown-item" href="#">Oldest</a></li>
-														</ul>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<ul class="review-lists home-reviews">
-										@foreach($course->feedback as $feedback)
-										<li>
-											<div class="review-wrap">
-												<div class="review-user-info">
-													<div class="review-img">
-														<img src="{{ $feedback->user->profile_photo ? asset('uploads/'.$feedback->user->profile_photo) : asset('assets/img/user/profile.jpg') }}" alt="{{ $feedback->user->name }}">
-													</div>
-													<div class="reviewer-info">
-														<h6><a href="#">{{ $feedback->user->name }}</a></h6>
-														<div class="star-rate">
-															@for($i=1;$i<=5;$i++)
-																<i class="fa-solid fa-star{{ $i <= $feedback->rating ? ' filled' : '' }}"></i>
-																@endfor
-																<span class="rating-count">{{ $feedback->rating }}</span>
-														</div>
-														<p class="reviewer-time">{{ $feedback->created_at->diffForHumans() }}</p>
-													</div>
-												</div>
-												<div class="review-content">
-													<p>{{ $feedback->comment }}</p>
-												</div>
-											</div>
-										</li>
-										@endforeach
-									</ul>
-									<!-- Add a Review --><!-- Review Form -->
-									<div class="course-review mt-5">
-										<h4>Leave a Review</h4>
-
-										@auth
-										@if(session('success'))
-										<div class="alert alert-success">{{ session('success') }}</div>
-										@endif
-
-										<form action="{{ route('courses.review', $course->id) }}" method="POST">
-											@csrf
-											<div class="mb-3">
-												<label class="form-label">Rating</label>
-												<select name="rating" class="form-select" required>
-													<option value="">-- Select --</option>
-													@for($i = 1; $i <= 5; $i++)
-														<option value="{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</option>
-														@endfor
-												</select>
-												@error('rating') <small class="text-danger">{{ $message }}</small> @enderror
-											</div>
-
-											<div class="mb-3">
-												<label class="form-label">Comment</label>
-												<textarea name="comment" rows="4" class="form-control" placeholder="Write your review..."></textarea>
-												@error('comment') <small class="text-danger">{{ $message }}</small> @enderror
-											</div>
-
-											<button type="submit" class="btn btn-primary">Submit Review</button>
-										</form>
-										@else
-										<p><a href="{{ route('login') }}">Login</a> to leave a review.</p>
-										@endauth
-									</div>
-									<!-- /Review Form -->
-
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Sidebar -->
-			<div class="col-lg-4 theiaStickySidebar">
-				<div class="service-widget member-widget postLists p-4">
-					<div class="course-header p-4 mb-4">
-						<!-- Course Title -->
-						<h2 class="breadcrumb-title fw-bold mb-3" style="color: #afafaf;">{{ $course->title }}</h2>
-
-						<!-- Course Info -->
-						<ul class="info-links d-flex flex-wrap gap-3 mb-4 list-unstyled p-0">
-							<li class="d-flex align-items-center">
-								<i class="ti ti-star-filled text-warning me-1"></i>
-								{{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
-							</li>
-							<li class="d-flex align-items-center">
-								<i class="ti ti-eye me-1"></i>
-								{{ $course->feedback->count() }} feedback
-							</li>
-							<li class="d-flex align-items-center">
-								<i class="ti ti-calendar-due me-1"></i>
-								Published: {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}
-							</li>
-							<li class="d-flex align-items-center">
-								<i class="ti ti-tag me-1"></i>
-								Category: {{ $course->category->name }}
-							</li>
-							<li class="d-flex align-items-center">
-								<i class="feather-heart me-1 text-danger"></i>
-								{{ $course->likes_count ?? 0 }} Likes
-							</li>
-						</ul>
-
-						<!-- Author Info -->
-						<div class="d-flex align-items-center gap-3 mb-3">
-							<div class="user-img flex-shrink-0">
-								<img src="{{ $course->talent->image ? asset('image/talents/'.$course->talent->image) : asset('assets/img/user/profile.jpg') }}"
-									alt="Author" class="rounded-circle shadow-sm" style="width: 70px; height: 70px; object-fit: cover;">
-							</div>
-							<div class="user-info flex-grow-1">
-								<h5 class="mb-1 fw-semibold">
-									{{ $course->talent->name }}
-									<span class="badge bg-success ms-2 py-1 px-2 small">
-										<i class="fa-solid fa-circle fa-xs me-1"></i> {{ ucfirst($course->talent->status) }}
-									</span>
-								</h5>
-								<p class="text-muted mb-0 small">
-									<i class="fa-solid fa-star text-warning me-1"></i>{{ $course->talent->rating }}
-									({{ $course->talent->rating_count }} Ratings)
-								</p>
-							</div>
-						</div>
-
-						<!-- About Author -->
-						<div class="about-me border-top pt-3">
-							<ul class="breadcrumb-links service-details">
-								<li class="me-0">
-									<div class="social-links d-flex align-items-center breadcrumb-social justify-content-lg-start">
-										Share
-										<ul class="ms-3">
-											@foreach(['facebook','twitter','instagram','linkedin','whatsapp'] as $social)
-											<li><a href="javascript:void(0);"><i class="fa-brands fa-{{ $social }}"></i></a></li>
-											@endforeach
-										</ul>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<style>
-						.course-header {
-							/* background: #fff; */
-							transition: all 0.3s ease;
-						}
-
-						.course-header:hover {
-							transform: translateY(-3px);
-							box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-						}
-
-						.info-links li {
-							/* background: #f7f9fc; */
-							border-radius: 0.5rem;
-							padding: 0.5rem 0.75rem;
-							display: flex;
-							align-items: center;
-							font-size: 0.875rem;
-							transition: 0.3s;
-						}
-
-						.info-links li:hover {
-							/* background: #e6f0ff; */
-						}
-
-						.user-img img {
-							border: 2px solid #e6ecf4;
-						}
-
-						.badge {
-							font-size: 0.75rem;
-						}
-					</style>
-
-					<!-- Action Buttons -->
-					<div class="d-flex gap-2 flex-wrap">
-						<a href="{{ route('user.talent.details', $course->talent->id) }}"
-							class="btn btn-outline-primary modern-btn">
-							View Author Profile
-						</a>
-
-						@if($course->is_free)
-						<a href="#enrollModal"
-							class="btn modern-btn"
-							data-bs-toggle="modal">
-							<i class="feather-book-open me-1"></i> Enroll for Free
-						</a>
-						@else
-						<a href="#paymentModal"
-							class="btn flex-grow-1 modern-btn"
-							data-bs-toggle="modal">
-							<i class="feather-book-open me-1"></i> Enroll for ${{ number_format($course->price, 2) }}
-						</a>
-						@endif
-					</div>
-
-					<style>
-						/* Modern card hover */
-						.postLists {
-							transition: all 0.3s ease;
-						}
-
-						.postLists:hover {
-							transform: translateY(-5px);
-							box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-						}
-
-						/* User image border */
-						.user-img img {
-							border: 2px solid #e6ecf4;
-						}
-
-						/* Badges */
-						.badge {
-							font-size: 0.75rem;
-						}
-
-						/* Modern buttons */
-						.modern-btn {
-							position: relative;
-							overflow: hidden;
-							min-width: 150px;
-							padding: 0.625rem 1.5rem;
-							font-weight: 600;
-							transition: all 0.3s ease;
-							/* background: linear-gradient(135deg, #6C63FF, #5CC1FF); */
-							color: #fff;
-							border: 1px solid #afafaf;
-							/* box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3); */
-						}
-
-						.modern-btn.btn-outline-primary {
-							color: #afafaf;
-							border: 1px solid #afafaf;
-							background: transparent;
-						}
-
-						.modern-btn:hover {
-							transform: translateY(-2px);
-							box-shadow: 0 6px 18px rgba(108, 99, 255, 0.4);
-							background-position: right center;
-						}
-
-						.modern-btn i {
-							transition: transform 0.3s ease;
-						}
-
-						.modern-btn:hover i {
-							transform: translateX(3px);
-						}
-
-						/* Responsive: stack buttons on small screens */
-						@media (max-width: 575px) {
-							.modern-btn {
-								flex-grow: 1;
-								text-align: center;
-							}
-						}
-					</style>
-
-				</div>
-
-				<style>
-					.postLists {
-						transition: all 0.3s ease;
-					}
-
-					.postLists:hover {
-						transform: translateY(-4px);
-						box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
-					}
-
-					.user-img img {
-						border: 2px solid #e6ecf4;
-					}
-
-					.badge {
-						font-size: 0.75rem;
-					}
-				</style>
-
-			</div>
-		</div>
-		<!-- Related Courses -->
-		<div class="related-courses mt-5">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="title-sec">
-						<div class="row align-items-center">
-							<div class="col-md-8">
-								<h3>Related Courses</h3>
-							</div>
-							<div class="col-md-4">
-								<div class="owl-nav worknav nav-control nav-top"></div>
-							</div>
-						</div>
-					</div>
-
-					<div class="gigs-slider owl-carousel">
-						@forelse($relatedCourses as $course)
-						<div class="gigs-grid postLists">
-                                <div class="gigs-img">
-                                    <div class="img-slider owl-carousel">
-                                        <div class="slide-images">
-                                            <a href="{{ route('user.courses.show', $course->slug) }}">
-                                                <img src="{{ asset('image/thumbnails/'.$course->thumbnail) }}" class="img-fluid" style="height: 240px; object-fit: cover; transition: transform 0.3s ease;" alt="{{ $course->title }}">
-                                            </a>
+{{-- Google Fonts: Syne for headings --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+
+<div class="page-content content cs-page">
+    <div class="container">
+        <div class="row g-4">
+
+            {{-- ── Main Column ───────────────────────────────────── --}}
+            <div class="col-lg-8">
+                <div class="cs-card p-4">
+
+                    {{-- Video --}}
+                    <div class="cs-video-wrap mb-4">
+                        @if($course->is_free && $course->lessons->isNotEmpty() && $course->lessons->first()->video)
+                            <div class="ratio ratio-16x9">
+                                <iframe
+                                    src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->lessons->first()->video, 'v=') }}?autoplay=1&mute=1&playsinline=1"
+                                    title="{{ $course->lessons->first()->title }}"
+                                    allow="autoplay; encrypted-media" allowfullscreen>
+                                </iframe>
+                            </div>
+                        @elseif($course->video)
+                            <div class="ratio ratio-16x9">
+                                <iframe
+                                    src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast($course->video, 'v=') }}"
+                                    title="{{ $course->title }}"
+                                    allow="autoplay; encrypted-media" allowfullscreen>
+                                </iframe>
+                            </div>
+                        @else
+                            <img src="{{ asset('images/thumbnails/'.$course->thumbnail) }}"
+                                 class="img-fluid w-100" style="border-radius: var(--radius-md);"
+                                 alt="{{ $course->title }}">
+                        @endif
+                    </div>
+
+                    {{-- Tabs nav --}}
+                    <div class="cs-tabs">
+                        <button class="cs-tab-link active" data-target="description">Description</button>
+                        <button class="cs-tab-link" data-target="lesson">Course Lessons</button>
+                        <button class="cs-tab-link" data-target="review">
+                            Reviews
+                            <span style="background:var(--accent-dim);color:var(--accent);font-size:.7rem;padding:1px 7px;border-radius:50px;margin-left:5px;">
+                                {{ $course->feedback->count() }}
+                            </span>
+                        </button>
+                    </div>
+
+                    {{-- Tab panels --}}
+                    <div>
+
+                        {{-- Description --}}
+                        <div class="tab-pane active show" id="description">
+                            <p class="cs-section-title">About this course</p>
+                            <p style="color:var(--text-secondary);line-height:1.8;font-size:.93rem;">
+                                {{ $course->description }}
+                            </p>
+                        </div>
+
+                        {{-- Lessons --}}
+                        <div class="tab-pane" id="lesson">
+                            <div class="cs-lessons-header">
+                                <p class="cs-section-title mb-0">Course Lessons</p>
+                                @if($course->lessons->count() > 0)
+                                    <span class="cs-lessons-badge">{{ $course->lessons->count() }} Lessons</span>
+                                @endif
+                            </div>
+
+                            @if($course->lessons->count() > 0)
+                                <ul class="cs-lesson-list">
+                                    @foreach($course->lessons as $key => $lesson)
+                                    <li class="cs-lesson-item">
+                                        <div class="cs-lesson-left">
+                                            <div class="cs-lesson-num">{{ $key + 1 }}</div>
+                                            <div>
+                                                <div class="cs-lesson-title">{{ $lesson->title ?? 'Untitled Lesson' }}</div>
+                                                @if($lesson->duration)
+                                                    <div class="cs-lesson-meta">
+                                                        <i class="fa-regular fa-clock me-1"></i>{{ $lesson->duration }}
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="gigs-content">
-                                    <div class="gigs-info">
-                                        <a href="{{ route('user.courses', ['category' => $course->category->slug]) }}" class="badge bg-primary-light">
-                                            {{ $course->category->name }}
-                                        </a>
-                                        <div class="star-rate">
-                                            <span>
-                                                <i class="fa-solid fa-star"></i>
-                                                {{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
-                                                ({{ $course->feedback->count() }} feedback)
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="gigs-title">
-                                        <h3><a href="{{ route('user.courses.show', $course->slug) }}">{{ $course->title }}</a></h3>
-                                    </div>
-
-                                    <ul class="gigs-user-info">
-                                        <li class="gigs-user">
-                                            <img src="{{ $course->talent->image ? asset('image/talents/'.$course->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="img">
-                                            <p>{{ $course->talent->name ?? 'Unknown' }}</p>
-                                        </li>
-                                        <li class="gigs-loc">
-                                            <p><i class="ti ti-map-pin-check"></i>{{ $course->talent->region ?? 'N/A' }}</p>
-                                        </li>
-                                    </ul>
-
-                                    <div class="gigs-card-footer d-flex justify-content-between align-items-center">
-                                        <h5>
-                                            @if($course->is_free)
-                                            Free
+                                        <div class="cs-lesson-right">
+                                            @if($lesson->video_url)
+                                                <span class="cs-type-badge video"><i class="fa-solid fa-play me-1"></i>Video</span>
                                             @else
-                                            ${{ number_format($course->price, 2) }}
+                                                <span class="cs-type-badge text"><i class="fa-solid fa-file-lines me-1"></i>Text</span>
                                             @endif
-                                        </h5>
-                                        <span class="badge"><a href="{{ route('user.courses.show', $course->slug) }}">View Details</a></span>
+                                            <button class="cs-preview-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#lessonModal{{ $lesson->id }}">
+                                                <i class="fa-solid fa-eye me-1"></i> Preview
+                                            </button>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <div class="cs-empty">
+                                    <i class="fa-solid fa-book-open"></i>
+                                    <h5 style="color:var(--text-secondary);margin-bottom:.5rem;">No Lessons Yet</h5>
+                                    <p style="font-size:.88rem;">Lessons haven't been added yet. Check back soon!</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Reviews --}}
+                        <div class="tab-pane" id="review">
+                            <p class="cs-section-title">Reviews ({{ $course->feedback->count() }})</p>
+
+                            @forelse($course->feedback as $feedback)
+                            <div class="cs-review-item">
+                                <div class="d-flex align-items-start gap-3">
+                                    <img src="{{ $feedback->user->profile_photo ? asset('uploads/'.$feedback->user->profile_photo) : asset('assets/img/user/profile.jpg') }}"
+                                         alt="{{ $feedback->user->name }}" class="cs-reviewer-avatar">
+                                    <div style="flex:1;">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span style="font-weight:700;color:var(--text-primary);font-size:.92rem;">{{ $feedback->user->name }}</span>
+                                            <span style="font-size:.75rem;color:var(--text-muted);">{{ $feedback->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <div class="cs-stars my-1">
+                                            @for($i=1;$i<=5;$i++)
+                                                <i class="fa-solid fa-star{{ $i <= $feedback->rating ? ' filled' : '' }}"></i>
+                                            @endfor
+                                            <span style="font-size:.75rem;color:var(--text-muted);margin-left:4px;">{{ $feedback->rating }}.0</span>
+                                        </div>
+                                        <p style="font-size:.88rem;color:var(--text-secondary);line-height:1.6;margin:0;">{{ $feedback->comment }}</p>
                                     </div>
                                 </div>
                             </div>
-						@empty
-						<p class="text-muted">No related courses found.</p>
-						@endforelse
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Related Courses -->
+                            @empty
+                            <div class="cs-empty">
+                                <i class="fa-solid fa-comment-slash"></i>
+                                <p>No reviews yet. Be the first to leave one!</p>
+                            </div>
+                            @endforelse
 
-		<!-- Enroll Modal -->
-		<div class="modal fade " id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content postLists">
-					<div class="modal-header">
-						<h5 class="modal-title" id="enrollModalLabel">Enroll in {{ $course->title }}</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p>You need to enroll in this course before you can leave a review or access lessons.</p>
-					</div>
-					<div class="modal-footer">
-						<form action="{{ route('user.courses.enroll', $course->id) }}" method="POST">
-							@csrf
-							<button type="submit" class="btn btn-success">Yes, Enroll Me</button>
-						</form>
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Enroll Modal -->
+                            {{-- Review Form --}}
+                            <div class="cs-review-form-card mt-4">
+                                <p class="cs-section-title">Leave a Review</p>
+                                @auth
+                                    @if(session('success'))
+                                        <div class="cs-alert-success">{{ session('success') }}</div>
+                                    @endif
+                                    <form action="{{ route('courses.review', $course->id) }}" method="POST">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label class="form-label" style="color:var(--text-secondary);font-size:.85rem;font-weight:600;">Rating</label>
+                                            <select name="rating" class="form-select cs-form-select" required>
+                                                <option value="">-- Select Rating --</option>
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <option value="{{ $i }}">{{ $i }} Star{{ $i > 1 ? 's' : '' }}</option>
+                                                @endfor
+                                            </select>
+                                            @error('rating')<small class="text-danger">{{ $message }}</small>@enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" style="color:var(--text-secondary);font-size:.85rem;font-weight:600;">Comment</label>
+                                            <textarea name="comment" rows="4" class="form-control cs-form-control"
+                                                      placeholder="Share your experience with this course..."></textarea>
+                                            @error('comment')<small class="text-danger">{{ $message }}</small>@enderror
+                                        </div>
+                                        <button type="submit" class="cs-btn-primary" style="width:auto;padding:.7rem 2rem;display:inline-block;">
+                                            Submit Review
+                                        </button>
+                                    </form>
+                                @else
+                                    <p class="cs-login-prompt"><a href="{{ route('login') }}">Log in</a> to leave a review.</p>
+                                @endauth
+                            </div>
+                        </div>
 
-		<!-- Paid Course Payment Modal -->
-		<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content postLists">
-					<div class="modal-header">
-						<h5 class="modal-title" id="paymentModalLabel">Pay to Enroll in {{ $course->title }}</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-					</div>
-					<div class="modal-body">
-						<p>The course costs <strong>${{ number_format($course->price, 2) }}</strong>.</p>
-						<p>Please complete the payment to confirm enrollment.</p>
-					</div>
-					<div class="modal-footer">
-						<form action="{{ route('user.courses.pay', $course->id) }}" method="POST">
-							@csrf
-							<button type="button" class="btn btn-success w-100" id="payBtn">
-								<span id="payBtnText"><i class="fa fa-money-bill-wave"></i> Pay Now</span>
-								<span id="payBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
-							</button>
-						</form>
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
+                    </div>{{-- /Tab panels --}}
+                </div>{{-- /cs-card --}}
+            </div>{{-- /col-lg-8 --}}
 
-	</div>
+            {{-- ── Sidebar ────────────────────────────────────────── --}}
+            <div class="col-lg-4">
+                <div class="cs-sidebar-card">
+
+                    {{-- Top section --}}
+                    <div class="cs-sidebar-top">
+                        <h2 class="cs-course-title">{{ $course->title }}</h2>
+
+                        {{-- Meta pills --}}
+                        <div style="margin-bottom:.75rem;">
+                            <span class="cs-meta-pill">
+                                <i class="fa-solid fa-star" style="color:#f5a623;font-size:.75rem;"></i>
+                                {{ number_format($course->feedback->avg('rating') ?? 0, 1) }}
+                            </span>
+                            <span class="cs-meta-pill">
+                                <i class="fa-solid fa-comment-dots"></i>
+                                {{ $course->feedback->count() }} reviews
+                            </span>
+                            <span class="cs-meta-pill">
+                                <i class="fa-solid fa-tag"></i>
+                                {{ $course->category->name }}
+                            </span>
+                            <span class="cs-meta-pill">
+                                <i class="fa-solid fa-heart" style="color:#e74c3c;"></i>
+                                {{ $course->likes_count ?? 0 }} likes
+                            </span>
+                            <span class="cs-meta-pill">
+                                <i class="fa-solid fa-calendar"></i>
+                                {{ $course->created_at ? $course->created_at->diffForHumans() : '' }}
+                            </span>
+                        </div>
+
+                        {{-- Price --}}
+                        <div class="cs-price-row">
+                            @if($course->is_free)
+                                <span class="cs-price" style="color:#5ab8d4;">Free</span>
+                                <span class="cs-price-label">No payment required</span>
+                            @else
+                                <span class="cs-price">${{ number_format($course->price, 2) }}</span>
+                                <span class="cs-price-label">one-time payment</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Author strip --}}
+                    <div class="cs-author-strip">
+                        <img src="{{ $course->talent->image ? asset('image/talents/'.$course->talent->image) : asset('assets/img/user/profile.jpg') }}"
+                             alt="Author" class="cs-author-avatar">
+                        <div>
+                            <div class="cs-author-name">
+                                {{ $course->talent->name }}
+                                <span style="background:var(--accent-dim);color:var(--accent);font-size:.68rem;padding:2px 8px;border-radius:50px;margin-left:6px;font-weight:700;">
+                                    <span class="cs-status-dot"></span>{{ ucfirst($course->talent->status) }}
+                                </span>
+                            </div>
+                            <div class="cs-author-meta">
+                                <i class="fa-solid fa-star" style="color:#f5a623;font-size:.7rem;"></i>
+                                {{ $course->talent->rating }} &nbsp;·&nbsp; {{ $course->talent->rating_count }} ratings
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Action buttons --}}
+                    <div class="cs-sidebar-actions">
+                        @if($course->is_free)
+                            <a href="#enrollModal" class="cs-btn-primary" data-bs-toggle="modal">
+                                <i class="fa-solid fa-bolt me-1"></i> Enroll for Free
+                            </a>
+                        @else
+                            <a href="#paymentModal" class="cs-btn-primary" data-bs-toggle="modal">
+                                <i class="fa-solid fa-lock-open me-1"></i>
+                                Enroll · ${{ number_format($course->price, 2) }}
+                            </a>
+                        @endif
+                        <a href="{{ route('user.talent.details', $course->talent->id) }}" class="cs-btn-outline">
+                            View Author Profile
+                        </a>
+                    </div>
+
+                    {{-- Share --}}
+                    <div class="cs-share-row">
+                        <span>Share</span>
+                        @foreach(['facebook','twitter','instagram','linkedin','whatsapp'] as $social)
+                            <a href="javascript:void(0);" class="cs-share-icon">
+                                <i class="fa-brands fa-{{ $social }}"></i>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- ── Related Courses ────────────────────────────────────── --}}
+        <div class="cs-related-section">
+            <h3 class="cs-related-title">Related Courses</h3>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                @forelse($relatedCourses as $rc)
+                <div class="col">
+                    <div class="cs-course-card h-100">
+                        <a href="{{ route('user.courses.show', $rc->slug) }}">
+                            <img src="{{ asset('image/thumbnails/'.$rc->thumbnail) }}"
+                                 class="cs-course-thumb"
+                                 alt="{{ $rc->title }}">
+                        </a>
+                        <div class="cs-course-body">
+                            <a href="{{ route('user.courses', ['category' => $rc->category->slug]) }}" class="cs-cat-tag">
+                                {{ $rc->category->name }}
+                            </a>
+                            <a href="{{ route('user.courses.show', $rc->slug) }}" class="d-block cs-course-name">
+                                {{ $rc->title }}
+                            </a>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem;">
+                                <img src="{{ $rc->talent->image ? asset('image/talents/'.$rc->talent->image) : asset('assets/img/user/profile.jpg') }}"
+                                     style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                                     alt="">
+                                <span style="font-size:.78rem;color:var(--text-muted);">{{ $rc->talent->name ?? 'Unknown' }}</span>
+                            </div>
+                            <div class="cs-course-foot">
+                                <span class="cs-course-price {{ $rc->is_free ? 'free' : '' }}">
+                                    {{ $rc->is_free ? 'Free' : '$'.number_format($rc->price, 2) }}
+                                </span>
+                                <a href="{{ route('user.courses.show', $rc->slug) }}"
+                                   style="font-size:.78rem;color:var(--accent);text-decoration:none;font-weight:700;">
+                                    View Details →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                <div class="col-12">
+                    <p style="color:var(--text-muted);">No related courses found.</p>
+                </div>
+                @endforelse
+            </div>
+        </div>
+
+    </div>{{-- /container --}}
+</div>{{-- /cs-page --}}
+
+{{-- ══ MODALS ══════════════════════════════════════════════════════ --}}
+
+{{-- Enroll Modal --}}
+<div class="modal fade cs-pay-modal" id="enrollModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Enroll in {{ $course->title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="color:var(--text-secondary);font-size:.9rem;padding:1.5rem;">
+                <p>You're about to enroll in this free course. Ready to start learning?</p>
+            </div>
+            <div class="modal-footer border-0" style="padding:1rem 1.5rem;">
+                <form action="{{ route('user.courses.enroll', $course->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="cs-btn-primary" style="width:auto;padding:.7rem 1.75rem;display:inline-block;">
+                        <i class="fa-solid fa-bolt me-1"></i> Yes, Enroll Me
+                    </button>
+                </form>
+                <button type="button" class="cs-btn-outline"
+                        style="width:auto;padding:.65rem 1.25rem;display:inline-block;"
+                        data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
 
+{{-- Payment Modal --}}
+<div class="modal fade cs-pay-modal" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Complete Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding:1.5rem;">
+                <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;margin-bottom:1rem;">
+                    <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.25rem;">Course</div>
+                    <div style="font-weight:700;color:var(--text-primary);">{{ $course->title }}</div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="color:var(--text-secondary);font-size:.9rem;">Total Due</span>
+                    <span style="font-size:1.5rem;font-weight:900;color:var(--accent);">${{ number_format($course->price, 2) }}</span>
+                </div>
+            </div>
+            <div class="modal-footer border-0" style="padding:1rem 1.5rem;gap:10px;">
+                <form action="{{ route('user.courses.pay', $course->id) }}" method="POST">
+                    @csrf
+                    <button type="button" class="cs-btn-primary" id="payBtn"
+                            style="width:auto;padding:.75rem 2rem;display:inline-flex;align-items:center;gap:8px;">
+                        <span id="payBtnText"><i class="fa fa-lock-open me-1"></i> Pay & Enroll</span>
+                        <span id="payBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    </button>
+                </form>
+                <button type="button" class="cs-btn-outline"
+                        style="width:auto;padding:.7rem 1.25rem;display:inline-block;"
+                        data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Lesson Modals --}}
 @foreach($course->lessons as $key => $lesson)
-<!-- Lesson Modal -->
-<div class="modal fade" id="lessonModal{{ $lesson->id }}" tabindex="-1"
-	aria-labelledby="lessonModalLabel{{ $lesson->id }}" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-centered">
-		<div class="modal-content lesson-modal-content">
-			<div class="modal-header lesson-modal-header">
-				<div class="modal-title-wrap">
-					<span class="modal-lesson-number">Lesson {{ $key + 1 }}</span>
-					<h5 class="modal-title" id="lessonModalLabel{{ $lesson->id }}">
-						{{ $lesson->title ?? 'Untitled Lesson' }}
-					</h5>
-				</div>
-				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body lesson-modal-body">
-				@if($lesson->video_url)
-				<div class="ratio ratio-16x9 mb-4 video-wrapper">
-					<iframe
-						src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast(\Illuminate\Support\Str::before($lesson->video_url, '&'), 'v=') }}?autoplay=0&playsinline=1"
-						title="{{ $lesson->title ?? 'Lesson Video' }}"
-						allowfullscreen
-						class="rounded-3">
-					</iframe>
-				</div>
-				@else
-				<div class="no-video-placeholder mb-4">
-					<i class="fa-solid fa-video-slash"></i>
-					<p>No video available for this lesson.</p>
-				</div>
-				@endif
-
-				@if($lesson->description)
-				<div class="lesson-description">
-					<p>{{ $lesson->description }}</p>
-				</div>
-				@endif
-			</div>
-			<div class="modal-footer lesson-modal-footer">
-				@if($lesson->duration)
-				<span class="duration-badge">
-					<i class="fa-regular fa-clock me-1"></i> {{ $lesson->duration }}
-				</span>
-				@endif
-				<button type="button" class="btn-close-modal" data-bs-dismiss="modal">
-					<i class="fa-solid fa-xmark me-1"></i> Close
-				</button>
-			</div>
-		</div>
-	</div>
+<div class="modal fade cs-modal" id="lessonModal{{ $lesson->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">
+                        Lesson {{ $key + 1 }}
+                    </div>
+                    <h5 class="modal-title">{{ $lesson->title ?? 'Untitled Lesson' }}</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if($lesson->video_url)
+                    <div class="ratio ratio-16x9 mb-3" style="border-radius:var(--radius-md);overflow:hidden;">
+                        <iframe
+                            src="https://www.youtube.com/embed/{{ \Illuminate\Support\Str::afterLast(\Illuminate\Support\Str::before($lesson->video_url, '&'), 'v=') }}?autoplay=0&playsinline=1"
+                            title="{{ $lesson->title ?? 'Lesson Video' }}"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                @else
+                    <div style="background:var(--bg-elevated);border:1px dashed var(--border);border-radius:var(--radius-md);padding:2.5rem;text-align:center;margin-bottom:1rem;">
+                        <i class="fa-solid fa-video-slash" style="font-size:2rem;color:var(--text-muted);margin-bottom:.75rem;display:block;"></i>
+                        <span style="color:var(--text-muted);font-size:.88rem;">No video available for this lesson.</span>
+                    </div>
+                @endif
+                @if($lesson->description)
+                    <div class="cs-lesson-desc">{{ $lesson->description }}</div>
+                @endif
+            </div>
+            <div class="modal-footer" style="justify-content:space-between;">
+                @if($lesson->duration)
+                    <span style="font-size:.8rem;color:var(--text-muted);">
+                        <i class="fa-regular fa-clock me-1"></i>{{ $lesson->duration }}
+                    </span>
+                @endif
+                <button type="button" class="cs-preview-btn" data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark me-1"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- /Lesson Modal -->
 @endforeach
+
+{{-- ══ SCRIPTS ══════════════════════════════════════════════════════ --}}
 <script>
-	document.addEventListener("DOMContentLoaded", function() {
-		const payBtn = document.getElementById("payBtn");
-		const payBtnText = document.getElementById("payBtnText");
-		const payBtnSpinner = document.getElementById("payBtnSpinner");
+/* ── Tab Switching ───────────────────────────────────────── */
+document.querySelectorAll('.cs-tab-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.cs-tab-link').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active','show'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target).classList.add('active','show');
+    });
+});
 
-		if (!payBtn) return;
+/* ── Flutterwave Payment ──────────────────────────────────── */
+document.addEventListener("DOMContentLoaded", function () {
+    const payBtn = document.getElementById("payBtn");
+    if (!payBtn) return;
 
-		payBtn.addEventListener("click", function() {
-			payBtnText.textContent = "Processing Payment...";
-			payBtnSpinner.classList.remove("d-none");
-			payBtn.disabled = true;
+    payBtn.addEventListener("click", function () {
+        const payBtnText = document.getElementById("payBtnText");
+        const payBtnSpinner = document.getElementById("payBtnSpinner");
 
-			const userEmail = "{{ auth()->user()->email ?? 'guest@example.com' }}";
-			const userName = "{{ auth()->user()->name ?? 'Guest' }}";
-			const courseId = "{{ $course->id }}";
-			const coursePrice = "{{ $course->price }}";
-			const txRef = "course-" + courseId + "-" + Date.now();
+        payBtnText.textContent = "Processing…";
+        payBtnSpinner.classList.remove("d-none");
+        payBtn.disabled = true;
 
-			FlutterwaveCheckout({
-				public_key: "{{ env('FLW_PUBLIC_KEY') }}",
-				tx_ref: txRef,
-				amount: coursePrice,
-				currency: "RWF",
-				payment_options: "card, mobilemoneyrwanda",
-				customer: {
-					email: userEmail,
-					name: userName
-				},
-				callback: function(data) {
-					if (data.status === "successful" || data.status === "completed") {
-						window.location.href = `/course/payment/callback?tx_ref=${data.tx_ref}&course_id=${courseId}&status=${data.status}`;
-					} else {
-						alert("Payment not successful. Please try again.");
-						resetPaymentButton();
-					}
-				},
-				onclose: function() {
-					resetPaymentButton();
-				},
-				customizations: {
-					title: "{{ $course->title }}",
-					description: "Pay to enroll in this course",
-					logo: "{{ asset('logo.png') }}"
-				}
-			});
-		});
+        const userEmail  = "{{ auth()->user()->email ?? 'guest@example.com' }}";
+        const userName   = "{{ auth()->user()->name ?? 'Guest' }}";
+        const courseId   = "{{ $course->id }}";
+        const coursePrice= "{{ $course->price }}";
+        const txRef      = "course-" + courseId + "-" + Date.now();
 
-		function resetPaymentButton() {
-			payBtnText.innerHTML = '<i class="fa fa-money-bill-wave"></i> Pay Now';
-			payBtnSpinner.classList.add("d-none");
-			payBtn.disabled = false;
-		}
-	});
+        FlutterwaveCheckout({
+            public_key: "{{ env('FLW_PUBLIC_KEY') }}",
+            tx_ref: txRef,
+            amount: coursePrice,
+            currency: "RWF",
+            payment_options: "card, mobilemoneyrwanda",
+            customer: { email: userEmail, name: userName },
+            callback: function (data) {
+                if (data.status === "successful" || data.status === "completed") {
+                    window.location.href = `/course/payment/callback?tx_ref=${data.tx_ref}&course_id=${courseId}&status=${data.status}`;
+                } else {
+                    alert("Payment not successful. Please try again.");
+                    resetBtn();
+                }
+            },
+            onclose: function () { resetBtn(); },
+            customizations: {
+                title: "{{ $course->title }}",
+                description: "Pay to enroll in this course",
+                logo: "{{ asset('logo.png') }}"
+            }
+        });
+
+        function resetBtn() {
+            payBtnText.innerHTML = '<i class="fa fa-lock-open me-1"></i> Pay & Enroll';
+            payBtnSpinner.classList.add("d-none");
+            payBtn.disabled = false;
+        }
+    });
+});
 </script>
 
 @endsection
