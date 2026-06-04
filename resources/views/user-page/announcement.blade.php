@@ -3,172 +3,499 @@
 @section('content')
 
 <style>
-    #tranding {
-        /* position: relative; */
-        overflow: hidden;
-        background: #060f11;
-        color: #fff;
-        padding: 1rem 0;
-        border-radius: 0.1rem;
-        border: 1px solid #3d4648;
-        margin-top: 2rem;
-        box-shadow: 0 1em 2em rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        /* height: 22rem; */
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+        --bg: #0e1618;
+        --bg-card: #121d1f;
+        --bg-raised: #172224;
+        --accent: #00a667;
+        --accent-dim: rgba(0, 166, 103, .13);
+        --accent-glow: rgba(0, 166, 103, .3);
+        --border: rgba(255, 255, 255, .07);
+        --text: #f0f4f3;
+        --muted: #7a9490;
+        --white: #ffffff;
     }
 
-    .talent-story-info {
-        background: #011E34;
-        color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
 
-    .postLists {
-        display: flex;
-        /* align-items: center; */
-        flex-direction: column;
-        border: 1px solid #afafaf;
-        border-radius: 3px;
-        /* background: linear-gradient(#f4f7fa calc(100% - 1.5em), #e6ecf4); */
-        /* box-shadow: 0 1em 1em #1f2d3d26; */
-        /* text-align: center; */
-        /* text-shadow: 0 1px #fff; */
-        transition: .25s;
-        margin-bottom: 1.5rem;
-
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'DM Sans', sans-serif;
     }
-</style>
 
-<style>
-    .slide-line-btn {
+    /* ── HERO ── */
+    .ann-hero {
         position: relative;
+        overflow: hidden;
+        padding: 5rem 0 4rem;
+        background: var(--bg);
+    }
+
+    .ann-hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background:
+            radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0, 166, 103, .1) 0%, transparent 65%),
+            radial-gradient(ellipse 40% 50% at 10% 20%, rgba(0, 166, 103, .06) 0%, transparent 60%);
+    }
+
+    .ann-hero-grid {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background-image:
+            linear-gradient(rgba(0, 166, 103, .03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 166, 103, .03) 1px, transparent 1px);
+        background-size: 44px 44px;
+    }
+
+    .ann-hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+    }
+
+    .ann-hero-content {
+        flex: 1;
+    }
+
+    .ann-hero-tag {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px 16px;
-        color: #fff;
-        background: linear-gradient(165deg, #011E34 15%, #319BF9 100%);
-        border-radius: 30px;
+        gap: .5rem;
+        background: var(--accent-dim);
+        border: 1px solid rgba(0, 166, 103, .3);
+        color: var(--accent);
+        font-family: 'Syne', sans-serif;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        padding: .35rem .9rem;
+        border-radius: 50px;
+        margin-bottom: 1.5rem;
+    }
+
+    .ann-hero-content h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 800;
+        line-height: 1.15;
+        color: var(--white);
+        margin-bottom: 1rem;
+    }
+
+    .ann-hero-content h1 em {
+        font-style: normal;
+        color: var(--accent);
+    }
+
+    .ann-hero-content p {
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.75;
+        max-width: 460px;
+        margin-bottom: 2rem;
+    }
+
+    .btn-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        background: var(--accent);
+        color: var(--white);
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: .9rem;
+        padding: .8rem 1.75rem;
+        border-radius: 10px;
         text-decoration: none;
+        border: none;
+        box-shadow: 0 0 28px var(--accent-glow);
+        transition: all .25s;
+        cursor: pointer;
+    }
+
+    .btn-hero:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px var(--accent-glow);
+        color: var(--white);
+    }
+
+    .ann-hero-visual {
+        flex: 0 0 420px;
+    }
+
+    .ann-hero-visual img {
+        width: 100%;
+        border-radius: 20px;
+        object-fit: cover;
+        max-height: 320px;
+        opacity: .85;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem 2.5rem;
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-pill {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: .75rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+    }
+
+    .stat-pill i {
+        color: var(--accent);
+        font-size: 1rem;
+    }
+
+    .stat-pill-text strong {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        color: var(--white);
+        display: block;
+        font-size: 1rem;
+    }
+
+    .stat-pill-text span {
+        font-size: .75rem;
+        color: var(--muted);
+    }
+
+    /* ── SECTION ── */
+    .ann-section {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
+    }
+
+    .ann-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .ann-section-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--white);
+    }
+
+    .ann-section-title span {
+        color: var(--accent);
+    }
+
+    /* ── CARDS GRID ── */
+    .ann-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .ann-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
         overflow: hidden;
-        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        transition: all .3s ease;
+        position: relative;
     }
 
-    .slide-line {
-        position: absolute;
-        top: 100%;
-        left: -100%;
-        width: 200%;
-        height: 100%;
-        background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%);
-        transform: rotate(45deg);
-        animation: slideRightUp 2s ease-in-out infinite;
-        z-index: 0;
+    .ann-card:hover {
+        border-color: rgba(0, 166, 103, .35);
+        transform: translateY(-5px);
+        box-shadow: 0 24px 56px rgba(0, 0, 0, .4), 0 0 0 1px rgba(0, 166, 103, .08);
     }
 
-    .slide-line:nth-child(2) {
-        animation-delay: 0s;
-        opacity: 0;
-        width: 50%;
+    .ann-card-accent-line {
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), transparent);
     }
 
-    .slide-line:nth-child(3) {
-        animation-delay: 0s;
-        opacity: 0.5;
-        width: 150%;
+    .ann-card-body {
+        padding: 1.75rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
-    .slide-line:nth-child(4) {
-        animation-delay: 0.8s;
-        opacity: 0.7;
-        width: 200%;
+    .ann-card-icon-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.25rem;
     }
 
-    @keyframes slideRightUp {
-        0% {
-            top: 100%;
-            left: -100%;
+    .ann-icon-bubble {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--accent-dim);
+        border: 1px solid rgba(0, 166, 103, .25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 1.1rem;
+    }
+
+    .ann-date-badge {
+        font-size: .72rem;
+        color: var(--muted);
+        font-weight: 500;
+        background: var(--bg-raised);
+        border: 1px solid var(--border);
+        padding: .25rem .75rem;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: .35rem;
+    }
+
+    .ann-date-badge i {
+        font-size: .65rem;
+    }
+
+    .ann-card-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--white);
+        line-height: 1.4;
+        margin-bottom: .75rem;
+    }
+
+    .ann-card-excerpt {
+        color: var(--muted);
+        font-size: .88rem;
+        line-height: 1.7;
+        flex: 1;
+        margin-bottom: 1.5rem;
+    }
+
+    .ann-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .ann-author {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+    }
+
+    .ann-author img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(0, 166, 103, .25);
+    }
+
+    .ann-author-info strong {
+        font-size: .8rem;
+        color: var(--text);
+        display: block;
+        font-weight: 600;
+    }
+
+    .ann-author-info span {
+        font-size: .72rem;
+        color: var(--muted);
+    }
+
+    .btn-read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        background: var(--accent-dim);
+        border: 1px solid rgba(0, 166, 103, .3);
+        color: var(--accent);
+        font-size: .8rem;
+        font-weight: 700;
+        padding: .45rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-family: 'Syne', sans-serif;
+        transition: all .2s;
+    }
+
+    .btn-read-more:hover {
+        background: var(--accent);
+        color: var(--white);
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h4 {
+        font-family: 'Syne', sans-serif;
+        color: var(--white);
+        margin-bottom: .5rem;
+    }
+
+    .empty-state p {
+        color: var(--muted);
+        font-size: .9rem;
+    }
+
+    @media (max-width: 768px) {
+        .ann-hero-inner {
+            flex-direction: column;
         }
 
-        50% {
-            top: 0%;
-            left: 0%;
+        .ann-hero-visual {
+            display: none;
         }
 
-        100% {
-            top: -100%;
-            left: 100%;
+        .ann-grid {
+            grid-template-columns: 1fr;
         }
-    }
 
-    .slide-line-btn span {
-        pointer-events: none;
+        .stats-bar {
+            flex-direction: column;
+        }
     }
 </style>
 
-<div class="container p-4">
-    <section id="tranding">
-        <div class="container p-4">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="banner-content aos-init aos-animate" data-aos="fade-up">
-                        <div class="banner-head">
-                            <h1 class="mb-2">Get latest updates</h1>
-                            <p class="d-inline-flex">Stay informed about the latest news and developments.</p>
-                            <p class="d-inline-flex">Discover new features, upcoming events, and important announcements.</p>
-                        </div>
-                        <a href="{{ route('user.talents') }}" class="btn btn-lg btn-primary mb-3 d-inline-flex align-items-center">
-                            Explore Updates below
-                            <i class="feather-arrow-right ms-2"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="banner-img">
-                        <div class="banner-img-right">
-                            <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" class="img-fluid" alt="img">
-                        </div>
-                    </div>
-                </div>
+<!-- HERO -->
+<section class="ann-hero">
+    <div class="ann-hero-bg"></div>
+    <div class="ann-hero-grid"></div>
+    <div class="ann-hero-inner">
+        <div class="ann-hero-content">
+            <div class="ann-hero-tag">
+                <i class="ti ti-bell"></i> Live Updates
             </div>
+            <h1>Stay in the loop with<br><em>Future Connect</em></h1>
+            <p>Discover the latest news, platform updates, upcoming events, and important announcements — all in one place.</p>
+            <a href="#announcements" class="btn-hero">
+                Explore Announcements <i class="feather-arrow-down"></i>
+            </a>
         </div>
-    </section>
-</div>
+        <div class="ann-hero-visual">
+            <img src="{{ asset('assets/img/bg/provide-bg.jpg') }}" alt="Updates">
+        </div>
+    </div>
+</section>
 
-
-<div class="page-content content">
-    <div class="container">
-        <div class="row">
-            @foreach($announcements as $ann)
-            <div class="col-xl-4 col-lg-6 col-md-6">
-                <div class="testimonial-slider-card postLists">
-                    <div class="testimonial-item">
-                        <div class="testimonial-icon"><i class="ti ti-bell"></i></div>
-                        <h5 class="mb-2">{{ $ann->title }}</h5>
-                        <p class="mb-3">
-                            {{ \Illuminate\Support\Str::limit($ann->content, 100, '...') }}
-                        </p>
-                        <div class="testimonial-review d-flex align-items-center justify-content-between">
-                            <div class="testimonial-user p-0">
-                                <img src="{{ asset('assets/img/user/admin.jpg') }}"
-                                    alt="img" />
-                                <div class="testimonial-info">
-                                    <h6>Product Team</h6>
-                                    <p>{{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}</p>
-                                </div>
-                            </div>
-                            <a href="{{ route('user.announcement.details', $ann->id ) }}" class="btn btn-lg btn-primary mb-3 d-inline-flex align-items-center">
-                                Read More<i class="feather-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-
+<!-- STATS -->
+<div class="stats-bar">
+    <div class="stat-pill">
+        <i class="ti ti-bell"></i>
+        <div class="stat-pill-text">
+            <strong>{{ $announcements->count() }}</strong>
+            <span>Announcements</span>
+        </div>
+    </div>
+    <div class="stat-pill">
+        <i class="ti ti-refresh"></i>
+        <div class="stat-pill-text">
+            <strong>Weekly</strong>
+            <span>Update Frequency</span>
+        </div>
+    </div>
+    <div class="stat-pill">
+        <i class="ti ti-speakerphone"></i>
+        <div class="stat-pill-text">
+            <strong>Product Team</strong>
+            <span>Official Source</span>
         </div>
     </div>
 </div>
+
+<!-- ANNOUNCEMENTS GRID -->
+<section class="ann-section" id="announcements">
+    <div class="ann-section-header">
+        <h2 class="ann-section-title">Latest <span>Announcements</span></h2>
+    </div>
+
+    @if($announcements->count())
+    <div class="ann-grid">
+        @foreach($announcements as $ann)
+        <div class="ann-card">
+            <div class="ann-card-accent-line"></div>
+            <div class="ann-card-body">
+                <div class="ann-card-icon-row">
+                    <div class="ann-icon-bubble">
+                        <i class="ti ti-bell"></i>
+                    </div>
+                    <div class="ann-date-badge">
+                        <i class="ti ti-clock"></i>
+                        {{ \Carbon\Carbon::parse($ann->created_at)->diffForHumans() }}
+                    </div>
+                </div>
+
+                <h3 class="ann-card-title">{{ $ann->title }}</h3>
+                <p class="ann-card-excerpt">
+                    {{ \Illuminate\Support\Str::limit($ann->content, 110, '…') }}
+                </p>
+
+                <div class="ann-card-footer">
+                    <div class="ann-author">
+                        <img src="{{ asset('assets/img/user/admin.jpg') }}" alt="Product Team">
+                        <div class="ann-author-info">
+                            <strong>Product Team</strong>
+                            <span>Official</span>
+                        </div>
+                    </div>
+                    <a href="{{ route('user.announcement.details', $ann->id) }}" class="btn-read-more">
+                        Read More <i class="feather-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    @else
+    <div class="empty-state">
+        <i class="ti ti-bell-off"></i>
+        <h4>No announcements yet</h4>
+        <p>Check back soon for the latest updates from the Product Team.</p>
+    </div>
+    @endif
+</section>
+
 @endsection
