@@ -803,7 +803,7 @@ $icons = [
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false"
                                                     aria-label="Actions for {{ $cat->name }}">
-                                                <i class="ti ti-dots-vertical" style="font-size:0.9rem;"></i>
+                                                <i class="ti ti-dots-vertical" style="font-size:0.9rem;"></i>Action
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsDropdown{{ $cat->id }}">
                                                 <li>

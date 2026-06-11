@@ -255,7 +255,7 @@ body {
     line-height: var(--bs-body-line-height);
     color: var(--bs-body-color);
     text-align: var(--bs-body-text-align);
-    background-color: #060f11;
+    /* background-color: #060f11; */
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent
 }
@@ -10317,7 +10317,7 @@ fieldset:disabled .dual-listbox .dual-listbox__button {
 .bg-lighter,
 .dual-listbox .dual-listbox__item:hover {
     --bs-bg-opacity: 1;
-    background-color: #060f11 !important
+    /* background-color: #060f11 !important */
 }
 
 .bg-black {

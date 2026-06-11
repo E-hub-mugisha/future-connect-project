@@ -200,7 +200,7 @@ class AdminTalentController extends Controller
             unlink(public_path('image/talents/' . $talent->image));
         }
         $talent->delete();
-        return redirect()->route('admin.talents')->with('success', 'Talent deleted successfully.');
+        return redirect()->route('admin.talents.index')->with('success', 'Talent deleted successfully.');
     }
 
     public function updateStatus(Request $request, $id)
