@@ -16,7 +16,7 @@ $categories = \App\Models\Category::all();
     --bg2:       #131d20;
     --bg3:       #18242a;
     --border:    rgba(255,255,255,0.07);
-    --green:     #00a667;
+    --green:     #48d597;
     --green-dim: rgba(0,166,103,0.15);
     --green-glow:rgba(0,166,103,0.35);
     --text:      #e8eef0;
@@ -1184,7 +1184,7 @@ $categories = \App\Models\Category::all();
             </div>
             <div class="d-flex justify-content-between mt-4">
               <button type="button" class="btn-outline btn-prev"><i class="ti ti-arrow-left me-1"></i> Back</button>
-              <button type="submit" class="btn-green" style="background:#00a667;">
+              <button type="submit" class="btn-green" style="background:#48d597;">
                 <i class="ti ti-check me-1"></i> Submit Registration
               </button>
             </div>

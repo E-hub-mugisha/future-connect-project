@@ -10,7 +10,7 @@
         --bg-card:       #0c2540;
         --bg-surface:    #0f2d4a;
         --bg-hover:      #163558;
-        --accent:        #00a667;
+        --accent:        #48d597;
         --accent-dim:    rgba(0, 166, 103, 0.15);
         --accent-glow:   rgba(0, 166, 103, 0.35);
         --text-primary:  #ffffff;

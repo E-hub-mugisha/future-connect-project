@@ -70,15 +70,15 @@ class DashboardController extends Controller
         $totalEnrollments   = max(DB::table('course_enrollments')->count(), 1);
 
         $platformHealth = collect([
-            ['label' => 'Server Uptime',      'value' => 99,  'color' => '#00a667'],
+            ['label' => 'Server Uptime',      'value' => 99,  'color' => '#48d597'],
             ['label' => 'Verified Users',      'value' => round($verifiedCount / $totalUsersForCalc * 100), 'color' => '#4a9de0'],
             ['label' => 'Profile Completion',  'value' => round($profilesDone  / $totalUsersForCalc * 100), 'color' => '#e8a44a'],
             ['label' => 'Job Fill Rate',       'value' => round($filledJobs    / $totalJobsEver     * 100), 'color' => '#e05c5c'],
-            ['label' => 'Course Completion',   'value' => round($completedCourses / $totalEnrollments * 100), 'color' => '#00a667'],
+            ['label' => 'Course Completion',   'value' => round($completedCourses / $totalEnrollments * 100), 'color' => '#48d597'],
         ]);
 
         // ── Skills by category ───────────────────────────────
-        $colors = ['#00a667','#4a9de0','#e8a44a','#e05c5c','#a074e8','#5bbcd6'];
+        $colors = ['#48d597','#4a9de0','#e8a44a','#e05c5c','#a074e8','#5bbcd6'];
         $skillCategories = Talent::select('category_id', DB::raw('count(*) as total'))
             ->groupBy('category_id')
             ->orderByDesc('total')
@@ -107,7 +107,7 @@ class DashboardController extends Controller
 
         // ── Recent users ─────────────────────────────────────
         $avatarColors = [
-            'green' => ['rgba(0,166,103,0.15)',    '#00a667'],
+            'green' => ['rgba(0,166,103,0.15)',    '#48d597'],
             'blue'  => ['rgba(74,157,224,0.15)',   '#4a9de0'],
             'amber' => ['rgba(232,164,74,0.15)',   '#e8a44a'],
             'red'   => ['rgba(224,92,92,0.15)',    '#e05c5c'],

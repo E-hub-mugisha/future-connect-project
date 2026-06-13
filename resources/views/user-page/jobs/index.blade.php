@@ -13,7 +13,7 @@
     --bg-card:     #131e21;
     --bg-glass:    rgba(255,255,255,0.035);
     --bg-glass2:   rgba(0,166,103,0.08);
-    --accent:      #00a667;
+    --accent:      #48d597;
     --accent-dim:  #008f59;
     --accent-glow: rgba(0,166,103,0.22);
     --border:      rgba(255,255,255,0.07);

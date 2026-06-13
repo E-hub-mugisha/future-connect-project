@@ -57,7 +57,7 @@
   }
 
   .seller-head h3 span {
-    color: #00a667;
+    color: #48d597;
   }
 
   .seller-head p {
@@ -100,14 +100,14 @@
   }
 
   .sllers-list ul li span {
-    color: #00a667;
+    color: #48d597;
     font-size: 16px;
     line-height: 1;
     flex-shrink: 0;
   }
 
   .sllers-list .btn-primary {
-    background: #00a667;
+    background: #48d597;
     border: none;
     color: #fff;
     padding: 10px 24px;
@@ -171,7 +171,7 @@
   }
 
   .why-choose-sec .nav-tabs .nav-link:hover {
-    color: #00a667;
+    color: #48d597;
     background: rgba(0, 166, 103, 0.06);
     border-color: transparent;
   }
@@ -179,7 +179,7 @@
   .why-choose-sec .nav-tabs .nav-link.active {
     background: rgba(0, 166, 103, 0.1);
     border-color: #1e3035 #1e3035 transparent;
-    color: #00a667;
+    color: #48d597;
     font-weight: 600;
   }
 
@@ -321,7 +321,7 @@
   }
 
   .review-user h6 a:hover {
-    color: #00a667;
+    color: #48d597;
   }
 
   .review-user h6 span {
@@ -334,7 +334,7 @@
   .owl-nav button {
     background: #0f1e21 !important;
     border: 1px solid #1e3035 !important;
-    color: #00a667 !important;
+    color: #48d597 !important;
     width: 36px;
     height: 36px;
     border-radius: 8px !important;
@@ -347,7 +347,7 @@
   }
 
   .owl-nav button i {
-    color: #00a667;
+    color: #48d597;
     font-size: 14px;
   }
 
@@ -374,7 +374,7 @@
   .cta-info .badge {
     display: inline-block;
     background: rgba(0, 166, 103, 0.12);
-    color: #00a667;
+    color: #48d597;
     border: 1px solid rgba(0, 166, 103, 0.3);
     border-radius: 20px;
     font-size: 11px;
@@ -401,7 +401,7 @@
   }
 
   .cta-btn .btn-primary {
-    background: #00a667;
+    background: #48d597;
     border: none;
     color: #fff;
     padding: 12px 28px;

@@ -8,7 +8,7 @@
         --bg-card: #131d1f;
         --bg-card-hover: #172023;
         --bg-surface: #1a2628;
-        --accent: #00a667;
+        --accent: #48d597;
         --accent-dim: rgba(0, 166, 103, 0.12);
         --accent-glow: rgba(0, 166, 103, 0.25);
         --text-primary: #e8f0ef;
@@ -272,8 +272,8 @@
         border-radius: 50%;
     }
 
-    .status-approved { background: rgba(0,166,103,0.12); color: #00a667; border: 1px solid rgba(0,166,103,0.25); }
-    .status-approved::before { background: #00a667; box-shadow: 0 0 5px rgba(0,166,103,0.6); }
+    .status-approved { background: rgba(0,166,103,0.12); color: #48d597; border: 1px solid rgba(0,166,103,0.25); }
+    .status-approved::before { background: #48d597; box-shadow: 0 0 5px rgba(0,166,103,0.6); }
 
     .status-pending { background: rgba(224,162,48,0.1); color: #e0a230; border: 1px solid rgba(224,162,48,0.25); }
     .status-pending::before { background: #e0a230; }

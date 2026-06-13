@@ -48,11 +48,11 @@
 
     .btn-white.btn-dim.btn-outline-light:hover {
         border-color: rgba(0, 166, 103, 0.4);
-        color: #00a667;
+        color: #48d597;
     }
 
     .nk-block-tools .btn-primary {
-        background: #00a667;
+        background: #48d597;
         border: none;
         color: #fff;
         font-size: 13px;
@@ -94,7 +94,7 @@
     .link-list-opt li a:hover,
     .link-list-plain li a:hover {
         background: rgba(0, 166, 103, 0.08);
-        color: #00a667;
+        color: #48d597;
     }
 
     .divider {
@@ -154,7 +154,7 @@
     }
 
     .card-title p a {
-        color: #00a667;
+        color: #48d597;
         text-decoration: none;
     }
 
@@ -169,7 +169,7 @@
     }
 
     .card-hint:hover {
-        color: #00a667;
+        color: #48d597;
     }
 
     /* Card tools nav */
@@ -193,7 +193,7 @@
     .card-tools-nav li a:hover,
     .card-tools-nav li.active a {
         background: rgba(0, 166, 103, 0.1);
-        color: #00a667;
+        color: #48d597;
     }
 
     /* ===== STAT / SALE DATA ===== */
@@ -222,7 +222,7 @@
     }
 
     .nk-sale-data .change.up.text-success {
-        color: #00a667 !important;
+        color: #48d597 !important;
     }
 
     /* ===== TALENT TABLE ===== */
@@ -279,7 +279,7 @@
     }
 
     .tb-lead a:hover {
-        color: #00a667;
+        color: #48d597;
     }
 
     .tb-sub {
@@ -288,7 +288,7 @@
     }
 
     .tb-sub.text-primary {
-        color: #00a667 !important;
+        color: #48d597 !important;
     }
 
     .tb-amount {
@@ -322,7 +322,7 @@
 
     .user-avatar.bg-primary-dim {
         background: rgba(0, 166, 103, 0.12);
-        color: #00a667;
+        color: #48d597;
     }
 
     .user-avatar img {
@@ -369,11 +369,11 @@
 
     .badge-dot.bg-success {
         background: rgba(0, 166, 103, 0.1);
-        color: #00a667;
+        color: #48d597;
     }
 
     .badge-dot.bg-success::before {
-        background: #00a667;
+        background: #48d597;
     }
 
     .badge-dot.bg-warning {
@@ -401,7 +401,7 @@
 
     .btn-icon.btn-trigger:hover {
         background: rgba(0, 166, 103, 0.08);
-        color: #00a667;
+        color: #48d597;
     }
 
     /* ===== ANNOUNCEMENTS / ACTIVITY ===== */
@@ -430,7 +430,7 @@
 
     .nk-activity-media.user-avatar.bg-success {
         background: rgba(0, 166, 103, 0.15);
-        color: #00a667;
+        color: #48d597;
         width: 36px;
         height: 36px;
         flex-shrink: 0;
@@ -515,7 +515,7 @@
     .nk-support-content .title .btn-primary.btn-md {
         background: rgba(0, 166, 103, 0.1);
         border: 1px solid rgba(0, 166, 103, 0.25);
-        color: #00a667;
+        color: #48d597;
         font-size: 11px;
         font-weight: 600;
         padding: 2px 10px;
@@ -526,7 +526,7 @@
     }
 
     .nk-support-content .title .btn-primary.btn-md:hover {
-        background: #00a667;
+        background: #48d597;
         color: #fff;
     }
 
@@ -575,12 +575,12 @@
     }
 
     .timeline-status.bg-primary {
-        background: #00a667;
+        background: #48d597;
     }
 
     .timeline-status.bg-primary.is-outline {
         background: transparent;
-        border: 2px solid #00a667;
+        border: 2px solid #48d597;
     }
 
     .timeline-status.bg-pink {
@@ -650,7 +650,7 @@
 
     .modal-header .btn-close:hover,
     .close-btn:hover {
-        color: #00a667;
+        color: #48d597;
     }
 
     .modal-body {
@@ -708,7 +708,7 @@
 
     .modal-footer .btn-primary,
     .modal-footer .btn.btn-primary {
-        background: #00a667;
+        background: #48d597;
         border: none;
         color: #fff;
         padding: 8px 20px;
@@ -762,7 +762,7 @@
     .form-select:focus,
     .form-control:focus {
         outline: none;
-        border-color: #00a667;
+        border-color: #48d597;
         box-shadow: 0 0 0 3px rgba(0, 166, 103, 0.1);
     }
 
@@ -782,7 +782,7 @@
     .model-head-text {
         font-size: 13px;
         font-weight: 600;
-        color: #00a667;
+        color: #48d597;
         text-transform: uppercase;
         letter-spacing: 0.4px;
         margin-bottom: 14px;
@@ -853,7 +853,7 @@
 
     .vary-amt:hover {
         border-color: rgba(0, 166, 103, 0.4);
-        color: #00a667;
+        color: #48d597;
     }
 
     .buyer-method {
@@ -878,7 +878,7 @@
     }
 
     .custom_radio input[type="radio"] {
-        accent-color: #00a667;
+        accent-color: #48d597;
     }
 
     .wallet-custom {
@@ -886,7 +886,7 @@
     }
 
     .btn.btn-primary.w-100 {
-        background: #00a667;
+        background: #48d597;
         border: none;
         color: #fff;
         width: 100%;
@@ -917,7 +917,7 @@
     /* Link */
     .link {
         font-size: 12px;
-        color: #00a667;
+        color: #48d597;
         text-decoration: none;
     }
 
@@ -926,7 +926,7 @@
     }
 
     .btn-link {
-        color: #00a667;
+        color: #48d597;
         text-decoration: none;
         font-size: 13px;
     }
@@ -939,7 +939,7 @@
     .card-tools .btn-primary.btn-dim {
         background: rgba(0, 166, 103, 0.1);
         border: 1px solid rgba(0, 166, 103, 0.25);
-        color: #00a667;
+        color: #48d597;
         font-size: 12px;
         font-weight: 600;
         border-radius: 8px;
@@ -952,7 +952,7 @@
     }
 
     .card-tools .btn-primary.btn-dim:hover {
-        background: #00a667;
+        background: #48d597;
         color: #fff;
     }
 </style>
@@ -1114,7 +1114,7 @@
                                     <div class="card-tools">
                                         <div class="dropdown">
                                             <a href="#" class="btn-primary btn-dim d-none d-sm-inline-flex"
-                                                style="padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:rgba(0,166,103,0.1);border:1px solid rgba(0,166,103,0.25);color:#00a667;"
+                                                style="padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:rgba(0,166,103,0.1);border:1px solid rgba(0,166,103,0.25);color:#48d597;"
                                                 data-bs-toggle="dropdown">
                                                 <em class="icon ni ni-download-cloud"></em><span>Download Report</span>
                                             </a>

@@ -22,7 +22,7 @@ $isActive = fn(string $pattern): string =>
     --fc-bg:            #051321;
     --fc-bg-2:          #060f11;
     --fc-bg-3:          #0b2540;
-    --fc-green:         #00a667;
+    --fc-green:         #48d597;
     --fc-green-dim:     rgba(0,166,103,0.12);
     --fc-green-border:  rgba(0,166,103,0.30);
     --fc-white:         #ffffff;

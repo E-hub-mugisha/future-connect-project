@@ -10,7 +10,7 @@
         --bg-card: #131d1f;
         --bg-surface: #1a2628;
         --bg-input: #0f1c1e;
-        --accent: #00a667;
+        --accent: #48d597;
         --accent-dim: rgba(0, 166, 103, 0.1);
         --accent-glow: rgba(0, 166, 103, 0.25);
         --text-primary: #e8f0ef;

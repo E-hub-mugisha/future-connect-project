@@ -10,7 +10,7 @@
         --bg-card: #131d1f;
         --bg-surface: #1a2628;
         --bg-input: #0f1c1e;
-        --accent: #00a667;
+        --accent: #48d597;
         --accent-dim: rgba(0, 166, 103, 0.1);
         --accent-glow: rgba(0, 166, 103, 0.25);
         --text-primary: #e8f0ef;
@@ -240,8 +240,8 @@
         border-radius: 50%;
     }
 
-    .status-approved { background: rgba(0,166,103,0.12); color: #00a667; }
-    .status-approved::before { background: #00a667; box-shadow: 0 0 5px rgba(0,166,103,0.6); }
+    .status-approved { background: rgba(0,166,103,0.12); color: #48d597; }
+    .status-approved::before { background: #48d597; box-shadow: 0 0 5px rgba(0,166,103,0.6); }
     .status-pending { background: rgba(224,162,48,0.1); color: #e0a230; }
     .status-pending::before { background: #e0a230; }
     .status-rejected { background: rgba(224,87,87,0.1); color: #e05757; }

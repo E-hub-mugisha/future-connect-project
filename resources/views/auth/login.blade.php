@@ -18,7 +18,7 @@
             --bg: #0e1618;
             --surface: #131e21;
             --border: #1f2f33;
-            --green: #00a667;
+            --green: #48d597;
             --green-hover: #00bd76;
             --green-dim: rgba(0, 166, 103, .12);
             --green-glow: rgba(0, 166, 103, .28);

@@ -253,7 +253,7 @@ class HomeController extends Controller
 
         $comment = StoryComment::create($data);
 
-        return redirect()->back()->with('success', 'Talent registered successfully.');
+        return redirect()->back()->with('success', 'Comment added successfully.');
     }
     public function storeTalent(Request $request)
     {
@@ -296,7 +296,7 @@ class HomeController extends Controller
         // Send email to admin
         Mail::to('kabosierik@gmail.com')->send(new TalentRegisteredAdmin($talent));
 
-        return redirect()->route('talent.success', $talent->id);
+        return redirect()->route('talent.success', $talent->id)->with('success', 'Your profile has been submitted for review.');
     }
 
     public function talentSuccess($id)

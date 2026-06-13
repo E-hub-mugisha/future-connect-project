@@ -5,7 +5,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 {{-- =============================================
      FUTURE CONNECT — MODERN FOOTER
      Background : #0e1618
-     Accent     : #00a667
+     Accent     : #48d597
 ============================================= --}}
 
 <style>
@@ -46,7 +46,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     text-decoration: none;
     transition: color .2s ease;
 }
-.fc-footer a:hover { color: #00a667; }
+.fc-footer a:hover { color: #48d597; }
 
 /* ── Top Navigation Bar ──────────────────────── */
 .fc-top-nav {
@@ -77,10 +77,10 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     left: 0;
     width: 0;
     height: 1.5px;
-    background: #00a667;
+    background: #48d597;
     transition: width .25s ease;
 }
-.fc-top-nav__inner a:hover { color: #00a667; }
+.fc-top-nav__inner a:hover { color: #48d597; }
 .fc-top-nav__inner a:hover::after { width: 100%; }
 
 /* ── Main Body ───────────────────────────────── */
@@ -102,7 +102,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #00a667;
+    color: #48d597;
     margin: 0 0 18px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0,166,103,.22);
@@ -124,7 +124,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 }
 .fc-link-list .arrow {
     font-size: 10px;
-    color: #00a667;
+    color: #48d597;
     display: inline-block;
     transition: transform .2s ease;
 }
@@ -153,7 +153,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 .fc-contact-icon svg {
     width: 14px;
     height: 14px;
-    stroke: #00a667;
+    stroke: #48d597;
     fill: none;
     stroke-width: 2;
     stroke-linecap: round;
@@ -162,7 +162,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 .fc-contact-label {
     font-size: 11px;
     font-weight: 700;
-    color: #00a667;
+    color: #48d597;
     text-transform: uppercase;
     letter-spacing: .5px;
     margin: 0 0 2px;
@@ -173,7 +173,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     margin: 0;
 }
 .fc-contact-value a { color: #8fa8ac; }
-.fc-contact-value a:hover { color: #00a667; }
+.fc-contact-value a:hover { color: #48d597; }
 
 /* ── Divider ─────────────────────────────────── */
 .fc-divider {
@@ -204,7 +204,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 .fc-logo-mark {
     width: 36px;
     height: 36px;
-    background: #00a667;
+    background: #48d597;
     border-radius: 9px;
     display: flex;
     align-items: center;
@@ -253,8 +253,8 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     transition: background .2s, border-color .2s, color .2s;
 }
 .fc-social a:hover {
-    background: #00a667;
-    border-color: #00a667;
+    background: #48d597;
+    border-color: #48d597;
     color: #0e1618;
 }
 .fc-social svg {
@@ -276,7 +276,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     font-size: 12px;
     color: #4e6b70;
 }
-.fc-legal a:hover { color: #00a667; }
+.fc-legal a:hover { color: #48d597; }
 
 /* Copyright */
 .fc-copy {

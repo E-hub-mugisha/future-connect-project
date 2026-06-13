@@ -13,7 +13,7 @@
     --bg-card:     #131e21;
     --bg-glass:    rgba(255,255,255,0.035);
     --bg-glass2:   rgba(0,166,103,0.08);
-    --accent:      #00a667;
+    --accent:      #48d597;
     --accent-dim:  #008f59;
     --accent-glow: rgba(0,166,103,0.22);
     --accent-line: rgba(0,166,103,0.35);
@@ -105,7 +105,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
     background-size: 60px 60px;
 }
 .fc-hero-content {
-    position: relative; z-index: 2; padding: 80px 0;
+    position: relative; z-index: 2; padding: 80px 40px;
 }
 .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;

@@ -12,7 +12,7 @@
     --bg2:        #131d20;
     --bg3:        #18242a;
     --border:     rgba(255,255,255,0.07);
-    --green:      #00a667;
+    --green:      #48d597;
     --green-dim:  rgba(0,166,103,0.12);
     --green-glow: rgba(0,166,103,0.3);
     --text:       #e8eef0;

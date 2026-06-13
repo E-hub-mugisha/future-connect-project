@@ -18,7 +18,7 @@ if (!function_exists('isActiveRoute')) {
     --h-bg:       #0e1618;
     --h-surface:  #141d20;
     --h-surface2: #1a2428;
-    --h-green:    #00a667;
+    --h-green:    #48d597;
     --h-green-d:  rgba(0,166,103,0.14);
     --h-green-b:  rgba(0,166,103,0.22);
     --h-text:     #e8f0ed;

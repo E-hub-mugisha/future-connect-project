@@ -12,9 +12,9 @@
         --bg-card:       #131e21;
         --bg-card-alt:   #192429;
         --bg-elevated:   #1e2d32;
-        --accent:        #00a667;
-        --accent-dim:    #00a66720;
-        --accent-muted:  #00a66740;
+        --accent:        #48d597;
+        --accent-dim:    #48d59720;
+        --accent-muted:  #48d59740;
         --accent-hover:  #00c27a;
         --text-primary:  #f0f4f5;
         --text-secondary:#8fa8ad;

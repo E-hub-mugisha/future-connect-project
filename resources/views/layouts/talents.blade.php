@@ -22,7 +22,7 @@
             --fc-bg: #0e1618;
             --fc-bg-2: #131d1f;
             --fc-bg-3: #1a2628;
-            --fc-green: #00a667;
+            --fc-green: #48d597;
             --fc-green-dim: rgba(0, 166, 103, 0.12);
             --fc-green-hover: #00bf78;
             --fc-text: #FDFEFE;

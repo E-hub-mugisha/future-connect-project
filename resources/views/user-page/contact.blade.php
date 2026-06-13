@@ -11,7 +11,7 @@
     --bg-deep:     #0e1618;
     --bg-card:     #131f22;
     --bg-input:    #0a1214;
-    --accent:      #00a667;
+    --accent:      #48d597;
     --accent-dim:  rgba(0,166,103,.12);
     --accent-mid:  rgba(0,166,103,.25);
     --text-head:   #e4eeef;

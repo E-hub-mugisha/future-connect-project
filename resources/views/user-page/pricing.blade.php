@@ -55,7 +55,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: #00a667;
+        background: #48d597;
         color: #fff;
         border: none;
         padding: 11px 26px;
@@ -117,7 +117,7 @@
 
     .pricing-tab .nav li a.active,
     .pricing-tab .nav li a:hover {
-        background: #00a667;
+        background: #48d597;
         color: #fff;
     }
 
@@ -140,7 +140,7 @@
     }
 
     .price-card.active {
-        border-color: #00a667;
+        border-color: #48d597;
         background: #0d2219;
         position: relative;
     }
@@ -184,7 +184,7 @@
     .plan-type .badge {
         display: inline-block;
         background: rgba(0, 166, 103, 0.15);
-        color: #00a667;
+        color: #48d597;
         border: 1px solid rgba(0, 166, 103, 0.35);
         border-radius: 20px;
         font-size: 10px;
@@ -218,7 +218,7 @@
     }
 
     .price-card.active .amt-item h2 {
-        color: #00a667;
+        color: #48d597;
     }
 
     /* Features list */
@@ -254,7 +254,7 @@
     }
 
     .price-features ul li span {
-        color: #00a667;
+        color: #48d597;
         font-size: 16px;
         line-height: 1;
         flex-shrink: 0;
@@ -273,7 +273,7 @@
         width: 100%;
         background: #0f2a22;
         border: 1px solid rgba(0, 166, 103, 0.4);
-        color: #00a667;
+        color: #48d597;
         padding: 11px 20px;
         border-radius: 8px;
         font-size: 13px;
@@ -283,15 +283,15 @@
     }
 
     .price-btn .btn-primary:hover {
-        background: #00a667;
-        border-color: #00a667;
+        background: #48d597;
+        border-color: #48d597;
         color: #fff;
         transform: translateY(-2px);
     }
 
     .price-card.active .price-btn .btn-primary {
-        background: #00a667;
-        border-color: #00a667;
+        background: #48d597;
+        border-color: #48d597;
         color: #fff;
     }
 
@@ -388,7 +388,7 @@
     }
 
     .modal-footer .btn-primary {
-        background: #00a667;
+        background: #48d597;
         border: none;
         color: #fff;
         padding: 9px 22px;

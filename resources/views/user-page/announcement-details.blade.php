@@ -9,7 +9,7 @@
         --bg:         #0e1618;
         --bg-card:    #121d1f;
         --bg-raised:  #172224;
-        --accent:     #00a667;
+        --accent:     #48d597;
         --accent-dim: rgba(0,166,103,.13);
         --accent-glow:rgba(0,166,103,.3);
         --border:     rgba(255,255,255,.07);

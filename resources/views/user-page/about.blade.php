@@ -21,7 +21,7 @@
     font-size: 12px;
   }
   .breadcrumb-bar .breadcrumb-item a {
-    color: #00a667;
+    color: #48d597;
     text-decoration: none;
   }
   .breadcrumb-bar .breadcrumb-item.active {
@@ -38,7 +38,7 @@
     color: #ffffff;
   }
   .breadcrumb-title span {
-    color: #00a667;
+    color: #48d597;
   }
 
   /* ===== ABOUT SECTION ===== */
@@ -70,7 +70,7 @@
   .about-badge {
     display: inline-block;
     background: rgba(0, 166, 103, 0.1);
-    color: #00a667;
+    color: #48d597;
     border: 1px solid rgba(0, 166, 103, 0.3);
     border-radius: 20px;
     font-size: 11px;
@@ -96,7 +96,7 @@
   .about-us-head h5 {
     font-size: 14px;
     font-weight: 600;
-    color: #00a667;
+    color: #48d597;
     margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.4px;
@@ -134,7 +134,7 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #00a667;
+    background: #48d597;
     flex-shrink: 0;
     display: inline-block;
   }
@@ -160,7 +160,7 @@
   .stats-strip .stat-num {
     font-size: 26px;
     font-weight: 700;
-    color: #00a667;
+    color: #48d597;
     line-height: 1;
   }
   .stats-strip .stat-label {
@@ -187,7 +187,7 @@
     margin-bottom: 8px;
   }
   .about-us-header h2 span {
-    color: #00a667;
+    color: #48d597;
   }
   .about-us-header p {
     font-size: 14px;
@@ -276,7 +276,7 @@
   }
   .faq-title a:hover,
   .faq-title a[aria-expanded="true"] {
-    color: #00a667;
+    color: #48d597;
   }
   .faq-title a::after {
     content: '\203A';
@@ -292,10 +292,10 @@
     color: rgba(0, 166, 103, 0.4);
   }
   .faq-title a[aria-expanded="true"] {
-    color: #00a667;
+    color: #48d597;
   }
   .faq-title a[aria-expanded="true"]::after {
-    color: #00a667;
+    color: #48d597;
   }
   .card-collapse {
     border-top: 1px solid #1a2a2e;
