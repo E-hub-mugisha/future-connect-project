@@ -1,4 +1,4 @@
-{{-- resources/views/talent/register.blade.php --}}
+{{-- resources/views/skill/register.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -555,9 +555,9 @@ body {
     </div>
 
     <div class="fc-left-body">
-      <div class="fc-badge">Talent Hub</div>
+      <div class="fc-badge">skill Hub</div>
       <h1>Showcase<br>Your <span>Skills</span><br>to the World</h1>
-      <p>Join thousands of verified talents on Rwanda's leading skills marketplace. Get discovered, get hired, and grow your career.</p>
+      <p>Join thousands of verified skills on Rwanda's leading skills marketplace. Get discovered, get hired, and grow your career.</p>
 
       <div class="fc-features">
         <div class="fc-feature">
@@ -626,7 +626,7 @@ body {
     <div class="fc-right-body">
 
       <div class="fc-right-head">
-        <h2>Create Your Talent Profile</h2>
+        <h2>Create Your skill Profile</h2>
         <p>Fill in four quick steps — takes less than 3 minutes.</p>
       </div>
 
@@ -667,7 +667,7 @@ body {
 
       <div class="fc-panel">
 
-        <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data" id="talentForm">
+        <form action="{{ route('talent.register') }}" method="POST" enctype="multipart/form-data" id="skillForm">
           @csrf
 
           {{-- ── STEP 1: Personal Info ── --}}
@@ -764,7 +764,7 @@ body {
             </div>
           </div>
 
-          {{-- ── STEP 3: Talent Info ── --}}
+          {{-- ── STEP 3: skill Info ── --}}
           <div class="fc-section" id="sec-2">
             <div class="fc-panel-head">
               <div class="fc-step-label">Step 3 of 4</div>
@@ -790,7 +790,7 @@ body {
 
               <div class="fc-field @error('category_id') has-error @enderror">
                 <label for="category_id">
-                  Talent Category
+                  skill Category
                   @error('category_id')
                     <span class="fc-field-error-tag">{{ $message }}</span>
                   @enderror
@@ -814,7 +814,7 @@ body {
             <div class="fc-row single">
               <div class="fc-field @error('description') has-error @enderror">
                 <label for="description">
-                  About Your Talent
+                  About Your skill
                   @error('description')
                     <span class="fc-field-error-tag">{{ $message }}</span>
                   @enderror
@@ -884,7 +884,7 @@ body {
           <div class="fc-success">
             <div class="fc-success-icon">✓</div>
             <h3>Registration Submitted!</h3>
-            <p>Your talent profile has been submitted for review.<br>
+            <p>Your skill profile has been submitted for review.<br>
                You'll receive a confirmation email within 24–48 hours.</p>
             <a href="{{ route('home') }}" class="fc-back-link">
               <svg width="15" height="15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7"/></svg>

@@ -778,13 +778,13 @@ $categories = \App\Models\Category::all();
         </p>
         <div class="hero-cta-group">
           <a class="btn-green" data-bs-toggle="modal" data-bs-target="#searchModal">
-            <i class="ti ti-search"></i> Find Talent
+            <i class="ti ti-search"></i> Find Skills
           </a>
-          <a class="btn-outline" data-bs-toggle="modal" data-bs-target="#talentModal">
-            <i class="ti ti-star"></i> Register Skills
+          <a class="btn-outline" href="{{ route('user.register_as_talent') }}">
+            <i class="ti ti-star"></i> Register your Skills
           </a>
-          <a class="btn-outline" href="{{ route('register') }}">
-            <i class="ti ti-users"></i> Join Community
+          <a class="btn-outline" href="{{ route('talent.connections-room') }}">
+            <i class="ti ti-users"></i> Connection Room
           </a>
         </div>
       </div>
@@ -807,7 +807,7 @@ $categories = \App\Models\Category::all();
                 <div class="hero-card-icon"><i class="ti ti-badge"></i></div>
                 <h5>Join Our Skill Hub</h5>
                 <p>Showcase skills, get verified, and connect with global clients.</p>
-                <a class="card-link" data-bs-toggle="modal" data-bs-target="#talentModal">
+                <a class="card-link" href="{{ route('user.register_as_talent') }}">
                   Register now <i class="ti ti-arrow-right"></i>
                 </a>
               </div>
@@ -817,8 +817,8 @@ $categories = \App\Models\Category::all();
                 <div class="hero-card-icon"><i class="ti ti-world"></i></div>
                 <h5>Expand Network</h5>
                 <p>Join groups, attend virtual events, and build connections that matter.</p>
-                <a class="card-link" href="{{ route('register') }}">
-                  Get started <i class="ti ti-arrow-right"></i>
+                <a class="card-link" href="{{ route('talent.connections-room') }}">
+                  Connection Room <i class="ti ti-arrow-right"></i>
                 </a>
               </div>
             </div>
@@ -850,7 +850,7 @@ $categories = \App\Models\Category::all();
                 <div class="hero-card-icon mx-auto mb-3"><i class="ti ti-badge"></i></div>
                 <h4>Join Our Skill Hub</h4>
                 <p>Showcase your skills, get verified, and connect with clients globally.</p>
-                <a class="btn-green mx-auto" data-bs-toggle="modal" data-bs-target="#talentModal">Register Skills</a>
+                <a class="btn-green mx-auto" href="{{ route('user.register_as_talent') }}">Register Skills</a>
               </div>
             </div>
             <div class="carousel-item">
@@ -961,7 +961,7 @@ $categories = \App\Models\Category::all();
         </p>
       </div>
       <div class="col-md-4 text-md-end">
-        <a role="button" data-bs-toggle="modal" data-bs-target="#talentModal" class="btn-green" style="font-size:1rem; padding:14px 32px;">
+        <a role="button" href="{{ route('user.register_as_talent') }}" class="btn-green" style="font-size:1rem; padding:14px 32px;">
           Register Your Skills <i class="ti ti-chevron-right"></i>
         </a>
       </div>

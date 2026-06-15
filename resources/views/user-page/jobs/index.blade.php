@@ -392,7 +392,7 @@ select.fc-form-control option { background: var(--bg-card); color: var(--text-1)
                 <div style="display:flex; gap:12px; flex-wrap:wrap;">
                     <a href="#jobs-list" class="btn-fc-primary">Browse Jobs <i class="ti ti-arrow-down"></i></a>
                     <a role="button" data-bs-toggle="modal" data-bs-target="#postJobModal" class="btn-fc-outline">
-                        <i class="ti ti-plus"></i> Post a Gig
+                        <i class="ti ti-plus"></i> Post a work
                     </a>
                 </div>
             </div>
@@ -409,7 +409,7 @@ select.fc-form-control option { background: var(--bg-card); color: var(--text-1)
             <div class="hero-feature-item">
                 <div class="fi-icon"><i class="ti ti-bolt"></i></div>
                 <h5>Unlock New Opportunities</h5>
-                <p>Tailored job listings, collaboration projects, and freelance gigs matched to your profile.</p>
+                <p>Tailored job listings, collaboration projects, and freelance works matched to your profile.</p>
                 <a href="#jobs-list" class="strip-link">Start Exploring <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="hero-feature-item">
@@ -689,15 +689,15 @@ select.fc-form-control option { background: var(--bg-card); color: var(--text-1)
     <div class="jobs-cta">
         <div class="jobs-cta-glow"></div>
         <div class="jobs-cta-content">
-            <span class="eyebrow">Post Your Gig</span>
+            <span class="eyebrow">Post Your work</span>
             <h3>Showcase Your Skills & Find Work Today!</h3>
-            <p>Post your gig in minutes and reach thousands of potential clients. Verified listings get more visibility and faster responses. Takes less than 5 minutes.</p>
+            <p>Post your work in minutes and reach thousands of potential clients. Verified listings get more visibility and faster responses. Takes less than 5 minutes.</p>
         </div>
         <div class="jobs-cta-actions">
             <a role="button" data-bs-toggle="modal" data-bs-target="#postJobModal" class="btn-fc-primary">
-                <i class="ti ti-plus"></i> Post Your Gig
+                <i class="ti ti-plus"></i> Post Your work
             </a>
-            <a href="{{ route('user.talents') }}" class="btn-fc-outline">Browse Talents</a>
+            <a href="{{ route('user.talents') }}" class="btn-fc-outline">Browse Skills</a>
         </div>
     </div>
 </div>
@@ -711,7 +711,7 @@ select.fc-form-control option { background: var(--bg-card); color: var(--text-1)
             <div class="modal-header">
                 <div>
                     <h5 class="modal-title">
-                        Post a New Job / Gig
+                        Post a New Job / work
                         <small>Fill in the details below to publish your listing</small>
                     </h5>
                     <span class="accent-line"></span>

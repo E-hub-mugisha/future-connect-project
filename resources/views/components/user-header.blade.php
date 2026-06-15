@@ -794,7 +794,7 @@ if (!function_exists('isActiveRoute')) {
                     <div class="fc-mega-col">
                         <h6>Browse</h6>
                         <ul>
-                            <li><a href="{{ route('user.talents') }}">All Skills</a></li>
+                            <li><a href="{{ route('user.talents') }}">Find Skills</a></li>
                             <li><a href="#">Verified</a></li>
                             <li><a href="#">Top Rated</a></li>
                         </ul>
@@ -965,14 +965,14 @@ if (!function_exists('isActiveRoute')) {
         </div>
 
         <ul class="fc-drawer-nav">
-            <li><a href="{{ route('user.jobs.index') }}">Find Work</a></li>
+            <li><a href="{{ route('user.jobs.index') }}">Find Opportunities</a></li>
             <li>
                 <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
                     Skills Hub <span>▾</span>
                 </a>
                 <ul class="fc-drawer-sub">
                     <li class="fc-drawer-sub-label">Browse</li>
-                    <li><a href="{{ route('user.talents') }}">All Skills</a></li>
+                    <li><a href="{{ route('user.talents') }}">Find Skills</a></li>
                     <li><a href="#">Verified Skills</a></li>
                     <li class="fc-drawer-sub-label">Hire</li>
                     <li><a href="#">Post a Job</a></li>

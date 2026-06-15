@@ -362,8 +362,8 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/courses') }}">
-                            <span class="arrow">›</span> Courses
+                        <a href="{{ route('user.courses') }}">
+                            <span class="arrow">›</span> Learning Center
                         </a>
                     </li>
                     <li>
@@ -373,7 +373,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
                     </li>
                     <li>
                         <a href="{{ route('user.talents') }}">
-                            <span class="arrow">›</span> Talents
+                            <span class="arrow">›</span> Skills Hub
                         </a>
                     </li>
                     <li>

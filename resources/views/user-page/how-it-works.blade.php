@@ -472,7 +472,7 @@
         <div class="seller-info-content w-100">
           <div class="seller-head">
             <h3>How <span>Future Connect</span> Works</h3>
-            <p>Connecting talents, clients, and opportunities for growth and success.</p>
+            <p>Connecting skills, clients, and opportunities for growth and success.</p>
           </div>
           <div class="seller-feature-list">
             <div class="sllers-list">
@@ -498,13 +498,13 @@
   <div class="container">
     <div class="about-us-header">
       <h2>How it Works</h2>
-      <p>Connecting talents, clients, and opportunities for growth and success.</p>
+      <p>Connecting skills, clients, and opportunities for growth and success.</p>
     </div>
 
     <ul class="nav nav-tabs justify-content-center mb-4" id="howItWorksTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="talent-tab" data-bs-toggle="tab" data-bs-target="#talent"
-          type="button" role="tab" aria-controls="talent" aria-selected="true">Talent</button>
+          type="button" role="tab" aria-controls="talent" aria-selected="true">Skills</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="client-tab" data-bs-toggle="tab" data-bs-target="#client"
@@ -555,7 +555,7 @@
                 <img src="assets/img/icons/why-choose-icon-01.svg" alt="">
               </div>
               <h4>Post a Project</h4>
-              <p>Share your project details and connect with suitable talents.</p>
+              <p>Share your project details and connect with suitable skills.</p>
             </div>
           </div>
           <div class="col-lg-4">
@@ -564,7 +564,7 @@
                 <img src="assets/img/icons/why-choose-icon-02.svg" alt="">
               </div>
               <h4>Hire the Best</h4>
-              <p>Search and review talent profiles to select the right candidate.</p>
+              <p>Search and review skills profiles to select the right candidate.</p>
             </div>
           </div>
           <div class="col-lg-4">

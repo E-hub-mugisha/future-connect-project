@@ -420,7 +420,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                 <p>We pride ourselves on offering a seamless, secure, and efficient experience. Browse thousands of verified talents, read reviews, and grow with a community built for your success.</p>
                 <div class="hero-ctas">
                     <a href="{{ route('user.talents') }}" class="btn-fc-primary">
-                        Explore Services <i class="ti ti-arrow-right"></i>
+                        Find Skills <i class="ti ti-arrow-right"></i>
                     </a>
                     <a href="{{ route('register') }}" class="btn-fc-outline">
                         Join Free <i class="ti ti-user-plus"></i>
@@ -459,19 +459,19 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                 <div class="strip-icon"><i class="ti ti-rocket"></i></div>
                 <h5>Skills Marketplace</h5>
                 <p>Stand out and reach 3× more employers. Boost your profile, get verified, and feature your story.</p>
-                <a href="{{ route('user.talents') }}" class="strip-link">Explore Marketplace <i class="ti ti-arrow-right"></i></a>
+                <a href="{{ route('user.talents') }}" class="strip-link">Find Skills <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="feature-strip-item">
                 <div class="strip-icon"><i class="ti ti-briefcase"></i></div>
                 <h5>Unlock Opportunities</h5>
                 <p>Discover tailored job listings, collaboration projects, and freelance gigs matched to your skills.</p>
-                <a href="#features" class="strip-link">Start Exploring <i class="ti ti-arrow-right"></i></a>
+                <a href="{{ route('user.jobs.index') }}" class="strip-link">Start Exploring <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="feature-strip-item">
                 <div class="strip-icon"><i class="ti ti-users"></i></div>
                 <h5>Expand Your Network</h5>
                 <p>Connect with professionals, mentors, and peers. Join groups and build relationships that matter.</p>
-                <a href="#features" class="strip-link">Join Community <i class="ti ti-arrow-right"></i></a>
+                <a href="{{ route('talent.connections-room') }}" class="strip-link">Skill Connect<i class="ti ti-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -541,7 +541,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                             <li>Reach 3× more clients with a boosted profile</li>
                         </ul>
                         <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
-                            <a href="{{ route('user.talents') }}" class="btn-fc-primary">Explore Marketplace <i class="ti ti-arrow-right"></i></a>
+                            <a href="{{ route('user.talents') }}" class="btn-fc-primary">Find skills<i class="ti ti-arrow-right"></i></a>
                             <div style="display:flex; align-items:center; gap:12px;">
                                 <div class="avatar-stack">
                                     @foreach($featuredTalents as $t)
@@ -596,7 +596,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                             <li>Find verified collaborators in one network</li>
                             <li>Set job alerts so you never miss a match</li>
                         </ul>
-                        <a href="{{ route('user.talents') }}" class="btn-fc-primary">Explore Works <i class="ti ti-arrow-right"></i></a>
+                        <a href="{{ route('user.jobs.index') }}" class="btn-fc-primary">Explore Opportunities <i class="ti ti-arrow-right"></i></a>
                     </div>
                     <div class="col-lg-6 feature-img-wrap">
                         <img src="assets/img/banner-img.png" alt="" class="img-fluid">
@@ -629,7 +629,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                             <li>Trust and transparency at every step</li>
                             <li>User-friendly, innovation-driven platform</li>
                         </ul>
-                        <a href="{{ route('user.talents') }}" class="btn-fc-primary">Join Community <i class="ti ti-arrow-right"></i></a>
+                        <a href="{{ route('talent.connections-room') }}" class="btn-fc-primary">Skills Connect<i class="ti ti-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -652,7 +652,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                         <div class="provide-icon"><img src="assets/img/icons/service-icon.svg" alt=""></div>
                         <h6>Sell a Product</h6>
                         <p>Showcase your digital products to thousands of buyers on the platform.</p>
-                        <a href="#" class="btn-fc-outline" style="font-size:0.8rem; padding:9px 18px;">Learn More <i class="ti ti-arrow-right"></i></a>
+                        <a data-bs-toggle="modal" data-bs-target="#applySellerModal" class="btn-fc-outline" style="font-size:0.8rem; padding:9px 18px;">Learn More <i class="ti ti-arrow-right"></i></a>
                     </div>
                     <div class="fc-provide-box">
                         <div class="provide-icon"><img src="assets/img/icons/user-icon-01.svg" alt=""></div>
@@ -728,7 +728,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                 <span class="step-num">01</span>
                 <h5>Create Your Profile</h5>
                 <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
-                <a href="{{ route('register') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
+                <a href="{{ route('user.register_as_talent') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="step-card">
                 <span class="step-num">02</span>
@@ -740,7 +740,7 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                 <span class="step-num">03</span>
                 <h5>Grow with the Community</h5>
                 <p>Connect, collaborate, and access learning resources. Shop or sell tools from local creators.</p>
-                <a href="{{ route('user.talents') }}" class="strip-link">Join Now <i class="ti ti-arrow-right"></i></a>
+                <a href="{{ route('talent.connections-room') }}" class="strip-link">Connection Room<i class="ti ti-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -870,8 +870,8 @@ body { background: var(--bg) !important; color: var(--text-1); font-family: var(
                 <h2>Showcase your talent, share your story, and inspire others.</h2>
                 <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
                 <div class="hero-ctas" style="margin-bottom:0;">
-                    <a href="{{ route('register') }}" class="btn-fc-primary">Get Started <i class="ti ti-arrow-right"></i></a>
-                    <a href="{{ route('user.talents') }}" class="btn-fc-outline">Browse Talents</a>
+                    <a href="{{ route('user.register_as_talent') }}" class="btn-fc-primary">Get Started <i class="ti ti-arrow-right"></i></a>
+                    <a href="{{ route('user.talents') }}" class="btn-fc-outline">Browse Skills</a>
                 </div>
             </div>
         </div>

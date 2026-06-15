@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Networking Hub – Connect with Talents & Opportunities')
+@section('title', 'Networking Hub – Connect with Skills & Opportunities')
 @section('content')
 
 @php
@@ -258,7 +258,7 @@ $categories = \App\Models\Category::all();
                     <i class="fa-solid fa-network-wired"></i> Networking Hub
                 </span>
                 <h1 class="nh-hero-title">
-                    Connect with <span>Talents</span><br>& Opportunities
+                    Connect with <span>Skills</span><br>& Opportunities
                 </h1>
                 <p class="nh-hero-sub">
                     A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.
@@ -279,7 +279,7 @@ $categories = \App\Models\Category::all();
                     <div class="nh-hero-stat">
                         <div class="nh-stat-item">
                             <div class="nh-stat-num">10K+</div>
-                            <div class="nh-stat-lbl">Talents</div>
+                            <div class="nh-stat-lbl">Skills</div>
                         </div>
                         <div style="width:1px;height:32px;background:var(--border);"></div>
                         <div class="nh-stat-item">
@@ -317,7 +317,7 @@ $categories = \App\Models\Category::all();
                             Your gateway to meaningful<br>professional connections.
                         </h2>
                         <p>
-                            Whether you are a talent seeking opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network — this hub connects you with the right people.
+                            Whether you are a skill seeker looking for opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network — this hub connects you with the right people.
                         </p>
                         <h5>Our Mission</h5>
                         <p>
@@ -406,7 +406,7 @@ $categories = \App\Models\Category::all();
                     </div>
                     <div>
                         <h5 class="nh-benefit-title">Collaborate on Projects</h5>
-                        <p class="nh-benefit-desc">Work together with talented individuals to bring your ideas to life and create something remarkable.</p>
+                        <p class="nh-benefit-desc">Work together with skilled individuals to bring your ideas to life and create something remarkable.</p>
                     </div>
                 </div>
             </div>
@@ -416,7 +416,7 @@ $categories = \App\Models\Category::all();
                         <i class="fa-solid fa-user-tie"></i>
                     </div>
                     <div>
-                        <h5 class="nh-benefit-title">Connect with Talents</h5>
+                        <h5 class="nh-benefit-title">Connect with Skills</h5>
                         <p class="nh-benefit-desc">Find professionals across various fields and expand your network effortlessly with verified profiles.</p>
                     </div>
                 </div>
