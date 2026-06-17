@@ -71,6 +71,7 @@ Route::get('/categories-with-talent-count', [HomeController::class, 'withTalentC
 Route::get('/testimonials/random', [HomeController::class, 'random']);
 Route::get('/register_your_skills', [HomeController::class, 'RegisterAsTalent'])->name('user.register_as_talent');
 Route::post('/talent/register', [HomeController::class, 'storeTalent'])->name('talent.register');
+Route::get('/talent/success/{id}', [HomeController::class, 'talentSuccess'])->name('talent.success');
 Route::get('/talent-matched', [HomeController::class, 'matchedTalents'])->name('talent.match');
 Route::post('/talent/feedback', [HomeController::class, 'storeFeedback'])->name('talent.feedback.store');
 Route::post('/support-talent', [HomeController::class, 'storeSupport'])->name('support.talent');

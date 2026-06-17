@@ -197,7 +197,7 @@
                                 <div class="card-title-group">
                                     <div class="card-title">
                                         <h6 class="title"><span class="me-2">Talents</span> <a
-                                                href="{{ route('admin.talents')}}" class="link d-none d-sm-inline">See
+                                                href="#" class="link d-none d-sm-inline">See
                                                 All</a></h6>
                                     </div>
                                     <div class="card-tools">
@@ -343,7 +343,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">Close</button>
-                                                    <a type="button" href="{{ route('admin.talents.view', $talent->id) }}" class="btn btn-primary">View Talent</a>
+                                                    <a type="button" href="#" class="btn btn-primary">View Talent</a>
                                                 </div>
 
                                             </div>

@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-
+@section('title', "Talent Registered Successfully!")
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-sm">
@@ -10,9 +10,9 @@
             <div class="mt-4">
                 <h5>Summary:</h5>
                 <ul class="list-unstyled">
-                    <li><strong>Name:</strong> {{ session('talent_name') ?? 'N/A' }}</li>
-                    <li><strong>Email:</strong> {{ session('talent_email') ?? 'N/A' }}</li>
-                    <li><strong>Category:</strong> {{ session('talent_category') ?? 'N/A' }}</li>
+                    <li><strong>Name:</strong> {{ $talent->name }}</li>
+                    <li><strong>Email:</strong> {{ $talent->email }}</li>
+                    <li><strong>Category:</strong> {{ $talent->category->name }}</li>
                 </ul>
             </div>
 

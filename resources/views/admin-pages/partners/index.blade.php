@@ -10,7 +10,7 @@
     .partners-page {
         background: #f8f9fb;
         min-height: 100vh;
-        padding: 32px 28px 48px;
+        /* padding: 32px 28px 48px; */
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
@@ -618,59 +618,15 @@
     }
 </style>
 
-<div class="partners-page">
+    <div class="partners-page">
 
-    {{-- PAGE HEADER --}}
-    <div class="page-header">
-        <div class="page-header-left">
-            <div class="eyebrow">Management</div>
-            <h1>Partners</h1>
-            <div class="sub">Manage your partner organisations and their visibility</div>
-        </div>
-        <button class="btn-add" data-bs-toggle="modal" data-bs-target="#addPartnerModal">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Add Partner
-        </button>
-    </div>
-
-    {{-- FLASH --}}
-    @if(session('success'))
-    <div class="flash-success">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-        </svg>
-        {{ session('success') }}
-    </div>
-    @endif
-
-    {{-- MAIN CARD --}}
-    <div class="partners-card">
-        <div class="partners-card-header">
-            <span class="partners-count">{{ $partners->count() }} partner{{ $partners->count() !== 1 ? 's' : '' }}</span>
-            <div class="search-wrap">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input type="text" id="partnerSearch" placeholder="Search partners…">
+        {{-- PAGE HEADER --}}
+        <div class="page-header">
+            <div class="page-header-left">
+                <div class="eyebrow">Management</div>
+                <h1>Partners</h1>
+                <div class="sub">Manage your partner and their visibility</div>
             </div>
-        </div>
-
-        @if($partners->isEmpty())
-        <div class="empty-state">
-            <div class="empty-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-            </div>
-            <h3>No partners yet</h3>
-            <p>Add your first partner to get started.</p>
             <button class="btn-add" data-bs-toggle="modal" data-bs-target="#addPartnerModal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19" />
@@ -679,93 +635,137 @@
                 Add Partner
             </button>
         </div>
-        @else
-        <table class="partners-table" id="partnersTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Partner</th>
-                    <th>Logo</th>
-                    <th>Website</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($partners as $key => $partner)
-                <tr>
-                    <td><span class="partner-row-num">{{ str_pad($key + 1, 2, '0', STR_PAD_LEFT) }}</span></td>
-                    <td><span class="partner-row-name">{{ $partner->name }}</span></td>
-                    <td>
-                        @if($partner->logo)
-                        <img src="{{ asset('image/partners/' . $partner->logo) }}" alt="{{ $partner->name }}" class="logo-thumb">
-                        @else
-                        <div class="logo-placeholder">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <circle cx="8.5" cy="8.5" r="1.5" />
-                                <polyline points="21 15 16 10 5 21" />
-                            </svg>
-                        </div>
-                        @endif
-                    </td>
-                    <td class="link-cell">
-                        @if($partner->link)
-                        <a href="{{ $partner->link }}" target="_blank">
-                            {{ Str::limit($partner->link, 28) }}
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                <polyline points="15 3 21 3 21 9" />
-                                <line x1="10" y1="14" x2="21" y2="3" />
-                            </svg>
-                        </a>
-                        @else
-                        <span style="color:#c8cdd5;font-size:12px">—</span>
-                        @endif
-                    </td>
-                    <td>
-                        @if($partner->status)
-                        <span class="badge-active">Active</span>
-                        @else
-                        <span class="badge-inactive">Inactive</span>
-                        @endif
-                    </td>
-                    <td>
-                        <div class="actions-cell">
-                            <button class="btn-action btn-view" data-bs-toggle="modal" data-bs-target="#showPartnerModal{{ $partner->id }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                    <circle cx="12" cy="12" r="3" />
-                                </svg>
-                                View
-                            </button>
-                            <button class="btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                </svg>
-                                Edit
-                            </button>
-                            <button class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#deletePartnerModal{{ $partner->id }}">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6" />
-                                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                                    <path d="M10 11v6" />
-                                    <path d="M14 11v6" />
-                                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                                </svg>
-                                Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        @endif
-    </div>
 
-</div>
+        {{-- FLASH --}}
+        @if(session('success'))
+        <div class="flash-success">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {{ session('success') }}
+        </div>
+        @endif
+
+        {{-- MAIN CARD --}}
+        <div class="partners-card">
+            <div class="partners-card-header">
+                <span class="partners-count">{{ $partners->count() }} partner{{ $partners->count() !== 1 ? 's' : '' }}</span>
+                <div class="search-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <input type="text" id="partnerSearch" placeholder="Search partners…">
+                </div>
+            </div>
+
+            @if($partners->isEmpty())
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <h3>No partners yet</h3>
+                <p>Add your first partner to get started.</p>
+                <button class="btn-add" data-bs-toggle="modal" data-bs-target="#addPartnerModal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Add Partner
+                </button>
+            </div>
+            @else
+            <table class="partners-table" id="partnersTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Partner</th>
+                        <th>Logo</th>
+                        <th>Website</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($partners as $key => $partner)
+                    <tr>
+                        <td><span class="partner-row-num">{{ str_pad($key + 1, 2, '0', STR_PAD_LEFT) }}</span></td>
+                        <td><span class="partner-row-name">{{ $partner->name }}</span></td>
+                        <td>
+                            @if($partner->logo)
+                            <img src="{{ asset('image/partners/' . $partner->logo) }}" alt="{{ $partner->name }}" class="logo-thumb">
+                            @else
+                            <div class="logo-placeholder">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                            </div>
+                            @endif
+                        </td>
+                        <td class="link-cell">
+                            @if($partner->link)
+                            <a href="{{ $partner->link }}" target="_blank">
+                                {{ Str::limit($partner->link, 28) }}
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                    <polyline points="15 3 21 3 21 9" />
+                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                </svg>
+                            </a>
+                            @else
+                            <span style="color:#c8cdd5;font-size:12px">—</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($partner->status)
+                            <span class="badge-active">Active</span>
+                            @else
+                            <span class="badge-inactive">Inactive</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="actions-cell">
+                                <button class="btn-action btn-view" data-bs-toggle="modal" data-bs-target="#showPartnerModal{{ $partner->id }}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                    View
+                                </button>
+                                <button class="btn-action btn-edit" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id }}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                    </svg>
+                                    Edit
+                                </button>
+                                <button class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#deletePartnerModal{{ $partner->id }}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6" />
+                                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                        <path d="M10 11v6" />
+                                        <path d="M14 11v6" />
+                                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @endif
+        </div>
+
+    </div>
 
 {{-- ═══════════ MODALS ═══════════ --}}
 
