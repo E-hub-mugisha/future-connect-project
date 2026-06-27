@@ -17711,7 +17711,7 @@ table.dataTable thead tr td {
 
 .price-card .price-title p {
     margin-bottom: 5px;
-    color: var(--gray-900);
+    /* color: var(--gray-900); */
     text-align: right;
 }
 

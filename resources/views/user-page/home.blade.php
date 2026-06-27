@@ -5,9 +5,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 
 <style>
-    /* ╔══════════════════════════════════╗
-   ║        DESIGN TOKENS             ║
-   ╚══════════════════════════════════╝ */
     :root {
         --bg: #0e1618;
         --bg-card: #131e21;
@@ -940,6 +937,38 @@
 </script>
 
 {{-- ════════════════════════════════════
+     5. HOW IT WORKS
+════════════════════════════════════ --}}
+<section class="fc-how">
+    <div class="container">
+        <div class="fc-section-head text-center" style="max-width:600px; margin:0 auto 48px;">
+            <span class="eyebrow">How It Works</span>
+            <h2>Get Started in 3 Simple Steps</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <span class="step-num">01</span>
+                <h5>Create Your Profile</h5>
+                <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
+                <a href="{{ route('user.register_as_talent') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="step-card">
+                <span class="step-num">02</span>
+                <h5>Get Discovered & Rated</h5>
+                <p>Employers browse skills by category, rate your profile, and share feedback to help you grow.</p>
+                <a href="{{ route('user.talents') }}" class="strip-link">Explore Skills <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="step-card">
+                <span class="step-num">03</span>
+                <h5>Grow with the Community</h5>
+                <p>Connect, collaborate, and access learning resources. Shop or sell tools from local creators.</p>
+                <a href="{{ route('talent.connections-room') }}" class="strip-link">Connection Room<i class="ti ti-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ════════════════════════════════════
      2. FEATURE STRIP
 ════════════════════════════════════ --}}
 <div class="fc-feature-strip">
@@ -1023,7 +1052,7 @@
                 <div class="row align-items-center g-5">
                     <div class="col-lg-6">
                         <span class="fc-badge mb-3"><i class="ti ti-sparkles"></i> Skills Marketplace</span>
-                        <h2>Showcase your talent <span>and</span> reach verified employers.</h2>
+                        <h2>Showcase your skills <span>and</span> reach verified employers.</h2>
                         <p>Future Connect's Skills Marketplace empowers professionals to present verified skills, attract clients, and secure freelance or full-time work opportunities.</p>
                         <ul class="feature-list">
                             <li>Get verified and build trust with employers</li>
@@ -1205,38 +1234,6 @@
 </div>
 
 {{-- ════════════════════════════════════
-     5. HOW IT WORKS
-════════════════════════════════════ --}}
-<section class="fc-how">
-    <div class="container">
-        <div class="fc-section-head text-center" style="max-width:600px; margin:0 auto 48px;">
-            <span class="eyebrow">How It Works</span>
-            <h2>Get Started in 3 Simple Steps</h2>
-        </div>
-        <div class="steps-grid">
-            <div class="step-card">
-                <span class="step-num">01</span>
-                <h5>Create Your Profile</h5>
-                <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
-                <a href="{{ route('user.register_as_talent') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
-            </div>
-            <div class="step-card">
-                <span class="step-num">02</span>
-                <h5>Get Discovered & Rated</h5>
-                <p>Employers browse skills by category, rate your profile, and share feedback to help you grow.</p>
-                <a href="{{ route('user.talents') }}" class="strip-link">Explore Skills <i class="ti ti-arrow-right"></i></a>
-            </div>
-            <div class="step-card">
-                <span class="step-num">03</span>
-                <h5>Grow with the Community</h5>
-                <p>Connect, collaborate, and access learning resources. Shop or sell tools from local creators.</p>
-                <a href="{{ route('talent.connections-room') }}" class="strip-link">Connection Room<i class="ti ti-arrow-right"></i></a>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- ════════════════════════════════════
      6. PARTNERS
 ════════════════════════════════════ --}}
 @if($partners->count())
@@ -1357,7 +1354,7 @@
         <div class="row align-items-center">
             <div class="col-md-7" style="position:relative;">
                 <span class="eyebrow" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); font-weight:600; display:block; margin-bottom:12px;">Join Future Connect</span>
-                <h2>Showcase your talent, share your story, and inspire others.</h2>
+                <h2>Showcase your skills, share your story, and inspire others.</h2>
                 <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
                 <div class="hero-ctas" style="margin-bottom:0;">
                     <a href="{{ route('user.register_as_talent') }}" class="btn-fc-primary">Get Started <i class="ti ti-arrow-right"></i></a>

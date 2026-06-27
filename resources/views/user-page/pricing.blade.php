@@ -479,13 +479,13 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="amt-item">
+                                <!-- <div class="amt-item">
                                     <div class="d-flex align-items-center">
                                         <h2 class="me-1">${{ $price->price }}</h2>
                                         <p class="mb-0">/ month</p>
                                     </div>
                                     <p>{{ $plan->limit_text ?? '' }}</p>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="price-features">
@@ -539,13 +539,13 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="amt-item">
+                                <!-- <div class="amt-item">
                                     <div class="d-flex align-items-center">
                                         <h2 class="me-1">${{ $price->price }}</h2>
                                         <p class="mb-0">/ year</p>
                                     </div>
                                     <p>{{ $plan->limit_text ?? '' }}</p>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="price-features">
