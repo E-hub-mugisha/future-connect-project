@@ -76,9 +76,6 @@ class UserJobController extends Controller
         ));
     }
 
-
-
-
     public function show($id)
     {
         $job = JobSection::findOrFail($id);

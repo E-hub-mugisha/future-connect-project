@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
 {
-    // GET /api/users
     public function index()
     {
         $users = User::all();
@@ -18,7 +17,6 @@ class AdminUserController extends Controller
         return view('admin-pages.users.index', compact('users'));
     }
 
-    // POST /api/users
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -33,17 +31,15 @@ class AdminUserController extends Controller
 
         $user = User::create($validated);
 
-        return response()->json($user, 201);
+        return redirect()->back()->with('success', 'user registered successfully.');
     }
 
-    // GET /api/users/{id}
     public function show($id)
     {
         $user = User::findOrFail($id);
         return view('admin-pages.users.user-profile', compact('user'));
     }
 
-    // PUT /api/users/{id}
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -57,15 +53,14 @@ class AdminUserController extends Controller
 
         $user->update($validated);
 
-        return response()->json($user, 200);
+        return redirect()->back()->with('success', 'user updated successfully.');
     }
-
-    // DELETE /api/users/{id}
+ 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['message' => 'User deleted'], 200);
+        return redirect()->back()->with('success', 'user deleted successfully.');
     }
 }

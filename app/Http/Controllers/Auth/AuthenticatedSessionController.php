@@ -29,17 +29,12 @@ class AuthenticatedSessionController extends Controller
                 ->activate($request);
         }
 
-        // Default dashboard per role
-        $defaultRedirect = match ($user->role) {
-            'admin'  => route('admin.dashboard'),
-            'agent'  => route('agent.dashboard'),
-            'talent' => route('talent.dashboard'),
-            'seller' => route('seller.dashboard'),
-            default  => route('user.dashboard'),
-        };
+        // Admin always goes to dashboard
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
 
-        // Explicit redirect_to param takes highest priority
-        // Validated to only allow same-origin URLs (prevent open redirect)
+        // Explicit redirect_to parameter
         if ($request->filled('redirect_to')) {
             $redirectTo = $request->redirect_to;
 
@@ -48,9 +43,8 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
-        // Fall back to Laravel's intended URL (e.g. from auth middleware),
-        // otherwise use the role-based default
-        return redirect()->intended($defaultRedirect);
+        // Non-admin users return to intended URL
+        return redirect()->intended(route('user.dashboard'));
     }
 
     public function destroy(Request $request): RedirectResponse

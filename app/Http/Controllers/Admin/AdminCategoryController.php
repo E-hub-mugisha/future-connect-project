@@ -33,7 +33,7 @@ class AdminCategoryController extends Controller
 
         $category = Category::create($validated);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'category created successfully.');
     }
 
     // GET /api/categories/{id}
@@ -61,7 +61,7 @@ class AdminCategoryController extends Controller
 
         $category->update($validated);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'category updated successfully.');
     }
 
     // DELETE /api/categories/{id}
@@ -70,7 +70,7 @@ class AdminCategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'category deleted successfully.');
     }
 
 }

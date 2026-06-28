@@ -4,35 +4,35 @@
 @section('content')
 
 <style>
-    /* ── CSS Variables & Theme ── */
+    /* ── CSS Variables & Light Theme ── */
     :root {
-        --bg-deep:       #060f11;
-        --bg-card:       #0c2540;
-        --bg-surface:    #0f2d4a;
-        --bg-hover:      #163558;
-        --accent:        #48d597;
-        --accent-dim:    rgba(0, 166, 103, 0.15);
-        --accent-glow:   rgba(0, 166, 103, 0.35);
-        --text-primary:  #ffffff;
-        --text-secondary:#94afc5;
-        --text-muted:    #4d7495;
-        --border:        rgba(255,255,255,0.07);
-        --border-accent: rgba(0,166,103,0.3);
-        --danger:        #e05c5c;
-        --danger-dim:    rgba(224, 92, 92, 0.12);
+        --bg-deep:       #f0f4f8;
+        --bg-card:       #ffffff;
+        --bg-surface:    #f8fafc;
+        --bg-hover:      #f1f5f9;
+        --accent:        #00a667;
+        --accent-dim:    rgba(0, 166, 103, 0.10);
+        --accent-glow:   rgba(0, 166, 103, 0.25);
+        --text-primary:  #0f1c2e;
+        --text-secondary:#4a6380;
+        --text-muted:    #8ea5be;
+        --border:        rgba(15, 28, 46, 0.09);
+        --border-accent: rgba(0, 166, 103, 0.28);
+        --danger:        #dc3545;
+        --danger-dim:    rgba(220, 53, 69, 0.09);
         --warning:       #f59e0b;
-        --warning-dim:   rgba(245, 158, 11, 0.12);
+        --warning-dim:   rgba(245, 158, 11, 0.10);
         --radius-sm:     6px;
         --radius-md:     10px;
         --radius-lg:     16px;
-        --shadow-card:   0 4px 24px rgba(0,0,0,0.35);
-        --shadow-glow:   0 0 20px rgba(0,166,103,0.2);
-        --focus-ring:    0 0 0 3px rgba(0, 166, 103, 0.5);
+        --shadow-card:   0 1px 4px rgba(15,28,46,0.07), 0 4px 16px rgba(15,28,46,0.05);
+        --shadow-glow:   0 0 18px rgba(0,166,103,0.18);
+        --focus-ring:    0 0 0 3px rgba(0, 166, 103, 0.22);
         --transition-fast: 150ms ease;
         --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* ── Base & Accessibility ── */
+    /* ── Base ── */
     body, .nk-wrap, .nk-content, .container-fluid {
         background-color: var(--bg-deep) !important;
         color: var(--text-primary) !important;
@@ -84,7 +84,7 @@
     }
 
     .btn-accent:hover {
-        background: #00bf76;
+        background: #008f57;
         box-shadow: var(--shadow-glow);
         transform: translateY(-1px);
         color: #fff;
@@ -100,7 +100,7 @@
         content: "";
         position: absolute;
         width: 16px; height: 16px;
-        border: 2px solid rgba(255,255,255,0.3);
+        border: 2px solid rgba(255,255,255,0.35);
         border-top-color: #fff;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
@@ -138,7 +138,7 @@
 
     .categories-table thead tr {
         background: var(--bg-surface);
-        border-bottom: 1px solid var(--border-accent);
+        border-bottom: 1.5px solid var(--border-accent);
     }
 
     .categories-table thead th {
@@ -158,7 +158,7 @@
     }
 
     .categories-table tbody tr:last-child { border-bottom: none; }
-    .categories-table tbody tr:hover { background: var(--bg-hover); }
+    .categories-table tbody tr:hover { background: #f6fdf9; }
 
     .categories-table tbody td {
         padding: 15px 20px;
@@ -181,8 +181,9 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             margin-bottom: 12px;
-            background: var(--bg-surface);
+            background: var(--bg-card);
             padding: 8px;
+            box-shadow: var(--shadow-card);
         }
         .categories-table tbody td {
             display: flex;
@@ -228,8 +229,8 @@
     .cat-slug {
         font-family: 'JetBrains Mono', 'Fira Code', monospace;
         font-size: 0.78rem;
-        color: var(--text-muted);
-        background: rgba(0,0,0,0.2);
+        color: var(--text-secondary);
+        background: #eef2f7;
         padding: 3px 8px;
         border-radius: 4px;
         border: 1px solid var(--border);
@@ -255,7 +256,7 @@
     }
 
     .badge-featured.no {
-        background: rgba(255,255,255,0.05);
+        background: #f1f5f9;
         color: var(--text-muted);
         border: 1px solid var(--border);
     }
@@ -298,16 +299,16 @@
 
     .btn-actions:hover,
     .btn-actions:focus {
-        background: var(--bg-hover);
+        background: #edf7f2;
         border-color: var(--accent);
-        color: var(--text-primary);
+        color: var(--accent);
     }
 
     .dropdown-menu {
-        background: var(--bg-surface) !important;
-        border: 1px solid var(--border-accent) !important;
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border) !important;
         border-radius: var(--radius-md) !important;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+        box-shadow: 0 8px 32px rgba(15,28,46,0.12) !important;
         min-width: 160px;
         padding: 6px !important;
         transform-origin: top right;
@@ -358,9 +359,9 @@
 
     .modal-content {
         background: var(--bg-card) !important;
-        border: 1px solid var(--border-accent) !important;
+        border: 1px solid var(--border) !important;
         border-radius: var(--radius-lg) !important;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.7) !important;
+        box-shadow: 0 20px 60px rgba(15,28,46,0.14) !important;
         color: var(--text-primary) !important;
     }
 
@@ -370,6 +371,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background: var(--bg-surface);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
     }
 
     .modal-title {
@@ -393,17 +396,18 @@
         display: flex;
         justify-content: flex-end;
         gap: 10px;
+        background: var(--bg-surface);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
     }
 
-    .modal-backdrop.show { opacity: 0.7 !important; }
+    .modal-backdrop.show { opacity: 0.35 !important; }
 
     .btn-close {
-        filter: invert(1) brightness(0.6) !important;
-        opacity: 0.7;
-        padding: 0.5rem;
+        filter: none !important;
+        opacity: 0.45;
     }
 
-    .btn-close:hover { opacity: 1; }
+    .btn-close:hover { opacity: 0.8; }
 
     /* ── Form Elements ── */
     .form-label {
@@ -418,13 +422,13 @@
 
     .form-control,
     .form-select {
-        background: var(--bg-surface) !important;
-        border: 1px solid var(--border) !important;
+        background: var(--bg-card) !important;
+        border: 1px solid #dae2ec !important;
         color: var(--text-primary) !important;
         border-radius: var(--radius-sm) !important;
         padding: 10px 14px !important;
         font-size: 0.875rem !important;
-        transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+        transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
         width: 100%;
     }
 
@@ -433,13 +437,13 @@
         border-color: var(--accent) !important;
         box-shadow: var(--focus-ring) !important;
         outline: none !important;
-        background: var(--bg-hover) !important;
+        background: #ffffff !important;
     }
 
     .form-control::placeholder { color: var(--text-muted) !important; }
 
     .form-select option {
-        background: var(--bg-surface);
+        background: var(--bg-card);
         color: var(--text-primary);
     }
 
@@ -460,8 +464,8 @@
     }
 
     .form-check-input {
-        background-color: var(--bg-surface) !important;
-        border-color: var(--border-accent) !important;
+        background-color: var(--bg-card) !important;
+        border-color: #c8d8e8 !important;
         width: 18px !important;
         height: 18px !important;
         cursor: pointer;
@@ -508,7 +512,7 @@
         background: var(--accent);
     }
     .btn-modal-save:hover {
-        background: #00bf76;
+        background: #008f57;
         box-shadow: var(--shadow-glow);
     }
 
@@ -516,24 +520,25 @@
         background: var(--danger);
     }
     .btn-modal-delete:hover {
-        background: #cc4a4a;
+        background: #b02a37;
     }
 
     .btn-modal-cancel {
         background: transparent;
         color: var(--text-secondary);
-        border: 1px solid var(--border);
+        border: 1px solid #dae2ec;
         padding: 9px 22px;
         border-radius: var(--radius-sm);
         font-weight: 500;
         font-size: 0.85rem;
         cursor: pointer;
-        transition: background var(--transition-fast), color var(--transition-fast);
+        transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
     }
 
     .btn-modal-cancel:hover {
         background: var(--bg-hover);
         color: var(--text-primary);
+        border-color: #b0c4d8;
     }
 
     /* ── Delete modal warning icon ── */
@@ -542,7 +547,7 @@
         height: 52px;
         border-radius: 50%;
         background: var(--danger-dim);
-        border: 1px solid rgba(224,92,92,0.25);
+        border: 1px solid rgba(220, 53, 69, 0.18);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -563,7 +568,7 @@
         font-size: 2.5rem;
         display: block;
         margin-bottom: 12px;
-        opacity: 0.6;
+        opacity: 0.45;
     }
 
     .empty-state h5 {
@@ -584,12 +589,12 @@
     .toast {
         pointer-events: auto;
         background: var(--bg-card) !important;
-        border: 1px solid var(--border-accent) !important;
+        border: 1px solid var(--border) !important;
         border-radius: var(--radius-md) !important;
-        box-shadow: var(--shadow-card) !important;
+        box-shadow: 0 4px 20px rgba(15,28,46,0.12) !important;
     }
     .toast-header {
-        background: transparent !important;
+        background: var(--bg-surface) !important;
         border-bottom: 1px solid var(--border) !important;
         color: var(--text-secondary) !important;
     }
@@ -597,13 +602,14 @@
         color: var(--text-primary) !important;
     }
     .toast .btn-close {
-        filter: invert(1) brightness(0.8) !important;
+        filter: none !important;
+        opacity: 0.45;
     }
 
     /* ── Icon Preview ── */
     .icon-preview {
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
+        background: #f6fdf9;
+        border: 1px solid var(--border-accent);
         border-radius: var(--radius-sm);
         padding: 8px 12px;
         display: flex;
@@ -627,8 +633,8 @@
     }
     .dataTables_wrapper .dataTables_length select,
     .dataTables_wrapper .dataTables_filter input {
-        background: var(--bg-surface) !important;
-        border: 1px solid var(--border) !important;
+        background: var(--bg-card) !important;
+        border: 1px solid #dae2ec !important;
         color: var(--text-primary) !important;
         border-radius: var(--radius-sm) !important;
         padding: 5px 10px !important;
@@ -648,8 +654,8 @@
         margin-left: 8px;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button {
-        background: var(--bg-surface) !important;
-        border: 1px solid var(--border) !important;
+        background: var(--bg-card) !important;
+        border: 1px solid #dae2ec !important;
         color: var(--text-secondary) !important;
         border-radius: var(--radius-sm) !important;
         margin: 0 2px;
@@ -666,7 +672,7 @@
         color: #fff !important;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: not-allowed;
     }
 
@@ -964,7 +970,7 @@ $icons = [
 
             {{-- ════ EDIT CATEGORY MODALS ════ --}}
             @foreach($categories as $category)
-            <div class="modal fade" id="editCategoryModal{{ $category->id }}" tabindex="-1" 
+            <div class="modal fade" id="editCategoryModal{{ $category->id }}" tabindex="-1"
                  aria-labelledby="editCategoryModalLabel{{ $category->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" style="max-width:480px;">
                     <form class="modal-content" method="POST"
@@ -1060,14 +1066,14 @@ document.addEventListener('DOMContentLoaded', function() {
     iconPickers.forEach(select => {
         const preview = select.closest('.mb-3')?.querySelector('.icon-preview');
         if (!preview) return;
-        
+
         const previewIcon = preview.querySelector('.icon-wrap i');
-        
+
         // Set initial preview
         if (select.value) {
             previewIcon.className = select.value;
         }
-        
+
         select.addEventListener('change', (e) => {
             previewIcon.className = e.target.value || 'ti ti-star';
         });
@@ -1078,7 +1084,7 @@ document.addEventListener('DOMContentLoaded', function() {
     nameInputs.forEach(input => {
         const hint = input.closest('.mb-3')?.querySelector('.slug-hint');
         if (!hint) return;
-        
+
         input.addEventListener('input', (e) => {
             const value = e.target.value.trim();
             if (value.length < 2) {

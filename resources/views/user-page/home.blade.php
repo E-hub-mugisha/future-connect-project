@@ -2,7 +2,7 @@
 @section('title', 'Empowering Talent, Opportunities & Growth')
 @section('content')
 
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
 
 <style>
     :root {
@@ -19,8 +19,8 @@
         --text-1: #f0f4f3;
         --text-2: #8da4a0;
         --text-3: #4d6460;
-        --font-head: 'Syne', sans-serif;
-        --font-body: 'DM Sans', sans-serif;
+        --font-head: 'Montserrat', sans-serif;
+        --font-body: 'Montserrat', sans-serif;
         --r-sm: 8px;
         --r-md: 14px;
         --r-lg: 20px;
@@ -173,15 +173,11 @@
                 rgba(0, 166, 103, 0.08) 100%);
     }
 
-    /* animated grid lines */
     .fc-hero-grid {
         position: absolute;
         inset: 0;
         z-index: 1;
         pointer-events: none;
-        /* background-image:
-            linear-gradient(rgba(0, 166, 103, 0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 166, 103, 0.04) 1px, transparent 1px); */
         background-size: 60px 60px;
     }
 
@@ -261,7 +257,6 @@
         margin-top: 2px;
     }
 
-    /* Avatar stack in hero */
     .avatar-stack {
         display: flex;
     }
@@ -525,7 +520,6 @@
         max-height: 260px;
     }
 
-    /* Provide boxes in marketplace tab */
     .fc-provide-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -570,7 +564,6 @@
         margin-bottom: 16px;
     }
 
-    /* Feature list */
     .feature-list {
         list-style: none;
         padding: 0;
@@ -1285,48 +1278,48 @@
                     </div>
                     <div class="testimonial-stars">
                         @for($i=0;$i<5;$i++){{ $i<$test->rating?'★':'☆' }}@endfor
+                    </div>
+                </div>
+                <div class="testimonial-body">
+                    <p>{{ $test->content ?? 'Passionate professional making a difference on Future Connect.' }}</p>
+                </div>
+                <div class="testimonial-loc">
+                    <i class="ti ti-map-pin" style="color:var(--accent)"></i>
+                    {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        {{-- Mobile carousel --}}
+        <div id="testimonialCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="6000">
+            <div class="carousel-inner">
+                @foreach($testimonials as $i => $test)
+                <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+                    <div class="testimonial-card" style="margin:0 auto; max-width:380px;">
+                        <div class="testimonial-head">
+                            <img src="{{ $test->talent->image ? asset('image/talents/'.$test->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="">
+                            <div>
+                                <div class="testimonial-name">{{ $test->talent->name ?? 'Talent' }}</div>
+                                <div class="testimonial-role">{{ $test->title ?? 'Creative Professional' }}</div>
                             </div>
-                    </div>
-                    <div class="testimonial-body">
-                        <p>{{ $test->content ?? 'Passionate professional making a difference on Future Connect.' }}</p>
-                    </div>
-                    <div class="testimonial-loc">
-                        <i class="ti ti-map-pin" style="color:var(--accent)"></i>
-                        {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                            <div class="testimonial-stars">
+                                @for($i2=0;$i2<5;$i2++){{ $i2<$test->rating?'★':'☆' }}@endfor
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            <p>{{ $test->content ?? 'Passionate professional making a difference on Future Connect.' }}</p>
+                        </div>
+                        <div class="testimonial-loc">
+                            <i class="ti ti-map-pin" style="color:var(--accent)"></i>
+                            {{ $test->talent->address ?? 'Kigali, Rwanda' }}
+                        </div>
                     </div>
                 </div>
                 @endforeach
             </div>
-
-            {{-- Mobile carousel --}}
-            <div id="testimonialCarousel" class="carousel slide d-md-none" data-bs-ride="carousel" data-bs-interval="6000">
-                <div class="carousel-inner">
-                    @foreach($testimonials as $i => $test)
-                    <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                        <div class="testimonial-card" style="margin:0 auto; max-width:380px;">
-                            <div class="testimonial-head">
-                                <img src="{{ $test->talent->image ? asset('image/talents/'.$test->talent->image) : asset('assets/img/user/profile.jpg') }}" alt="">
-                                <div>
-                                    <div class="testimonial-name">{{ $test->talent->name ?? 'Talent' }}</div>
-                                    <div class="testimonial-role">{{ $test->title ?? 'Creative Professional' }}</div>
-                                </div>
-                                <div class="testimonial-stars">
-                                    @for($i2=0;$i2<5;$i2++){{ $i2<$test->rating?'★':'☆' }}@endfor
-                                        </div>
-                                </div>
-                                <div class="testimonial-body">
-                                    <p>{{ $test->content ?? 'Passionate professional making a difference on Future Connect.' }}</p>
-                                </div>
-                                <div class="testimonial-loc">
-                                    <i class="ti ti-map-pin" style="color:var(--accent)"></i>
-                                    {{ $test->talent->address ?? 'Kigali, Rwanda' }}
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+        </div>
+    </div>
 </section>
 
 {{-- ════════════════════════════════════

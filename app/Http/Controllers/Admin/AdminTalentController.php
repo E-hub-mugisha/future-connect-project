@@ -72,15 +72,33 @@ class AdminTalentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'featured' => 'sometimes|boolean',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'language' => 'nullable|string|max:50',
-            'category_id' => 'required|exists:categories,id',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
+
+            'featured' => ['sometimes', 'boolean'],
+
+            'description' => ['nullable', 'string'],
+
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg,webp', 'max:2048'],
+
+            'address' => ['nullable', 'string', 'max:255'],
+
+            'phone' => [
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^[0-9+\-\s()]+$/'
+            ],
+
+            'email' => ['nullable', 'email', 'max:255'],
+
+            'language' => ['nullable', 'string', 'max:50'],
+
+            'category_id' => ['required', 'exists:categories,id'],
         ]);
 
         $talentImage = null;
@@ -114,7 +132,7 @@ class AdminTalentController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->back()->with('success', 'Talent registered successfully.');
+        return redirect()->route('admin.talents.show')->with('success', 'Talent registered successfully.');
     }
 
 
@@ -143,15 +161,33 @@ class AdminTalentController extends Controller
     public function update(Request $request, Talent $talent)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'featured' => 'sometimes|boolean',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'language' => 'nullable|string|max:50',
-            'category_id' => 'required|exists:categories,id',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
+
+            'featured' => ['sometimes', 'boolean'],
+
+            'description' => ['nullable', 'string'],
+
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,svg,webp', 'max:2048'],
+
+            'address' => ['nullable', 'string', 'max:255'],
+
+            'phone' => [
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^[0-9+\-\s()]+$/'
+            ],
+
+            'email' => ['nullable', 'email', 'max:255'],
+
+            'language' => ['nullable', 'string', 'max:50'],
+
+            'category_id' => ['required', 'exists:categories,id'],
         ]);
 
         $talentImage = $talent->image; // keep old image by default
@@ -189,7 +225,7 @@ class AdminTalentController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->back()->with('success', 'Talent updated successfully.');
+        return redirect()->route('admin.talents.show')->with('success', 'Talent updated successfully.');
     }
 
     public function destroy($id)
@@ -266,10 +302,10 @@ class AdminTalentController extends Controller
     public function toggleFeatured(Talent $talent)
     {
         $talent->update(['featured' => !$talent->featured]);
- 
+
         return back()->with('success', 'Featured status updated.');
     }
- 
+
     /**
      * Toggle the status of a talent.
      */
@@ -277,10 +313,10 @@ class AdminTalentController extends Controller
     {
         $newStatus = $talent->status === 'active' ? 'inactive' : 'active';
         $talent->update(['status' => $newStatus]);
- 
+
         return back()->with('success', 'Status updated to ' . $newStatus . '.');
     }
- 
+
     /**
      * Bulk actions on talents.
      */
@@ -291,9 +327,9 @@ class AdminTalentController extends Controller
             'ids'     => 'required|array',
             'ids.*'   => 'exists:talents,id',
         ]);
- 
+
         $talents = Talent::whereIn('id', $request->ids);
- 
+
         match ($request->action) {
             'delete'     => $talents->each(fn($t) => $t->delete()),
             'activate'   => $talents->update(['status' => 'active']),
@@ -301,7 +337,7 @@ class AdminTalentController extends Controller
             'feature'    => $talents->update(['featured' => true]),
             'unfeature'  => $talents->update(['featured' => false]),
         };
- 
+
         return back()->with('success', 'Bulk action applied to ' . count($request->ids) . ' talent(s).');
     }
 }

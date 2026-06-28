@@ -247,16 +247,16 @@
                         <td style="font-size:13px;color:var(--text-lo)">{{ $user->created_at->format('d M Y') }}</td>
                         <td>
                             <div class="action-icons">
-                                <a href="{{ route('admin.users.show', $user->id) }}" class="action-btn" title="View profile">
-                                    <em class="icon ni ni-eye"></em>
+                                <a href="{{ route('admin.users.show', $user->id) }}" class="action-btn btn" title="View profile">
+                                    <span class="text-info">View</span>
                                 </a>
-                                <button type="button" class="action-btn btn-edit" title="Edit"
+                                <button type="button" class="action-btn btn-edit btn" title="Edit"
                                     data-bs-toggle="modal" data-bs-target="#editModal{{ $user->id }}">
-                                    <em class="icon ni ni-edit"></em>
+                                    <span class="text-warning">Edit</span>
                                 </button>
-                                <button type="button" class="action-btn btn-delete" title="Delete"
+                                <button type="button" class="action-btn btn-delete btn" title="Delete"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal{{ $user->id }}">
-                                    <em class="icon ni ni-trash"></em>
+                                    <span class="text-danger">Delete</span>
                                 </button>
                             </div>
                         </td>
