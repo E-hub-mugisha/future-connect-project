@@ -676,4 +676,17 @@ Route::get('/run-migrations-seeders', function () {
 
 Route::get('/git-pull', [HomeController::class, 'pull']);
 
+Route::get('/run-migrations', function () {
+
+
+    try {
+        // Run migrations
+        Artisan::call('migrate', ['--force' => true]);
+
+        return redirect()->route('user.home')->with('success', 'Migration and seeders ran successfully!');
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
 require __DIR__ . '/auth.php';
