@@ -8451,7 +8451,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
     background: url(../img/bg/faq-bg.png);
     border-radius: 10px;
     padding: 14px;
-    margin: 80px 0;
+    /* margin: 80px 0; */
 }
 
 @media (max-width: 991.98px) {
@@ -10336,7 +10336,7 @@ div.dt-container .dt-paging .dt-paging-button.current {
     width: 380px;
     height: 380px;
     border-radius: 50%;
-    background-color: #FFF3EB;
+    /* background-color: #FFF3EB; */
     left: 50%;
     bottom: -37%;
     transform: translateX(-50%);

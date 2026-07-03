@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', $categoryName . ' Talents')
+@section('title', 'Verified Skills | Future Connect')
 @section('content')
 
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -456,11 +456,11 @@
 <!-- ═══ PAGE HEADER ═══ -->
 <div class="page-header">
   <div class="container">
-    <div class="page-header-eyebrow">Category</div>
+    <div class="page-header-eyebrow">Verified</div>
     <h1>
-      Explore <span class="accent">{{ $categoryName }}</span> Skilled People
+      Explore <span class="accent">Verified</span> Skilled People
     </h1>
-    <p>Connect with the next wave of skilled professionals — fresh perspectives, verified talent.</p>
+    <p>Connect with the next wave of skilled professionals — fresh perspectives, verified skills.</p>
   </div>
 </div>
 
@@ -470,7 +470,7 @@
     <div class="cat-scroll">
       @foreach($categories as $cat)
         <a href="{{ route('user.talents.category', $cat->slug) }}"
-           class="cat-chip {{ $cat->name === $categoryName ? 'active' : '' }}">
+           class="cat-chip">
           {{ $cat->name }}
         </a>
       @endforeach
@@ -510,7 +510,7 @@
           <div class="sidebar-title"><i class="ti ti-layout-grid"></i> Categories</div>
           @foreach($categories as $cat)
             <a href="{{ route('user.talents.category', $cat->slug) }}"
-               class="sidebar-cat-link {{ $cat->name === $categoryName ? 'active' : '' }}">
+               class="sidebar-cat-link">
               {{ $cat->name }}
               <span class="count">{{ optional($cat->talents)->count() ?? 0 }}</span>
             </a>
@@ -586,7 +586,7 @@
           @empty
           <div class="empty-state">
             <i class="ti ti-users-off"></i>
-            <h4>No skills found</h4>
+            <h4>No talents found</h4>
             <p>Try a different category or search keyword.</p>
           </div>
           @endforelse
@@ -666,7 +666,7 @@
     <div class="sidebar-title mb-3"><i class="ti ti-layout-grid"></i> Categories</div>
     @foreach($categories as $cat)
       <a href="{{ route('user.talents.category', $cat->slug) }}"
-         class="sidebar-cat-link {{ $cat->name === $categoryName ? 'active' : '' }}">
+         class="sidebar-cat-link">
         {{ $cat->name }}
         <span class="count">{{ optional($cat->talents)->count() ?? 0 }}</span>
       </a>

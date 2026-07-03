@@ -181,6 +181,36 @@ class HomeController extends Controller
             'categories' => \App\Models\Category::all(),
         ]);
     }
+
+    // verified talents
+    public function verifiedTalents()
+    {
+        // Fetch talents with related talent
+        $talents = Talent::where('status', array('approved', 'verified'))
+            ->get();
+
+        return view('user-page.verified-talents', [
+            'talents' => $talents,
+            'categories' => \App\Models\Category::all(),
+        ]);
+    }
+
+    // top rated talents
+    public function topRatedTalents()
+    {
+        // Fetch talents with related talent
+        $talents = Talent::with('feedback')
+            ->get()
+            ->sortByDesc(function ($talent) {
+                return $talent->feedback->avg('rating');
+            });
+
+        return view('user-page.top-rated-talents', [
+            'talents' => $talents,
+            'categories' => \App\Models\Category::all(),
+        ]);
+    }
+
     public function TalentSkillDetails($id)
     {
         $skill = \App\Models\Skill::with('reviews')->findOrFail($id);
@@ -641,8 +671,45 @@ class HomeController extends Controller
     public function pricing()
     {
         $plans = PricingPlan::with('prices')
-        ->where('is_active', true)
-        ->get();
+            ->where('is_active', true)
+            ->get();
         return view('user-page.pricing', compact('plans'));
+    }
+
+    // success stories
+    public function successStories()
+    {
+        return view('user-page.success-stories');
+    }
+
+    // success story store
+    public function storeSuccessStory(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'thumbnail_url' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'excerpt' => 'required|string|max:500',
+            'content' => 'required|string',
+            'author_name' => 'required|string|max:255',
+            'role' => 'nullable|string|max:255',
+        ]);
+
+        $thumbnailPath = null;
+        if ($image = $request->file('thumbnail_url')) {
+            $path = 'image/success-stories/';
+            $thumbnailPath = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move(public_path($path), $thumbnailPath);
+        }
+
+        SuccessStory::create([
+            'title' => $request->title,
+            'thumbnail_url' => $thumbnailPath,
+            'excerpt' => $request->excerpt,
+            'content' => $request->content,
+            'author_name' => $request->author_name,
+            'role' => $request->role,
+        ]);
+
+        return redirect()->back()->with('success', 'Success story submitted successfully!');
     }
 }

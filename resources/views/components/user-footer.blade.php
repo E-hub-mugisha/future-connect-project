@@ -336,17 +336,17 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
                     </li>
                     <li>
                         <a href="{{ route('talent.connections-room') }}">
-                            <span class="arrow">›</span> Connection Room
+                            <span class="arrow">›</span> Partnerships & Collaborations
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('user.register_as_talent') }}">
-                            <span class="arrow">›</span> Join the Platform
+                        <a href="{{ route('user.success-stories') }}">
+                            <span class="arrow">›</span> Customer Success Stories
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('user.contact') }}">
-                            <span class="arrow">›</span> Contact Us
+                            <span class="arrow">›</span> Help & Support
                         </a>
                     </li>
                 </ul>
@@ -358,7 +358,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
                 <ul class="fc-link-list">
                     <li>
                         <a href="{{ route('user.stories') }}">
-                            <span class="arrow">›</span> Inspiring Stories
+                            <span class="arrow">›</span> Find Jobs & Opportunities
                         </a>
                     </li>
                     <li>
@@ -368,7 +368,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
                     </li>
                     <li>
                         <a href="{{ route('user.blogs') }}">
-                            <span class="arrow">›</span> Blog
+                            <span class="arrow">›</span> News & Insights
                         </a>
                     </li>
                     <li>

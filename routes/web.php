@@ -27,8 +27,10 @@ use App\Http\Controllers\Talent\TalentStoryController;
 use App\Http\Controllers\Talent\TalentSkillController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DemoRequestController;
 use App\Http\Controllers\Diaspora\DiasporaAccountController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\QuickHireController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Seller\SellerPanelController;
 use App\Http\Controllers\Seller\SellerProductController;
@@ -78,6 +80,8 @@ Route::post('/support-talent', [HomeController::class, 'storeSupport'])->name('s
 Route::get('/skills_hub', [HomeController::class, 'talents'])->name('user.talents');
 Route::get('/talent/{id}', [HomeController::class, 'showTalents'])->name('user.talent.details');
 Route::get('/talents/category/{slug}', [HomeController::class, 'getTalentByCategory'])->name('user.talents.category');
+Route::get('/verified-skills', [HomeController::class, 'verifiedTalents'])->name('user.verified-talents');
+Route::get('/top-rated-talents', [HomeController::class, 'topRatedTalents'])->name('user.top-rated-talents');
 Route::get('/search', [HomeController::class, 'search'])->name('talent.search');
 Route::get('/talent/{id}/stories', [HomeController::class, 'talentStories'])->name('talent.stories');
 Route::get('/skills', [HomeController::class, 'skills'])->name('user.skills');
@@ -105,6 +109,10 @@ Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('u
 Route::get('/terms-condition', [HomeController::class, 'termsCondition'])->name('user.terms-condition');
 Route::get('/donation-policy', [HomeController::class, 'donationPolicy'])->name('user.donation-policy');
 Route::get('/video', fn() => view('user-page.video'));
+
+// success stories
+Route::get('/success-stories', [HomeController::class, 'successStories'])->name('user.success-stories');
+Route::post('/success-stories/store', [HomeController::class, 'storeSuccessStory'])->name('user.success-stories.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -191,6 +199,17 @@ Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'store
 Route::get('/sponsorship/{sponsorship}/payment/', [UserProjectController::class, 'payment'])
     ->name('diaspora.sponsorship.payment');
 Route::get('/project/payment/callback', [UserProjectController::class, 'handleCallback'])->name('project.sponsor.callback');
+
+Route::prefix('quick-hire')->name('quick-hire.')->group(function () {
+    Route::get('/', [QuickHireController::class, 'create'])->name('create');
+    Route::post('/', [QuickHireController::class, 'store'])->name('store');
+    Route::get('/talents-by-category/{category}', [QuickHireController::class, 'talentsByCategory'])
+        ->name('talents-by-category');
+    Route::get('/{quickHire}/success', [QuickHireController::class, 'success'])->name('success');
+});
+
+Route::get('/request-demo', [DemoRequestController::class, 'create'])->name('demo.request');
+Route::post('/request-demo', [DemoRequestController::class, 'store'])->name('demo.store');
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes

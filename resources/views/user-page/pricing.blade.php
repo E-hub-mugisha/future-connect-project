@@ -13,7 +13,7 @@
         background: #0b1416;
         border: 1px solid #1a2a2e;
         border-radius: 16px;
-        padding: 40px 36px;
+        padding: 40px 36px 0px;
         margin: 32px 0;
         position: relative;
         overflow: hidden;

@@ -56,6 +56,29 @@
         .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,166,103,.1) 0%, transparent 70%); top: -120px; right: -120px; }
         .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,166,103,.07) 0%, transparent 70%); bottom: -100px; left: -80px; }
 
+        /* ── Global back button (floats above the card) ── */
+        .back-nav {
+            position: fixed; top: 24px; left: 24px; z-index: 5;
+        }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(19, 30, 33, .7); backdrop-filter: blur(8px);
+            border: 1.5px solid var(--border); border-radius: 99px;
+            padding: 9px 16px 9px 12px;
+            font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+            color: var(--muted); text-decoration: none; cursor: pointer;
+            transition: border-color .2s, color .2s, background .2s, transform .15s;
+        }
+        .back-btn svg { width: 15px; height: 15px; flex-shrink: 0; transition: transform .2s; }
+        .back-btn:hover { color: var(--green); border-color: rgba(0,166,103,.35); background: rgba(19, 30, 33, .9); transform: translateX(-2px); }
+        .back-btn:hover svg { transform: translateX(-2px); }
+
+        @media (max-width: 480px) {
+            .back-nav { top: 14px; left: 14px; }
+            .back-btn span { display: none; }
+            .back-btn { padding: 10px; }
+        }
+
         /* ── Card ── */
         .card {
             display: flex;
@@ -269,6 +292,44 @@
             .stats { flex-direction: column; gap: 8px; }
             .stat + .stat { margin-left: 0; margin-top: 8px; }
         }
+
+        /* Logo lockup */
+.fc-logo-lockup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+.fc-logo-mark {
+    width: 36px;
+    height: 36px;
+    background: #48d597;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.fc-logo-mark svg {
+    width: 18px;
+    height: 18px;
+    fill: #0e1618;
+}
+.fc-logo-wordmark {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e2ecee;
+    letter-spacing: .3px;
+    line-height: 1.2;
+    margin: 0;
+}
+.fc-logo-tagline {
+    font-size: 11px;
+    color: #4e6b70;
+    letter-spacing: .3px;
+    margin: 0;
+    line-height: 1;
+}
     </style>
 </head>
 <body>
@@ -276,6 +337,17 @@
 <div class="page">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
+
+    {{-- ── Back button ── --}}
+    <div class="back-nav">
+        <a href="{{ url()->previous() !== url()->current() ? url()->previous() : url('/') }}"
+           class="back-btn" id="backBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Back</span>
+        </a>
+    </div>
 
     <div class="card">
 
@@ -285,10 +357,17 @@
                 @for ($i = 0; $i < 20; $i++)<span></span>@endfor
             </div>
 
-            <div class="brand">
-                <div class="brand-mark">⚡</div>
-                <div class="brand-name">Future<em>Connect</em></div>
-            </div>
+            <a href="{{ route('user.home') }}" class="fc-logo-lockup">
+        <div class="fc-logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <div>
+          <p class="fc-logo-wordmark">Future Connect</p>
+          <p class="fc-logo-tagline">Empowering Stories. Real Impact.</p>
+        </div>
+      </a>
 
             <div>
                 <div class="pill">Rwanda's #1 Talent Platform</div>
@@ -400,6 +479,16 @@
 <!-- Toastr JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
+    // Prefer real browser history when it exists (avoids bouncing between
+    // this page and a previous form submission), otherwise fall back to
+    // the server-computed href already set on the anchor.
+    document.getElementById('backBtn').addEventListener('click', function (e) {
+        if (window.history.length > 1 && document.referrer) {
+            e.preventDefault();
+            window.history.back();
+        }
+    });
+
     // Password toggle
     document.getElementById('eyeBtn').addEventListener('click', function () {
         const input = document.getElementById('password');

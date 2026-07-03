@@ -9,7 +9,7 @@
   <title>Register Your Skills — Future Connect</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
   <style>
     /* ─── TOKENS ─────────────────────────────────────────── */
@@ -43,7 +43,7 @@
     body {
       background: var(--bg);
       margin: 0;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       color: var(--text);
     }
 
@@ -56,39 +56,18 @@
 
     /* ─── LEFT PANEL ──────────────────────────────────────── */
     .fc-left {
-      background: linear-gradient(160deg, #0a1f14 0%, #0e1618 50%, #071210 100%);
+      /* background: linear-gradient(160deg, #0a1f14 0%, #0e1618 50%, #071210 100%); */
       border-right: 1px solid var(--border);
       padding: 60px 52px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      /* justify-content: space-between; */
       position: sticky;
       top: 0;
       height: 100vh;
       overflow: hidden;
     }
 
-    .fc-left::before {
-      content: '';
-      position: absolute;
-      top: -120px;
-      left: -80px;
-      width: 480px;
-      height: 480px;
-      background: radial-gradient(circle, rgba(0, 166, 103, 0.14) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    .fc-left::after {
-      content: '';
-      position: absolute;
-      bottom: -100px;
-      right: -60px;
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle, rgba(0, 166, 103, 0.08) 0%, transparent 65%);
-      pointer-events: none;
-    }
 
     /* Logo */
     .fc-logo {
@@ -107,7 +86,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-weight: 800;
       font-size: 15px;
       color: #fff;
@@ -115,7 +94,7 @@
     }
 
     .fc-logo-text {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 15px;
       font-weight: 700;
       color: #fff;
@@ -145,6 +124,7 @@
       padding: 5px 14px;
       border-radius: 100px;
       margin-bottom: 22px;
+      margin-top: 22px;
     }
 
     .fc-badge::before {
@@ -172,7 +152,7 @@
     }
 
     .fc-left-body h1 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 2.4rem;
       font-weight: 800;
       color: #fff;
@@ -246,7 +226,7 @@
     }
 
     .fc-stat-num {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.45rem;
       font-weight: 800;
       color: var(--green);
@@ -338,7 +318,7 @@
     }
 
     .fc-right-head h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.5rem;
       font-weight: 700;
       color: #fff;
@@ -386,7 +366,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 12px;
       font-weight: 700;
       color: var(--muted);
@@ -519,7 +499,7 @@
     }
 
     .fc-panel-head h3 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.15rem;
       font-weight: 700;
       color: #fff;
@@ -589,7 +569,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       color: var(--text);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 13.5px;
       padding: 11px 14px;
       outline: none;
@@ -793,7 +773,7 @@
       gap: 7px;
       padding: 11px 22px;
       border-radius: var(--radius);
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -879,7 +859,7 @@
     }
 
     .fc-success h3 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.3rem;
       color: #fff;
       margin: 0 0 10px;
@@ -900,7 +880,7 @@
       color: var(--green);
       font-size: 13.5px;
       text-decoration: none;
-      font-family: 'Syne', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       font-weight: 700;
     }
 
@@ -984,16 +964,62 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Logo lockup */
+.fc-logo-lockup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+.fc-logo-mark {
+    width: 36px;
+    height: 36px;
+    background: #48d597;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.fc-logo-mark svg {
+    width: 18px;
+    height: 18px;
+    fill: #0e1618;
+}
+.fc-logo-wordmark {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e2ecee;
+    letter-spacing: .3px;
+    line-height: 1.2;
+    margin: 0;
+}
+.fc-logo-tagline {
+    font-size: 11px;
+    color: #4e6b70;
+    letter-spacing: .3px;
+    margin: 0;
+    line-height: 1;
+}
+
   </style>
 
   <div class="fc-page">
 
     {{-- ══════════ LEFT — Branding ══════════ --}}
     <div class="fc-left">
-      <div class="fc-logo">
-        <div class="fc-logo-mark">FC</div>
-        <div class="fc-logo-text">Future<span>Connect</span></div>
-      </div>
+      <a href="{{ route('user.home') }}" class="fc-logo-lockup">
+        <div class="fc-logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <div>
+          <p class="fc-logo-wordmark">Future Connect</p>
+          <p class="fc-logo-tagline">Empowering Stories. Real Impact.</p>
+        </div>
+      </a>
 
       <div class="fc-left-body">
         <div class="fc-badge">skill Hub</div>
@@ -1032,7 +1058,7 @@
         </div>
       </div>
 
-      <div class="fc-stats">
+      <!-- <div class="fc-stats">
         <div>
           <div class="fc-stat-num">8K+</div>
           <div class="fc-stat-label">Skills listed</div>
@@ -1045,7 +1071,7 @@
           <div class="fc-stat-num">100%</div>
           <div class="fc-stat-label">Free to join</div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     {{-- ══════════ RIGHT — Form ══════════ --}}

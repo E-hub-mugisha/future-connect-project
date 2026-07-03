@@ -1,0 +1,734 @@
+{{-- resources/views/demo/request.blade.php --}}
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>Request a Demo — Future Connect</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0e1618;
+      --surface: #141d20;
+      --surface2: #1a2428;
+      --green: #48d597;
+      --green-mid: #00a667;
+      --green-dim: rgba(0, 166, 103, 0.12);
+      --red: #f07070;
+      --red-dim: rgba(240, 112, 112, 0.10);
+      --red-border: rgba(240, 112, 112, 0.35);
+      --text: #e8f0ed;
+      --muted: #7a9a8e;
+      --muted2: #4a6a60;
+      --border: rgba(0, 166, 103, 0.18);
+      --border-h: rgba(0, 166, 103, 0.42);
+      --radius: 10px;
+      --radius-lg: 18px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text);
+    }
+
+    .dr-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── LEFT PANEL ── */
+    .dr-left {
+      border-right: 1px solid var(--border);
+      padding: 60px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .dr-logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .dr-logo-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--green);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dr-logo-mark svg { width: 18px; height: 18px; fill: var(--bg); }
+
+    .dr-logo-wordmark {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e2ecee;
+      letter-spacing: .3px;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .dr-logo-tagline {
+      font-size: 11px;
+      color: var(--muted2);
+      letter-spacing: .3px;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .dr-left-body { position: relative; z-index: 1; }
+
+    .dr-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--green-dim);
+      border: 1px solid rgba(0, 166, 103, 0.3);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 22px;
+    }
+
+    .dr-badge::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: drPulse 2s infinite;
+    }
+
+    @keyframes drPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(.7); }
+    }
+
+    .dr-left-body h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin: 0 0 16px;
+    }
+
+    .dr-left-body h1 span { color: var(--green); }
+
+    .dr-left-body > p {
+      font-size: 14.5px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 0 0 34px;
+      max-width: 380px;
+    }
+
+    .dr-features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .dr-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .dr-feature-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--green-dim);
+      border: 1px solid rgba(0, 166, 103, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .dr-feature-text strong {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .dr-feature-text span {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .dr-stats {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+      padding-top: 26px;
+      border-top: 1px solid var(--border);
+    }
+
+    .dr-stat-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .dr-stat-label { font-size: 11.5px; color: var(--muted); }
+
+    /* ── RIGHT PANEL ── */
+    .dr-right {
+      background: var(--bg);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dr-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 52px 0;
+      flex-shrink: 0;
+    }
+
+    .dr-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 7px 14px 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: var(--surface);
+      transition: all 0.2s ease;
+    }
+
+    .dr-home-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--muted);
+      transition: stroke 0.2s ease, transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .dr-home-btn:hover { color: var(--green); border-color: var(--border-h); background: var(--green-dim); }
+    .dr-home-btn:hover svg { stroke: var(--green); transform: translateX(-2px); }
+
+    .dr-login-hint { font-size: 12.5px; color: var(--muted); }
+    .dr-login-hint a { color: var(--green); text-decoration: none; font-weight: 500; }
+    .dr-login-hint a:hover { text-decoration: underline; }
+
+    .dr-right-body { padding: 28px 52px 56px; flex: 1; }
+
+    .dr-right-head { margin-bottom: 24px; }
+
+    .dr-right-head h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 6px;
+    }
+
+    .dr-right-head p { font-size: 13px; color: var(--muted); margin: 0; }
+
+    /* ── PANEL ── */
+    .dr-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dr-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), transparent);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    /* ── ALERTS ── */
+    .dr-alert-success {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--green-dim);
+      border: 1px solid var(--border-h);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 22px;
+    }
+
+    .dr-alert-success-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(0, 166, 103, 0.18);
+      border: 1px solid var(--border-h);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    .dr-alert-success-body strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 3px;
+    }
+
+    .dr-alert-success-body p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+
+    .dr-error-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--red-dim);
+      border: 1px solid var(--red-border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 22px;
+    }
+
+    .dr-error-banner-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(240, 112, 112, 0.15);
+      border: 1px solid var(--red-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    .dr-error-banner-body strong {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--red);
+      margin-bottom: 5px;
+    }
+
+    .dr-error-banner-body ul { margin: 0; padding-left: 16px; list-style: disc; }
+    .dr-error-banner-body ul li { font-size: 12px; color: #f0a0a0; line-height: 1.6; }
+
+    /* ── FIELDS ── */
+    .dr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .dr-row.single { grid-template-columns: 1fr; }
+
+    .dr-field { display: flex; flex-direction: column; gap: 6px; }
+
+    .dr-field label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .dr-field-error-tag {
+      font-size: 9.5px;
+      font-weight: 500;
+      color: var(--red);
+      text-transform: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dr-field-error-tag::before {
+      content: '';
+      display: inline-block;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+
+    .dr-field input,
+    .dr-field select,
+    .dr-field textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13.5px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .dr-field input::placeholder,
+    .dr-field textarea::placeholder { color: var(--muted2); }
+
+    .dr-field input:focus,
+    .dr-field select:focus,
+    .dr-field textarea:focus {
+      border-color: var(--green);
+      background: rgba(0, 166, 103, 0.06);
+      box-shadow: 0 0 0 3px rgba(0, 166, 103, 0.08);
+    }
+
+    .dr-field.has-error input,
+    .dr-field.has-error select,
+    .dr-field.has-error textarea {
+      border-color: var(--red-border);
+      background: var(--red-dim);
+      box-shadow: 0 0 0 3px rgba(240, 112, 112, 0.08);
+    }
+
+    .dr-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300a667' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .dr-field select option { background: #141d20; color: var(--text); }
+    .dr-field textarea { resize: vertical; min-height: 96px; }
+
+    /* ── ACTIONS ── */
+    .dr-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .dr-btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--green);
+      color: #0a1f14;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px 28px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .dr-btn-submit:hover { background: #62eaaa; transform: translateY(-1px); }
+
+    .dr-note {
+      font-size: 11.5px;
+      color: var(--muted2);
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .dr-page { grid-template-columns: 1fr; }
+      .dr-left { position: static; height: auto; padding: 44px 28px 40px; }
+      .dr-topbar { padding: 22px 24px 0; }
+      .dr-right-body { padding: 24px 24px 56px; }
+    }
+
+    @media (max-width: 520px) {
+      .dr-left { padding: 36px 18px 32px; }
+      .dr-topbar { padding: 18px 14px 0; }
+      .dr-right-body { padding: 18px 14px 48px; }
+      .dr-left-body h1 { font-size: 1.9rem; }
+      .dr-panel { padding: 20px 14px; }
+      .dr-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="dr-page">
+
+    {{-- ══════════ LEFT — Branding ══════════ --}}
+    <div class="dr-left">
+      <a href="{{ route('user.home') }}" class="dr-logo-lockup">
+        <div class="dr-logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <div>
+          <p class="dr-logo-wordmark">Future Connect</p>
+          <p class="dr-logo-tagline">Empowering Stories. Real Impact.</p>
+        </div>
+      </a>
+
+      <div class="dr-left-body">
+        <div class="dr-badge">Live Demo</div>
+        <h1>See Future Connect<br>in <span>Action</span></h1>
+        <p>Book a personalized walkthrough with our team and discover how Future Connect can help you find, vet, and hire the right talent — fast.</p>
+
+        <div class="dr-features">
+          <div class="dr-feature">
+            <div class="dr-feature-icon">🎯</div>
+            <div class="dr-feature-text">
+              <strong>Tailored to You</strong>
+              <span>We'll walk through the features most relevant to your team and use case.</span>
+            </div>
+          </div>
+          <div class="dr-feature">
+            <div class="dr-feature-icon">⚡</div>
+            <div class="dr-feature-text">
+              <strong>30 Minutes, No Pressure</strong>
+              <span>A quick, friendly session — ask anything, no obligation to buy.</span>
+            </div>
+          </div>
+          <div class="dr-feature">
+            <div class="dr-feature-icon">🧑‍💼</div>
+            <div class="dr-feature-text">
+              <strong>Real Talent Pool</strong>
+              <span>See live examples of verified talent matching your industry.</span>
+            </div>
+          </div>
+          <div class="dr-feature">
+            <div class="dr-feature-icon">📅</div>
+            <div class="dr-feature-text">
+              <strong>Flexible Scheduling</strong>
+              <span>Pick a time that works for you — we'll confirm within one business day.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dr-stats">
+        <div>
+          <div class="dr-stat-num">8K+</div>
+          <div class="dr-stat-label">Skills listed</div>
+        </div>
+        <div>
+          <div class="dr-stat-num">4.8</div>
+          <div class="dr-stat-label">Avg. rating</div>
+        </div>
+        <div>
+          <div class="dr-stat-num">24h</div>
+          <div class="dr-stat-label">Response time</div>
+        </div>
+      </div>
+    </div>
+
+    {{-- ══════════ RIGHT — Form ══════════ --}}
+    <div class="dr-right">
+
+      <div class="dr-topbar">
+        <a href="{{ route('user.home') }}" class="dr-home-btn">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M5 12l7-7M5 12l7 7" />
+          </svg>
+          Back to Home
+        </a>
+        <span class="dr-login-hint">
+          Have an account? <a href="{{ route('login') }}">Sign in →</a>
+        </span>
+      </div>
+
+      <div class="dr-right-body">
+
+        <div class="dr-right-head">
+          <h2>Request a Demo</h2>
+          <p>Tell us a bit about your team and we'll set up a time to show you around.</p>
+        </div>
+
+        @if (session('success'))
+        <div class="dr-alert-success">
+          <div class="dr-alert-success-icon">✓</div>
+          <div class="dr-alert-success-body">
+            <strong>Request received</strong>
+            <p>{{ session('success') }}</p>
+          </div>
+        </div>
+        @endif
+
+        @if ($errors->any())
+        <div class="dr-error-banner">
+          <div class="dr-error-banner-icon">⚠️</div>
+          <div class="dr-error-banner-body">
+            <strong>Please fix {{ $errors->count() }} {{ Str::plural('issue', $errors->count()) }} before continuing:</strong>
+            <ul>
+              @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        </div>
+        @endif
+
+        <div class="dr-panel">
+          <form action="{{ route('demo.store') }}" method="POST">
+            @csrf
+
+            <div class="dr-row">
+              <div class="dr-field @error('full_name') has-error @enderror">
+                <label for="full_name">
+                  Full Name
+                  @error('full_name')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <input type="text" id="full_name" name="full_name" value="{{ old('full_name') }}"
+                  placeholder="e.g. Jane Uwimana" required>
+              </div>
+
+              <div class="dr-field @error('work_email') has-error @enderror">
+                <label for="work_email">
+                  Work Email
+                  @error('work_email')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <input type="email" id="work_email" name="work_email" value="{{ old('work_email') }}"
+                  placeholder="you@company.com" required>
+              </div>
+            </div>
+
+            <div class="dr-row">
+              <div class="dr-field @error('phone') has-error @enderror">
+                <label for="phone">
+                  Phone <span style="text-transform:none;font-weight:400;">(optional)</span>
+                  @error('phone')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <input type="tel" id="phone" name="phone" value="{{ old('phone') }}"
+                  placeholder="+250 788 123 456">
+              </div>
+
+              <div class="dr-field @error('role') has-error @enderror">
+                <label for="role">
+                  Your Role <span style="text-transform:none;font-weight:400;">(optional)</span>
+                  @error('role')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <input type="text" id="role" name="role" value="{{ old('role') }}"
+                  placeholder="e.g. HR Manager, Founder">
+              </div>
+            </div>
+
+            <div class="dr-row">
+              <div class="dr-field @error('company_name') has-error @enderror">
+                <label for="company_name">
+                  Company Name
+                  @error('company_name')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <input type="text" id="company_name" name="company_name" value="{{ old('company_name') }}"
+                  placeholder="e.g. Umoja NGO" required>
+              </div>
+
+              <div class="dr-field @error('company_size') has-error @enderror">
+                <label for="company_size">
+                  Company Size <span style="text-transform:none;font-weight:400;">(optional)</span>
+                  @error('company_size')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <select id="company_size" name="company_size">
+                  <option value="">Select size</option>
+                  @foreach($companySizes as $value => $label)
+                  <option value="{{ $value }}" {{ old('company_size') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="dr-row">
+              <div class="dr-field @error('preferred_date') has-error @enderror">
+                <label for="preferred_date">
+                  Preferred Date <span style="text-transform:none;font-weight:400;">(optional)</span>
+                  @error('preferred_date')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <input type="date" id="preferred_date" name="preferred_date" value="{{ old('preferred_date') }}"
+                  min="{{ now()->toDateString() }}">
+              </div>
+
+              <div class="dr-field @error('preferred_time') has-error @enderror">
+                <label for="preferred_time">
+                  Preferred Time <span style="text-transform:none;font-weight:400;">(optional)</span>
+                  @error('preferred_time')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <select id="preferred_time" name="preferred_time">
+                  <option value="">Select time</option>
+                  @foreach($preferredTimes as $value => $label)
+                  <option value="{{ $value }}" {{ old('preferred_time') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="dr-row single">
+              <div class="dr-field @error('message') has-error @enderror">
+                <label for="message">
+                  What would you like to see? <span style="text-transform:none;font-weight:400;">(optional)</span>
+                  @error('message')<span class="dr-field-error-tag">{{ $message }}</span>@enderror
+                </label>
+                <textarea id="message" name="message"
+                  placeholder="e.g. Hiring for a 6-month design contract, want to see the talent matching flow...">{{ old('message') }}</textarea>
+              </div>
+            </div>
+
+            <div class="dr-actions">
+              <button type="submit" class="dr-btn-submit">Request My Demo →</button>
+            </div>
+
+            <p class="dr-note">By submitting, you agree to be contacted by our team regarding your demo request. We won't share your details with third parties.</p>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
