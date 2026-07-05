@@ -26,7 +26,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
 }
 
 /* Subtle radial glow top-right */
-.fc-footer::before {
+/* .fc-footer::before {
     content: '';
     position: absolute;
     top: -120px;
@@ -36,7 +36,7 @@ $categories = \App\Models\Category::inRandomOrder()->take(6)->get();
     background: radial-gradient(circle, rgba(0,166,103,.08) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
-}
+} */
 
 .fc-footer > * { position: relative; z-index: 1; }
 

@@ -136,10 +136,9 @@ return request()->routeIs($route) ? 'active' : '';
         margin: 0 auto;
         padding: 0 32px;
         height: 66px;
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        display: flex;
         align-items: center;
-        gap: 100px;
+        gap: 32px;
         font-family: 'DM Sans', sans-serif;
     }
 
@@ -149,14 +148,13 @@ return request()->routeIs($route) ? 'active' : '';
         width: 100%;
     }
 
-    /* ── Logo (shared markup/classes for desktop header + mobile drawer) ── */
+    /* Logo */
     .fc-logo-wrap {
         display: flex;
         align-items: center;
         gap: 9px;
         flex-shrink: 0;
         text-decoration: none;
-        justify-self: start;
     }
 
     .fc-logo-mark {
@@ -167,17 +165,10 @@ return request()->routeIs($route) ? 'active' : '';
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
         font-family: 'Syne', sans-serif;
         font-weight: 800;
         font-size: 13px;
         color: #fff;
-    }
-
-    .fc-logo-mark svg {
-        width: 16px;
-        height: 16px;
-        fill: #fff;
     }
 
     .fc-logo-name {
@@ -185,8 +176,7 @@ return request()->routeIs($route) ? 'active' : '';
         font-size: 15px;
         font-weight: 700;
         color: #fff;
-        line-height: 1.15;
-        white-space: nowrap;
+        line-height: 1;
     }
 
     .fc-logo-name span {
@@ -197,11 +187,11 @@ return request()->routeIs($route) ? 'active' : '';
     .fc-nav {
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 2px;
         list-style: none;
         margin: 0;
         padding: 0;
+        flex: 1;
     }
 
     .fc-nav>li {
@@ -219,7 +209,6 @@ return request()->routeIs($route) ? 'active' : '';
         border-radius: 7px;
         transition: color 0.2s, background 0.2s;
         white-space: nowrap;
-        cursor: pointer;
     }
 
     .fc-nav>li>a:hover,
@@ -240,23 +229,78 @@ return request()->routeIs($route) ? 'active' : '';
         opacity: 1;
     }
 
-    /* ── MEGA MENU — flat 2-column grid of feature cards, no sub-headers ── */
+    /* ── DROPDOWN ── */
+    .fc-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        background: var(--h-surface);
+        border: 1px solid var(--h-border);
+        border-radius: 14px;
+        padding: 8px;
+        min-width: 180px;
+        list-style: none;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(6px);
+        transition: all 0.2s ease;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+        z-index: 100;
+    }
+
+    .fc-nav>li:hover .fc-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .fc-dropdown li a {
+        display: block;
+        padding: 8px 12px;
+        font-size: 13px;
+        color: var(--h-muted);
+        border-radius: 8px;
+        transition: color 0.18s, background 0.18s;
+    }
+
+    .fc-dropdown li a:hover {
+        color: #fff;
+        background: var(--h-green-d);
+    }
+
+    .fc-dropdown .fc-dd-label {
+        padding: 8px 12px 4px;
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgba(122, 154, 142, 0.6);
+        font-weight: 500;
+    }
+
+    .fc-dropdown .fc-dd-sep {
+        height: 1px;
+        background: var(--h-border);
+        margin: 6px 8px;
+    }
+
+    /* ── MEGA MENU ── */
     .fc-mega {
         position: absolute;
         top: calc(100% + 10px);
-        left: 50%;
-        transform: translateX(-50%) translateY(6px);
+        left: -120px;
         background: var(--h-surface);
         border: 1px solid var(--h-border);
         border-radius: 16px;
-        padding: 14px;
-        width: 460px;
+        padding: 20px;
+        width: 600px;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+        transform: translateY(6px);
+        transition: all 0.22s ease;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         z-index: 100;
     }
@@ -264,42 +308,39 @@ return request()->routeIs($route) ? 'active' : '';
     .fc-nav>li:hover .fc-mega {
         opacity: 1;
         visibility: visible;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
     }
 
-    .fc-mega a.fc-card {
+    .fc-mega-col h6 {
+        font-family: 'Syne', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--h-green);
+        margin: 0 0 8px;
+        padding: 0 8px;
+    }
+
+    .fc-mega-col ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .fc-mega-col ul li a {
         display: block;
-        padding: 12px 14px;
-        border-radius: 10px;
-        transition: background 0.18s;
+        padding: 6px 8px;
+        font-size: 13px;
+        color: var(--h-muted);
+        border-radius: 7px;
+        transition: color 0.18s, background 0.18s;
     }
 
-    .fc-mega a.fc-card:hover {
+    .fc-mega-col ul li a:hover {
+        color: #fff;
         background: var(--h-green-d);
     }
-
-    .fc-mega a.fc-card .fc-card-title {
-        font-family: 'Syne', sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--h-text);
-        margin: 0 0 3px;
-        line-height: 1.3;
-    }
-
-    .fc-mega a.fc-card:hover .fc-card-title {
-        color: #fff;
-    }
-
-    .fc-mega a.fc-card .fc-card-desc {
-        font-size: 11.5px;
-        color: var(--h-muted);
-        margin: 0;
-        line-height: 1.4;
-    }
-
-    /* Trending is a plain link, not a dropdown — it points at live platform
-       activity rather than a static menu, so no mega markup is attached to it. */
 
     /* ── RIGHT ACTIONS ── */
     .fc-actions {
@@ -307,7 +348,7 @@ return request()->routeIs($route) ? 'active' : '';
         align-items: center;
         gap: 8px;
         flex-shrink: 0;
-        justify-self: end;
+        margin-left: auto;
     }
 
     .fc-btn-ghost {
@@ -324,7 +365,6 @@ return request()->routeIs($route) ? 'active' : '';
         background: transparent;
         cursor: pointer;
         transition: all 0.2s;
-        white-space: nowrap;
     }
 
     .fc-btn-ghost:hover {
@@ -369,7 +409,6 @@ return request()->routeIs($route) ? 'active' : '';
         cursor: pointer;
         transition: all 0.2s;
         font-size: 15px;
-        flex-shrink: 0;
     }
 
     .fc-btn-search:hover {
@@ -721,17 +760,6 @@ return request()->routeIs($route) ? 'active' : '';
         background: var(--h-green-d);
     }
 
-    .fc-drawer-nav>li>a .chevron {
-        font-size: 10px;
-        opacity: 0.6;
-        transition: transform 0.2s;
-    }
-
-    .fc-drawer-nav>li>a.sub-open .chevron {
-        transform: rotate(180deg);
-        opacity: 1;
-    }
-
     .fc-drawer-sub {
         list-style: none;
         margin: 0;
@@ -887,14 +915,10 @@ return request()->routeIs($route) ? 'active' : '';
     }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 1150px) {
+    @media (max-width: 1100px) {
         .fc-nav>li>a {
             padding: 8px 8px;
             font-size: 13px;
-        }
-
-        .fc-btn-request-demo {
-            display: none;
         }
     }
 
@@ -935,7 +959,7 @@ return request()->routeIs($route) ? 'active' : '';
     }
 
     /* ══════════════════════════════════════
-   MODAL (shared: post job / apply seller)
+   MODAL
 ══════════════════════════════════════ */
     .fc-modal .modal-content {
         background: var(--bg-card);
@@ -1027,6 +1051,7 @@ return request()->routeIs($route) ? 'active' : '';
         color: var(--text-1);
     }
 
+    /* ── SHARED UTILS ── */
     .btn-fc-primary {
         display: inline-flex;
         align-items: center;
@@ -1074,6 +1099,797 @@ return request()->routeIs($route) ? 'active' : '';
         color: var(--accent);
         background: var(--bg-glass2);
     }
+
+    .fc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--bg-glass2);
+        border: 1px solid var(--border-h);
+        color: var(--accent);
+        border-radius: var(--r-pill);
+        padding: 4px 14px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .eyebrow {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* ══════════════════════════════════════
+   HERO STRIP
+══════════════════════════════════════ */
+    .jobs-hero {
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border);
+        padding: 52px 0 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .jobs-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .jobs-hero-grid {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+            linear-gradient(rgba(0, 166, 103, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 166, 103, 0.03) 1px, transparent 1px);
+        background-size: 48px 48px;
+    }
+
+    .jobs-hero-glow {
+        position: absolute;
+        bottom: -80px;
+        right: -80px;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: var(--accent-glow);
+        filter: blur(90px);
+        pointer-events: none;
+    }
+
+    .jobs-hero-inner {
+        position: relative;
+        z-index: 2;
+    }
+
+    .jobs-hero h1 {
+        font-family: var(--font-head);
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 800;
+        color: var(--text-1);
+        margin-bottom: 12px;
+        line-height: 1.1;
+    }
+
+    .jobs-hero h1 span {
+        color: var(--accent);
+    }
+
+    .jobs-hero p {
+        color: var(--text-2);
+        font-size: 0.95rem;
+        max-width: 540px;
+        line-height: 1.7;
+        margin-bottom: 28px;
+    }
+
+    /* Hero stat pills */
+    .hero-pills {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+    }
+
+    .hero-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-glass);
+        border: 1px solid var(--border);
+        border-radius: var(--r-pill);
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        color: var(--text-2);
+    }
+
+    .hero-pill i {
+        color: var(--accent);
+    }
+
+    .hero-pill strong {
+        color: var(--text-1);
+    }
+
+    /* Mini feature cards */
+    .hero-feature-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border-radius: var(--r-md);
+        overflow: hidden;
+        margin-top: 40px;
+    }
+
+    @media(max-width:767px) {
+        .hero-feature-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .hero-feature-item {
+        background: var(--bg-card);
+        padding: 22px 24px;
+        transition: background .2s;
+    }
+
+    .hero-feature-item:hover {
+        background: var(--bg-glass2);
+    }
+
+    .hero-feature-item h5 {
+        font-family: var(--font-head);
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--text-1);
+        margin-bottom: 6px;
+    }
+
+    .hero-feature-item p {
+        font-size: 0.8rem;
+        color: var(--text-2);
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+
+    .strip-link {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--accent);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: gap .2s;
+    }
+
+    .strip-link:hover {
+        gap: 8px;
+    }
+
+    .fi-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--r-sm);
+        background: var(--bg-glass2);
+        border: 1px solid var(--border-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    /* ══════════════════════════════════════
+   CATEGORIES SCROLL
+══════════════════════════════════════ */
+    .cats-bar {
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border);
+        padding: 18px 0;
+    }
+
+    .cats-scroll {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        align-items: center;
+    }
+
+    .cats-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .cat-chip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+        background: var(--bg-glass);
+        border: 1px solid var(--border);
+        border-radius: var(--r-pill);
+        padding: 7px 16px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--text-2);
+        text-decoration: none;
+        transition: border-color .2s, color .2s, background .2s;
+        white-space: nowrap;
+    }
+
+    .cat-chip:hover,
+    .cat-chip.active {
+        border-color: var(--border-h);
+        color: var(--accent);
+        background: var(--bg-glass2);
+    }
+
+    .cat-chip .count {
+        background: var(--bg-glass2);
+        border: 1px solid var(--border-h);
+        color: var(--accent);
+        border-radius: 20px;
+        padding: 1px 7px;
+        font-size: 0.68rem;
+    }
+
+    /* ══════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════ */
+    .jobs-main {
+        padding: 40px 0 80px;
+    }
+
+    /* ── SIDEBAR ── */
+    .jobs-sidebar {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        position: sticky;
+        top: 24px;
+    }
+
+    .sidebar-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .sidebar-title-row h4 {
+        font-family: var(--font-head);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-1);
+        margin: 0;
+    }
+
+    .reset-link {
+        font-size: 0.75rem;
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .reset-link:hover {
+        text-decoration: underline;
+    }
+
+    .filter-group {
+        margin-bottom: 22px;
+    }
+
+    .filter-group-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-3);
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .filter-divider {
+        border-top: 1px solid var(--border);
+        margin: 18px 0;
+    }
+
+    .filter-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .filter-list li a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        border-radius: var(--r-sm);
+        font-size: 0.82rem;
+        color: var(--text-2);
+        text-decoration: none;
+        transition: background .15s, color .15s;
+    }
+
+    .filter-list li a:hover,
+    .filter-list li a.active {
+        background: var(--bg-glass2);
+        color: var(--accent);
+    }
+
+    .filter-list li a .fcount {
+        font-size: 0.7rem;
+        color: var(--text-3);
+        background: var(--bg-glass);
+        border-radius: 10px;
+        padding: 1px 7px;
+    }
+
+    .filter-list li a.active .fcount {
+        color: var(--accent);
+    }
+
+    /* ── JOBS GRID ── */
+    .jobs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+    }
+
+    .job-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color .25s, transform .2s;
+    }
+
+    .job-card:hover {
+        border-color: var(--border-h);
+        transform: translateY(-3px);
+    }
+
+    .job-card-thumb {
+        position: relative;
+        height: 150px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .job-card-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .35s;
+    }
+
+    .job-card:hover .job-card-thumb img {
+        transform: scale(1.04);
+    }
+
+    .job-type-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: var(--accent);
+        color: #fff;
+        border-radius: var(--r-pill);
+        padding: 3px 10px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: capitalize;
+    }
+
+    .job-card-body {
+        padding: 18px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .job-company-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .company-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid var(--border-h);
+        flex-shrink: 0;
+    }
+
+    .company-name {
+        font-size: 0.78rem;
+        color: var(--text-3);
+    }
+
+    .job-title {
+        font-family: var(--font-head);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-1);
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+
+    .job-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .job-title a:hover {
+        color: var(--accent);
+    }
+
+    .job-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    .job-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        color: var(--text-3);
+    }
+
+    .job-meta-item i {
+        color: var(--accent);
+        font-size: 0.8rem;
+    }
+
+    .job-card-footer {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+    }
+
+    .job-salary {
+        font-family: var(--font-head);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .btn-view-job {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: var(--bg-glass2);
+        border: 1px solid var(--border-h);
+        color: var(--accent);
+        border-radius: var(--r-pill);
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background .2s, color .2s;
+    }
+
+    .btn-view-job:hover {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+    }
+
+    /* ── RESULTS HEADER ── */
+    .results-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .results-count {
+        font-family: var(--font-head);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-1);
+    }
+
+    .results-count span {
+        color: var(--accent);
+    }
+
+    .sort-select {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-pill);
+        color: var(--text-2);
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        font-family: var(--font-body);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .sort-select:focus {
+        border-color: var(--border-h);
+    }
+
+    /* ── PAGINATION ── */
+    .fc-pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 36px;
+    }
+
+    .fc-pagination nav {
+        width: 100%;
+    }
+
+    .fc-pagination .pagination {
+        display: flex;
+        gap: 6px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .fc-pagination .page-item .page-link {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        color: var(--text-2);
+        border-radius: var(--r-sm);
+        padding: 8px 14px;
+        font-size: 0.82rem;
+        text-decoration: none;
+        transition: border-color .2s, color .2s, background .2s;
+    }
+
+    .fc-pagination .page-item.active .page-link,
+    .fc-pagination .page-item .page-link:hover {
+        background: var(--bg-glass2);
+        border-color: var(--border-h);
+        color: var(--accent);
+    }
+
+    /* ── MOBILE FILTER ── */
+    .mobile-filter-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-pill);
+        padding: 10px 20px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-2);
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: border-color .2s, color .2s;
+    }
+
+    .mobile-filter-btn:hover {
+        border-color: var(--border-h);
+        color: var(--accent);
+    }
+
+    .mobile-filter-btn i {
+        color: var(--accent);
+    }
+
+    /* Mobile Filter Drawer */
+    .filter-offcanvas {
+        --bs-offcanvas-bg: var(--bg-card);
+        --bs-offcanvas-color: var(--text-1);
+    }
+
+    .filter-offcanvas .offcanvas-header {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .filter-offcanvas .offcanvas-title {
+        font-family: var(--font-head);
+        font-weight: 700;
+    }
+
+    .filter-offcanvas .btn-close {
+        filter: invert(1) brightness(0.6);
+    }
+
+    /* ── MOBILE JOB CARD (carousel fallback) ── */
+    .mobile-job-card {
+        padding: 0 4px 24px;
+    }
+
+    /* ══════════════════════════════════════
+   CTA BAND
+══════════════════════════════════════ */
+    .jobs-cta {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 44px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 28px;
+        margin-bottom: 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .jobs-cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .jobs-cta-glow {
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: var(--accent-glow);
+        filter: blur(70px);
+        pointer-events: none;
+    }
+
+    .jobs-cta-content {
+        position: relative;
+    }
+
+    .jobs-cta h3 {
+        font-family: var(--font-head);
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-1);
+        margin-bottom: 8px;
+    }
+
+    .jobs-cta p {
+        color: var(--text-2);
+        font-size: 0.88rem;
+        max-width: 480px;
+        margin: 0;
+    }
+
+    .jobs-cta-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+    /* ══════════════════════════════════════
+   MODAL
+══════════════════════════════════════ */
+    .fc-modal .modal-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        color: var(--text-1);
+    }
+
+    .fc-modal .modal-header {
+        border-bottom: 1px solid var(--border);
+        padding: 22px 28px;
+    }
+
+    .fc-modal .modal-title {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--text-1);
+    }
+
+    .fc-modal .modal-title small {
+        display: block;
+        font-size: 0.72rem;
+        color: var(--text-3);
+        font-weight: 400;
+        margin-top: 3px;
+    }
+
+    .fc-modal .accent-line {
+        display: block;
+        width: 32px;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin-top: 6px;
+    }
+
+    .fc-modal .btn-close {
+        filter: invert(1) brightness(0.6);
+    }
+
+    .fc-modal .modal-body {
+        padding: 28px;
+    }
+
+    .fc-modal .modal-footer {
+        border-top: 1px solid var(--border);
+        padding: 18px 28px;
+    }
+
+    .fc-form-label {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-2);
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .fc-form-control {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        color: var(--text-1);
+        padding: 11px 14px;
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        outline: none;
+        transition: border-color .2s;
+        margin-bottom: 0;
+    }
+
+    .fc-form-control:focus {
+        border-color: var(--border-h);
+        box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .fc-form-control::placeholder {
+        color: var(--text-3);
+    }
+
+    textarea.fc-form-control {
+        resize: vertical;
+        min-height: 90px;
+    }
+
+    select.fc-form-control option {
+        background: var(--bg-card);
+        color: var(--text-1);
+    }
 </style>
 
 {{-- ════════════════════ FIXED HEADER STACK (topbar + header pinned to viewport) ════════════════════ --}}
@@ -1087,6 +1903,7 @@ return request()->routeIs($route) ? 'active' : '';
                 <span>+250 784 123 456</span>
             </div>
             <div class="fc-tb-social">
+                
                 <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
                 <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
                 <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
@@ -1098,135 +1915,94 @@ return request()->routeIs($route) ? 'active' : '';
     <header class="fc-header" id="fcHeader">
         <div class="fc-header-inner">
 
-            {{-- Logo (same markup/classes used in the mobile drawer, for visual parity) --}}
-            <a href="{{ route('user.home') }}" class="fc-logo-wrap">
+            {{-- Logo --}}
+            <a href="{{ route('user.home') }}" class="fc-logo-lockup">
                 <div class="fc-logo-mark">
                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                     </svg>
                 </div>
-                <div class="fc-logo-name">Future<span>Connect</span></div>
+                <div>
+                    <p class="fc-logo-wordmark">Future <br />Connect</p>
+                    <!-- <p class="fc-logo-tagline">Empowering Stories. Real Impact.</p> -->
+                </div>
             </a>
 
             {{-- Desktop Navigation --}}
             <ul class="fc-nav">
 
-                {{-- Platform — what you can DO on FutureConnect --}}
                 <li>
-                    <a href="javascript:void(0)">Platform <span class="chevron">▾</span></a>
-                    <div class="fc-mega">
-                        <a class="fc-card" href="{{ route('talent.connections-room') }}">
-                            <p class="fc-card-title">Professional Connections</p>
-                            <p class="fc-card-desc">Connect with experts and peers in your field.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.talents') }}">
-                            <p class="fc-card-title">Project Collaboration</p>
-                            <p class="fc-card-desc">Build projects with talented people.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.jobs.index') }}">
-                            <p class="fc-card-title">Job Opportunities</p>
-                            <p class="fc-card-desc">Find jobs, internships, and career opportunities.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.courses') }}">
-                            <p class="fc-card-title">Learning</p>
-                            <p class="fc-card-desc">Learn, grow, and earn new certifications.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.register_as_talent') }}">
-                            <p class="fc-card-title">Skills Hub</p>
-                            <p class="fc-card-desc">Showcase your skills and portfolio.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.products.index') }}">
-                            <p class="fc-card-title">Marketplace</p>
-                            <p class="fc-card-desc">Buy and sell technology solutions.</p>
-                        </a>
-                    </div>
+                    <a href="javascript:void(0)">Find Opportunities <span class="chevron">▾</span></a>
+                    <ul class="fc-dropdown">
+                        <li class="fc-dd-label">Discover</li>
+                        <li><a href="{{ route('user.jobs.index') }}">Find Jobs</a></li>
+                        <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#postJobModal">Post a Job</a></li>
+                        <li><a href="{{ route('quick-hire.create') }}">Quick Hire</a></li>
+                    </ul>
                 </li>
 
-                {{-- Solutions — who FutureConnect is for --}}
+                {{-- Skills Hub — mega menu --}}
                 <li>
-                    <a href="javascript:void(0)">Solutions <span class="chevron">▾</span></a>
+                    <a href="javascript:void(0)">Skills Hub <span class="chevron">▾</span></a>
                     <div class="fc-mega">
-                        <a class="fc-card" href="{{ route('user.register_as_talent') }}">
-                            <p class="fc-card-title">For Students</p>
-                            <p class="fc-card-desc">Launch your career with confidence.</p>
-                        </a>
-                        <a class="fc-card" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#postJobModal">
-                            <p class="fc-card-title">For NGOs</p>
-                            <p class="fc-card-desc">Partner with skilled local talent.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.verified-talents') }}">
-                            <p class="fc-card-title">For Companies</p>
-                            <p class="fc-card-desc">Find verified and sharp skills faster.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.jobs.index') }}">
-                            <p class="fc-card-title">For Professionals</p>
-                            <p class="fc-card-desc">Grow your network and opportunities.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.how-it-works') }}">
-                            <p class="fc-card-title">For Universities</p>
-                            <p class="fc-card-desc">Empower students beyond graduation.</p>
-                        </a>
-                        {{-- TODO: no dedicated investors route exists yet — swap in route('user.investors') once it's built --}}
-                        <a class="fc-card" href="{{ route('user.success-stories') }}">
-                            <p class="fc-card-title">For Investors</p>
-                            <p class="fc-card-desc">Discover skills worth investing in.</p>
-                        </a>
-                    </div>
-                </li>
-
-                {{-- Trending — plain link, not a dropdown: it should point at live,
-                     currently-active platform content (e.g. trending talent/jobs),
-                     never a static page. Wire this to a real "trending" route/controller. --}}
-                <li>
-                    {{-- TODO: replace with route('user.trending') once that page exists --}}
-                    <a href="{{ route('user.blogs') }}">Trending</a>
-                </li>
-
-                {{-- Company — about the platform + support --}}
-                <li>
-                    <a href="javascript:void(0)">Company <span class="chevron">▾</span></a>
-                    <div class="fc-mega">
-                        <a class="fc-card" href="{{ route('user.how-it-works') }}">
-                            <p class="fc-card-title">How It Works</p>
-                            <p class="fc-card-desc">See the platform in action.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.contact') }}">
-                            <p class="fc-card-title">Contact</p>
-                            <p class="fc-card-desc">Get in touch with our team.</p>
-                        </a>
-                        <a class="fc-card" href="{{ route('user.success-stories') }}">
-                            <p class="fc-card-title">Customer Stories</p>
-                            <p class="fc-card-desc">Real outcomes from real talent.</p>
-                        </a>
-                        {{-- TODO: no dedicated partnerships route exists yet — swap in route('user.partnerships') once it's built --}}
-                        <a class="fc-card" href="{{ route('user.contact') }}">
-                            <p class="fc-card-title">Partnerships</p>
-                            <p class="fc-card-desc">Team up with FutureConnect.</p>
-                        </a>
-                        {{-- TODO: no dedicated FAQ route exists yet — swap in route('user.faq') once it's built --}}
-                        <a class="fc-card" href="{{ route('user.faq') }}">
-                            <p class="fc-card-title">FAQ</p>
-                            <p class="fc-card-desc">Answers to common questions.</p>
-                        </a>
-                        {{-- TODO: no dedicated support route exists yet — swap in route('user.support') once it's built --}}
-                        <a class="fc-card" href="{{ route('user.contact') }}">
-                            <p class="fc-card-title">Help &amp; Support</p>
-                            <p class="fc-card-desc">Get help when you need it.</p>
-                        </a>
+                        <div class="fc-mega-col">
+                            <h6>Browse</h6>
+                            <ul>
+                                <li><a href="{{ route('user.talents') }}">Find Skills</a></li>
+                                <li><a href="{{ route('user.verified-talents') }}">Verified</a></li>
+                                <li><a href="{{ route('user.top-rated-talents') }}">Top Rated</a></li>
+                            </ul>
+                        </div>
+                        <div class="fc-mega-col">
+                            <h6>Categories</h6>
+                            <ul>
+                                @foreach($categories as $cat)
+                                <li><a href="{{ url('/talents/category/' . $cat->slug) }}">{{ $cat->name }}</a></li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="fc-mega-col">
+                            <h6>Register</h6>
+                            <ul>
+                                <li><a href="{{ route('user.register_as_talent') }}">Register Skills</a></li>
+                                <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
+                                <li><a href="{{ route('user.success-stories') }}">Success Stories</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </li>
 
                 <li>
-                    <a href="{{ route('pricing') }}">Pricing</a>
+                    <a href="{{ route('user.courses') }}">Learning Hub</a>
                 </li>
 
+                <li>
+                    <a href="{{ route('user.products.index') }}">Marketplace</a>
+                </li>
+
+                <li>
+                    <a href="{{ route('talent.connections-room') }}">Connection Room</a>
+                </li>
+
+                {{-- More dropdown --}}
+                <li>
+                    <a href="javascript:void(0)">More <span class="chevron">▾</span></a>
+                    <ul class="fc-dropdown">
+                        <li class="fc-dd-label">Discover</li>
+                        <li><a href="{{ route('user.announcements') }}">Updates</a></li>
+                        <li><a href="{{ route('user.blogs') }}">News & Insights</a></li>
+                        <li><a href="{{ route('pricing') }}">Pricing</a></li>
+                        <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
+                        <li class="fc-dd-sep"></li>
+                        <li><a href="{{ route('user.contact') }}">Help &amp; Support</a></li>
+                    </ul>
+                </li>
+
+                <a href="{{ route('demo.request') }}" class="fc-btn-ghost fc-btn-demo">Request Demo</a>
             </ul>
 
             {{-- Right Actions --}}
             <div class="fc-actions">
-
-                {{-- Request Demo — desktop only, mirrored in the mobile drawer ctas --}}
-                <a href="{{ route('demo.request') }}" class="fc-btn-ghost fc-btn-request-demo">Request Demo</a>
 
                 {{-- Search button --}}
                 <button class="fc-btn-search" id="fcSearchBtn" aria-label="Search">
@@ -1337,18 +2113,14 @@ return request()->routeIs($route) ? 'active' : '';
 {{-- Spacer — reserves the fixed stack's height so page content doesn't jump underneath it --}}
 <div class="fc-header-spacer" id="fcHeaderSpacer"></div>
 
-{{-- ════════════════════ MOBILE DRAWER (mirrors the desktop nav exactly) ════════════════════ --}}
+{{-- ════════════════════ MOBILE DRAWER ════════════════════ --}}
 <div class="fc-drawer" id="fcDrawer">
     <div class="fc-drawer-bg" id="fcDrawerBg"></div>
     <div class="fc-drawer-panel">
 
         <div class="fc-drawer-logo">
             <a href="{{ route('user.home') }}" class="fc-logo-wrap">
-                <div class="fc-logo-mark">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                    </svg>
-                </div>
+                <div class="fc-logo-mark">FC</div>
                 <div class="fc-logo-name">Future<span>Connect</span></div>
             </a>
             <button class="fc-drawer-close" id="fcDrawerClose">✕</button>
@@ -1357,50 +2129,38 @@ return request()->routeIs($route) ? 'active' : '';
         <ul class="fc-drawer-nav">
             <li>
                 <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
-                    Platform <span class="chevron">▾</span>
+                    Find Opportunities <span>▾</span>
                 </a>
                 <ul class="fc-drawer-sub">
-                    <li><a href="{{ route('talent.connections-room') }}">Professional Connections</a></li>
-                    <li><a href="{{ route('user.talents') }}">Project Collaboration</a></li>
-                    <li><a href="{{ route('user.jobs.index') }}">Job Opportunities</a></li>
-                    <li><a href="{{ route('user.courses') }}">Learning</a></li>
-                    <li><a href="{{ route('user.register_as_talent') }}">Skills Hub</a></li>
-                    <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
+                    <li class="fc-drawer-sub-label">Discover</li>
+                    <li><a href="{{ route('user.jobs.index') }}">Find Jobs</a></li>
+                    <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#postJobModal">Post a Job</a></li>
+                    <li><a href="{{ route('quick-hire.create') }}">Quick Hire</a></li>
                 </ul>
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
-                    Solutions <span class="chevron">▾</span>
+                    Skills Hub <span>▾</span>
                 </a>
                 <ul class="fc-drawer-sub">
-                    <li><a href="{{ route('user.register_as_talent') }}">For Students</a></li>
-                    <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#postJobModal">For NGOs</a></li>
-                    <li><a href="{{ route('user.verified-talents') }}">For Companies</a></li>
-                    <li><a href="{{ route('user.jobs.index') }}">For Professionals</a></li>
-                    <li><a href="{{ route('user.how-it-works') }}">For Universities</a></li>
-                    {{-- TODO: swap in route('user.investors') once that page exists --}}
-                    <li><a href="{{ route('user.success-stories') }}">For Investors</a></li>
-                </ul>
-            </li>
-            {{-- TODO: replace with route('user.trending') once that page exists --}}
-            <li><a href="{{ route('user.blogs') }}">Trending</a></li>
-            <li>
-                <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
-                    Company <span class="chevron">▾</span>
-                </a>
-                <ul class="fc-drawer-sub">
+                    <li class="fc-drawer-sub-label">Browse</li>
+                    <li><a href="{{ route('user.talents') }}">Find Skills</a></li>
+                    <li><a href="{{ route('user.verified-talents') }}">Verified Skills</a></li>
+                    <li><a href="{{ route('user.top-rated-talents') }}">Top Rated</a></li>
+                    <li class="fc-drawer-sub-label">Register</li>
+                    <li><a href="{{ route('user.register_as_talent') }}">Register Skills</a></li>
                     <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
-                    <li><a href="{{ route('user.contact') }}">Contact</a></li>
-                    <li><a href="{{ route('user.success-stories') }}">Customer Stories</a></li>
-                    {{-- TODO: swap in route('user.partnerships') once that page exists --}}
-                    <li><a href="{{ route('user.contact') }}">Partnerships</a></li>
-                    {{-- TODO: swap in route('user.faq') once that page exists --}}
-                    <li><a href="{{ route('user.faq') }}">FAQ</a></li>
-                    {{-- TODO: swap in route('user.support') once that page exists --}}
-                    <li><a href="{{ route('user.contact') }}">Help &amp; Support</a></li>
+                    <li><a href="{{ route('user.success-stories') }}">Success Stories</a></li>
                 </ul>
             </li>
+            <li><a href="{{ route('user.courses') }}">Learning Hub</a></li>
+            <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
+            <li><a href="{{ route('talent.connections-room') }}">Connection Room</a></li>
+            <li><a href="{{ route('user.announcements') }}">Updates</a></li>
+            <li><a href="{{ route('user.blogs') }}">News &amp; Insights</a></li>
             <li><a href="{{ route('pricing') }}">Pricing</a></li>
+            <li><a href="{{ route('user.contact') }}">Help &amp; Support</a></li>
+            <a href="{{ route('demo.request') }}" class="fc-btn-ghost fc-btn-demo">Request Demo</a>
         </ul>
 
         <div class="fc-drawer-ctas">
@@ -1415,7 +2175,6 @@ return request()->routeIs($route) ? 'active' : '';
             <button class="fc-btn-ghost" onclick="openMobileLogin()">Sign In</button>
             <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green">Register Skills</a>
             @endauth
-            <a href="{{ route('demo.request') }}" class="fc-btn-ghost">Request Demo</a>
         </div>
 
     </div>
@@ -1675,7 +2434,6 @@ return request()->routeIs($route) ? 'active' : '';
             const sub = el.nextElementSibling;
             if (sub && sub.classList.contains('fc-drawer-sub')) {
                 sub.classList.toggle('open');
-                el.classList.toggle('sub-open', sub.classList.contains('open'));
             }
         };
 

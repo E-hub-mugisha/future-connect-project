@@ -712,4 +712,15 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Success story submitted successfully!');
     }
+
+    public function addFaqStore(Request $request)
+    {
+        $request->validate([
+            'question' => 'required|string|max:255',
+        ]);
+
+        Faq::create($request->all());
+
+        return redirect()->back()->with('success', 'FAQ added successfully!');
+    }
 }

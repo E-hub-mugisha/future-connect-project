@@ -833,10 +833,10 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
             <div class="ss-grid-row">
                 @foreach ($ssStories as $story)
                 <div class="ss-card ss-card-trigger" data-slug="{{ $story->slug }}" role="button" tabindex="0">
-                    <div class="ss-card-img">
+                    <!-- <div class="ss-card-img">
                         <img src="{{ $story->thumbnail_url ?: asset('assets/img/blog/blog-large-01.jpg') }}" alt="{{ $story->title }}">
                         <div class="ss-card-quote-icon"><i class="feather-message-circle"></i></div>
-                    </div>
+                    </div> -->
 
                     <div class="ss-card-body">
                         <h3 class="ss-card-title">

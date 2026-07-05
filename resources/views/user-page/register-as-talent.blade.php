@@ -56,15 +56,11 @@
 
     /* ─── LEFT PANEL ──────────────────────────────────────── */
     .fc-left {
-      /* background: linear-gradient(160deg, #0a1f14 0%, #0e1618 50%, #071210 100%); */
       border-right: 1px solid var(--border);
       padding: 60px 52px;
       display: flex;
       flex-direction: column;
-      /* justify-content: space-between; */
-      position: sticky;
       top: 0;
-      height: 100vh;
       overflow: hidden;
     }
 
@@ -153,12 +149,12 @@
 
     .fc-left-body h1 {
       font-family: 'Montserrat', sans-serif;
-      font-size: 2.4rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: #fff;
       line-height: 1.12;
       letter-spacing: -0.5px;
-      margin: 0 0 16px;
+      margin: 16px 0 16px;
     }
 
     .fc-left-body h1 span {
@@ -198,6 +194,16 @@
       font-size: 16px;
       flex-shrink: 0;
       margin-top: 1px;
+    }
+
+    .fc-feature-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .fc-feature-text strong {
@@ -375,6 +381,16 @@
       flex-shrink: 0;
     }
 
+    .fc-step-node svg {
+      width: 16px;
+      height: 16px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .fc-step-node.fc-done {
       background: var(--green);
       border-color: var(--green);
@@ -438,6 +454,16 @@
       justify-content: center;
       flex-shrink: 0;
       font-size: 15px;
+    }
+
+    .fc-error-banner-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: var(--red);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .fc-error-banner-body strong {
@@ -693,6 +719,16 @@
       font-size: 18px;
     }
 
+    .fc-file-icon svg {
+      width: 19px;
+      height: 19px;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .fc-file-zone p {
       margin: 0;
       font-size: 13px;
@@ -782,6 +818,16 @@
       text-decoration: none;
     }
 
+    .fc-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .btn-back {
       background: var(--surface2);
       color: var(--muted);
@@ -856,6 +902,16 @@
       margin: 0 auto 18px;
       font-size: 28px;
       color: var(--green);
+    }
+
+    .fc-success-icon svg {
+      width: 30px;
+      height: 30px;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .fc-success h3 {
@@ -966,43 +1022,46 @@
     }
 
     /* Logo lockup */
-.fc-logo-lockup {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-}
-.fc-logo-mark {
-    width: 36px;
-    height: 36px;
-    background: #48d597;
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.fc-logo-mark svg {
-    width: 18px;
-    height: 18px;
-    fill: #0e1618;
-}
-.fc-logo-wordmark {
-    font-size: 15px;
-    font-weight: 700;
-    color: #e2ecee;
-    letter-spacing: .3px;
-    line-height: 1.2;
-    margin: 0;
-}
-.fc-logo-tagline {
-    font-size: 11px;
-    color: #4e6b70;
-    letter-spacing: .3px;
-    margin: 0;
-    line-height: 1;
-}
+    .fc-logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
 
+    .fc-logo-mark {
+      width: 36px;
+      height: 36px;
+      background: #48d597;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .fc-logo-mark svg {
+      width: 18px;
+      height: 18px;
+      fill: #0e1618;
+    }
+
+    .fc-logo-wordmark {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e2ecee;
+      letter-spacing: .3px;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .fc-logo-tagline {
+      font-size: 11px;
+      color: #4e6b70;
+      letter-spacing: .3px;
+      margin: 0;
+      line-height: 1;
+    }
   </style>
 
   <div class="fc-page">
@@ -1023,33 +1082,41 @@
 
       <div class="fc-left-body">
         <div class="fc-badge">skill Hub</div>
-        <h1>Showcase<br>Your <span>Skills</span><br>to the World</h1>
-        <p>Join thousands of verified skills on Rwanda's leading skills marketplace. Get discovered, get hired, and grow your career.</p>
+        <h1>Showcase Your <span>Skills</span> to the World</h1>
+        <!-- <p>Join thousands of verified skills on Rwanda's leading skills marketplace. Get discovered, get hired, and grow your career.</p> -->
 
         <div class="fc-features">
           <div class="fc-feature">
-            <div class="fc-feature-icon">🎯</div>
+            <div class="fc-feature-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
+            </div>
             <div class="fc-feature-text">
               <strong>Get Verified</strong>
               <span>Earn a verified badge and build instant credibility with clients.</span>
             </div>
           </div>
           <div class="fc-feature">
-            <div class="fc-feature-icon">🌍</div>
+            <div class="fc-feature-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a13 13 0 0 1 0 18a13 13 0 0 1 0-18z"/></svg>
+            </div>
             <div class="fc-feature-text">
               <strong>Global Exposure</strong>
               <span>Reach clients and employers locally and across the globe.</span>
             </div>
           </div>
           <div class="fc-feature">
-            <div class="fc-feature-icon">💬</div>
+            <div class="fc-feature-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </div>
             <div class="fc-feature-text">
               <strong>Direct Connections</strong>
               <span>Connect securely with clients through our Connection Room.</span>
             </div>
           </div>
           <div class="fc-feature">
-            <div class="fc-feature-icon">📈</div>
+            <div class="fc-feature-icon">
+              <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
             <div class="fc-feature-text">
               <strong>Grow With Us</strong>
               <span>Access courses, opportunities and tools to level up your career.</span>
@@ -1057,21 +1124,6 @@
           </div>
         </div>
       </div>
-
-      <!-- <div class="fc-stats">
-        <div>
-          <div class="fc-stat-num">8K+</div>
-          <div class="fc-stat-label">Skills listed</div>
-        </div>
-        <div>
-          <div class="fc-stat-num">4.8</div>
-          <div class="fc-stat-label">Avg. rating</div>
-        </div>
-        <div>
-          <div class="fc-stat-num">100%</div>
-          <div class="fc-stat-label">Free to join</div>
-        </div>
-      </div> -->
     </div>
 
     {{-- ══════════ RIGHT — Form ══════════ --}}
@@ -1100,7 +1152,13 @@
         {{-- ── Global validation error banner ── --}}
         @if ($errors->any())
         <div class="fc-error-banner" id="errorBanner">
-          <div class="fc-error-banner-icon">⚠️</div>
+          <div class="fc-error-banner-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
           <div class="fc-error-banner-body">
             <strong>Please fix {{ $errors->count() }} {{ Str::plural('issue', $errors->count()) }} before continuing:</strong>
             <ul>
@@ -1190,7 +1248,10 @@
               </div>
               <div class="fc-actions">
                 <span></span>
-                <button type="button" class="fc-btn btn-next" onclick="validateStep(1)">Continue →</button>
+                <button type="button" class="fc-btn btn-next" onclick="validateStep(1)">
+                  Continue
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </button>
               </div>
             </div>
 
@@ -1244,8 +1305,14 @@
 
               </div>
               <div class="fc-actions">
-                <button type="button" class="fc-btn btn-back" onclick="goTo(0)">← Back</button>
-                <button type="button" class="fc-btn btn-next" onclick="validateStep(2)">Continue →</button>
+                <button type="button" class="fc-btn btn-back" onclick="goTo(0)">
+                  <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                  Back
+                </button>
+                <button type="button" class="fc-btn btn-next" onclick="validateStep(2)">
+                  Continue
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </button>
               </div>
             </div>
 
@@ -1326,8 +1393,14 @@
               </div>
 
               <div class="fc-actions">
-                <button type="button" class="fc-btn btn-back" onclick="goTo(1)">← Back</button>
-                <button type="button" class="fc-btn btn-next" onclick="validateStep(3)">Continue →</button>
+                <button type="button" class="fc-btn btn-back" onclick="goTo(1)">
+                  <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                  Back
+                </button>
+                <button type="button" class="fc-btn btn-next" onclick="validateStep(3)">
+                  Continue
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </button>
               </div>
             </div>
 
@@ -1341,7 +1414,12 @@
               <div class="fc-file-zone @error('image') has-error @enderror" id="dropzone">
                 <input type="file" name="image" id="imageInput" accept="image/*"
                   onchange="handleFile(this)" required>
-                <div class="fc-file-icon">📷</div>
+                <div class="fc-file-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                </div>
                 <p><span>Click to upload</span> or drag &amp; drop</p>
                 <p style="font-size:11px;margin-top:5px;color:var(--muted2);">JPG, PNG — max 5 MB</p>
               </div>
@@ -1372,8 +1450,14 @@
               </label>
 
               <div class="fc-actions">
-                <button type="button" class="fc-btn btn-back" onclick="goTo(2)">← Back</button>
-                <button type="submit" class="fc-btn btn-submit">Submit Registration ✓</button>
+                <button type="button" class="fc-btn btn-back" onclick="goTo(2)">
+                  <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                  Back
+                </button>
+                <button type="submit" class="fc-btn btn-submit">
+                  Submit Registration
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
               </div>
             </div>
 
@@ -1383,7 +1467,12 @@
           @if(session('success'))
           <div class="fc-section fc-visible" id="sec-done">
             <div class="fc-success">
-              <div class="fc-success-icon">✓</div>
+              <div class="fc-success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </div>
               <h3>Registration Submitted!</h3>
               <p>Your skill profile has been submitted for review.<br>
                 You'll receive a confirmation email within 24–48 hours.</p>
@@ -1566,7 +1655,7 @@
         node.classList.remove('fc-active', 'fc-done');
         if (i < current) {
           node.classList.add('fc-done');
-          node.textContent = '✓';
+          node.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>';
         } else if (i === current) {
           node.classList.add('fc-active');
           node.textContent = i + 1;
@@ -1600,13 +1689,13 @@
     attachLiveValidation();
 
     /* Jump to the correct step when Laravel bounces back with errors */
-    @if($errors -> has('name') || $errors -> has('address'))
+    @if($errors->has('name') || $errors->has('address'))
     goTo(0);
-    @elseif($errors -> has('phone') || $errors -> has('email'))
+    @elseif($errors->has('phone') || $errors->has('email'))
     goTo(1);
-    @elseif($errors -> has('language') || $errors -> has('category_id') || $errors -> has('description'))
+    @elseif($errors->has('language') || $errors->has('category_id') || $errors->has('description'))
     goTo(2);
-    @elseif($errors -> has('image'))
+    @elseif($errors->has('image'))
     goTo(3);
     @endif
   </script>

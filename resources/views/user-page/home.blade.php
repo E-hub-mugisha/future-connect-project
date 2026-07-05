@@ -1325,7 +1325,7 @@
 {{-- ════════════════════════════════════
      8. FIND SKILLS CTA BAND
 ════════════════════════════════════ --}}
-<div class="container">
+<!-- <div class="container">
     <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-lg); padding:40px 36px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom:60px; position:relative; overflow:hidden;">
         <div style="position:absolute;top:-40px;left:-40px;width:200px;height:200px;background:var(--accent-glow);filter:blur(60px);border-radius:50%;pointer-events:none;"></div>
         <div style="position:relative;">
@@ -1336,7 +1336,7 @@
             Explore Skills Hub <i class="ti ti-arrow-right"></i>
         </a>
     </div>
-</div>
+</div> -->
 
 {{-- ════════════════════════════════════
      9. CTA JOIN BANNER

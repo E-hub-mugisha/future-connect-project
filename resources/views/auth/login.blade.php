@@ -370,9 +370,9 @@
       </a>
 
             <div>
-                <div class="pill">Rwanda's #1 Talent Platform</div>
+                <div class="pill">Rwanda's #1 skills Platform</div>
                 <div class="tagline">
-                    <h2>Empowering<br><em>Talent,</em><br>Opportunities<br>&amp; Growth.</h2>
+                    <h2>Empowering<br><em>skills,</em><br>Opportunities<br>&amp; Growth.</h2>
                     <p>Connect with verified employers, showcase your skills, and unlock new career paths — all in one place.</p>
                 </div>
             </div>

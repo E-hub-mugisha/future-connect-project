@@ -104,6 +104,7 @@ Route::post('/announcement/{announcement}/comment', [HomeController::class, 'add
 Route::get('/blogs', [HomeController::class, 'blogs'])->name('user.blogs');
 Route::get('/blog/{slug}', [HomeController::class, 'blogDetails'])->name('user.blog.details');
 Route::get('/faq', [HomeController::class, 'faq'])->name('user.faq');
+Route::post('/faq/store', [HomeController::class, 'addFaqStore'])->name('faq.ask.store');
 Route::get('/how-it-works', [HomeController::class, 'howItWorks'])->name('user.how-it-works');
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('user.privacy-policy');
 Route::get('/terms-condition', [HomeController::class, 'termsCondition'])->name('user.terms-condition');
