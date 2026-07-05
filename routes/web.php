@@ -616,37 +616,6 @@ Route::post('/activate-trial', [SubscriptionController::class, 'activate'])
     ->middleware('auth')
     ->name('trial.activate');
 
-Route::get('/deploy', function (Request $request) {
-    // Secure token validation
-    if ($request->query('key') !== env('DEPLOY_KEY')) {
-        abort(403, 'Unauthorized');
-    }
-
-    $projectPath = '/home/futureconnect/public_html/futureconnect'; // 🟢 Update this path
-
-    $commands = [
-        "cd $projectPath",
-        'git reset --hard HEAD',
-        'git pull origin main',
-        'composer install --no-dev --optimize-autoloader',
-        'npm install',
-        'npm run build',
-        'php artisan migrate --force',
-        'php artisan optimize:clear',
-        'php artisan config:cache',
-        'php artisan route:cache',
-        'php artisan view:cache',
-    ];
-
-    $output = [];
-    foreach ($commands as $command) {
-        $result = [];
-        exec($command . ' 2>&1', $result);
-        $output[] = "→ <b>$command</b><br>" . implode("<br>", $result);
-    }
-
-    return response("<pre>" . implode("<br><br>", $output) . "</pre>");
-});
 
 Route::get('/seller/apply', [SellerController::class, 'create'])->name('seller.create');
 Route::post('/seller/store', [SellerController::class, 'store'])->name('seller.store');
