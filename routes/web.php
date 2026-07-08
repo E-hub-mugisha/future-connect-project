@@ -40,6 +40,7 @@ use App\Http\Controllers\Talent\TalentJobController;
 use App\Http\Controllers\Talent\TalentProductController;
 use App\Http\Controllers\Talent\TalentProjectController;
 use App\Http\Controllers\TalentConnectionController;
+use App\Http\Controllers\TrendingController;
 use App\Http\Controllers\users\CartController;
 use App\Http\Controllers\users\CheckoutController;
 use App\Http\Controllers\users\PaymentController as UsersPaymentController;
@@ -211,6 +212,17 @@ Route::prefix('quick-hire')->name('quick-hire.')->group(function () {
 
 Route::get('/request-demo', [DemoRequestController::class, 'create'])->name('demo.request');
 Route::post('/request-demo', [DemoRequestController::class, 'store'])->name('demo.store');
+
+Route::prefix('solutions')->name('solutions.')->controller(HomeController::class)->group(function () {
+    Route::get('/students',      'students')->name('students');
+    Route::get('/ngos',          'ngos')->name('ngos');
+    Route::get('/companies',     'companies')->name('companies');
+    Route::get('/professionals', 'professionals')->name('professionals');
+    Route::get('/universities',  'universities')->name('universities');
+    Route::get('/investors',     'investors')->name('investors');
+});
+
+Route::get('/trending', [TrendingController::class, 'index'])->name('user.trending.index');
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes

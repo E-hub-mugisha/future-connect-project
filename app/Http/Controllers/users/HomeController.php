@@ -723,4 +723,72 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'FAQ added successfully!');
     }
+
+    /**
+     * For Students — "Launch your career with confidence"
+     */
+    public function students()
+    {
+        return view('user-page.solutions.students', [
+            'stats' => [
+                'skills_listed'    => '8K+',
+                'employer_reach'   => '3x',
+                'verified_profiles'=> '100%',
+            ],
+        ]);
+    }
+ 
+    /**
+     * For NGOs — "Partner with skilled local talent"
+     */
+    public function ngos()
+    {
+        return view('user-page.solutions.ngos');
+    }
+ 
+    /**
+     * For Companies — "Find verified and sharp skills faster"
+     */
+    public function companies()
+    {
+        return view('user-page.solutions.companies');
+    }
+ 
+    /**
+     * For Professionals — "Grow your network and opportunities"
+     */
+    public function professionals()
+    {
+        return view('user-page.solutions.professionals');
+    }
+ 
+    /**
+     * For Universities — "Empower students beyond graduation"
+     */
+    public function universities()
+    {
+        return view('user-page.solutions.universities', [
+            'dashboard' => [
+                'students_onboarded'      => 1240,
+                'verified_profile_pct'    => 82,
+                'placement_rate_pct'      => 68,
+                'active_employer_partners'=> 54,
+            ],
+        ]);
+    }
+ 
+    /**
+     * For Investors — "Discover skills worth investing in"
+     */
+    public function investors()
+    {
+        return view('user-page.solutions.investors', [
+            'trends' => [
+                ['name' => 'Digital Marketing',     'growth' => 38, 'bar' => 80],
+                ['name' => 'Software Development',  'growth' => 31, 'bar' => 70],
+                ['name' => 'Writing & Content',      'growth' => 22, 'bar' => 55],
+                ['name' => 'Design & Creative',      'growth' => 19, 'bar' => 48],
+            ],
+        ]);
+    }
 }

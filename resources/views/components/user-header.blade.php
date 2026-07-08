@@ -1119,7 +1119,7 @@ return request()->routeIs($route) ? 'active' : '';
                             <p class="fc-card-title">Professional Connections</p>
                             <p class="fc-card-desc">Connect with experts and peers in your field.</p>
                         </a>
-                        <a class="fc-card" href="{{ route('user.talents') }}">
+                        <a class="fc-card" href="{{ route('user.projects.index') }}">
                             <p class="fc-card-title">Project Collaboration</p>
                             <p class="fc-card-desc">Build projects with talented people.</p>
                         </a>
@@ -1131,7 +1131,7 @@ return request()->routeIs($route) ? 'active' : '';
                             <p class="fc-card-title">Learning</p>
                             <p class="fc-card-desc">Learn, grow, and earn new certifications.</p>
                         </a>
-                        <a class="fc-card" href="{{ route('user.register_as_talent') }}">
+                        <a class="fc-card" href="{{ route('user.talents') }}">
                             <p class="fc-card-title">Skills Hub</p>
                             <p class="fc-card-desc">Showcase your skills and portfolio.</p>
                         </a>
@@ -1146,40 +1146,38 @@ return request()->routeIs($route) ? 'active' : '';
                 <li>
                     <a href="javascript:void(0)">Solutions <span class="chevron">▾</span></a>
                     <div class="fc-mega">
-                        <a class="fc-card" href="{{ route('user.register_as_talent') }}">
+                        <a class="fc-card" href="{{ route('solutions.students') }}">
                             <p class="fc-card-title">For Students</p>
                             <p class="fc-card-desc">Launch your career with confidence.</p>
                         </a>
-                        <a class="fc-card" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#postJobModal">
+                        <a class="fc-card" href="{{ route('solutions.ngos') }}">
                             <p class="fc-card-title">For NGOs</p>
                             <p class="fc-card-desc">Partner with skilled local talent.</p>
                         </a>
-                        <a class="fc-card" href="{{ route('user.verified-talents') }}">
+                        <a class="fc-card" href="{{ route('solutions.companies') }}">
                             <p class="fc-card-title">For Companies</p>
                             <p class="fc-card-desc">Find verified and sharp skills faster.</p>
                         </a>
-                        <a class="fc-card" href="{{ route('user.jobs.index') }}">
+                        <a class="fc-card" href="{{ route('solutions.professionals') }}">
                             <p class="fc-card-title">For Professionals</p>
                             <p class="fc-card-desc">Grow your network and opportunities.</p>
                         </a>
-                        <a class="fc-card" href="{{ route('user.how-it-works') }}">
+                        <a class="fc-card" href="{{ route('solutions.universities') }}">
                             <p class="fc-card-title">For Universities</p>
                             <p class="fc-card-desc">Empower students beyond graduation.</p>
                         </a>
                         {{-- TODO: no dedicated investors route exists yet — swap in route('user.investors') once it's built --}}
-                        <a class="fc-card" href="{{ route('user.success-stories') }}">
+                        <a class="fc-card" href="{{ route('solutions.investors') }}">
                             <p class="fc-card-title">For Investors</p>
                             <p class="fc-card-desc">Discover skills worth investing in.</p>
                         </a>
                     </div>
                 </li>
 
-                {{-- Trending — plain link, not a dropdown: it should point at live,
-                     currently-active platform content (e.g. trending talent/jobs),
-                     never a static page. Wire this to a real "trending" route/controller. --}}
+                
                 <li>
-                    {{-- TODO: replace with route('user.trending') once that page exists --}}
-                    <a href="{{ route('user.blogs') }}">Trending</a>
+                    
+                    <a href="{{ route('user.trending.index') }}">Trending</a>
                 </li>
 
                 {{-- Company — about the platform + support --}}
@@ -1198,17 +1196,14 @@ return request()->routeIs($route) ? 'active' : '';
                             <p class="fc-card-title">Customer Stories</p>
                             <p class="fc-card-desc">Real outcomes from real talent.</p>
                         </a>
-                        {{-- TODO: no dedicated partnerships route exists yet — swap in route('user.partnerships') once it's built --}}
                         <a class="fc-card" href="{{ route('user.contact') }}">
                             <p class="fc-card-title">Partnerships</p>
                             <p class="fc-card-desc">Team up with FutureConnect.</p>
                         </a>
-                        {{-- TODO: no dedicated FAQ route exists yet — swap in route('user.faq') once it's built --}}
                         <a class="fc-card" href="{{ route('user.faq') }}">
                             <p class="fc-card-title">FAQ</p>
                             <p class="fc-card-desc">Answers to common questions.</p>
                         </a>
-                        {{-- TODO: no dedicated support route exists yet — swap in route('user.support') once it's built --}}
                         <a class="fc-card" href="{{ route('user.contact') }}">
                             <p class="fc-card-title">Help &amp; Support</p>
                             <p class="fc-card-desc">Get help when you need it.</p>
@@ -1225,7 +1220,6 @@ return request()->routeIs($route) ? 'active' : '';
             {{-- Right Actions --}}
             <div class="fc-actions">
 
-                {{-- Request Demo — desktop only, mirrored in the mobile drawer ctas --}}
                 <a href="{{ route('demo.request') }}" class="fc-btn-ghost fc-btn-request-demo">Request Demo</a>
 
                 {{-- Search button --}}
@@ -1373,17 +1367,15 @@ return request()->routeIs($route) ? 'active' : '';
                     Solutions <span class="chevron">▾</span>
                 </a>
                 <ul class="fc-drawer-sub">
-                    <li><a href="{{ route('user.register_as_talent') }}">For Students</a></li>
-                    <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#postJobModal">For NGOs</a></li>
-                    <li><a href="{{ route('user.verified-talents') }}">For Companies</a></li>
-                    <li><a href="{{ route('user.jobs.index') }}">For Professionals</a></li>
-                    <li><a href="{{ route('user.how-it-works') }}">For Universities</a></li>
-                    {{-- TODO: swap in route('user.investors') once that page exists --}}
-                    <li><a href="{{ route('user.success-stories') }}">For Investors</a></li>
+                    <li><a href="{{ route('solutions.students') }}">For Students</a></li>
+                    <li><a href="{{ route('solutions.ngos') }}">For NGOs</a></li>
+                    <li><a href="{{ route('solutions.companies') }}">For Companies</a></li>
+                    <li><a href="{{ route('solutions.professionals') }}">For Professionals</a></li>
+                    <li><a href="{{ route('solutions.universities') }}">For Universities</a></li>
+                    <li><a href="{{ route('solutions.investors') }}">For Investors</a></li>
                 </ul>
             </li>
-            {{-- TODO: replace with route('user.trending') once that page exists --}}
-            <li><a href="{{ route('user.blogs') }}">Trending</a></li>
+            <li><a href="{{ route('user.trending.index') }}">Trending</a></li>
             <li>
                 <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
                     Company <span class="chevron">▾</span>
@@ -1392,11 +1384,8 @@ return request()->routeIs($route) ? 'active' : '';
                     <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
                     <li><a href="{{ route('user.contact') }}">Contact</a></li>
                     <li><a href="{{ route('user.success-stories') }}">Customer Stories</a></li>
-                    {{-- TODO: swap in route('user.partnerships') once that page exists --}}
                     <li><a href="{{ route('user.contact') }}">Partnerships</a></li>
-                    {{-- TODO: swap in route('user.faq') once that page exists --}}
                     <li><a href="{{ route('user.faq') }}">FAQ</a></li>
-                    {{-- TODO: swap in route('user.support') once that page exists --}}
                     <li><a href="{{ route('user.contact') }}">Help &amp; Support</a></li>
                 </ul>
             </li>
