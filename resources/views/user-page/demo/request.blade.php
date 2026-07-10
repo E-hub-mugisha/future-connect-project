@@ -10,12 +10,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
-  {{-- The header below (mega menus + search overlay) uses Tabler Icons
-       ("ti ti-*") and Font Awesome ("fa-brands") for its icons — this
-       standalone page didn't load either before, so they're added here.
-       Its dropdowns/panels/drawer are hand-rolled with plain JS (see the
-       script block after the header markup), so no Bootstrap JS is needed
-       for the header itself. --}}
+ 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -62,7 +57,11 @@
       --border-h: rgba(0, 100, 60, 0.35);
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
     body {
       background: var(--bg);
@@ -86,7 +85,7 @@
       justify-content: space-between;
       position: sticky;
       top: var(--dr-header-h);
-      height: calc(100vh - var(--dr-header-h));
+      /* height: calc(100vh - var(--dr-header-h)); */
       overflow-y: auto;
     }
 
@@ -108,7 +107,11 @@
       flex-shrink: 0;
     }
 
-    .dr-logo-mark svg { width: 18px; height: 18px; fill: #fff; }
+    .dr-logo-mark svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
 
     .dr-logo-wordmark {
       font-size: 15px;
@@ -127,7 +130,10 @@
       line-height: 1;
     }
 
-    .dr-left-body { position: relative; z-index: 1; }
+    .dr-left-body {
+      position: relative;
+      z-index: 1;
+    }
 
     .dr-badge {
       display: inline-flex;
@@ -156,8 +162,17 @@
     }
 
     @keyframes drPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .4; transform: scale(.7); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.7);
+      }
     }
 
     .dr-left-body h1 {
@@ -170,9 +185,11 @@
       margin: 0 0 16px;
     }
 
-    .dr-left-body h1 span { color: var(--green); }
+    .dr-left-body h1 span {
+      color: var(--green);
+    }
 
-    .dr-left-body > p {
+    .dr-left-body>p {
       font-size: 14.5px;
       color: var(--muted);
       line-height: 1.8;
@@ -239,7 +256,10 @@
       margin-bottom: 4px;
     }
 
-    .dr-stat-label { font-size: 11.5px; color: var(--muted); }
+    .dr-stat-label {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
 
     /* ── RIGHT PANEL ── */
     .dr-right {
@@ -280,16 +300,40 @@
       flex-shrink: 0;
     }
 
-    .dr-home-btn:hover { color: var(--green); border-color: var(--border-h); background: var(--green-dim); }
-    .dr-home-btn:hover svg { stroke: var(--green); transform: translateX(-2px); }
+    .dr-home-btn:hover {
+      color: var(--green);
+      border-color: var(--border-h);
+      background: var(--green-dim);
+    }
 
-    .dr-login-hint { font-size: 12.5px; color: var(--muted); }
-    .dr-login-hint a { color: var(--green); text-decoration: none; font-weight: 500; }
-    .dr-login-hint a:hover { text-decoration: underline; }
+    .dr-home-btn:hover svg {
+      stroke: var(--green);
+      transform: translateX(-2px);
+    }
 
-    .dr-right-body { padding: 28px 52px 56px; flex: 1; }
+    .dr-login-hint {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
 
-    .dr-right-head { margin-bottom: 24px; }
+    .dr-login-hint a {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .dr-login-hint a:hover {
+      text-decoration: underline;
+    }
+
+    .dr-right-body {
+      padding: 28px 52px 56px;
+      flex: 1;
+    }
+
+    .dr-right-head {
+      margin-bottom: 24px;
+    }
 
     .dr-right-head h2 {
       font-family: 'Montserrat', sans-serif;
@@ -299,7 +343,11 @@
       margin: 0 0 6px;
     }
 
-    .dr-right-head p { font-size: 13px; color: var(--muted); margin: 0; }
+    .dr-right-head p {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
 
     /* ── PANEL ── */
     .dr-panel {
@@ -314,7 +362,9 @@
     .dr-panel::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 2px;
       background: linear-gradient(90deg, var(--green), transparent);
       border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -354,7 +404,12 @@
       margin-bottom: 3px;
     }
 
-    .dr-alert-success-body p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+    .dr-alert-success-body p {
+      margin: 0;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
     .dr-error-banner {
       display: flex;
@@ -388,14 +443,36 @@
       margin-bottom: 5px;
     }
 
-    .dr-error-banner-body ul { margin: 0; padding-left: 16px; list-style: disc; }
-    .dr-error-banner-body ul li { font-size: 12px; color: var(--red); line-height: 1.6; opacity: .85; }
+    .dr-error-banner-body ul {
+      margin: 0;
+      padding-left: 16px;
+      list-style: disc;
+    }
+
+    .dr-error-banner-body ul li {
+      font-size: 12px;
+      color: var(--red);
+      line-height: 1.6;
+      opacity: .85;
+    }
 
     /* ── FIELDS ── */
-    .dr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-    .dr-row.single { grid-template-columns: 1fr; }
+    .dr-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
 
-    .dr-field { display: flex; flex-direction: column; gap: 6px; }
+    .dr-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    .dr-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
     .dr-field label {
       display: flex;
@@ -421,7 +498,8 @@
     .dr-field-error-tag::before {
       content: '';
       display: inline-block;
-      width: 4px; height: 4px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       background: var(--red);
       flex-shrink: 0;
@@ -445,7 +523,9 @@
     }
 
     .dr-field input::placeholder,
-    .dr-field textarea::placeholder { color: var(--muted2); }
+    .dr-field textarea::placeholder {
+      color: var(--muted2);
+    }
 
     .dr-field input:focus,
     .dr-field select:focus,
@@ -472,8 +552,15 @@
       cursor: pointer;
     }
 
-    .dr-field select option { background: var(--surface2); color: var(--text); }
-    .dr-field textarea { resize: vertical; min-height: 96px; }
+    .dr-field select option {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .dr-field textarea {
+      resize: vertical;
+      min-height: 96px;
+    }
 
     /* ── ACTIONS ── */
     .dr-actions {
@@ -501,7 +588,10 @@
       transition: background 0.2s ease, transform 0.2s ease;
     }
 
-    .dr-btn-submit:hover { background: #62eaaa; transform: translateY(-1px); }
+    .dr-btn-submit:hover {
+      background: #62eaaa;
+      transform: translateY(-1px);
+    }
 
     .dr-note {
       font-size: 11.5px;
@@ -512,19 +602,49 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
-      .dr-page { grid-template-columns: 1fr; }
-      .dr-left { position: static; height: auto; padding: 44px 28px 40px; }
-      .dr-topbar { padding: 22px 24px 0; }
-      .dr-right-body { padding: 24px 24px 56px; }
+      .dr-page {
+        grid-template-columns: 1fr;
+      }
+
+      .dr-left {
+        position: static;
+        height: auto;
+        padding: 44px 28px 40px;
+      }
+
+      .dr-topbar {
+        padding: 22px 24px 0;
+      }
+
+      .dr-right-body {
+        padding: 24px 24px 56px;
+      }
     }
 
     @media (max-width: 520px) {
-      .dr-left { padding: 36px 18px 32px; }
-      .dr-topbar { padding: 18px 14px 0; }
-      .dr-right-body { padding: 18px 14px 48px; }
-      .dr-left-body h1 { font-size: 1.9rem; }
-      .dr-panel { padding: 20px 14px; }
-      .dr-row { grid-template-columns: 1fr; }
+      .dr-left {
+        padding: 36px 18px 32px;
+      }
+
+      .dr-topbar {
+        padding: 18px 14px 0;
+      }
+
+      .dr-right-body {
+        padding: 18px 14px 48px;
+      }
+
+      .dr-left-body h1 {
+        font-size: 1.9rem;
+      }
+
+      .dr-panel {
+        padding: 20px 14px;
+      }
+
+      .dr-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -532,13 +652,13 @@
 <body>
 
   @php
-    $categories = \App\Models\Category::inRandomOrder()->take(3)->get();
+  $categories = \App\Models\Category::inRandomOrder()->take(3)->get();
 
-    if (!function_exists('isActiveRoute')) {
-        function isActiveRoute($route) {
-            return request()->routeIs($route) ? 'active' : '';
-        }
-    }
+  if (!function_exists('isActiveRoute')) {
+  function isActiveRoute($route) {
+  return request()->routeIs($route) ? 'active' : '';
+  }
+  }
   @endphp
 
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1569,489 +1689,29 @@
     }
   </style>
 
-  {{-- ════════════════════ FIXED HEADER STACK ════════════════════ --}}
-  <div class="fc-header-fixed-wrap" id="fcHeaderFixedWrap">
+  {{-- ══════════ MODERN TOP HEADER (standalone page — its own header) ══════════ --}}
+  <header class="fc-topheader">
+    <div class="fc-topheader-inner">
+      <a href="{{ route('user.home') }}" class="fc-th-logo">
+        <div class="fc-th-logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <span class="fc-th-logo-text">Future<span>Connect</span></span>
+      </a>
 
-    <div class="fc-topbar d-none d-lg-block" id="fcTopbar">
-      <div class="fc-tb-inner">
-        <div class="fc-tb-contact">
-          <span>info@futureconnect.rw</span>
-          <span>+250 784 123 456</span>
-        </div>
-        <div class="fc-tb-social">
-          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-        </div>
+      <div class="fc-th-actions">
+        <a href="{{ route('user.home') }}" class="fc-th-home">
+          <i class="ti ti-home"></i> <span>Home</span>
+        </a>
+        <button class="fc-th-toggle" id="fcThemeToggle" aria-label="Toggle theme">
+          <i class="ti ti-sun"></i>
+          <i class="ti ti-moon"></i>
+        </button>
       </div>
     </div>
-
-    <header class="fc-header" id="fcHeader">
-      <div class="fc-header-inner">
-
-        <a href="{{ route('user.home') }}" class="fc-logo-wrap">
-          <div class="fc-logo-mark">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
-          <div class="fc-logo-name">Future<span>Connect</span></div>
-        </a>
-
-        <ul class="fc-nav">
-
-          <li>
-            <a href="javascript:void(0)">Platform <span class="chevron">▾</span></a>
-            <div class="fc-mega">
-              <a class="fc-card" href="{{ route('talent.connections-room') }}">
-                <p class="fc-card-title">Professional Connections</p>
-                <p class="fc-card-desc">Connect with experts and peers in your field.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.projects.index') }}">
-                <p class="fc-card-title">Project Collaboration</p>
-                <p class="fc-card-desc">Build projects with talented people.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.jobs.index') }}">
-                <p class="fc-card-title">Job Opportunities</p>
-                <p class="fc-card-desc">Find jobs, internships, and career opportunities.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.courses') }}">
-                <p class="fc-card-title">Learning</p>
-                <p class="fc-card-desc">Learn, grow, and earn new certifications.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.talents') }}">
-                <p class="fc-card-title">Skills Hub</p>
-                <p class="fc-card-desc">Showcase your skills and portfolio.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.products.index') }}">
-                <p class="fc-card-title">Marketplace</p>
-                <p class="fc-card-desc">Buy and sell technology solutions.</p>
-              </a>
-            </div>
-          </li>
-
-          <li>
-            <a href="javascript:void(0)">Solutions <span class="chevron">▾</span></a>
-            <div class="fc-mega">
-              <a class="fc-card" href="{{ route('solutions.students') }}">
-                <p class="fc-card-title">For Students</p>
-                <p class="fc-card-desc">Launch your career with confidence.</p>
-              </a>
-              <a class="fc-card" href="{{ route('solutions.ngos') }}">
-                <p class="fc-card-title">For NGOs</p>
-                <p class="fc-card-desc">Partner with skilled local talent.</p>
-              </a>
-              <a class="fc-card" href="{{ route('solutions.companies') }}">
-                <p class="fc-card-title">For Companies</p>
-                <p class="fc-card-desc">Find verified and sharp skills faster.</p>
-              </a>
-              <a class="fc-card" href="{{ route('solutions.professionals') }}">
-                <p class="fc-card-title">For Professionals</p>
-                <p class="fc-card-desc">Grow your network and opportunities.</p>
-              </a>
-              <a class="fc-card" href="{{ route('solutions.universities') }}">
-                <p class="fc-card-title">For Universities</p>
-                <p class="fc-card-desc">Empower students beyond graduation.</p>
-              </a>
-              <a class="fc-card" href="{{ route('solutions.investors') }}">
-                <p class="fc-card-title">For Investors</p>
-                <p class="fc-card-desc">Discover skills worth investing in.</p>
-              </a>
-            </div>
-          </li>
-
-          <li>
-            <a href="{{ route('user.trending.index') }}">Trending</a>
-          </li>
-
-          <li>
-            <a href="javascript:void(0)">Company <span class="chevron">▾</span></a>
-            <div class="fc-mega">
-              <a class="fc-card" href="{{ route('user.how-it-works') }}">
-                <p class="fc-card-title">How It Works</p>
-                <p class="fc-card-desc">See the platform in action.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.contact') }}">
-                <p class="fc-card-title">Contact</p>
-                <p class="fc-card-desc">Get in touch with our team.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.success-stories') }}">
-                <p class="fc-card-title">Customer Stories</p>
-                <p class="fc-card-desc">Real outcomes from real talent.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.contact') }}">
-                <p class="fc-card-title">Partnerships</p>
-                <p class="fc-card-desc">Team up with FutureConnect.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.faq') }}">
-                <p class="fc-card-title">FAQ</p>
-                <p class="fc-card-desc">Answers to common questions.</p>
-              </a>
-              <a class="fc-card" href="{{ route('user.contact') }}">
-                <p class="fc-card-title">Help &amp; Support</p>
-                <p class="fc-card-desc">Get help when you need it.</p>
-              </a>
-            </div>
-          </li>
-
-          <li>
-            <a href="{{ route('pricing') }}">Pricing</a>
-          </li>
-
-        </ul>
-
-        <div class="fc-actions">
-
-          <a href="{{ route('demo.request') }}" class="fc-btn-ghost fc-btn-request-demo">Request Demo</a>
-
-          <button class="fc-theme-toggle" id="fcThemeToggle" aria-label="Toggle theme">
-            <i class="ti ti-sun"></i>
-            <i class="ti ti-moon"></i>
-          </button>
-
-          <button class="fc-btn-search" id="fcSearchBtn" aria-label="Search">
-            <i class="ti ti-search"></i>
-          </button>
-
-          @auth
-          @php
-          $dashboards = [
-          'admin' => 'admin.dashboard',
-          'agent' => 'agent.dashboard',
-          'talent' => 'talent.dashboard',
-          'seller' => 'seller.dashboard',
-          'user' => 'user.dashboard',
-          ];
-          @endphp
-          <a href="{{ route($dashboards[auth()->user()->role] ?? 'user.dashboard') }}"
-            class="fc-btn-green">
-            <i class="ti ti-layout-dashboard"></i> Dashboard
-          </a>
-
-          @else
-          <div class="fc-login-wrap">
-            <button class="fc-btn-ghost fc-sign-in-desktop" id="fcSignInBtn">
-              <i class="ti ti-user"></i> Sign In
-            </button>
-
-            <div class="fc-login-panel" id="fcLoginPanel">
-              <div class="fc-lp-head">
-                <div class="fc-lp-head-left">
-                  <h4>Welcome Back</h4>
-                  <p>Sign in to your account</p>
-                </div>
-                <button class="fc-lp-close" id="fcLoginClose">✕</button>
-              </div>
-
-              <form action="{{ route('login') }}" method="POST">
-                @csrf
-
-                <div class="fc-lp-field">
-                  <label for="lp_email">Email</label>
-                  <div class="fc-lp-input-wrap">
-                    <i class="ti ti-mail fc-lp-icon"></i>
-                    <input type="email" id="lp_email" name="email"
-                      placeholder="you@example.com" required
-                      value="{{ old('email') }}">
-                  </div>
-                </div>
-
-                <div class="fc-lp-field">
-                  <label for="lp_password">Password</label>
-                  <div class="fc-lp-input-wrap">
-                    <i class="ti ti-lock fc-lp-icon"></i>
-                    <input type="password" id="lp_password" name="password"
-                      placeholder="••••••••" required>
-                  </div>
-                </div>
-
-                <div class="fc-lp-row">
-                  <label class="fc-lp-remember">
-                    <input type="checkbox" name="remember">
-                    <span>Remember me</span>
-                  </label>
-                  <a href="{{ route('password.request') }}" class="fc-lp-forgot">
-                    Forgot password?
-                  </a>
-                </div>
-
-                <button type="submit" class="fc-lp-submit">Sign In →</button>
-              </form>
-
-              <div class="fc-lp-footer">
-                No account yet?
-                <a href="{{ route('register') }}">Create one →</a>
-              </div>
-            </div>
-          </div>
-
-          <a href="{{ route('user.register_as_talent') }}"
-            class="fc-btn-register-mobile"
-            aria-label="Register Skills"
-            title="Register Skills">
-            <i class="ti ti-plus"></i>
-          </a>
-
-          <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green fc-register-desktop">
-            Register Skills
-          </a>
-          @endauth
-
-          <button class="fc-hamburger" id="fcHamburger" aria-label="Menu">
-            <i class="ti ti-menu-2"></i>
-          </button>
-
-        </div>
-
-      </div>
-    </header>
-
-  </div>
-
-  <div class="fc-header-spacer" id="fcHeaderSpacer"></div>
-
-  {{-- ════════════════════ MOBILE DRAWER ════════════════════ --}}
-  <div class="fc-drawer" id="fcDrawer">
-    <div class="fc-drawer-bg" id="fcDrawerBg"></div>
-    <div class="fc-drawer-panel">
-
-      <div class="fc-drawer-logo">
-        <a href="{{ route('user.home') }}" class="fc-logo-wrap">
-          <div class="fc-logo-mark">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
-          <div class="fc-logo-name">Future<span>Connect</span></div>
-        </a>
-        <button class="fc-drawer-close" id="fcDrawerClose">✕</button>
-      </div>
-
-      <ul class="fc-drawer-nav">
-        <li>
-          <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
-            Platform <span class="chevron">▾</span>
-          </a>
-          <ul class="fc-drawer-sub">
-            <li><a href="{{ route('talent.connections-room') }}">Professional Connections</a></li>
-            <li><a href="{{ route('user.talents') }}">Project Collaboration</a></li>
-            <li><a href="{{ route('user.jobs.index') }}">Job Opportunities</a></li>
-            <li><a href="{{ route('user.courses') }}">Learning</a></li>
-            <li><a href="{{ route('user.register_as_talent') }}">Skills Hub</a></li>
-            <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
-            Solutions <span class="chevron">▾</span>
-          </a>
-          <ul class="fc-drawer-sub">
-            <li><a href="{{ route('solutions.students') }}">For Students</a></li>
-            <li><a href="{{ route('solutions.ngos') }}">For NGOs</a></li>
-            <li><a href="{{ route('solutions.companies') }}">For Companies</a></li>
-            <li><a href="{{ route('solutions.professionals') }}">For Professionals</a></li>
-            <li><a href="{{ route('solutions.universities') }}">For Universities</a></li>
-            <li><a href="{{ route('solutions.investors') }}">For Investors</a></li>
-          </ul>
-        </li>
-        <li><a href="{{ route('user.trending.index') }}">Trending</a></li>
-        <li>
-          <a href="javascript:void(0)" onclick="toggleDrawerSub(this)">
-            Company <span class="chevron">▾</span>
-          </a>
-          <ul class="fc-drawer-sub">
-            <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
-            <li><a href="{{ route('user.contact') }}">Contact</a></li>
-            <li><a href="{{ route('user.success-stories') }}">Customer Stories</a></li>
-            <li><a href="{{ route('user.contact') }}">Partnerships</a></li>
-            <li><a href="{{ route('user.faq') }}">FAQ</a></li>
-            <li><a href="{{ route('user.contact') }}">Help &amp; Support</a></li>
-          </ul>
-        </li>
-        <li><a href="{{ route('pricing') }}">Pricing</a></li>
-      </ul>
-
-      <div class="fc-drawer-ctas">
-        @auth
-        @php
-        $dashboards = ['admin'=>'admin.dashboard','agent'=>'agent.dashboard','talent'=>'talent.dashboard','seller'=>'seller.dashboard','user'=>'user.dashboard'];
-        @endphp
-        <a href="{{ route($dashboards[auth()->user()->role] ?? 'user.dashboard') }}" class="fc-btn-green">
-          Dashboard
-        </a>
-        @else
-        <button class="fc-btn-ghost" onclick="openMobileLogin()">Sign In</button>
-        <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green">Register Skills</a>
-        @endauth
-        <a href="{{ route('demo.request') }}" class="fc-btn-ghost">Request Demo</a>
-      </div>
-
-    </div>
-  </div>
-
-  {{-- ════════════════════ SEARCH OVERLAY ════════════════════ --}}
-  <div class="fc-search-overlay" id="fcSearchOverlay">
-    <button class="fc-search-close" id="fcSearchClose">✕</button>
-    <div class="fc-search-box">
-      <p>Search talents, skills, stories &amp; more</p>
-      <form action="{{ route('talent.search') }}" method="GET">
-        <div class="fc-search-input-wrap">
-          <input type="text" name="keyword" placeholder="e.g. Photography, Coding, Dance..." required autofocus>
-          <button type="submit" class="fc-search-submit"><i class="ti ti-search"></i></button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-
-      const fixedWrap = document.getElementById('fcHeaderFixedWrap');
-      const header = document.getElementById('fcHeader');
-      const topbar = document.getElementById('fcTopbar');
-      const spacer = document.getElementById('fcHeaderSpacer');
-
-      const SCROLL_THRESHOLD = 60;
-
-      function syncSpacerHeight() {
-        if (fixedWrap && spacer) {
-          spacer.style.height = fixedWrap.offsetHeight + 'px';
-        }
-      }
-
-      function handleScrollState() {
-        const scrolled = window.scrollY > SCROLL_THRESHOLD;
-        header && header.classList.toggle('scrolled', scrolled);
-        topbar && topbar.classList.toggle('fc-hide', scrolled);
-      }
-
-      handleScrollState();
-      syncSpacerHeight();
-
-      window.addEventListener('scroll', () => {
-        handleScrollState();
-      }, { passive: true });
-
-      topbar && topbar.addEventListener('transitionend', syncSpacerHeight);
-
-      window.addEventListener('resize', syncSpacerHeight, { passive: true });
-
-      const signInBtn = document.getElementById('fcSignInBtn');
-      const loginPanel = document.getElementById('fcLoginPanel');
-      const loginClose = document.getElementById('fcLoginClose');
-
-      if (signInBtn && loginPanel) {
-        signInBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          loginPanel.classList.toggle('open');
-        });
-
-        loginClose && loginClose.addEventListener('click', () => {
-          loginPanel.classList.remove('open');
-        });
-
-        document.addEventListener('click', (e) => {
-          if (loginPanel.classList.contains('open') &&
-            !loginPanel.contains(e.target) &&
-            e.target !== signInBtn) {
-            loginPanel.classList.remove('open');
-          }
-        });
-
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') loginPanel.classList.remove('open');
-        });
-      }
-
-      const searchBtn = document.getElementById('fcSearchBtn');
-      const searchOverlay = document.getElementById('fcSearchOverlay');
-      const searchClose = document.getElementById('fcSearchClose');
-
-      searchBtn && searchBtn.addEventListener('click', () => {
-        searchOverlay.classList.add('open');
-        setTimeout(() => searchOverlay.querySelector('input').focus(), 100);
-      });
-
-      searchClose && searchClose.addEventListener('click', () => {
-        searchOverlay.classList.remove('open');
-      });
-
-      searchOverlay && searchOverlay.addEventListener('click', (e) => {
-        if (e.target === searchOverlay) searchOverlay.classList.remove('open');
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') searchOverlay && searchOverlay.classList.remove('open');
-      });
-
-      const hamburger = document.getElementById('fcHamburger');
-      const drawer = document.getElementById('fcDrawer');
-      const drawerBg = document.getElementById('fcDrawerBg');
-      const drawerClose = document.getElementById('fcDrawerClose');
-
-      function openDrawer() {
-        drawer.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeDrawer() {
-        drawer.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-
-      hamburger && hamburger.addEventListener('click', openDrawer);
-      drawerClose && drawerClose.addEventListener('click', closeDrawer);
-      drawerBg && drawerBg.addEventListener('click', closeDrawer);
-
-      window.toggleDrawerSub = function(el) {
-        const sub = el.nextElementSibling;
-        if (sub && sub.classList.contains('fc-drawer-sub')) {
-          sub.classList.toggle('open');
-          el.classList.toggle('sub-open', sub.classList.contains('open'));
-        }
-      };
-
-      window.openMobileLogin = function() {
-        closeDrawer();
-        if (loginPanel) {
-          setTimeout(() => loginPanel.classList.add('open'), 350);
-          document.getElementById('fcSignInBtn') && document.getElementById('fcSignInBtn').scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-          });
-        }
-      };
-
-    })();
-  </script>
-
-  <script>
-    (function initTheme() {
-      const root = document.documentElement;
-      const stored = localStorage.getItem('fc-theme');
-      const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-      const theme = stored || (systemPrefersLight ? 'light' : 'dark');
-      if (theme === 'light') root.setAttribute('data-h-theme', 'light');
-    })();
-
-    function fcSetTheme(theme) {
-      const root = document.documentElement;
-      if (theme === 'light') {
-        root.setAttribute('data-h-theme', 'light');
-      } else {
-        root.removeAttribute('data-h-theme');
-      }
-      localStorage.setItem('fc-theme', theme);
-    }
-
-    function fcToggleTheme() {
-      const isLight = document.documentElement.getAttribute('data-h-theme') === 'light';
-      fcSetTheme(isLight ? 'dark' : 'light');
-    }
-
-    const themeToggle = document.getElementById('fcThemeToggle');
-    themeToggle && themeToggle.addEventListener('click', fcToggleTheme);
-  </script>
+  </header>
 
   <div class="dr-page">
 
@@ -2284,12 +1944,34 @@
 
   </div>
 
-  {{-- Keeps this two-column layout below the fixed header stack: the header
-       component's own wrapper (#fcHeaderFixedWrap) already reserves its
-       height via its own spacer for normal page flow, but since .dr-left is
-       `position: sticky`, it also needs to know that height as an offset so
-       it sticks just under the header instead of under the very top of the
-       viewport. This mirrors the sync the header does for its own spacer. --}}
+  <script>
+    /* ── Theme switch: shared across all pages via localStorage ── */
+    (function initTheme() {
+      const root = document.documentElement;
+      const stored = localStorage.getItem('fc-theme');
+      const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      const theme = stored || (systemPrefersLight ? 'light' : 'dark');
+      if (theme === 'light') root.setAttribute('data-h-theme', 'light');
+    })();
+
+    function fcSetTheme(theme) {
+      const root = document.documentElement;
+      if (theme === 'light') {
+        root.setAttribute('data-h-theme', 'light');
+      } else {
+        root.removeAttribute('data-h-theme');
+      }
+      localStorage.setItem('fc-theme', theme);
+    }
+
+    function fcToggleTheme() {
+      const isLight = document.documentElement.getAttribute('data-h-theme') === 'light';
+      fcSetTheme(isLight ? 'dark' : 'light');
+    }
+
+    document.getElementById('fcThemeToggle')?.addEventListener('click', fcToggleTheme);
+  </script>
+
   <script>
     (function() {
       const root = document.documentElement;
@@ -2302,11 +1984,16 @@
       }
 
       syncHeaderOffset();
-      window.addEventListener('resize', syncHeaderOffset, { passive: true });
-      window.addEventListener('scroll', syncHeaderOffset, { passive: true });
+      window.addEventListener('resize', syncHeaderOffset, {
+        passive: true
+      });
+      window.addEventListener('scroll', syncHeaderOffset, {
+        passive: true
+      });
       fixedWrap && fixedWrap.addEventListener('transitionend', syncHeaderOffset);
     })();
   </script>
 
 </body>
+
 </html>
