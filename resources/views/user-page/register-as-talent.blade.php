@@ -10,6 +10,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 
   <style>
     /* ─── TOKENS ─────────────────────────────────────────── */
@@ -45,6 +46,119 @@
       margin: 0;
       font-family: 'Montserrat', sans-serif;
       color: var(--text);
+    }
+
+    /* ─── TOP HEADER (standalone page — carries its own header + toggle) ── */
+    .fc-topheader {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+    }
+
+    .fc-topheader-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .fc-th-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .fc-th-logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .fc-th-logo-mark svg {
+      width: 16px;
+      height: 16px;
+      fill: #0e1618;
+    }
+
+    .fc-th-logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .fc-th-logo-text span {
+      color: var(--green);
+    }
+
+    .fc-th-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fc-th-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .fc-th-home:hover {
+      color: var(--green);
+      border-color: var(--border-h);
+      background: var(--green-dim);
+    }
+
+    .fc-th-toggle {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .fc-th-toggle:hover {
+      color: #fff;
+      border-color: var(--border-h);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .fc-th-toggle .ti-sun { display: none; }
+    .fc-th-toggle .ti-moon { display: inline-flex; }
+
+    @media (max-width: 520px) {
+      .fc-topheader-inner { padding: 0 18px; }
+      .fc-th-home span { display: none; }
     }
 
     /* ─── PAGE GRID ───────────────────────────────────────── */
@@ -1062,7 +1176,106 @@
       margin: 0;
       line-height: 1;
     }
+
+    /* ══════════════════════════════════════
+       LIGHT THEME OVERRIDES (matches shared header toggle site-wide)
+    ══════════════════════════════════════ */
+    [data-h-theme="light"] {
+      --bg: #f6faf8;
+      --surface: #ffffff;
+      --surface2: #eef4f1;
+      --surface3: #e6f1ec;
+      --green: #00a667;
+      --green-mid: #00c07a;
+      --green-dim: rgba(0, 166, 103, 0.08);
+      --green-glow: rgba(0, 166, 103, 0.16);
+      --red: #d94848;
+      --red-dim: rgba(217, 72, 72, 0.08);
+      --red-border: rgba(217, 72, 72, 0.3);
+      --text: #10201b;
+      --muted: #5b7a70;
+      --muted2: #8fa89e;
+      --border: rgba(0, 100, 60, 0.12);
+      --border-h: rgba(0, 100, 60, 0.3);
+    }
+
+    /* Headings + text hardcoded to #fff throughout the panel need to flip dark */
+    [data-h-theme="light"] .fc-th-logo-text,
+    [data-h-theme="light"] .fc-logo-text,
+    [data-h-theme="light"] .fc-logo-wordmark,
+    [data-h-theme="light"] .fc-left-body h1,
+    [data-h-theme="light"] .fc-feature-text strong,
+    [data-h-theme="light"] .fc-panel-head h3,
+    [data-h-theme="light"] .fc-right-head h2,
+    [data-h-theme="light"] .fc-success h3 {
+      color: #10201b;
+    }
+
+    [data-h-theme="light"] .fc-th-toggle:hover {
+      color: #10201b;
+      background: rgba(0, 100, 60, 0.06);
+    }
+
+    [data-h-theme="light"] .fc-th-toggle .ti-sun { display: inline-flex; }
+    [data-h-theme="light"] .fc-th-toggle .ti-moon { display: none; }
+
+    /* Tagline color was a hardcoded dark-only hex */
+    [data-h-theme="light"] .fc-logo-tagline {
+      color: #8fa89e;
+    }
+
+    /* Step-node checkmark SVG stroke hardcoded to #fff — fine on solid green
+       "done" background, but invisible on the light green-dim "active" bg */
+    [data-h-theme="light"] .fc-step-node.fc-active svg {
+      stroke: var(--green);
+    }
+
+    /* Select dropdown option background was hardcoded to a dark hex */
+    [data-h-theme="light"] .fc-field select option {
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    /* Error banner icon background hardcoded rgba tuned for dark bg */
+    [data-h-theme="light"] .fc-error-banner-icon {
+      background: rgba(217, 72, 72, 0.1);
+    }
+
+    /* Error message text color was a hardcoded pink meant for dark bg */
+    [data-h-theme="light"] .fc-error-banner-body ul li {
+      color: #b03a3a;
+    }
+
+    /* btn-next / btn-submit text color (#0a1f14) already reads fine on both
+       theme's green accent — intentionally left unchanged */
   </style>
+</head>
+
+<body>
+
+  {{-- ══════════ MODERN TOP HEADER (standalone page — its own header) ══════════ --}}
+  <header class="fc-topheader">
+    <div class="fc-topheader-inner">
+      <a href="{{ route('user.home') }}" class="fc-th-logo">
+        <div class="fc-th-logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <span class="fc-th-logo-text">Future<span>Connect</span></span>
+      </a>
+
+      <div class="fc-th-actions">
+        <a href="{{ route('user.home') }}" class="fc-th-home">
+          <i class="ti ti-home"></i> <span>Home</span>
+        </a>
+        <button class="fc-th-toggle" id="fcThemeToggle" aria-label="Toggle theme">
+          <i class="ti ti-sun"></i>
+          <i class="ti ti-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
 
   <div class="fc-page">
 
@@ -1129,14 +1342,9 @@
     {{-- ══════════ RIGHT — Form ══════════ --}}
     <div class="fc-right">
 
-      {{-- Top Bar: Back to Home + Sign in link --}}
+      {{-- Top Bar: Sign in link (Back to Home now lives in the sticky header above) --}}
       <div class="fc-topbar">
-        <a href="{{ route('user.home') }}" class="fc-home-btn">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 12H5M5 12l7-7M5 12l7 7" />
-          </svg>
-          Back to Home
-        </a>
+        <span></span>
         <span class="fc-login-hint">
           Have a profile? <a href="{{ route('login') }}">Sign in →</a>
         </span>
@@ -1493,6 +1701,34 @@
   </div>{{-- /fc-page --}}
 
   <script>
+    /* ── Theme switch: shared across all pages via localStorage ── */
+    (function initTheme() {
+      const root = document.documentElement;
+      const stored = localStorage.getItem('fc-theme');
+      const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      const theme = stored || (systemPrefersLight ? 'light' : 'dark');
+      if (theme === 'light') root.setAttribute('data-h-theme', 'light');
+    })();
+
+    function fcSetTheme(theme) {
+      const root = document.documentElement;
+      if (theme === 'light') {
+        root.setAttribute('data-h-theme', 'light');
+      } else {
+        root.removeAttribute('data-h-theme');
+      }
+      localStorage.setItem('fc-theme', theme);
+    }
+
+    function fcToggleTheme() {
+      const isLight = document.documentElement.getAttribute('data-h-theme') === 'light';
+      fcSetTheme(isLight ? 'dark' : 'light');
+    }
+
+    document.getElementById('fcThemeToggle')?.addEventListener('click', fcToggleTheme);
+  </script>
+
+  <script>
     let current = 0;
     const total = 4;
 
@@ -1700,6 +1936,6 @@
     @endif
   </script>
 
-  </body>
+</body>
 
 </html>

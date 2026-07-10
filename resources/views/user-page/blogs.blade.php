@@ -668,6 +668,62 @@ $tbSort = request('sort', 'latest');
             align-items: flex-start;
         }
     }
+
+    /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+    [data-h-theme="light"] {
+        --tb-bg: #f6faf8;
+        --tb-surface: #ffffff;
+        --tb-surface2: #eef4f1;
+        --tb-green: #00a667;
+        --tb-green-dim: rgba(0, 166, 103, .08);
+        --tb-green-glow: rgba(0, 166, 103, .18);
+        --tb-text: #10201b;
+        --tb-muted: #5b7a70;
+        --tb-border: rgba(0, 100, 60, .12);
+        --tb-border-h: rgba(0, 100, 60, .3);
+    }
+
+    /* Breadcrumb band: hardcoded dark gradient + grid lines need light equivalents */
+    [data-h-theme="light"] .tb-breadcrumb {
+        background: linear-gradient(145deg, #f0f7f4 0%, #e6f3ee 65%, #f0f7f4 100%);
+    }
+
+    [data-h-theme="light"] .tb-breadcrumb::before {
+        background-image:
+            linear-gradient(rgba(0, 100, 60, .06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 100, 60, .06) 1px, transparent 1px);
+    }
+
+    [data-h-theme="light"] .tb-breadcrumb-title {
+        color: #10201b;
+    }
+
+    /* Card title + card-title link color was hardcoded #fff */
+    [data-h-theme="light"] .tb-card-title a {
+        color: #10201b;
+    }
+
+    /* Category pill + favorite button on card images: hardcoded translucent-black
+       chips read as dark smudges on a light card image, switch to translucent-white */
+    [data-h-theme="light"] .tb-card-cat {
+        background: rgba(255, 255, 255, .85);
+        border-color: var(--tb-border-h);
+    }
+
+    [data-h-theme="light"] .tb-card-fav {
+        background: rgba(255, 255, 255, .85);
+    }
+
+    /* Select dropdown caret SVG is hardcoded to a dark-theme muted color;
+       swap to the light-theme muted tone so it stays visible */
+    [data-h-theme="light"] .tb-select {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%235b7a70'/></svg>");
+    }
+
+    /* Search input placeholder was hardcoded to a dark-theme-only hex */
+    [data-h-theme="light"] .tb-search-form input::placeholder {
+        color: #a9c2b8;
+    }
 </style>
 
 <div class="tb-blog-page">

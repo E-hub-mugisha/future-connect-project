@@ -758,6 +758,43 @@ $categories = \App\Models\Category::all();
     background: linear-gradient(90deg, transparent, var(--border), transparent);
     margin: 0;
   }
+
+  /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+  [data-h-theme="light"] {
+    --bg:         #f6faf8;
+    --bg2:        #ffffff;
+    --bg3:        #eef4f1;
+    --border:     rgba(0, 100, 60, 0.1);
+    --green:      #00a667;
+    --green-dim:  rgba(0, 166, 103, 0.08);
+    --green-glow: rgba(0, 166, 103, 0.2);
+    --text:       #10201b;
+    --muted:      #5b7a70;
+    --white:      #10201b;
+  }
+
+  /* Hero radial glow — soften so it doesn't look like a smear on white */
+  [data-h-theme="light"] #hero-section::before {
+    background: radial-gradient(circle, rgba(0,166,103,0.08) 0%, transparent 70%);
+  }
+
+  [data-h-theme="light"] #cta-band::before {
+    background: radial-gradient(circle, rgba(0,166,103,0.06) 0%, transparent 70%);
+  }
+
+  /* Modal close icon: Bootstrap's btn-close-white forces a white X,
+     invisible on a light modal header — revert to the default dark icon */
+  [data-h-theme="light"] .btn-close-white {
+    filter: none;
+  }
+
+  /* form-control/select placeholder + option colors were fine via --muted,
+     but modal header background (--bg3) + title (--white→now dark) already
+     cascade correctly through variables — no extra rule needed there */
+
+  /* faq-q background uses --bg2, text uses --text — cascades automatically */
+
+  /* step-dot "done" state background uses --green-dim — cascades fine */
 </style>
 
 <!-- ═══ HERO ═══ -->

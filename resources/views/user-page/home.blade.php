@@ -861,6 +861,73 @@
     .fc-accordion .accordion-body {
         padding: 24px;
     }
+
+    /* ══════════════════════════════════════
+   LIGHT THEME OVERRIDES
+   Toggled via data-h-theme="light" on <html>
+══════════════════════════════════════ */
+[data-h-theme="light"] {
+    --bg: #f6faf8;
+    --bg-card: #ffffff;
+    --bg-glass: rgba(0, 60, 40, 0.03);
+    --bg-glass2: rgba(0, 166, 103, 0.07);
+    --accent: #00a667;
+    --accent-dim: #00814f;
+    --accent-glow: rgba(0, 166, 103, 0.16);
+    --accent-line: rgba(0, 166, 103, 0.3);
+    --border: rgba(0, 60, 40, 0.08);
+    --border-h: rgba(0, 166, 103, 0.28);
+    --text-1: #10201b;
+    --text-2: #4f6b65;
+    --text-3: #7d9791;
+}
+
+[data-h-theme="light"] body {
+    background: var(--bg) !important;
+    color: var(--text-1);
+}
+
+/* Buttons keep white text on the green accent — fine as-is since --accent
+   stays a solid saturated green, but primary button text explicitly pinned: */
+[data-h-theme="light"] .btn-fc-primary {
+    color: #fff;
+}
+[data-h-theme="light"] .btn-fc-primary:hover {
+    color: #fff;
+}
+
+/* Hero overlay: lighten the gradient so it reads correctly over the bg image */
+[data-h-theme="light"] .fc-hero-overlay {
+    background: linear-gradient(135deg,
+            rgba(246, 250, 248, 0.93) 0%,
+            rgba(246, 250, 248, 0.78) 50%,
+            rgba(0, 166, 103, 0.10) 100%);
+}
+
+/* Provide-box icons: swap the invert-to-green filter for a light-safe version */
+[data-h-theme="light"] .fc-provide-box .provide-icon img {
+    filter: brightness(0) saturate(100%) invert(38%) sepia(90%) saturate(1000%) hue-rotate(120deg) brightness(90%) contrast(101%);
+}
+
+/* Partner logos: don't force-invert to white on a light background */
+[data-h-theme="light"] .partners-scroll img {
+    filter: none;
+    opacity: 0.45;
+}
+[data-h-theme="light"] .partners-scroll img:hover {
+    opacity: 0.85;
+}
+
+/* Feature-list checkmark icon uses a hardcoded green stroke (#00a667) already —
+   it stays correct in light mode as-is, no change needed. */
+
+/* Accordion chevron: don't invert-to-white on a light card */
+[data-h-theme="light"] .fc-accordion .accordion-button::after {
+    filter: none;
+}
+
+/* Avatar / testimonial image borders reference --bg for contrast ring —
+   automatically correct via variable, no override needed. */
 </style>
 
 {{-- ════════════════════════════════════

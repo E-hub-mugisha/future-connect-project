@@ -30,6 +30,49 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         --ss-border: rgba(0, 166, 103, .16);
         --ss-border-h: rgba(0, 166, 103, .38);
         --ss-radius: 14px;
+        --ss-btn-text: #06120d;
+        --ss-heading: #ffffff;
+        --ss-placeholder: #3d5a52;
+        --ss-error: #ff8a8a;
+        --ss-card-shadow: rgba(0, 0, 0, .4);
+        --ss-quote-bg: rgba(8, 15, 17, .75);
+        --ss-hero-grad: linear-gradient(145deg, #091315 0%, #0c1e21 65%, #081213 100%);
+    }
+
+    /* ── LIGHT THEME OVERRIDES ──────────────────────
+       Driven by the same [data-h-theme="light"] attribute
+       the header sets on <html> (and persists via
+       localStorage 'fc-theme'), so this page just follows
+       whatever the header's toggle already decided. ── */
+    [data-h-theme="light"] {
+        --ss-bg: #f6faf8;
+        --ss-surface: #ffffff;
+        --ss-surface2: #eef4f1;
+        --ss-green: #00a667;
+        --ss-green-dim: rgba(0, 166, 103, .08);
+        --ss-green-glow: rgba(0, 166, 103, .18);
+        --ss-text: #10201b;
+        --ss-muted: #5b7a70;
+        --ss-border: rgba(0, 100, 60, .12);
+        --ss-border-h: rgba(0, 100, 60, .3);
+        --ss-btn-text: #ffffff;
+        --ss-heading: #10201b;
+        --ss-placeholder: #a9c2b8;
+        --ss-error: #c94040;
+        --ss-card-shadow: rgba(16, 32, 27, .12);
+        --ss-quote-bg: rgba(255, 255, 255, .85);
+        --ss-hero-grad: linear-gradient(145deg, #eef7f2 0%, #ffffff 65%, #f2f8f5 100%);
+    }
+
+    [data-h-theme="light"] .ss-modal .btn-close {
+        filter: none;
+        opacity: .6;
+    }
+
+    [data-h-theme="light"] .ss-card:hover,
+    [data-h-theme="light"] .ss-cta-banner,
+    [data-h-theme="light"] .ss-filter-bar {
+        box-shadow: 0 1px 3px rgba(16, 32, 27, .05);
     }
 
     .ss-page,
@@ -44,16 +87,18 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         font-family: 'DM Sans', sans-serif;
         color: var(--ss-text);
         padding-bottom: 60px;
+        transition: background .25s ease;
     }
 
     /* ── Breadcrumb / hero ── */
     .ss-breadcrumb {
-        background: linear-gradient(145deg, #091315 0%, #0c1e21 65%, #081213 100%);
+        background: var(--ss-hero-grad);
         border-bottom: 1px solid var(--ss-border);
         padding: 44px 0 36px;
         position: relative;
         overflow: hidden;
         text-align: center;
+        transition: background .25s ease;
     }
 
     .ss-breadcrumb::before {
@@ -132,7 +177,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         font-weight: 800;
         font-size: clamp(26px, 3.6vw, 40px);
         letter-spacing: -1px;
-        color: #fff;
+        color: var(--ss-heading);
         margin: 0 0 10px;
     }
 
@@ -153,7 +198,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         align-items: center;
         gap: 8px;
         background: var(--ss-green);
-        color: #06120d;
+        color: var(--ss-btn-text);
         font-weight: 700;
         font-size: 13.5px;
         padding: 12px 22px;
@@ -165,7 +210,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
 
     .ss-hero-cta:hover {
         background: #00c07a;
-        color: #06120d;
+        color: var(--ss-btn-text);
         transform: translateY(-2px);
     }
 
@@ -176,7 +221,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
 
     /* ── CTA banner ── */
     .ss-cta-banner {
-        background: linear-gradient(120deg, var(--ss-surface) 0%, #10201b 100%);
+        background: linear-gradient(120deg, var(--ss-surface) 0%, var(--ss-surface2) 100%);
         border: 1px solid var(--ss-border);
         border-radius: var(--ss-radius);
         padding: 30px 34px;
@@ -188,6 +233,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         margin-bottom: 30px;
         position: relative;
         overflow: hidden;
+        transition: background .25s, border-color .25s;
     }
 
     .ss-cta-banner::after {
@@ -209,7 +255,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
 
     .ss-cta-banner-text h4 {
         font-family: 'Syne', sans-serif;
-        color: #fff;
+        color: var(--ss-heading);
         font-weight: 700;
         font-size: 19px;
         margin: 0 0 6px;
@@ -229,7 +275,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         align-items: center;
         gap: 8px;
         background: var(--ss-green);
-        color: #06120d;
+        color: var(--ss-btn-text);
         font-weight: 700;
         font-size: 13.5px;
         padding: 13px 24px;
@@ -256,6 +302,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         gap: 18px;
         flex-wrap: wrap;
         margin-bottom: 30px;
+        transition: background .25s, border-color .25s;
     }
 
     .ss-search-form {
@@ -277,7 +324,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     }
 
     .ss-search-form input::placeholder {
-        color: #3d5a52;
+        color: var(--ss-placeholder);
     }
 
     .ss-search-form input:focus {
@@ -328,12 +375,12 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     }
 
     .ss-chip:hover {
-        color: #fff;
+        color: var(--ss-heading);
         border-color: var(--ss-border-h);
     }
 
     .ss-chip.active {
-        color: #fff;
+        color: var(--ss-heading);
         background: var(--ss-green-dim);
         border-color: var(--ss-border-h);
         font-weight: 600;
@@ -376,13 +423,13 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: transform .25s, box-shadow .25s, border-color .25s;
+        transition: transform .25s, box-shadow .25s, border-color .25s, background .25s;
         cursor: pointer;
     }
 
     .ss-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 20px 44px rgba(0, 0, 0, .4);
+        box-shadow: 0 20px 44px var(--ss-card-shadow);
         border-color: var(--ss-border-h);
     }
 
@@ -411,7 +458,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         width: 34px;
         height: 34px;
         border-radius: 9px;
-        background: rgba(8, 15, 17, .75);
+        background: var(--ss-quote-bg);
         backdrop-filter: blur(6px);
         border: 1px solid var(--ss-border-h);
         color: var(--ss-green);
@@ -440,7 +487,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
         background: none;
         border: none;
         padding: 0;
-        color: #fff;
+        color: var(--ss-heading);
         text-decoration: none;
         transition: color .18s;
         text-align: left;
@@ -544,7 +591,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     }
 
     .ss-empty h5 {
-        color: #fff;
+        color: var(--ss-heading);
         font-family: 'Syne', sans-serif;
         margin-bottom: 6px;
     }
@@ -577,7 +624,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     .ss-pagination-wrap .page-item.active .page-link {
         background: var(--ss-green);
         border-color: var(--ss-green);
-        color: #fff;
+        color: var(--ss-btn-text);
     }
 
     .ss-pagination-wrap .page-link:hover {
@@ -601,7 +648,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     .ss-modal .modal-title {
         font-family: 'Syne', sans-serif;
         font-weight: 700;
-        color: #fff;
+        color: var(--ss-heading);
         font-size: 18px;
     }
 
@@ -640,7 +687,7 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     }
 
     .ss-form-control::placeholder {
-        color: #3d5a52;
+        color: var(--ss-placeholder);
     }
 
     .ss-form-control:focus {
@@ -658,14 +705,14 @@ $ssRoles = \App\Models\SuccessStory::whereNotNull('role')
     }
 
     .ss-form-error {
-        color: #ff8a8a;
+        color: var(--ss-error);
         font-size: 11.5px;
         margin-top: 5px;
     }
 
     .ss-btn-primary {
         background: var(--ss-green);
-        color: #06120d;
+        color: var(--ss-btn-text);
         font-weight: 700;
         font-size: 13.5px;
         border: none;

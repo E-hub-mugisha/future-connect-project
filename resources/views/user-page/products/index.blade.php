@@ -270,6 +270,76 @@
         .filter-bar { flex-direction: column; align-items: flex-start; }
         .products-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+    [data-h-theme="light"] {
+        --bg-deep:    #f6faf8;
+        --bg-card:    #ffffff;
+        --bg-raised:  #eef4f1;
+        --accent:     #00a667;
+        --accent-dim: rgba(0,166,103,.08);
+        --accent-glow:rgba(0,166,103,.2);
+        --border:     rgba(0,100,60,.1);
+        --text:       #10201b;
+        --muted:      #5b7a70;
+        --white:      #10201b;
+    }
+
+    /* Hero radial glow + grid lines tuned for dark bg — soften/darken tint */
+    [data-h-theme="light"] .hero-banner::before {
+        background: radial-gradient(ellipse 70% 60% at 60% 50%, rgba(0,166,103,.08) 0%, transparent 70%);
+    }
+    [data-h-theme="light"] .hero-grid-lines {
+        background-image:
+            linear-gradient(rgba(0,100,60,.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,100,60,.05) 1px, transparent 1px);
+    }
+
+    /* btn-hero-primary text was var(--white), now correctly resolves dark —
+       but the button sits on solid green, so force it back to white here */
+    [data-h-theme="light"] .btn-hero-primary,
+    [data-h-theme="light"] .btn-hero-primary:hover,
+    [data-h-theme="light"] .btn-accent,
+    [data-h-theme="light"] .btn-accent:hover,
+    [data-h-theme="light"] .apply-seller-fab,
+    [data-h-theme="light"] .apply-seller-fab:hover,
+    [data-h-theme="light"] .product-quick-view,
+    [data-h-theme="light"] .page-btn:hover,
+    [data-h-theme="light"] .page-btn.active,
+    [data-h-theme="light"] .btn-view-product:hover {
+        color: #fff;
+    }
+
+    /* Product card image overlay: dark-to-transparent scrim reads muddy
+       against a white card, soften it */
+    [data-h-theme="light"] .product-img-overlay {
+        background: linear-gradient(to top, rgba(16,32,27,.55) 0%, transparent 60%);
+    }
+
+    /* Product fav icon circle background hardcoded to near-black translucent */
+    [data-h-theme="light"] .product-fav {
+        background: rgba(255,255,255,.85);
+    }
+
+    /* Product card hover shadow tuned for dark bg (heavy black shadow) */
+    [data-h-theme="light"] .product-card:hover {
+        box-shadow: 0 20px 48px rgba(0,0,0,.1), 0 0 0 1px rgba(0,166,103,.1);
+    }
+
+    /* Modal header gradient hardcoded to a deep-green-on-black duotone */
+    [data-h-theme="light"] .modal-header-custom {
+        background: linear-gradient(135deg, #d9f2e6, #c3ecd9);
+        border-bottom: 1px solid rgba(0,166,103,.25) !important;
+    }
+
+    /* Modal header title + close icon: hardcoded inline styles override
+       the class-based fix below (see note) */
+    [data-h-theme="light"] .modal-header-custom h5 {
+        color: #10201b !important;
+    }
+    [data-h-theme="light"] .btn-close-white {
+        filter: none;
+    }
 </style>
 
 <!-- HERO -->
@@ -416,8 +486,7 @@
         <div class="modal-content">
             <form action="{{ route('seller.store') }}" method="POST" class="p-0">
                 @csrf
-                <div class="modal-header-custom" style="border-radius: 18px 18px 0 0; padding: 1.5rem 2rem; border-bottom: 1px solid rgba(0,166,103,.2);">
-                    <h5 style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;margin:0;">🌿 Apply to Become a Seller</h5>
+                <div class="modal-header-custom" > Apply to Become a Seller</h5>
                     <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">

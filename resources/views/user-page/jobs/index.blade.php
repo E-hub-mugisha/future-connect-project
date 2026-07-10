@@ -874,6 +874,55 @@
         background: var(--bg-card);
         color: var(--text-1);
     }
+
+    /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+    [data-h-theme="light"] {
+        --bg: #f6faf8;
+        --bg-card: #ffffff;
+        --bg-glass: rgba(0, 100, 60, 0.035);
+        --bg-glass2: rgba(0, 166, 103, 0.08);
+        --accent: #00a667;
+        --accent-dim: #00c07a;
+        --accent-glow: rgba(0, 166, 103, 0.18);
+        --border: rgba(0, 100, 60, 0.1);
+        --border-h: rgba(0, 100, 60, 0.28);
+        --text-1: #10201b;
+        --text-2: #5b7a70;
+        --text-3: #8fa89e;
+    }
+
+    [data-h-theme="light"] body {
+        background: var(--bg) !important;
+    }
+
+    /* Buttons keep white text on the green accent already — fine as-is */
+
+    /* Hero grid lines need a darker tint on light bg to stay visible */
+    [data-h-theme="light"] .jobs-hero-grid {
+        background-image:
+            linear-gradient(rgba(0, 100, 60, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 100, 60, 0.05) 1px, transparent 1px);
+    }
+
+    /* Bootstrap modal close icon: dark theme inverts it to look light;
+       on light theme we want it dark again */
+    [data-h-theme="light"] .fc-modal .btn-close {
+        filter: none;
+    }
+
+    /* Job type badge / thumb overlay already uses --accent, fine */
+
+    /* Company avatar border uses --border-h, fine automatically */
+
+    /* Select dropdown arrow / native control colors */
+    [data-h-theme="light"] .sort-select {
+        color-scheme: light;
+    }
+
+    /* Pagination + form controls inherit vars already, but Bootstrap's
+       .page-link / .form-control base styles can leak dark defaults —
+       these two are the ones this page overrides manually with inline
+       vars already, so no changes needed there. */
 </style>
 
 {{-- ════════════════════════════════════

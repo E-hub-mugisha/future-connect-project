@@ -450,6 +450,36 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--border), transparent);
   }
+
+  /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+  [data-h-theme="light"] {
+    --bg:         #f6faf8;
+    --bg2:        #ffffff;
+    --bg3:        #eef4f1;
+    --border:     rgba(0, 100, 60, 0.1);
+    --green:      #00a667;
+    --green-dim:  rgba(0, 166, 103, 0.08);
+    --green-glow: rgba(0, 166, 103, 0.2);
+    --text:       #10201b;
+    --muted:      #5b7a70;
+    --white:      #10201b;
+  }
+
+  /* Page header radial glow — soften for white background */
+  [data-h-theme="light"] .page-header::before {
+    background: radial-gradient(circle, rgba(0,166,103,0.07) 0%, transparent 70%);
+  }
+
+  /* Offcanvas + search modal close icons: both use inline filter:invert(1)
+     or Bootstrap's btn-close-white, which render invisible on light headers */
+  [data-h-theme="light"] #mobileFilters .btn-close,
+  [data-h-theme="light"] .btn-close-white {
+    filter: none;
+  }
+
+  /* Carousel prev/next icons sit on --green-dim, fine automatically,
+     but Bootstrap's built-in arrow glyphs are white by default via filter:none
+     already set here — no extra rule needed */
 </style>
 
 

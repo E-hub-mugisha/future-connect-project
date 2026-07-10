@@ -468,6 +468,51 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--border), transparent);
   }
+
+  /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+  [data-h-theme="light"] {
+    --bg:         #f6faf8;
+    --bg2:        #ffffff;
+    --bg3:        #eef4f1;
+    --border:     rgba(0, 100, 60, 0.1);
+    --green:      #00a667;
+    --green-dim:  rgba(0, 166, 103, 0.08);
+    --green-glow: rgba(0, 166, 103, 0.22);
+    --text:       #10201b;
+    --muted:      #5b7a70;
+    --white:      #10201b;
+  }
+
+  [data-h-theme="light"] body {
+    background: var(--bg);
+  }
+
+  /* Hero grid-line decoration needs a darker tint to stay visible on light bg */
+  [data-h-theme="light"] .lc-hero::after {
+    background-image:
+      linear-gradient(rgba(0, 100, 60, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 100, 60, 0.06) 1px, transparent 1px);
+  }
+
+  /* Hero radial glow — soften on light bg so it doesn't look like a smear */
+  [data-h-theme="light"] .lc-hero::before {
+    background: radial-gradient(ellipse, rgba(0,166,103,0.08) 0%, transparent 70%);
+  }
+
+  /* Course thumb gradient overlay: dark-to-transparent reads muddy on light
+     cards, flip it to a very light scrim so text/badges still pop */
+  [data-h-theme="light"] .course-thumb-overlay {
+    background: linear-gradient(to top, rgba(16,32,27,0.35) 0%, transparent 50%);
+  }
+
+  /* thumb-price pill: was --bg2 bg on dark border, keep border visible */
+  [data-h-theme="light"] .thumb-price {
+    border-color: rgba(0, 100, 60, 0.25);
+  }
+
+  /* Star rating color stays amber (#f59e0b) — fine on both themes, no change needed */
+
+  /* Bootstrap carousel indicators already use var(--green), fine automatically */
 </style>
 
 

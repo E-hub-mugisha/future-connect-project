@@ -1074,6 +1074,123 @@ return request()->routeIs($route) ? 'active' : '';
         color: var(--accent);
         background: var(--bg-glass2);
     }
+
+    :root {
+        --h-bg: #0e1618;
+        --h-surface: #141d20;
+        --h-surface2: #1a2428;
+        --h-green: #48d597;
+        --h-green-d: rgba(0, 166, 103, 0.14);
+        --h-green-b: rgba(0, 166, 103, 0.22);
+        --h-text: #e8f0ed;
+        --h-muted: #7a9a8e;
+        --h-border: rgba(0, 166, 103, 0.16);
+        --h-border-h: rgba(0, 166, 103, 0.38);
+        --h-radius: 10px;
+    }
+
+    /* ── LIGHT THEME OVERRIDES ── */
+    [data-h-theme="light"] {
+        --h-bg: #f6faf8;
+        --h-surface: #ffffff;
+        --h-surface2: #eef4f1;
+        --h-green: #00a667;
+        --h-green-d: rgba(0, 166, 103, 0.08);
+        --h-green-b: rgba(0, 166, 103, 0.18);
+        --h-text: #10201b;
+        --h-muted: #5b7a70;
+        --h-border: rgba(0, 100, 60, 0.12);
+        --h-border-h: rgba(0, 100, 60, 0.3);
+    }
+
+    [data-h-theme="light"] .fc-topbar {
+        background: #eef4f1;
+        border-bottom-color: rgba(0, 100, 60, 0.1);
+    }
+
+    [data-h-theme="light"] .fc-header.scrolled {
+        background: rgba(246, 250, 248, 0.95);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-h-theme="light"] .fc-logo-mark,
+    [data-h-theme="light"] .fc-btn-green,
+    [data-h-theme="light"] .fc-lp-submit,
+    [data-h-theme="light"] .fc-btn-register-mobile {
+        color: #fff;
+    }
+
+    [data-h-theme="light"] .fc-logo-name {
+        color: #10201b;
+    }
+
+    [data-h-theme="light"] .fc-nav>li>a:hover,
+    [data-h-theme="light"] .fc-nav>li:hover>a {
+        color: #10201b;
+        background: rgba(0, 100, 60, 0.06);
+    }
+
+    [data-h-theme="light"] .fc-card-title {
+        color: #10201b;
+    }
+
+    [data-h-theme="light"] .fc-card:hover .fc-card-title {
+        color: #00a667;
+    }
+
+    [data-h-theme="light"] .fc-lp-field input::placeholder,
+    [data-h-theme="light"] .fc-search-input-wrap input::placeholder {
+        color: #a9c2b8;
+    }
+
+    [data-h-theme="light"] .fc-search-overlay {
+        background: rgba(246, 250, 248, 0.92);
+    }
+
+    /* ── THEME TOGGLE BUTTON ── */
+    .fc-theme-toggle {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--h-border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--h-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 15px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .fc-theme-toggle:hover {
+        color: #fff;
+        border-color: var(--h-border-h);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    [data-h-theme="light"] .fc-theme-toggle:hover {
+        color: #10201b;
+        background: rgba(0, 100, 60, 0.06);
+    }
+
+    .fc-theme-toggle .ti-sun {
+        display: none;
+    }
+
+    .fc-theme-toggle .ti-moon {
+        display: inline-flex;
+    }
+
+    [data-h-theme="light"] .fc-theme-toggle .ti-sun {
+        display: inline-flex;
+    }
+
+    [data-h-theme="light"] .fc-theme-toggle .ti-moon {
+        display: none;
+    }
 </style>
 
 {{-- ════════════════════ FIXED HEADER STACK (topbar + header pinned to viewport) ════════════════════ --}}
@@ -1174,9 +1291,9 @@ return request()->routeIs($route) ? 'active' : '';
                     </div>
                 </li>
 
-                
+
                 <li>
-                    
+
                     <a href="{{ route('user.trending.index') }}">Trending</a>
                 </li>
 
@@ -1221,6 +1338,12 @@ return request()->routeIs($route) ? 'active' : '';
             <div class="fc-actions">
 
                 <a href="{{ route('demo.request') }}" class="fc-btn-ghost fc-btn-request-demo">Request Demo</a>
+
+                {{-- Theme toggle --}}
+                <button class="fc-theme-toggle" id="fcThemeToggle" aria-label="Toggle theme">
+                    <i class="ti ti-sun"></i>
+                    <i class="ti ti-moon"></i>
+                </button>
 
                 {{-- Search button --}}
                 <button class="fc-btn-search" id="fcSearchBtn" aria-label="Search">
@@ -1681,4 +1804,36 @@ return request()->routeIs($route) ? 'active' : '';
         };
 
     })();
+</script>
+
+<script>
+    /* ── Theme switch: persisted in localStorage, defaults to system preference ── */
+    (function initTheme() {
+        const root = document.documentElement;
+        const stored = localStorage.getItem('fc-theme');
+        const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        const theme = stored || (systemPrefersLight ? 'light' : 'dark');
+        if (theme === 'light') root.setAttribute('data-h-theme', 'light');
+    })();
+
+    function fcSetTheme(theme) {
+        const root = document.documentElement;
+        if (theme === 'light') {
+            root.setAttribute('data-h-theme', 'light');
+        } else {
+            root.removeAttribute('data-h-theme');
+        }
+        localStorage.setItem('fc-theme', theme);
+    }
+
+    function fcToggleTheme() {
+        const isLight = document.documentElement.getAttribute('data-h-theme') === 'light';
+        fcSetTheme(isLight ? 'dark' : 'light');
+    }
+
+    const themeToggle = document.getElementById('fcThemeToggle');
+    themeToggle && themeToggle.addEventListener('click', fcToggleTheme);
+
+    const themeToggleMobile = document.getElementById('fcThemeToggleMobile');
+    themeToggleMobile && themeToggleMobile.addEventListener('click', fcToggleTheme);
 </script>

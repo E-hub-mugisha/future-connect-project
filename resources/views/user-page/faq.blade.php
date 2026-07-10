@@ -425,6 +425,54 @@
             justify-content: center;
         }
     }
+
+    /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
+    [data-h-theme="light"] {
+        --fq-bg: #f6faf8;
+        --fq-surface: #ffffff;
+        --fq-surface2: #eef4f1;
+        --fq-green: #00a667;
+        --fq-green-d: rgba(0, 166, 103, 0.08);
+        --fq-green-b: rgba(0, 166, 103, 0.18);
+        --fq-text: #10201b;
+        --fq-muted: #5b7a70;
+        --fq-border: rgba(0, 100, 60, 0.12);
+        --fq-border-h: rgba(0, 100, 60, 0.3);
+    }
+
+    /* Hero glow — soften so it doesn't look like a smear on white */
+    [data-h-theme="light"] .fq-hero-glow {
+        background: radial-gradient(circle, rgba(0, 166, 103, 0.1), transparent 70%);
+    }
+
+    /* Headings hardcoded to #fff need to flip dark */
+    [data-h-theme="light"] .fq-hero h1,
+    [data-h-theme="light"] .fq-cta-text h3,
+    [data-h-theme="light"] .fq-modal .modal-title {
+        color: #10201b;
+    }
+
+    /* Search + FAQ answer form placeholder was hardcoded to a dark-theme-only hex */
+    [data-h-theme="light"] .fq-search-wrap input::placeholder,
+    [data-h-theme="light"] .fq-form-control::placeholder {
+        color: #a9c2b8;
+    }
+
+    /* Modal close icon: dark theme inverts it to white, revert on light */
+    [data-h-theme="light"] .fq-modal .btn-close {
+        filter: none;
+    }
+
+    /* fq-btn-outline hover color hardcoded to #fff */
+    [data-h-theme="light"] .fq-btn-outline:hover {
+        color: #10201b;
+    }
+
+    /* Form control background was a flat white-on-black translucent fill;
+       on a white surface it needs to go the other direction to stay visible */
+    [data-h-theme="light"] .fq-form-control {
+        background: rgba(0, 100, 60, 0.04);
+    }
 </style>
 
 <div class="fq-page">

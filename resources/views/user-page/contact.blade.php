@@ -21,8 +21,47 @@
         --text-body: #7fa0a6;
         --text-muted: #3d5a5e;
         --border: rgba(255, 255, 255, .06);
+        --border-soft: rgba(255, 255, 255, .08);
+        --focus-ring: rgba(0, 166, 103, .08);
+        --success-text: #4dd9a0;
+        --submit-text: #0e1618;
         --radius-lg: 16px;
         --radius-md: 10px;
+    }
+
+    /* ── LIGHT THEME OVERRIDES ──────────────────────
+       Driven by the same [data-h-theme="light"] attribute
+       the header sets on <html> (and persists via
+       localStorage 'fc-theme'), so this page just follows
+       whatever the header's toggle already decided. ── */
+    [data-h-theme="light"] {
+        --bg-deep: #f6faf8;
+        --bg-card: #ffffff;
+        --bg-input: #f2f7f4;
+        --accent: #00a667;
+        --accent-dim: rgba(0, 166, 103, .08);
+        --accent-mid: rgba(0, 100, 60, .22);
+        --danger: #c94040;
+        --danger-dim: rgba(220, 50, 50, .06);
+        --danger-border: rgba(220, 50, 50, .28);
+        --text-head: #10201b;
+        --text-body: #52716a;
+        --text-muted: #86a49b;
+        --border: rgba(0, 100, 60, .1);
+        --border-soft: rgba(0, 100, 60, .16);
+        --focus-ring: rgba(0, 166, 103, .12);
+        --success-text: #0a8a56;
+        --submit-text: #ffffff;
+    }
+
+    [data-h-theme="light"] .cp-page {
+        box-shadow: none;
+    }
+
+    [data-h-theme="light"] .cp-info-card,
+    [data-h-theme="light"] .cp-info-panel,
+    [data-h-theme="light"] .cp-form-panel {
+        box-shadow: 0 1px 3px rgba(16, 32, 27, .05);
     }
 
     /* ── Page Shell ──────────────────────────────── */
@@ -33,6 +72,7 @@
         padding: 0 0 80px;
         position: relative;
         overflow: hidden;
+        transition: background .25s ease;
     }
 
     /* decorative orbs */
@@ -151,7 +191,7 @@
         display: flex;
         align-items: flex-start;
         gap: 16px;
-        transition: border-color .25s, transform .25s;
+        transition: border-color .25s, transform .25s, background .25s;
     }
 
     .cp-info-card:hover {
@@ -226,6 +266,7 @@
         padding: 36px 32px;
         display: flex;
         flex-direction: column;
+        transition: background .25s, border-color .25s;
     }
 
     .cp-info-panel h3 {
@@ -334,7 +375,7 @@
         height: 38px;
         border-radius: 10px;
         background: var(--bg-input);
-        border: 1px solid rgba(255, 255, 255, .08);
+        border: 1px solid var(--border-soft);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -368,6 +409,7 @@
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
         padding: 36px 32px;
+        transition: background .25s, border-color .25s;
     }
 
     .cp-form-panel h3 {
@@ -435,14 +477,14 @@
     .cp-field input,
     .cp-field textarea {
         background: var(--bg-input);
-        border: 1px solid rgba(255, 255, 255, .08);
+        border: 1px solid var(--border-soft);
         border-radius: var(--radius-md);
         color: var(--text-head);
         font-family: 'DM Sans', sans-serif;
         font-size: 14px;
         padding: 12px 16px;
         width: 100%;
-        transition: border-color .2s, box-shadow .2s;
+        transition: border-color .2s, box-shadow .2s, background .25s;
         outline: none;
         -webkit-appearance: none;
     }
@@ -455,7 +497,7 @@
     .cp-field input:focus,
     .cp-field textarea:focus {
         border-color: var(--accent-mid);
-        box-shadow: 0 0 0 3px rgba(0, 166, 103, .08);
+        box-shadow: 0 0 0 3px var(--focus-ring);
     }
 
     .cp-field.has-error input,
@@ -481,7 +523,7 @@
     .cp-submit {
         width: 100%;
         background: var(--accent);
-        color: #0e1618;
+        color: var(--submit-text);
         border: none;
         border-radius: var(--radius-md);
         font-family: 'DM Sans', sans-serif;
@@ -510,7 +552,7 @@
     .cp-submit svg {
         width: 15px;
         height: 15px;
-        stroke: #0e1618;
+        stroke: var(--submit-text);
         fill: none;
         stroke-width: 2;
         stroke-linecap: round;
@@ -536,7 +578,7 @@
     .cp-alert--success {
         background: rgba(0, 166, 103, .1);
         border: 1px solid rgba(0, 166, 103, .25);
-        color: #4dd9a0;
+        color: var(--success-text);
     }
 
     .cp-alert--error {
