@@ -8,10 +8,66 @@
         box-sizing: border-box;
     }
 
+    /* ===== THEME VARIABLES (driven by the same data-h-theme attribute the
+       header's theme toggle sets on <html>, so this page follows it) ===== */
+    :root {
+        --pp-bg: #0e1618;
+        --pp-bg-deep: #0b1416;
+        --pp-surface: #0f1e21;
+        --pp-border: #1e3035;
+        --pp-border-soft: #1a2a2e;
+        --pp-green: #48d597;
+        --pp-green-dark: #008f58;
+        --pp-green-deep-bg: #0d2219;
+        --pp-text: #ffffff;
+        --pp-text-soft: #e0f0f0;
+        --pp-text-body: #c8dde0;
+        --pp-muted: #8aa4aa;
+        --pp-muted2: #6b8a90;
+        --pp-alert-text: #8adfc0;
+        --pp-glow: rgba(0, 166, 103, 0.08);
+        --pp-border-hover: rgba(0, 166, 103, 0.45);
+        --pp-badge-bg: rgba(0, 166, 103, 0.15);
+        --pp-badge-border: rgba(0, 166, 103, 0.35);
+        --pp-btn-bg: #0f2a22;
+        --pp-btn-border: rgba(0, 166, 103, 0.4);
+        --pp-alert-bg: rgba(0, 166, 103, 0.08);
+        --pp-alert-border: rgba(0, 166, 103, 0.25);
+        --pp-modal-header-grad: linear-gradient(135deg, #0a2a1c, #0f2a22, #0b1e2a);
+        --pp-close-filter: invert(1) grayscale(1) brightness(2);
+    }
+
+    [data-h-theme="light"] {
+        --pp-bg: #f6faf8;
+        --pp-bg-deep: #eef4f1;
+        --pp-surface: #ffffff;
+        --pp-border: rgba(0, 100, 60, 0.14);
+        --pp-border-soft: rgba(0, 100, 60, 0.12);
+        --pp-green: #00a667;
+        --pp-green-dark: #00854f;
+        --pp-green-deep-bg: #e3f5ec;
+        --pp-text: #10201b;
+        --pp-text-soft: #10201b;
+        --pp-text-body: #274a40;
+        --pp-muted: #5b7a70;
+        --pp-muted2: #5b7a70;
+        --pp-alert-text: #00704a;
+        --pp-glow: rgba(0, 166, 103, 0.06);
+        --pp-border-hover: rgba(0, 100, 60, 0.4);
+        --pp-badge-bg: rgba(0, 166, 103, 0.1);
+        --pp-badge-border: rgba(0, 100, 60, 0.3);
+        --pp-btn-bg: #eef4f1;
+        --pp-btn-border: rgba(0, 100, 60, 0.3);
+        --pp-alert-bg: rgba(0, 166, 103, 0.06);
+        --pp-alert-border: rgba(0, 100, 60, 0.2);
+        --pp-modal-header-grad: linear-gradient(135deg, #e3f5ec, #eef4f1, #e7f0f5);
+        --pp-close-filter: none;
+    }
+
     /* ===== TRIAL BANNER ===== */
     .trusted-customers-two {
-        background: #0b1416;
-        border: 1px solid #1a2a2e;
+        background: var(--pp-bg-deep);
+        border: 1px solid var(--pp-border-soft);
         border-radius: 16px;
         padding: 40px 36px 0px;
         margin: 32px 0;
@@ -26,7 +82,7 @@
         right: -60px;
         width: 240px;
         height: 240px;
-        background: radial-gradient(circle, rgba(0, 166, 103, 0.08) 0%, transparent 70%);
+        background: radial-gradient(circle, var(--pp-glow) 0%, transparent 70%);
         pointer-events: none;
     }
 
@@ -39,7 +95,7 @@
     .trusted-customers-two h2 {
         font-size: 26px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--pp-text);
         line-height: 1.35;
         margin-bottom: 8px;
     }
@@ -47,7 +103,7 @@
     .trusted-customers-two>.container>.row>div>p,
     .trusted-customers-two p {
         font-size: 14px;
-        color: #8aa4aa;
+        color: var(--pp-muted);
         margin-bottom: 20px;
     }
 
@@ -55,7 +111,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: #48d597;
+        background: var(--pp-green);
         color: #fff;
         border: none;
         padding: 11px 26px;
@@ -68,7 +124,7 @@
     }
 
     .btn-white:hover {
-        background: #008f58;
+        background: var(--pp-green-dark);
         transform: translateY(-2px);
         color: #fff;
     }
@@ -76,13 +132,13 @@
     .trusted-customers-shape {
         display: block;
         font-size: 12px;
-        color: #6b8a90 !important;
+        color: var(--pp-muted2) !important;
         margin-top: 12px;
     }
 
     /* ===== PRICING SECTION ===== */
     .price-section {
-        background: #0e1618;
+        background: var(--pp-bg);
         padding: 56px 0 72px;
     }
 
@@ -98,8 +154,8 @@
         padding: 4px;
         margin: 0;
         display: flex;
-        background: #0f1e21;
-        border: 1px solid #1e3035;
+        background: var(--pp-surface);
+        border: 1px solid var(--pp-border);
         border-radius: 10px;
         gap: 4px;
     }
@@ -110,21 +166,21 @@
         border-radius: 7px;
         font-size: 13px;
         font-weight: 500;
-        color: #6b8a90;
+        color: var(--pp-muted2);
         text-decoration: none;
         transition: background 0.2s, color 0.2s;
     }
 
     .pricing-tab .nav li a.active,
     .pricing-tab .nav li a:hover {
-        background: #48d597;
+        background: var(--pp-green);
         color: #fff;
     }
 
     /* Price cards */
     .price-card {
-        background: #0f1e21;
-        border: 1px solid #1e3035;
+        background: var(--pp-surface);
+        border: 1px solid var(--pp-border);
         border-radius: 16px;
         padding: 28px 24px;
         margin-bottom: 24px;
@@ -135,13 +191,13 @@
     }
 
     .price-card:hover {
-        border-color: rgba(0, 166, 103, 0.45);
+        border-color: var(--pp-border-hover);
         transform: translateY(-4px);
     }
 
     .price-card.active {
-        border-color: #48d597;
-        background: #0d2219;
+        border-color: var(--pp-green);
+        background: var(--pp-green-deep-bg);
         position: relative;
     }
 
@@ -150,12 +206,12 @@
         position: absolute;
         inset: 0;
         border-radius: 16px;
-        background: radial-gradient(ellipse at top, rgba(0, 166, 103, 0.07) 0%, transparent 65%);
+        background: radial-gradient(ellipse at top, var(--pp-glow) 0%, transparent 65%);
         pointer-events: none;
     }
 
     .price-card .border-bottom {
-        border-bottom: 1px solid #1a2a2e !important;
+        border-bottom: 1px solid var(--pp-border-soft) !important;
         padding-bottom: 20px;
         margin-bottom: 20px !important;
     }
@@ -171,21 +227,21 @@
     .plan-type h6 {
         font-size: 15px;
         font-weight: 600;
-        color: #e0f0f0;
+        color: var(--pp-text-soft);
         margin: 0 0 4px;
     }
 
     .plan-type p {
         font-size: 12px;
-        color: #6b8a90;
+        color: var(--pp-muted2);
         margin: 0;
     }
 
     .plan-type .badge {
         display: inline-block;
-        background: rgba(0, 166, 103, 0.15);
-        color: #48d597;
-        border: 1px solid rgba(0, 166, 103, 0.35);
+        background: var(--pp-badge-bg);
+        color: var(--pp-green);
+        border: 1px solid var(--pp-badge-border);
         border-radius: 20px;
         font-size: 10px;
         font-weight: 600;
@@ -199,26 +255,26 @@
     .amt-item h2 {
         font-size: 34px;
         font-weight: 700;
-        color: #ffffff;
+        color: var(--pp-text);
         margin: 0;
         line-height: 1;
     }
 
     .amt-item .d-flex p {
         font-size: 13px;
-        color: #6b8a90;
+        color: var(--pp-muted2);
         align-self: flex-end;
         padding-bottom: 4px;
     }
 
     .amt-item>p {
         font-size: 12px;
-        color: #6b8a90;
+        color: var(--pp-muted2);
         margin-top: 6px;
     }
 
     .price-card.active .amt-item h2 {
-        color: #48d597;
+        color: var(--pp-green);
     }
 
     /* Features list */
@@ -230,7 +286,7 @@
     .price-features h6 {
         font-size: 11px;
         font-weight: 600;
-        color: #6b8a90;
+        color: var(--pp-muted2);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 12px;
@@ -250,11 +306,11 @@
         align-items: center;
         gap: 10px;
         font-size: 13px;
-        color: #c8dde0;
+        color: var(--pp-text-body);
     }
 
     .price-features ul li span {
-        color: #48d597;
+        color: var(--pp-green);
         font-size: 16px;
         line-height: 1;
         flex-shrink: 0;
@@ -271,9 +327,9 @@
         justify-content: center;
         gap: 8px;
         width: 100%;
-        background: #0f2a22;
-        border: 1px solid rgba(0, 166, 103, 0.4);
-        color: #48d597;
+        background: var(--pp-btn-bg);
+        border: 1px solid var(--pp-btn-border);
+        color: var(--pp-green);
         padding: 11px 20px;
         border-radius: 8px;
         font-size: 13px;
@@ -283,45 +339,45 @@
     }
 
     .price-btn .btn-primary:hover {
-        background: #48d597;
-        border-color: #48d597;
+        background: var(--pp-green);
+        border-color: var(--pp-green);
         color: #fff;
         transform: translateY(-2px);
     }
 
     .price-card.active .price-btn .btn-primary {
-        background: #48d597;
-        border-color: #48d597;
+        background: var(--pp-green);
+        border-color: var(--pp-green);
         color: #fff;
     }
 
     .price-card.active .price-btn .btn-primary:hover {
-        background: #008f58;
-        border-color: #008f58;
+        background: var(--pp-green-dark);
+        border-color: var(--pp-green-dark);
     }
 
     /* ===== MODAL ===== */
     .modal-content {
-        background: #0f1e21 !important;
-        border: 1px solid #1e3035 !important;
+        background: var(--pp-surface) !important;
+        border: 1px solid var(--pp-border) !important;
         border-radius: 14px !important;
         overflow: hidden;
     }
 
     .modal-header {
-        background: linear-gradient(135deg, #0a2a1c, #0f2a22, #0b1e2a) !important;
-        border-bottom: 1px solid #1e3035 !important;
+        background: var(--pp-modal-header-grad) !important;
+        border-bottom: 1px solid var(--pp-border) !important;
         padding: 18px 24px;
     }
 
     .modal-header .modal-title {
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--pp-text);
     }
 
     .btn-close-white {
-        filter: invert(1) grayscale(1) brightness(2);
+        filter: var(--pp-close-filter);
         opacity: 0.6;
     }
 
@@ -331,39 +387,39 @@
 
     .modal-body {
         padding: 24px;
-        background: #0f1e21;
+        background: var(--pp-surface);
     }
 
     .modal-body p {
         font-size: 13px;
-        color: #8aa4aa;
+        color: var(--pp-muted);
         margin-bottom: 8px;
     }
 
     .modal-body h5 {
         font-size: 18px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--pp-text);
         margin-bottom: 4px;
     }
 
     .modal-body .text-muted {
         font-size: 13px;
-        color: #6b8a90 !important;
+        color: var(--pp-muted2) !important;
     }
 
     .modal-body .alert-info {
-        background: rgba(0, 166, 103, 0.08);
-        border: 1px solid rgba(0, 166, 103, 0.25);
-        color: #8adfc0;
+        background: var(--pp-alert-bg);
+        border: 1px solid var(--pp-alert-border);
+        color: var(--pp-alert-text);
         border-radius: 8px;
         font-size: 13px;
         padding: 12px 16px;
     }
 
     .modal-footer {
-        background: #0b1416;
-        border-top: 1px solid #1a2a2e !important;
+        background: var(--pp-bg-deep);
+        border-top: 1px solid var(--pp-border-soft) !important;
         padding: 16px 24px;
         display: flex;
         gap: 10px;
@@ -372,8 +428,8 @@
 
     .modal-footer .btn-outline-secondary {
         background: transparent;
-        border: 1px solid #1e3035;
-        color: #8aa4aa;
+        border: 1px solid var(--pp-border);
+        color: var(--pp-muted);
         padding: 9px 20px;
         border-radius: 8px;
         font-size: 13px;
@@ -383,12 +439,12 @@
     }
 
     .modal-footer .btn-outline-secondary:hover {
-        border-color: #6b8a90;
-        color: #c8dde0;
+        border-color: var(--pp-muted2);
+        color: var(--pp-text-body);
     }
 
     .modal-footer .btn-primary {
-        background: #48d597;
+        background: var(--pp-green);
         border: none;
         color: #fff;
         padding: 9px 22px;
@@ -400,7 +456,7 @@
     }
 
     .modal-footer .btn-primary:hover {
-        background: #008f58;
+        background: var(--pp-green-dark);
         transform: translateY(-1px);
     }
 </style>
@@ -633,6 +689,116 @@
             document.getElementById('modalCycle').textContent = btn.getAttribute('data-cycle');
         });
     });
+</script>
+
+{{-- ════════════════════ STANDALONE THEME SUPPORT ════════════════════
+     This page's light theme is driven by [data-h-theme="light"] on <html>.
+     Normally the header sets that attribute. This block makes the page
+     fully self-sufficient too: it applies the stored/system theme itself
+     on load, keeps itself in sync if the header (or another tab) changes
+     it, and — only if no header toggle button exists anywhere on the
+     page — injects its own floating toggle button so this page always
+     has a working light/dark switch on its own. ════════════════════ --}}
+<style>
+    .pp-theme-toggle {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1200;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        border: 1px solid var(--pp-border);
+        background: var(--pp-surface);
+        color: var(--pp-muted2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        transition: all 0.2s;
+    }
+
+    .pp-theme-toggle:hover {
+        color: var(--pp-text);
+        border-color: var(--pp-border-hover);
+        transform: translateY(-2px);
+    }
+
+    .pp-theme-toggle .pp-sun {
+        display: none;
+    }
+
+    .pp-theme-toggle .pp-moon {
+        display: inline-flex;
+    }
+
+    [data-h-theme="light"] .pp-theme-toggle .pp-sun {
+        display: inline-flex;
+    }
+
+    [data-h-theme="light"] .pp-theme-toggle .pp-moon {
+        display: none;
+    }
+</style>
+
+<script>
+    (function() {
+        const root = document.documentElement;
+        const STORAGE_KEY = 'fc-theme';
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                root.setAttribute('data-h-theme', 'light');
+            } else {
+                root.removeAttribute('data-h-theme');
+            }
+        }
+
+        function currentTheme() {
+            return root.getAttribute('data-h-theme') === 'light' ? 'light' : 'dark';
+        }
+
+        function storedOrSystemTheme() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored === 'light' || stored === 'dark') return stored;
+            return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+
+        // Apply immediately on load, in case no header script has already done so.
+        applyTheme(storedOrSystemTheme());
+
+        // Stay in sync if theme changes elsewhere (header toggle on this same
+        // page, or a toggle on another tab writing to localStorage).
+        window.addEventListener('storage', function(e) {
+            if (e.key === STORAGE_KEY) applyTheme(e.newValue === 'light' ? 'light' : 'dark');
+        });
+
+        function setTheme(theme) {
+            applyTheme(theme);
+            localStorage.setItem(STORAGE_KEY, theme);
+        }
+
+        function toggleTheme() {
+            setTheme(currentTheme() === 'light' ? 'dark' : 'light');
+        }
+
+        // Only add our own floating toggle if the page has no other theme
+        // toggle control already (e.g. the header's #fcThemeToggle button).
+        document.addEventListener('DOMContentLoaded', function() {
+            const hasExistingToggle = document.querySelector('#fcThemeToggle, [data-theme-toggle]');
+            if (hasExistingToggle) return;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pp-theme-toggle';
+            btn.setAttribute('aria-label', 'Toggle theme');
+            btn.innerHTML = '<i class="ti ti-sun pp-sun"></i><i class="ti ti-moon pp-moon"></i>';
+            btn.addEventListener('click', toggleTheme);
+            document.body.appendChild(btn);
+        });
+    })();
 </script>
 
 @endsection
