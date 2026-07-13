@@ -28,29 +28,35 @@ use App\Models\Testimonial;
 use App\Models\TalentFeedback;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        $oneMonthAgo = now()->subMonth();
 
-        $skills = Skill::withCount('reviews')->withAvg('reviews', 'rating')->take(6)->get();
 
-        $talents = Talent::with('category', 'feedback', 'stories')->take(8)->get();
+        $talents = Talent::with([
+            'category',
+            'feedback',
+            'stories'
+        ])
+            ->take(8)
+            ->get();
 
-        $now = Carbon::now();
-        $oneMonthAgo = $now->copy()->subMonth();
 
         $talents->transform(function ($talent) use ($oneMonthAgo) {
+
             $avgRating = $talent->feedback->avg('rating') ?? 0;
             $feedbackCount = $talent->feedback->count();
-            $createdAt = $talent->created_at;
+
 
             if ($talent->featured) {
                 $talent->tag = 'featured';
             } elseif ($feedbackCount >= 20) {
                 $talent->tag = 'popular';
-            } elseif ($createdAt >= $oneMonthAgo) {
+            } elseif ($talent->created_at >= $oneMonthAgo) {
                 $talent->tag = 'latest';
             } elseif ($avgRating >= 4 && $avgRating < 4.5) {
                 $talent->tag = 'recommended';
@@ -58,27 +64,72 @@ class HomeController extends Controller
                 $talent->tag = 'latest';
             }
 
+
             return $talent;
         });
 
-        $courses = Course::with(['category', 'feedback', 'talent'])->latest()->take(6)->get();
 
-        return view('user-page.home', [
+
+        return Inertia::render('UserPage/Home', [
+
             'talents' => $talents,
-            'categories' => Category::withCount('talents')->take(10)->get(),
+
+
+            'skills' => Skill::withCount('reviews')
+                ->withAvg('reviews', 'rating')
+                ->take(6)
+                ->get(),
+
+
+            'categories' => Category::withCount('talents')
+                ->take(10)
+                ->get(),
+
+
             'popularCategories' => Category::withCount('talents')
-                ->orderBy('talents_count', 'desc')
+                ->orderByDesc('talents_count')
                 ->take(3)
                 ->get(),
-            'stories' => Story::all()->take(6),
-            'skills' => $skills,
-            'testimonials' => Testimonial::with('talent')->inRandomOrder()->take(2)->get(),
-            'partners' => Partner::all(), // Fetch only active partners
-            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->take(4)->get(),
-            'courses' => $courses,
-            'totalTalents' => Talent::where('status', 'approved')->count(),
+
+
+            'stories' => Story::take(6)->get(),
+
+
+            'testimonials' => Testimonial::with('talent')
+                ->inRandomOrder()
+                ->take(2)
+                ->get(),
+
+
+            'partners' => Partner::all(),
+
+
+            'featuredTalents' => Talent::with([
+                'category',
+                'stories'
+            ])
+                ->where('featured', 1)
+                ->inRandomOrder()
+                ->take(4)
+                ->get(),
+
+
+            'courses' => Course::with([
+                'category',
+                'feedback',
+                'talent'
+            ])
+                ->latest()
+                ->take(6)
+                ->get(),
+
+
+            'totalTalents' => Talent::where('status', 'approved')
+                ->count(),
+
         ]);
     }
+
     public function talents()
     {
         // Fetch featured talents - modify query as needed
@@ -130,7 +181,7 @@ class HomeController extends Controller
     {
         $faqs = Faq::all();
 
-        return view('user-page.about', compact('faqs'));
+        return Inertia::render('UserPage/AboutUs', compact('faqs'));
     }
     public function contact()
     {
@@ -733,11 +784,11 @@ class HomeController extends Controller
             'stats' => [
                 'skills_listed'    => '8K+',
                 'employer_reach'   => '3x',
-                'verified_profiles'=> '100%',
+                'verified_profiles' => '100%',
             ],
         ]);
     }
- 
+
     /**
      * For NGOs — "Partner with skilled local talent"
      */
@@ -745,7 +796,7 @@ class HomeController extends Controller
     {
         return view('user-page.solutions.ngos');
     }
- 
+
     /**
      * For Companies — "Find verified and sharp skills faster"
      */
@@ -753,7 +804,7 @@ class HomeController extends Controller
     {
         return view('user-page.solutions.companies');
     }
- 
+
     /**
      * For Professionals — "Grow your network and opportunities"
      */
@@ -761,7 +812,7 @@ class HomeController extends Controller
     {
         return view('user-page.solutions.professionals');
     }
- 
+
     /**
      * For Universities — "Empower students beyond graduation"
      */
@@ -772,11 +823,11 @@ class HomeController extends Controller
                 'students_onboarded'      => 1240,
                 'verified_profile_pct'    => 82,
                 'placement_rate_pct'      => 68,
-                'active_employer_partners'=> 54,
+                'active_employer_partners' => 54,
             ],
         ]);
     }
- 
+
     /**
      * For Investors — "Discover skills worth investing in"
      */

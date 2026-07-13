@@ -7,6 +7,7 @@ use App\Models\Talent;
 use App\Models\TalentConnection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class TalentConnectionController extends Controller
 {
@@ -14,7 +15,7 @@ class TalentConnectionController extends Controller
     public function index()
     {
         $talents = Talent::where('status','approved')->paginate(12);
-        return view('user-page.connection-room', compact('talents'));
+        return Inertia::render('UserPage/NetworkingHub', compact('talents'));
     }
 
     // Show a single talent profile
