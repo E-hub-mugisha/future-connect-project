@@ -159,7 +159,7 @@ class HomeController extends Controller
         });
 
 
-        return view('user-page.talents', [
+        return Inertia::render('UserPage/SkillsMarketPlace', [
             'talents' => $talents,
             'categories' => Category::withCount('talents')->take(10)->get(),
             'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->get(),
@@ -207,29 +207,29 @@ class HomeController extends Controller
     }
     public function RegisterAsTalent()
     {
-        return view('user-page.register-as-talent', ['categories' => \App\Models\Category::all(),]);
+        return Inertia::render('UserPage/SkillRegister', ['categories' => \App\Models\Category::all(),]);
     }
 
     public function showTalents($id)
     {
         $talent = Talent::with(['skills', 'stories', 'courses'])->findOrFail($id);
-        return view('user-page.talent-details', [
+        return Inertia::render('UserPage/SkillProfile', [
             'talent' => $talent
         ]);
     }
     public function getTalentByCategory($slug)
     {
-        // Find the category by slug or fail
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        // Fetch talents with related talent
-        $talents = Talent::where('category_id', $category->id)
+        $talents = Talent::with('category')
+            ->where('status', 'approved')
+            ->where('category_id', $category->id)
             ->get();
 
-        return view('user-page.category-talents', [
-            'categoryName' => $category->name,
-            'talents' => $talents,
-            'categories' => \App\Models\Category::all(),
+        return Inertia::render('UserPage/SkillsCategory', [
+            'category'   => $category,
+            'talents'    => $talents,
+            'categories' => Category::all(),
         ]);
     }
 

@@ -9,6 +9,7 @@ use App\Models\CourseFeedback;
 use App\Models\CoursePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CourseController extends Controller
 {
@@ -16,7 +17,7 @@ class CourseController extends Controller
     {
         $courses = Course::with(['category', 'talent', 'feedback'])->paginate(8);
         $categories = Category::with('courses')->get();
-        return view('user-page.courses', compact('courses', 'categories'));
+        return Inertia::render('UserPage/LearningCenter', compact('courses', 'categories'));
     }
 
     public function show($slug)

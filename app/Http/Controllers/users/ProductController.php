@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,7 @@ class ProductController extends Controller
             ->latest()
             ->take(5)
             ->get();
-        return view('user-page.products.index', compact('products', 'categories', 'featuredProducts'));
+        return Inertia::render('UserPage/Products', compact('products', 'categories', 'featuredProducts'));
     }
 
     public function details($id)

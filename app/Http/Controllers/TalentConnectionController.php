@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\ConnectionPayment;
 use App\Models\Talent;
 use App\Models\TalentConnection;
@@ -14,8 +15,14 @@ class TalentConnectionController extends Controller
     // List all talents (connection room)
     public function index()
     {
-        $talents = Talent::where('status','approved')->paginate(12);
-        return Inertia::render('UserPage/NetworkingHub', compact('talents'));
+        $talents = Talent::where('status', 'approved')->paginate(12);
+        $categories = Category::whereIn(
+            'id',
+            Talent::where('status', 'approved')
+                ->select('category_id')
+                ->distinct()
+        )->get();
+        return Inertia::render('UserPage/NetworkingHub', compact('talents', 'categories'));
     }
 
     // Show a single talent profile
@@ -41,7 +48,7 @@ class TalentConnectionController extends Controller
             'message' => $request->message
         ]);
 
-        return redirect()->route('connections.payment.choice', $connection->id)->with('success','Request sent proceed with payment.');
+        return redirect()->route('connections.payment.choice', $connection->id)->with('success', 'Request sent proceed with payment.');
     }
 
     public function paymentChoice($id)
@@ -94,6 +101,6 @@ class TalentConnectionController extends Controller
         $this->authorize('update', $connection->talent);
 
         $connection->update(['status' => $request->status]); // accepted / declined
-        return back()->with('success','Connection updated successfully.');
+        return back()->with('success', 'Connection updated successfully.');
     }
 }

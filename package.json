@@ -27,6 +27,7 @@
     "dependencies": {
         "@samkirkland/ftp-deploy": "^1.2.4",
         "aos": "^2.3.4",
+        "bootstrap": "^5.3.8",
         "swiper": "^14.0.5",
         "toastr": "^2.1.4",
         "ziggy-js": "^2.6.3"

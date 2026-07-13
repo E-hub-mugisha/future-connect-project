@@ -72,22 +72,22 @@ Route::post('/contact/send', [HomeController::class, 'contactSend'])->name('cont
 Route::get('/categories', [HomeController::class, 'categories'])->name('user.categories');
 Route::get('/categories-with-talent-count', [HomeController::class, 'withTalentCount']);
 Route::get('/testimonials/random', [HomeController::class, 'random']);
-Route::get('/register_your_skills', [HomeController::class, 'RegisterAsTalent'])->name('user.register_as_talent');
+Route::get('/register/skills', [HomeController::class, 'RegisterAsTalent'])->name('user.register_skills');
 Route::post('/talent/register', [HomeController::class, 'storeTalent'])->name('talent.register');
 Route::get('/talent/success/{id}', [HomeController::class, 'talentSuccess'])->name('talent.success');
 Route::get('/talent-matched', [HomeController::class, 'matchedTalents'])->name('talent.match');
 Route::post('/talent/feedback', [HomeController::class, 'storeFeedback'])->name('talent.feedback.store');
 Route::post('/support-talent', [HomeController::class, 'storeSupport'])->name('support.talent');
-Route::get('/skills_hub', [HomeController::class, 'talents'])->name('user.talents');
-Route::get('/talent/{id}', [HomeController::class, 'showTalents'])->name('user.talent.details');
-Route::get('/talents/category/{slug}', [HomeController::class, 'getTalentByCategory'])->name('user.talents.category');
+Route::get('/skills-marketplace', [HomeController::class, 'talents'])->name('user.talents');
+Route::get('/skills/{id}', [HomeController::class, 'showTalents'])->name('user.talent.details');
+Route::get('/skills/category/{slug}', [HomeController::class, 'getTalentByCategory'])->name('user.talents.category');
 Route::get('/verified-skills', [HomeController::class, 'verifiedTalents'])->name('user.verified-talents');
 Route::get('/top-rated-talents', [HomeController::class, 'topRatedTalents'])->name('user.top-rated-talents');
 Route::get('/search', [HomeController::class, 'search'])->name('talent.search');
 Route::get('/talent/{id}/stories', [HomeController::class, 'talentStories'])->name('talent.stories');
 Route::get('/skills', [HomeController::class, 'skills'])->name('user.skills');
-Route::get('/skills/category/{slug}', [HomeController::class, 'getByCategory']);
-Route::get('/skills/{slug}', [HomeController::class, 'skillDetails']);
+// Route::get('/skills/category/{slug}', [HomeController::class, 'getByCategory']);
+// Route::get('/skills/{slug}', [HomeController::class, 'skillDetails']);
 Route::get('/skills/related/{categoryId}', [HomeController::class, 'relatedSkills']);
 Route::post('/skills/{id}/reviews', [HomeController::class, 'storeReview'])->name('reviews.store');
 Route::get('/stories', [HomeController::class, 'stories'])->name('user.stories');
@@ -152,7 +152,7 @@ Route::get('/courses/{course}/success', [CourseController::class, 'paymentSucces
 Route::get('/course/payment/callback', [CourseController::class, 'handleCallback'])->name('course.payment.callback');
 
 // products
-Route::get('/our-products', [UsersProductController::class, 'index'])->name('user.products.index');
+Route::get('/products', [UsersProductController::class, 'index'])->name('user.products.index');
 Route::get('/our-product/{id}', [UsersProductController::class, 'details'])->name('user.product-details');
 Route::get('/product/category/{id}', [UsersProductController::class, 'showCategory'])->name('user.product.category');
 Route::post('/products/{product}/reviews', [UsersProductController::class, 'store'])->name('product.reviews.store')->middleware('auth');
@@ -181,8 +181,8 @@ Route::get('/events', [UserEventController::class, 'index'])->name('user.events.
 Route::get('/events/{id}', [UserEventController::class, 'show'])->name('user.events.show');
 
 // job routes
-Route::get('/work', [UserJobController::class, 'index'])->name('user.jobs.index');
-Route::get('/job/{id}', [UserJobController::class, 'show'])->name('user.jobs.show');
+Route::get('/find_work', [UserJobController::class, 'index'])->name('user.jobs.index');
+Route::get('/jobs/{id}', [UserJobController::class, 'show'])->name('user.jobs.show');
 Route::post('/jobs/{job}/apply', [UserJobController::class, 'apply'])->name('user.jobs.apply')->middleware('auth');
 Route::get('/jobs/category/{id}', [UserJobController::class, 'category'])->name('user.jobs.category');
 Route::post('/jobs/store', [UserJobController::class, 'store'])->name('user.jobs.store');

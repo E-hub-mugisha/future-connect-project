@@ -10,6 +10,7 @@ use App\Models\ProjectPayment;
 use App\Models\ProjectSponsorship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class UserProjectController extends Controller
 {
@@ -17,7 +18,7 @@ class UserProjectController extends Controller
     {
         $projects = Project::where('status', 'approved')->latest()->paginate(10);
         $categories = \App\Models\Category::all();
-        return view('user-page.projects.index', compact('projects', 'categories'));
+        return Inertia::render('UserPage/Projects', compact('projects', 'categories'));
     }
     public function show($id)
     {

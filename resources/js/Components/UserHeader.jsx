@@ -1,49 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
 
-/**
- * UserHeader
- * ----------
- * React port of the Blade `header` partial for FutureConnect.
- *
- * Updated to use React Router's <Link> for all internal navigation so the
- * page no longer does a full reload when the user clicks nav items, mega
- * menu cards, drawer links, dashboard/register/login-footer links, etc.
- * External links (social icons) and non-navigating dropdown triggers stay
- * as plain <a> / <button>. Forms that POST/GET to a route (login, search,
- * seller apply, post job) are left as native <form> submissions since
- * <Link> doesn't apply to form actions — wire those up via onSubmit/fetch
- * in the parent if you want those to be non-reloading too.
- *
- * Notes on the conversion from Blade:
- * - `route('name')` calls became lookups into a `routes` prop/object (see
- *   DEFAULT_ROUTES below). Pass a `routes` prop from the parent to override
- *   any path — e.g. from your router config or an API response.
- * - `@auth` / `@endauth` became a `currentUser` prop: pass `null` (or leave
- *   it undefined) for a logged-out visitor, or a `{ name, role }` object for
- *   a logged-in user.
- * - The `$categories` Eloquent query became a `categories` prop (array of
- *   `{ id, name }`) — fetch these from your API and pass them in.
- * - `@csrf` became a `csrfToken` prop rendered as a hidden input. Wire the
- *   `<form>` `action`/`onSubmit` up to however your app submits auth forms
- *   (plain POST, fetch, React Router action, etc).
- * - All `document.getElementById` / vanilla-JS wiring became React state,
- *   refs, and effects.
- * - This component assumes Tabler Icons (`ti ti-*`) and Font Awesome
- *   (`fa-brands fa-*`) are already loaded globally, same as in the Blade
- *   version. Swap in an icon library of your choice if not.
- * - This component requires `react-router-dom` (v6) to be installed and a
- *   <BrowserRouter>/<RouterProvider> ancestor in your app.
- */
 
 const DEFAULT_ROUTES = {
   "user.home": "/",
   "talent.connections-room": "/connection-room",
   "user.projects.index": "/projects",
-  "user.jobs.index": "/jobs",
-  "user.courses": "/courses",
-  "user.talents": "/talents",
-  "user.products.index": "/marketplace",
+  "user.jobs.index": "/find_work",
+  "user.courses": "/learning_center",
+  "user.talents": "/skills-marketplace",
+  "user.products.index": "/products",
   "solutions.students": "/solutions/students",
   "solutions.ngos": "/solutions/ngos",
   "solutions.companies": "/solutions/companies",
@@ -57,7 +23,7 @@ const DEFAULT_ROUTES = {
   "user.faq": "/faq",
   pricing: "/pricing",
   "demo.request": "/demo-request",
-  "user.register_as_talent": "/register/talent",
+  "user.register_skills": "/register/skills",
   "talent.search": "/search",
   login: "/login",
   register: "/register",
@@ -858,7 +824,7 @@ export default function UserHeader({
                   </div>
 
                   <Link
-                    href={r("user.register_as_talent")}
+                    href={r("user.register_skills")}
                     className="fc-btn-register-mobile"
                     aria-label="Register Skills"
                     title="Register Skills"
@@ -866,7 +832,7 @@ export default function UserHeader({
                     <i className="ti ti-plus" />
                   </Link>
 
-                  <Link href={r("user.register_as_talent")} className="fc-btn-green fc-register-desktop">
+                  <Link href={r("user.register_skills")} className="fc-btn-green fc-register-desktop">
                     Register Skills
                   </Link>
                 </>
@@ -911,7 +877,7 @@ export default function UserHeader({
                 <li><Link href={r("user.talents")} className={isActive("user.talents") ? "active" : ""}>Project Collaboration</Link></li>
                 <li><Link href={r("user.jobs.index")} className={isActive("user.jobs.index") ? "active" : ""}>Job Opportunities</Link></li>
                 <li><Link href={r("user.courses")} className={isActive("user.courses") ? "active" : ""}>Learning</Link></li>
-                <li><Link href={r("user.register_as_talent")} className={isActive("user.register_as_talent") ? "active" : ""}>Skills Hub</Link></li>
+                <li><Link href={r("user.register_skills")} className={isActive("user.register_skills") ? "active" : ""}>Skills Hub</Link></li>
                 <li><Link href={r("user.products.index")} className={isActive("user.products.index") ? "active" : ""}>Marketplace</Link></li>
               </ul>
             </li>
@@ -957,7 +923,7 @@ export default function UserHeader({
             ) : (
               <>
                 <button className="fc-btn-ghost" onClick={openMobileLogin}>Sign In</button>
-                <Link href={r("user.register_as_talent")} className="fc-btn-green">Register Skills</Link>
+                <Link href={r("user.register_skills")} className="fc-btn-green">Register Skills</Link>
               </>
             )}
             <Link href={r("demo.request")} className="fc-btn-ghost">Request Demo</Link>
@@ -1099,96 +1065,7 @@ export default function UserHeader({
         </div>
       </div>
 
-      {/* ════════════════════ POST JOB MODAL ════════════════════ */}
-      <div className="modal fade fc-modal" id="postJobModal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div className="modal-header">
-              <div>
-                <h5 className="modal-title">
-                  Post a New Job / work
-                  <small>Fill in the details below to publish your listing</small>
-                </h5>
-                <span className="accent-line" />
-              </div>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" />
-            </div>
-            <form action={r("user.jobs.store")} method="POST" onSubmit={onPostJobSubmit}>
-              {csrfToken && <input type="hidden" name="_token" value={csrfToken} />}
-              <div className="modal-body">
-                <div className="row g-3">
-                  <div className="col-12">
-                    <label className="fc-form-label">
-                      Job Title <span style={{ color: "var(--accent)" }}>*</span>
-                    </label>
-                    <input type="text" name="title" className="fc-form-control" placeholder="e.g., Senior Laravel Developer" required />
-                  </div>
-                  <div className="col-12">
-                    <label className="fc-form-label">
-                      Description <span style={{ color: "var(--accent)" }}>*</span>
-                    </label>
-                    <textarea
-                      name="description"
-                      className="fc-form-control"
-                      rows="4"
-                      placeholder="Describe the job responsibilities, requirements, and benefits..."
-                      required
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="fc-form-label">
-                      Category <span style={{ color: "var(--accent)" }}>*</span>
-                    </label>
-                    <select name="job_category_id" className="fc-form-control" required defaultValue="">
-                      <option value="">Select Category</option>
-                      {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    <label className="fc-form-label">
-                      Location <span style={{ color: "var(--accent)" }}>*</span>
-                    </label>
-                    <input type="text" name="location" className="fc-form-control" placeholder="e.g., Kigali, Rwanda / Remote" required />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="fc-form-label">Job Type</label>
-                    <select name="type" className="fc-form-control" defaultValue="full-time">
-                      <option value="full-time">Full-time</option>
-                      <option value="part-time">Part-time</option>
-                      <option value="freelance">Freelance</option>
-                      <option value="internship">Internship</option>
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    <label className="fc-form-label">Experience Level</label>
-                    <select name="experience_level" className="fc-form-control" defaultValue="entry">
-                      <option value="entry">Entry Level</option>
-                      <option value="mid">Mid Level</option>
-                      <option value="senior">Senior Level</option>
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    <label className="fc-form-label">Salary Range</label>
-                    <input type="text" name="salary_range" className="fc-form-control" placeholder="e.g., 300K – 800K RWF" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="fc-form-label">Skills (comma separated)</label>
-                    <input type="text" name="skills" className="fc-form-control" placeholder="e.g., Laravel, Vue, CSS" />
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer" style={{ gap: 10 }}>
-                <button type="button" className="btn-fc-outline" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" className="btn-fc-primary">
-                  <i className="ti ti-send" /> Post Job
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      
     </>
   );
 }

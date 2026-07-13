@@ -36,11 +36,11 @@ import GuestLayout from "@/Layouts/GuestLayout";
  */
 
 const DEFAULT_ROUTES = {
-  "user.talents": "/talents",
+  "user.talents": "/skills-marketplace",
 };
 
 const categoryRoute = (routes, slug) =>
-  (routes["user.talents.category"] || "/talents/category/:slug").replace(
+  (routes["user.talents.category"] || "/skills/category/:slug").replace(
     ":slug",
     slug
   );

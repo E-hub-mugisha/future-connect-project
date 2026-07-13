@@ -1,4 +1,4 @@
-{{-- resources/views/skill/register.blade.php --}}
+{{-- resources/views/skillRegister.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 

@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class UserJobController extends Controller
 {
@@ -64,7 +65,7 @@ class UserJobController extends Controller
         // Other data
         $companies = Seller::all();
 
-        return view('user-page.jobs.index', compact(
+        return Inertia::render('UserPage/JobsIndex', compact(
             'categories',
             'locations',
             'ratings',
@@ -78,13 +79,34 @@ class UserJobController extends Controller
 
     public function show($id)
     {
-        $job = JobSection::findOrFail($id);
-        $recent = JobSection::latest()->take(5)->get();
-        // Fetch only categories that contain jobs
+        $job = JobSection::with('company')->findOrFail($id);
+        $job->apply_url = route('user.jobs.apply', $job->id);
+
+        $recent = JobSection::with('company')
+            ->where('id', '!=', $job->id)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($j) {
+                $j->show_url = route('user.jobs.show', $j->id);
+                return $j;
+            });
+
         $categories = JobCategory::withCount('jobSections')
             ->having('job_sections_count', '>', 0)
             ->get();
-        return view('user-page.jobs.show', compact('job', 'recent', 'categories'));
+
+        return Inertia::render('UserPage/JobShow', [
+            'job' => $job,
+            'recent' => $recent,
+            'categories' => $categories,
+            'filters' => request()->only(['category']),
+            'routes' => [
+                'user.jobs.index' => route('user.jobs.index'),
+                'pricing'         => route('pricing'),
+            ],
+            'showSubscribeModal' => session('showSubscribeModal', false),
+        ]);
     }
 
     public function apply(Request $request, JobSection $job)
@@ -97,7 +119,7 @@ class UserJobController extends Controller
             return redirect()->route('user.jobs.show', $job->id)
                 ->with('warning', 'You must subscribe before applying to jobs.');
         }
-        
+
         $request->validate([
             'cover_letter' => 'nullable|string',
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
