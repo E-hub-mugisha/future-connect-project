@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class TrendingController extends Controller
 {
@@ -38,7 +39,7 @@ class TrendingController extends Controller
             'talent'     => $trendingTalent->count(),
         ];
 
-        return view('user-page.trending', compact(
+        return Inertia::render('UserPage/Trending', compact(
             'trendingSkills',
             'trendingCategories',
             'trendingProjects',

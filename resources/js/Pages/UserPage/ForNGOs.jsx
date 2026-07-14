@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
+import GuestLayout from '@/Layouts/GuestLayout';
 
 export default function ForNGOs() {
     return (
@@ -536,3 +537,5 @@ export default function ForNGOs() {
         </>
     );
 }
+
+ForNGOs.layout = (page) => <GuestLayout children={page} />;
