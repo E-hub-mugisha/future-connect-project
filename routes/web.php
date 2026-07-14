@@ -201,6 +201,7 @@ Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'store
 Route::get('/sponsorship/{sponsorship}/payment/', [UserProjectController::class, 'payment'])
     ->name('diaspora.sponsorship.payment');
 Route::get('/project/payment/callback', [UserProjectController::class, 'handleCallback'])->name('project.sponsor.callback');
+Route::get('/project/create', [UserProjectController::class, 'create'])->name('user.projects.create');
 
 Route::prefix('quick-hire')->name('quick-hire.')->group(function () {
     Route::get('/', [QuickHireController::class, 'create'])->name('create');
