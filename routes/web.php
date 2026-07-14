@@ -153,8 +153,8 @@ Route::get('/course/payment/callback', [CourseController::class, 'handleCallback
 
 // products
 Route::get('/products', [UsersProductController::class, 'index'])->name('user.products.index');
-Route::get('/our-product/{id}', [UsersProductController::class, 'details'])->name('user.product-details');
-Route::get('/product/category/{id}', [UsersProductController::class, 'showCategory'])->name('user.product.category');
+Route::get('/products/{id}', [UsersProductController::class, 'details'])->name('user.product-details');
+Route::get('/product/categories/{id}', [UsersProductController::class, 'showCategory'])->name('user.product.category');
 Route::post('/products/{product}/reviews', [UsersProductController::class, 'store'])->name('product.reviews.store')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
@@ -210,7 +210,7 @@ Route::prefix('quick-hire')->name('quick-hire.')->group(function () {
     Route::get('/{quickHire}/success', [QuickHireController::class, 'success'])->name('success');
 });
 
-Route::get('/request-demo', [DemoRequestController::class, 'create'])->name('demo.request');
+Route::get('/demo-request', [DemoRequestController::class, 'create'])->name('demo.request');
 Route::post('/request-demo', [DemoRequestController::class, 'store'])->name('demo.store');
 
 Route::prefix('solutions')->name('solutions.')->controller(HomeController::class)->group(function () {
@@ -275,7 +275,7 @@ Route::prefix('diaspora')->group(function () {
     Route::post('/{id}/reject', [DiasporaAccountController::class, 'reject']);
 });
 
-Route::get('pricing_plan', [HomeController::class, 'pricing'])->name('pricing');
+Route::get('pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::middleware(['auth'])->group(function () {
     Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])
         ->name('subscribe');

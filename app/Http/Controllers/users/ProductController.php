@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function details($id)
     {
         $product = Product::with('reviews')->findOrFail($id);
-        return view('user-page.products.details', compact('product'));
+        return Inertia::render('UserPage/ProductDetails', compact('product'));
     }
 
     // Show all products by category
@@ -33,7 +33,7 @@ class ProductController extends Controller
         $category = ProductCategory::findOrFail($id);
         $products = Product::where('product_category_id', $id)->get();
         $categories = ProductCategory::withCount('products')->get();
-        return view('user-page.products.category', compact('category', 'products', 'categories'));
+        return Inertia::render('UserPage/ProductsByCategory', compact('category', 'products', 'categories'));
     }
 
     /**

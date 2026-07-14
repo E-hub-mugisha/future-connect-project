@@ -25,7 +25,7 @@ class UserProjectController extends Controller
         $project = Project::with('user')->findOrFail($id);
         $recent = Project::where('id', '!=', $id)->latest()->take(5)->get();
 
-        return view('user-page.projects.show', compact('project', 'recent'));
+        return Inertia::render('UserPage/ProjectShow', compact('project', 'recent'));
     }
 
     public function store(Request $request, $id)

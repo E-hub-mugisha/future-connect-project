@@ -30,7 +30,7 @@ class CourseController extends Controller
             ->take(6)
             ->with(['talent', 'category', 'feedback'])
             ->get();
-        return view('user-page.course-details', compact('course', 'relatedCourses'));
+        return Inertia::render('UserPage/CourseShow', compact('course', 'relatedCourses'));
     }
 
     public function getCoursesByCategory($slug)
@@ -45,8 +45,9 @@ class CourseController extends Controller
         $categories = Category::all();
         $categoryName = $category->name;
 
-        return view('user-page.category-course', compact('courses', 'categories', 'categoryName'));
+        return Inertia::render('UserPage/CoursesByCategory', compact('courses', 'categories', 'categoryName'));
     }
+    
     public function storeReview(Request $request, $courseId)
     {
         $request->validate([

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DemoRequest;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DemoRequestController extends Controller
 {
@@ -32,7 +33,7 @@ class DemoRequestController extends Controller
      */
     public function create()
     {
-        return view('user-page.demo.request', [
+        return Inertia::render('UserPage/DemoRequest', [
             'companySizes' => $this->companySizes,
             'preferredTimes' => $this->preferredTimes,
         ]);

@@ -4,7 +4,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 
 const routes = {
     productDetails: (id) => `/products/${id}`,
-    productCategory: (id) => `/categories/${id}`,
+    productCategory: (id) => `/product/categories/${id}`,
     sellerStore: '/sellers',
 };
 

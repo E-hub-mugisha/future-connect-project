@@ -185,7 +185,7 @@ class HomeController extends Controller
     }
     public function contact()
     {
-        return view('user-page.contact');
+        return Inertia::render('UserPage/Contact');
     }
 
     public function contactSend(Request $request)
@@ -677,28 +677,28 @@ class HomeController extends Controller
         // Fetch FAQs from the database
         $faqs = Faq::all();
 
-        return view('user-page.faq', compact('faqs'));
+        return Inertia::render('UserPage/Faq', compact('faqs'));
     }
 
     public function howItWorks()
     {
         $successStories = SuccessStory::inRandomOrder()->get();
-        return view('user-page.how-it-works', compact('successStories'));
+        return Inertia::render('UserPage/HowItWorks', compact('successStories'));
     }
 
     public function privacyPolicy()
     {
-        return view('user-page.privacy-policy');
+        return Inertia::render('UserPage/PrivacyPolicy');
     }
 
     public function termsCondition()
     {
-        return view('user-page.terms-condition');
+        return Inertia::render('UserPage/TermsCondition');
     }
 
     public function donationPolicy()
     {
-        return view('user-page.donate');
+        return Inertia::render('UserPage/DonationPolicy');
     }
 
     public function pull()
@@ -724,13 +724,37 @@ class HomeController extends Controller
         $plans = PricingPlan::with('prices')
             ->where('is_active', true)
             ->get();
-        return view('user-page.pricing', compact('plans'));
+        return Inertia::render('UserPage/Pricing', compact('plans'));
     }
 
-    // success stories
-    public function successStories()
+    public function successStories(Request $request)
     {
-        return view('user-page.success-stories');
+        $search = $request->query('search');
+        $role = $request->query('role');
+
+        $stories = SuccessStory::query()
+            ->when($search, fn($q) => $q->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%")
+                    ->orWhere('author_name', 'like', "%{$search}%");
+            }))
+            ->when($role, fn($q) => $q->where('role', $role))
+            ->latest()
+            ->paginate(9)
+            ->withQueryString();
+
+        $roles = SuccessStory::whereNotNull('role')
+            ->where('role', '!=', '')
+            ->distinct()
+            ->orderBy('role')
+            ->pluck('role');
+
+        return Inertia::render('UserPage/SuccessStories', [
+            'stories' => $stories,
+            'search' => $search,
+            'role' => $role,
+            'roles' => $roles,
+        ]);
     }
 
     // success story store
