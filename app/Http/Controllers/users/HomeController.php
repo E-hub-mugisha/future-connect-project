@@ -804,7 +804,7 @@ class HomeController extends Controller
      */
     public function students()
     {
-        return view('user-page.solutions.students', [
+        return Inertia::render('UserPage/ForStudents', [
             'stats' => [
                 'skills_listed'    => '8K+',
                 'employer_reach'   => '3x',
@@ -818,7 +818,7 @@ class HomeController extends Controller
      */
     public function ngos()
     {
-        return view('user-page.solutions.ngos');
+        return Inertia::render('UserPage/ForNGOs');
     }
 
     /**
@@ -826,7 +826,7 @@ class HomeController extends Controller
      */
     public function companies()
     {
-        return view('user-page.solutions.companies');
+        return Inertia::render('UserPage/ForCompanies');
     }
 
     /**
@@ -834,7 +834,7 @@ class HomeController extends Controller
      */
     public function professionals()
     {
-        return view('user-page.solutions.professionals');
+        return Inertia::render('UserPage/ForProfessionals');
     }
 
     /**
@@ -842,7 +842,7 @@ class HomeController extends Controller
      */
     public function universities()
     {
-        return view('user-page.solutions.universities', [
+        return Inertia::render('UserPage/ForUniversities', [
             'dashboard' => [
                 'students_onboarded'      => 1240,
                 'verified_profile_pct'    => 82,
@@ -857,7 +857,7 @@ class HomeController extends Controller
      */
     public function investors()
     {
-        return view('user-page.solutions.investors', [
+        return Inertia::render('UserPage/ForInvestors', [
             'trends' => [
                 ['name' => 'Digital Marketing',     'growth' => 38, 'bar' => 80],
                 ['name' => 'Software Development',  'growth' => 31, 'bar' => 70],
