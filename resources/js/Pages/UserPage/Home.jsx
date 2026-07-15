@@ -2,39 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * Home (Inertia page component)
- * ------------------------------
- * React/Inertia port of the Blade homepage (`@extends('layouts.guest')`).
- *
- * Notes on the conversion from Blade:
- * - `@extends('layouts.guest')` / `@section('content')` became Inertia's
- *   persistent-layout pattern: `Home.layout = (page) => <GuestLayout>{page}</GuestLayout>`
- *   at the bottom of this file. Swap in your actual layout component path.
- * - `route('name', ...)` calls go through a local `r()` wrapper (see below)
- *   around Ziggy's global `route()` helper — the standard pairing for
- *   Laravel + Inertia. `r()` catches the case where `window.Ziggy` isn't
- *   present yet and logs a pointer to the fix instead of crashing the page.
- *   If you're not using Ziggy at all, swap `r()` for a `routes` prop like in
- *   the UserHeader/UserFooter conversions.
- * - All Blade-side data ($totalTalents, $partners, $categories,
- *   $featuredTalents, $testimonials) became page props, passed in from the
- *   controller via `Inertia::render('Home', [...])`.
- * - `@foreach` / `@if` / `@for` became `.map()` / conditional rendering /
- *   `Array.from({ length: 5 })`.
- * - Internal links use Inertia's `<Link>` for client-side navigation;
- *   external/asset links (images, mailto, `#`) stay as plain `<a>`/`<img>`.
- * - The feature tabs (vanilla JS click handlers) became a React
- *   `activeTab` state.
- * - The hero background carousel and the mobile testimonial carousel still
- *   rely on Bootstrap's JS carousel component (as in the original), wired
- *   up via `useEffect` + refs instead of an inline `<script>` tag. This
- *   assumes `window.bootstrap` is available globally (Bootstrap's JS bundle
- *   loaded in your app entry/layout, same as the Blade version).
- * - Asset paths (`asset('image/talents/...')`) became plain public paths
- *   (`/image/talents/...`) — adjust the base path to match how your Vite/
- *   Laravel build serves `public/`.
- */
 
 const FEATURE_TABS = [
   { key: "skills", label: "Skills" },
@@ -472,7 +439,7 @@ export default function Home({
               <span className="step-num">01</span>
               <h5>Create Your Profile</h5>
               <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
-              <Link href={r("user.register_as_talent")} className="strip-link">
+              <Link href={r("user.register_skills")} className="strip-link">
                 Get Started <i className="ti ti-arrow-right" />
               </Link>
             </div>
@@ -927,7 +894,7 @@ export default function Home({
               <h2>Showcase your skills, share your story, and inspire others.</h2>
               <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
               <div className="hero-ctas" style={{ marginBottom: 0 }}>
-                <Link href={r("user.register_as_talent")} className="btn-fc-primary">
+                <Link href={r("user.register_skills")} className="btn-fc-primary">
                   Get Started <i className="ti ti-arrow-right" />
                 </Link>
                 <Link href={r("user.talents")} className="btn-fc-outline">

@@ -1964,7 +1964,7 @@ return request()->routeIs($route) ? 'active' : '';
                         <div class="fc-mega-col">
                             <h6>Register</h6>
                             <ul>
-                                <li><a href="{{ route('user.register_as_talent') }}">Register Skills</a></li>
+                                <li><a href="{{ route('user.register_skills') }}">Register Skills</a></li>
                                 <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
                                 <li><a href="{{ route('user.success-stories') }}">Success Stories</a></li>
                             </ul>
@@ -2085,7 +2085,7 @@ return request()->routeIs($route) ? 'active' : '';
                 </div>
 
                 {{-- Mobile: + icon button (shown only on small screens) --}}
-                <a href="{{ route('user.register_as_talent') }}"
+                <a href="{{ route('user.register_skills') }}"
                     class="fc-btn-register-mobile"
                     aria-label="Register Skills"
                     title="Register Skills">
@@ -2093,7 +2093,7 @@ return request()->routeIs($route) ? 'active' : '';
                 </a>
 
                 {{-- Desktop: full text button (hidden on small screens) --}}
-                <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green fc-register-desktop">
+                <a href="{{ route('user.register_skills') }}" class="fc-btn-green fc-register-desktop">
                     Register Skills
                 </a>
                 @endauth
@@ -2148,7 +2148,7 @@ return request()->routeIs($route) ? 'active' : '';
                     <li><a href="{{ route('user.verified-talents') }}">Verified Skills</a></li>
                     <li><a href="{{ route('user.top-rated-talents') }}">Top Rated</a></li>
                     <li class="fc-drawer-sub-label">Register</li>
-                    <li><a href="{{ route('user.register_as_talent') }}">Register Skills</a></li>
+                    <li><a href="{{ route('user.register_skills') }}">Register Skills</a></li>
                     <li><a href="{{ route('user.how-it-works') }}">How It Works</a></li>
                     <li><a href="{{ route('user.success-stories') }}">Success Stories</a></li>
                 </ul>
@@ -2173,7 +2173,7 @@ return request()->routeIs($route) ? 'active' : '';
             </a>
             @else
             <button class="fc-btn-ghost" onclick="openMobileLogin()">Sign In</button>
-            <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green">Register Skills</a>
+            <a href="{{ route('user.register_skills') }}" class="fc-btn-green">Register Skills</a>
             @endauth
         </div>
 

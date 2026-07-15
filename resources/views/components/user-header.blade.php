@@ -1426,7 +1426,7 @@ return request()->routeIs($route) ? 'active' : '';
                 </div>
 
                 {{-- Mobile: + icon button (shown only on small screens) --}}
-                <a href="{{ route('user.register_as_talent') }}"
+                <a href="{{ route('user.register_skills') }}"
                     class="fc-btn-register-mobile"
                     aria-label="Register Skills"
                     title="Register Skills">
@@ -1434,7 +1434,7 @@ return request()->routeIs($route) ? 'active' : '';
                 </a>
 
                 {{-- Desktop: full text button (hidden on small screens) --}}
-                <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green fc-register-desktop">
+                <a href="{{ route('user.register_skills') }}" class="fc-btn-green fc-register-desktop">
                     Register Skills
                 </a>
                 @endauth
@@ -1481,7 +1481,7 @@ return request()->routeIs($route) ? 'active' : '';
                     <li><a href="{{ route('user.talents') }}">Project Collaboration</a></li>
                     <li><a href="{{ route('user.jobs.index') }}">Job Opportunities</a></li>
                     <li><a href="{{ route('user.courses') }}">Learning</a></li>
-                    <li><a href="{{ route('user.register_as_talent') }}">Skills Hub</a></li>
+                    <li><a href="{{ route('user.register_skills') }}">Skills Hub</a></li>
                     <li><a href="{{ route('user.products.index') }}">Marketplace</a></li>
                 </ul>
             </li>
@@ -1525,7 +1525,7 @@ return request()->routeIs($route) ? 'active' : '';
             </a>
             @else
             <button class="fc-btn-ghost" onclick="openMobileLogin()">Sign In</button>
-            <a href="{{ route('user.register_as_talent') }}" class="fc-btn-green">Register Skills</a>
+            <a href="{{ route('user.register_skills') }}" class="fc-btn-green">Register Skills</a>
             @endauth
             <a href="{{ route('demo.request') }}" class="fc-btn-ghost">Request Demo</a>
         </div>

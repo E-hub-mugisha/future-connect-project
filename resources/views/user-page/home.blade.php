@@ -1010,7 +1010,7 @@
                 <span class="step-num">01</span>
                 <h5>Create Your Profile</h5>
                 <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
-                <a href="{{ route('user.register_as_talent') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
+                <a href="{{ route('user.register_skills') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="step-card">
                 <span class="step-num">02</span>
@@ -1417,7 +1417,7 @@
                 <h2>Showcase your skills, share your story, and inspire others.</h2>
                 <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
                 <div class="hero-ctas" style="margin-bottom:0;">
-                    <a href="{{ route('user.register_as_talent') }}" class="btn-fc-primary">Get Started <i class="ti ti-arrow-right"></i></a>
+                    <a href="{{ route('user.register_skills') }}" class="btn-fc-primary">Get Started <i class="ti ti-arrow-right"></i></a>
                     <a href="{{ route('user.talents') }}" class="btn-fc-outline">Browse Skills</a>
                 </div>
             </div>
