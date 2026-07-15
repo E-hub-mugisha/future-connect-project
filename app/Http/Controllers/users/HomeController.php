@@ -563,13 +563,14 @@ class HomeController extends Controller
             'matchedTalents' => $matchedTalents
         ]);
     }
+
     public function search(Request $request)
     {
         $category = $request->category;
-        $region = $request->region;
-        $keyword = $request->keyword;
+        $region   = $request->region;
+        $keyword  = $request->keyword;
 
-        $query = Talent::query();
+        $query = Talent::with(['category', 'feedback']); // eager-load for avgRating() and category name
 
         if ($category) {
             $query->where('category_id', $category);
@@ -580,13 +581,19 @@ class HomeController extends Controller
         }
 
         if ($keyword) {
-            $query->where('name', 'like', "%$keyword%")
-                ->orWhere('skills', 'like', "%$keyword%");
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%$keyword%")
+                    ->orWhere('description', 'like', "%$keyword%");
+            });
         }
 
         $talents = $query->get();
 
-        return view('user-page.search-results', compact('talents'));
+        return Inertia::render('UserPage/SearchResults', [
+            'talents'    => $talents,
+            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'filters'    => $request->only(['keyword', 'category', 'region']),
+        ]);
     }
 
 

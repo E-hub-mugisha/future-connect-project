@@ -5,7 +5,8 @@ import GuestLayout from '@/Layouts/GuestLayout';
 const routes = {
     talentsCategory: (slug) => `/skills/category/${slug}`,
     talentDetails: (id) => `/skills/${id}`,
-    skills: '/skills-marketplace',
+    skills: '/skills',
+    search: '/search'
 };
 
 export default function SkillsCategory({
@@ -43,9 +44,9 @@ export default function SkillsCategory({
     }, [talents, activeFilter, sidebarQuery]);
 
     const submitSearch = (e) => {
-        e.preventDefault();
-        router.get(routes.talents, { keyword, category: categoryId }, { preserveState: true });
-    };
+    e.preventDefault();
+    router.get(routes.search, { keyword, category: categoryId }, { preserveState: true });
+};
 
     const filterTabs = [
         { key: 'all', label: 'All' },
