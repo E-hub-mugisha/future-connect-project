@@ -1,39 +1,14 @@
 import React from "react";
 import { Link, usePage } from "@inertiajs/react";
 
-/**
- * UserFooter
- * ----------
- * React port of the Blade `footer` partial for FutureConnect, wired up for
- * Inertia.js.
- *
- * Notes on the conversion from Blade:
- * - `route('name')` calls became lookups into a `routes` prop (see
- *   DEFAULT_ROUTES below for fallbacks) — pass a `routes` prop to override
- *   any path. If you have Ziggy set up, you can swap `r(name)` for
- *   `route(name)` directly instead.
- * - The `$categories` Eloquent query (6 random categories) became a
- *   `categories` prop: array of `{ id, name, slug }`. Fetch these from your
- *   API/build step and pass them in.
- * - `{{ date('Y') }}` became `new Date().getFullYear()`.
- * - The light/dark theme is still purely CSS-driven via the
- *   `[data-h-theme="light"]` attribute selector — set by UserHeader's theme
- *   toggle on `<html>`, so no extra wiring is needed here.
- * - All internal `<a href>` tags became `<Link>` from `@inertiajs/react` so
- *   navigation is handled by Inertia (no full page reload). External links
- *   (social icons, `mailto:`) stay as plain `<a>`.
- * - Every internal link now compares its target against the current
- *   Inertia page URL (`usePage().url`) and gets an `.is-active` class when
- *   it matches, so the page you're on is visually indicated in the footer.
- */
 
 const DEFAULT_ROUTES = {
   "user.home": "/",
   "user.about": "/about",
   "user.how-it-works": "/how-it-works",
-  "user.talents": "/talents",
-  "user.courses": "/courses",
-  "user.blogs": "/blog",
+  "user.talents": "/skills-marketplace",
+  "user.courses": "/learning_center",
+  "user.blogs": "/blogs",
   "user.contact": "/contact",
   "talent.connections-room": "/connections",
   "user.success-stories": "/success-stories",
@@ -42,6 +17,12 @@ const DEFAULT_ROUTES = {
   "user.privacy-policy": "/privacy-policy",
   "user.terms-condition": "/terms-and-conditions",
   "user.donation-policy": "/donation-policy",
+  "solutions.students": "/solutions/students",
+  "solutions.ngos": "/solutions/ngos",
+  "solutions.companies": "/solutions/companies",
+  "solutions.professionals": "/solutions/professionals",
+  "solutions.universities": "/solutions/universities",
+  "solutions.investors": "/solutions/investors",
 };
 
 export default function UserFooter({ categories = [], routes = {} }) {
@@ -208,10 +189,10 @@ export default function UserFooter({ categories = [], routes = {} }) {
           <div className="fc-top-nav__inner">
             <Link href={r("user.about")} className={navClass(r("user.about"))}>About Us</Link>
             <Link href={r("user.how-it-works")} className={navClass(r("user.how-it-works"))}>How It Works</Link>
-            <Link href={r("user.talents")} className={navClass(r("user.talents"))}>Skills</Link>
-            <Link href={r("user.courses")} className={navClass(r("user.courses"))}>Courses</Link>
+            <Link href={r("user.talents")} className={navClass(r("user.talents"))}>Skills Hub</Link>
+            <Link href={r("user.courses")} className={navClass(r("user.courses"))}>Learning Center</Link>
             <Link href={r("user.blogs")} className={navClass(r("user.blogs"))}>News & Insights</Link>
-            <Link href={r("user.contact")} className={navClass(r("user.contact"))}>Contact</Link>
+            <Link href={r("user.contact")} className={navClass(r("user.contact"))}>Help & Support</Link>
           </div>
         </div>
 
@@ -242,26 +223,35 @@ export default function UserFooter({ categories = [], routes = {} }) {
               </ul>
             </div>
 
-            {/* Popular Categories */}
+            {/* Solutions */}
             <div>
-              <p className="fc-col-title">Popular Categories</p>
+              <p className="fc-col-title">Solutions</p>
               <ul className="fc-link-list">
-                {categories.map((cat) => {
-                  const href = `/talents/category/${cat.slug}`;
-                  return (
-                    <li key={cat.id}>
-                      <Link href={href} className={navClass(href)}>
-                        <span className="arrow">›</span> {cat.name}
-                      </Link>
-                    </li>
-                  );
-                })}
+                <li><Link href={r("solutions.students")} className={navClass(r("solutions.students"))}><span className="arrow">›</span> For Students</Link></li>
+                <li><Link href={r("solutions.ngos")} className={navClass(r("solutions.ngos"))}><span className="arrow">›</span> For NGOs</Link></li>
+                <li><Link href={r("solutions.companies")} className={navClass(r("solutions.companies"))}><span className="arrow">›</span> For Companies</Link></li>
+                <li><Link href={r("solutions.professionals")} className={navClass(r("solutions.professionals"))}><span className="arrow">›</span> For Professionals</Link></li>
+                <li><Link href={r("solutions.universities")} className={navClass(r("solutions.universities"))}><span className="arrow">›</span> For Universities</Link></li>
+                <li><Link href={r("solutions.investors")} className={navClass(r("solutions.investors"))}><span className="arrow">›</span> For Investors</Link></li>
               </ul>
             </div>
 
             {/* Contact */}
             <div>
               <p className="fc-col-title">Get in Touch</p>
+
+              <div className="fc-contact-item">
+                <div className="fc-contact-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+                    <circle cx="12" cy="9" r="2.5" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="fc-contact-label">Location</p>
+                  <p className="fc-contact-value">Kigali, Rwanda</p>
+                </div>
+              </div>
 
               <div className="fc-contact-item">
                 <div className="fc-contact-icon">

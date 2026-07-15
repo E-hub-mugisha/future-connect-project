@@ -647,16 +647,71 @@ class HomeController extends Controller
     }
 
 
-    public function blogs()
+    public function blogs(Request $request)
     {
-        // Fetch all blogs, eager load relationships if needed (like author or category)
-        $blogs = Blog::orderBy('created_at', 'desc')->paginate(9);
+        $query = Blog::query()->where('is_published', true);
 
-        $categories = Category::all();
-        // Return the Blade view with blogs
-        return view('user-page.blogs', [
-            'blogs' => $blogs,
-            'categories' => $categories
+        // Category filter
+        if ($request->filled('category')) {
+            $query->whereHas('category', fn($q) => $q->where('slug', $request->category));
+        }
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%");
+            });
+        }
+
+        // Sort
+        switch ($request->input('sort', 'latest')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'popular':
+                $query->orderByDesc('views_count'); // adjust to your actual column
+                break;
+            default:
+                $query->latest();
+        }
+
+        $blogs = $query->with(['author', 'category'])
+            ->paginate(9)
+            ->withQueryString();
+
+        $categories = Category::withCount('blogs')->get();
+
+        $recent = Blog::where('is_published', true)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return Inertia::render('UserPage/BlogIndex', [
+            'blogs' => $blogs->through(fn($blog) => [
+                'id' => $blog->id,
+                'slug' => $blog->slug,
+                'title' => $blog->title,
+                'excerpt' => $blog->excerpt,
+                'image_url' => $blog->image_url,
+                'created_at_formatted' => $blog->created_at->format('M d, Y'),
+                'category' => $blog->category ? [
+                    'slug' => $blog->category->slug,
+                    'name' => $blog->category->name,
+                ] : null,
+                'author' => $blog->author ? [
+                    'name' => $blog->author->name,
+                    'avatar_url' => $blog->author->avatar_url,
+                ] : null,
+            ]), // <-- no ->items() here — keep it as a paginator instance
+            'categories' => $categories,
+            'recent' => $recent,
+            'filters' => [
+                'category' => $request->category,
+                'search' => $request->search,
+                'sort' => $request->input('sort', 'latest'),
+            ],
         ]);
     }
 
@@ -669,7 +724,7 @@ class HomeController extends Controller
             ->latest()
             ->take(5)
             ->get();
-        return view('user-page.blog-details', compact('blog', 'relatedPosts'));
+        return Inertia::render('UserPage/BlogDetails', compact('blog', 'relatedPosts'));
     }
 
     public function faq()
