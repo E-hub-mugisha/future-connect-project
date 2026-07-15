@@ -14,16 +14,14 @@ return new class extends Migration
         Schema::create('talent_connections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('talent_id');    // The talent being connected to
-            $table->unsignedBigInteger('user_id');      // The requester (sponsor/visitor)
+            $table->string('name');
+            $table->string('email');
             $table->string('status')->default('pending'); // pending, accepted, declined
-            $table->decimal('amount', 10, 2)->default(0); // payment amount
-            $table->enum('payment_status', ['paid', 'unpaid'])->default('unpaid');
             $table->text('message');
             $table->text('response')->nullable();
             $table->timestamps();
 
             $table->foreign('talent_id')->references('id')->on('talents')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

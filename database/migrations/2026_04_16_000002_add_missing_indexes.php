@@ -135,14 +135,12 @@ return new class extends Migration
         Schema::table('job_section_applications', function (Blueprint $table) {
             $table->index('status');
             $table->index(['job_section_id', 'status'], 'job_apps_section_status_idx');
-            $table->index(['user_id', 'status'], 'job_apps_user_status_idx');
         });
 
         // ── project_applications ─────────────────────────────────────────────
         Schema::table('project_applications', function (Blueprint $table) {
             $table->index('status');
             $table->index(['project_id', 'status'], 'proj_apps_project_status_idx');
-            $table->index(['user_id', 'status'], 'proj_apps_user_status_idx');
         });
 
         // ── projects ─────────────────────────────────────────────────────────
@@ -155,9 +153,7 @@ return new class extends Migration
         // ── talent_connections ───────────────────────────────────────────────
         Schema::table('talent_connections', function (Blueprint $table) {
             $table->index('status');
-            $table->index('payment_status');
             $table->index(['talent_id', 'status'], 'connections_talent_status_idx');
-            $table->index(['user_id', 'status'], 'connections_user_status_idx');
         });
 
         // ── events ───────────────────────────────────────────────────────────

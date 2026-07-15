@@ -26,9 +26,12 @@ use App\Models\SuccessStory;
 use App\Models\SupportTalent;
 use App\Models\Testimonial;
 use App\Models\TalentFeedback;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -357,7 +360,17 @@ class HomeController extends Controller
             $image->move(public_path($path), $talentImage);
         }
 
+        $password = Str::random(8);
+        // auto create user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($password), // Random password
+            'role' => 'talent', // Assign role
+        ]);
+
         $talent = Talent::create([
+            'user_id' => $user->id,
             'name' => $request->name,
             'featured' => $request->has('featured') ? 1 : 0,
             'description' => $request->description,
@@ -371,7 +384,7 @@ class HomeController extends Controller
 
         // Send email to user
         if ($talent->email) {
-            Mail::to($talent->email)->send(new TalentRegisteredUser($talent));
+            Mail::to($talent->email)->send(new TalentRegisteredUser($talent, $password));
         }
 
         // Send email to admin
@@ -384,7 +397,7 @@ class HomeController extends Controller
     {
         $talent = Talent::findOrFail($id);
 
-        return view('user-page.talent-success', compact('talent'));
+        return Inertia::render('UserPage/SkillRegistrationSuccess', compact('talent'));
     }
     public function storyDetails($slug)
     {

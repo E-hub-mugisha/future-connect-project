@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('image')->nullable();
             $table->string('address')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
             $table->string('language')->nullable();
             $table->boolean('matched')->default(false); 
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
