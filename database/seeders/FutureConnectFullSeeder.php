@@ -1058,7 +1058,7 @@ class FutureConnectFullSeeder extends Seeder
     protected function seedCorporateRecruitments(): void
     {
         DB::table('corporate_recruitments')->insert([
-            'company_id'  => $this->ids['users']['client'][2],
+            'company_id'  => 1,
             'title'       => 'Backend Developer for Digital Lending Platform',
             'description' => 'Seeking a Laravel developer to join our digital lending product team on a 6-month contract.',
             'skills'      => json_encode(['Laravel', 'MySQL', 'REST API']),
