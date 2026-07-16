@@ -2,39 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * Home (Inertia page component)
- * ------------------------------
- * React/Inertia port of the Blade homepage (`@extends('layouts.guest')`).
- *
- * Notes on the conversion from Blade:
- * - `@extends('layouts.guest')` / `@section('content')` became Inertia's
- *   persistent-layout pattern: `Home.layout = (page) => <GuestLayout>{page}</GuestLayout>`
- *   at the bottom of this file. Swap in your actual layout component path.
- * - `route('name', ...)` calls go through a local `r()` wrapper (see below)
- *   around Ziggy's global `route()` helper — the standard pairing for
- *   Laravel + Inertia. `r()` catches the case where `window.Ziggy` isn't
- *   present yet and logs a pointer to the fix instead of crashing the page.
- *   If you're not using Ziggy at all, swap `r()` for a `routes` prop like in
- *   the UserHeader/UserFooter conversions.
- * - All Blade-side data ($totalTalents, $partners, $categories,
- *   $featuredTalents, $testimonials) became page props, passed in from the
- *   controller via `Inertia::render('Home', [...])`.
- * - `@foreach` / `@if` / `@for` became `.map()` / conditional rendering /
- *   `Array.from({ length: 5 })`.
- * - Internal links use Inertia's `<Link>` for client-side navigation;
- *   external/asset links (images, mailto, `#`) stay as plain `<a>`/`<img>`.
- * - The feature tabs (vanilla JS click handlers) became a React
- *   `activeTab` state.
- * - The hero background carousel and the mobile testimonial carousel still
- *   rely on Bootstrap's JS carousel component (as in the original), wired
- *   up via `useEffect` + refs instead of an inline `<script>` tag. This
- *   assumes `window.bootstrap` is available globally (Bootstrap's JS bundle
- *   loaded in your app entry/layout, same as the Blade version).
- * - Asset paths (`asset('image/talents/...')`) became plain public paths
- *   (`/image/talents/...`) — adjust the base path to match how your Vite/
- *   Laravel build serves `public/`.
- */
 
 const FEATURE_TABS = [
   { key: "skills", label: "Skills" },
@@ -51,7 +18,7 @@ const ACCORDION_PANELS = [
     icon: "ti-sparkles",
     routeName: "user.talents",
     cta: "Explore Marketplace",
-    desc: "Get verified, showcase your work, and put yourself in front of employers actively hiring for your skill set.",
+    desc: "Stand out and reach 3× more employers. Get verified and feature your story on our homepage.",
   },
   {
     id: "accLearn",
@@ -59,7 +26,7 @@ const ACCORDION_PANELS = [
     icon: "ti-school",
     routeName: "user.courses",
     cta: "Explore Courses",
-    desc: "Focused, practical courses built to help you level up fast — taught by people who do the work.",
+    desc: "Short, affordable, high-quality learning designed for practical application.",
   },
   {
     id: "accOpp",
@@ -67,7 +34,7 @@ const ACCORDION_PANELS = [
     icon: "ti-briefcase",
     routeName: "user.talents",
     cta: "Explore Works",
-    desc: "Freelance gigs, collaborations, and full-time roles — matched to what you're actually good at.",
+    desc: "Post work, find collaborators, and build your dream team in one verified network.",
   },
   {
     id: "accConnect",
@@ -75,7 +42,7 @@ const ACCORDION_PANELS = [
     icon: "ti-users",
     routeName: "user.talents",
     cta: "Join Community",
-    desc: "A secure space to message, meet, and build real professional relationships with verified members.",
+    desc: "Secure messaging and meeting system for verified professionals.",
   },
 ];
 
@@ -146,7 +113,7 @@ export default function Home({
 
   return (
     <>
-      <Head title="Future Connect — Where Verified Talent Meets Real Opportunity" />
+      <Head title="Empowering Talent, Opportunities & Growth" />
 
       <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap"
@@ -234,14 +201,12 @@ export default function Home({
           line-height: 1.08; color: var(--text-1); margin-bottom: 22px;
         }
         .fc-hero h1 .hl { color: var(--accent); }
-        .fc-hero p { font-size: 1.05rem; color: var(--text-2); max-width: 540px; line-height: 1.75; margin-bottom: 36px; }
+        .fc-hero p { font-size: 1.05rem; color: var(--text-2); max-width: 520px; line-height: 1.75; margin-bottom: 36px; }
 
         .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
         .hero-stats { display: flex; gap: 36px; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 28px; }
         .hero-stat-val { font-family: var(--font-head); font-size: 1.7rem; font-weight: 800; color: var(--accent); }
         .hero-stat-lbl { font-size: 0.78rem; color: var(--text-3); margin-top: 2px; }
-
-        .hero-trust-note { font-size: 0.78rem; color: var(--text-3); margin-top: 6px; }
 
         .avatar-stack { display: flex; }
         .avatar-stack img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--bg); object-fit: cover; margin-left: -10px; }
@@ -277,7 +242,6 @@ export default function Home({
         .cat-pill-name { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; color: var(--text-1); }
         .cat-pill-count { font-size: 0.75rem; color: var(--text-3); }
         .cat-pill-arrow { color: var(--accent); font-size: 0.75rem; margin-top: 8px; }
-        .cat-empty { color: var(--text-3); font-size: 0.85rem; }
 
         .fc-features { padding: 80px 0; }
         .fc-tab-bar {
@@ -426,26 +390,26 @@ export default function Home({
         <div className="container fc-hero-content">
           <div className="row align-items-center">
             <div className="col-lg-7">
-              <p className="hero-eyebrow">The Verified Talent Network</p>
+              <p className="hero-eyebrow">Skills Marketplace</p>
               <h1>
-                Where Skilled Professionals <span className="hl">Get Discovered.</span>
+                On-Demand <span className="hl">Services</span> for Your Every Need
               </h1>
               <p>
-                Future Connect brings verified talent, real opportunities, and practical learning together in one
-                trusted platform — so you can build a career or a team without the guesswork.
+                We pride ourselves on offering a seamless, secure, and efficient experience. Browse thousands of
+                verified talents, read reviews, and grow with a community built for your success.
               </p>
               <div className="hero-ctas">
                 <Link href={r("user.talents")} className="btn-fc-primary">
-                  Browse Talent <i className="ti ti-arrow-right" />
+                  Find Skills <i className="ti ti-arrow-right" />
                 </Link>
                 <Link href={r("register")} className="btn-fc-outline">
-                  Create Your Profile <i className="ti ti-user-plus" />
+                  Join Free <i className="ti ti-user-plus" />
                 </Link>
               </div>
               <div className="hero-stats">
                 <div>
                   <div className="hero-stat-val">{totalTalents}+</div>
-                  <div className="hero-stat-lbl">Verified Professionals</div>
+                  <div className="hero-stat-lbl">Skilled Professionals</div>
                 </div>
                 <div>
                   <div className="hero-stat-val">{partners.length}+</div>
@@ -468,7 +432,7 @@ export default function Home({
         <div className="container">
           <div className="fc-section-head text-center" style={{ maxWidth: 600, margin: "0 auto 48px" }}>
             <span className="eyebrow">How It Works</span>
-            <h2>From Sign-Up to Standout — in 3 Steps</h2>
+            <h2>Get Started in 3 Simple Steps</h2>
           </div>
           <div className="steps-grid">
             <div className="step-card">
@@ -482,15 +446,15 @@ export default function Home({
             <div className="step-card">
               <span className="step-num">02</span>
               <h5>Get Discovered & Rated</h5>
-              <p>Employers browse by category, leave ratings, and share feedback that helps you grow your reputation.</p>
+              <p>Employers browse skills by category, rate your profile, and share feedback to help you grow.</p>
               <Link href={r("user.talents")} className="strip-link">
                 Explore Skills <i className="ti ti-arrow-right" />
               </Link>
             </div>
             <div className="step-card">
               <span className="step-num">03</span>
-              <h5>Grow With the Community</h5>
-              <p>Connect with peers, keep learning, and buy or sell tools with creators across the platform.</p>
+              <h5>Grow with the Community</h5>
+              <p>Connect, collaborate, and access learning resources. Shop or sell tools from local creators.</p>
               <Link href={r("talent.connections-room")} className="strip-link">
                 Connection Room<i className="ti ti-arrow-right" />
               </Link>
@@ -507,24 +471,24 @@ export default function Home({
           <div className="feature-strip-grid">
             <div className="feature-strip-item">
               <div className="strip-icon"><i className="ti ti-rocket" /></div>
-              <h5>Get Seen Faster</h5>
-              <p>Verified, boosted profiles reach up to 3× more employers — and can be featured right on our homepage.</p>
+              <h5>Skills Marketplace</h5>
+              <p>Stand out and reach 3× more employers. Boost your profile, get verified, and feature your story.</p>
               <Link href={r("user.talents")} className="strip-link">
                 Find Skills <i className="ti ti-arrow-right" />
               </Link>
             </div>
             <div className="feature-strip-item">
               <div className="strip-icon"><i className="ti ti-briefcase" /></div>
-              <h5>Unlock Real Opportunities</h5>
-              <p>Tailored job listings, freelance gigs, and collaboration projects matched to your actual skill set.</p>
+              <h5>Unlock Opportunities</h5>
+              <p>Discover tailored job listings, collaboration projects, and freelance gigs matched to your skills.</p>
               <Link href={r("user.jobs.index")} className="strip-link">
                 Start Exploring <i className="ti ti-arrow-right" />
               </Link>
             </div>
             <div className="feature-strip-item">
               <div className="strip-icon"><i className="ti ti-users" /></div>
-              <h5>Grow Your Network</h5>
-              <p>Meet professionals, find mentors, and build the relationships that move a career forward.</p>
+              <h5>Expand Your Network</h5>
+              <p>Connect with professionals, mentors, and peers. Join groups and build relationships that matter.</p>
               <Link href={r("talent.connections-room")} className="strip-link">
                 Skill Connect<i className="ti ti-arrow-right" />
               </Link>
@@ -542,8 +506,8 @@ export default function Home({
             <div className="col-md-8">
               <div className="fc-section-head" style={{ marginBottom: 0 }}>
                 <span className="eyebrow">Browse Categories</span>
-                <h2>The Skills Shaping Today's Market</h2>
-                <p>From design to development to consulting — find the category that fits, then find your person.</p>
+                <h2>Trending Skills for Today's Market</h2>
+                <p>Explore the most sought-after skills and connections in today's job market.</p>
               </div>
             </div>
             <div className="col-md-4 text-md-end">
@@ -553,17 +517,13 @@ export default function Home({
             </div>
           </div>
           <div className="category-scroll">
-            {categories.length > 0 ? (
-              categories.map((cat) => (
-                <Link key={cat.id} href={r("user.talents.category", cat.slug)} className="cat-pill">
-                  <span className="cat-pill-name">{cat.name}</span>
-                  <span className="cat-pill-count">{cat.talents_count ?? 0} talents</span>
-                  <span className="cat-pill-arrow"><i className="ti ti-arrow-right" /></span>
-                </Link>
-              ))
-            ) : (
-              <p className="cat-empty">New categories are being added — check back soon.</p>
-            )}
+            {categories.map((cat) => (
+              <Link key={cat.id} href={r("user.talents.category", cat.slug)} className="cat-pill">
+                <span className="cat-pill-name">{cat.name}</span>
+                <span className="cat-pill-count">{cat.talents_count ?? 0} talents</span>
+                <span className="cat-pill-arrow"><i className="ti ti-arrow-right" /></span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -575,8 +535,8 @@ export default function Home({
         <div className="container">
           <div className="fc-section-head">
             <span className="eyebrow">Platform Features</span>
-            <h2>Everything You Need, In One Place</h2>
-            <p>Showcase your skills, find your next opportunity, keep learning, and connect with the right people — all inside Future Connect.</p>
+            <h2>Explore Future Connect</h2>
+            <p>Everything you need to grow your career, showcase your skills, and connect with the right people.</p>
           </div>
 
           <div className="fc-tab-bar" role="tablist">
@@ -597,15 +557,15 @@ export default function Home({
               <div className="row align-items-center g-5">
                 <div className="col-lg-6">
                   <span className="fc-badge mb-3"><i className="ti ti-sparkles" /> Skills Marketplace</span>
-                  <h2>Turn your skills <span>into</span> your next client.</h2>
+                  <h2>Showcase your skills <span>and</span> reach verified employers.</h2>
                   <p>
-                    Future Connect's Skills Marketplace helps you present verified work, build trust fast, and
-                    convert profile views into real freelance and full-time opportunities.
+                    Future Connect's Skills Marketplace empowers professionals to present verified skills, attract
+                    clients, and secure freelance or full-time work opportunities.
                   </p>
                   <ul className="feature-list">
-                    <li>Get verified and build instant credibility with employers</li>
-                    <li>Feature your story and best work on our homepage</li>
-                    <li>Reach up to 3× more clients with a boosted profile</li>
+                    <li>Get verified and build trust with employers</li>
+                    <li>Feature your story on our homepage</li>
+                    <li>Reach 3× more clients with a boosted profile</li>
                   </ul>
                   <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
                     <Link href={r("user.talents")} className="btn-fc-primary">
@@ -637,15 +597,15 @@ export default function Home({
               <div className="row align-items-center g-5">
                 <div className="col-lg-6">
                   <span className="fc-badge mb-3"><i className="ti ti-school" /> Learning Center</span>
-                  <h2>Skills that pay off, <span>faster.</span></h2>
+                  <h2>Upskill with short, impactful <span>professional courses.</span></h2>
                   <p>
-                    Short, focused courses taught by working professionals — built for real-world application, not
-                    just certificates that sit in a drawer.
+                    The Learning Center brings together experts and learners for short, affordable, high-quality
+                    experiences — designed for practical application so you can implement knowledge immediately.
                   </p>
                   <ul className="feature-list">
                     <li>Short, high-impact micro-courses</li>
-                    <li>Instructors who work in the industry they teach</li>
-                    <li>Shareable certificates that strengthen your profile</li>
+                    <li>Expert instructors from your industry</li>
+                    <li>Certificates you can share on your profile</li>
                   </ul>
                   <Link href={r("user.courses")} className="btn-fc-primary">
                     Explore Courses <i className="ti ti-arrow-right" />
@@ -664,15 +624,11 @@ export default function Home({
               <div className="row align-items-center g-5">
                 <div className="col-lg-6">
                   <span className="fc-badge mb-3"><i className="ti ti-briefcase" /> Opportunities</span>
-                  <h2>Post the work. <span>Find</span> the right people.</h2>
-                  <p>
-                    Whether you're hiring or looking to be hired, Opportunities connects you with verified talent
-                    and real roles — without the noise of open job boards.
-                  </p>
+                  <h2>Post work, find collaborators, <span>and build</span> your dream team.</h2>
                   <ul className="feature-list">
-                    <li>Post freelance gigs and full-time roles in minutes</li>
-                    <li>Find verified collaborators in one trusted network</li>
-                    <li>Set job alerts so you never miss the right match</li>
+                    <li>Post freelance gigs and full-time roles</li>
+                    <li>Find verified collaborators in one network</li>
+                    <li>Set job alerts so you never miss a match</li>
                   </ul>
                   <Link href={r("user.jobs.index")} className="btn-fc-primary">
                     Explore Opportunities <i className="ti ti-arrow-right" />
@@ -702,15 +658,15 @@ export default function Home({
                 </div>
                 <div className="col-lg-7">
                   <span className="fc-badge mb-3"><i className="ti ti-users" /> Connection Room</span>
-                  <h2>Build relationships <span>securely</span>, not just contacts.</h2>
+                  <h2>Network and collaborate <span>securely</span> with verified users.</h2>
                   <p>
-                    The Connection Room gives verified professionals a private space to message, meet, and
-                    collaborate — from quick check-ins to scheduled mentorship calls.
+                    The Connect Room offers a secure messaging and meeting system for verified professionals. Build
+                    meaningful relationships, exchange ideas, or schedule mentorship calls.
                   </p>
                   <ul className="feature-list">
-                    <li>A diverse, verified professional network</li>
-                    <li>Built on trust and transparency at every step</li>
-                    <li>A simple, distraction-free way to connect</li>
+                    <li>Diverse network of verified professionals</li>
+                    <li>Trust and transparency at every step</li>
+                    <li>User-friendly, innovation-driven platform</li>
                   </ul>
                   <Link href={r("talent.connections-room")} className="btn-fc-primary">
                     Skills Connect<i className="ti ti-arrow-right" />
@@ -724,16 +680,16 @@ export default function Home({
           <div className={`fc-tab-panel${activeTab === "marketplace" ? " active" : ""}`}>
             <div className="feature-panel-card">
               <span className="fc-badge mb-3"><i className="ti ti-shopping-bag" /> Marketplace</span>
-              <h2>Buy, sell, and grow <span>on your terms.</span></h2>
+              <h2>We're here to help <span>find your needs.</span></h2>
               <p>
-                From templates to digital tools, the Marketplace lets creators sell their work with full payment
-                protection — and lets buyers shop with confidence.
+                Our Marketplace lets creators showcase digital products — from templates to tools — with full
+                payment protection via the platform.
               </p>
               <div className="fc-provide-grid">
                 <div className="fc-provide-box">
                   <div className="provide-icon"><img src="/assets/img/icons/ipad-icon.svg" alt="" /></div>
                   <h6>Browse Products</h6>
-                  <p>Everything you need for your craft, backed by secure payments through Future Connect.</p>
+                  <p>Everything you need for your craft — safe payments through Future Connect.</p>
                   <Link href={r("user.products.index")} className="btn-fc-primary" style={{ fontSize: "0.8rem", padding: "9px 18px" }}>
                     Explore <i className="ti ti-arrow-right" />
                   </Link>
@@ -741,7 +697,7 @@ export default function Home({
                 <div className="fc-provide-box">
                   <div className="provide-icon"><img src="/assets/img/icons/service-icon.svg" alt="" /></div>
                   <h6>Sell a Product</h6>
-                  <p>Put your digital products in front of thousands of buyers already on the platform.</p>
+                  <p>Showcase your digital products to thousands of buyers on the platform.</p>
                   <a
                     data-bs-toggle="modal"
                     data-bs-target="#applySellerModal"
@@ -754,7 +710,7 @@ export default function Home({
                 <div className="fc-provide-box">
                   <div className="provide-icon"><img src="/assets/img/icons/user-icon-01.svg" alt="" /></div>
                   <h6>Become a Seller</h6>
-                  <p>Get paid instantly — Future Connect keeps a small fee to cover logistics and support.</p>
+                  <p>Sellers earn instantly — FC keeps a small fee for logistics and support.</p>
                   <a
                     className="btn-fc-primary"
                     data-bs-toggle="modal"
@@ -777,7 +733,7 @@ export default function Home({
         <div className="container">
           <div className="fc-section-head">
             <span className="eyebrow">Platform Features</span>
-            <h2>Everything You Need, In One Place</h2>
+            <h2>Explore Future Connect</h2>
           </div>
           <div className="accordion" id="fcAccordion">
             {ACCORDION_PANELS.map((panel) => {
@@ -839,8 +795,8 @@ export default function Home({
             <div className="col-md-7">
               <div className="fc-section-head" style={{ marginBottom: 0 }}>
                 <span className="eyebrow">Testimonials</span>
-                <h2>Real Stories From Real Talent</h2>
-                <p>Hear from professionals who've grown their careers, client lists, and networks through Future Connect.</p>
+                <h2>What Talents Say About Future Connect</h2>
+                <p>Voices of passionate individuals whose lives have been impacted by sharing their skills and stories.</p>
               </div>
             </div>
             <div className="col-md-5 text-md-end">
@@ -868,7 +824,7 @@ export default function Home({
                   </div>
                 </div>
                 <div className="testimonial-body">
-                  <p>{test.content ?? "Future Connect helped me turn my skills into steady, real opportunities."}</p>
+                  <p>{test.content ?? "Passionate professional making a difference on Future Connect."}</p>
                 </div>
                 <div className="testimonial-loc">
                   <i className="ti ti-map-pin" style={{ color: "var(--accent)" }} />
@@ -899,7 +855,7 @@ export default function Home({
                       </div>
                     </div>
                     <div className="testimonial-body">
-                      <p>{test.content ?? "Future Connect helped me turn my skills into steady, real opportunities."}</p>
+                      <p>{test.content ?? "Passionate professional making a difference on Future Connect."}</p>
                     </div>
                     <div className="testimonial-loc">
                       <i className="ti ti-map-pin" style={{ color: "var(--accent)" }} />
@@ -935,8 +891,8 @@ export default function Home({
               >
                 Join Future Connect
               </span>
-              <h2>Your skills deserve to be seen. Let's make that happen.</h2>
-              <p>Join a growing community of verified professionals building real careers, one connection at a time. It only takes a few minutes to start.</p>
+              <h2>Showcase your skills, share your story, and inspire others.</h2>
+              <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
               <div className="hero-ctas" style={{ marginBottom: 0 }}>
                 <Link href={r("user.register_as_talent")} className="btn-fc-primary">
                   Get Started <i className="ti ti-arrow-right" />
