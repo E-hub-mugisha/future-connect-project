@@ -26,9 +26,12 @@ use App\Models\SuccessStory;
 use App\Models\SupportTalent;
 use App\Models\Testimonial;
 use App\Models\TalentFeedback;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -357,7 +360,17 @@ class HomeController extends Controller
             $image->move(public_path($path), $talentImage);
         }
 
+        $password = Str::random(8);
+        // auto create user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($password), // Random password
+            'role' => 'talent', // Assign role
+        ]);
+
         $talent = Talent::create([
+            'user_id' => $user->id,
             'name' => $request->name,
             'featured' => $request->has('featured') ? 1 : 0,
             'description' => $request->description,
@@ -371,7 +384,7 @@ class HomeController extends Controller
 
         // Send email to user
         if ($talent->email) {
-            Mail::to($talent->email)->send(new TalentRegisteredUser($talent));
+            Mail::to($talent->email)->send(new TalentRegisteredUser($talent, $password));
         }
 
         // Send email to admin
@@ -384,7 +397,7 @@ class HomeController extends Controller
     {
         $talent = Talent::findOrFail($id);
 
-        return view('user-page.talent-success', compact('talent'));
+        return Inertia::render('UserPage/SkillRegistrationSuccess', compact('talent'));
     }
     public function storyDetails($slug)
     {
@@ -550,13 +563,14 @@ class HomeController extends Controller
             'matchedTalents' => $matchedTalents
         ]);
     }
+
     public function search(Request $request)
     {
         $category = $request->category;
-        $region = $request->region;
-        $keyword = $request->keyword;
+        $region   = $request->region;
+        $keyword  = $request->keyword;
 
-        $query = Talent::query();
+        $query = Talent::with(['category', 'feedback']); // eager-load for avgRating() and category name
 
         if ($category) {
             $query->where('category_id', $category);
@@ -567,13 +581,19 @@ class HomeController extends Controller
         }
 
         if ($keyword) {
-            $query->where('name', 'like', "%$keyword%")
-                ->orWhere('skills', 'like', "%$keyword%");
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%$keyword%")
+                    ->orWhere('description', 'like', "%$keyword%");
+            });
         }
 
         $talents = $query->get();
 
-        return view('user-page.search-results', compact('talents'));
+        return Inertia::render('UserPage/SearchResults', [
+            'talents'    => $talents,
+            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'filters'    => $request->only(['keyword', 'category', 'region']),
+        ]);
     }
 
 

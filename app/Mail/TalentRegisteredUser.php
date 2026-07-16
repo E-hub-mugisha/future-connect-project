@@ -13,13 +13,15 @@ class TalentRegisteredUser extends Mailable
     use Queueable, SerializesModels;
 
     protected $talent;
+    public $password;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($talent)
+    public function __construct($talent, $password)
     {
         $this->talent = $talent;
+        $this->password = $password;
     }
 
     /**
@@ -41,6 +43,7 @@ class TalentRegisteredUser extends Mailable
             view: 'emails.talent_user',
             with: [
                 'talent' => $this->talent,
+                'password' => $this->password,
             ],
         );
     }

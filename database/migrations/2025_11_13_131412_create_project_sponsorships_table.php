@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('project_sponsorships', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('diaspora_account_id')->constrained('diaspora_accounts')->onDelete('cascade');
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->string('name');
+            $table->string('email');
             $table->decimal('amount', 12, 2);
             $table->string('currency', 10)->default('USD');
             $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');

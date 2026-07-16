@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\ConnectionPayment;
 use App\Models\Talent;
 use App\Models\TalentConnection;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -35,20 +36,20 @@ class TalentConnectionController extends Controller
     public function store(Request $request, Talent $talent)
     {
         $request->validate([
-            'message' => 'required|string'
+            'message' => 'required|string',
+            'email' => 'required|email',
+            'name' => 'required|string|max:255'
         ]);
-        // This is where you'd integrate Flutterwave/Stripe
-        $amount = 10.00; // example connection fee
 
         $connection = TalentConnection::create([
             'talent_id' => $talent->id,
-            'user_id'   => Auth::id(),
+            'name' => $request->name,
+            'email' => $request->email,
             'status'    => 'pending',
-            'amount'    => $amount,
             'message' => $request->message
         ]);
 
-        return redirect()->route('connections.payment.choice', $connection->id)->with('success', 'Request sent proceed with payment.');
+        return redirect()->back()->with('success', 'Request sent successfully and will be notified.');
     }
 
     public function paymentChoice($id)

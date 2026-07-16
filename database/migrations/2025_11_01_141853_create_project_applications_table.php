@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('project_applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('name');
+            $table->string('email');
             $table->text('message')->nullable();
             $table->string('portfolio_url')->nullable();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');

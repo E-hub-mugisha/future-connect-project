@@ -12,6 +12,8 @@
     <p>Here’s a quick summary of your submission:</p>
     <ul>
         <li><strong>Name:</strong> {{ $talent->name }}</li>
+    <!-- unhashed password -->
+        <li><strong>Password:</strong> {{ $password }}</li>
         <li><strong>Category:</strong> {{ $talent->category->name ?? 'N/A' }}</li>
         <li><strong>Description:</strong> {{ $talent->description ?? 'No description provided' }}</li>
         <li><strong>Phone:</strong> {{ $talent->phone ?? 'Not provided' }}</li>

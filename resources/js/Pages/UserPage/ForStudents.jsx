@@ -20,7 +20,7 @@ import GuestLayout from "@/Layouts/GuestLayout";
  *   now actually re-themes this page too.
  * - The four placeholder `href="#"` CTAs ("Create your profile", "See how
  *   it works", "Join for free", "Create your free profile") were pointed
- *   at real routes (`user.register_as_talent`, `user.how-it-works`) and
+ *   at real routes (`user.register_skills`, `user.how-it-works`) and
  *   converted to `<Link>` for client-side navigation.
  */
 
@@ -250,7 +250,7 @@ export default function ForStudents() {
                   market.
                 </p>
                 <div className="d-flex gap-3 flex-wrap">
-                  <Link href={r("user.register_as_talent")} className="btn-fc-primary">
+                  <Link href={r("user.register_skills")} className="btn-fc-primary">
                     <i className="ti ti-rocket" /> Create your profile
                   </Link>
                   <Link href={r("user.how-it-works")} className="btn-fc-ghost">
@@ -340,7 +340,7 @@ export default function ForStudents() {
               <div className="col-lg-4">
                 <div className="fc-final-cta h-100 d-flex flex-column justify-content-center mb-0 py-4">
                   <h2 className="h5 mb-2">Ready to start?</h2>
-                  <Link href={r("user.register_as_talent")} className="btn-fc-primary justify-content-center">
+                  <Link href={r("user.register_skills")} className="btn-fc-primary justify-content-center">
                     Join for free
                   </Link>
                 </div>
@@ -366,7 +366,7 @@ export default function ForStudents() {
           <div className="fc-final-cta">
             <h2>Your career starts with one profile</h2>
             <p>Join thousands of students already building their future on Future Connect.</p>
-            <Link href={r("user.register_as_talent")} className="btn-fc-primary">
+            <Link href={r("user.register_skills")} className="btn-fc-primary">
               Create your free profile
             </Link>
           </div>

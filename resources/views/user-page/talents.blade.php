@@ -817,7 +817,7 @@ $categories = \App\Models\Category::all();
           <a class="btn-green" data-bs-toggle="modal" data-bs-target="#searchModal">
             <i class="ti ti-search"></i> Find Skills
           </a>
-          <a class="btn-outline" href="{{ route('user.register_as_talent') }}">
+          <a class="btn-outline" href="{{ route('user.register_skills') }}">
             <i class="ti ti-star"></i> Register your Skills
           </a>
           <a class="btn-outline" href="{{ route('talent.connections-room') }}">
@@ -844,7 +844,7 @@ $categories = \App\Models\Category::all();
                 <div class="hero-card-icon"><i class="ti ti-badge"></i></div>
                 <h5>Join Our Skill Hub</h5>
                 <p>Showcase skills, get verified, and connect with global clients.</p>
-                <a class="card-link" href="{{ route('user.register_as_talent') }}">
+                <a class="card-link" href="{{ route('user.register_skills') }}">
                   Register now <i class="ti ti-arrow-right"></i>
                 </a>
               </div>
@@ -887,7 +887,7 @@ $categories = \App\Models\Category::all();
                 <div class="hero-card-icon mx-auto mb-3"><i class="ti ti-badge"></i></div>
                 <h4>Join Our Skill Hub</h4>
                 <p>Showcase your skills, get verified, and connect with clients globally.</p>
-                <a class="btn-green mx-auto" href="{{ route('user.register_as_talent') }}">Register Skills</a>
+                <a class="btn-green mx-auto" href="{{ route('user.register_skills') }}">Register Skills</a>
               </div>
             </div>
             <div class="carousel-item">
@@ -998,7 +998,7 @@ $categories = \App\Models\Category::all();
         </p>
       </div>
       <div class="col-md-4 text-md-end">
-        <a role="button" href="{{ route('user.register_as_talent') }}" class="btn-green" style="font-size:1rem; padding:14px 32px;">
+        <a role="button" href="{{ route('user.register_skills') }}" class="btn-green" style="font-size:1rem; padding:14px 32px;">
           Register Your Skills <i class="ti ti-chevron-right"></i>
         </a>
       </div>

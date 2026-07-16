@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('job_section_applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_section_id');
-            $table->unsignedBigInteger('user_id');
+            $table->string('name');
+            $table->string('email');
             $table->text('cover_letter')->nullable();
             $table->string('resume')->nullable();
             $table->enum('status', ['pending', 'reviewed', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
             $table->foreign('job_section_id')->references('id')->on('job_sections')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

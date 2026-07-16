@@ -37,7 +37,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
 
   function handleSearchSubmit(e) {
     e.preventDefault();
-    router.get(route('user.talents'), search);
+    router.get(route('talent.search'), search);
     setSearchModalOpen(false);
   }
 

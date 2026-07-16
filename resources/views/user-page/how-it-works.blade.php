@@ -1548,7 +1548,7 @@
         <span class="step-num">01</span>
         <h5>Create Your Profile</h5>
         <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
-        <a href="{{ route('user.register_as_talent') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
+        <a href="{{ route('user.register_skills') }}" class="strip-link">Get Started <i class="ti ti-arrow-right"></i></a>
       </div>
       <div class="step-card">
         <span class="step-num">02</span>
@@ -1756,7 +1756,7 @@
         </div>
         <div class="col-md-4 text-md-end">
           <div class="cta-btn">
-            <a href="{{ route('user.register_as_talent') }}" class="btn btn-primary btn-lg">
+            <a href="{{ route('user.register_skills') }}" class="btn btn-primary btn-lg">
               Register your Skills <i class="ti ti-arrow-badge-right"></i>
             </a>
           </div>

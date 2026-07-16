@@ -19,6 +19,7 @@ class Talent extends Model
      */
     protected $fillable = [
         'name',
+        'user_id',
         'status',
         'featured',
         'description',

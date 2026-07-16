@@ -84,30 +84,11 @@ return new class extends Migration
             $table->unique(['user_id', 'course_id'], 'course_feedback_user_course_unique');
         });
 
-        // ── talent_connections ────────────────────────────────────────────────
-        Schema::table('talent_connections', function (Blueprint $table) {
-            $table->unique(['user_id', 'talent_id'], 'connections_user_talent_unique');
-        });
-
         // ── wallets ───────────────────────────────────────────────────────────
         Schema::table('wallets', function (Blueprint $table) {
             $table->unique('user_id', 'wallets_user_unique');
         });
 
-        // ── project_applications ──────────────────────────────────────────────
-        Schema::table('project_applications', function (Blueprint $table) {
-            $table->unique(['user_id', 'project_id'], 'proj_apps_user_project_unique');
-        });
-
-        // ── job_section_applications ──────────────────────────────────────────
-        Schema::table('job_section_applications', function (Blueprint $table) {
-            $table->unique(['user_id', 'job_section_id'], 'job_apps_user_section_unique');
-        });
-
-        // ── product_reviews ───────────────────────────────────────────────────
-        Schema::table('product_reviews', function (Blueprint $table) {
-            $table->unique(['user_id', 'product_id'], 'product_reviews_user_product_unique');
-        });
 
         // ── plan_prices ───────────────────────────────────────────────────────
         // Each plan can have only one price per billing cycle
@@ -136,11 +117,7 @@ return new class extends Migration
         Schema::table('carts', fn($t) => $t->dropUnique('carts_user_product_unique'));
         Schema::table('course_enrollments', fn($t) => $t->dropUnique('enrollments_user_course_unique'));
         Schema::table('course_feedback', fn($t) => $t->dropUnique('course_feedback_user_course_unique'));
-        Schema::table('talent_connections', fn($t) => $t->dropUnique('connections_user_talent_unique'));
         Schema::table('wallets', fn($t) => $t->dropUnique('wallets_user_unique'));
-        Schema::table('project_applications', fn($t) => $t->dropUnique('proj_apps_user_project_unique'));
-        Schema::table('job_section_applications', fn($t) => $t->dropUnique('job_apps_user_section_unique'));
-        Schema::table('product_reviews', fn($t) => $t->dropUnique('product_reviews_user_product_unique'));
         Schema::table('plan_prices', fn($t) => $t->dropUnique('plan_prices_plan_cycle_unique'));
         Schema::table('subscription_payments', fn($t) => $t->dropUnique('sub_payments_tx_ref_unique'));
         Schema::table('diaspora_accounts', fn($t) => $t->dropUnique('diaspora_passport_unique'));
