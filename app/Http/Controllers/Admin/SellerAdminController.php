@@ -24,7 +24,9 @@ class SellerAdminController extends Controller
     // Show single seller details (optional for modal)
     public function show(Seller $seller)
     {
-        return response()->json($seller);
+        return Inertia::render('AdminPage/Sellers/Show', [
+            'seller' => $seller->loadCount('products')->load('products:id,seller_id,name,price,status'),
+        ]);
     }
 
     // Update seller (status, info)

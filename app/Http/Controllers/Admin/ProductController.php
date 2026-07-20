@@ -11,19 +11,35 @@ use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('seller')->latest()->get();
-        return view('admin-pages.products.index', compact('products'));
+        $query = Product::with(['category:id,name', 'seller:id,company_name,address']);
+
+        if ($status = $request->get('status')) {
+            $query->where('status', $status);
+        }
+
+        return Inertia::render('AdminPage/Products/Index', [
+            'products' => $query->latest()->get(),
+            'counts' => [
+                'total'    => Product::count(),
+                'approved' => Product::where('status', 'approved')->count(),
+                'pending'  => Product::where('status', 'pending')->count(),
+                'rejected' => Product::where('status', 'rejected')->count(),
+            ],
+            'filters' => $request->only('status'),
+        ]);
     }
 
-    public function show($id)
+    public function show(Product $product)
     {
-        $product = Product::with('seller')->findOrFail($id);
-        return view('admin-pages.products.details', compact('product'));
+        return Inertia::render('AdminPage/Products/Show', [
+            'product' => $product->load(['category:id,name', 'seller:id,company_name', 'reviews.user:id,name,profile_image']),
+        ]);
     }
 
     public function create()
