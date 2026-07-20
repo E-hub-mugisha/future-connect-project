@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class SellerAdminController extends Controller
 {
@@ -17,7 +18,7 @@ class SellerAdminController extends Controller
     public function index()
     {
         $sellers = Seller::latest()->get();
-        return view('admin-pages.sellers.index', compact('sellers'));
+        return Inertia::render('AdminPage/Sellers/Index', compact('sellers'));
     }
 
     // Show single seller details (optional for modal)

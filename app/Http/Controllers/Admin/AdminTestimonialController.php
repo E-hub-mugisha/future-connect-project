@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
 class AdminTestimonialController extends Controller
 {
     public function index()
     {
         $testimonials = Testimonial::with('talent')->get();
 
-        return view('admin-pages.testimonials.index', [
+        return Inertia::render('AdminPage/Testimonials/Index', [
             'talents' => \App\Models\Talent::all(),
             'testimonials' => $testimonials
         ]);

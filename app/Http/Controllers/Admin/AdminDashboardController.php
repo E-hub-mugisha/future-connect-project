@@ -34,7 +34,7 @@ class AdminDashboardController extends Controller
         // Fetch the first (and only) settings row
         $settings = Setting::first();
 
-        return view('admin-pages.settings.index', compact('settings'));
+        return Inertia::render('AdminPage/Settings/Index', compact('settings'));
     }
 
     /**
