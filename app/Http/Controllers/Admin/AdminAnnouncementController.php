@@ -7,12 +7,13 @@ use App\Models\Announcement;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class AdminAnnouncementController extends Controller
 {
     public function index()
     {
-        return view('admin-pages.announcements.index', [
+        return Inertia::render('AdminPage/Announcements/Index', [
             'announcements' => Announcement::all(),
             'categories' => Category::all(),
         ]);
@@ -21,13 +22,13 @@ class AdminAnnouncementController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin-pages.announcements.create-edit', compact('categories'));
+        return Inertia::render('AdminPage/Announcements/Create', compact('categories'));
     }
 
     public function edit(Announcement $announcement)
     {
         $categories = Category::all();
-        return view('admin-pages.announcements.create-edit', compact('announcement', 'categories'));
+        return Inertia::render('AdminPage/Announcements/Edit', compact('announcement', 'categories'));
     }
 
 
@@ -66,7 +67,7 @@ class AdminAnnouncementController extends Controller
     public function show($id)
     {
         $announcement = Announcement::with('category')->findOrFail($id);
-        return view('admin-pages.announcements.show', compact('announcement'));
+        return Inertia::render('AdminPage/Announcements/Show', compact('announcement'));
     }
 
     public function update(Request $request, Announcement $announcement)

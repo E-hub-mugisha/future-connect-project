@@ -8,19 +8,19 @@ use App\Models\Project;
 use App\Models\ProjectApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Inertia\Inertia;
 class AdminProjectController extends Controller
 {
     public function index()
     {
         $projects = Project::latest()->paginate(10);
-        return view('admin-pages.projects.index', compact('projects'));
+        return Inertia::render('AdminPage/Projects/Index', compact('projects'));
     }
 
     // create project
     public function create()
     {
-        return view('admin-pages.projects.create');
+        return Inertia::render('AdminPage/Projects/Create');
     }
     public function store(Request $request)
     {
@@ -43,7 +43,7 @@ class AdminProjectController extends Controller
     public function edit($id)
     {
         $project = Project::findOrFail($id);
-        return view('admin-pages.projects.edit', compact('project'));
+        return Inertia::render('AdminPage/Projects/Edit', compact('project'));
     }
 
     public function update(Request $request, $id)
@@ -67,7 +67,7 @@ class AdminProjectController extends Controller
     public function show($id)
     {
         $project = Project::findOrFail($id);
-        return view('admin-pages.projects.show', compact('project'));
+        return Inertia::render('AdminPage/Projects/Show', compact('project'));
     }
 
     public function verify($id)

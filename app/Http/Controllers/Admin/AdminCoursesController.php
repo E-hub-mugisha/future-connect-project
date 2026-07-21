@@ -10,6 +10,7 @@ use App\Models\CourseLesson;
 use App\Models\Talent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AdminCoursesController extends Controller
 {
@@ -52,14 +53,14 @@ class AdminCoursesController extends Controller
  
         $categories = Category::orderBy('name')->get();
 
-        return view('admin-pages.courses.index', compact('courses', 'stats', 'categories'));
+        return Inertia::render('AdminPage/Courses/Index', compact('courses', 'stats', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $talents = Talent::all();
-        return view('admin-pages.courses.create', compact('categories', 'talents'));
+        return Inertia::render('AdminPage/Courses/Create', compact('categories', 'talents'));
     }
 
 
@@ -127,7 +128,7 @@ class AdminCoursesController extends Controller
         $course = Course::findOrFail($id);
         $categories = Category::all();
         $talents = Talent::all();
-        return view('admin-pages.courses.create', compact('course', 'categories', 'talents'));
+        return Inertia::render('AdminPage/Courses/Edit', compact('course', 'categories', 'talents'));
     }
 
     public function update(Request $request, $id)
@@ -188,7 +189,7 @@ class AdminCoursesController extends Controller
     public function show($slug)
     {
         $course = Course::where('slug', $slug)->with(['category', 'talent'])->firstOrFail();
-        return view('admin-pages.courses.show', compact('course'));
+        return Inertia::render('AdminPage/Courses/Show', compact('course'));
     }
 
     public function destroy($id)
@@ -249,7 +250,7 @@ class AdminCoursesController extends Controller
     public function editLesson($id)
     {
         $lesson = CourseLesson::findOrFail($id);
-        return view('admin-pages.courses.edit-lesson', compact('lesson'));
+        return Inertia::render('AdminPage/Courses/EditLesson', compact('lesson'));
     }
 
     public function updateLesson(Request $request, $id)

@@ -8,6 +8,7 @@ use App\Models\JobSection;
 use App\Models\JobSectionApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class AdminJobController extends Controller
 {
@@ -15,13 +16,13 @@ class AdminJobController extends Controller
     public function index()
     {
         $jobs = JobSection::latest()->paginate(10);
-        return view('admin-pages.jobs.index', compact('jobs'));
+        return Inertia::render('AdminPage/Jobs/Index', compact('jobs'));
     }
 
     // Show create form
     public function create()
     {
-        return view('admin-pages.jobs.create');
+        return Inertia::render('AdminPage/Jobs/Create');
     }
 
     // Store new job
@@ -48,7 +49,7 @@ class AdminJobController extends Controller
     public function edit($id)
     {
         $job = JobSection::findOrFail($id);
-        return view('admin-pages.jobs.edit', compact('job'));
+        return Inertia::render('AdminPage/Jobs/Edit', compact('job'));
     }
 
     // Update job
@@ -83,7 +84,7 @@ class AdminJobController extends Controller
     public function show($id)
     {
         $job = JobSection::findOrFail($id);
-        return view('admin-pages.jobs.show', compact('job'));
+        return Inertia::render('AdminPage/Jobs/Show', compact('job'));
     }
 
     public function updateApplicationStatus(Request $request, $id)
@@ -107,14 +108,14 @@ class AdminJobController extends Controller
         // Fetch applications for this job
         $applications = JobSectionApplication::where('job_section_id', $job->id)->latest()->get();
 
-        return view('admin-pages.jobs.applications', compact('job', 'applications'));
+        return Inertia::render('AdminPage/Jobs/Applications', compact('job', 'applications'));
     }
 
     public function jobCategories()
     {
         //
         $categories = JobCategory::orderBy('name')->get();
-        return view('admin-pages.jobs.categories', compact('categories'));
+        return Inertia::render('AdminPage/Jobs/Categories', compact('categories'));
     }
 
     public function storeJobCategory(Request $request)
