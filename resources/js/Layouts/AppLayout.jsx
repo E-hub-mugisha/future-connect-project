@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Head, usePage } from '@inertiajs/react';
 import Swal from 'sweetalert2';
-import { ThemeProvider } from '@/Components/ThemeContext';
 import DashBoardSidebar from '@/Components/DashBoardSidebar';
 import DashBoardTopbar from '@/Components/DashBoardTopbar';
 import DashBoardFooter from '@/Components/DashBoardFooter';
@@ -66,7 +65,7 @@ export default function AppLayout({ title, children, notifications = [] }) {
     }, [flash]);
 
     return (
-        <ThemeProvider>
+        <>
             <Head title={title ? `${title} - ${appName}` : appName} />
 
             <div id="sidebar-backdrop" className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`} onClick={() => setSidebarOpen(false)} />
@@ -102,6 +101,6 @@ export default function AppLayout({ title, children, notifications = [] }) {
                     .page-wrapper { margin-left: 0 !important; }
                 }
             `}</style>
-        </ThemeProvider>
+        </>
     );
 }

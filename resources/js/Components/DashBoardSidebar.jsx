@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 
-/**
- * Role-based sidebar (converted from FutureConnect Blade partial).
- * Expects `route()` (Ziggy) to be globally available, and
- * `usePage().props.auth.user` to contain { name, role }.
- */
 export default function Sidebar() {
     const { auth, url } = usePage().props;
     const user = auth?.user;
@@ -40,7 +35,13 @@ export default function Sidebar() {
     return (
         <>
             <style>{`
-                :root {
+                /*
+                   Sidebar chrome tokens. The sidebar stays dark in both light and dark
+                   modes (it's an intentional dark control surface), but we expose the
+                   values as CSS vars so [data-bs-theme="dark"] can subtly deepen them
+                   when the rest of the app goes dark.
+                */
+                .fc-sidebar {
                     --sb-bg:       #060f11;
                     --sb-surface:  #0d1e22;
                     --sb-border:   rgba(72, 213, 151, 0.10);
@@ -51,6 +52,12 @@ export default function Sidebar() {
                     --text-mid:    #7aa89f;
                     --text-lo:     #3e5e58;
                     --danger:      #e85c6a;
+                }
+                [data-bs-theme="dark"] .fc-sidebar {
+                    --sb-bg:       #050b0c;
+                    --sb-surface:  #0a1719;
+                    --sb-border:   rgba(72, 213, 151, 0.14);
+                    --text-mid:    #6a9a90;
                 }
                 .fc-sidebar {
                     position: fixed; top: 0; left: 0; width: 248px; height: 100vh;
@@ -114,16 +121,6 @@ export default function Sidebar() {
                 {/* Brand */}
                 <div className="fc-sidebar-brand">
                     <img className="fc-brand-logo" src="/assets/img/WORDMARK.png" alt="logo" />
-                </div>
-
-                {/* Profile */}
-                <div className="fc-profile-block">
-                    <div className="fc-avatar">{initials}</div>
-                    <div className="fc-profile-info">
-                        <div className="fc-profile-name">{user?.name}</div>
-                        <div className="fc-profile-role">{role ? role.charAt(0).toUpperCase() + role.slice(1) : ''}</div>
-                    </div>
-                    <div className="fc-online-dot" title="Online" />
                 </div>
 
                 {/* Nav body */}

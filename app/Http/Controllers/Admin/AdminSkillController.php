@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Skill;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AdminSkillController extends Controller
 {
@@ -15,7 +16,7 @@ class AdminSkillController extends Controller
         $talents = \App\Models\Talent::all();
         $skills = Skill::with(['talent', 'category'])->latest()->paginate(10);
 
-        return view('admin-pages.skills.index', compact('skills', 'categories', 'talents'));
+        return Inertia::render('AdminPage/Skills/Index', compact('skills', 'categories', 'talents'));
     }
 
     public function create()
@@ -23,7 +24,7 @@ class AdminSkillController extends Controller
         $categories = \App\Models\Category::all();
         $talents = \App\Models\Talent::all();
 
-        return view('admin-pages.skills.create', compact('categories', 'talents'));
+        return Inertia::render('AdminPage/Skills/Create', compact('categories', 'talents'));
     }
 
     public function store(Request $request)
@@ -72,7 +73,7 @@ class AdminSkillController extends Controller
     {
         $skill = Skill::with(['talent', 'category'])->findOrFail($id);
 
-        return view('admin-pages.skills.show', compact('skill'));
+        return Inertia::render('AdminPage/Skills/Show', compact('skill'));
     }
 
     public function edit($id)
@@ -81,7 +82,7 @@ class AdminSkillController extends Controller
         $categories = \App\Models\Category::all();
         $talents = \App\Models\Talent::all();
 
-        return view('admin-pages.skills.edit', compact('skill', 'categories', 'talents'));
+        return Inertia::render('AdminPage/Skills/Edit', compact('skill', 'categories', 'talents'));
     }
 
     public function update(Request $request, string $id)

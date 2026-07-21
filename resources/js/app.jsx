@@ -18,6 +18,8 @@ import "aos/dist/aos.css";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 
+import { ThemeProvider } from './Components/ThemeContext';
+
 
 window.route = route;
 
@@ -41,7 +43,11 @@ createInertiaApp({
 
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <ThemeProvider>
+                <App {...props} />
+            </ThemeProvider>
+        );
     },
 
     progress: {
