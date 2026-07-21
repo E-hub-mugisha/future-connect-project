@@ -129,7 +129,7 @@ Route::get('/story/payment/callback', [UsersPaymentController::class, 'handleCal
 
 Route::get('/connection-room', [TalentConnectionController::class, 'index'])->name('talent.connections-room');
 Route::get('/connection/{talent}', [TalentConnectionController::class, 'show'])->name('talent.profile.show');
-Route::post('/connection/{talent}/request', [TalentConnectionController::class, 'store'])->name('talent.connections.request')->middleware('auth');
+Route::post('/connection/{talent}/request', [TalentConnectionController::class, 'store'])->name('talent.connections.request');
 Route::get('/connection/{id}/payment', [TalentConnectionController::class, 'paymentChoice'])->name('connections.payment.choice');
 Route::post('/connections/{id}/pay-now', [TalentConnectionController::class, 'payNow'])->name('connections.payment.now');
 Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, 'payLater'])->name('connections.payment.later');
@@ -298,7 +298,7 @@ Route::get(
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Talents
     Route::get('/talents', [AdminTalentController::class, 'index'])->name('talents.index');

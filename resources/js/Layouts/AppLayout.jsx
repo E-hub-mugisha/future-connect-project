@@ -4,7 +4,8 @@ import Swal from 'sweetalert2';
 import DashBoardSidebar from '@/Components/DashBoardSidebar';
 import DashBoardTopbar from '@/Components/DashBoardTopbar';
 import DashBoardFooter from '@/Components/DashBoardFooter';
-
+import '@/Layouts/AppLayout.css';
+ 
 const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -78,7 +79,7 @@ export default function AppLayout({ title, children, notifications = [] }) {
 
             <div className="min-vh-100 position-relative">
                 <div className="page-wrapper" style={{ paddingTop: 60, marginLeft: 250 }}>
-                    <div className="container-fluid">{children}</div>
+                    {children}
                 </div>
                 <DashBoardFooter />
             </div>

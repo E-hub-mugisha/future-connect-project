@@ -6,7 +6,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 const routes = {
     talentFeedbackStore: '/talent/feedback',
     supportTalent: '/talent/support',
-    talentConnectionRequest: (id) => `/talent/${id}/connect`,
+    talentConnectionRequest: (id) => `/connection/${id}/request`,
     storyDetails: (slug) => `/story-details/${slug}`,
     courseDetails: (slug) => `/course/details/${slug}`,
 };
@@ -131,6 +131,9 @@ export default function SkillProfile({ talent, profileUrl }) {
 
     const connectForm = useForm({
         message: '',
+        name: '',
+        email: '',
+        phone: '',
     });
 
     const submitConnect = (e) => {
@@ -1236,6 +1239,36 @@ export default function SkillProfile({ talent, profileUrl }) {
                                     Send a connection request and introduce yourself.
                                 </p>
                                 <form onSubmit={submitConnect}>
+                                    <div className="mb-3">
+                                        <label className="form-label">Your Name</label>
+                                        <input
+                                            type="text"
+                                            className="form-control-dark"
+                                            placeholder="Enter your name"
+                                            value={connectForm.data.name}
+                                            onChange={(e) => connectForm.setData('name', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Your Email</label>
+                                        <input
+                                            type="email"
+                                            className="form-control-dark"
+                                            placeholder="Enter your email"
+                                            value={connectForm.data.email}
+                                            onChange={(e) => connectForm.setData('email', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label className="form-label">Your Phone</label>
+                                        <input
+                                            type="tel"
+                                            className="form-control-dark"
+                                            placeholder="Enter your phone number"
+                                            value={connectForm.data.phone}
+                                            onChange={(e) => connectForm.setData('phone', e.target.value)}
+                                        />
+                                    </div>
                                     <label className="form-label">Your Message</label>
                                     <textarea
                                         className="form-control-dark"
