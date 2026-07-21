@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class AdminUserController extends Controller
 {
@@ -14,7 +15,7 @@ class AdminUserController extends Controller
     {
         $users = User::all();
 
-        return view('admin-pages.users.index', compact('users'));
+        return Inertia::render('AdminPage/User/Index', compact('users'));
     }
 
     public function store(Request $request)
@@ -37,7 +38,7 @@ class AdminUserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return view('admin-pages.users.user-profile', compact('user'));
+        return Inertia::render('AdminPage/User/Show', compact('user'));
     }
 
     public function update(Request $request, $id)

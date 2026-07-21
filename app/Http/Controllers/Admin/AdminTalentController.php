@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class AdminTalentController extends Controller
 {
@@ -60,13 +61,13 @@ class AdminTalentController extends Controller
             'matched'  => Talent::where('matched', true)->count(),
         ];
 
-        return view('admin-pages.talents.index', compact('talents', 'categories', 'stats'));
+        return Inertia::render('AdminPage/Talents/Index', compact('talents', 'categories', 'stats'));
     }
 
     public function create()
     {
         $categories = Category::orderBy('name')->get();
-        return view('admin-pages.talents.create', compact('categories'));
+        return Inertia::render('AdminPage/Talents/Create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -120,7 +121,7 @@ class AdminTalentController extends Controller
             $image->move($path, $talentImage);
         }
 
-        Talent::create([
+        $talent = Talent::create([
             'name' => $request->name,
             'featured' => $request->boolean('featured'),
             'description' => $request->description,
@@ -132,7 +133,7 @@ class AdminTalentController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('admin.talents.show')->with('success', 'Talent registered successfully.');
+        return redirect()->route('admin.talents.show', $talent)->with('success', 'Talent registered successfully.');
     }
 
 
@@ -149,13 +150,13 @@ class AdminTalentController extends Controller
             'user',
         ]);
 
-        return view('admin-pages.talents.show', compact('talent'));
+        return Inertia::render('AdminPage/Talents/Show', compact('talent'));
     }
 
     public function edit(Talent $talent)
     {
         $categories = Category::orderBy('name')->get();
-        return view('admin-pages.talents.edit', compact('talent', 'categories'));
+        return Inertia::render('AdminPage/Talents/Edit', compact('talent', 'categories'));
     }
 
     public function update(Request $request, Talent $talent)
@@ -225,7 +226,7 @@ class AdminTalentController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('admin.talents.show')->with('success', 'Talent updated successfully.');
+        return redirect()->route('admin.talents.show', $talent)->with('success', 'Talent updated successfully.');
     }
 
     public function destroy($id)

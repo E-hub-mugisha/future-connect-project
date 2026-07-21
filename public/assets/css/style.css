@@ -5525,7 +5525,7 @@ html.menu-opened body {
     -webkit-transition: all 0.2s ease;
     -ms-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    background: var(--light);
+    /* background: var(--light); */
 }
 
 .page-wrapper .page-content.content {

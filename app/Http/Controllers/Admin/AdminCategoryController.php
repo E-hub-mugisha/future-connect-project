@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AdminCategoryController extends Controller
 {
@@ -16,7 +17,7 @@ class AdminCategoryController extends Controller
         $totalTalents = \App\Models\Talent::count();
         $totalStories = \App\Models\Story::count();
         $totalSkills = \App\Models\Skill::count();
-        return view('admin-pages.categories.index', compact('categories', 'totalTalents', 'totalStories', 'totalSkills'));
+        return Inertia::render('AdminPage/Categories/Index', compact('categories', 'totalTalents', 'totalStories', 'totalSkills'));
     }
 
     // POST /api/categories

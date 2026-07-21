@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AdminPartnerController extends Controller
 {
     public function index()
     {
         $partners = Partner::all();
-        return view('admin-pages.partners.index', compact('partners'));
+        return Inertia::render('AdminPage/Partners/Index', compact('partners'));
     }
 
 

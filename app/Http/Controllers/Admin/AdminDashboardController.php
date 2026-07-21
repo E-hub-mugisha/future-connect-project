@@ -9,7 +9,7 @@ use App\Models\Setting;
 use App\Models\StoryPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Inertia\Inertia;
 class AdminDashboardController extends Controller
 {
     //
@@ -26,7 +26,7 @@ class AdminDashboardController extends Controller
         $payments = \App\Models\StoryPayment::latest()->take(5)->get();
         $announcements = Announcement::latest()->take(5)->get();
         $totalCourses = \App\Models\Course::count();
-        return view('admin-pages.dashboard.index', compact('announcements','payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents','totalCourses'));
+        return Inertia::render('AdminPage/Dashboard/Index', compact('announcements','payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents','totalCourses'));
     }
 
     public function index()
@@ -34,7 +34,7 @@ class AdminDashboardController extends Controller
         // Fetch the first (and only) settings row
         $settings = Setting::first();
 
-        return view('admin-pages.settings.index', compact('settings'));
+        return Inertia::render('AdminPage/Settings/Index', compact('settings'));
     }
 
     /**
