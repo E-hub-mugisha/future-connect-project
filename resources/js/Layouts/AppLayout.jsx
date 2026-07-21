@@ -1,20 +1,25 @@
-import { useEffect, useState } from 'react';
-import { Head, usePage } from '@inertiajs/react';
-import Swal from 'sweetalert2';
-import DashBoardSidebar from '@/Components/DashBoardSidebar';
-import DashBoardTopbar from '@/Components/DashBoardTopbar';
-import DashBoardFooter from '@/Components/DashBoardFooter';
-import '@/Layouts/AppLayout.css';
- 
+import { useEffect, useState } from "react";
+import { Head, usePage } from "@inertiajs/react";
+import Swal from "sweetalert2";
+import DashBoardSidebar from "@/Components/DashBoardSidebar";
+import DashBoardTopbar from "@/Components/DashBoardTopbar";
+import DashBoardFooter from "@/Components/DashBoardFooter";
+import "../../adminator/assets/style.css";
+import "../../adminator/assets/runtime.js";
+import "../../adminator/assets/vendor-fullcalendar.js";
+import "../../adminator/assets/vendor-chartjs.js";
+import "../../adminator/assets/vendors.js";
+import "../../adminator/assets/2026.js";
+
 const Toast = Swal.mixin({
     toast: true,
-    position: 'top-end',
+    position: "top-end",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
     didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
     },
 });
 
@@ -33,20 +38,20 @@ const Toast = Swal.mixin({
 export default function AppLayout({ title, children, notifications = [] }) {
     const { flash } = usePage().props;
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const appName = import.meta.env.VITE_APP_NAME || 'App';
+    const appName = import.meta.env.VITE_APP_NAME || "App";
 
     // Flash message toasts — same behavior as the old Blade @if(session('success')) blocks
     useEffect(() => {
         if (!flash) return;
 
         if (flash.success) {
-            Toast.fire({ icon: 'success', title: flash.success });
+            Toast.fire({ icon: "success", title: flash.success });
         }
         if (flash.error) {
-            Toast.fire({ icon: 'error', title: flash.error });
+            Toast.fire({ icon: "error", title: flash.error });
             Swal.fire({
-                icon: 'error',
-                title: 'Access Denied',
+                icon: "error",
+                title: "Access Denied",
                 text: flash.error,
                 html: `
                     <p class="mt-2">
@@ -58,10 +63,10 @@ export default function AppLayout({ title, children, notifications = [] }) {
             });
         }
         if (flash.warning) {
-            Toast.fire({ icon: 'warning', title: flash.warning });
+            Toast.fire({ icon: "warning", title: flash.warning });
         }
         if (flash.info) {
-            Toast.fire({ icon: 'info', title: flash.info });
+            Toast.fire({ icon: "info", title: flash.info });
         }
     }, [flash]);
 
@@ -69,16 +74,26 @@ export default function AppLayout({ title, children, notifications = [] }) {
         <>
             <Head title={title ? `${title} - ${appName}` : appName} />
 
-            <div id="sidebar-backdrop" className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`} onClick={() => setSidebarOpen(false)} />
+            <div
+                id="sidebar-backdrop"
+                className={`sidebar-backdrop ${sidebarOpen ? "show" : ""}`}
+                onClick={() => setSidebarOpen(false)}
+            />
 
-            <div id="new-sidebar" className={sidebarOpen ? 'open' : ''}>
+            <div id="new-sidebar" className={sidebarOpen ? "open" : ""}>
                 <DashBoardSidebar />
             </div>
 
-            <DashBoardTopbar notifications={notifications} onToggleSidebar={() => setSidebarOpen((o) => !o)} />
+            <DashBoardTopbar
+                notifications={notifications}
+                onToggleSidebar={() => setSidebarOpen((o) => !o)}
+            />
 
             <div className="min-vh-100 position-relative">
-                <div className="page-wrapper" style={{ paddingTop: 60, marginLeft: 250 }}>
+                <div
+                    className="page-wrapper"
+                    style={{ paddingTop: 60, marginLeft: 250 }}
+                >
                     {children}
                 </div>
                 <DashBoardFooter />

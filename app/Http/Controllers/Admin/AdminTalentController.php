@@ -146,7 +146,6 @@ class AdminTalentController extends Controller
             'connections',
             'feedback',
             'stories',
-            'supports',
             'user',
         ]);
 

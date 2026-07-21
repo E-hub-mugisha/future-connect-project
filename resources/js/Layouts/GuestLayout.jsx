@@ -3,7 +3,14 @@ import { usePage } from "@inertiajs/react";
 
 import UserHeader from "@/Components/UserHeader";
 import UserFooter from "@/Components/UserFooter";
-
+import "../../guest/plugins/tabler-icons/tabler-icons.min.css";
+import "../../guest/plugins/fontawesome/css/all.min.css";
+import "../../guest/css/feather.css";
+import "../../guest/css/owl.carousel.min.css";
+import "../../guest/plugins/select2/css/select2.min.css";
+import "../../guest/css/style.css";
+import "../../guest/css/bootstrap.min.css";
+import "../../guest/js/theme-script.js";
 
 export default function GuestLayout({ children }) {
 

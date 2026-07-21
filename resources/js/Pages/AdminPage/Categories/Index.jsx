@@ -2,19 +2,6 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AppLayout';
 
-const ICONS = {
-    'ti ti-star': 'Star',
-    'ti ti-movie': 'Movie',
-    'ti ti-music': 'Music',
-    'ti ti-camera': 'Camera',
-    'ti ti-briefcase': 'Briefcase',
-    'ti ti-book': 'Book',
-    'ti ti-heart': 'Heart',
-    'ti ti-crown': 'Crown',
-    'ti ti-code': 'Code',
-    'ti ti-palette': 'Graphic Design',
-    'fa-solid fa-bullhorn': 'Digital Marketing',
-};
 
 function slugify(value) {
     return value
@@ -26,15 +13,7 @@ function slugify(value) {
         .replace(/^-+|-+$/g, '');
 }
 
-/**
- * Categories — Admin
- *
- * Bootstrap dropdowns/toasts/modals relied on global bootstrap.js
- * auto-wiring elements on DOMContentLoaded, which doesn't fire again on
- * Inertia navigations. Replaced with React-driven equivalents: a
- * per-row dropdown with outside-click handling, self-dismissing toasts,
- * and the same overlay modal pattern used elsewhere in the admin.
- */
+
 export default function Index({ categories, flash, errors: pageErrors }) {
     const routes = {
         store:   () => route('admin.categories.store'),
@@ -70,69 +49,49 @@ export default function Index({ categories, flash, errors: pageErrors }) {
                     </button>
                 </div>
 
-                {/* Table card */}
-                <div className="data-card">
-                    <div className="table-responsive">
-                        <table className="categories-table" role="table" aria-label="Categories list">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Featured</th>
-                                    <th scope="col">Slug</th>
-                                    <th scope="col">Icon</th>
-                                    <th scope="col" className="text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {categories.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={6}>
-                                            <div className="empty-state">
-                                                <FolderOffIcon />
-                                                <h5>No categories yet</h5>
-                                                <p>Get started by creating your first category.</p>
-                                                <button className="btn-accent" onClick={() => setAddOpen(true)}>
-                                                    <PlusIcon /> Add First Category
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    categories.map((cat) => (
-                                        <tr key={cat.id}>
-                                            <td data-label="Name"><span className="cat-name">{cat.name}</span></td>
-                                            <td data-label="Description">
-                                                <span className="cat-desc" title={cat.description}>
-                                                    {limit(cat.description, 50)}
-                                                </span>
-                                            </td>
-                                            <td data-label="Featured">
-                                                {cat.featured ? (
-                                                    <span className="badge-featured yes"><CheckSmallIcon /> Yes</span>
-                                                ) : (
-                                                    <span className="badge-featured no">No</span>
-                                                )}
-                                            </td>
-                                            <td data-label="Slug"><code className="cat-slug">{cat.slug}</code></td>
-                                            <td data-label="Icon">
-                                                <span className="icon-wrap" title={cat.image ?? 'Default icon'}>
-                                                    <i className={cat.image ?? 'ti ti-star'} />
-                                                </span>
-                                            </td>
-                                            <td data-label="Actions" className="text-end">
-                                                <ActionsDropdown
-                                                    onEdit={() => setEditingCategory(cat)}
-                                                    onDelete={() => setDeletingCategory(cat)}
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                {/* Grid of category cards */}
+                {categories.length === 0 ? (
+                    <div className="data-card">
+                        <div className="empty-state">
+                            <FolderOffIcon />
+                            <h5>No categories yet</h5>
+                            <p>Get started by creating your first category.</p>
+                            <button className="btn-accent" onClick={() => setAddOpen(true)}>
+                                <PlusIcon /> Add First Category
+                            </button>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="categories-grid">
+                        {categories.map((cat) => (
+                            <div className="cat-card" key={cat.id}>
+                                <div className="cat-card-top">
+                                    <div className="cat-card-heading">
+                                        <span className="cat-name">{cat.name}</span>
+                                        {cat.featured ? (
+                                            <span className="badge-featured yes"><CheckSmallIcon /> Featured</span>
+                                        ) : (
+                                            <span className="badge-featured no">Not Featured</span>
+                                        )}
+                                    </div>
+                                    <ActionsDropdown
+                                        onEdit={() => setEditingCategory(cat)}
+                                        onDelete={() => setDeletingCategory(cat)}
+                                    />
+                                </div>
+
+                                <p className="cat-desc" title={cat.description}>
+                                    {limit(cat.description, 110)}
+                                </p>
+
+                                <div className="cat-card-footer">
+                                    <span className="cat-slug-label">Slug</span>
+                                    <code className="cat-slug">{cat.slug}</code>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {addOpen && (
@@ -230,7 +189,7 @@ function ActionsDropdown({ onEdit, onDelete }) {
     return (
         <div className="dropdown-wrap" ref={ref}>
             <button type="button" className="btn-actions" onClick={() => setOpen((o) => !o)}>
-                <DotsIcon /> Action
+                <DotsIcon />
             </button>
             {open && (
                 <ul className="dropdown-menu">
@@ -258,7 +217,6 @@ function CategoryFormModal({ mode, category, routes, onClose }) {
     const { data, setData, post, processing, errors, transform } = useForm({
         name: category?.name ?? '',
         description: category?.description ?? '',
-        image: category?.image ?? '',
         featured: isEdit ? !!category?.featured : false,
     });
 
@@ -305,27 +263,6 @@ function CategoryFormModal({ mode, category, routes, onClose }) {
                             required
                         />
                         {errors.description && <small className="text-danger">{errors.description}</small>}
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor={`icon-${mode}`}>Icon</label>
-                        <select
-                            id={`icon-${mode}`}
-                            className="form-select"
-                            value={data.image}
-                            onChange={(e) => setData('image', e.target.value)}
-                            required
-                        >
-                            <option value="">— Select Icon —</option>
-                            {Object.entries(ICONS).map(([cls, label]) => (
-                                <option key={cls} value={cls}>{label}</option>
-                            ))}
-                        </select>
-                        <div className="icon-preview">
-                            <span className="icon-wrap"><i className={data.image || 'ti ti-star'} /></span>
-                            <small>Preview</small>
-                        </div>
-                        {errors.image && <small className="text-danger">{errors.image}</small>}
                     </div>
 
                     <div className="form-check">
@@ -408,10 +345,9 @@ function AlertCircleIcon() { return <svg width="15" height="15" viewBox="0 0 24 
 function CloseIcon() { return <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>; }
 
 /* ── Styles ──
-   Kept the Terra-green accent (#00a667) and card treatment from the
-   original but tightened the type scale, unified radii/shadow tokens,
-   and rebuilt dropdown/toast/modal chrome as real components instead
-   of relying on Bootstrap JS state classes. */
+   Table markup replaced with a responsive card grid. Icon field and
+   all icon-select/icon-preview chrome removed. Dropdown/toast/modal
+   chrome kept as real components rather than Bootstrap JS state classes. */
 const css = `
 [data-h-scope="categories"] {
     --bg-deep:       #F0F4F8;
@@ -453,43 +389,35 @@ const css = `
 .btn-accent:hover { background: var(--accent-dark); box-shadow: var(--shadow-glow); transform: translateY(-1px); }
 .btn-accent:disabled { opacity: .7; cursor: default; }
 
-.data-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; }
-.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.categories-table { width: 100%; border-collapse: collapse; font-size: .875rem; min-width: 720px; }
-.categories-table thead tr { background: var(--bg-surface); border-bottom: 1.5px solid var(--border-accent); }
-.categories-table thead th { padding: 14px 20px; text-transform: uppercase; font-size: .7rem; font-weight: 700; letter-spacing: .1em; color: var(--accent); white-space: nowrap; text-align: left; }
-.categories-table tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
-.categories-table tbody tr:last-child { border-bottom: none; }
-.categories-table tbody tr:hover { background: #F6FDF9; }
-.categories-table tbody td { padding: 15px 20px; color: var(--text-primary); vertical-align: middle; text-align: left; }
-.text-end { text-align: right; }
+/* Card grid */
+.categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
 
-@media (max-width: 991px) {
-    .categories-table thead { display: none; }
-    .categories-table, .categories-table tbody, .categories-table tr, .categories-table td { display: block; width: 100%; }
-    .categories-table tbody tr { border: 1px solid var(--border); border-radius: var(--radius-md); margin: 12px; background: var(--bg-card); padding: 8px; box-shadow: var(--shadow-card); }
-    .categories-table tbody td { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: right; }
-    .categories-table tbody td:last-child { border-bottom: none; }
-    .categories-table tbody td::before { content: attr(data-label); font-weight: 700; color: var(--accent); text-transform: uppercase; font-size: .7rem; letter-spacing: .05em; margin-right: auto; padding-right: 12px; }
-    .cat-desc { max-width: 100%; white-space: normal; }
-}
+.cat-card { position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 20px; display: flex; flex-direction: column; gap: 14px; transition: box-shadow .15s, transform .15s, border-color .15s; }
+.cat-card:hover, .cat-card:focus-within { box-shadow: var(--shadow-card), var(--shadow-glow); border-color: var(--border-accent); transform: translateY(-2px); z-index: 5; }
 
-.cat-name { font-weight: 700; color: var(--text-primary); display: block; }
-.cat-desc { color: var(--text-secondary); max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; }
-.cat-slug { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: .78rem; color: var(--text-secondary); background: #EEF2F7; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); display: inline-block; }
+.cat-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.cat-card-heading { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
-.badge-featured { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700; letter-spacing: .04em; }
+.cat-name { font-weight: 700; font-size: 1.02rem; color: var(--text-primary); line-height: 1.3; word-break: break-word; }
+
+.cat-desc { color: var(--text-secondary); font-size: .85rem; line-height: 1.5; margin: 0; flex: 1; }
+
+.cat-card-footer { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px solid var(--border); }
+.cat-slug-label { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+
+.badge-featured { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: .7rem; font-weight: 700; letter-spacing: .04em; width: fit-content; }
 .badge-featured.yes { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--border-accent); }
 .badge-featured.no { background: #F1F5F9; color: var(--text-muted); border: 1px solid var(--border); }
 
-.icon-wrap { width: 34px; height: 34px; border-radius: var(--radius-sm); background: var(--accent-dim); border: 1px solid var(--border-accent); display: inline-flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1rem; transition: box-shadow .15s, transform .15s; }
-tr:hover .icon-wrap { box-shadow: var(--shadow-glow); transform: scale(1.05); }
+.cat-slug { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: .78rem; color: var(--text-secondary); background: #EEF2F7; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); display: inline-block; }
+
+.data-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; }
 
 /* Dropdown */
-.dropdown-wrap { position: relative; display: inline-block; }
-.btn-actions { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-secondary); padding: 6px 14px; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.dropdown-wrap { position: relative; display: inline-block; flex-shrink: 0; }
+.btn-actions { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-secondary); padding: 6px 10px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
 .btn-actions:hover { background: #EDF7F2; border-color: var(--accent); color: var(--accent); }
-.dropdown-menu { position: absolute; right: 0; top: calc(100% + 6px); background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: 0 8px 32px rgba(15,28,46,.12); min-width: 160px; padding: 6px; list-style: none; margin: 0; z-index: 40; animation: dropdownSlide .15s ease-out; }
+.dropdown-menu { position: absolute; right: 0; top: calc(100% + 6px); background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: 0 8px 32px rgba(15,28,46,.12); min-width: 150px; padding: 6px; list-style: none; margin: 0; z-index: 40; animation: dropdownSlide .15s ease-out; }
 @keyframes dropdownSlide { from { opacity: 0; transform: scale(.95) translateY(-8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 .dropdown-item { width: 100%; background: none; border: none; text-align: left; color: var(--text-secondary); border-radius: var(--radius-sm); padding: 8px 12px; font-size: .83rem; font-weight: 500; transition: background .15s, color .15s; display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .dropdown-item:hover { background: var(--bg-hover); color: var(--text-primary); }
@@ -549,8 +477,4 @@ tr:hover .icon-wrap { box-shadow: var(--shadow-glow); transform: scale(1.05); }
 .delete-icon-wrap { width: 52px; height: 52px; border-radius: 50%; background: var(--danger-dim); border: 1px solid rgba(220,53,69,.18); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--danger); }
 .delete-title { font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
 .delete-sub { color: var(--text-secondary); font-size: .875rem; margin: 0; }
-
-.icon-preview { background: #F6FDF9; border: 1px solid var(--border-accent); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-.icon-preview .icon-wrap { width: 28px; height: 28px; font-size: .9rem; }
-.icon-preview small { color: var(--text-muted); font-size: .75rem; }
 `;
