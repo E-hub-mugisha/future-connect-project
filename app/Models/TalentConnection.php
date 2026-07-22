@@ -12,4 +12,5 @@ class TalentConnection extends Model
     {
         return $this->belongsTo(Talent::class);
     }
+    
 }

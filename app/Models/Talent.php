@@ -40,7 +40,6 @@ class Talent extends Model
     protected $casts = [
         'featured' => 'boolean',
         'matched' => 'boolean',
-        'level' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

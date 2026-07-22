@@ -409,7 +409,7 @@ class HomeController extends Controller
             ->latest()
             ->take(3) // Limit to 3 related stories
             ->get();
-        return view('user-page.story-details', [
+        return Inertia::render('UserPage/StoryDetails', [
             'story' => $story,
             'comments' => $story->comments,
             'relatedStories' => $relatedStories,
@@ -431,7 +431,7 @@ class HomeController extends Controller
             ->where('category_id', $category->id)
             ->get();
 
-        return view('user-page.category-skills', [
+        return Inertia::render('UserPage/CategorySkills', [
             'categoryName' => $category->name,
             'skills' => $skills,
         ]);
@@ -445,7 +445,7 @@ class HomeController extends Controller
         $stories = Story::where('category_id', $category->id)
             ->get();
 
-        return view('user-page.category-story', [
+        return Inertia::render('UserPage/CategoryStories', [
             'categoryName' => $category->name,
             'stories' => $stories,
             'categories' => Category::withCount('stories')->take(10)->get(),
@@ -472,7 +472,7 @@ class HomeController extends Controller
             ->latest()
             ->take(3) // Limit to 3 related stories
             ->get();
-        return view('user-page.skill-details', [
+        return Inertia::render('UserPage/SkillDetails', [
             'skill' => $skill,
             'relatedSkills' => $relatedSkills,
             'totalReviews' => $totalReviews,
@@ -663,7 +663,7 @@ class HomeController extends Controller
         $categories = Category::all();
         $featuredStories = Story::inRandomOrder()->take(4)->get();
 
-        return view('user-page.stories', compact('featuredStories', 'stories', 'categories'));
+        return Inertia::render('UserPage/Stories', compact('featuredStories', 'stories', 'categories'));
     }
 
 

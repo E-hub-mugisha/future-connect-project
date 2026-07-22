@@ -2,13 +2,7 @@ import { useState, useMemo } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AppLayout';
 
-/**
- * Skills Registry — Admin
- *
- * Ziggy note: route() is resolved lazily inside a `routes` prop object so
- * this component never throws on an undefined talent id during SSR/first
- * paint. Follows the same pattern used across the Future Connect admin.
- */
+
 export default function Index({ talents, categories, stats, filters }) {
     const routes = {
         create:  () => route('admin.talents.create'),
@@ -17,6 +11,7 @@ export default function Index({ talents, categories, stats, filters }) {
         show:    (id) => route('admin.talents.show', id),
         edit:    (id) => route('admin.talents.edit', id),
         destroy: (id) => route('admin.talents.destroy', id),
+        connections: () => route('admin.connections')
     };
 
     const { data, setData, get, processing } = useForm({
@@ -101,6 +96,9 @@ export default function Index({ talents, categories, stats, filters }) {
                     </div>
                     <Link href={routes.create()} className="btn-accent">
                         <PlusIcon /> Add Skill
+                    </Link>
+                    <Link href={routes.connections()} className="btn-accent">
+                        <UsersIcon /> Connections requests
                     </Link>
                 </div>
 
@@ -341,6 +339,13 @@ function PlusIcon() {
     return (
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M12 5v14M5 12h14" />
+        </svg>
+    );
+}
+function UsersIcon() {
+    return (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
     );
 }

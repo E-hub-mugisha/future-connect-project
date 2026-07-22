@@ -5,25 +5,25 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TalentConnection;
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
 class AdminTalentConnectionController extends Controller
 {
     public function index()
     {
         // eager load related models for performance
-        $connections = TalentConnection::with(['requester', 'talent', 'payment'])
+        $connections = TalentConnection::with(['talent'])
             ->latest()
             ->paginate(10);
 
-        return view('admin-pages.talents.connections', compact('connections'));
+        return Inertia::render('AdminPage/Talents/ConnectionIndex', compact('connections'));
     }
 
     public function show($id)
     {
-        $connection = TalentConnection::with(['requester', 'talent', 'payment'])
+        $connection = TalentConnection::with(['talent'])
             ->findOrFail($id);
 
-        return view('admin-pages.talents.connection-show', compact('connection'));
+        return Inertia::render('AdminPage/Talents/ConnectionShow', compact('connection'));
     }
 
     public function respond(Request $request, $id)

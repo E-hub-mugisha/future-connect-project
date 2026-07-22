@@ -52,6 +52,17 @@ export default function SkillProfile({ talent, profileUrl }) {
         }
     }, []);
 
+    // Lock body scroll while a modal is open, and restore it on close/unmount
+    useEffect(() => {
+        if (supportOpen || connectOpen) {
+            const previousOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = previousOverflow;
+            };
+        }
+    }, [supportOpen, connectOpen]);
+
     const feedback = talent.feedback || [];
     const stories = talent.stories || [];
     const courses = talent.courses || [];
@@ -614,8 +625,10 @@ export default function SkillProfile({ talent, profileUrl }) {
                 /* ── MODAL (custom, no Bootstrap JS dependency) ── */
                 .fc-modal-backdrop {
                     position: fixed; inset: 0; background: rgba(0,0,0,.6);
-                    display: flex; align-items: center; justify-content: center;
-                    z-index: 1050; padding: 1rem;
+                    display: flex; align-items: flex-start; justify-content: center;
+                    z-index: 1050; padding: 3rem 1rem;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
                 }
                 .modal-dark {
                     background: var(--bg-card);
@@ -624,6 +637,10 @@ export default function SkillProfile({ talent, profileUrl }) {
                     color: var(--text-primary);
                     width: 100%;
                     max-width: 520px;
+                    margin: auto 0;
+                    max-height: calc(100vh - 6rem);
+                    display: flex;
+                    flex-direction: column;
                 }
                 .modal-dark .modal-header {
                     border-bottom: 1px solid var(--border);
@@ -631,6 +648,7 @@ export default function SkillProfile({ talent, profileUrl }) {
                     display: flex;
                     align-items: flex-start;
                     justify-content: space-between;
+                    flex-shrink: 0;
                 }
                 .modal-dark .modal-title {
                     font-family: var(--font-head);
@@ -642,7 +660,10 @@ export default function SkillProfile({ talent, profileUrl }) {
                 .modal-dark .accent-bar {
                     display: block; width: 32px; height: 3px; background: var(--accent); border-radius: 2px; margin-top: 5px;
                 }
-                .modal-dark .modal-body { padding: 24px; }
+                .modal-dark .modal-body {
+                    padding: 24px;
+                    overflow-y: auto;
+                }
                 .modal-dark .btn-close {
                     background: transparent;
                     border: none;
@@ -659,6 +680,8 @@ export default function SkillProfile({ talent, profileUrl }) {
                     .talent-name { font-size: 1.5rem; }
                     .tab-body { padding: 20px; }
                     .copy-link-wrap { min-width: 160px; }
+                    .fc-modal-backdrop { padding: 1.5rem 1rem; }
+                    .modal-dark { max-height: calc(100vh - 3rem); }
                 }
 
                 /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
