@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\AdminProjectController;
 use App\Http\Controllers\Admin\AdminTalentConnectionController;
 use App\Http\Controllers\Admin\AdminTalentController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
+use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SellerAdminController;
 use App\Http\Controllers\Talent\TalentDashboardController;
@@ -401,6 +402,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/products/{id}/status', [ProductController::class, 'updateStatus'])->name('products.updateStatus');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
+    Route::resource('product-categories', ProductCategoryController::class)
+    ->except(['create', 'edit', 'show']);
     // projects route
     Route::get('/projects', [AdminProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/create', [AdminProjectController::class, 'create'])->name('projects.create');

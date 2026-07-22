@@ -240,10 +240,9 @@ function AdminNav({ isActive }) {
 
             <NavSection>Commerce</NavSection>
             <NavItem href="/admin/products" active={isActive('/admin/products')} icon={icons.product}>Products</NavItem>
+            <NavItem href="/admin/product-categories" active={isActive('/admin/product-categories')} icon={icons.grid}>Product Categories</NavItem>
             <NavItem href="/admin/sellers" active={isActive('/admin/sellers')} icon={icons.seller}>Sellers</NavItem>
-            <NavItem href="/admin/payments" active={isActive('/admin/payments')} icon={icons.payment}>Payments</NavItem>
-            <NavItem href="/admin/wallets" active={isActive('/admin/wallets')} icon={icons.wallet}>Wallets</NavItem>
-
+            
             <NavSection>System</NavSection>
             <NavItem href="/admin/login-activity" active={isActive('/admin/login-activity')} icon={icons.activity}>Login Activity</NavItem>
             <NavItem href="/admin/settings" active={isActive('/admin/settings')} icon={icons.settings}>Settings</NavItem>

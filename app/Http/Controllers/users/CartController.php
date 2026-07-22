@@ -7,13 +7,14 @@ use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
     public function index()
     {
         $cartItems = Cart::with('product')->where('user_id', Auth::id())->get();
-        return view('user-page.cart.index', compact('cartItems'));
+        return Inertia::render('UserPage/ProductCart', compact('cartItems'));
     }
 
     public function add(Request $request, Product $product)

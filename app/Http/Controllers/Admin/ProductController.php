@@ -46,14 +46,14 @@ class ProductController extends Controller
     {
         $sellers = Seller::all();
         $categories = ProductCategory::all();
-        return view('admin-pages.products.create', compact('sellers', 'categories'));
+        return Inertia::render('AdminPage/Products/Create', compact('sellers', 'categories'));
     }
 
     public function edit($id)
     {
         $product = Product::findOrFail($id);
         $sellers = Seller::all();
-        return view('admin-pages.products.edit', compact('product', 'sellers'));
+        return Inertia::render('AdminPage/Products/Edit', compact('product', 'sellers'));
     }
 
     public function store(Request $request)

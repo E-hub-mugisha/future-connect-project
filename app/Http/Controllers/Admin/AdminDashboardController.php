@@ -186,6 +186,6 @@ class AdminDashboardController extends Controller
     {
         $activities = LoginActivity::with('user')->latest()->paginate(20);
 
-        return view('admin-pages.login-activity.index', compact('activities'));
+        return Inertia::render('AdminPage/User/LoginActivityIndex', compact('activities'));
     }
 }

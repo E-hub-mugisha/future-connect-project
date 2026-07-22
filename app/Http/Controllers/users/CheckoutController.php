@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Inertia\Inertia;
 
 class CheckoutController extends Controller
 {
@@ -21,7 +22,7 @@ class CheckoutController extends Controller
         // Use the authenticated user's cart ID or create one if not exist
         $cartId = $cartItems->first()?->cart_id ?? null;
 
-        return view('user-page.checkout.index', compact('cartItems', 'grandTotal', 'public_key', 'cartId'));
+        return Inertia::render('UserPage/ProductCheckout', compact('cartItems', 'grandTotal', 'public_key', 'cartId'));
     }
 
     public function paymentCallback(Request $request)
@@ -69,6 +70,6 @@ class CheckoutController extends Controller
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        return view('user-page.orders.success', compact('order'));
+        return Inertia::render('UserPage/ProductOrderSuccess', compact('order'));
     }
 }
