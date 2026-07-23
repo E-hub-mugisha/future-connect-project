@@ -1,40 +1,44 @@
-import React, { useState } from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
+import React, { useState } from "react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
+import AppLayout from "@/Layouts/AppLayout";
 
 const routes = {
     connectionShow: (id) => `/admin/connections/show/${id}`,
-    connectionsIndex: '/admin/connections',
-    connectionStore: '/admin/connections',
+    connectionsIndex: "/admin/connections",
+    connectionStore: "/admin/connections",
 };
 
 function initials(name) {
-    if (!name) return '—';
+    if (!name) return "—";
     return name
-        .split(' ')
+        .split(" ")
         .filter(Boolean)
         .slice(0, 2)
         .map((p) => p[0]?.toUpperCase())
-        .join('');
+        .join("");
 }
 
 function decodePaginationLabel(label) {
     return label
-        .replace(/&laquo;/g, '‹')
-        .replace(/&raquo;/g, '›')
-        .replace(/Previous/i, 'Prev');
+        .replace(/&laquo;/g, "‹")
+        .replace(/&raquo;/g, "›")
+        .replace(/Previous/i, "Prev");
 }
 
 function StatusBadge({ status }) {
-    const s = (status ?? 'pending').toLowerCase();
+    const s = (status ?? "pending").toLowerCase();
     const map = {
-        pending: { cls: 'badge-pending', label: 'Pending', icon: 'ti-clock' },
-        accepted: { cls: 'badge-success', label: 'Accepted', icon: 'ti-check' },
-        approved: { cls: 'badge-success', label: 'Approved', icon: 'ti-check' },
-        rejected: { cls: 'badge-danger', label: 'Rejected', icon: 'ti-x' },
-        declined: { cls: 'badge-danger', label: 'Declined', icon: 'ti-x' },
+        pending: { cls: "badge-pending", label: "Pending", icon: "ti-clock" },
+        accepted: { cls: "badge-success", label: "Accepted", icon: "ti-check" },
+        approved: { cls: "badge-success", label: "Approved", icon: "ti-check" },
+        rejected: { cls: "badge-danger", label: "Rejected", icon: "ti-x" },
+        declined: { cls: "badge-danger", label: "Declined", icon: "ti-x" },
     };
-    const meta = map[s] ?? { cls: 'badge-pending', label: status ?? 'Pending', icon: 'ti-clock' };
+    const meta = map[s] ?? {
+        cls: "badge-pending",
+        label: status ?? "Pending",
+        icon: "ti-clock",
+    };
     return (
         <span className={`badge ${meta.cls}`}>
             <i className={`ti ${meta.icon}`} /> {meta.label}
@@ -42,17 +46,23 @@ function StatusBadge({ status }) {
     );
 }
 
-export default function ConnectionIndex({ connections, filters = {}, talents = [] }) {
+export default function ConnectionIndex({
+    connections,
+    filters = {},
+    talents = [],
+}) {
     const [requestModalOpen, setRequestModalOpen] = useState(false);
-    const [search, setSearch] = useState(filters.search ?? '');
-    const [statusFilter, setStatusFilter] = useState(filters.status ?? '');
+    const [search, setSearch] = useState(filters.search ?? "");
+    const [statusFilter, setStatusFilter] = useState(filters.status ?? "");
 
     const rows = connections?.data ?? [];
     const paginationLinks = connections?.links ?? [];
 
     const computedStats = {
         total: connections?.total ?? rows.length,
-        pending: rows.filter((c) => (c.status ?? 'pending').toLowerCase() === 'pending').length,
+        pending: rows.filter(
+            (c) => (c.status ?? "pending").toLowerCase() === "pending",
+        ).length,
         responded: rows.filter((c) => !!c.response).length,
     };
 
@@ -60,7 +70,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
         router.get(
             routes.connectionsIndex,
             { search: nextSearch, status: nextStatus },
-            { preserveState: true, preserveScroll: true, replace: true }
+            { preserveState: true, preserveScroll: true, replace: true },
         );
     };
 
@@ -75,10 +85,10 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
     };
 
     const requestForm = useForm({
-        talent_id: '',
-        name: '',
-        email: '',
-        message: '',
+        talent_id: "",
+        name: "",
+        email: "",
+        message: "",
     });
 
     const submitRequest = (e) => {
@@ -168,6 +178,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     border-radius: 14px;
                     padding: 20px;
                     display: flex; align-items: center; gap: 14px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
                 }
                 .stat-icon {
                     width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
@@ -186,6 +197,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     border: 1px solid var(--border);
                     border-radius: var(--radius-lg);
                     overflow: hidden;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
                 }
                 .table-toolbar {
                     display: flex; align-items: center; justify-content: space-between;
@@ -195,7 +207,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                 }
                 .search-wrap {
                     display: flex; align-items: center; gap: 8px;
-                    background: rgba(255,255,255,0.04);
+                    background: rgba(0,0,0,0.02);
                     border: 1px solid var(--border);
                     border-radius: var(--radius-pill);
                     padding: 8px 16px;
@@ -240,13 +252,14 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     border-bottom: 1px solid var(--border);
                     white-space: nowrap;
                 }
-                .admin-table td {
-                    padding: 16px 22px;
-                    border-bottom: 1px solid var(--border);
-                    font-size: 0.85rem;
-                    color: var(--text-secondary);
-                    vertical-align: middle;
-                }
+                .fc-admin-page .admin-table tr td {
+    background-color: var(--bg-card) !important;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    vertical-align: middle;
+}
                 .admin-table tbody tr:last-child td { border-bottom: none; }
                 .admin-table tbody tr { transition: background 0.15s; }
                 .admin-table tbody tr:hover { background: var(--bg-glass); }
@@ -272,9 +285,9 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     font-size: 0.72rem;
                     font-weight: 700;
                 }
-                .badge-success { background: rgba(72,213,151,0.14); color: var(--accent); }
-                .badge-danger { background: rgba(224,100,90,0.14); color: var(--danger); }
-                .badge-pending { background: rgba(232,185,74,0.14); color: var(--warn); }
+                .badge-success { background: rgba(0,166,103,0.12); color: var(--accent); }
+                .badge-danger { background: rgba(201,74,63,0.12); color: var(--danger); }
+                .badge-pending { background: rgba(179,130,15,0.12); color: var(--warn); }
 
                 .message-cell {
                     max-width: 260px;
@@ -321,7 +334,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
 
                 /* ── Modal ── */
                 .fc-modal-backdrop {
-                    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+                    position: fixed; inset: 0; background: rgba(0,0,0,.45);
                     display: flex; align-items: flex-start; justify-content: center;
                     z-index: 1050; padding: 3rem 1rem;
                     overflow-y: auto;
@@ -338,6 +351,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     max-height: calc(100vh - 6rem);
                     display: flex;
                     flex-direction: column;
+                    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
                 }
                 .modal-dark .modal-header {
                     border-bottom: 1px solid var(--border);
@@ -349,11 +363,10 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                 .modal-dark .accent-bar { display: block; width: 32px; height: 3px; background: var(--accent); border-radius: 2px; margin-top: 5px; }
                 .modal-dark .modal-body { padding: 24px; overflow-y: auto; }
                 .modal-dark .btn-close { background: transparent; border: none; color: var(--text-primary); font-size: 1.1rem; cursor: pointer; }
-                [data-h-theme="dark"] .modal-dark .btn-close { filter: invert(1) brightness(0.6); }
                 .form-label { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; display: block; }
                 .form-control-dark {
                     width: 100%;
-                    background: rgba(255,255,255,0.04);
+                    background: rgba(0,0,0,0.02);
                     border: 1px solid var(--border);
                     border-radius: 10px;
                     color: var(--text-primary);
@@ -390,26 +403,6 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     .fc-modal-backdrop { padding: 1.5rem 1rem; }
                     .modal-dark { max-height: calc(100vh - 3rem); }
                 }
-
-                /* ── DARK THEME (opt-in override) ── */
-                [data-h-theme="dark"] {
-                    --bg-deep:    #0e1618;
-                    --bg-card:    #131e21;
-                    --bg-glass:   rgba(255,255,255,0.035);
-                    --bg-glass2:  rgba(0,166,103,0.07);
-                    --accent:     #48d597;
-                    --accent-dim: #008f59;
-                    --accent-glow:rgba(0,166,103,0.25);
-                    --text-primary:   #f0f4f3;
-                    --text-secondary: #8da4a0;
-                    --text-muted:     #4d6460;
-                    --border:     rgba(255,255,255,0.07);
-                    --border-accent: rgba(0,166,103,0.3);
-                    --warn: #e8b94a;
-                    --danger: #e0645a;
-                }
-                [data-h-theme="dark"] .search-wrap,
-                [data-h-theme="dark"] .form-control-dark { background: rgba(255,255,255,0.04); }
             `}</style>
 
             <div className="fc-admin-page">
@@ -417,9 +410,15 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     <div className="admin-header">
                         <div>
                             <h2>Talent Connection</h2>
-                            <p>Review and manage connection requests between users and talents.</p>
+                            <p>
+                                Review and manage connection requests between
+                                users and talents.
+                            </p>
                         </div>
-                        <button className="btn-primary-pill" onClick={() => setRequestModalOpen(true)}>
+                        <button
+                            className="btn-primary-pill"
+                            onClick={() => setRequestModalOpen(true)}
+                        >
                             <i className="ti ti-plus" /> Connection Request
                         </button>
                     </div>
@@ -427,21 +426,27 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     {/* ═══════════════ STATS ═══════════════ */}
                     <div className="stat-row">
                         <div className="stat-card">
-                            <div className="stat-icon"><i className="ti ti-users-group" /></div>
+                            <div className="stat-icon">
+                                <i className="ti ti-users-group" />
+                            </div>
                             <div className="stat-meta">
                                 <p>Total Requests</p>
                                 <h4>{computedStats.total}</h4>
                             </div>
                         </div>
                         <div className="stat-card pending">
-                            <div className="stat-icon"><i className="ti ti-clock" /></div>
+                            <div className="stat-icon">
+                                <i className="ti ti-clock" />
+                            </div>
                             <div className="stat-meta">
                                 <p>Pending</p>
                                 <h4>{computedStats.pending}</h4>
                             </div>
                         </div>
                         <div className="stat-card">
-                            <div className="stat-icon"><i className="ti ti-message-circle" /></div>
+                            <div className="stat-icon">
+                                <i className="ti ti-message-circle" />
+                            </div>
                             <div className="stat-meta">
                                 <p>Responded</p>
                                 <h4>{computedStats.responded}</h4>
@@ -452,7 +457,10 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                     {/* ═══════════════ TABLE ═══════════════ */}
                     <div className="table-card">
                         <div className="table-toolbar">
-                            <form onSubmit={handleSearchSubmit} className="search-wrap">
+                            <form
+                                onSubmit={handleSearchSubmit}
+                                className="search-wrap"
+                            >
                                 <i className="ti ti-search" />
                                 <input
                                     type="text"
@@ -463,15 +471,17 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                             </form>
                             <div className="status-filters">
                                 {[
-                                    { key: '', label: 'All' },
-                                    { key: 'pending', label: 'Pending' },
-                                    { key: 'accepted', label: 'Accepted' },
-                                    { key: 'rejected', label: 'Rejected' },
+                                    { key: "", label: "All" },
+                                    { key: "pending", label: "Pending" },
+                                    { key: "accepted", label: "Accepted" },
+                                    { key: "rejected", label: "Rejected" },
                                 ].map((opt) => (
                                     <button
-                                        key={opt.key || 'all'}
-                                        className={`status-chip ${statusFilter === opt.key ? 'active' : ''}`}
-                                        onClick={() => handleStatusClick(opt.key)}
+                                        key={opt.key || "all"}
+                                        className={`status-chip ${statusFilter === opt.key ? "active" : ""}`}
+                                        onClick={() =>
+                                            handleStatusClick(opt.key)
+                                        }
                                     >
                                         {opt.label}
                                     </button>
@@ -480,7 +490,7 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                         </div>
 
                         {rows.length > 0 ? (
-                            <div style={{ overflowX: 'auto' }}>
+                            <div style={{ overflowX: "auto" }}>
                                 <table className="admin-table">
                                     <thead>
                                         <tr>
@@ -488,7 +498,6 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                                             <th>Requester</th>
                                             <th>Talent</th>
                                             <th>Status</th>
-                                            <th>Message</th>
                                             <th>Requested At</th>
                                             <th>Actions</th>
                                         </tr>
@@ -496,41 +505,83 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                                     <tbody>
                                         {rows.map((connection, i) => (
                                             <tr key={connection.id}>
-                                                <td>{(connections.from ?? 1) + i}</td>
+                                                <td>
+                                                    {(connections.from ?? 1) +
+                                                        i}
+                                                </td>
                                                 <td>
                                                     <div className="cell-person">
-                                                        <div className="avatar-circle">{initials(connection.name)}</div>
+                                                        <div className="avatar-circle">
+                                                            {initials(
+                                                                connection.name,
+                                                            )}
+                                                        </div>
                                                         <div>
-                                                            <h6>{connection.name ?? 'N/A'}</h6>
-                                                            <p>{connection.email ?? ''}</p>
+                                                            <h6>
+                                                                {connection.name ??
+                                                                    "N/A"}
+                                                            </h6>
+                                                            <p>
+                                                                {connection.email ??
+                                                                    ""}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div className="cell-person">
-                                                        <div className="avatar-circle">{initials(connection.talent?.name)}</div>
+                                                        <div className="avatar-circle">
+                                                            {initials(
+                                                                connection
+                                                                    .talent
+                                                                    ?.name,
+                                                            )}
+                                                        </div>
                                                         <div>
-                                                            <h6>{connection.talent?.name}</h6>
-                                                            <p>{connection.talent?.email}</p>
+                                                            <h6>
+                                                                {
+                                                                    connection
+                                                                        .talent
+                                                                        ?.name
+                                                                }
+                                                            </h6>
+                                                            <p>
+                                                                {
+                                                                    connection
+                                                                        .talent
+                                                                        ?.email
+                                                                }
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td><StatusBadge status={connection.status} /></td>
-                                                <td className="message-cell" title={connection.message ?? ''}>
-                                                    {connection.message ?? '—'}
+                                                <td>
+                                                    <StatusBadge
+                                                        status={
+                                                            connection.status
+                                                        }
+                                                    />
                                                 </td>
                                                 <td>
-                                                    {new Date(connection.created_at).toLocaleString('en-US', {
-                                                        day: '2-digit',
-                                                        month: 'short',
-                                                        year: 'numeric',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
+                                                    {new Date(
+                                                        connection.created_at,
+                                                    ).toLocaleString("en-US", {
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
                                                     })}
                                                 </td>
                                                 <td>
-                                                    <Link href={routes.connectionShow(connection.id ?? 0)} className="btn-view">
-                                                        <i className="ti ti-eye" /> View
+                                                    <Link
+                                                        href={routes.connectionShow(
+                                                            connection.id ?? 0,
+                                                        )}
+                                                        className="btn-view"
+                                                    >
+                                                        <i className="ti ti-eye" />{" "}
+                                                        View
                                                     </Link>
                                                 </td>
                                             </tr>
@@ -551,8 +602,8 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                                     {paginationLinks.map((link, i) => (
                                         <Link
                                             key={i}
-                                            href={link.url || '#'}
-                                            className={`page-link ${link.active ? 'active' : ''} ${!link.url ? 'disabled' : ''}`}
+                                            href={link.url || "#"}
+                                            className={`page-link ${link.active ? "active" : ""} ${!link.url ? "disabled" : ""}`}
                                             preserveScroll
                                         >
                                             {decodePaginationLabel(link.label)}
@@ -566,14 +617,27 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
 
                 {/* ═══════════════ NEW CONNECTION REQUEST MODAL ═══════════════ */}
                 {requestModalOpen && (
-                    <div className="fc-modal-backdrop" onClick={() => setRequestModalOpen(false)}>
-                        <div className="modal-dark" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="fc-modal-backdrop"
+                        onClick={() => setRequestModalOpen(false)}
+                    >
+                        <div
+                            className="modal-dark"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <div className="modal-header">
                                 <div>
-                                    <h5 className="modal-title">New Connection Request</h5>
+                                    <h5 className="modal-title">
+                                        New Connection Request
+                                    </h5>
                                     <span className="accent-bar" />
                                 </div>
-                                <button className="btn-close" onClick={() => setRequestModalOpen(false)}>✕</button>
+                                <button
+                                    className="btn-close"
+                                    onClick={() => setRequestModalOpen(false)}
+                                >
+                                    ✕
+                                </button>
                             </div>
                             <form onSubmit={submitRequest}>
                                 <div className="modal-body">
@@ -582,12 +646,21 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                                         <select
                                             className="form-control-dark"
                                             value={requestForm.data.talent_id}
-                                            onChange={(e) => requestForm.setData('talent_id', e.target.value)}
+                                            onChange={(e) =>
+                                                requestForm.setData(
+                                                    "talent_id",
+                                                    e.target.value,
+                                                )
+                                            }
                                             required
                                         >
-                                            <option value="">Select a talent</option>
+                                            <option value="">
+                                                Select a talent
+                                            </option>
                                             {talents.map((t) => (
-                                                <option value={t.id} key={t.id}>{t.name}</option>
+                                                <option value={t.id} key={t.id}>
+                                                    {t.name}
+                                                </option>
                                             ))}
                                         </select>
                                     ) : (
@@ -596,41 +669,73 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
                                             className="form-control-dark"
                                             placeholder="Talent name"
                                             value={requestForm.data.talent_id}
-                                            onChange={(e) => requestForm.setData('talent_id', e.target.value)}
+                                            onChange={(e) =>
+                                                requestForm.setData(
+                                                    "talent_id",
+                                                    e.target.value,
+                                                )
+                                            }
                                             required
                                         />
                                     )}
 
-                                    <label className="form-label">Requester Name</label>
+                                    <label className="form-label">
+                                        Requester Name
+                                    </label>
                                     <input
                                         type="text"
                                         className="form-control-dark"
                                         placeholder="Full name"
                                         value={requestForm.data.name}
-                                        onChange={(e) => requestForm.setData('name', e.target.value)}
+                                        onChange={(e) =>
+                                            requestForm.setData(
+                                                "name",
+                                                e.target.value,
+                                            )
+                                        }
                                         required
                                     />
 
-                                    <label className="form-label">Requester Email</label>
+                                    <label className="form-label">
+                                        Requester Email
+                                    </label>
                                     <input
                                         type="email"
                                         className="form-control-dark"
                                         placeholder="email@example.com"
                                         value={requestForm.data.email}
-                                        onChange={(e) => requestForm.setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            requestForm.setData(
+                                                "email",
+                                                e.target.value,
+                                            )
+                                        }
                                         required
                                     />
 
-                                    <label className="form-label">Message (optional)</label>
+                                    <label className="form-label">
+                                        Message (optional)
+                                    </label>
                                     <textarea
                                         className="form-control-dark"
                                         placeholder="Add a note about this request…"
                                         value={requestForm.data.message}
-                                        onChange={(e) => requestForm.setData('message', e.target.value)}
+                                        onChange={(e) =>
+                                            requestForm.setData(
+                                                "message",
+                                                e.target.value,
+                                            )
+                                        }
                                     />
 
-                                    <button type="submit" className="btn-submit" disabled={requestForm.processing}>
-                                        {requestForm.processing ? 'Submitting…' : 'Submit Request'}
+                                    <button
+                                        type="submit"
+                                        className="btn-submit"
+                                        disabled={requestForm.processing}
+                                    >
+                                        {requestForm.processing
+                                            ? "Submitting…"
+                                            : "Submit Request"}
                                     </button>
                                 </div>
                             </form>
@@ -642,4 +747,6 @@ export default function ConnectionIndex({ connections, filters = {}, talents = [
     );
 }
 
-ConnectionIndex.layout = (page) => <AppLayout children={page} title="Talent Connection" />;
+ConnectionIndex.layout = (page) => (
+    <AppLayout children={page} title="Talent Connection" />
+);

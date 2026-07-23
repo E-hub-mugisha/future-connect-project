@@ -6,14 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobSectionApplication extends Model
 {
-    protected $fillable = ['job_section_id', 'email','phone','name', 'cover_letter', 'resume', 'status'];
+    protected $fillable = ['job_section_id', 'email','name', 'cover_letter', 'resume', 'status'];
 
     public function job()
     {
         return $this->belongsTo(JobSection::class);
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    
 }

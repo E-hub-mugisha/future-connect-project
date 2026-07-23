@@ -1,51 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-// If Ziggy is installed, replace r("user.jobs.show") + "/" + id patterns with:
-// route('user.jobs.show', recentJob.id)
-// route('user.jobs.apply', job.id)
-// This removes DEFAULT_ROUTES guesswork entirely.
-
 import { Head, Link, useForm } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
-/**
- * JobShow
- * -------
- * React/Inertia port of the Blade `jobs.show` page.
- *
- * Notes on the conversion from Blade:
- * - `@extends`/`@section('title')` → `<Head title="...">`.
- * - `$job`, `$categories`, `$recent` became plain props, same shapes as
- *   the Eloquent models/collections passed from the controller
- *   (`$job->company`, `$job->skills_list`, `$cat->job_sections_count`, etc.)
- * - `request('category')` became a `filters.category` prop (same pattern
- *   as JobsIndex) so the sidebar "active category" highlight still works.
- * - `route('user.jobs.index', array_merge(...))`, `route('user.jobs.show', ...)`,
- *   `route('user.jobs.apply', ...)`, `route('pricing')` became lookups into
- *   a `routes` prop (see DEFAULT_ROUTES) — same pattern as the other
- *   converted pages. Swap for Ziggy's `route()` directly if available.
- * - The Apply modal and Subscribe modal are genuine Bootstrap `Modal`
- *   components (same reliable ref + imperative `.show()/.hide()` pattern
- *   used in JobsIndex), NOT `data-bs-toggle` attributes — this avoids the
- *   two failure modes covered there (missed click-delegation on
- *   React-rendered buttons, and id collisions with other modals in the
- *   layout). IDs were made unique: `jobApplyModalPage` / `jobSubscribeModalPage`.
- * - `@csrf` was removed — the Apply form now uses Inertia's `useForm` hook,
- *   whose underlying axios instance attaches the CSRF cookie/header
- *   automatically. File upload (`resume`) works the same way; `useForm`
- *   detects the File object and sends the request as multipart/form-data.
- * - The `showSubscribeModal` Blade session flash + inline `<script>` that
- *   auto-opened the subscribe modal on load became a `showSubscribeModal`
- *   boolean prop (pass `$request->session()->get('showSubscribeModal')`
- *   through Inertia the same way), consumed in a `useEffect` that calls
- *   the modal instance's `.show()` once it's mounted.
- * - The vanilla-JS apply-form validation (`validateApplyForm`,
- *   `showApplyErr`/`clearApplyErr`, cover-letter char counter, resume
- *   type/size checks) was ported 1:1 into React state (`coverLength`,
- *   `formErrors`) and `postJobForm.setData`, still running client-side
- *   before the Inertia POST fires — the same UX, just React-native.
- * - Added a full light-theme token override block (`[data-h-theme="light"]`)
- *   matching the same design-token pattern used in SkillProfile and
- *   JobsIndex, so this page respects the app-wide theme toggle.
- */
+
 
 const DEFAULT_ROUTES = {
   "user.jobs.index": "/jobs",
@@ -74,10 +30,6 @@ export default function JobShow({
 }) {
   const r = (name) => routes[name] || DEFAULT_ROUTES[name] || "#";
   const asset = (path) => `${assetBase}${path}`;
-
-  // Prefer a fully-resolved URL from the backend (job.apply_url /
-  // recentJob.show_url) if present — this avoids the client having to
-  // reconstruct route URIs at all, which is what caused the earlier 404.
   const applyUrl = job.apply_url || `${r("user.jobs.apply")}/${job.id}`;
   const jobShowUrl = (aJob) => aJob.show_url || `${r("user.jobs.show")}/${aJob.id}`;
 
@@ -117,14 +69,16 @@ export default function JobShow({
   const applyForm = useForm({
     cover_letter: "",
     resume: null,
+    name: "",
+    email: ""
   });
 
-  const [formErrors, setFormErrors] = useState({ cover_letter: "", resume: "" });
+  const [formErrors, setFormErrors] = useState({ cover_letter: "", resume: "", name: "", email: "" });
   const coverLength = applyForm.data.cover_letter.trim().length;
   const coverCountColor = coverLength >= MIN_COVER_LETTER_LENGTH ? "#48d597" : "#f07070";
 
   const validateApplyForm = () => {
-    const errors = { cover_letter: "", resume: "" };
+    const errors = { cover_letter: "", resume: "", name: "", email: "" };
 
     if (coverLength < MIN_COVER_LETTER_LENGTH) {
       errors.cover_letter = `Please write at least ${MIN_COVER_LETTER_LENGTH} characters.`;
@@ -155,7 +109,7 @@ export default function JobShow({
       forceFormData: true,
       onSuccess: () => {
         applyForm.reset();
-        setFormErrors({ cover_letter: "", resume: "" });
+        setFormErrors({ cover_letter: "", resume: "", name: "", email: "" });
         closeApplyModal();
       },
     });
@@ -999,6 +953,32 @@ export default function JobShow({
             </div>
             <div className="modal-body">
               <form onSubmit={onApplySubmit} noValidate encType="multipart/form-data">
+                <div className="mb-2">
+                  <label className="form-label">Name</label>
+                  <input
+                    type="text"
+                    className={`form-control${formErrors.name ? " is-invalid" : ""}`}
+                    placeholder="Your Name"
+                    value={applyForm.data.name}
+                    onChange={(e) => applyForm.setData("name", e.target.value)}
+                  />
+                  {formErrors.name && (
+                    <div className="fc-error-text">{formErrors.name}</div>
+                  )}
+                </div>
+                <div className="mb-2">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className={`form-control${formErrors.email ? " is-invalid" : ""}`}
+                    placeholder="Your Email"
+                    value={applyForm.data.email}
+                    onChange={(e) => applyForm.setData("email", e.target.value)}
+                  />
+                  {formErrors.email && (
+                    <div className="fc-error-text">{formErrors.email}</div>
+                  )}
+                </div>
                 <div className="mb-2">
                   <label className="form-label">Cover Letter</label>
                   <textarea

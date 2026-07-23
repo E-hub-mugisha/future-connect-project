@@ -33,6 +33,9 @@ class UserProjectController extends Controller
         $request->validate([
             'message' => 'required|string|max:1000',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,zip|max:2048',
+            'portfolio_url' => 'nullable|url|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
         ]);
 
         $project = Project::findOrFail($id);
@@ -43,10 +46,11 @@ class UserProjectController extends Controller
 
         ProjectApplication::create([
             'project_id' => $project->id,
-            'user_id' => Auth::id(),
             'message' => $request->message,
             'attachment' => $path,
             'portfolio_url' => $request->portfolio_url,
+            'name' => $request->name,
+            'email' => $request->email,
             'status' => 'pending',
         ]);
 

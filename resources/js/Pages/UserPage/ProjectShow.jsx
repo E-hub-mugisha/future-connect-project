@@ -2,28 +2,7 @@ import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
 
-/**
- * Converted from resources/views/.../project-show.blade.php
- *
- * Notes:
- * - `project` and `recent` are passed as props from the controller (same shape as the
- *   Blade `$project` / `$recent` variables — `project.user`, `project.category`, etc.).
- * - `$project->created_at->diffForHumans()` has no client-side Carbon equivalent, so I
- *   send that already-formatted string from the backend as `project.posted_ago` — add
- *   that to your controller (`'posted_ago' => $project->created_at->diffForHumans()`)
- *   or swap in a JS date library (e.g. dayjs with the relativeTime plugin) if you'd
- *   rather compute it client-side.
- * - Both modals still use data-bs-toggle / data-bs-dismiss (needs bootstrap.bundle.js
- *   loaded globally, same as your other converted pages).
- * - Both forms now use Inertia's useForm — sponsorForm posts to
- *   `diaspora.sponsorship.store`, applyForm posts to `user.projects.apply` (multipart,
- *   since it has a file input). Validation errors come from `errors` instead of Blade's
- *   `@error` directive / `$errors` bag.
- * - No light theme existed in the original file — I added `[data-h-theme="light"]`
- *   overrides following the same token pattern (fc-bg / fc-bg-alt / fc-card / etc.) used
- *   on your other converted "fc-" pages, so this page now respects the same header
- *   theme toggle they do.
- */
+
 export default function ProjectShow({ project, recent = [] }) {
   const sponsorForm = useForm({
     message: '',
@@ -35,6 +14,8 @@ export default function ProjectShow({ project, recent = [] }) {
     message: '',
     portfolio_url: '',
     attachment: null,
+    name: '',
+    email: '',
   });
 
   function submitSponsor(e) {
@@ -443,6 +424,40 @@ export default function ProjectShow({ project, recent = [] }) {
 
             <form onSubmit={submitApply} className="p-3 p-md-4">
               <div className="modal-body">
+                <div className="mb-4">
+                  <label className="form-label">
+                    <i className="bi bi-person-circle me-1" style={{ color: 'var(--fc-accent)' }}></i> Your Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control p-3"
+                    placeholder="Your full name"
+                    value={applyForm.data.name}
+                    onChange={(e) => applyForm.setData('name', e.target.value)}
+                    required
+                  />
+                  {applyForm.errors.name && (
+                    <div className="text-danger small mt-1">{applyForm.errors.name}</div>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label className="form-label">
+                    <i className="bi bi-envelope me-1" style={{ color: 'var(--fc-accent)' }}></i> Your Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="form-control p-3"
+                    placeholder="Your email address"
+                    value={applyForm.data.email}
+                    onChange={(e) => applyForm.setData('email', e.target.value)}
+                    required
+                  />
+                  {applyForm.errors.email && (
+                    <div className="text-danger small mt-1">{applyForm.errors.email}</div>
+                  )}
+                </div>
                 <div className="mb-4">
                   <label className="form-label">
                     <i className="bi bi-chat-dots me-1" style={{ color: 'var(--fc-accent)' }}></i> Message / Collaboration Proposal

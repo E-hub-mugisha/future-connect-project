@@ -2,47 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, useForm, usePage, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
 
-/**
- * Converted from resources/views/.../course-show.blade.php
- *
- * Assumptions made during conversion — check these against your controller/shared props:
- *
- * 1. `course`, `relatedCourses` are passed as props with the same shape as the Blade
- *    variables — `course.lessons`, `course.feedback` (with `.user` loaded), `course.talent`,
- *    `course.category`, etc. Since the Blade version reads these as already-loaded
- *    collections (not paginated), I read them directly as arrays here too.
- *
- * 2. `auth()->user()` -> `usePage().props.auth.user`. This assumes your
- *    HandleInertiaRequests middleware shares `auth.user` on every request (the Breeze/
- *    Jetstream default). Adjust the path if your shared prop is named differently.
- *
- * 3. `session('success')` -> `usePage().props.flash?.success`. Same assumption — your
- *    middleware needs to share a `flash` prop for this to work; wire it up if it
- *    doesn't yet (`'flash' => ['success' => fn () => $request->session()->get('success')]`).
- *
- * 4. `env('FLW_PUBLIC_KEY')` can't be read client-side — that's a server secret-ish
- *    value. I'm reading it from a `flutterwavePublicKey` prop instead; add
- *    `'flutterwavePublicKey' => config('services.flutterwave.public_key')` (or similar)
- *    to the controller.
- *
- * 5. `asset('logo.png')` -> `/logo.png` (assumes it's in `public/`).
- *
- * 6. Course created_at / feedback created_at "time ago" strings (`diffForHumans()`)
- *    have no client equivalent — I read `course.created_ago` and
- *    `feedback.created_ago` per item; add those to your API resource / controller,
- *    or wire up a JS date library if you'd rather compute them in the browser.
- *
- * 7. Tabs (Description / Lessons / Reviews) are now React state instead of vanilla DOM
- *    class toggling. Lesson-preview and Enroll/Payment modals still use Bootstrap's
- *    data-bs-toggle / data-bs-dismiss (needs bootstrap.bundle.js loaded globally).
- *
- * 8. The review form now uses Inertia's useForm, posting to `courses.review`. The Enroll
- *    (free) form posts via `router.post` to `user.courses.enroll` instead of a native
- *    form submit, so Inertia can re-render the page with the updated enrollment state.
- *    The Flutterwave payment flow is unchanged (external checkout + a raw redirect on
- *    success, same as the original — that part isn't Inertia-navigable since it's a
- *    third-party checkout).
- */
+
 export default function CourseShow({ course, relatedCourses = [], flutterwavePublicKey }) {
   const { auth, flash } = usePage().props;
   const [activeTab, setActiveTab] = useState('description');

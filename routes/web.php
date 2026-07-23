@@ -184,7 +184,7 @@ Route::get('/events/{id}', [UserEventController::class, 'show'])->name('user.eve
 // job routes
 Route::get('/find_work', [UserJobController::class, 'index'])->name('user.jobs.index');
 Route::get('/jobs/{id}', [UserJobController::class, 'show'])->name('user.jobs.show');
-Route::post('/jobs/{job}/apply', [UserJobController::class, 'apply'])->name('user.jobs.apply')->middleware('auth');
+Route::post('/jobs/{job}/apply', [UserJobController::class, 'apply'])->name('user.jobs.apply');
 Route::get('/jobs/category/{id}', [UserJobController::class, 'category'])->name('user.jobs.category');
 Route::post('/jobs/store', [UserJobController::class, 'store'])->name('user.jobs.store');
 

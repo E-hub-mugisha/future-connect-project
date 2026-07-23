@@ -13,7 +13,7 @@ class AdminProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::latest()->paginate(10);
+        $projects = Project::with('user')->latest()->paginate(10);
         return Inertia::render('AdminPage/Projects/Index', compact('projects'));
     }
 
@@ -28,7 +28,7 @@ class AdminProjectController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'required|string|max:100',
-            'budget' => 'nullable|numeric',
+            'budget_amount' => 'nullable|numeric',
             'location' => 'nullable|string|max:255',
             'status' => 'required|string|max:50',
             'verified' => 'boolean',
@@ -42,7 +42,7 @@ class AdminProjectController extends Controller
     // edit project
     public function edit($id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::with('user')->findOrFail($id);
         return Inertia::render('AdminPage/Projects/Edit', compact('project'));
     }
 
@@ -52,7 +52,7 @@ class AdminProjectController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'required|string|max:100',
-            'budget' => 'nullable|numeric',
+            'budget_amount' => 'nullable|numeric',
             'location' => 'nullable|string|max:255',
             'status' => 'required|string|max:50',
             'verified' => 'boolean',
@@ -66,13 +66,13 @@ class AdminProjectController extends Controller
 
     public function show($id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::with('user', 'applications')->findOrFail($id);
         return Inertia::render('AdminPage/Projects/Show', compact('project'));
     }
 
     public function verify($id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::with('user')->findOrFail($id);
         $project->verified = true;
         $project->save();
 
@@ -81,14 +81,14 @@ class AdminProjectController extends Controller
 
     public function destroy($id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::with('user')->findOrFail($id);
         $project->delete();
 
         return redirect()->back()->with('success', 'Project deleted successfully!');
     }
     public function accept($id)
     {
-        $application = ProjectApplication::findOrFail($id);
+        $application = ProjectApplication::with('project')->findOrFail($id);
         $application->status = 'accepted';
         $application->save();
 
@@ -97,7 +97,7 @@ class AdminProjectController extends Controller
 
     public function reject(Request $request, $id)
     {
-        $application = ProjectApplication::findOrFail($id);
+        $application = ProjectApplication::with('project')->findOrFail($id);
         $application->status = 'rejected';
         $application->message = $request->message;
         $application->save();

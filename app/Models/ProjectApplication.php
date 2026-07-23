@@ -6,15 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectApplication extends Model
 {
-    protected $fillable = ['project_id', 'user_id', 'message', 'portfolio_url', 'status'];
+    protected $fillable = ['project_id', 'name', 'email', 'message', 'portfolio_url', 'status'];
 
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

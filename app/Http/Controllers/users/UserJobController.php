@@ -111,25 +111,20 @@ class UserJobController extends Controller
 
     public function apply(Request $request, JobSection $job)
     {
-        $user = Auth::user();
-
-        // ✅ Check if the user has an active subscription
-        if (!$user->activeSubscription) {
-            // Redirect back with a session key to trigger modal
-            return redirect()->route('user.jobs.show', $job->id)
-                ->with('warning', 'You must subscribe before applying to jobs.');
-        }
 
         $request->validate([
             'cover_letter' => 'nullable|string',
-            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
         ]);
 
         $resumePath = $request->hasFile('resume') ? $request->file('resume')->store('resumes', 'public') : null;
 
         JobSectionApplication::create([
             'job_section_id' => $job->id,
-            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'email' => $request->email,
             'cover_letter' => $request->cover_letter,
             'resume' => $resumePath
         ]);
