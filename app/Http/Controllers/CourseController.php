@@ -15,14 +15,26 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::with(['category', 'talent', 'feedback'])->paginate(8);
+        $courses = Course::with(['category', 'talent'])
+            ->withCount(['enrollments', 'feedback'])
+            ->withAvg('feedback', 'rating')
+            ->paginate(6);
+
+        $popularCourses = Course::with(['category', 'talent'])
+            ->withCount(['enrollments', 'feedback'])
+            ->withAvg('feedback', 'rating')
+            ->orderByDesc('enrollments_count')
+            ->take(4)
+            ->get();
+
         $categories = Category::with('courses')->get();
-        return Inertia::render('UserPage/LearningCenter', compact('courses', 'categories'));
+
+        return Inertia::render('UserPage/LearningCenter', compact('courses', 'popularCourses', 'categories'));
     }
 
     public function show($slug)
     {
-        $course = Course::with(['category', 'feedback', 'talent'])->where('slug', $slug)->firstOrFail();
+        $course = Course::with(['category', 'feedback', 'talent', 'lessons'])->where('slug', $slug)->firstOrFail();
         // Get related courses (same category, not the current one)
         $relatedCourses = Course::where('category_id', $course->category_id)
             ->where('id', '!=', $course->id)
@@ -47,7 +59,7 @@ class CourseController extends Controller
 
         return Inertia::render('UserPage/CoursesByCategory', compact('courses', 'categories', 'categoryName'));
     }
-    
+
     public function storeReview(Request $request, $courseId)
     {
         $request->validate([
@@ -113,7 +125,7 @@ class CourseController extends Controller
                 'user_id' => $payment->user_id,
                 'course_id' => $payment->course_id,
             ]);
-            
+
             return redirect()->back()->with('success', 'Payment already processed');
         }
 

@@ -383,6 +383,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Admin Courses Lessons Routes
     Route::post('courses/lessons', [AdminCoursesController::class, 'storeLesson'])
         ->name('courses.lessons.store');
+    Route::get('courses/{course}/lessons', [AdminCoursesController::class, 'indexLessons'])
+        ->name('courses.lessons.index');
+    Route::get('courses/{course}/lessons/create', [AdminCoursesController::class, 'createLesson'])
+        ->name('courses.lessons.create');
+    Route::post('courses/{course}/lessons', [AdminCoursesController::class, 'storeLesson'])
+        ->name('courses.lessons.store');
+    Route::get('courses/{course}/lessons/{lesson}/edit', [AdminCoursesController::class, 'editLesson'])
+        ->name('courses.lessons.edit');
+    Route::put('courses/{course}/lessons/{lesson}', [AdminCoursesController::class, 'updateLesson'])
+        ->name('courses.lessons.update');
+    Route::delete('courses/{course}/lessons/{lesson}', [AdminCoursesController::class, 'destroyLesson'])
+        ->name('courses.lessons.destroy');
 
     // sellers route
     Route::get('/sellers', [SellerAdminController::class, 'index'])->name('sellers.index');

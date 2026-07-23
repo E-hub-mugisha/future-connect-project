@@ -188,7 +188,7 @@ class AdminCoursesController extends Controller
 
     public function show($slug)
     {
-        $course = Course::where('slug', $slug)->with(['category', 'talent'])->firstOrFail();
+        $course = Course::where('slug', $slug)->with(['category', 'talent', 'feedback', 'enrollments', 'lessons'])->firstOrFail();
         return Inertia::render('AdminPage/Courses/Show', compact('course'));
     }
 

@@ -2,39 +2,8 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
 
-/**
- * Converted from resources/views/.../learning-center.blade.php
- *
- * Assumptions made during conversion — check these against your controller:
- *
- * 1. `courses` is a Laravel paginator (Course::paginate(...)), so Inertia sends it as
- *    { data, links, current_page, last_page, total, ... } — same shape issue as the
- *    Projects page. `courses.total()` -> `courses.total`, `courses.count()` (count of
- *    items on the current page) -> `courses.data.length`.
- *
- * 2. `$category->courses->count()` in the Blade file recomputes a live collection count
- *    per category on every render. That only works because Blade has the loaded
- *    relation in PHP; over JSON you'd normally send this precomputed. I'm reading
- *    `category.courses_count` (i.e. your controller should use
- *    `Category::withCount('courses')->get()`), falling back to `category.courses?.length`
- *    if you're instead sending the full loaded relation.
- *
- * 3. Same pattern for `$course->feedback->avg('rating')` / `->count()` — I'm reading
- *    `course.avg_rating` / `course.reviews_count` (e.g. via `withAvg('feedback',
- *    'rating')` + `withCount('feedback')` in the controller), falling back to computing
- *    from a loaded `course.feedback` array if that's what you send instead.
- *
- * 4. The category links (`url('/courses/category/'.$category->slug)`) had no named
- *    route in the original file, so they stay as plain path strings via Inertia's
- *    <Link>, e.g. `/courses/category/${category.slug}`. Swap for `route(...)` if you
- *    add a named route.
- *
- * 5. The filter tabs (All / Latest / Popular / Featured / Recommended) were pure
- *    client-side show/hide against `data-category` in the original — I kept that
- *    exact behavior (no server round-trip), now via React state instead of DOM
- *    class/style toggling.
- */
-export default function LearningCenter({ courses, categories = [] }) {
+
+export default function LearningCenter({ courses, popularCourses = [], categories = [] }) {
   const courseList = courses?.data ?? [];
   const paginationLinks = courses?.links ?? [];
   const totalCourses = courses?.total ?? courseList.length;
@@ -51,6 +20,7 @@ export default function LearningCenter({ courses, categories = [] }) {
   }
 
   function avgRating(course) {
+    if (course.feedback_avg_rating != null) return Number(course.feedback_avg_rating);
     if (course.avg_rating != null) return Number(course.avg_rating);
     if (Array.isArray(course.feedback) && course.feedback.length) {
       return course.feedback.reduce((sum, f) => sum + f.rating, 0) / course.feedback.length;
@@ -59,9 +29,21 @@ export default function LearningCenter({ courses, categories = [] }) {
   }
 
   function reviewsCount(course) {
+    if (course.feedback_count != null) return course.feedback_count;
     if (course.reviews_count != null) return course.reviews_count;
     if (Array.isArray(course.feedback)) return course.feedback.length;
     return 0;
+  }
+
+  function enrolledCount(course) {
+    if (course.enrollments_count != null) return course.enrollments_count;
+    if (Array.isArray(course.enrollments)) return course.enrollments.length;
+    return 0;
+  }
+
+  function formatEnrolled(n) {
+    if (n >= 1000) return `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k`;
+    return `${n}`;
   }
 
   return (
@@ -79,6 +61,8 @@ export default function LearningCenter({ courses, categories = [] }) {
           --green:      #48d597;
           --green-dim:  rgba(0,166,103,0.12);
           --green-glow: rgba(0,166,103,0.3);
+          --gold:       #f5b942;
+          --gold-dim:   rgba(245,185,66,0.12);
           --text:       #e8eef0;
           --muted:      #7a9199;
           --white:      #ffffff;
@@ -162,14 +146,33 @@ export default function LearningCenter({ courses, categories = [] }) {
           font-size: 1rem;
           max-width: 500px;
           line-height: 1.7;
-          margin-bottom: 32px;
+          margin-bottom: 24px;
           position: relative; z-index: 1;
         }
 
         .hero-cta-row {
           display: flex; gap: 12px; flex-wrap: wrap;
           position: relative; z-index: 1;
+          margin-bottom: 26px;
         }
+
+        /* Social proof row — international-platform trust signal */
+        .hero-proof {
+          display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+          position: relative; z-index: 1;
+        }
+
+        .proof-avatars { display: flex; }
+        .proof-avatars img {
+          width: 32px; height: 32px; border-radius: 50%;
+          border: 2px solid var(--bg2); object-fit: cover;
+          margin-left: -10px;
+        }
+        .proof-avatars img:first-child { margin-left: 0; }
+
+        .proof-text { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+        .proof-text strong { color: var(--text); font-family: var(--font-head); }
+        .proof-rating { color: var(--gold); font-size: 11px; letter-spacing: 1px; }
 
         .hero-info-cards {
           display: grid;
@@ -282,6 +285,8 @@ export default function LearningCenter({ courses, categories = [] }) {
           content:''; display:inline-block;
           width:18px; height:2px; background:var(--green); border-radius:1px;
         }
+        .section-label.gold { color: var(--gold); }
+        .section-label.gold::before { background: var(--gold); }
 
         .section-title {
           font-family: var(--font-head);
@@ -291,6 +296,80 @@ export default function LearningCenter({ courses, categories = [] }) {
         }
 
         .section-sub { color: var(--muted); font-size: 0.9rem; }
+
+        /* ─── POPULAR COURSES ─── */
+        .popular-section { padding: 56px 0 8px; }
+
+        .popular-scroll {
+          display: flex; gap: 18px; overflow-x: auto;
+          scroll-snap-type: x mandatory; padding: 6px 2px 14px;
+          scrollbar-width: thin;
+        }
+
+        .popular-card {
+          scroll-snap-align: start;
+          flex: 0 0 300px;
+          background: var(--bg2); border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          overflow: hidden; position: relative;
+          transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+        }
+        .popular-card:hover {
+          transform: translateY(-5px);
+          border-color: rgba(245,185,66,0.4);
+          box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+        }
+
+        .popular-rank {
+          position: absolute; top: 14px; left: 14px; z-index: 2;
+          width: 30px; height: 30px; border-radius: 8px;
+          background: rgba(14,22,24,0.75); backdrop-filter: blur(4px);
+          border: 1px solid rgba(245,185,66,0.4);
+          color: var(--gold); font-family: var(--font-head); font-weight: 800; font-size: 0.85rem;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        .popular-badge {
+          position: absolute; top: 14px; right: 14px; z-index: 2;
+          background: var(--gold); color: #1a1400;
+          font-size: 0.66rem; font-weight: 800; text-transform: uppercase;
+          letter-spacing: 0.06em; padding: 4px 10px; border-radius: 50px;
+        }
+
+        .popular-thumb { position: relative; height: 160px; overflow: hidden; }
+        .popular-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .popular-card:hover .popular-thumb img { transform: scale(1.06); }
+        .popular-thumb-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(to top, rgba(14,22,24,0.75) 0%, transparent 55%);
+        }
+
+        .popular-body { padding: 16px 18px 18px; }
+        .popular-cat { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); margin-bottom: 6px; }
+        .popular-title {
+          font-family: var(--font-head); font-size: 0.92rem; font-weight: 700;
+          color: var(--white); text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.35;
+          overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+          transition: color var(--t);
+        }
+        .popular-title:hover { color: var(--gold); }
+
+        .popular-meta {
+          display: flex; align-items: center; justify-content: space-between;
+          font-size: 0.75rem; color: var(--muted); margin-bottom: 12px;
+        }
+        .popular-meta .stars { color: var(--gold); font-size: 10px; margin-right: 4px; }
+        .popular-meta .score { color: var(--text); font-weight: 600; }
+
+        .popular-footer {
+          display: flex; align-items: center; justify-content: space-between;
+          padding-top: 12px; border-top: 1px solid var(--border);
+        }
+        .popular-price { font-family: var(--font-head); font-weight: 800; color: var(--green); font-size: 0.95rem; }
+        .popular-price.free { color: var(--green); }
+
+        .scroll-hint { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+        .scroll-hint i { margin: 0 4px; }
 
         /* ─── CATEGORY STRIP ─── */
         .cat-strip { padding: 48px 0 0; }
@@ -433,6 +512,14 @@ export default function LearningCenter({ courses, categories = [] }) {
           letter-spacing: 0.05em;
         }
 
+        .thumb-level {
+          position: absolute; top: 12px; right: 12px;
+          background: rgba(14,22,24,0.75); backdrop-filter: blur(4px);
+          color: var(--text); border: 1px solid var(--border);
+          font-size: 0.66rem; font-weight: 600; text-transform: capitalize;
+          padding: 4px 10px; border-radius: 50px;
+        }
+
         .thumb-price {
           position: absolute; bottom: 12px; right: 12px;
           background: var(--bg2); color: var(--green);
@@ -463,11 +550,17 @@ export default function LearningCenter({ courses, categories = [] }) {
         .course-rating {
           display: flex; align-items: center; gap: 6px;
           font-size: 0.78rem; color: var(--muted);
-          margin-bottom: 14px;
+          margin-bottom: 6px;
         }
 
         .course-rating .stars { color: #f59e0b; font-size: 11px; }
         .course-rating .score { color: var(--text); font-weight: 600; }
+
+        .course-enrolled {
+          font-size: 0.74rem; color: var(--muted);
+          margin-bottom: 14px;
+        }
+        .course-enrolled strong { color: var(--text); font-weight: 600; }
 
         .course-instructor {
           display: flex; align-items: center; gap: 10px;
@@ -525,6 +618,30 @@ export default function LearningCenter({ courses, categories = [] }) {
           background: linear-gradient(90deg, transparent, var(--border), transparent);
         }
 
+        /* ─── CTA BANNER ─── */
+        .cta-banner {
+          margin: 64px 0 0;
+          background: linear-gradient(135deg, var(--bg3) 0%, var(--bg2) 100%);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          padding: 46px 40px;
+          position: relative; overflow: hidden;
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 24px; flex-wrap: wrap;
+        }
+        .cta-banner::before {
+          content: '';
+          position: absolute; top: -80px; right: -80px;
+          width: 260px; height: 260px; border-radius: 50%;
+          background: radial-gradient(circle, rgba(0,166,103,0.15) 0%, transparent 70%);
+        }
+        .cta-banner h3 {
+          font-family: var(--font-head); font-weight: 800; font-size: 1.4rem;
+          color: var(--white); margin-bottom: 8px; position: relative; z-index: 1;
+        }
+        .cta-banner p { color: var(--muted); font-size: 0.9rem; max-width: 420px; position: relative; z-index: 1; margin: 0; }
+        .cta-banner .btn-green { position: relative; z-index: 1; flex-shrink: 0; }
+
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg:         #f6faf8;
@@ -534,6 +651,8 @@ export default function LearningCenter({ courses, categories = [] }) {
           --green:      #00a667;
           --green-dim:  rgba(0, 166, 103, 0.08);
           --green-glow: rgba(0, 166, 103, 0.22);
+          --gold:       #b8790c;
+          --gold-dim:   rgba(184, 121, 12, 0.1);
           --text:       #10201b;
           --muted:      #5b7a70;
           --white:      #10201b;
@@ -553,12 +672,18 @@ export default function LearningCenter({ courses, categories = [] }) {
           background: radial-gradient(ellipse, rgba(0,166,103,0.08) 0%, transparent 70%);
         }
 
-        [data-h-theme="light"] .course-thumb-overlay {
+        [data-h-theme="light"] .course-thumb-overlay,
+        [data-h-theme="light"] .popular-thumb-overlay {
           background: linear-gradient(to top, rgba(16,32,27,0.35) 0%, transparent 50%);
         }
 
         [data-h-theme="light"] .thumb-price {
           border-color: rgba(0, 100, 60, 0.25);
+        }
+
+        [data-h-theme="light"] .popular-rank,
+        [data-h-theme="light"] .thumb-level {
+          background: rgba(255,255,255,0.85);
         }
       `}</style>
 
@@ -574,11 +699,21 @@ export default function LearningCenter({ courses, categories = [] }) {
                 Where <span className="accent">knowledge</span><br />meets opportunity
               </h1>
               <p className="hero-sub">
-                Explore courses and learning materials crafted by skilled professionals — enhance your skills and advance your career today.
+                Career-ready courses taught by verified professionals — learn in-demand skills, earn a certificate, and grow your career on your own schedule.
               </p>
               <div className="hero-cta-row">
                 <a href="#courses" className="btn-green"><i className="ti ti-book-2"></i> Explore Courses</a>
                 <Link href={route('register')} className="btn-outline"><i className="ti ti-users"></i> Join Platform</Link>
+              </div>
+              <div className="hero-proof">
+                <div className="proof-avatars">
+                  <img src="/assets/img/user/profile.jpg" alt="" />
+                  <img src="/assets/img/user/profile.jpg" alt="" />
+                  <img src="/assets/img/user/profile.jpg" alt="" />
+                </div>
+                <div className="proof-text">
+                  <span className="proof-rating">★★★★★</span> <strong>4.8/5</strong> from thousands of learners
+                </div>
               </div>
             </div>
 
@@ -666,6 +801,55 @@ export default function LearningCenter({ courses, categories = [] }) {
       </div>
 
       <div className="section-divider"></div>
+
+      {/* ═══ POPULAR COURSES ═══ */}
+      {popularCourses.length > 0 && (
+        <div className="popular-section">
+          <div className="container">
+            <div className="d-flex align-items-end justify-content-between flex-wrap gap-3">
+              <div>
+                <div className="section-label gold">Trending Now</div>
+                <div className="section-title">Popular Courses</div>
+                <p className="section-sub">Handpicked by our learners &mdash; the courses everyone's talking about</p>
+              </div>
+            </div>
+
+            <div className="popular-scroll">
+              {popularCourses.map((course, index) => (
+                <div className="popular-card" key={course.id}>
+                  <span className="popular-rank">#{index + 1}</span>
+                  {index === 0 && <span className="popular-badge">Bestseller</span>}
+                  <Link href={route('user.courses.show', course.slug)} className="popular-thumb">
+                    <img src={`/image/thumbnails/${course.thumbnail}`} alt={course.title} />
+                    <div className="popular-thumb-overlay"></div>
+                  </Link>
+                  <div className="popular-body">
+                    <div className="popular-cat">{course.category?.name ?? 'Course'}</div>
+                    <Link href={route('user.courses.show', course.slug)} className="popular-title">
+                      {course.title}
+                    </Link>
+                    <div className="popular-meta">
+                      <span><span className="stars">★★★★★</span><span className="score">{avgRating(course).toFixed(1)}</span> ({reviewsCount(course)})</span>
+                      <span>{formatEnrolled(enrolledCount(course))} enrolled</span>
+                    </div>
+                    <div className="popular-footer">
+                      <span className={`popular-price${course.is_free ? ' free' : ''}`}>
+                        {course.is_free ? 'Free' : `$${Number(course.price).toFixed(2)}`}
+                      </span>
+                      <Link href={route('user.courses.show', course.slug)} className="course-view-btn">
+                        View <i className="feather-arrow-right"></i>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="scroll-hint d-lg-none"><i className="ti ti-arrow-left"></i>Swipe to see more<i className="ti ti-arrow-right"></i></p>
+          </div>
+        </div>
+      )}
+
+      <div className="section-divider" style={{ marginTop: '16px' }}></div>
 
       {/* ═══ CATEGORIES ═══ */}
       <div className="cat-strip">
@@ -755,6 +939,7 @@ export default function LearningCenter({ courses, categories = [] }) {
                     </Link>
                     <div className="course-thumb-overlay"></div>
                     <span className="thumb-badge">{course.category?.name ?? 'Course'}</span>
+                    {course.level && <span className="thumb-level">{course.level}</span>}
                     <span className="thumb-price">
                       {course.is_free ? 'Free' : `$${Number(course.price).toFixed(2)}`}
                     </span>
@@ -784,6 +969,10 @@ export default function LearningCenter({ courses, categories = [] }) {
                       </span>
                       <span className="score">{avgRating(course).toFixed(1)}</span>
                       <span>({reviewsCount(course)} reviews)</span>
+                    </div>
+
+                    <div className="course-enrolled">
+                      <strong>{formatEnrolled(enrolledCount(course))}</strong> learners enrolled
                     </div>
 
                     <div className="course-instructor">
@@ -824,6 +1013,17 @@ export default function LearningCenter({ courses, categories = [] }) {
             ))}
           </div>
         )}
+
+        {/* CTA banner */}
+        <div className="cta-banner">
+          <div>
+            <h3>Have a skill worth teaching?</h3>
+            <p>Join our community of talents and publish your own course — reach learners across Africa and beyond.</p>
+          </div>
+          <Link href={route('register')} className="btn-green">
+            <i className="ti ti-rocket"></i> Become an Instructor
+          </Link>
+        </div>
 
       </div>
     </>

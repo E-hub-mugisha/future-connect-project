@@ -13,9 +13,18 @@ export default function Show({ course }) {
 
     const sortedLessons = [...(course.lessons ?? [])].sort((a, b) => a.order - b.order);
 
+    const avgRating = course.feedback_avg_rating != null
+        ? Number(course.feedback_avg_rating)
+        : (course.feedback && course.feedback.length
+            ? course.feedback.reduce((sum, f) => sum + f.rating, 0) / course.feedback.length
+            : 0);
+
+    const enrolledCount = course.enrollments_count ?? course.enrollments?.length ?? 0;
+    const reviewsCount = course.feedback_count ?? course.feedback?.length ?? 0;
+
     function handleAddLesson(e) {
         e.preventDefault();
-        post(route('admin.courses.lessons.store'), {
+        post(route('admin.courses.lessons.store', { course: course.id }), {
             onSuccess: () => {
                 reset();
                 const modalEl = document.getElementById('addLessonModal');
@@ -27,7 +36,8 @@ export default function Show({ course }) {
 
     function handleDeleteLesson(lesson) {
         if (confirm('Delete this lesson?')) {
-            router.delete(route('admin.courses.lessons.destroy', lesson.id));
+            // Nested route needs both the parent course id and the lesson id.
+            router.delete(route('admin.courses.lessons.destroy', { course: course.id, lesson: lesson.id }));
         }
     }
 
@@ -53,6 +63,8 @@ export default function Show({ course }) {
                     --c-success-soft:#e9f9ee;
                     --c-warning:#d97706;
                     --c-warning-soft:#fff4e5;
+                    --c-gold:#b8790c;
+                    --c-gold-soft:#fdf3e2;
                     --c-radius:14px;
                 }
                 .page-wrap{ background:var(--c-bg); }
@@ -67,6 +79,21 @@ export default function Show({ course }) {
                 .badge-draft{ background:var(--c-warning-soft); color:var(--c-warning); }
                 .badge-free{ background:var(--c-primary-soft); color:var(--c-primary); }
                 .badge-paid{ background:#f1f2f5; color:var(--c-text); }
+
+                /* Quick stats strip */
+                .stat-strip{
+                    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+                    background:var(--c-card); border:1px solid var(--c-border); border-radius:var(--c-radius);
+                    overflow:hidden; margin-bottom:1.5rem;
+                }
+                .stat-cell{
+                    padding:1.1rem 1rem; text-align:center; border-right:1px solid var(--c-border);
+                }
+                .stat-cell:last-child{ border-right:none; }
+                .stat-cell .val{ font-size:1.25rem; font-weight:800; color:var(--c-text); display:block; line-height:1.3; }
+                .stat-cell .val i{ color:var(--c-gold); font-size:.95rem; margin-right:.2rem; }
+                .stat-cell .lbl{ font-size:.72rem; color:var(--c-muted); text-transform:uppercase; letter-spacing:.05em; }
+
                 .info-card{
                     background:var(--c-card); border:1px solid var(--c-border); border-radius:var(--c-radius);
                     padding:1.5rem; height:100%;
@@ -128,6 +155,26 @@ export default function Show({ course }) {
                             <Link href={route('admin.courses.index')} className="btn btn-cancel">
                                 <i className="bi bi-arrow-left me-1"></i> Back
                             </Link>
+                        </div>
+                    </div>
+
+                    {/* Quick stats */}
+                    <div className="stat-strip">
+                        <div className="stat-cell">
+                            <span className="val"><i className="bi bi-star-fill"></i>{avgRating.toFixed(1)}</span>
+                            <span className="lbl">Avg Rating</span>
+                        </div>
+                        <div className="stat-cell">
+                            <span className="val">{reviewsCount}</span>
+                            <span className="lbl">Reviews</span>
+                        </div>
+                        <div className="stat-cell">
+                            <span className="val">{enrolledCount}</span>
+                            <span className="lbl">Enrolled</span>
+                        </div>
+                        <div className="stat-cell">
+                            <span className="val">{sortedLessons.length}</span>
+                            <span className="lbl">Lessons</span>
                         </div>
                     </div>
 
@@ -214,7 +261,11 @@ export default function Show({ course }) {
                                             <div className="lesson-sub">{limit(lesson.content, 60)}</div>
                                         </div>
                                         <div className="d-flex gap-2">
-                                            <Link href={route('admin.courses.lessons.edit', lesson.id)} className="btn-icon" title="Edit">
+                                            <Link
+                                                href={route('admin.courses.lessons.edit', { course: course.id, lesson: lesson.id })}
+                                                className="btn-icon"
+                                                title="Edit"
+                                            >
                                                 <i className="bi bi-pencil"></i>
                                             </Link>
                                             <button

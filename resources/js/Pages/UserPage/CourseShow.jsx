@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Head, Link, useForm, usePage, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
 
@@ -7,6 +7,15 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
   const { auth, flash } = usePage().props;
   const [activeTab, setActiveTab] = useState('description');
   const [payProcessing, setPayProcessing] = useState(false);
+
+  // The lesson currently loaded in the main player — this is what turns the
+  // page from "modal per lesson" into a Coursera/Udemy style course-content
+  // player: pick a lesson on the right, it plays up top, description updates.
+  const [activeLesson, setActiveLesson] = useState(
+    course.lessons?.length ? course.lessons[0] : null
+  );
+
+  const playerRef = useRef(null);
 
   const reviewForm = useForm({
     rating: '',
@@ -31,6 +40,11 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
     const beforeAmp = url.split('&')[0];
     const idx = beforeAmp.lastIndexOf('v=');
     return idx === -1 ? beforeAmp : beforeAmp.slice(idx + 2);
+  }
+
+  function playLesson(lesson) {
+    setActiveLesson(lesson);
+    playerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function handlePay() {
@@ -72,10 +86,12 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
       ? course.feedback.reduce((sum, f) => sum + f.rating, 0) / course.feedback.length
       : 0;
 
-  const heroVideo =
-    course.is_free && course.lessons?.length && course.lessons[0].video
-      ? course.lessons[0].video
-      : null;
+  // What plays in the main player: the selected lesson's video takes priority,
+  // then course-level video, then fall back to the thumbnail image.
+  const playerVideoUrl = activeLesson?.video_url || course.video || null;
+  const lessonIndex = activeLesson
+    ? course.lessons?.findIndex((l) => l.id === activeLesson.id)
+    : -1;
 
   return (
     <>
@@ -123,6 +139,42 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
           border-radius: var(--radius-md);
           overflow: hidden;
           border: 1px solid var(--border);
+          scroll-margin-top: 1.5rem;
+        }
+
+        .cs-player-meta {
+          display: flex; align-items: center; justify-content: space-between;
+          margin-top: .85rem; margin-bottom: 1.5rem; gap: 12px; flex-wrap: wrap;
+        }
+        .cs-player-lesson-tag {
+          font-size: .72rem; font-weight: 700; color: var(--accent);
+          text-transform: uppercase; letter-spacing: .6px; margin-bottom: .3rem;
+          display: flex; align-items: center; gap: 6px;
+        }
+        .cs-player-lesson-tag .dot {
+          width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+          animation: cs-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes cs-pulse { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+        .cs-player-lesson-title {
+          font-size: 1.15rem; font-weight: 800; color: var(--text-primary);
+          font-family: 'Syne', sans-serif;
+        }
+        .cs-player-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .cs-player-nav button {
+          background: var(--bg-elevated); border: 1px solid var(--border);
+          color: var(--text-secondary); border-radius: var(--radius-sm);
+          width: 34px; height: 34px; display: inline-flex; align-items: center;
+          justify-content: center; cursor: pointer; transition: border-color .2s, color .2s;
+        }
+        .cs-player-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+        .cs-player-nav button:disabled { opacity: .35; cursor: not-allowed; }
+
+        .cs-lesson-desc-panel {
+          background: var(--bg-elevated); border-left: 3px solid var(--accent);
+          border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+          padding: 1rem 1.25rem; font-size: .88rem; color: var(--text-secondary); line-height: 1.7;
+          margin-bottom: 1.75rem;
         }
 
         .cs-tabs { border-bottom: 1px solid var(--border); margin-bottom: 1.75rem; gap: .25rem; display: flex; }
@@ -149,47 +201,6 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
           content: ''; display: inline-block; width: 3px; height: 1rem;
           background: var(--accent); border-radius: 2px;
         }
-
-        .cs-lessons-header {
-          display: flex; align-items: center; justify-content: space-between;
-          margin-bottom: 1.25rem;
-        }
-        .cs-lessons-badge {
-          background: var(--accent-dim); color: var(--accent);
-          font-size: .75rem; font-weight: 700; padding: 4px 12px;
-          border-radius: 50px; border: 1px solid var(--accent-muted);
-          letter-spacing: .3px;
-        }
-        .cs-lesson-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-        .cs-lesson-item {
-          display: flex; align-items: center; justify-content: space-between;
-          background: var(--bg-card-alt); border: 1px solid var(--border);
-          border-radius: var(--radius-md); padding: 14px 18px;
-          transition: border-color .2s, background .2s;
-        }
-        .cs-lesson-item:hover { border-color: var(--accent-muted); background: var(--bg-elevated); }
-        .cs-lesson-left { display: flex; align-items: center; gap: 14px; }
-        .cs-lesson-num {
-          width: 34px; height: 34px; border-radius: 50%;
-          background: var(--accent-dim); border: 1px solid var(--accent-muted);
-          color: var(--accent); font-size: .8rem; font-weight: 700;
-          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
-        .cs-lesson-title { font-size: .9rem; font-weight: 600; color: var(--text-primary); }
-        .cs-lesson-meta { font-size: .75rem; color: var(--text-muted); margin-top: 2px; }
-        .cs-lesson-right { display: flex; align-items: center; gap: 8px; }
-        .cs-type-badge {
-          font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
-          letter-spacing: .3px;
-        }
-        .cs-type-badge.video { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-muted); }
-        .cs-type-badge.text  { background: #1a2d3a; color: #5ab8d4; border: 1px solid #2a4a5a; }
-        .cs-preview-btn {
-          background: none; border: 1px solid var(--border); color: var(--text-secondary);
-          border-radius: var(--radius-sm); padding: 5px 14px; font-size: .78rem; font-weight: 600;
-          cursor: pointer; transition: border-color .2s, color .2s;
-        }
-        .cs-preview-btn:hover { border-color: var(--accent); color: var(--accent); }
 
         .cs-empty {
           text-align: center; padding: 3rem 1rem;
@@ -228,7 +239,6 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
         .cs-sidebar-card {
           background: var(--bg-card); border: 1px solid var(--border);
           border-radius: var(--radius-lg); overflow: hidden;
-          position: sticky; top: 1.5rem;
         }
         .cs-sidebar-top {
           background: linear-gradient(135deg, #0e1d21 0%, #0e1618 100%);
@@ -305,6 +315,67 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
         }
         .cs-share-icon:hover { border-color: var(--accent); color: var(--accent); }
 
+        /* ── Course Content sidebar (Udemy/Coursera curriculum panel) ── */
+        .cs-content-card { margin-top: 1.25rem; position: sticky; top: 1.5rem; }
+        .cs-content-header {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--border);
+        }
+        .cs-content-header h3 {
+          font-size: .95rem; font-weight: 800; color: var(--text-primary);
+          margin: 0; font-family: 'Syne', sans-serif;
+        }
+        .cs-content-badge {
+          background: var(--accent-dim); color: var(--accent);
+          font-size: .72rem; font-weight: 700; padding: 3px 10px;
+          border-radius: 50px; border: 1px solid var(--accent-muted);
+        }
+        .cs-content-list {
+          list-style: none; margin: 0; padding: .5rem;
+          max-height: 480px; overflow-y: auto;
+        }
+        .cs-content-item {
+          display: flex; align-items: center; gap: 12px;
+          padding: 12px; border-radius: var(--radius-sm);
+          cursor: pointer; border: 1px solid transparent;
+          transition: background .2s, border-color .2s;
+        }
+        .cs-content-item:hover { background: var(--bg-card-alt); }
+        .cs-content-item.playing {
+          background: var(--accent-dim); border-color: var(--accent-muted);
+        }
+        .cs-content-num {
+          width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+          background: var(--bg-elevated); border: 1px solid var(--border);
+          color: var(--text-secondary); font-size: .75rem; font-weight: 700;
+          display: flex; align-items: center; justify-content: center;
+          transition: background .2s, border-color .2s, color .2s;
+        }
+        .cs-content-item.playing .cs-content-num {
+          background: var(--accent); border-color: var(--accent); color: #06231a;
+        }
+        .cs-content-item.playing .cs-content-num i { font-size: .68rem; }
+        .cs-content-body { flex: 1; min-width: 0; }
+        .cs-content-title {
+          font-size: .85rem; font-weight: 600; color: var(--text-primary);
+          line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .cs-content-item.playing .cs-content-title { color: var(--accent); }
+        .cs-content-sub {
+          display: flex; align-items: center; gap: 6px; margin-top: 2px;
+          font-size: .72rem; color: var(--text-muted);
+        }
+        .cs-content-sub i { font-size: .68rem; }
+        .cs-content-now-playing {
+          font-size: .68rem; font-weight: 700; color: var(--accent);
+          text-transform: uppercase; letter-spacing: .4px;
+          display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+        }
+        .cs-content-now-playing .dot {
+          width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+          animation: cs-pulse 1.6s ease-in-out infinite;
+        }
+
         .cs-related-section { margin-top: 3rem; }
         .cs-related-title {
           font-size: 1.3rem; font-weight: 800; color: var(--text-primary);
@@ -341,28 +412,6 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
         .cs-course-price { font-size: 1rem; font-weight: 800; color: var(--accent); }
         .cs-course-price.free { color: #5ab8d4; }
 
-        .cs-modal .modal-content {
-          background: var(--bg-card); border: 1px solid var(--border);
-          border-radius: var(--radius-lg); color: var(--text-primary);
-        }
-        .cs-modal .modal-header {
-          background: var(--bg-elevated); border-bottom: 1px solid var(--border);
-          padding: 1.25rem 1.5rem; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-        .cs-modal .modal-title { color: var(--text-primary); font-weight: 700; }
-        .cs-modal .modal-body { padding: 1.5rem; background: var(--bg-card); }
-        .cs-modal .modal-footer {
-          background: var(--bg-card-alt); border-top: 1px solid var(--border);
-          padding: 1rem 1.5rem;
-        }
-        .cs-modal .btn-close { filter: invert(1) opacity(.6); }
-        .cs-lesson-desc {
-          background: var(--bg-elevated); border-left: 3px solid var(--accent);
-          border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-          padding: 1rem 1.25rem; font-size: .88rem; color: var(--text-secondary); line-height: 1.7;
-          margin-top: 1rem;
-        }
-
         .cs-pay-modal .modal-content {
           background: var(--bg-card); border: 1px solid var(--border);
           border-radius: var(--radius-lg); color: var(--text-primary);
@@ -388,6 +437,7 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
 
         @media (max-width: 768px) {
           .cs-price { font-size: 1.5rem; }
+          .cs-content-card { position: static; }
         }
 
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
@@ -415,17 +465,12 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
 
         /* Bootstrap's default close icon is already dark, so on a light modal
            header it doesn't need the white-icon invert the dark theme required */
-        [data-h-theme="light"] .cs-modal .btn-close,
         [data-h-theme="light"] .cs-pay-modal .btn-close {
           filter: none;
         }
 
-        /* Lesson type "text" badge colors were a dark-navy chip — lighten so it
-           doesn't look like a dark hole on a white card */
-        [data-h-theme="light"] .cs-type-badge.text {
-          background: #eaf5fa;
-          color: #1c7fa0;
-          border-color: #c7e6f0;
+        [data-h-theme="light"] .cs-content-item.playing .cs-content-num {
+          color: #ffffff;
         }
       `}</style>
 
@@ -437,22 +482,14 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
             <div className="col-lg-8">
               <div className="cs-card p-4">
 
-                {/* Video */}
-                <div className="cs-video-wrap mb-4">
-                  {heroVideo ? (
+                {/* Player */}
+                <div className="cs-video-wrap" ref={playerRef}>
+                  {playerVideoUrl ? (
                     <div className="ratio ratio-16x9">
                       <iframe
-                        src={`https://www.youtube.com/embed/${extractYouTubeId(heroVideo)}?autoplay=1&mute=1&playsinline=1`}
-                        title={course.lessons[0].title}
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      ></iframe>
-                    </div>
-                  ) : course.video ? (
-                    <div className="ratio ratio-16x9">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${extractYouTubeId(course.video)}`}
-                        title={course.title}
+                        key={playerVideoUrl}
+                        src={`https://www.youtube.com/embed/${extractYouTubeId(playerVideoUrl)}?autoplay=0&playsinline=1`}
+                        title={activeLesson?.title ?? course.title}
                         allow="autoplay; encrypted-media"
                         allowFullScreen
                       ></iframe>
@@ -467,13 +504,49 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
                   )}
                 </div>
 
+                {/* Player meta / lesson navigation, Udemy/Coursera style */}
+                {activeLesson ? (
+                  <div className="cs-player-meta">
+                    <div>
+                      <div className="cs-player-lesson-tag">
+                        <span className="dot"></span>
+                        Lesson {lessonIndex + 1} of {course.lessons.length}
+                      </div>
+                      <div className="cs-player-lesson-title">{activeLesson.title ?? 'Untitled Lesson'}</div>
+                    </div>
+                    <div className="cs-player-nav">
+                      <button
+                        type="button"
+                        disabled={lessonIndex <= 0}
+                        onClick={() => playLesson(course.lessons[lessonIndex - 1])}
+                        title="Previous lesson"
+                      >
+                        <i className="fa-solid fa-chevron-left"></i>
+                      </button>
+                      <button
+                        type="button"
+                        disabled={lessonIndex === -1 || lessonIndex >= course.lessons.length - 1}
+                        onClick={() => playLesson(course.lessons[lessonIndex + 1])}
+                        title="Next lesson"
+                      >
+                        <i className="fa-solid fa-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="cs-player-meta">
+                    <div className="cs-player-lesson-title">{course.title}</div>
+                  </div>
+                )}
+
+                {activeLesson?.description && (
+                  <div className="cs-lesson-desc-panel">{activeLesson.description}</div>
+                )}
+
                 {/* Tabs nav */}
                 <div className="cs-tabs">
                   <button className={`cs-tab-link${activeTab === 'description' ? ' active' : ''}`} onClick={() => setActiveTab('description')}>
                     Description
-                  </button>
-                  <button className={`cs-tab-link${activeTab === 'lesson' ? ' active' : ''}`} onClick={() => setActiveTab('lesson')}>
-                    Course Lessons
                   </button>
                   <button className={`cs-tab-link${activeTab === 'review' ? ' active' : ''}`} onClick={() => setActiveTab('review')}>
                     Reviews
@@ -492,52 +565,6 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
                     <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '.93rem' }}>
                       {course.description}
                     </p>
-                  </div>
-
-                  {/* Lessons */}
-                  <div className={`tab-pane${activeTab === 'lesson' ? ' active show' : ''}`}>
-                    <div className="cs-lessons-header">
-                      <p className="cs-section-title mb-0">Course Lessons</p>
-                      {course.lessons?.length > 0 && (
-                        <span className="cs-lessons-badge">{course.lessons.length} Lessons</span>
-                      )}
-                    </div>
-
-                    {course.lessons?.length > 0 ? (
-                      <ul className="cs-lesson-list">
-                        {course.lessons.map((lesson, key) => (
-                          <li className="cs-lesson-item" key={lesson.id}>
-                            <div className="cs-lesson-left">
-                              <div className="cs-lesson-num">{key + 1}</div>
-                              <div>
-                                <div className="cs-lesson-title">{lesson.title ?? 'Untitled Lesson'}</div>
-                                {lesson.duration && (
-                                  <div className="cs-lesson-meta">
-                                    <i className="fa-regular fa-clock me-1"></i>{lesson.duration}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                            <div className="cs-lesson-right">
-                              {lesson.video_url ? (
-                                <span className="cs-type-badge video"><i className="fa-solid fa-play me-1"></i>Video</span>
-                              ) : (
-                                <span className="cs-type-badge text"><i className="fa-solid fa-file-lines me-1"></i>Text</span>
-                              )}
-                              <button className="cs-preview-btn" data-bs-toggle="modal" data-bs-target={`#lessonModal${lesson.id}`}>
-                                <i className="fa-solid fa-eye me-1"></i> Preview
-                              </button>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="cs-empty">
-                        <i className="fa-solid fa-book-open"></i>
-                        <h5 style={{ color: 'var(--text-secondary)', marginBottom: '.5rem' }}>No Lessons Yet</h5>
-                        <p style={{ fontSize: '.88rem' }}>Lessons haven&apos;t been added yet. Check back soon!</p>
-                      </div>
-                    )}
                   </div>
 
                   {/* Reviews */}
@@ -714,6 +741,49 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
                   ))}
                 </div>
               </div>
+
+              {/* Course Content — Udemy/Coursera style curriculum list.
+                  Clicking a row plays it in the main player above instead of a modal. */}
+              {course.lessons?.length > 0 && (
+                <div className="cs-sidebar-card cs-content-card">
+                  <div className="cs-content-header">
+                    <h3>Course content</h3>
+                    <span className="cs-content-badge">{course.lessons.length} lessons</span>
+                  </div>
+                  <ul className="cs-content-list">
+                    {course.lessons.map((lesson, key) => {
+                      const isPlaying = activeLesson?.id === lesson.id;
+                      return (
+                        <li
+                          className={`cs-content-item${isPlaying ? ' playing' : ''}`}
+                          key={lesson.id}
+                          onClick={() => playLesson(lesson)}
+                        >
+                          <div className="cs-content-num">
+                            {isPlaying ? <i className="fa-solid fa-play"></i> : key + 1}
+                          </div>
+                          <div className="cs-content-body">
+                            <div className="cs-content-title">{lesson.title ?? 'Untitled Lesson'}</div>
+                            <div className="cs-content-sub">
+                              {lesson.video_url ? (
+                                <><i className="fa-solid fa-circle-play"></i> Video</>
+                              ) : (
+                                <><i className="fa-solid fa-file-lines"></i> Text</>
+                              )}
+                              {lesson.duration && <span>· {lesson.duration}</span>}
+                            </div>
+                          </div>
+                          {isPlaying && (
+                            <span className="cs-content-now-playing">
+                              <span className="dot"></span> Playing
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
@@ -767,6 +837,8 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
       </div>
 
       {/* ══ MODALS ══ */}
+      {/* Note: per-lesson preview modals are gone — lessons now play inline in
+          the main player above, selected from the "Course content" sidebar. */}
 
       {/* Enroll Modal */}
       <div className="modal fade cs-pay-modal" id="enrollModal" tabIndex="-1" aria-hidden="true">
@@ -835,52 +907,6 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
           </div>
         </div>
       </div>
-
-      {/* Lesson Modals */}
-      {course.lessons?.map((lesson, key) => (
-        <div className="modal fade cs-modal" id={`lessonModal${lesson.id}`} tabIndex="-1" aria-hidden="true" key={lesson.id}>
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <div>
-                  <div style={{ fontSize: '.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '3px' }}>
-                    Lesson {key + 1}
-                  </div>
-                  <h5 className="modal-title">{lesson.title ?? 'Untitled Lesson'}</h5>
-                </div>
-                <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div className="modal-body">
-                {lesson.video_url ? (
-                  <div className="ratio ratio-16x9 mb-3" style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-                    <iframe
-                      src={`https://www.youtube.com/embed/${extractYouTubeId(lesson.video_url)}?autoplay=0&playsinline=1`}
-                      title={lesson.title ?? 'Lesson Video'}
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                ) : (
-                  <div style={{ background: 'var(--bg-elevated)', border: '1px dashed var(--border)', borderRadius: 'var(--radius-md)', padding: '2.5rem', textAlign: 'center', marginBottom: '1rem' }}>
-                    <i className="fa-solid fa-video-slash" style={{ fontSize: '2rem', color: 'var(--text-muted)', marginBottom: '.75rem', display: 'block' }}></i>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '.88rem' }}>No video available for this lesson.</span>
-                  </div>
-                )}
-                {lesson.description && <div className="cs-lesson-desc">{lesson.description}</div>}
-              </div>
-              <div className="modal-footer" style={{ justifyContent: 'space-between' }}>
-                {lesson.duration && (
-                  <span style={{ fontSize: '.8rem', color: 'var(--text-muted)' }}>
-                    <i className="fa-regular fa-clock me-1"></i>{lesson.duration}
-                  </span>
-                )}
-                <button type="button" className="cs-preview-btn" data-bs-dismiss="modal">
-                  <i className="fa-solid fa-xmark me-1"></i> Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
     </>
   );
 }
