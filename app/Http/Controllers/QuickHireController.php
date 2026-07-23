@@ -8,6 +8,7 @@ use App\Models\Talent;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class QuickHireController extends Controller
 {
@@ -39,7 +40,7 @@ class QuickHireController extends Controller
     {
         $categories = Category::orderBy('name')->get();
 
-        return view('user-page.quick-hire.create', [
+        return Inertia::render('UserPage/QuickHireCreate', [
             'categories' => $categories,
             'timelines' => $this->timelines,
             'experienceLevels' => $this->experienceLevels,
@@ -148,6 +149,6 @@ class QuickHireController extends Controller
     {
         $quickHire->load(['category', 'talent']);
 
-        return view('user-page.quick-hire.success', compact('quickHire'));
+        return Inertia::render('UserPage/QuickHireSuccess', compact('quickHire'));
     }
 }

@@ -204,7 +204,7 @@ Route::get('/project/payment/callback', [UserProjectController::class, 'handleCa
 Route::get('/project/create', [UserProjectController::class, 'create'])->name('user.projects.create');
 
 Route::prefix('quick-hire')->name('quick-hire.')->group(function () {
-    Route::get('/', [QuickHireController::class, 'create'])->name('create');
+    Route::get('/create', [QuickHireController::class, 'create'])->name('create');
     Route::post('/', [QuickHireController::class, 'store'])->name('store');
     Route::get('/talents-by-category/{category}', [QuickHireController::class, 'talentsByCategory'])
         ->name('talents-by-category');

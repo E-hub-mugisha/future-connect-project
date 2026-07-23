@@ -1,49 +1,55 @@
-import React from 'react';
-import { Head, Link } from '@inertiajs/react';
-import GuestLayout from '@/Layouts/GuestLayout';
+import React from "react";
+import { Head, Link } from "@inertiajs/react";
+import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * "For Companies" solutions page — mostly static marketing content.
- *
- * NOTE ON ROUTES: the "#" links below (Search talent, Post a job, Start hiring)
- * were placeholders in the Blade original. Swap them for real routes when ready,
- * e.g. routes.talentsSearch, routes.postJob, etc.
- */
 
 const routes = {
-    talentsSearch: '/skills-marketplace',
-    postJob: '/jobs/create',
+    talentsSearch: "/skills-marketplace",
+    postJob: "/jobs/create",
+    startHiring: "/quick-hire/create",
 };
 
 export default function ForCompanies() {
     const benefits = [
         {
-            icon: 'ti-filter',
-            title: 'Skill-based search',
-            text: 'Search by skill, category, and location instead of sorting through résumés one by one.',
+            icon: "ti-filter",
+            title: "Skill-based search",
+            text: "Search by skill, category, and location instead of sorting through résumés one by one.",
         },
         {
-            icon: 'ti-badge',
-            title: 'Verification badges',
-            text: 'Every verified profile has been checked — hire with confidence, not guesswork.',
+            icon: "ti-badge",
+            title: "Verification badges",
+            text: "Every verified profile has been checked — hire with confidence, not guesswork.",
         },
         {
-            icon: 'ti-adjustments',
-            title: 'Flexible engagement',
-            text: 'Hire for a one-off project, ongoing freelance work, or a full-time role — your choice.',
+            icon: "ti-adjustments",
+            title: "Flexible engagement",
+            text: "Hire for a one-off project, ongoing freelance work, or a full-time role — your choice.",
         },
         {
-            icon: 'ti-users-group',
-            title: 'Team & bulk hiring',
-            text: 'Post multiple roles for a project at once and manage applicants from a single dashboard.',
+            icon: "ti-users-group",
+            title: "Team & bulk hiring",
+            text: "Post multiple roles for a project at once and manage applicants from a single dashboard.",
         },
     ];
 
     const comparisonRows = [
-        { capability: 'Verified skill profiles', traditional: 'Rarely', fc: 'Always' },
-        { capability: 'Search by exact skill', traditional: 'Limited', fc: 'Built-in' },
-        { capability: 'Direct messaging with candidates', traditional: 'Through recruiters', fc: 'Connect Room' },
-        { capability: 'Local talent focus', traditional: 'Varies', fc: 'Yes' },
+        {
+            capability: "Verified skill profiles",
+            traditional: "Rarely",
+            fc: "Always",
+        },
+        {
+            capability: "Search by exact skill",
+            traditional: "Limited",
+            fc: "Built-in",
+        },
+        {
+            capability: "Direct messaging with candidates",
+            traditional: "Through recruiters",
+            fc: "Connect Room",
+        },
+        { capability: "Local talent focus", traditional: "Varies", fc: "Yes" },
     ];
 
     return (
@@ -97,7 +103,7 @@ export default function ForCompanies() {
                 .fc-testimonial .author strong{ color:var(--fc-white); display:block; }
                 .fc-testimonial .author span{ color:var(--fc-muted); font-size:.85rem; }
                 .fc-final-cta{ background:var(--fc-card); border:1px solid var(--fc-border); border-radius:24px; padding:60px; text-align:center; position:relative; overflow:hidden; margin-bottom:80px; }
-                .fc-final-cta::before{ content:""; position:absolute; top:-70px; left:50%; transform:translateX(-50%); width:280px; height:280px; background:radial-gradient(circle, rgba(72,213,151,.16), transparent 70%); }
+                .fc-final-cta::before{ content:""; top:-70px; left:50%; transform:translateX(-50%); width:280px; height:280px; background:radial-gradient(circle, rgba(72,213,151,.16), transparent 70%); }
                 .fc-final-cta h2{ font-weight:700; margin-bottom:12px; position:relative; }
                 .fc-final-cta p{ color:var(--fc-muted); max-width:480px; margin:0 auto 26px; position:relative; }
 
@@ -143,21 +149,33 @@ export default function ForCompanies() {
                         <div className="row align-items-center g-5">
                             <div className="col-lg-7">
                                 <span className="fc-sol-eyebrow">
-                                    <i className="ti ti-building-skyscraper" /> For Companies
+                                    <i className="ti ti-building-skyscraper" />{" "}
+                                    For Companies
                                 </span>
                                 <h1>
-                                    Find verified and <span>sharp skills</span> faster
+                                    Find verified and <span>sharp skills</span>{" "}
+                                    faster
                                 </h1>
                                 <p className="lead">
-                                    Skip the guesswork. Search a marketplace of verified professionals, hire for a
-                                    project or full-time, and cut your time-to-hire dramatically.
+                                    Skip the guesswork. Search a marketplace of
+                                    verified professionals, hire for a project
+                                    or full-time, and cut your time-to-hire
+                                    dramatically.
                                 </p>
                                 <div className="d-flex gap-3 flex-wrap">
-                                    <Link href={routes.talentsSearch} className="btn-fc-primary">
-                                        <i className="ti ti-search" /> Search talent
+                                    <Link
+                                        href={routes.talentsSearch}
+                                        className="btn-fc-primary"
+                                    >
+                                        <i className="ti ti-search" /> Search
+                                        talent
                                     </Link>
-                                    <Link href={routes.postJob} className="btn-fc-ghost">
-                                        <i className="ti ti-file-plus" /> Post a job
+                                    <Link
+                                        href={routes.postJob}
+                                        className="btn-fc-ghost"
+                                    >
+                                        <i className="ti ti-file-plus" /> Post a
+                                        job
                                     </Link>
                                 </div>
                             </div>
@@ -165,15 +183,23 @@ export default function ForCompanies() {
                                 <div className="fc-hero-visual">
                                     <div className="fc-mini-stat">
                                         <strong>8K+</strong>
-                                        <span>Verified skills to search from</span>
+                                        <span>
+                                            Verified skills to search from
+                                        </span>
                                     </div>
                                     <div className="fc-mini-stat">
                                         <strong>Faster</strong>
-                                        <span>Time-to-hire vs traditional recruiting</span>
+                                        <span>
+                                            Time-to-hire vs traditional
+                                            recruiting
+                                        </span>
                                     </div>
                                     <div className="fc-mini-stat mb-0">
                                         <strong>Flexible</strong>
-                                        <span>Freelance, contract, or full-time hires</span>
+                                        <span>
+                                            Freelance, contract, or full-time
+                                            hires
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -188,11 +214,17 @@ export default function ForCompanies() {
                             <h2>
                                 Hiring, <span>simplified</span>
                             </h2>
-                            <p>Everything a hiring team needs to find real skill, fast.</p>
+                            <p>
+                                Everything a hiring team needs to find real
+                                skill, fast.
+                            </p>
                         </div>
                         <div className="row g-4">
                             {benefits.map((b) => (
-                                <div className="col-md-6 col-lg-3" key={b.title}>
+                                <div
+                                    className="col-md-6 col-lg-3"
+                                    key={b.title}
+                                >
                                     <div className="fc-benefit-card">
                                         <div className="fc-benefit-icon">
                                             <i className={`ti ${b.icon}`} />
@@ -213,7 +245,9 @@ export default function ForCompanies() {
                             <h2>
                                 Why hire on <span>Future Connect</span>
                             </h2>
-                            <p>See the difference verified skill search makes.</p>
+                            <p>
+                                See the difference verified skill search makes.
+                            </p>
                         </div>
                         <div className="fc-compare">
                             <table>
@@ -244,8 +278,9 @@ export default function ForCompanies() {
                         <div className="fc-testimonial">
                             <div className="quote-mark">"</div>
                             <p className="quote">
-                                We filled a specialised design role in under a week — something that would normally
-                                take us over a month through traditional recruiting.
+                                We filled a specialised design role in under a
+                                week — something that would normally take us
+                                over a month through traditional recruiting.
                             </p>
                             <div className="author">
                                 <strong>Hiring manager</strong>
@@ -259,9 +294,14 @@ export default function ForCompanies() {
                 <div className="container">
                     <div className="fc-final-cta">
                         <h2>Hire sharper, hire faster</h2>
-                        <p>Search verified talent or post your next role today.</p>
-                        <Link href={routes.talentsSearch} className="btn-fc-primary">
-                            Start hiring
+                        <p>
+                            Search verified talent or post your next role today.
+                        </p>
+                        <Link
+                            href={routes.startHiring}
+                            className="btn-fc-primary"
+                        >
+                            Quick hiring
                         </Link>
                     </div>
                 </div>
@@ -271,5 +311,5 @@ export default function ForCompanies() {
 }
 
 ForCompanies.layout = (page) => (
-  <GuestLayout children={page} title="For Companies - Future Connect" />
+    <GuestLayout children={page} title="For Companies - Future Connect" />
 );
