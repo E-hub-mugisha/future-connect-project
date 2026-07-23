@@ -12,8 +12,11 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
-        'quantity',
+        'seller_id',
+        'product_name',
         'price',
+        'quantity',
+        'subtotal',
     ];
 
     public function order()
@@ -26,8 +29,8 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function codes()
+    public function seller()
     {
-        return $this->hasMany(TicketCode::class);
+        return $this->belongsTo(Seller::class);
     }
 }

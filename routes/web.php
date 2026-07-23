@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\AdminProjectController;
 use App\Http\Controllers\Admin\AdminTalentConnectionController;
 use App\Http\Controllers\Admin\AdminTalentController;
 use App\Http\Controllers\Admin\AdminTestimonialController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PricingPlanController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SellerAdminController;
@@ -59,6 +61,7 @@ use App\Models\Talent;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,18 +161,14 @@ Route::get('/products/{id}', [UsersProductController::class, 'details'])->name('
 Route::get('/product/categories/{id}', [UsersProductController::class, 'showCategory'])->name('user.product.category');
 Route::post('/products/{product}/reviews', [UsersProductController::class, 'store'])->name('product.reviews.store')->middleware('auth');
 
-Route::middleware(['auth'])->group(function () {
-    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    Route::get('/order/{id}', [CheckoutController::class, 'orderShow'])->name('user.orders.show');
+Route::get('/checkout/{product:slug}', [CheckoutController::class, 'create'])
+    ->name('checkout.create');
 
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-    Route::get('/cart/payment/callback', [CheckoutController::class, 'paymentCallback'])->name('cart.payment.callback');
-});
+Route::post('/checkout/{product:slug}', [CheckoutController::class, 'store'])
+    ->name('checkout.store');
+
+Route::get('/checkout/success/{orderNumber}', [CheckoutController::class, 'success'])
+    ->name('checkout.success');
 
 Route::prefix('corporate')->group(function () {
     Route::get('/', [UserCorporateRecruitmentController::class, 'index'])->name('corporate.index');
@@ -402,8 +401,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/products/{id}/status', [ProductController::class, 'updateStatus'])->name('products.updateStatus');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/confirm', [OrderController::class, 'confirm'])->name('orders.confirm');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+
     Route::resource('product-categories', ProductCategoryController::class)
-    ->except(['create', 'edit', 'show']);
+        ->except(['create', 'edit', 'show']);
     // projects route
     Route::get('/projects', [AdminProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/create', [AdminProjectController::class, 'create'])->name('projects.create');
@@ -448,17 +452,24 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // ==========================
     // 💵 ORDERS MANAGEMENT
     // ==========================
-    Route::resource('orders', AdminEventController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('event/orders', AdminEventController::class)->only(['index', 'show', 'destroy']);
 
     // View Orders by Ticket
-    Route::get('orders/ticket/{ticket}', [AdminEventController::class, 'ordersByTicket'])
+    Route::get('event/orders/ticket/{ticket}', [AdminEventController::class, 'ordersByTicket'])
         ->name('orders.byTicket');
 
     // View Payment Details for an Order
-    Route::get('orders/{order}/payment', [AdminEventController::class, 'paymentDetails'])
+    Route::get('event/orders/{order}/payment', [AdminEventController::class, 'paymentDetails'])
         ->name('orders.payment');
 
-
+    Route::resource('pricing-plans', PricingPlanController::class);
+    
+    Route::get('demo-requests', [AdminDemoRequestController::class, 'index'])->name('demo-requests.index');
+    Route::get('demo-requests/{demoRequest}', [AdminDemoRequestController::class, 'show'])->name('demo-requests.show');
+    Route::patch('demo-requests/{demoRequest}/confirm', [AdminDemoRequestController::class, 'confirm'])->name('demo-requests.confirm');
+    Route::patch('demo-requests/{demoRequest}/cancel', [AdminDemoRequestController::class, 'cancel'])->name('demo-requests.cancel');
+    Route::patch('demo-requests/{demoRequest}/complete', [AdminDemoRequestController::class, 'complete'])->name('demo-requests.complete');
+    Route::delete('demo-requests/{demoRequest}', [AdminDemoRequestController::class, 'destroy'])->name('demo-requests.destroy');
     // Job Management
     Route::get('/jobs', [AdminJobController::class, 'index'])->name('jobs.index');
     Route::get('/jobs/create', [AdminJobController::class, 'create'])->name('jobs.create');

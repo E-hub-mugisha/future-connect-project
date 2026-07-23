@@ -11,16 +11,9 @@ class Cart extends Model
 
     // Allow mass assignment for these columns
     protected $fillable = [
-        'user_id',
         'product_id',
         'quantity',
     ];
-
-    // Optional: relationships
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function product()
     {

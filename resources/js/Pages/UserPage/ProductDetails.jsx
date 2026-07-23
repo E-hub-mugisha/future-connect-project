@@ -1,89 +1,62 @@
-import React, { useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
-import GuestLayout from '@/Layouts/GuestLayout';
+import React, { useState } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
+import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * Converted from resources/views/.../product-details.blade.php
- *
- * Assumptions made during conversion:
- *
- * 1. `product` carries the same shape as the Blade variable — `product.category`,
- *    `product.seller`, `product.reviews` (with `.user` loaded per review).
- * 2. `$product->reviews->avg('rating')` / `->count()` are computed client-side here
- *    directly from the `product.reviews` array, same as the Blade version computes
- *    them from an already-loaded collection (no aggregate props needed, unlike the
- *    course pages which paginate/aggregate server-side).
- * 3. `created_at->diffForHumans()` (both product "Listed" and review timestamps) has no
- *    client equivalent — I read `product.listed_ago` and `review.created_ago` per
- *    item; add those to your controller/resource or wire up a JS date library if
- *    you'd rather compute them client-side.
- * 4. The main product image is a hardcoded static asset in the original Blade
- *    (`service-slide-01.jpg`, not `$product->image`) — kept exactly as-is rather than
- *    "fixing" it to use the real product image, since that might be intentional
- *    (e.g. a placeholder while product photography isn't ready yet). The Cart modal
- *    image, by contrast, DOES use `$product->image` via `storage/`, so that one maps
- *    to `/storage/${product.image}` as expected.
- * 5. Breadcrumb "Home" / "Marketplace" links were `href="#"` placeholders in the
- *    original (no route) — kept as plain `<a href="#">` rather than inventing routes
- *    for them.
- * 6. Tabs (Description / Reviews), the star-rating picker, and the quantity
- *    stepper + live total are now React state instead of vanilla DOM manipulation.
- * 7. Both forms (review, add-to-cart) now use Inertia's useForm, posting to
- *    `product.reviews.store` and `cart.add` respectively, instead of native form
- *    submits. Both modals still use data-bs-toggle / data-bs-dismiss (needs
- *    bootstrap.bundle.js loaded globally, same as your other converted pages).
- * 8. No light theme existed in the original file — added `[data-h-theme="light"]`
- *    overrides following the same token-swap pattern as your other converted pages.
- */
 export default function ProductDetails({ product }) {
-  const [activeTab, setActiveTab] = useState('description');
-  const [hoverStar, setHoverStar] = useState(0);
+    const [activeTab, setActiveTab] = useState("description");
+    const [hoverStar, setHoverStar] = useState(0);
 
-  const reviewForm = useForm({
-    rating: '',
-    comment: '',
-  });
-
-  const cartForm = useForm({
-    quantity: 1,
-  });
-
-  function submitReview(e) {
-    e.preventDefault();
-    reviewForm.post(route('product.reviews.store', product.id), {
-      preserveScroll: true,
-      onSuccess: () => reviewForm.reset(),
+    const reviewForm = useForm({
+        rating: "",
+        comment: "",
     });
-  }
 
-  function submitCart(e) {
-    e.preventDefault();
-    cartForm.post(route('cart.add', product.id), {
-      preserveScroll: true,
+    const cartForm = useForm({
+        quantity: 1,
     });
-  }
 
-  function decreaseQty() {
-    cartForm.setData('quantity', Math.max(1, cartForm.data.quantity - 1));
-  }
+    function submitReview(e) {
+        e.preventDefault();
+        reviewForm.post(route("product.reviews.store", product.id), {
+            preserveScroll: true,
+            onSuccess: () => reviewForm.reset(),
+        });
+    }
 
-  function increaseQty() {
-    const max = product.stock ?? 1000;
-    cartForm.setData('quantity', Math.min(max, Number(cartForm.data.quantity) + 1));
-  }
+    function submitCart(e) {
+        e.preventDefault();
+        cartForm.post(route("cart.add", product.id), {
+            preserveScroll: true,
+        });
+    }
 
-  const avgRating =
-    product.reviews && product.reviews.length
-      ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
-      : 0;
+    function decreaseQty() {
+        cartForm.setData("quantity", Math.max(1, cartForm.data.quantity - 1));
+    }
 
-  const totalPrice = (Number(product.price) * Number(cartForm.data.quantity || 1)).toFixed(2);
+    function increaseQty() {
+        const max = product.stock ?? 1000;
+        cartForm.setData(
+            "quantity",
+            Math.min(max, Number(cartForm.data.quantity) + 1),
+        );
+    }
 
-  return (
-    <>
-      <Head title={product.name} />
+    const avgRating =
+        product.reviews && product.reviews.length
+            ? product.reviews.reduce((sum, r) => sum + r.rating, 0) /
+              product.reviews.length
+            : 0;
 
-      <style>{`
+    const totalPrice = (
+        Number(product.price) * Number(cartForm.data.quantity || 1)
+    ).toFixed(2);
+
+    return (
+        <>
+            <Head title={product.name} />
+
+            <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
 
         :root {
@@ -301,272 +274,678 @@ export default function ProductDetails({ product }) {
             those are inline style attributes per star */
       `}</style>
 
-      <div className="pd-wrapper">
-        {/* BREADCRUMB */}
-        <div className="breadcrumb-row">
-          <a href="#">Home</a> <i className="fa-solid fa-chevron-right" style={{ fontSize: '.65rem' }}></i>
-          <a href="#">Marketplace</a> <i className="fa-solid fa-chevron-right" style={{ fontSize: '.65rem' }}></i>
-          <Link href={route('user.product.category', product.category?.id ?? '#')}>
-            {product.category?.name ?? 'Products'}
-          </Link>
-          <i className="fa-solid fa-chevron-right" style={{ fontSize: '.65rem' }}></i>
-          <span>{product.name}</span>
-        </div>
+            <div className="pd-wrapper">
+                {/* BREADCRUMB */}
+                <div className="breadcrumb-row">
+                    <a href="#">Home</a>{" "}
+                    <i
+                        className="fa-solid fa-chevron-right"
+                        style={{ fontSize: ".65rem" }}
+                    ></i>
+                    <a href="#">Marketplace</a>{" "}
+                    <i
+                        className="fa-solid fa-chevron-right"
+                        style={{ fontSize: ".65rem" }}
+                    ></i>
+                    <Link
+                        href={route(
+                            "user.product.category",
+                            product.category?.id ?? "#",
+                        )}
+                    >
+                        {product.category?.name ?? "Products"}
+                    </Link>
+                    <i
+                        className="fa-solid fa-chevron-right"
+                        style={{ fontSize: ".65rem" }}
+                    ></i>
+                    <span>{product.name}</span>
+                </div>
 
-        <div className="pd-grid">
-          {/* LEFT: product content */}
-          <div>
-            {/* Image */}
-            <div className="product-image-panel" style={{ marginBottom: '1.5rem' }}>
-              <img src="/assets/img/service/service-slide-01.jpg" alt={product.name} className="product-main-img" />
-              <div className="product-img-glow"></div>
+                <div className="pd-grid">
+                    {/* LEFT: product content */}
+                    <div>
+                        {/* Image */}
+                        <div
+                            className="product-image-panel"
+                            style={{ marginBottom: "1.5rem" }}
+                        >
+                            <img
+                                src="/assets/img/service/service-slide-01.jpg"
+                                alt={product.name}
+                                className="product-main-img"
+                            />
+                            <div className="product-img-glow"></div>
+                        </div>
+
+                        {/* Tabs */}
+                        <div
+                            style={{
+                                background: "var(--bg-card)",
+                                border: "1px solid var(--border)",
+                                borderRadius: "18px",
+                                overflow: "hidden",
+                            }}
+                        >
+                            <div className="tab-nav">
+                                <button
+                                    className={`tab-btn${activeTab === "description" ? " active" : ""}`}
+                                    onClick={() => setActiveTab("description")}
+                                >
+                                    Description
+                                </button>
+                                <button
+                                    className={`tab-btn${activeTab === "reviews" ? " active" : ""}`}
+                                    onClick={() => setActiveTab("reviews")}
+                                >
+                                    Reviews ({product.reviews?.length ?? 0})
+                                </button>
+                            </div>
+
+                            <div
+                                className={`tab-pane${activeTab === "description" ? " active" : ""}`}
+                            >
+                                <div className="description-section">
+                                    <h3>About this product</h3>
+                                    <p>{product.description}</p>
+                                </div>
+                            </div>
+
+                            <div
+                                className={`tab-pane${activeTab === "reviews" ? " active" : ""}`}
+                            >
+                                <div className="review-header">
+                                    <h3>Customer Reviews</h3>
+                                    <a
+                                        href="#"
+                                        className="btn-write-review"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#addReviewModal"
+                                    >
+                                        <i className="fa-solid fa-pen"></i>{" "}
+                                        Write a Review
+                                    </a>
+                                </div>
+
+                                <div className="rating-summary">
+                                    <div className="big-score">
+                                        {avgRating.toFixed(1)}
+                                    </div>
+                                    <div className="out-of">out of 5.0</div>
+                                    <div className="stars">
+                                        {Array.from({ length: 5 }).map(
+                                            (_, i) => (
+                                                <i
+                                                    key={i}
+                                                    className="fa-solid fa-star"
+                                                    style={{
+                                                        color:
+                                                            i <
+                                                            Math.round(
+                                                                avgRating,
+                                                            )
+                                                                ? "#f59e0b"
+                                                                : "#2a3d3a",
+                                                    }}
+                                                ></i>
+                                            ),
+                                        )}
+                                    </div>
+                                    <p>
+                                        Based on {product.reviews?.length ?? 0}{" "}
+                                        reviews
+                                    </p>
+                                </div>
+
+                                {product.reviews?.map((review) => (
+                                    <div
+                                        className="review-item"
+                                        key={review.id}
+                                    >
+                                        <div className="review-user">
+                                            <img
+                                                src={
+                                                    review.user
+                                                        ?.profile_photo_url ??
+                                                    "/assets/img/default-avatar.png"
+                                                }
+                                                alt={review.user?.name}
+                                                className="review-avatar"
+                                            />
+                                            <div>
+                                                <div className="review-user-name">
+                                                    {review.user?.name}
+                                                </div>
+                                                <div className="review-time">
+                                                    {review.created_ago}
+                                                </div>
+                                            </div>
+                                            <div className="review-stars ms-auto">
+                                                {Array.from({ length: 5 }).map(
+                                                    (_, i) => (
+                                                        <i
+                                                            key={i}
+                                                            className="fa-solid fa-star"
+                                                            style={{
+                                                                color:
+                                                                    i <
+                                                                    review.rating
+                                                                        ? "#f59e0b"
+                                                                        : "#2a3d3a",
+                                                            }}
+                                                        ></i>
+                                                    ),
+                                                )}
+                                            </div>
+                                        </div>
+                                        <p className="review-text">
+                                            {review.comment}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT: sidebar */}
+                    <div>
+                        <div className="sidebar-card">
+                            <div className="price-block">
+                                <div className="price-label">Price</div>
+                                <div className="price-amount">
+                                    {Number(product.price).toLocaleString()}
+                                    <span className="price-currency">RWF</span>
+                                </div>
+                                <Link
+                                    href={route(
+                                        "checkout.create",
+                                        product.slug,
+                                    )}
+                                    className="btn-buy-now"
+                                >
+                                    <i className="feather-shopping-cart"></i>{" "}
+                                    Buy This Product
+                                </Link>
+                            </div>
+
+                            <div className="seller-block">
+                                <div className="seller-header">
+                                    <img
+                                        src="/assets/img/user/user-05.jpg"
+                                        alt="Seller"
+                                        className="seller-avatar"
+                                    />
+                                    <div>
+                                        <div className="seller-name">
+                                            {product.seller?.company_name}
+                                        </div>
+                                        <div className="seller-online">
+                                            Online
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul className="meta-list">
+                                    <li>
+                                        <i className="ti ti-tag"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Category
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.category?.name ??
+                                                    "Uncategorized"}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-user"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Seller
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.seller?.company_name}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-calendar-check"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Listed
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.listed_ago ?? "—"}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-stack"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Stock / Queue
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.stock} units
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-star"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Rating
+                                            </div>
+                                            <div className="meta-val">
+                                                {avgRating.toFixed(1)} / 5 (
+                                                {product.reviews?.length ?? 0}{" "}
+                                                reviews)
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <a
+                                    href="#"
+                                    className="btn-contact"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#contact_me"
+                                >
+                                    <i className="feather-message-circle"></i>{" "}
+                                    Contact Seller
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Tabs */}
-            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '18px', overflow: 'hidden' }}>
-              <div className="tab-nav">
-                <button className={`tab-btn${activeTab === 'description' ? ' active' : ''}`} onClick={() => setActiveTab('description')}>
-                  Description
-                </button>
-                <button className={`tab-btn${activeTab === 'reviews' ? ' active' : ''}`} onClick={() => setActiveTab('reviews')}>
-                  Reviews ({product.reviews?.length ?? 0})
-                </button>
-              </div>
-
-              <div className={`tab-pane${activeTab === 'description' ? ' active' : ''}`}>
-                <div className="description-section">
-                  <h3>About this product</h3>
-                  <p>{product.description}</p>
-                </div>
-              </div>
-
-              <div className={`tab-pane${activeTab === 'reviews' ? ' active' : ''}`}>
-                <div className="review-header">
-                  <h3>Customer Reviews</h3>
-                  <a href="#" className="btn-write-review" data-bs-toggle="modal" data-bs-target="#addReviewModal">
-                    <i className="fa-solid fa-pen"></i> Write a Review
-                  </a>
-                </div>
-
-                <div className="rating-summary">
-                  <div className="big-score">{avgRating.toFixed(1)}</div>
-                  <div className="out-of">out of 5.0</div>
-                  <div className="stars">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <i key={i} className="fa-solid fa-star" style={{ color: i < Math.round(avgRating) ? '#f59e0b' : '#2a3d3a' }}></i>
-                    ))}
-                  </div>
-                  <p>Based on {product.reviews?.length ?? 0} reviews</p>
-                </div>
-
-                {product.reviews?.map((review) => (
-                  <div className="review-item" key={review.id}>
-                    <div className="review-user">
-                      <img
-                        src={review.user?.profile_photo_url ?? '/assets/img/default-avatar.png'}
-                        alt={review.user?.name}
-                        className="review-avatar"
-                      />
-                      <div>
-                        <div className="review-user-name">{review.user?.name}</div>
-                        <div className="review-time">{review.created_ago}</div>
-                      </div>
-                      <div className="review-stars ms-auto">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <i key={i} className="fa-solid fa-star" style={{ color: i < review.rating ? '#f59e0b' : '#2a3d3a' }}></i>
-                        ))}
-                      </div>
+            {/* REVIEW MODAL */}
+            <div
+                className="modal fade"
+                id="addReviewModal"
+                tabIndex="-1"
+                aria-hidden="true"
+            >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div
+                            style={{
+                                background:
+                                    "linear-gradient(135deg,#0a2e22,#0d3d29)",
+                                padding: "1.5rem 2rem",
+                                borderRadius: "18px 18px 0 0",
+                                borderBottom: "1px solid rgba(0,166,103,.2)",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <h5
+                                    style={{
+                                        fontFamily: "'Syne',sans-serif",
+                                        fontWeight: 800,
+                                        color: "#fff",
+                                        margin: 0,
+                                    }}
+                                >
+                                    Leave a Review
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"
+                                ></button>
+                            </div>
+                        </div>
+                        <form onSubmit={submitReview}>
+                            <div className="modal-body p-4">
+                                <div className="mb-4">
+                                    <label
+                                        className="form-label"
+                                        style={{
+                                            color: "var(--muted)",
+                                            fontSize: ".85rem",
+                                            display: "block",
+                                            marginBottom: ".75rem",
+                                        }}
+                                    >
+                                        Your Rating
+                                    </label>
+                                    <div className="star-select-row">
+                                        {[1, 2, 3, 4, 5].map((i) => (
+                                            <i
+                                                key={i}
+                                                className={
+                                                    Number(
+                                                        reviewForm.data.rating,
+                                                    ) >= i || hoverStar >= i
+                                                        ? "fa-solid fa-star"
+                                                        : "fa-regular fa-star"
+                                                }
+                                                style={{
+                                                    color:
+                                                        Number(
+                                                            reviewForm.data
+                                                                .rating,
+                                                        ) >= i || hoverStar >= i
+                                                            ? "#f59e0b"
+                                                            : "var(--muted)",
+                                                }}
+                                                onMouseEnter={() =>
+                                                    setHoverStar(i)
+                                                }
+                                                onMouseLeave={() =>
+                                                    setHoverStar(0)
+                                                }
+                                                onClick={() =>
+                                                    reviewForm.setData(
+                                                        "rating",
+                                                        i,
+                                                    )
+                                                }
+                                            ></i>
+                                        ))}
+                                    </div>
+                                    {reviewForm.errors.rating && (
+                                        <small className="text-danger d-block mt-1">
+                                            {reviewForm.errors.rating}
+                                        </small>
+                                    )}
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">
+                                        Your Review
+                                    </label>
+                                    <textarea
+                                        className="form-control"
+                                        rows="4"
+                                        placeholder="Share your experience with this product..."
+                                        value={reviewForm.data.comment}
+                                        onChange={(e) =>
+                                            reviewForm.setData(
+                                                "comment",
+                                                e.target.value,
+                                            )
+                                        }
+                                        required
+                                    ></textarea>
+                                    {reviewForm.errors.comment && (
+                                        <small className="text-danger d-block mt-1">
+                                            {reviewForm.errors.comment}
+                                        </small>
+                                    )}
+                                </div>
+                            </div>
+                            <div
+                                className="modal-footer"
+                                style={{
+                                    borderTop: "1px solid var(--border)",
+                                    padding: "1.25rem 2rem",
+                                }}
+                            >
+                                <button
+                                    type="submit"
+                                    className="btn-accent w-100"
+                                    disabled={reviewForm.processing}
+                                >
+                                    Submit Review
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <p className="review-text">{review.comment}</p>
-                  </div>
-                ))}
-              </div>
+                </div>
             </div>
-          </div>
 
-          {/* RIGHT: sidebar */}
-          <div>
-            <div className="sidebar-card">
-              <div className="price-block">
-                <div className="price-label">Price</div>
-                <div className="price-amount">
-                  {Number(product.price).toLocaleString()}<span className="price-currency">RWF</span>
+            {/* CART MODAL */}
+            <div
+                className="modal fade"
+                id={`addToCartModal${product.id}`}
+                tabIndex="-1"
+                aria-hidden="true"
+            >
+                <div className="modal-dialog modal-dialog-centered modal-lg">
+                    <div className="modal-content">
+                        <div
+                            style={{
+                                background:
+                                    "linear-gradient(135deg,#0a2e22,#0d3d29)",
+                                padding: "1.25rem 2rem",
+                                borderRadius: "18px 18px 0 0",
+                                borderBottom: "1px solid rgba(0,166,103,.2)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <h5
+                                style={{
+                                    fontFamily: "'Syne',sans-serif",
+                                    fontWeight: 800,
+                                    color: "#fff",
+                                    margin: 0,
+                                    fontSize: "1rem",
+                                }}
+                            >
+                                Add to Cart
+                            </h5>
+                            <button
+                                type="button"
+                                className="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                            ></button>
+                        </div>
+                        <form onSubmit={submitCart}>
+                            <div className="modal-body p-4">
+                                <div className="row g-4">
+                                    <div className="col-md-5">
+                                        <img
+                                            src={`/storage/${product.image}`}
+                                            alt={product.name}
+                                            className="cart-product-img"
+                                        />
+                                    </div>
+                                    <div className="col-md-7">
+                                        <h4
+                                            style={{
+                                                fontFamily: "'Syne',sans-serif",
+                                                fontWeight: 800,
+                                                color: "var(--white)",
+                                                marginBottom: ".5rem",
+                                            }}
+                                        >
+                                            {product.name}
+                                        </h4>
+                                        <p
+                                            style={{
+                                                color: "var(--muted)",
+                                                fontSize: ".9rem",
+                                                marginBottom: "1rem",
+                                            }}
+                                        >
+                                            {product.description}
+                                        </p>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                gap: ".5rem",
+                                                marginBottom: "1rem",
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    background:
+                                                        "var(--accent-dim)",
+                                                    border: "1px solid rgba(0,166,103,.3)",
+                                                    color: "var(--accent)",
+                                                    fontSize: ".75rem",
+                                                    fontWeight: 700,
+                                                    padding: ".2rem .65rem",
+                                                    borderRadius: "50px",
+                                                }}
+                                            >
+                                                {product.category?.name ??
+                                                    "General"}
+                                            </span>
+                                            <span
+                                                style={{
+                                                    background:
+                                                        "var(--bg-raised)",
+                                                    border: "1px solid var(--border)",
+                                                    color: "var(--muted)",
+                                                    fontSize: ".75rem",
+                                                    fontWeight: 600,
+                                                    padding: ".2rem .65rem",
+                                                    borderRadius: "50px",
+                                                }}
+                                            >
+                                                {product.seller?.company_name ??
+                                                    "N/A"}
+                                            </span>
+                                        </div>
+                                        <p
+                                            style={{
+                                                fontSize: ".85rem",
+                                                color: "var(--muted)",
+                                                marginBottom: "1.25rem",
+                                            }}
+                                        >
+                                            In Stock:{" "}
+                                            <strong
+                                                style={{ color: "var(--text)" }}
+                                            >
+                                                {product.stock ?? "Unlimited"}
+                                            </strong>
+                                        </p>
+
+                                        <div
+                                            style={{ marginBottom: "1.25rem" }}
+                                        >
+                                            <label
+                                                style={{
+                                                    fontSize: ".8rem",
+                                                    color: "var(--muted)",
+                                                    display: "block",
+                                                    marginBottom: ".6rem",
+                                                }}
+                                            >
+                                                Quantity
+                                            </label>
+                                            <div className="qty-control">
+                                                <button
+                                                    type="button"
+                                                    className="qty-btn"
+                                                    onClick={decreaseQty}
+                                                >
+                                                    −
+                                                </button>
+                                                <input
+                                                    type="number"
+                                                    className="qty-num"
+                                                    min="1"
+                                                    max={product.stock ?? 1000}
+                                                    value={
+                                                        cartForm.data.quantity
+                                                    }
+                                                    onChange={(e) =>
+                                                        cartForm.setData(
+                                                            "quantity",
+                                                            Math.max(
+                                                                1,
+                                                                Number(
+                                                                    e.target
+                                                                        .value,
+                                                                ) || 1,
+                                                            ),
+                                                        )
+                                                    }
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="qty-btn"
+                                                    onClick={increaseQty}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            style={{
+                                                background: "var(--bg-raised)",
+                                                border: "1px solid var(--border)",
+                                                borderRadius: "12px",
+                                                padding: "1rem",
+                                                marginBottom: "1.5rem",
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    color: "var(--muted)",
+                                                    fontSize: ".85rem",
+                                                }}
+                                            >
+                                                Total Amount
+                                            </span>
+                                            <span
+                                                style={{
+                                                    fontFamily:
+                                                        "'Syne',sans-serif",
+                                                    fontSize: "1.3rem",
+                                                    fontWeight: 800,
+                                                    color: "var(--white)",
+                                                }}
+                                            >
+                                                ${totalPrice}
+                                            </span>
+                                        </div>
+
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                gap: ".75rem",
+                                            }}
+                                        >
+                                            <button
+                                                type="button"
+                                                className="btn-contact"
+                                                data-bs-dismiss="modal"
+                                                style={{ flex: 1 }}
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="btn-accent"
+                                                style={{
+                                                    flex: 2,
+                                                    padding: ".8rem",
+                                                }}
+                                                disabled={cartForm.processing}
+                                            >
+                                                <i className="feather-shopping-cart"></i>{" "}
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <button className="btn-buy-now" data-bs-toggle="modal" data-bs-target={`#addToCartModal${product.id}`}>
-                  <i className="feather-shopping-cart"></i> Buy This Product
-                </button>
-              </div>
-
-              <div className="seller-block">
-                <div className="seller-header">
-                  <img src="/assets/img/user/user-05.jpg" alt="Seller" className="seller-avatar" />
-                  <div>
-                    <div className="seller-name">{product.seller?.company_name}</div>
-                    <div className="seller-online">Online</div>
-                  </div>
-                </div>
-
-                <ul className="meta-list">
-                  <li>
-                    <i className="ti ti-tag"></i>
-                    <div>
-                      <div className="meta-key">Category</div>
-                      <div className="meta-val">{product.category?.name ?? 'Uncategorized'}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <i className="ti ti-user"></i>
-                    <div>
-                      <div className="meta-key">Seller</div>
-                      <div className="meta-val">{product.seller?.company_name}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <i className="ti ti-calendar-check"></i>
-                    <div>
-                      <div className="meta-key">Listed</div>
-                      <div className="meta-val">{product.listed_ago ?? '—'}</div>
-                    </div>
-                  </li>
-                  <li>
-                    <i className="ti ti-stack"></i>
-                    <div>
-                      <div className="meta-key">Stock / Queue</div>
-                      <div className="meta-val">{product.stock} units</div>
-                    </div>
-                  </li>
-                  <li>
-                    <i className="ti ti-star"></i>
-                    <div>
-                      <div className="meta-key">Rating</div>
-                      <div className="meta-val">{avgRating.toFixed(1)} / 5 ({product.reviews?.length ?? 0} reviews)</div>
-                    </div>
-                  </li>
-                </ul>
-
-                <a href="#" className="btn-contact" data-bs-toggle="modal" data-bs-target="#contact_me">
-                  <i className="feather-message-circle"></i> Contact Seller
-                </a>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* REVIEW MODAL */}
-      <div className="modal fade" id="addReviewModal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div style={{ background: 'linear-gradient(135deg,#0a2e22,#0d3d29)', padding: '1.5rem 2rem', borderRadius: '18px 18px 0 0', borderBottom: '1px solid rgba(0,166,103,.2)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <h5 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, color: '#fff', margin: 0 }}>Leave a Review</h5>
-                <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-              </div>
-            </div>
-            <form onSubmit={submitReview}>
-              <div className="modal-body p-4">
-                <div className="mb-4">
-                  <label className="form-label" style={{ color: 'var(--muted)', fontSize: '.85rem', display: 'block', marginBottom: '.75rem' }}>Your Rating</label>
-                  <div className="star-select-row">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <i
-                        key={i}
-                        className={Number(reviewForm.data.rating) >= i || hoverStar >= i ? 'fa-solid fa-star' : 'fa-regular fa-star'}
-                        style={{ color: Number(reviewForm.data.rating) >= i || hoverStar >= i ? '#f59e0b' : 'var(--muted)' }}
-                        onMouseEnter={() => setHoverStar(i)}
-                        onMouseLeave={() => setHoverStar(0)}
-                        onClick={() => reviewForm.setData('rating', i)}
-                      ></i>
-                    ))}
-                  </div>
-                  {reviewForm.errors.rating && <small className="text-danger d-block mt-1">{reviewForm.errors.rating}</small>}
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Your Review</label>
-                  <textarea
-                    className="form-control"
-                    rows="4"
-                    placeholder="Share your experience with this product..."
-                    value={reviewForm.data.comment}
-                    onChange={(e) => reviewForm.setData('comment', e.target.value)}
-                    required
-                  ></textarea>
-                  {reviewForm.errors.comment && <small className="text-danger d-block mt-1">{reviewForm.errors.comment}</small>}
-                </div>
-              </div>
-              <div className="modal-footer" style={{ borderTop: '1px solid var(--border)', padding: '1.25rem 2rem' }}>
-                <button type="submit" className="btn-accent w-100" disabled={reviewForm.processing}>Submit Review</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      {/* CART MODAL */}
-      <div className="modal fade" id={`addToCartModal${product.id}`} tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div style={{ background: 'linear-gradient(135deg,#0a2e22,#0d3d29)', padding: '1.25rem 2rem', borderRadius: '18px 18px 0 0', borderBottom: '1px solid rgba(0,166,103,.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h5 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, color: '#fff', margin: 0, fontSize: '1rem' }}>Add to Cart</h5>
-              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <form onSubmit={submitCart}>
-              <div className="modal-body p-4">
-                <div className="row g-4">
-                  <div className="col-md-5">
-                    <img src={`/storage/${product.image}`} alt={product.name} className="cart-product-img" />
-                  </div>
-                  <div className="col-md-7">
-                    <h4 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, color: 'var(--white)', marginBottom: '.5rem' }}>{product.name}</h4>
-                    <p style={{ color: 'var(--muted)', fontSize: '.9rem', marginBottom: '1rem' }}>{product.description}</p>
-                    <div style={{ display: 'flex', gap: '.5rem', marginBottom: '1rem' }}>
-                      <span style={{ background: 'var(--accent-dim)', border: '1px solid rgba(0,166,103,.3)', color: 'var(--accent)', fontSize: '.75rem', fontWeight: 700, padding: '.2rem .65rem', borderRadius: '50px' }}>
-                        {product.category?.name ?? 'General'}
-                      </span>
-                      <span style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', color: 'var(--muted)', fontSize: '.75rem', fontWeight: 600, padding: '.2rem .65rem', borderRadius: '50px' }}>
-                        {product.seller?.company_name ?? 'N/A'}
-                      </span>
-                    </div>
-                    <p style={{ fontSize: '.85rem', color: 'var(--muted)', marginBottom: '1.25rem' }}>
-                      In Stock: <strong style={{ color: 'var(--text)' }}>{product.stock ?? 'Unlimited'}</strong>
-                    </p>
-
-                    <div style={{ marginBottom: '1.25rem' }}>
-                      <label style={{ fontSize: '.8rem', color: 'var(--muted)', display: 'block', marginBottom: '.6rem' }}>Quantity</label>
-                      <div className="qty-control">
-                        <button type="button" className="qty-btn" onClick={decreaseQty}>−</button>
-                        <input
-                          type="number"
-                          className="qty-num"
-                          min="1"
-                          max={product.stock ?? 1000}
-                          value={cartForm.data.quantity}
-                          onChange={(e) => cartForm.setData('quantity', Math.max(1, Number(e.target.value) || 1))}
-                        />
-                        <button type="button" className="qty-btn" onClick={increaseQty}>+</button>
-                      </div>
-                    </div>
-
-                    <div style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--muted)', fontSize: '.85rem' }}>Total Amount</span>
-                      <span style={{ fontFamily: "'Syne',sans-serif", fontSize: '1.3rem', fontWeight: 800, color: 'var(--white)' }}>${totalPrice}</span>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '.75rem' }}>
-                      <button type="button" className="btn-contact" data-bs-dismiss="modal" style={{ flex: 1 }}>Cancel</button>
-                      <button type="submit" className="btn-accent" style={{ flex: 2, padding: '.8rem' }} disabled={cartForm.processing}>
-                        <i className="feather-shopping-cart"></i> Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 }
 
-ProductDetails.layout = (page) => <GuestLayout children={page} title={page.props.product.name} />;
+ProductDetails.layout = (page) => (
+    <GuestLayout children={page} title={page.props.product.name} />
+);
