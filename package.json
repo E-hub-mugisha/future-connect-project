@@ -28,6 +28,7 @@
         "@samkirkland/ftp-deploy": "^1.2.4",
         "aos": "^2.3.4",
         "bootstrap": "^5.3.8",
+        "chart.js": "^4.5.1",
         "recharts": "^3.10.0",
         "sweetalert2": "^11.26.25",
         "swiper": "^14.0.5",

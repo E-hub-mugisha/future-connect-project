@@ -1,11 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-/**
- * Future Connect — Register Page (Inertia + React)
- *
- * Shares the same fcToggleTheme / initTheme pattern as Login.jsx.
- */
+
 
 const THEME_KEY = 'fc-theme';
 
@@ -35,18 +31,67 @@ function scorePassword(val) {
     return score;
 }
 
-export default function Register() {
+const ROLES = [
+    {
+        key: 'talent',
+        title: 'Talent',
+        subtitle: 'Showcase your skills & get discovered',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2L12 2z" />
+            </svg>
+        ),
+    },
+    {
+        key: 'seller',
+        title: 'Seller',
+        subtitle: 'List products or services & reach buyers',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 3h18l-1.5 9h-15L3 3z" />
+                <circle cx="9" cy="20" r="1.5" />
+                <circle cx="17" cy="20" r="1.5" />
+            </svg>
+        ),
+    },
+    {
+        key: 'user',
+        title: 'Regular User',
+        subtitle: 'Browse, connect, and explore the platform',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </svg>
+        ),
+    },
+];
+
+export default function Register({ categories = [] }) {
     const [theme, setTheme] = useState(initTheme);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const [step, setStep] = useState('role'); // 'role' | 'form'
 
     const { data, setData, post, processing, errors, reset } = useForm({
+        role: '',
         name: '',
         email: '',
         phone: '',
         password: '',
         password_confirmation: '',
         terms: false,
+
+        // talent-only
+        talent_address: '',
+        talent_language: '',
+        category_id: '',
+        talent_description: '',
+
+        // seller-only
+        company_name: '',
+        seller_address: '',
+        seller_description: '',
     });
 
     useEffect(() => {
@@ -61,12 +106,21 @@ export default function Register() {
     const strength = useMemo(() => scorePassword(data.password), [data.password]);
     const strengthLabel = data.password.length === 0 ? STRENGTH_LABELS[0] : STRENGTH_LABELS[strength];
 
+    const selectRole = (roleKey) => {
+        setData('role', roleKey);
+        setStep('form');
+    };
+
+    const backToRoles = () => setStep('role');
+
     const submit = (e) => {
         e.preventDefault();
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
+
+    const selectedRole = ROLES.find((r) => r.key === data.role);
 
     return (
         <>
@@ -105,13 +159,23 @@ export default function Register() {
                 </div>
 
                 <div className="back-nav">
-                    <Link href="/" className="back-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12" />
-                            <polyline points="12 19 5 12 12 5" />
-                        </svg>
-                        <span>Back</span>
-                    </Link>
+                    {step === 'form' ? (
+                        <button type="button" className="back-btn" onClick={backToRoles}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            <span>Change role</span>
+                        </button>
+                    ) : (
+                        <Link href="/" className="back-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            <span>Back</span>
+                        </Link>
+                    )}
                 </div>
 
                 <div className="card">
@@ -201,223 +265,383 @@ export default function Register() {
                         </div>
                     </div>
 
-                    {/* ── Right Form Panel ── */}
+                    {/* ── Right Panel ── */}
                     <div className="panel-right">
-                        <div className="form-head">
-                            <div className="eyebrow">Create Account</div>
-                            <h1>Join Future Connect</h1>
-                            <p>Fill in your details to get started for free</p>
-                        </div>
-
-                        <form onSubmit={submit}>
-                            <div className="fields-grid">
-                                {/* Name */}
-                                <div className="field field-full">
-                                    <label htmlFor="name">Your Name</label>
-                                    <div className="input-wrap">
-                                        <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                            <circle cx="12" cy="7" r="4" />
-                                        </svg>
-                                        <input
-                                            id="name"
-                                            className={`fc-input ${errors.name ? 'is-invalid' : ''}`}
-                                            type="text"
-                                            name="name"
-                                            value={data.name}
-                                            onChange={(e) => setData('name', e.target.value)}
-                                            placeholder="Jean Mugisha"
-                                            required
-                                            autoComplete="given-name"
-                                        />
-                                    </div>
-                                    {errors.name && <div className="field-error">{errors.name}</div>}
+                        {step === 'role' ? (
+                            <>
+                                <div className="form-head">
+                                    <div className="eyebrow">Create Account</div>
+                                    <h1>How will you use Future Connect?</h1>
+                                    <p>Pick the option that fits you best — you can always update this later.</p>
                                 </div>
 
-                                {/* Email */}
-                                <div className="field">
-                                    <label htmlFor="email">Email Address</label>
-                                    <div className="input-wrap">
-                                        <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                            <polyline points="22,6 12,13 2,6" />
-                                        </svg>
-                                        <input
-                                            id="email"
-                                            className={`fc-input ${errors.email ? 'is-invalid' : ''}`}
-                                            type="email"
-                                            name="email"
-                                            value={data.email}
-                                            onChange={(e) => setData('email', e.target.value)}
-                                            placeholder="you@example.com"
-                                            required
-                                            autoComplete="email"
-                                        />
-                                    </div>
-                                    {errors.email && <div className="field-error">{errors.email}</div>}
-                                </div>
-
-                                {/* Phone */}
-                                <div className="field">
-                                    <label htmlFor="phone">Phone Number</label>
-                                    <div className="input-wrap">
-                                        <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.85a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                                        </svg>
-                                        <input
-                                            id="phone"
-                                            className={`fc-input ${errors.phone ? 'is-invalid' : ''}`}
-                                            type="tel"
-                                            name="phone"
-                                            value={data.phone}
-                                            onChange={(e) => setData('phone', e.target.value)}
-                                            placeholder="+250 7XX XXX XXX"
-                                            autoComplete="tel"
-                                        />
-                                    </div>
-                                    {errors.phone && <div className="field-error">{errors.phone}</div>}
-                                </div>
-
-                                {/* Password */}
-                                <div className="field">
-                                    <label htmlFor="password">Password</label>
-                                    <div className="input-wrap">
-                                        <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                        </svg>
-                                        <input
-                                            id="password"
-                                            className={`fc-input ${errors.password ? 'is-invalid' : ''}`}
-                                            type={showPassword ? 'text' : 'password'}
-                                            name="password"
-                                            value={data.password}
-                                            onChange={(e) => setData('password', e.target.value)}
-                                            placeholder="••••••••"
-                                            required
-                                            autoComplete="new-password"
-                                        />
+                                <div className="role-grid">
+                                    {ROLES.map((r) => (
                                         <button
                                             type="button"
-                                            className="eye-btn"
-                                            onClick={() => setShowPassword((s) => !s)}
-                                            aria-label="Toggle password"
+                                            key={r.key}
+                                            className="role-card"
+                                            onClick={() => selectRole(r.key)}
                                         >
-                                            {showPassword ? (
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                    <circle cx="12" cy="12" r="3" />
+                                            <div className="role-icon">{r.icon}</div>
+                                            <div className="role-text">
+                                                <strong>{r.title}</strong>
+                                                <span>{r.subtitle}</span>
+                                            </div>
+                                            <svg className="role-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                <line x1="5" y1="12" x2="19" y2="12" />
+                                                <polyline points="12 5 19 12 12 19" />
+                                            </svg>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="role-note">
+                                    Not a talent or seller? Apart from those two options, everyone else registers as a <strong>Regular User</strong> — you can browse, connect, and use the platform freely.
+                                </div>
+
+                                <div className="login-row">
+                                    Already have an account? <Link href={route('login')}>Sign In</Link>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="form-head">
+                                    <div className="eyebrow">
+                                        {selectedRole?.title} Account
+                                    </div>
+                                    <h1>
+                                        {data.role === 'talent' && 'Set up your Talent profile'}
+                                        {data.role === 'seller' && 'Set up your Seller account'}
+                                        {data.role === 'user' && 'Create your account'}
+                                    </h1>
+                                    <p>Fill in your details to get started for free</p>
+                                </div>
+
+                                <form onSubmit={submit}>
+                                    <div className="fields-grid">
+                                        {/* Name */}
+                                        <div className="field field-full">
+                                            <label htmlFor="name">Your Name</label>
+                                            <div className="input-wrap">
+                                                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                                    <circle cx="12" cy="7" r="4" />
                                                 </svg>
-                                            ) : (
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                                    <line x1="1" y1="1" x2="23" y2="23" />
+                                                <input
+                                                    id="name"
+                                                    className={`fc-input ${errors.name ? 'is-invalid' : ''}`}
+                                                    type="text"
+                                                    name="name"
+                                                    value={data.name}
+                                                    onChange={(e) => setData('name', e.target.value)}
+                                                    placeholder="Jean Mugisha"
+                                                    required
+                                                    autoComplete="given-name"
+                                                />
+                                            </div>
+                                            {errors.name && <div className="field-error">{errors.name}</div>}
+                                        </div>
+
+                                        {/* Email */}
+                                        <div className="field">
+                                            <label htmlFor="email">Email Address</label>
+                                            <div className="input-wrap">
+                                                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                                    <polyline points="22,6 12,13 2,6" />
+                                                </svg>
+                                                <input
+                                                    id="email"
+                                                    className={`fc-input ${errors.email ? 'is-invalid' : ''}`}
+                                                    type="email"
+                                                    name="email"
+                                                    value={data.email}
+                                                    onChange={(e) => setData('email', e.target.value)}
+                                                    placeholder="you@example.com"
+                                                    required
+                                                    autoComplete="email"
+                                                />
+                                            </div>
+                                            {errors.email && <div className="field-error">{errors.email}</div>}
+                                        </div>
+
+                                        {/* Phone */}
+                                        <div className="field">
+                                            <label htmlFor="phone">Phone Number</label>
+                                            <div className="input-wrap">
+                                                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.85a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                                                </svg>
+                                                <input
+                                                    id="phone"
+                                                    className={`fc-input ${errors.phone ? 'is-invalid' : ''}`}
+                                                    type="tel"
+                                                    name="phone"
+                                                    value={data.phone}
+                                                    onChange={(e) => setData('phone', e.target.value)}
+                                                    placeholder="+250 7XX XXX XXX"
+                                                    autoComplete="tel"
+                                                />
+                                            </div>
+                                            {errors.phone && <div className="field-error">{errors.phone}</div>}
+                                        </div>
+
+                                        {/* Password */}
+                                        <div className="field">
+                                            <label htmlFor="password">Password</label>
+                                            <div className="input-wrap">
+                                                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                                </svg>
+                                                <input
+                                                    id="password"
+                                                    className={`fc-input ${errors.password ? 'is-invalid' : ''}`}
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    name="password"
+                                                    value={data.password}
+                                                    onChange={(e) => setData('password', e.target.value)}
+                                                    placeholder="••••••••"
+                                                    required
+                                                    autoComplete="new-password"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="eye-btn"
+                                                    onClick={() => setShowPassword((s) => !s)}
+                                                    aria-label="Toggle password"
+                                                >
+                                                    {showPassword ? (
+                                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                            <circle cx="12" cy="12" r="3" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                                            <line x1="1" y1="1" x2="23" y2="23" />
+                                                        </svg>
+                                                    )}
+                                                </button>
+                                            </div>
+
+                                            <div className="strength-bar">
+                                                {[0, 1, 2, 3].map((i) => (
+                                                    <span
+                                                        key={i}
+                                                        className={`strength-seg ${i < strength ? STRENGTH_CLASSES[strength] : ''}`}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <div
+                                                className="strength-label"
+                                                style={{
+                                                    color:
+                                                        data.password.length === 0
+                                                            ? 'var(--muted)'
+                                                            : ['', '#e07070', '#e0a045', '#5ab4e0', 'var(--green)'][strength],
+                                                }}
+                                            >
+                                                {strengthLabel}
+                                            </div>
+                                            {errors.password && <div className="field-error">{errors.password}</div>}
+                                        </div>
+
+                                        {/* Confirm Password */}
+                                        <div className="field">
+                                            <label htmlFor="password_confirmation">Confirm Password</label>
+                                            <div className="input-wrap">
+                                                <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                                </svg>
+                                                <input
+                                                    id="password_confirmation"
+                                                    className="fc-input"
+                                                    type={showConfirm ? 'text' : 'password'}
+                                                    name="password_confirmation"
+                                                    value={data.password_confirmation}
+                                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                                    placeholder="••••••••"
+                                                    required
+                                                    autoComplete="new-password"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="eye-btn"
+                                                    onClick={() => setShowConfirm((s) => !s)}
+                                                    aria-label="Toggle confirm password"
+                                                >
+                                                    {showConfirm ? (
+                                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                            <circle cx="12" cy="12" r="3" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                                            <line x1="1" y1="1" x2="23" y2="23" />
+                                                        </svg>
+                                                    )}
+                                                </button>
+                                            </div>
+                                            {errors.password_confirmation && (
+                                                <div className="field-error">{errors.password_confirmation}</div>
+                                            )}
+                                        </div>
+
+                                        {/* ── Talent-only fields ── */}
+                                        {data.role === 'talent' && (
+                                            <>
+                                                <div className="field-full role-section-label">Talent Details</div>
+
+                                                <div className="field">
+                                                    <label htmlFor="talent_address">Address</label>
+                                                    <input
+                                                        id="talent_address"
+                                                        className={`fc-input fc-input--plain ${errors.talent_address ? 'is-invalid' : ''}`}
+                                                        type="text"
+                                                        value={data.talent_address}
+                                                        onChange={(e) => setData('talent_address', e.target.value)}
+                                                        placeholder="Kigali, Gasabo"
+                                                        required
+                                                    />
+                                                    {errors.talent_address && <div className="field-error">{errors.talent_address}</div>}
+                                                </div>
+
+                                                <div className="field">
+                                                    <label htmlFor="talent_language">Language</label>
+                                                    <input
+                                                        id="talent_language"
+                                                        className={`fc-input fc-input--plain ${errors.talent_language ? 'is-invalid' : ''}`}
+                                                        type="text"
+                                                        value={data.talent_language}
+                                                        onChange={(e) => setData('talent_language', e.target.value)}
+                                                        placeholder="Kinyarwanda, English"
+                                                        required
+                                                    />
+                                                    {errors.talent_language && <div className="field-error">{errors.talent_language}</div>}
+                                                </div>
+
+                                                <div className="field field-full">
+                                                    <label htmlFor="category_id">Category</label>
+                                                    <select
+                                                        id="category_id"
+                                                        className={`fc-input fc-input--plain ${errors.category_id ? 'is-invalid' : ''}`}
+                                                        value={data.category_id}
+                                                        onChange={(e) => setData('category_id', e.target.value)}
+                                                        required
+                                                    >
+                                                        <option value="">Select a category</option>
+                                                        {categories.map((c) => (
+                                                            <option key={c.id} value={c.id}>{c.name}</option>
+                                                        ))}
+                                                    </select>
+                                                    {errors.category_id && <div className="field-error">{errors.category_id}</div>}
+                                                </div>
+
+                                                <div className="field field-full">
+                                                    <label htmlFor="talent_description">Short Bio</label>
+                                                    <textarea
+                                                        id="talent_description"
+                                                        className={`fc-input fc-input--plain fc-textarea ${errors.talent_description ? 'is-invalid' : ''}`}
+                                                        value={data.talent_description}
+                                                        onChange={(e) => setData('talent_description', e.target.value)}
+                                                        placeholder="Tell employers a bit about your skills and experience..."
+                                                        rows={3}
+                                                    />
+                                                    {errors.talent_description && <div className="field-error">{errors.talent_description}</div>}
+                                                </div>
+                                            </>
+                                        )}
+
+                                        {/* ── Seller-only fields ── */}
+                                        {data.role === 'seller' && (
+                                            <>
+                                                <div className="field-full role-section-label">Seller Details</div>
+
+                                                <div className="field field-full">
+                                                    <label htmlFor="company_name">Company / Business Name</label>
+                                                    <input
+                                                        id="company_name"
+                                                        className={`fc-input fc-input--plain ${errors.company_name ? 'is-invalid' : ''}`}
+                                                        type="text"
+                                                        value={data.company_name}
+                                                        onChange={(e) => setData('company_name', e.target.value)}
+                                                        placeholder="Terra Real Estate Ltd"
+                                                        required
+                                                    />
+                                                    {errors.company_name && <div className="field-error">{errors.company_name}</div>}
+                                                </div>
+
+                                                <div className="field field-full">
+                                                    <label htmlFor="seller_address">Business Address</label>
+                                                    <input
+                                                        id="seller_address"
+                                                        className={`fc-input fc-input--plain ${errors.seller_address ? 'is-invalid' : ''}`}
+                                                        type="text"
+                                                        value={data.seller_address}
+                                                        onChange={(e) => setData('seller_address', e.target.value)}
+                                                        placeholder="Kigali, Nyarugenge"
+                                                        required
+                                                    />
+                                                    {errors.seller_address && <div className="field-error">{errors.seller_address}</div>}
+                                                </div>
+
+                                                <div className="field field-full">
+                                                    <label htmlFor="seller_description">Business Description</label>
+                                                    <textarea
+                                                        id="seller_description"
+                                                        className={`fc-input fc-input--plain fc-textarea ${errors.seller_description ? 'is-invalid' : ''}`}
+                                                        value={data.seller_description}
+                                                        onChange={(e) => setData('seller_description', e.target.value)}
+                                                        placeholder="What does your business sell or offer?"
+                                                        rows={3}
+                                                    />
+                                                    {errors.seller_description && <div className="field-error">{errors.seller_description}</div>}
+                                                </div>
+                                            </>
+                                        )}
+
+                                        {/* Terms */}
+                                        <div className="field field-full">
+                                            <div className="terms-row">
+                                                <input
+                                                    type="checkbox"
+                                                    id="terms"
+                                                    name="terms"
+                                                    checked={data.terms}
+                                                    onChange={(e) => setData('terms', e.target.checked)}
+                                                    required
+                                                />
+                                                <label htmlFor="terms">
+                                                    I agree to the <a href="#">Terms of Service</a> and{' '}
+                                                    <a href="#">Privacy Policy</a> of Future Connect
+                                                </label>
+                                            </div>
+                                            {errors.terms && <div className="field-error">{errors.terms}</div>}
+                                        </div>
+                                    </div>
+
+                                    <button className="btn" type="submit" disabled={processing}>
+                                        <span className="btn-inner">
+                                            {processing ? 'Creating account…' : 'Create Account'}
+                                            {!processing && (
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                                    <polyline points="12 5 19 12 12 19" />
                                                 </svg>
                                             )}
-                                        </button>
-                                    </div>
+                                        </span>
+                                    </button>
+                                </form>
 
-                                    <div className="strength-bar">
-                                        {[0, 1, 2, 3].map((i) => (
-                                            <span
-                                                key={i}
-                                                className={`strength-seg ${i < strength ? STRENGTH_CLASSES[strength] : ''}`}
-                                            />
-                                        ))}
-                                    </div>
-                                    <div
-                                        className="strength-label"
-                                        style={{
-                                            color:
-                                                data.password.length === 0
-                                                    ? 'var(--muted)'
-                                                    : ['', '#e07070', '#e0a045', '#5ab4e0', 'var(--green)'][strength],
-                                        }}
-                                    >
-                                        {strengthLabel}
-                                    </div>
-                                    {errors.password && <div className="field-error">{errors.password}</div>}
+                                <div className="login-row">
+                                    Already have an account? <Link href={route('login')}>Sign In</Link>
                                 </div>
-
-                                {/* Confirm Password */}
-                                <div className="field">
-                                    <label htmlFor="password_confirmation">Confirm Password</label>
-                                    <div className="input-wrap">
-                                        <svg className="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                        </svg>
-                                        <input
-                                            id="password_confirmation"
-                                            className="fc-input"
-                                            type={showConfirm ? 'text' : 'password'}
-                                            name="password_confirmation"
-                                            value={data.password_confirmation}
-                                            onChange={(e) => setData('password_confirmation', e.target.value)}
-                                            placeholder="••••••••"
-                                            required
-                                            autoComplete="new-password"
-                                        />
-                                        <button
-                                            type="button"
-                                            className="eye-btn"
-                                            onClick={() => setShowConfirm((s) => !s)}
-                                            aria-label="Toggle confirm password"
-                                        >
-                                            {showConfirm ? (
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                    <circle cx="12" cy="12" r="3" />
-                                                </svg>
-                                            ) : (
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                                    <line x1="1" y1="1" x2="23" y2="23" />
-                                                </svg>
-                                            )}
-                                        </button>
-                                    </div>
-                                    {errors.password_confirmation && (
-                                        <div className="field-error">{errors.password_confirmation}</div>
-                                    )}
-                                </div>
-
-                                {/* Terms */}
-                                <div className="field field-full">
-                                    <div className="terms-row">
-                                        <input
-                                            type="checkbox"
-                                            id="terms"
-                                            name="terms"
-                                            checked={data.terms}
-                                            onChange={(e) => setData('terms', e.target.checked)}
-                                            required
-                                        />
-                                        <label htmlFor="terms">
-                                            I agree to the <a href="#">Terms of Service</a> and{' '}
-                                            <a href="#">Privacy Policy</a> of Future Connect
-                                        </label>
-                                    </div>
-                                    {errors.terms && <div className="field-error">{errors.terms}</div>}
-                                </div>
-                            </div>
-
-                            <button className="btn" type="submit" disabled={processing}>
-                                <span className="btn-inner">
-                                    {processing ? 'Creating account…' : 'Create Account'}
-                                    {!processing && (
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                            <line x1="5" y1="12" x2="19" y2="12" />
-                                            <polyline points="12 5 19 12 12 19" />
-                                        </svg>
-                                    )}
-                                </span>
-                            </button>
-                        </form>
-
-                        <div className="login-row">
-                            Already have an account? <Link href={route('login')}>Sign In</Link>
-                        </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -563,6 +787,35 @@ export default function Register() {
                 .form-head h1 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -.8px; line-height: 1.1; }
                 .form-head p { margin-top: 8px; font-size: 13px; color: var(--muted); }
 
+                /* Role selection */
+                .role-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+                .role-card {
+                    display: flex; align-items: center; gap: 14px; text-align: left;
+                    background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 14px;
+                    padding: 16px 18px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+                    transition: border-color .2s, box-shadow .2s, transform .15s;
+                }
+                .role-card:hover { border-color: var(--green); box-shadow: 0 0 0 4px var(--green-dim); transform: translateY(-1px); }
+                .role-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-dim); border: 1px solid rgba(0,166,103,.2); display: grid; place-items: center; flex-shrink: 0; color: var(--green); }
+                .role-icon svg { width: 19px; height: 19px; }
+                .role-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+                .role-text strong { font-size: 14.5px; font-weight: 700; color: var(--text); }
+                .role-text span { font-size: 12px; color: var(--muted); }
+                .role-arrow { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; transition: transform .2s, color .2s; }
+                .role-card:hover .role-arrow { color: var(--green); transform: translateX(3px); }
+
+                .role-note {
+                    font-size: 12.5px; color: var(--muted); line-height: 1.6;
+                    background: var(--green-dim); border: 1px solid rgba(0,166,103,.18);
+                    border-radius: 10px; padding: 12px 14px; margin-bottom: 24px;
+                }
+                .role-note strong { color: var(--green); }
+
+                .role-section-label {
+                    font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase;
+                    letter-spacing: 1px; margin-top: 6px; padding-top: 14px; border-top: 1px dashed var(--border);
+                }
+
                 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
                 .field-full { grid-column: 1 / -1; }
 
@@ -578,6 +831,9 @@ export default function Register() {
                     padding: 12px 14px 12px 42px; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--text); outline: none;
                     transition: border-color .2s, box-shadow .2s, background .2s;
                 }
+                .fc-input--plain { padding: 12px 14px; }
+                .fc-textarea { resize: vertical; min-height: 80px; }
+                select.fc-input { appearance: none; cursor: pointer; }
                 .fc-input::placeholder { color: var(--muted); opacity: .5; }
                 .fc-input:focus { border-color: var(--green); box-shadow: 0 0 0 4px var(--green-dim); }
                 .fc-input.is-invalid { border-color: var(--field-error); }

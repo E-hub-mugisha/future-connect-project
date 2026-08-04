@@ -656,25 +656,13 @@ function TalentNav({ isActive, openMenus, toggleMenu }) {
                 My Skills
             </NavItem>
 
-            <Collapsible
-                label="Courses"
-                icon={icons.book}
-                open={openMenus.courses}
-                onToggle={() => toggleMenu("courses")}
-            >
-                <NavItem
+            <NavItem
                     href={route("talent.courses.index")}
                     active={route().current("talent.courses.index")}
-                >
-                    All Courses
-                </NavItem>
-                <NavItem
-                    href={route("talent.courses.create")}
-                    active={route().current("talent.courses.create")}
-                >
-                    Create Course
-                </NavItem>
-            </Collapsible>
+                    icon={icons.course}
+            >
+                My Courses
+            </NavItem>
 
             <NavSection>Work & Projects</NavSection>
             <Collapsible
@@ -725,29 +713,6 @@ function TalentNav({ isActive, openMenus, toggleMenu }) {
                 Connections
             </NavItem>
             <NavItem
-                href={route("talent.announcements.index")}
-                active={route().current("talent.announcements*")}
-                icon={icons.announce}
-            >
-                Announcements
-            </NavItem>
-            <NavItem
-                href={route("talent.events.index")}
-                active={route().current("talent.events*")}
-                icon={icons.event}
-            >
-                Events
-            </NavItem>
-
-            <NavSection>Content</NavSection>
-            <NavItem
-                href={route("talent.page.stories")}
-                active={route().current("talent.page.stories*")}
-                icon={icons.story}
-            >
-                My Stories
-            </NavItem>
-            <NavItem
                 href={route("talent.testimonials.index")}
                 active={route().current("talent.testimonials*")}
                 icon={icons.testimonial}
@@ -769,34 +734,12 @@ function TalentNav({ isActive, openMenus, toggleMenu }) {
                     My Products
                 </NavItem>
                 <NavItem
-                    href={route("talent.products.create")}
-                    active={route().current("talent.products.create")}
-                >
-                    Add Product
-                </NavItem>
-                <NavItem
                     href={route("talent.products.seller")}
                     active={route().current("talent.products.seller")}
                 >
                     Become a Seller
                 </NavItem>
             </Collapsible>
-
-            <NavSection>Finance</NavSection>
-            <NavItem
-                href={route("talent.wallets.index")}
-                active={route().current("talent.wallets*")}
-                icon={icons.wallet}
-            >
-                Wallet
-            </NavItem>
-            <NavItem
-                href={route("talent.payments.index")}
-                active={route().current("talent.payments*")}
-                icon={icons.payment}
-            >
-                Payments
-            </NavItem>
         </>
     );
 }

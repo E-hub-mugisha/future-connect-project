@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Talent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class TalentProfileController extends Controller
 {
@@ -21,14 +22,14 @@ class TalentProfileController extends Controller
         }
 
         $categories = Category::all();
-        return view('talent-pages.account.index', compact('talent','categories'));
+        return Inertia::render('Talent/Profile/Index', compact('talent','categories'));
     }
     public function update(Request $request, $id)
     {
         $talent = Talent::findOrFail($id);
 
         $request->validate([
-            'name' => 'required',
+           
             'description' => 'nullable',
             'phone' => 'nullable',
             'image' => 'nullable|image|mimes:jpg,jpeg,png',
