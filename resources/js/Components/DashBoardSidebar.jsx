@@ -137,6 +137,7 @@ export default function Sidebar() {
                             isActive={isActive}
                             openMenus={openMenus}
                             toggleMenu={toggleMenu}
+                            user={user}
                         />
                     )}
                     {role === "user" && <UserNav isActive={isActive} />}
@@ -458,6 +459,29 @@ const icons = {
             <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
         </svg>
     ),
+    demo: (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+    ),
+    course: (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        </svg>
+    ),
 };
 
 function AdminNav({ isActive }) {
@@ -607,7 +631,11 @@ function AdminNav({ isActive }) {
             </NavItem>
 
             <NavSection>System</NavSection>
-            <NavItem href="/admin/demo-requests" active={isActive("/admin/demo-requests")} icon={icons.demo}>
+            <NavItem
+                href="/admin/demo-requests"
+                active={isActive("/admin/demo-requests")}
+                icon={icons.demo}
+            >
                 Demo Requests
             </NavItem>
             <NavItem
@@ -628,7 +656,7 @@ function AdminNav({ isActive }) {
     );
 }
 
-function TalentNav({ isActive, openMenus, toggleMenu }) {
+function TalentNav({ isActive, openMenus, toggleMenu, user }) {
     return (
         <>
             <NavSection>Overview</NavSection>
@@ -648,61 +676,14 @@ function TalentNav({ isActive, openMenus, toggleMenu }) {
             </NavItem>
 
             <NavSection>Skills & Learning</NavSection>
-            <NavItem
-                href={route("talent.skills")}
-                active={route().current("talent.skills*")}
-                icon={icons.skill}
-            >
-                My Skills
-            </NavItem>
 
             <NavItem
-                    href={route("talent.courses.index")}
-                    active={route().current("talent.courses.index")}
-                    icon={icons.course}
+                href={route("talent.courses.index")}
+                active={route().current("talent.courses.index")}
+                icon={icons.course}
             >
                 My Courses
             </NavItem>
-
-            <NavSection>Work & Projects</NavSection>
-            <Collapsible
-                label="Jobs"
-                icon={icons.job}
-                open={openMenus.jobs}
-                onToggle={() => toggleMenu("jobs")}
-            >
-                <NavItem
-                    href={route("talent.jobs.index")}
-                    active={route().current("talent.jobs.index")}
-                >
-                    Browse Jobs
-                </NavItem>
-                <NavItem
-                    href={route("talent.jobs.create")}
-                    active={route().current("talent.jobs.create")}
-                >
-                    Post a Job
-                </NavItem>
-            </Collapsible>
-            <Collapsible
-                label="Projects"
-                icon={icons.project}
-                open={openMenus.projects}
-                onToggle={() => toggleMenu("projects")}
-            >
-                <NavItem
-                    href={route("talent.projects.index")}
-                    active={route().current("talent.projects.index")}
-                >
-                    Browse Projects
-                </NavItem>
-                <NavItem
-                    href={route("talent.projects.create")}
-                    active={route().current("talent.projects.create")}
-                >
-                    Post a Project
-                </NavItem>
-            </Collapsible>
 
             <NavSection>Network</NavSection>
             <NavItem
@@ -721,25 +702,24 @@ function TalentNav({ isActive, openMenus, toggleMenu }) {
             </NavItem>
 
             <NavSection>Commerce</NavSection>
-            <Collapsible
-                label="Products"
+            <NavItem
+                href={route("talent.products.index")}
+                active={route().current("talent.products.index")}
                 icon={icons.product}
-                open={openMenus.products}
-                onToggle={() => toggleMenu("products")}
             >
-                <NavItem
-                    href={route("talent.products.index")}
-                    active={route().current("talent.products.index")}
-                >
-                    My Products
-                </NavItem>
+                My Products
+            </NavItem>
+            
+            {/* Show "Become a Seller" only if the user doesn't have a seller profile yet */}
+            {!user?.seller && (
                 <NavItem
                     href={route("talent.products.seller")}
                     active={route().current("talent.products.seller")}
+                    icon={icons.seller}
                 >
                     Become a Seller
                 </NavItem>
-            </Collapsible>
+            )}
         </>
     );
 }

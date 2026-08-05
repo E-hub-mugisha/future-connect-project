@@ -734,7 +734,7 @@ export default function SkillProfile({ talent, profileUrl }) {
                                 <div className="col-md-4">
                                     <div className="talent-photo-wrap">
                                         <img
-                                            src={talent.image ? `/image/talents/${talent.image}` : '/assets/img/user/profile.jpg'}
+                                            src={talent.image ? `/${talent.image}` : '/assets/img/user/profile.jpg'}
                                             alt={talent.name}
                                         />
                                         <div className="photo-overlay" />

@@ -9,30 +9,29 @@ use App\Models\CourseLesson;
 use App\Models\Talent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
 class TalentCourseController extends Controller
 {
-    public function index()
+    /**
+     * Resolve (or provision) the Talent profile for the current user.
+     * Centralized so index()/store() don't duplicate the same 3-query lookup chain.
+     */
+    private function resolveTalentForUser($user): Talent
     {
-        $user = Auth::user();
-
-        // Find existing talent by user_id OR find orphan talent with same email/name
         $talent = Talent::where('user_id', $user->id)->first();
 
-        // If no talent is linked to this user, try to find an orphan profile
         if (!$talent) {
-            $talent = Talent::where('email', $user->email)->first();
+            $talent = Talent::where('email', $user->email)->whereNull('user_id')->first();
 
-            // If an orphan talent exists, attach it to current user
             if ($talent) {
-                $talent->update([
-                    'user_id' => $user->id
-                ]);
+                $talent->update(['user_id' => $user->id]);
             }
         }
 
-        // If still no talent exists, create a new one
         if (!$talent) {
             $talent = Talent::create([
                 'user_id' => $user->id,
@@ -42,92 +41,115 @@ class TalentCourseController extends Controller
             ]);
         }
 
-        // Load courses belonging to this talent
-        $courses = Course::where('talent_id', $talent->id)->get();
+        return $talent;
+    }
 
-        return view('talent-pages.courses.index', compact('courses'));
+    /**
+     * Ensure the given course belongs to the current user's talent profile.
+     * Aborts with 403 otherwise. Prevents IDOR (editing/deleting others' courses).
+     */
+    private function authorizeCourseOwner(Course $course): void
+    {
+        $talent = Talent::where('user_id', Auth::id())->first();
+
+        if (!$talent || $course->talent_id !== $talent->id) {
+            abort(Response::HTTP_FORBIDDEN, 'You do not own this course.');
+        }
+    }
+
+    public function index()
+    {
+        $talent = $this->resolveTalentForUser(Auth::user());
+
+        $courses = Course::where('talent_id', $talent->id)
+            ->with(['category:id,name', 'talent:id,name,email'])
+            ->withCount(['lessons', 'enrollments'])
+            ->withAvg('feedback', 'rating')
+            ->latest()
+            ->get();
+
+        return Inertia::render('Talent/Courses/Index', compact('courses'));
     }
 
     public function show($id)
     {
-        $course = Course::findOrFail($id);
-        return view('talent-pages.courses.show', compact('course'));
+        $course = Course::with([
+            'category',
+            'talent',
+            'feedback' => fn($q) => $q->latest(),
+            'lessons' => fn($q) => $q->orderBy('order'),
+        ])
+            ->withCount('enrollments')
+            ->findOrFail($id);
+
+        $this->authorizeCourseOwner($course);
+
+        return Inertia::render('Talent/Courses/Show', compact('course'));
     }
+
     public function create()
     {
-        $categories = Category::all();
-        return view('talent-pages.courses.create', compact('categories'));
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+
+        return Inertia::render('Talent/Courses/Create', compact('categories'));
     }
+
     public function edit($id)
     {
         $course = Course::findOrFail($id);
-        $categories = Category::all();
-        return view('talent-pages.courses.create', compact('course', 'categories'));
+        $this->authorizeCourseOwner($course);
+
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+
+        return Inertia::render('Talent/Courses/Create', compact('course', 'categories'));
     }
 
     public function store(Request $request)
     {
         $user = Auth::user();
 
-        // ✅ Check if the user has an active subscription
-        if (!$user->activeSubscription) {
-            // Redirect back with a session key to trigger modal
-            return redirect()->back()
-                ->with('warning', 'You must subscribe before posting to course.');
-        }
+        // if (!$user->activeSubscription) {
+        //     return redirect()->back()
+        //         ->with('warning', 'You must subscribe before posting to course.');
+        // }
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'is_free' => 'sometimes|boolean',
-            'price' => 'nullable|numeric|min:0',
-            'level' => 'nullable|string|max:50',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'video' => 'nullable|url|max:255',
-            'status' => 'required|in:draft,published',
+            'is_free'     => 'sometimes|boolean',
+            'price'       => 'nullable|numeric|min:0',
+            'level'       => 'nullable|string|max:50',
+            'thumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'video'       => 'nullable|url|max:255',
+            'status'      => 'required|in:draft,published',
         ]);
 
-        $user = Auth::user();
-        $talent = Talent::where('user_id', $user->id)->first();
+        $talent = $this->resolveTalentForUser($user);
+        $isFree = $request->boolean('is_free');
 
-        $course = new Course();
+        $course = DB::transaction(function () use ($validated, $talent, $isFree, $request) {
+            $course = new Course([
+                'title'       => $validated['title'],
+                'slug'        => Str::slug($validated['title']) . '-' . uniqid(),
+                'description' => $validated['description'] ?? '',
+                'category_id' => $validated['category_id'],
+                'talent_id'   => $talent->id,
+                'status'      => $validated['status'],
+                'level'       => $validated['level'] ?? 'Beginner',
+                'video'       => $validated['video'] ?? null,
+                'is_free'     => $isFree,
+                'price'       => $isFree ? 0 : ($validated['price'] ?? 0),
+            ]);
 
-        $course->title = $validated['title'];
-        $course->slug = Str::slug($validated['title']) . '-' . uniqid();
-        $course->description = $validated['description'] ?? '';
-        $course->category_id = $validated['category_id'];
-        $course->talent_id = $talent->id;
-        $course->status = $validated['status'];
-        $course->level = $validated['level'] ?? 'Beginner';
-        $course->video = $validated['video'] ?? null;
-
-        $course->is_free = $request->boolean('is_free');
-        $course->price = $course->is_free ? 0 : ($validated['price'] ?? 0);
-
-        // Handle manual file upload with move()
-        if ($request->hasFile('thumbnail')) {
-            $image = $request->file('thumbnail');
-
-            // Build safe, unique file name
-            $fileName = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
-
-            // Destination path (inside public/)
-            $destinationPath = public_path('images/thumbnails');
-
-            // Ensure directory exists
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true);
+            if ($request->hasFile('thumbnail')) {
+                $course->thumbnail = $this->storeThumbnail($request->file('thumbnail'));
             }
 
-            // Move the uploaded file
-            $image->move($destinationPath, $fileName);
+            $course->save();
 
-            // Save only filename or relative path
-            $course->thumbnail = $fileName;
-        }
-
-        $course->save();
+            return $course;
+        });
 
         return redirect()
             ->route('talent.courses.index')
@@ -137,51 +159,45 @@ class TalentCourseController extends Controller
     public function update(Request $request, $id)
     {
         $course = Course::findOrFail($id);
+        $this->authorizeCourseOwner($course);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'is_free' => 'sometimes|boolean',
-            'price' => 'nullable|numeric|min:0',
-            'level' => 'nullable|string|max:50',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'video' => 'nullable|url|max:255',
-            'status' => 'required|in:draft,published',
+            'is_free'     => 'sometimes|boolean',
+            'price'       => 'nullable|numeric|min:0',
+            'level'       => 'nullable|string|max:50',
+            'thumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'video'       => 'nullable|url|max:255',
+            'status'      => 'required|in:draft,published',
         ]);
 
-        // Update basic fields
-        $course->title = $validated['title'];
-        $course->slug = Str::slug($validated['title']) . '-' . uniqid();
-        $course->description = $validated['description'] ?? '';
-        $course->category_id = $validated['category_id'];
-        $course->status = $validated['status'];
-        $course->level = $validated['level'] ?? 'Beginner';
-        $course->video = $validated['video'] ?? null;
-        $course->is_free = $request->boolean('is_free');
-        $course->price = $course->is_free ? 0 : ($validated['price'] ?? 0);
+        $isFree = $request->boolean('is_free');
 
-        // Handle thumbnail replacement
-        if ($request->hasFile('thumbnail')) {
-            $image = $request->file('thumbnail');
-            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('images/thumbnails');
-
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true);
+        DB::transaction(function () use ($course, $validated, $isFree, $request) {
+            // Only regenerate the slug if the title actually changed —
+            // otherwise every edit silently breaks the course's public URL / SEO.
+            if ($course->title !== $validated['title']) {
+                $course->slug = Str::slug($validated['title']) . '-' . uniqid();
             }
 
-            // Delete old image if exists
-            if ($course->thumbnail && file_exists(public_path('images/thumbnails/' . $course->thumbnail))) {
-                unlink(public_path('images/thumbnails/' . $course->thumbnail));
+            $course->title       = $validated['title'];
+            $course->description = $validated['description'] ?? '';
+            $course->category_id = $validated['category_id'];
+            $course->status      = $validated['status'];
+            $course->level       = $validated['level'] ?? 'Beginner';
+            $course->video       = $validated['video'] ?? null;
+            $course->is_free     = $isFree;
+            $course->price       = $isFree ? 0 : ($validated['price'] ?? 0);
+
+            if ($request->hasFile('thumbnail')) {
+                $this->deleteThumbnail($course->thumbnail);
+                $course->thumbnail = $this->storeThumbnail($request->file('thumbnail'));
             }
 
-            // Move new file
-            $image->move($destinationPath, $filename);
-            $course->thumbnail = $filename;
-        }
-
-        $course->save();
+            $course->save();
+        });
 
         return redirect()->route('talent.courses.index')
             ->with('success', 'Course updated successfully.');
@@ -190,55 +206,74 @@ class TalentCourseController extends Controller
     public function destroy($id)
     {
         $course = Course::findOrFail($id);
+        $this->authorizeCourseOwner($course);
 
-        // Delete thumbnail if exists
-        if ($course->thumbnail && file_exists(public_path('images/thumbnails/' . $course->thumbnail))) {
-            unlink(public_path('images/thumbnails/' . $course->thumbnail));
-        }
-
+        $this->deleteThumbnail($course->thumbnail);
         $course->delete();
 
         return redirect()->route('talent.courses.index')
             ->with('success', 'Course deleted successfully.');
     }
-    
+
+    /* ---------- thumbnail helpers (shared by store/update) ---------- */
+
+    private function storeThumbnail($image): string
+    {
+        $destinationPath = public_path('images/thumbnails');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // Match the talent-profile pattern: time() + uniqid() for the filename,
+        // full relative path stored in DB so the frontend never has to guess the folder.
+        $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+        $image->move($destinationPath, $filename);
+
+        return "images/thumbnails/{$filename}";
+    }
+
+    private function deleteThumbnail(?string $thumbnail): void
+    {
+        if ($thumbnail && file_exists(public_path($thumbnail))) {
+            unlink(public_path($thumbnail));
+        }
+    }
+
+    /* ---------- lessons ---------- */
+
     public function storeLesson(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'order' => 'nullable|integer',
-            'video_url' => 'required|url|max:522', // 50MB max
+            'title'     => 'required|string|max:255',
+            'content'   => 'nullable|string',
+            'order'     => 'nullable|integer',
+            'video_url' => 'required|url|max:522',
         ]);
-        // Create lesson
-        $lesson = CourseLesson::create([
-            'course_id' => $request->course_id,
-            'title' => $request->title,
-            'content' => $request->content,
-            'video_url' => $request->video_url,
-            'order' => $request->order,
-        ]);
+
+        $course = Course::findOrFail($validated['course_id']);
+        $this->authorizeCourseOwner($course);
+
+        CourseLesson::create($validated);
 
         return redirect()->back()->with('success', 'Lesson added successfully.');
     }
+
     public function updateLesson(Request $request, $id)
     {
         $lesson = CourseLesson::findOrFail($id);
+        $this->authorizeCourseOwner($lesson->course);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'order' => 'nullable|integer',
-            'video_url' => 'required|url|max:522', // 50MB max
+        $validated = $request->validate([
+            'title'     => 'required|string|max:255',
+            'content'   => 'nullable|string',
+            'order'     => 'nullable|integer',
+            'video_url' => 'required|url|max:522',
         ]);
 
-        $lesson->update([
-            'title' => $request->title,
-            'content' => $request->content,
-            'video_url' => $request->video_url,
-            'order' => $request->order,
-        ]);
+        $lesson->update($validated);
 
         return redirect()->back()->with('success', 'Lesson updated successfully.');
     }
@@ -246,6 +281,8 @@ class TalentCourseController extends Controller
     public function destroyLesson($id)
     {
         $lesson = CourseLesson::findOrFail($id);
+        $this->authorizeCourseOwner($lesson->course);
+
         $lesson->delete();
 
         return redirect()->back()->with('success', 'Lesson deleted successfully.');

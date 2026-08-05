@@ -646,7 +646,7 @@ export default function SkillsCategory({
                                                             className="talent-avatar"
                                                             src={
                                                                 talent.image
-                                                                    ? `/image/talents/${talent.image}`
+                                                                    ? `/${talent.image}`
                                                                     : '/assets/img/user/profile.jpg'
                                                             }
                                                             alt={talent.name}

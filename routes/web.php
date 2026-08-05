@@ -475,7 +475,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         ->name('orders.payment');
 
     Route::resource('pricing-plans', PricingPlanController::class);
-    
+
     Route::get('demo-requests', [AdminDemoRequestController::class, 'index'])->name('demo-requests.index');
     Route::get('demo-requests/{demoRequest}', [AdminDemoRequestController::class, 'show'])->name('demo-requests.show');
     Route::patch('demo-requests/{demoRequest}/confirm', [AdminDemoRequestController::class, 'confirm'])->name('demo-requests.confirm');
@@ -517,15 +517,18 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::put('/talent/profile/update/{id}', [TalentProfileController::class, 'update'])->name('profile.update');
 
     // List all connection requests sent TO the logged-in talent
-    Route::get('/get/connections', [App\Http\Controllers\Talent\TalentConnectionController::class, 'connectionRequests'])
-        ->name('connections.index');
+    Route::get('/get/connections', [App\Http\Controllers\Talent\TalentConnectionController::class, 'connectionRequests'])->name('connections.index');
+    Route::patch('/get/connections/{id}/respond', [App\Http\Controllers\Talent\TalentConnectionController::class, 'respond'])->name('connections.respond');
+
     // Announcements
     Route::get('/announcements', [TalentDashboardController::class, 'index'])->name('announcements.index');
     Route::get('/announcements/{announcement}', [TalentDashboardController::class, 'show'])->name('announcements.show');
 
     // Testimonials
-    Route::get('/get/testimonials', [TalentDashboardController::class, 'testimonials'])->name('testimonials.index');
-    Route::post('/get/testimonials', [TalentDashboardController::class, 'store'])->name('testimonials.store');
+    Route::get('/get/testimonials', [App\Http\Controllers\Talent\TestimonialController::class, 'index'])->name('testimonials.index');
+    Route::post('/get/testimonials', [App\Http\Controllers\Talent\TestimonialController::class, 'store'])->name('testimonials.store');
+    Route::put('/get/testimonials/{id}', [App\Http\Controllers\Talent\TestimonialController::class, 'update'])->name('testimonials.update');
+    Route::delete('/get/testimonials/{id}', [App\Http\Controllers\Talent\TestimonialController::class, 'destroy'])->name('testimonials.destroy');
 
     // Skills
     Route::get('/skills', [TalentSkillController::class, 'index'])->name('skills');
@@ -533,9 +536,13 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     Route::delete('/skills/{id}', [TalentSkillController::class, 'destroy'])->name('skills.destroy');
 
     // Stories
-    Route::get('get/talent/stories', [TalentStoryController::class, 'index'])
-        ->name('page.stories');
-    Route::get('talents/stories/{id}', [TalentStoryController::class, 'show'])->name('page.stories.show');
+    Route::get('/page/get/stories', [TalentStoryController::class, 'index'])->name('page.stories.index');
+    Route::get('/page/create/story', [TalentStoryController::class, 'create'])->name('page.stories.create');
+    Route::post('/page/create/story', [TalentStoryController::class, 'store'])->name('page.stories.store');
+    Route::get('/page/stories/{id}', [TalentStoryController::class, 'show'])->name('page.stories.show');
+    Route::get('/page/stories/{id}/edit', [TalentStoryController::class, 'edit'])->name('page.stories.edit');
+    Route::put('/page/stories/{id}', [TalentStoryController::class, 'update'])->name('page.stories.update');
+
 
     Route::get('/pages/courses', [TalentCourseController::class, 'index'])->name('courses.index');
     Route::get('/pages/get/courses/{id}', [TalentCourseController::class, 'show'])->name('courses.show');
@@ -597,7 +604,7 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
         ->name('applications.reject');
 
     Route::get('/pages/products', [TalentProductController::class, 'index'])->name('products.index');
-    Route::get('/pages/products/{id}', [TalentProductController::class, 'show'])->name('products.view');
+    Route::get('/pages/products/{id}', [TalentProductController::class, 'show'])->name('products.show');
     Route::get('/pages/product/create', [TalentProductController::class, 'create'])->name('products.create');
     Route::post('/pages/products', [TalentProductController::class, 'storeProduct'])->name('products.store');
     Route::get('/pages/products/{id}/edit', [TalentProductController::class, 'edit'])->name('products.edit');
