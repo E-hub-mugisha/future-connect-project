@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, usePage, useForm } from "@inertiajs/react";
+import { Link, usePage, useForm, router } from "@inertiajs/react";
 
 const DEFAULT_ROUTES = {
     "user.home": "/",
@@ -29,11 +29,12 @@ const DEFAULT_ROUTES = {
     "password.request": "/forgot-password",
     "admin.dashboard": "/admin/dashboard",
     "agent.dashboard": "/agent/dashboard",
-    "talent.dashboard": "/talent/dashboard",
+    "talent.dashboard": "/talent/page/dashboard",
     "seller.dashboard": "/seller/dashboard",
-    "user.dashboard": "/dashboard",
+    "user.dashboard": "/user/dashboard",
     "seller.store": "/seller/apply",
     "user.jobs.store": "/jobs",
+    logout: "/logout",
 };
 
 const DASHBOARD_ROUTE_BY_ROLE = {
@@ -143,6 +144,15 @@ const COMPANY_LINKS = [
         desc: "Get help when you need it.",
     },
 ];
+
+// ── Small helper: turn "Jane Doe" into "JD", "jane" into "JA" ──
+function getInitials(name) {
+    if (!name || typeof name !== "string") return "?";
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return "?";
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
 
 export default function UserHeader({
     categories = [],
@@ -280,6 +290,41 @@ export default function UserHeader({
         };
     }, [loginOpen]);
 
+    // ── Logged-in user menu (avatar dropdown: name, dashboard, logout) ──
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const userMenuPanelRef = useRef(null);
+    const userMenuBtnRef = useRef(null);
+
+    useEffect(() => {
+        function handleOutsideClick(e) {
+            if (
+                userMenuOpen &&
+                userMenuPanelRef.current &&
+                !userMenuPanelRef.current.contains(e.target) &&
+                e.target !== userMenuBtnRef.current &&
+                !userMenuBtnRef.current?.contains(e.target)
+            ) {
+                setUserMenuOpen(false);
+            }
+        }
+        function handleEscape(e) {
+            if (e.key === "Escape") setUserMenuOpen(false);
+        }
+        document.addEventListener("click", handleOutsideClick);
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [userMenuOpen]);
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        setUserMenuOpen(false);
+        setDrawerOpen(false);
+        router.post(r("logout"));
+    };
+
     // ── Seller apply form (CSRF-safe via useForm) ──
     const sellerForm = useForm({
         company_name: "",
@@ -384,6 +429,7 @@ export default function UserHeader({
           --h-border-h: rgba(0, 166, 103, 0.38);
           --h-radius: 10px;
           --h-error: #ff6b6b;
+          --h-hover: #fff;
         }
 
         .fc-header *, .fc-header *::before, .fc-header *::after { box-sizing: border-box; }
@@ -461,15 +507,15 @@ export default function UserHeader({
           font-size: 13.5px; font-weight: 400; color: var(--h-muted); border-radius: 7px;
           transition: color 0.2s, background 0.2s; white-space: nowrap; cursor: pointer;
         }
-        .fc-nav > li > a:hover, .fc-nav > li:hover > a { color: #fff; background: rgba(255, 255, 255, 0.05); }
-        .fc-nav > li > a.active { color: #fff; background: var(--h-green-d); }
+        .fc-nav > li > a:hover, .fc-nav > li:hover > a { color: var(--h-hover); background: rgba(255, 255, 255, 0.05); }
+        .fc-nav > li > a.active { color: var(--h-hover); background: var(--h-green-d); }
         .fc-nav > li > a.active::after {
           content: ''; position: absolute; left: 11px; right: 11px; bottom: 2px; height: 2px;
           background: var(--h-green); border-radius: 2px;
         }
         .fc-mega a.fc-card.active { background: var(--h-green-d); }
         .fc-mega a.fc-card.active .fc-card-title { color: var(--h-green); }
-        .fc-drawer-nav > li > a.active, .fc-drawer-sub li a.active { color: #fff; background: var(--h-green-d); }
+        .fc-drawer-nav > li > a.active, .fc-drawer-sub li a.active { color: var(--h-hover); background: var(--h-green-d); }
         .fc-nav > li > a .chevron { font-size: 10px; margin-top: 1px; transition: transform 0.2s; opacity: 0.6; }
         .fc-nav > li:hover > a .chevron { transform: rotate(180deg); opacity: 1; }
 
@@ -486,7 +532,7 @@ export default function UserHeader({
         .fc-mega a.fc-card { display: block; padding: 12px 14px; border-radius: 10px; transition: background 0.18s; }
         .fc-mega a.fc-card:hover { background: var(--h-green-d); }
         .fc-mega a.fc-card .fc-card-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--h-text); margin: 0 0 3px; line-height: 1.3; }
-        .fc-mega a.fc-card:hover .fc-card-title { color: #fff; }
+        .fc-mega a.fc-card:hover .fc-card-title { color: var(--h-hover); }
         .fc-mega a.fc-card .fc-card-desc { font-size: 11.5px; color: var(--h-muted); margin: 0; line-height: 1.4; }
 
         .fc-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; justify-self: end; }
@@ -497,7 +543,7 @@ export default function UserHeader({
           font-size: 13px; font-weight: 400; color: var(--h-muted); background: transparent;
           cursor: pointer; transition: all 0.2s; white-space: nowrap;
         }
-        .fc-btn-ghost:hover { color: #fff; border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
+        .fc-btn-ghost:hover { color: var(--h-hover); border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
         .fc-btn-ghost:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .fc-btn-green {
@@ -515,7 +561,7 @@ export default function UserHeader({
           justify-content: center; cursor: pointer; transition: all 0.2s; font-size: 15px;
           flex-shrink: 0; position: relative;
         }
-        .fc-btn-search:hover, .fc-theme-toggle:hover { color: #fff; border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
+        .fc-btn-search:hover, .fc-theme-toggle:hover { color: var(--h-hover); border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
 
         .fc-btn-register-mobile {
           width: 38px; height: 38px; background: var(--h-green); border: none; border-radius: 8px;
@@ -547,7 +593,7 @@ export default function UserHeader({
           border: 1px solid var(--h-border); color: var(--h-muted); display: flex; align-items: center;
           justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s; flex-shrink: 0;
         }
-        .fc-lp-close:hover { color: #fff; border-color: var(--h-border-h); }
+        .fc-lp-close:hover { color: var(--h-hover); border-color: var(--h-border-h); }
 
         .fc-lp-field { margin-bottom: 14px; }
         .fc-lp-field label {
@@ -593,13 +639,76 @@ export default function UserHeader({
         .fc-lp-footer a { color: var(--h-green); font-weight: 500; }
         .fc-lp-footer a:hover { text-decoration: underline; }
 
+        /* ── Logged-in avatar + dropdown ── */
+        .fc-user-menu-wrap { position: relative; }
+        .fc-user-btn {
+          display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px;
+          border: 1px solid var(--h-border); border-radius: 999px; background: transparent;
+          cursor: pointer; transition: all 0.2s; color: var(--h-text); font-family: 'DM Sans', sans-serif;
+          max-width: 220px;
+        }
+        .fc-user-btn:hover, .fc-user-btn.open { border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
+        .fc-user-avatar {
+          width: 28px; height: 28px; border-radius: 50%; background: var(--h-green); color: #fff;
+          display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif;
+          font-weight: 700; font-size: 11px; flex-shrink: 0; overflow: hidden;
+        }
+        .fc-user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .fc-user-btn-name {
+          font-size: 13px; font-weight: 500; max-width: 110px; overflow: hidden;
+          text-overflow: ellipsis; white-space: nowrap;
+        }
+        .fc-user-btn .chevron { font-size: 10px; opacity: 0.6; transition: transform 0.2s; flex-shrink: 0; }
+        .fc-user-btn.open .chevron { transform: rotate(180deg); opacity: 1; }
+
+        .fc-user-panel {
+          position: absolute; top: calc(100% + 12px); right: 0; width: 250px;
+          background: var(--h-surface); border: 1px solid var(--h-border); border-radius: 16px;
+          padding: 10px; opacity: 0; visibility: hidden; transform: translateY(8px) scale(0.98);
+          transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+          box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55); z-index: 200; overflow: hidden;
+        }
+        .fc-user-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .fc-user-panel-head {
+          display: flex; align-items: center; gap: 10px; padding: 6px 8px 14px;
+          border-bottom: 1px solid var(--h-border); margin-bottom: 6px;
+        }
+        .fc-user-panel-head .fc-user-avatar { width: 38px; height: 38px; font-size: 13px; }
+        .fc-user-panel-head-info { min-width: 0; }
+        .fc-user-panel-head-info .fc-upn-name {
+          font-family: 'Syne', sans-serif; font-size: 13.5px; font-weight: 700; color: #fff;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .fc-user-panel-head-info .fc-upn-role { font-size: 11px; color: var(--h-muted); text-transform: capitalize; }
+        .fc-user-panel-item {
+          display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 8px; border: none;
+          background: transparent; border-radius: 9px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+          color: var(--h-text); text-align: left; cursor: pointer; transition: background 0.18s, color 0.18s;
+        }
+        .fc-user-panel-item:hover { background: var(--h-green-d); color: var(--h-hover); }
+        .fc-user-panel-item.logout { color: var(--h-error); }
+        .fc-user-panel-item.logout:hover { background: rgba(255, 107, 107, 0.1); color: var(--h-error); }
+        .fc-user-panel-item i { font-size: 14px; width: 16px; text-align: center; flex-shrink: 0; }
+
+        .fc-drawer-user-card {
+          display: flex; align-items: center; gap: 10px; padding: 10px;
+          border: 1px solid var(--h-border); border-radius: 12px; margin-bottom: 4px;
+        }
+        .fc-drawer-user-card .fc-user-avatar { width: 38px; height: 38px; font-size: 13px; }
+        .fc-drawer-user-card-info { min-width: 0; }
+        .fc-drawer-user-card-info .fc-upn-name {
+          font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .fc-drawer-user-card-info .fc-upn-role { font-size: 11px; color: var(--h-muted); text-transform: capitalize; }
+
         .fc-hamburger {
           display: none; width: 38px; height: 38px; align-items: center; justify-content: center;
           cursor: pointer; border-radius: 8px; border: 1px solid var(--h-border); background: transparent;
           color: var(--h-muted); font-size: 22px; flex-shrink: 0;
           transition: color 0.2s, border-color 0.2s, background 0.2s;
         }
-        .fc-hamburger:hover { color: #fff; border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
+        .fc-hamburger:hover { color: var(--h-hover); border-color: var(--h-border-h); background: rgba(255, 255, 255, 0.04); }
 
         .fc-drawer { display: none; position: fixed; inset: 0; z-index: 1050; pointer-events: none; }
         .fc-drawer.open { pointer-events: auto; }
@@ -622,14 +731,14 @@ export default function UserHeader({
           border: 1px solid var(--h-border); color: var(--h-muted); display: flex; align-items: center;
           justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s;
         }
-        .fc-drawer-close:hover, .fc-drawer-theme-toggle:hover, .fc-drawer-search-btn:hover { color: #fff; }
+        .fc-drawer-close:hover, .fc-drawer-theme-toggle:hover, .fc-drawer-search-btn:hover { color: var(--h-hover); }
         .fc-drawer-nav { list-style: none; margin: 0; padding: 0; flex: 1; }
         .fc-drawer-nav > li > a {
           display: flex; align-items: center; justify-content: space-between; padding: 10px 12px;
           font-size: 14px; color: var(--h-muted); border-radius: 8px; transition: color 0.18s, background 0.18s;
           cursor: pointer;
         }
-        .fc-drawer-nav > li > a:hover { color: #fff; background: var(--h-green-d); }
+        .fc-drawer-nav > li > a:hover { color: var(--h-hover); background: var(--h-green-d); }
         .fc-drawer-nav > li > a .chevron { font-size: 10px; opacity: 0.6; transition: transform 0.2s; }
         .fc-drawer-nav > li > a.sub-open .chevron { transform: rotate(180deg); opacity: 1; }
         .fc-drawer-sub { list-style: none; margin: 0; padding: 0 0 4px 12px; display: none; }
@@ -640,7 +749,7 @@ export default function UserHeader({
         }
         .fc-drawer-sub li a:hover { background: var(--h-green-d); }
         .fc-drawer-sub li a .fc-drawer-sub-title { font-size: 13px; color: var(--h-text); font-weight: 500; }
-        .fc-drawer-sub li a:hover .fc-drawer-sub-title { color: #fff; }
+        .fc-drawer-sub li a:hover .fc-drawer-sub-title { color: var(--h-hover); }
         .fc-drawer-sub li a .fc-drawer-sub-desc { font-size: 11px; color: var(--h-muted); }
         .fc-drawer-sub li a.active .fc-drawer-sub-title { color: var(--h-green); }
         .fc-drawer-ctas { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--h-border); display: flex; flex-direction: column; gap: 10px; }
@@ -673,7 +782,7 @@ export default function UserHeader({
           background: var(--h-surface); border: 1px solid var(--h-border); color: var(--h-muted); cursor: pointer;
           display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;
         }
-        .fc-search-close:hover { color: #fff; border-color: var(--h-border-h); }
+        .fc-search-close:hover { color: var(--h-hover); border-color: var(--h-border-h); }
 
         /* ── Responsive breakpoints ── */
         @media (max-width: 1150px) {
@@ -689,6 +798,7 @@ export default function UserHeader({
           .fc-btn-ghost.fc-sign-in-desktop { display: none; }
           .fc-btn-green.fc-register-desktop { display: none; }
           .fc-btn-register-mobile { display: flex; }
+          .fc-user-menu-wrap { display: none; }
           .fc-header-inner { grid-template-columns: auto 1fr auto; gap: 12px; height: 60px; }
         }
         @media (max-width: 640px) {
@@ -749,6 +859,7 @@ export default function UserHeader({
           --h-bg: #f6faf8; --h-surface: #ffffff; --h-surface2: #eef4f1; --h-green: #00a667;
           --h-green-d: rgba(0, 166, 103, 0.08); --h-green-b: rgba(0, 166, 103, 0.18);
           --h-text: #10201b; --h-muted: #5b7a70; --h-border: rgba(0, 100, 60, 0.12); --h-border-h: rgba(0, 100, 60, 0.3);
+          --h-hover: #10201b;
         }
         [data-h-theme="light"] .fc-topbar { background: #eef4f1; border-bottom-color: rgba(0, 100, 60, 0.1); }
         [data-h-theme="light"] .fc-header.scrolled { background: rgba(246, 250, 248, 0.95); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08); }
@@ -757,7 +868,7 @@ export default function UserHeader({
         [data-h-theme="light"] .fc-logo-name { color: #10201b; }
         [data-h-theme="light"] .fc-nav > li > a:hover, [data-h-theme="light"] .fc-nav > li:hover > a { color: #10201b; background: rgba(0, 100, 60, 0.06); }
         [data-h-theme="light"] .fc-card-title { color: #10201b; }
-        [data-h-theme="light"] .fc-card:hover .fc-card-title { color: #00a667; }
+        [data-h-theme="light"] .fc-mega a.fc-card:hover .fc-card-title { color: #00a667; }
         [data-h-theme="light"] .fc-lp-field input::placeholder, [data-h-theme="light"] .fc-search-input-wrap input::placeholder { color: #a9c2b8; }
         [data-h-theme="light"] .fc-search-overlay { background: rgba(246, 250, 248, 0.92); }
 
@@ -944,13 +1055,81 @@ export default function UserHeader({
                             </button>
 
                             {currentUser ? (
-                                <Link
-                                    href={dashboardRoute}
-                                    className="fc-btn-green"
-                                >
-                                    <i className="ti ti-layout-dashboard" />{" "}
-                                    Dashboard
-                                </Link>
+                                <div className="fc-user-menu-wrap">
+                                    <button
+                                        ref={userMenuBtnRef}
+                                        className={`fc-user-btn${userMenuOpen ? " open" : ""}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setUserMenuOpen((o) => !o);
+                                        }}
+                                        aria-haspopup="true"
+                                        aria-expanded={userMenuOpen}
+                                    >
+                                        <span className="fc-user-avatar">
+                                            {currentUser.avatar ? (
+                                                <img
+                                                    src={currentUser.avatar}
+                                                    alt={currentUser.name || "User"}
+                                                />
+                                            ) : (
+                                                getInitials(currentUser.name)
+                                            )}
+                                        </span>
+                                        <span className="fc-user-btn-name">
+                                            {currentUser.name}
+                                        </span>
+                                        <span className="chevron">▾</span>
+                                    </button>
+
+                                    <div
+                                        className={`fc-user-panel${userMenuOpen ? " open" : ""}`}
+                                        ref={userMenuPanelRef}
+                                    >
+                                        <div className="fc-user-panel-head">
+                                            <span className="fc-user-avatar">
+                                                {currentUser.avatar ? (
+                                                    <img
+                                                        src={currentUser.avatar}
+                                                        alt={currentUser.name || "User"}
+                                                    />
+                                                ) : (
+                                                    getInitials(currentUser.name)
+                                                )}
+                                            </span>
+                                            <div className="fc-user-panel-head-info">
+                                                <div className="fc-upn-name">
+                                                    {currentUser.name}
+                                                </div>
+                                                {currentUser.role && (
+                                                    <div className="fc-upn-role">
+                                                        {currentUser.role}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <Link
+                                            href={dashboardRoute}
+                                            className="fc-user-panel-item"
+                                            onClick={() =>
+                                                setUserMenuOpen(false)
+                                            }
+                                        >
+                                            <i className="ti ti-layout-dashboard" />
+                                            Dashboard
+                                        </Link>
+
+                                        <button
+                                            type="button"
+                                            className="fc-user-panel-item logout"
+                                            onClick={handleLogout}
+                                        >
+                                            <i className="ti ti-logout" />
+                                            Logout
+                                        </button>
+                                    </div>
+                                </div>
                             ) : (
                                 <>
                                     <div className="fc-login-wrap">
@@ -1119,19 +1298,19 @@ export default function UserHeader({
                                     </div>
 
                                     <Link
-                                        href={r("user.register_skills")}
+                                        href={r("register")}
                                         className="fc-btn-register-mobile"
-                                        aria-label="Register Skills"
-                                        title="Register Skills"
+                                        aria-label="Register"
+                                        title="Register"
                                     >
                                         <i className="ti ti-plus" />
                                     </Link>
 
                                     <Link
-                                        href={r("user.register_skills")}
+                                        href={r("register")}
                                         className="fc-btn-green fc-register-desktop"
                                     >
-                                        Register Skills
+                                        Register
                                     </Link>
                                 </>
                             )}
@@ -1330,13 +1509,44 @@ export default function UserHeader({
 
                     <div className="fc-drawer-ctas">
                         {currentUser ? (
-                            <Link
-                                href={dashboardRoute}
-                                className="fc-btn-green"
-                                onClick={() => setDrawerOpen(false)}
-                            >
-                                Dashboard
-                            </Link>
+                            <>
+                                <div className="fc-drawer-user-card">
+                                    <span className="fc-user-avatar">
+                                        {currentUser.avatar ? (
+                                            <img
+                                                src={currentUser.avatar}
+                                                alt={currentUser.name || "User"}
+                                            />
+                                        ) : (
+                                            getInitials(currentUser.name)
+                                        )}
+                                    </span>
+                                    <div className="fc-drawer-user-card-info">
+                                        <div className="fc-upn-name">
+                                            {currentUser.name}
+                                        </div>
+                                        {currentUser.role && (
+                                            <div className="fc-upn-role">
+                                                {currentUser.role}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <Link
+                                    href={dashboardRoute}
+                                    className="fc-btn-green"
+                                    onClick={() => setDrawerOpen(false)}
+                                >
+                                    Dashboard
+                                </Link>
+                                <button
+                                    type="button"
+                                    className="fc-btn-ghost"
+                                    onClick={handleLogout}
+                                >
+                                    <i className="ti ti-logout" /> Logout
+                                </button>
+                            </>
                         ) : (
                             <>
                                 <button
@@ -1346,7 +1556,7 @@ export default function UserHeader({
                                     Sign In
                                 </button>
                                 <Link
-                                    href={r("user.register_skills")}
+                                    href={r("register")}
                                     className="fc-btn-green"
                                     onClick={() => setDrawerOpen(false)}
                                 >

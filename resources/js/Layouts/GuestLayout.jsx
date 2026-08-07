@@ -13,104 +13,63 @@ import "../../guest/css/bootstrap.min.css";
 import "../../guest/js/theme-script.js";
 
 export default function GuestLayout({ children }) {
-
-
     useEffect(() => {
-
         // Initialize AOS
-        if(window.AOS){
+        if (window.AOS) {
             window.AOS.init();
         }
 
-
         // Initialize swiper
-        if(window.Swiper){
+        if (window.Swiper) {
+            const captionSwiper = new window.Swiper("#captionSwiper", {
+                effect: "fade",
+                loop: true,
+                speed: 700,
+            });
 
-            const captionSwiper =
-                new window.Swiper('#captionSwiper', {
-                    effect:'fade',
-                    loop:true,
-                    speed:700,
-                });
+            const imageSwiper = new window.Swiper("#imageSwiper", {
+                effect: "coverflow",
+                loop: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
 
+                autoplay: {
+                    delay: 4000,
+                },
+            });
 
-            const imageSwiper =
-                new window.Swiper('#imageSwiper', {
-
-                    effect:'coverflow',
-                    loop:true,
-                    centeredSlides:true,
-                    slidesPerView:'auto',
-
-                    autoplay:{
-                        delay:4000
-                    }
-
-                });
-
-
-            imageSwiper.on(
-                'slideChangeTransitionStart',
-                ()=>{
-                    captionSwiper.slideToLoop(
-                        imageSwiper.realIndex
-                    );
-                }
-            );
+            imageSwiper.on("slideChangeTransitionStart", () => {
+                captionSwiper.slideToLoop(imageSwiper.realIndex);
+            });
         }
-
-
     }, []);
 
+    const { auth, flash } = usePage().props;
+    const currentUser = auth?.user ?? null;
 
+    useEffect(() => {
+        if (window.toastr && flash) {
+            if (flash.success) toastr.success(flash.success);
 
-    const { flash } = usePage().props;
+            if (flash.error) toastr.error(flash.error);
 
+            if (flash.warning) toastr.warning(flash.warning);
 
-    useEffect(()=>{
-
-        if(window.toastr && flash){
-
-            if(flash.success)
-                toastr.success(flash.success);
-
-
-            if(flash.error)
-                toastr.error(flash.error);
-
-
-            if(flash.warning)
-                toastr.warning(flash.warning);
-
-
-            if(flash.info)
-                toastr.info(flash.info);
-
+            if (flash.info) toastr.info(flash.info);
         }
-
-    },[flash]);
-
-
+    }, [flash]);
 
     return (
-
         <div className="body-overlay-wrapper">
-
             <div className="main-wrapper">
-
-
-                <UserHeader />
-
+                <UserHeader currentUser={currentUser} />
 
                 {children}
 
-
                 <UserFooter />
 
-
                 <div className="back-to-top">
-
-                    <a 
+                    <a
                         href="#top"
                         className="
                         back-to-top-icon
@@ -119,17 +78,10 @@ export default function GuestLayout({ children }) {
                         d-flex
                         "
                     >
-
                         <i className="ti ti-arrow-badge-up"></i>
-
                     </a>
-
                 </div>
-
-
             </div>
-
         </div>
-
     );
 }

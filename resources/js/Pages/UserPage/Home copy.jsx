@@ -439,7 +439,7 @@ export default function Home({
               <span className="step-num">01</span>
               <h5>Create Your Profile</h5>
               <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
-              <Link href={r("user.register_as_talent")} className="strip-link">
+              <Link href={r("user.register_skills")} className="strip-link">
                 Get Started <i className="ti ti-arrow-right" />
               </Link>
             </div>
@@ -894,7 +894,7 @@ export default function Home({
               <h2>Showcase your skills, share your story, and inspire others.</h2>
               <p>Be part of a community that empowers growth and recognition. Your journey starts here.</p>
               <div className="hero-ctas" style={{ marginBottom: 0 }}>
-                <Link href={r("user.register_as_talent")} className="btn-fc-primary">
+                <Link href={r("user.register_skills")} className="btn-fc-primary">
                   Get Started <i className="ti ti-arrow-right" />
                 </Link>
                 <Link href={r("user.talents")} className="btn-fc-outline">
