@@ -201,7 +201,7 @@ export default function ForUniversities({ stats = DEFAULT_STATS }) {
 
         .fc-final-cta {
           background: var(--fc-card); border: 1px solid var(--fc-border); border-radius: 24px; padding: 60px;
-          text-align: center; position: relative; overflow: hidden; margin-bottom: 80px;
+          text-align: center; position: relative; overflow: hidden;
         }
         .fc-final-cta::before {
           content: ""; position: absolute; top: -70px; left: 50%; transform: translateX(-50%);

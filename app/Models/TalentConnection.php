@@ -13,4 +13,8 @@ class TalentConnection extends Model
         return $this->belongsTo(Talent::class);
     }
     
+    public function requester()
+    {
+        return $this->belongsTo(User::class, 'email', 'email');
+    }
 }

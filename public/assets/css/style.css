@@ -4,9 +4,13 @@
 
 :root {
     --dark: #0e1618;
-    --black: #48d597;
-    --light: #7d8385;
-    --white: #0e1618;
+    /* unchanged — dark accent used intentionally for header/footer/badges in both themes */
+    --black: #0e1618;
+    /* was #48d597 → now real dark text so .text-black reads dark-on-light, matching how it reads light-on-dark below */
+    --light: #f3f5f4;
+    /* was #7d8385 (a mid-gray, wrong for a "light panel" background) → now a proper light gray */
+    --white: #ffffff;
+    /* was #0e1618 (this was the actual bug — main page/card/table background was dark even in "light" mode) → now real white */
     --light-100: #FDFEFE;
     --light-200: #FDFDFD;
     --light-300: #FCFCFD;
@@ -28,6 +32,7 @@
 }
 
 [data-theme=dark] {
+    /* unchanged — this block was already a correct, self-consistent dark palette */
     --dark: #48d597;
     --black: #FFFCFA;
     --light: #110E0D;
@@ -52,16 +57,30 @@
     --gray-900: #FFFCFA;
 }
 
+:root {
+    --bs-body-font-family: "IBM Plex Sans", sans-serif;
+    --bs-body-font-size: 16px;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+    --bs-body-color: var(--gray-500);
+    --bs-body-text-align: left;
+    --bs-body-bg: var(--white);
+}
 /******* Base *******/
 /****** Utils ******/
 body {
-    font-family: "IBM Plex Sans", sans-serif;
-    font-size: 16px;
-    color: var(--gray-500);
-    line-height: 1.5;
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    text-align: var(--bs-body-text-align);
+    background-color: var(--bs-body-bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: var(--white);
 }
 
 .modal-backdrop.show {

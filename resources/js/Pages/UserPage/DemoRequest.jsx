@@ -1,53 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 
-/**
- * DemoRequest (Inertia page component)
- * --------------------------------------
- * React/Inertia port of `resources/views/demo/request.blade.php`.
- *
- * This page intentionally does NOT use the shared GuestLayout — like the
- * original Blade file, it's a standalone two-column layout with its own
- * minimal top bar, not the full site header/footer. It's rendered as a
- * top-level Inertia page (no `.layout` assignment at the bottom).
- *
- * Notes on the conversion, and a design bug fixed along the way:
- * - **Bug fix**: the original page's top bar (`<header class="fc-topheader">`
- *   with `fc-th-logo` / `fc-th-actions` / `fc-th-home` / `fc-th-toggle`
- *   classes) had NO matching CSS anywhere in the file — the `<style>` block
- *   only styled a *different*, unused header (`fc-header` / `fc-nav` /
- *   `fc-mega`, copy-pasted from the main site header partial). The result
- *   was an unstyled, unlaid-out top bar. This version gives `.dr-topheader`
- *   real CSS: a slim sticky bar with the logo on the left and Home link +
- *   theme toggle on the right.
- * - **Bug fix**: the height-sync script referenced
- *   `document.getElementById('fcHeaderFixedWrap')`, an ID that doesn't
- *   exist anywhere on this page (it belongs to the shared site header used
- *   elsewhere) — so `--dr-header-h` was silently always `0px` and the
- *   `position: sticky` left panel's `top` offset never accounted for the
- *   bar's real height. This version measures the actual top bar via a
- *   `ref` instead.
- * - `route('name')` goes through the same safe `r()` wrapper used on the
- *   other pages (falls back to `#` + a console warning if Ziggy's
- *   `window.Ziggy` isn't set up).
- * - `$companySizes` / `$preferredTimes` (associative arrays passed to the
- *   Blade `<select>`s) become `companySizes` / `preferredTimes` props as
- *   plain `{ value: label }` objects — that's what Laravel's `Inertia::render`
- *   actually serializes a string-keyed PHP array to (a JSON object, not an
- *   array), so this component reads them with `Object.entries()` rather
- *   than `.map()`.
- * - `@csrf`, `old()`, `@error()`, and `session('success')` all became
- *   Inertia's `useForm()` — it tracks `data`, `errors`, and `processing`
- *   for you and re-populates `errors` automatically after a failed
- *   validation redirect, so there's no need to manually thread old input
- *   back into each field.
- * - The success banner reads from a shared `flash.success` prop (via
- *   `usePage().props.flash`) — wire this up in
- *   `HandleInertiaRequests::share()` if you haven't already:
- *   `'flash' => ['success' => fn () => $request->session()->get('success')]`.
- * - The theme-toggle script and the header-height-sync script both became
- *   `useEffect` hooks.
- */
 
 function r(name, params) {
   try {
@@ -452,28 +405,44 @@ export default function DemoRequest({
 
               <div className="dr-features">
                 <div className="dr-feature">
-                  <div className="dr-feature-icon">🎯</div>
+                  <div className="dr-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    </svg>
+                  </div>
                   <div className="dr-feature-text">
                     <strong>Tailored to You</strong>
                     <span>We'll walk through the features most relevant to your team and use case.</span>
                   </div>
                 </div>
                 <div className="dr-feature">
-                  <div className="dr-feature-icon">⚡</div>
+                  <div className="dr-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    </svg>
+                  </div>
                   <div className="dr-feature-text">
                     <strong>30 Minutes, No Pressure</strong>
                     <span>A quick, friendly session — ask anything, no obligation to buy.</span>
                   </div>
                 </div>
                 <div className="dr-feature">
-                  <div className="dr-feature-icon">🧑‍💼</div>
+                  <div className="dr-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    </svg>
+                  </div>
                   <div className="dr-feature-text">
                     <strong>Real Talent Pool</strong>
                     <span>See live examples of verified talent matching your industry.</span>
                   </div>
                 </div>
                 <div className="dr-feature">
-                  <div className="dr-feature-icon">📅</div>
+                  <div className="dr-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    </svg>
+                  </div>
                   <div className="dr-feature-text">
                     <strong>Flexible Scheduling</strong>
                     <span>Pick a time that works for you — we'll confirm within one business day.</span>

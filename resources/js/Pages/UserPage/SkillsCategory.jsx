@@ -58,7 +58,7 @@ export default function SkillsCategory({
 
     return (
         <>
-            <Head title={`${categoryName} Talents`} />
+            <Head title={`${categoryName} Skills`} />
             <link
                 href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
                 rel="stylesheet"

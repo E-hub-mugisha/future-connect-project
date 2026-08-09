@@ -65,7 +65,7 @@ export default function ForProfessionals() {
         .fc-testimonial p.quote{ font-size:1.1rem; color:var(--fc-white); margin:10px 0 20px; }
         .fc-testimonial .author strong{ color:var(--fc-white); display:block; }
         .fc-testimonial .author span{ color:var(--fc-muted); font-size:.85rem; }
-        .fc-final-cta{ background:var(--fc-card); border:1px solid var(--fc-border); border-radius:24px; padding:60px; text-align:center; position:relative; overflow:hidden; margin-bottom:80px; }
+        .fc-final-cta{ background:var(--fc-card); border:1px solid var(--fc-border); border-radius:24px; padding:60px; text-align:center; position:relative; overflow:hidden; }
         .fc-final-cta::before{ content:""; position:absolute; top:-70px; left:50%; transform:translateX(-50%); width:280px; height:280px; background:radial-gradient(circle, rgba(72,213,151,.16), transparent 70%); }
         .fc-final-cta h2{ font-weight:700; margin-bottom:12px; position:relative; }
         .fc-final-cta p{ color:var(--fc-muted); max-width:480px; margin:0 auto 26px; position:relative; }

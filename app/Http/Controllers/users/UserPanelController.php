@@ -10,7 +10,7 @@ use App\Models\Talent;
 use App\Models\TalentConnection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Inertia\Inertia;
 class UserPanelController extends Controller
 {
     public function dashboard() {
@@ -20,16 +20,14 @@ class UserPanelController extends Controller
         $totalStories = \App\Models\Story::count();
         $totalTalents = \App\Models\Talent::count();
         $totalUsers = \App\Models\User::count();
-        $totalStoryPayments = StoryPayment::sum('amount');
         $users = \App\Models\User::latest()->take(5)->get();
         $talents = \App\Models\Talent::latest()->take(5)->get();
-        $payments = \App\Models\StoryPayment::latest()->take(5)->get();
         $announcements = Announcement::latest()->take(5)->get();
-        return view('user.dashboard', compact('announcements','payments','totalStoryPayments', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents'));
+        return Inertia::render('UserPanel/Dashboard', compact('announcements', 'totalTestimonials', 'totalStories', 'totalTalents', 'totalUsers', 'users', 'talents'));
     }
 
     public function profile() {
-        return view('user.profile', ['user' => Auth::user()]);
+        return Inertia::render('UserPanel/Profile', ['user' => Auth::user()]);
     }
 
     public function updateProfile(Request $request) {
@@ -53,29 +51,17 @@ class UserPanelController extends Controller
 
     public function myTalents() {
         $talents = TalentConnection::where('user_id', Auth::user()->id)->where('status', 'accepted')->get();
-        return view('user.talents', compact('talents'));
+        return Inertia::render('UserPanel/MyTalents', compact('talents'));
     }
 
     public function transactions() {
         $payments = auth()->user()->payments;
-        return view('user.payments', compact('payments'));
+        return Inertia::render('UserPanel/Transactions', compact('payments'));
     }
 
     public function notifications() {
         $notifications = auth()->user()->notifications()->latest()->get();
-        return view('user.notifications', compact('notifications'));
-    }
-
-    public function connections() {
-        $connections = TalentConnection::where('user_id', Auth::user()->id)->where('status', 'pending')->get();
-        return view('user.connections', compact('connections'));
-    }
-    public function showConnection($id)
-    {
-        $connection = TalentConnection::with(['requester', 'talent', 'payment'])
-            ->findOrFail($id);
-
-        return view('user.connection-show', compact('connection'));
+        return Inertia::render('UserPanel/Notifications', compact('notifications'));
     }
 
     public function sendConnectionRequest(Request $request) {

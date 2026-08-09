@@ -617,19 +617,20 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('user/dashboard', [UserPanelController::class, 'dashboard'])->name('user.dashboard');
-    Route::get('user/profile', [UserPanelController::class, 'profile'])->name('user.profile');
-    Route::post('user/profile/update', [UserPanelController::class, 'updateProfile'])->name('profile.update');
+    Route::get('user/dashboard', [App\Http\Controllers\UserPanel\DashboardController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('user/profile', [App\Http\Controllers\UserPanel\ProfileController::class, 'profile'])->name('user.profile');
+    Route::post('user/profile/{id}/update', [App\Http\Controllers\UserPanel\ProfileController::class, 'updateProfile'])->name('user.profile.update');
 
     Route::get('user/talents', [UserPanelController::class, 'myTalents'])->name('user.talents.connected');
     Route::get('user/connections/show/{id}', [UserPanelController::class, 'showConnection'])->name('user.connections.show');
     Route::get('user/transactions', [UserPanelController::class, 'transactions'])->name('user.transactions');
     Route::get('user/notifications', [UserPanelController::class, 'notifications'])->name('user.notifications');
-    Route::get('user/connections', [UserPanelController::class, 'connections'])->name('user.connections');
+    Route::get('user/connections', [App\Http\Controllers\UserPanel\ProfileController::class, 'connections'])->name('user.connections');
+    Route::get('user/connections/show/{id}', [App\Http\Controllers\UserPanel\ProfileController::class, 'showConnection'])->name('user.connections.show');
     Route::post('user/connections/request', [UserPanelController::class, 'sendConnectionRequest'])->name('connections.request');
 
-    Route::get('user/courses', [UserPanelController::class, 'userCourses'])->name('user.courses');
-    Route::get('user/courses/{slug}', [UserPanelController::class, 'userCoursesShow'])->name('user-panel.courses.show');
+    Route::get('user/courses', [App\Http\Controllers\UserPanel\CourseController::class, 'courses'])->name('user-panel.courses');
+    Route::get('user/courses/{slug}', [App\Http\Controllers\UserPanel\CourseController::class, 'userCoursesShow'])->name('user-panel.courses.show');
 
     Route::get('/user/subscription', [SubscriptionController::class, 'indexUser'])->name('user.subscription');
     Route::get('/user/subscription/{subscription}', [SubscriptionController::class, 'showUser'])->name('user.subscription.show');
