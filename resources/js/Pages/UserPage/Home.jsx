@@ -2,89 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * Home (Inertia page component)
- * ------------------------------
- * React/Inertia port of the Blade homepage (`@extends('layouts.guest')`).
- *
- * Notes on the conversion from Blade:
- * - `@extends('layouts.guest')` / `@section('content')` became Inertia's
- *   persistent-layout pattern: `Home.layout = (page) => <GuestLayout>{page}</GuestLayout>`
- *   at the bottom of this file. Swap in your actual layout component path.
- * - `route('name', ...)` calls go through a local `r()` wrapper (see below)
- *   around Ziggy's global `route()` helper — the standard pairing for
- *   Laravel + Inertia. `r()` catches the case where `window.Ziggy` isn't
- *   present yet and logs a pointer to the fix instead of crashing the page.
- *   If you're not using Ziggy at all, swap `r()` for a `routes` prop like in
- *   the UserHeader/UserFooter conversions.
- * - All Blade-side data ($totalTalents, $partners, $categories,
- *   $featuredTalents, $testimonials) became page props, passed in from the
- *   controller via `Inertia::render('Home', [...])`.
- * - `@foreach` / `@if` / `@for` became `.map()` / conditional rendering /
- *   `Array.from({ length: 5 })`.
- * - Internal links use Inertia's `<Link>` for client-side navigation;
- *   external/asset links (images, mailto, `#`) stay as plain `<a>`/`<img>`.
- * - The feature tabs (vanilla JS click handlers) became a React
- *   `activeTab` state.
- * - The hero background carousel and the mobile testimonial carousel still
- *   rely on Bootstrap's JS carousel component (as in the original), wired
- *   up via `useEffect` + refs instead of an inline `<script>` tag. This
- *   assumes `window.bootstrap` is available globally (Bootstrap's JS bundle
- *   loaded in your app entry/layout, same as the Blade version).
- * - Asset paths (`asset('image/talents/...')`) became plain public paths
- *   (`/image/talents/...`) — adjust the base path to match how your Vite/
- *   Laravel build serves `public/`.
- */
-
-const FEATURE_TABS = [
-  { key: "skills", label: "Skills" },
-  { key: "learning", label: "Learning" },
-  { key: "opportunity", label: "Opportunities" },
-  { key: "connect", label: "Connect" },
-  { key: "marketplace", label: "Marketplace" },
-];
-
-const ACCORDION_PANELS = [
-  {
-    id: "accSkills",
-    label: "Skills Marketplace",
-    icon: "ti-sparkles",
-    routeName: "user.talents",
-    cta: "Explore Marketplace",
-    desc: "Get verified, showcase your work, and put yourself in front of employers actively hiring for your skill set.",
-  },
-  {
-    id: "accLearn",
-    label: "Learning Center",
-    icon: "ti-school",
-    routeName: "user.courses",
-    cta: "Explore Courses",
-    desc: "Focused, practical courses built to help you level up fast — taught by people who do the work.",
-  },
-  {
-    id: "accOpp",
-    label: "Opportunities",
-    icon: "ti-briefcase",
-    routeName: "user.talents",
-    cta: "Explore Works",
-    desc: "Freelance gigs, collaborations, and full-time roles — matched to what you're actually good at.",
-  },
-  {
-    id: "accConnect",
-    label: "Connection Room",
-    icon: "ti-users",
-    routeName: "user.talents",
-    cta: "Join Community",
-    desc: "A secure space to message, meet, and build real professional relationships with verified members.",
-  },
-];
-
-// Safe wrapper around Ziggy's global `route()`. If `window.Ziggy` isn't
-// present — most commonly because the `@routes` Blade directive is missing
-// from your root layout (resources/views/app.blade.php), or it's placed
-// after the Inertia app div instead of in <head> — `route()` throws instead
-// of returning a URL. This wrapper logs a clear pointer to the fix instead
-// of crashing the whole page.
 function r(name, params) {
   try {
     return route(name, params);
@@ -121,9 +38,6 @@ export default function Home({
   featuredTalents = [],
   testimonials = [],
 }) {
-  const [activeTab, setActiveTab] = useState("skills");
-  const [openAccordion, setOpenAccordion] = useState(ACCORDION_PANELS[0].id);
-
   const heroCarouselRef = useRef(null);
   const testimonialCarouselRef = useRef(null);
 
@@ -146,14 +60,17 @@ export default function Home({
 
   return (
     <>
-      <Head title="Future Connect — Where Verified Talent Meets Real Opportunity" />
-
-      <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap"
-        rel="stylesheet"
-      />
+      <Head title="Future Connect — Get Discovered. Get Hired. Get Ahead." />
 
       <style>{`
+        /*
+          Font note: Apple does not license the SF Pro / San Francisco font
+          files for embedding on non-Apple-platform web pages. The correct,
+          fully-licensed way to render actual San Francisco on Apple devices
+          is the system-font stack below — Safari/macOS/iOS resolve
+          -apple-system / BlinkMacSystemFont straight to San Francisco,
+          and every other OS falls back to its own native UI font.
+        */
         :root {
           --bg: #0e1618;
           --bg-card: #131e21;
@@ -168,8 +85,8 @@ export default function Home({
           --text-1: #f0f4f3;
           --text-2: #8da4a0;
           --text-3: #4d6460;
-          --font-head: 'Montserrat', sans-serif;
-          --font-body: 'Montserrat', sans-serif;
+          --font-head: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
           --r-sm: 8px;
           --r-md: 14px;
           --r-lg: 20px;
@@ -279,27 +196,10 @@ export default function Home({
         .cat-pill-arrow { color: var(--accent); font-size: 0.75rem; margin-top: 8px; }
         .cat-empty { color: var(--text-3); font-size: 0.85rem; }
 
-        .fc-features { padding: 80px 0; }
-        .fc-tab-bar {
-          display: flex; gap: 4px; flex-wrap: wrap; background: var(--bg-card); border: 1px solid var(--border);
-          border-radius: var(--r-md); padding: 6px; margin-bottom: 32px;
-        }
-        .fc-tab-btn {
-          flex: 1; min-width: 100px; background: transparent; border: none; border-radius: var(--r-sm);
-          padding: 10px 20px; font-family: var(--font-head); font-size: 0.8rem; font-weight: 600; color: var(--text-3);
-          cursor: pointer; transition: background .2s, color .2s; white-space: nowrap;
-        }
-        .fc-tab-btn.active { background: var(--bg-glass2); color: var(--accent); border: 1px solid var(--border-h); }
-        .fc-tab-btn:hover:not(.active) { color: var(--text-2); }
-        .fc-tab-panel { display: none; animation: panelIn .3s ease; }
-        .fc-tab-panel.active { display: block; }
-        @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-        .feature-panel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 40px; overflow: hidden; position: relative; }
-        .feature-panel-card::before {
-          content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-          background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        }
+        /* ── Feature sections (stacked, no tabs) ── */
+        .fc-feature-section { padding: 72px 0; }
+        .fc-feature-section.alt { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .feature-panel-card { position: relative; }
         .feature-panel-card h2 { font-family: var(--font-head); font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; color: var(--text-1); margin-bottom: 16px; line-height: 1.2; }
         .feature-panel-card h2 span { color: var(--accent); }
         .feature-panel-card p { color: var(--text-2); line-height: 1.75; margin-bottom: 28px; max-width: 520px; }
@@ -362,14 +262,7 @@ export default function Home({
         .fc-cta-glow { position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: var(--accent-glow); filter: blur(80px); pointer-events: none; }
         .fc-cta h2 { font-family: var(--font-head); font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; color: var(--text-1); margin-bottom: 12px; }
         .fc-cta p { color: var(--text-2); font-size: 0.95rem; max-width: 480px; margin-bottom: 28px; }
-
-        .fc-accordion { padding: 48px 0; }
-        .fc-accordion .accordion-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-md) !important; margin-bottom: 8px; overflow: hidden; }
-        .fc-accordion .accordion-button { background: var(--bg-card); color: var(--text-1); font-family: var(--font-head); font-weight: 600; font-size: 0.9rem; box-shadow: none; padding: 18px 22px; }
-        .fc-accordion .accordion-button:not(.collapsed) { color: var(--accent); background: var(--bg-glass2); }
-        .fc-accordion .accordion-button::after { filter: invert(1); }
-        .fc-accordion .accordion-collapse { border-top: 1px solid var(--border); }
-        .fc-accordion .accordion-body { padding: 24px; }
+        .fc-cta-note { font-size: 0.78rem; color: var(--text-3); margin-top: -14px; margin-bottom: 0; }
 
         [data-h-theme="light"] {
           --bg: #f6faf8; --bg-card: #ffffff; --bg-glass: rgba(0, 60, 40, 0.03); --bg-glass2: rgba(0, 166, 103, 0.07);
@@ -388,7 +281,6 @@ export default function Home({
         }
         [data-h-theme="light"] .partners-scroll img { filter: none; opacity: 0.45; }
         [data-h-theme="light"] .partners-scroll img:hover { opacity: 0.85; }
-        [data-h-theme="light"] .fc-accordion .accordion-button::after { filter: none; }
       `}</style>
 
       {/* ════════════════════════════════════
@@ -426,20 +318,21 @@ export default function Home({
         <div className="container fc-hero-content">
           <div className="row align-items-center">
             <div className="col-lg-7">
-              <p className="hero-eyebrow">The Verified Talent Network</p>
+              <p className="hero-eyebrow">Join {totalTalents}+ Verified Professionals Already Winning Work</p>
               <h1>
-                Where Skilled Professionals <span className="hl">Get Discovered.</span>
+                Stop Getting Overlooked. <span className="hl">Start Getting Hired.</span>
               </h1>
               <p>
-                Future Connect brings verified talent, real opportunities, and practical learning together in one
-                trusted platform — so you can build a career or a team without the guesswork.
+                Future Connect puts your verified skills in front of the people actively hiring for them —
+                no cold applications, no algorithms burying your profile. Create your free profile today and
+                let real opportunities come to you.
               </p>
               <div className="hero-ctas">
-                <Link href={r("user.talents")} className="btn-fc-primary">
-                  Browse Talent <i className="ti ti-arrow-right" />
+                <Link href={r("user.register_skills")} className="btn-fc-primary">
+                  Claim Your Free Profile <i className="ti ti-arrow-right" />
                 </Link>
-                <Link href={r("register")} className="btn-fc-outline">
-                  Create Your Profile <i className="ti ti-user-plus" />
+                <Link href={r("user.talents")} className="btn-fc-outline">
+                  See Who's Hiring <i className="ti ti-arrow-right" />
                 </Link>
               </div>
               <div className="hero-stats">
@@ -455,6 +348,243 @@ export default function Home({
                   <div className="hero-stat-val">4.8</div>
                   <div className="hero-stat-lbl">Average Rating</div>
                 </div>
+              </div>
+              <p className="hero-trust-note">Free to join. Takes about 3 minutes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════
+           2. FEATURE STRIP
+      ════════════════════════════════════ */}
+      <div className="fc-feature-strip">
+        <div className="container">
+          <div className="feature-strip-grid">
+            <div className="feature-strip-item">
+              <div className="strip-icon"><i className="ti ti-rocket" /></div>
+              <h5>Get Seen 3× Faster</h5>
+              <p>Verified, boosted profiles jump the queue — and the best ones get featured right on our homepage.</p>
+              <Link href={r("user.talents")} className="strip-link">
+                Find Skills <i className="ti ti-arrow-right" />
+              </Link>
+            </div>
+            <div className="feature-strip-item">
+              <div className="strip-icon"><i className="ti ti-briefcase" /></div>
+              <h5>Never Miss the Right Job</h5>
+              <p>Freelance gigs, collabs, and full-time roles matched to your actual skills — not keyword spam.</p>
+              <Link href={r("user.jobs.index")} className="strip-link">
+                Start Exploring <i className="ti ti-arrow-right" />
+              </Link>
+            </div>
+            <div className="feature-strip-item">
+              <div className="strip-icon"><i className="ti ti-users" /></div>
+              <h5>Build a Network That Works</h5>
+              <p>Meet the people, mentors, and collaborators who actually move a career forward.</p>
+              <Link href={r("talent.connections-room")} className="strip-link">
+                Skill Connect<i className="ti ti-arrow-right" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      {/* ════════════════════════════════════
+           4. FEATURE SECTIONS — SKILLS MARKETPLACE
+      ════════════════════════════════════ */}
+      <section className="fc-feature-section" id="skills">
+        <div className="container">
+          <div className="feature-panel-card">
+            <div className="row align-items-center g-5">
+              <div className="col-lg-6">
+                <span className="fc-badge mb-3"><i className="ti ti-sparkles" /> Skills Marketplace</span>
+                <h2>Turn Your Skills <span>Into Your Next Client.</span></h2>
+                <p>
+                  Every day you're not verified is a day an employer scrolls past you. The Skills Marketplace puts
+                  your best work front and center, builds instant trust, and turns profile views into real,
+                  paying opportunities — faster than a resume ever could.
+                </p>
+                <ul className="feature-list">
+                  <li>Get verified and build instant credibility with employers</li>
+                  <li>Feature your story and best work on our homepage</li>
+                  <li>Reach up to 3× more clients with a boosted profile</li>
+                </ul>
+                <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+                  <Link href={r("user.talents")} className="btn-fc-primary">
+                    Get Discovered <i className="ti ti-arrow-right" />
+                  </Link>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div className="avatar-stack">
+                      {featuredTalents.map((t, i) => (
+                        <img key={t.id ?? i} src={talentImage(t)} alt="" />
+                      ))}
+                    </div>
+                    <div>
+                      <div style={{ color: "var(--accent)", fontSize: "0.8rem" }}>★★★★★ 4.8/5</div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-3)" }}>{totalTalents}+ professionals already in</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 feature-img-wrap">
+                <img src="/assets/img/home/banner-image.svg" alt="" className="img-fluid" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════
+           LEARNING CENTER
+      ════════════════════════════════════ */}
+      <section className="fc-feature-section alt" id="learning">
+        <div className="container">
+          <div className="feature-panel-card">
+            <div className="row align-items-center g-5">
+              <div className="col-lg-6">
+                <span className="fc-badge mb-3"><i className="ti ti-school" /> Learning Center</span>
+                <h2>The Skills Gap Ends <span>Here.</span></h2>
+                <p>
+                  Every course is short, sharp, and taught by people doing the work right now — not theory that
+                  sits in a drawer. Finish one, add it to your profile, and watch your credibility climb
+                  immediately.
+                </p>
+                <ul className="feature-list">
+                  <li>Short, high-impact micro-courses you can finish this week</li>
+                  <li>Instructors who work in the industry they teach</li>
+                  <li>Shareable certificates that strengthen your profile instantly</li>
+                </ul>
+                <Link href={r("user.courses")} className="btn-fc-primary">
+                  Start Learning Free <i className="ti ti-arrow-right" />
+                </Link>
+              </div>
+              <div className="col-lg-6 feature-img-wrap">
+                <img src="/assets/img/banner-img.png" alt="" className="img-fluid" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════
+           OPPORTUNITIES
+      ════════════════════════════════════ */}
+      <section className="fc-feature-section" id="opportunities">
+        <div className="container">
+          <div className="feature-panel-card">
+            <div className="row align-items-center g-5">
+              <div className="col-lg-6">
+                <span className="fc-badge mb-3"><i className="ti ti-briefcase" /> Opportunities</span>
+                <h2>Real Roles. <span>Zero Noise.</span></h2>
+                <p>
+                  Skip the endless scroll of open job boards. Whether you're hiring or looking to be hired,
+                  Opportunities connects you directly with verified people and real work — matched, not mass-posted.
+                </p>
+                <ul className="feature-list">
+                  <li>Post freelance gigs and full-time roles in minutes</li>
+                  <li>Find verified collaborators in one trusted network</li>
+                  <li>Set job alerts so the right match finds you first</li>
+                </ul>
+                <Link href={r("user.jobs.index")} className="btn-fc-primary">
+                  Browse Open Roles <i className="ti ti-arrow-right" />
+                </Link>
+              </div>
+              <div className="col-lg-6 feature-img-wrap">
+                <img src="/assets/img/banner-img.png" alt="" className="img-fluid" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════
+           CONNECTION ROOM
+      ════════════════════════════════════ */}
+      <section className="fc-feature-section alt" id="connect">
+        <div className="container">
+          <div className="feature-panel-card">
+            <div className="row align-items-center g-5">
+              <div className="col-lg-5">
+                <div className="row g-3">
+                  <div className="col-6">
+                    <img src="/assets/img/aboutus/about-us-01.jpg" alt="" className="img-fluid" style={{ borderRadius: "var(--r-md)" }} />
+                  </div>
+                  <div className="col-6 d-flex flex-column gap-3">
+                    <img src="/assets/img/aboutus/about-us-02.jpg" alt="" className="img-fluid" style={{ borderRadius: "var(--r-md)" }} />
+                    <img src="/assets/img/aboutus/about-us-03.jpg" alt="" className="img-fluid" style={{ borderRadius: "var(--r-md)" }} />
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-7">
+                <span className="fc-badge mb-3"><i className="ti ti-users" /> Connection Room</span>
+                <h2>Your Next Big Break <span>Starts With One Message.</span></h2>
+                <p>
+                  The Connection Room gives verified professionals a private space to message, meet, and
+                  collaborate — from a quick introduction to a scheduled mentorship call. Real relationships,
+                  not just another inbox.
+                </p>
+                <ul className="feature-list">
+                  <li>A diverse, verified professional network</li>
+                  <li>Built on trust and transparency at every step</li>
+                  <li>A simple, distraction-free way to connect</li>
+                </ul>
+                <Link href={r("talent.connections-room")} className="btn-fc-primary">
+                  Join the Room <i className="ti ti-arrow-right" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════
+           MARKETPLACE
+      ════════════════════════════════════ */}
+      <section className="fc-feature-section" id="marketplace">
+        <div className="container">
+          <div className="feature-panel-card">
+            <span className="fc-badge mb-3"><i className="ti ti-shopping-bag" /> Marketplace</span>
+            <h2>Turn What You Make <span>Into What You Earn.</span></h2>
+            <p>
+              From templates to digital tools, the Marketplace lets creators sell their work with full payment
+              protection — and lets buyers shop with total confidence. Your first sale could be one listing away.
+            </p>
+            <div className="fc-provide-grid">
+              <div className="fc-provide-box">
+                <div className="provide-icon"><img src="/assets/img/icons/ipad-icon.svg" alt="" /></div>
+                <h6>Browse Products</h6>
+                <p>Everything you need for your craft, backed by secure payments through Future Connect.</p>
+                <Link href={r("user.products.index")} className="btn-fc-primary" style={{ fontSize: "0.8rem", padding: "9px 18px" }}>
+                  Explore <i className="ti ti-arrow-right" />
+                </Link>
+              </div>
+              <div className="fc-provide-box">
+                <div className="provide-icon"><img src="/assets/img/icons/service-icon.svg" alt="" /></div>
+                <h6>Sell a Product</h6>
+                <p>Put your digital products in front of thousands of buyers who are already on the platform.</p>
+                <a
+                  data-bs-toggle="modal"
+                  data-bs-target="#applySellerModal"
+                  className="btn-fc-outline"
+                  style={{ fontSize: "0.8rem", padding: "9px 18px", cursor: "pointer" }}
+                >
+                  Learn More <i className="ti ti-arrow-right" />
+                </a>
+              </div>
+              <div className="fc-provide-box">
+                <div className="provide-icon"><img src="/assets/img/icons/user-icon-01.svg" alt="" /></div>
+                <h6>Become a Seller</h6>
+                <p>Get paid instantly — Future Connect keeps a small fee to cover logistics and support.</p>
+                <a
+                  className="btn-fc-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#applySellerModal"
+                  style={{ fontSize: "0.8rem", padding: "9px 18px", cursor: "pointer" }}
+                >
+                  Apply Now <i className="ti ti-arrow-right" />
+                </a>
               </div>
             </div>
           </div>
@@ -474,7 +604,7 @@ export default function Home({
             <div className="step-card">
               <span className="step-num">01</span>
               <h5>Create Your Profile</h5>
-              <p>Sign up and showcase your story, skills, and aspirations through text, images, and video.</p>
+              <p>Sign up free and showcase your story, skills, and ambitions through text, images, and video. Takes minutes.</p>
               <Link href={r("user.register_skills")} className="strip-link">
                 Get Started <i className="ti ti-arrow-right" />
               </Link>
@@ -482,7 +612,7 @@ export default function Home({
             <div className="step-card">
               <span className="step-num">02</span>
               <h5>Get Discovered & Rated</h5>
-              <p>Employers browse by category, leave ratings, and share feedback that helps you grow your reputation.</p>
+              <p>Employers browse by category, leave ratings, and share feedback that builds your reputation from day one.</p>
               <Link href={r("user.talents")} className="strip-link">
                 Explore Skills <i className="ti ti-arrow-right" />
               </Link>
@@ -490,7 +620,7 @@ export default function Home({
             <div className="step-card">
               <span className="step-num">03</span>
               <h5>Grow With the Community</h5>
-              <p>Connect with peers, keep learning, and buy or sell tools with creators across the platform.</p>
+              <p>Connect with peers, keep learning, and buy or sell tools with creators across the platform — for as long as you stay.</p>
               <Link href={r("talent.connections-room")} className="strip-link">
                 Connection Room<i className="ti ti-arrow-right" />
               </Link>
@@ -498,321 +628,6 @@ export default function Home({
           </div>
         </div>
       </section>
-
-      {/* ════════════════════════════════════
-           2. FEATURE STRIP
-      ════════════════════════════════════ */}
-      <div className="fc-feature-strip">
-        <div className="container">
-          <div className="feature-strip-grid">
-            <div className="feature-strip-item">
-              <div className="strip-icon"><i className="ti ti-rocket" /></div>
-              <h5>Get Seen Faster</h5>
-              <p>Verified, boosted profiles reach up to 3× more employers — and can be featured right on our homepage.</p>
-              <Link href={r("user.talents")} className="strip-link">
-                Find Skills <i className="ti ti-arrow-right" />
-              </Link>
-            </div>
-            <div className="feature-strip-item">
-              <div className="strip-icon"><i className="ti ti-briefcase" /></div>
-              <h5>Unlock Real Opportunities</h5>
-              <p>Tailored job listings, freelance gigs, and collaboration projects matched to your actual skill set.</p>
-              <Link href={r("user.jobs.index")} className="strip-link">
-                Start Exploring <i className="ti ti-arrow-right" />
-              </Link>
-            </div>
-            <div className="feature-strip-item">
-              <div className="strip-icon"><i className="ti ti-users" /></div>
-              <h5>Grow Your Network</h5>
-              <p>Meet professionals, find mentors, and build the relationships that move a career forward.</p>
-              <Link href={r("talent.connections-room")} className="strip-link">
-                Skill Connect<i className="ti ti-arrow-right" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ════════════════════════════════════
-           3. TRENDING CATEGORIES
-      ════════════════════════════════════ */}
-      <section className="fc-categories">
-        <div className="container">
-          <div className="row align-items-end mb-5">
-            <div className="col-md-8">
-              <div className="fc-section-head" style={{ marginBottom: 0 }}>
-                <span className="eyebrow">Browse Categories</span>
-                <h2>The Skills Shaping Today's Market</h2>
-                <p>From design to development to consulting — find the category that fits, then find your person.</p>
-              </div>
-            </div>
-            <div className="col-md-4 text-md-end">
-              <Link href={r("user.talents")} className="btn-fc-outline" style={{ fontSize: "0.8rem", padding: "9px 20px" }}>
-                All Categories <i className="ti ti-arrow-right" />
-              </Link>
-            </div>
-          </div>
-          <div className="category-scroll">
-            {categories.length > 0 ? (
-              categories.map((cat) => (
-                <Link key={cat.id} href={r("user.talents.category", cat.slug)} className="cat-pill">
-                  <span className="cat-pill-name">{cat.name}</span>
-                  <span className="cat-pill-count">{cat.talents_count ?? 0} talents</span>
-                  <span className="cat-pill-arrow"><i className="ti ti-arrow-right" /></span>
-                </Link>
-              ))
-            ) : (
-              <p className="cat-empty">New categories are being added — check back soon.</p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════
-           4. FEATURES TABS (DESKTOP)
-      ════════════════════════════════════ */}
-      <section className="fc-features d-none d-lg-block" id="features">
-        <div className="container">
-          <div className="fc-section-head">
-            <span className="eyebrow">Platform Features</span>
-            <h2>Everything You Need, In One Place</h2>
-            <p>Showcase your skills, find your next opportunity, keep learning, and connect with the right people — all inside Future Connect.</p>
-          </div>
-
-          <div className="fc-tab-bar" role="tablist">
-            {FEATURE_TABS.map((tab) => (
-              <button
-                key={tab.key}
-                className={`fc-tab-btn${activeTab === tab.key ? " active" : ""}`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Skills */}
-          <div className={`fc-tab-panel${activeTab === "skills" ? " active" : ""}`}>
-            <div className="feature-panel-card">
-              <div className="row align-items-center g-5">
-                <div className="col-lg-6">
-                  <span className="fc-badge mb-3"><i className="ti ti-sparkles" /> Skills Marketplace</span>
-                  <h2>Turn your skills <span>into</span> your next client.</h2>
-                  <p>
-                    Future Connect's Skills Marketplace helps you present verified work, build trust fast, and
-                    convert profile views into real freelance and full-time opportunities.
-                  </p>
-                  <ul className="feature-list">
-                    <li>Get verified and build instant credibility with employers</li>
-                    <li>Feature your story and best work on our homepage</li>
-                    <li>Reach up to 3× more clients with a boosted profile</li>
-                  </ul>
-                  <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
-                    <Link href={r("user.talents")} className="btn-fc-primary">
-                      Find skills<i className="ti ti-arrow-right" />
-                    </Link>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <div className="avatar-stack">
-                        {featuredTalents.map((t, i) => (
-                          <img key={t.id ?? i} src={talentImage(t)} alt="" />
-                        ))}
-                      </div>
-                      <div>
-                        <div style={{ color: "var(--accent)", fontSize: "0.8rem" }}>★★★★★ 4.8/5</div>
-                        <div style={{ fontSize: "0.72rem", color: "var(--text-3)" }}>{totalTalents}+ professionals</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 feature-img-wrap">
-                  <img src="/assets/img/home/banner-image.svg" alt="" className="img-fluid" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Learning */}
-          <div className={`fc-tab-panel${activeTab === "learning" ? " active" : ""}`}>
-            <div className="feature-panel-card">
-              <div className="row align-items-center g-5">
-                <div className="col-lg-6">
-                  <span className="fc-badge mb-3"><i className="ti ti-school" /> Learning Center</span>
-                  <h2>Skills that pay off, <span>faster.</span></h2>
-                  <p>
-                    Short, focused courses taught by working professionals — built for real-world application, not
-                    just certificates that sit in a drawer.
-                  </p>
-                  <ul className="feature-list">
-                    <li>Short, high-impact micro-courses</li>
-                    <li>Instructors who work in the industry they teach</li>
-                    <li>Shareable certificates that strengthen your profile</li>
-                  </ul>
-                  <Link href={r("user.courses")} className="btn-fc-primary">
-                    Explore Courses <i className="ti ti-arrow-right" />
-                  </Link>
-                </div>
-                <div className="col-lg-6 feature-img-wrap">
-                  <img src="/assets/img/banner-img.png" alt="" className="img-fluid" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Opportunities */}
-          <div className={`fc-tab-panel${activeTab === "opportunity" ? " active" : ""}`}>
-            <div className="feature-panel-card">
-              <div className="row align-items-center g-5">
-                <div className="col-lg-6">
-                  <span className="fc-badge mb-3"><i className="ti ti-briefcase" /> Opportunities</span>
-                  <h2>Post the work. <span>Find</span> the right people.</h2>
-                  <p>
-                    Whether you're hiring or looking to be hired, Opportunities connects you with verified talent
-                    and real roles — without the noise of open job boards.
-                  </p>
-                  <ul className="feature-list">
-                    <li>Post freelance gigs and full-time roles in minutes</li>
-                    <li>Find verified collaborators in one trusted network</li>
-                    <li>Set job alerts so you never miss the right match</li>
-                  </ul>
-                  <Link href={r("user.jobs.index")} className="btn-fc-primary">
-                    Explore Opportunities <i className="ti ti-arrow-right" />
-                  </Link>
-                </div>
-                <div className="col-lg-6 feature-img-wrap">
-                  <img src="/assets/img/banner-img.png" alt="" className="img-fluid" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Connect */}
-          <div className={`fc-tab-panel${activeTab === "connect" ? " active" : ""}`}>
-            <div className="feature-panel-card">
-              <div className="row align-items-center g-5">
-                <div className="col-lg-5">
-                  <div className="row g-3">
-                    <div className="col-6">
-                      <img src="/assets/img/aboutus/about-us-01.jpg" alt="" className="img-fluid" style={{ borderRadius: "var(--r-md)" }} />
-                    </div>
-                    <div className="col-6 d-flex flex-column gap-3">
-                      <img src="/assets/img/aboutus/about-us-02.jpg" alt="" className="img-fluid" style={{ borderRadius: "var(--r-md)" }} />
-                      <img src="/assets/img/aboutus/about-us-03.jpg" alt="" className="img-fluid" style={{ borderRadius: "var(--r-md)" }} />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-7">
-                  <span className="fc-badge mb-3"><i className="ti ti-users" /> Connection Room</span>
-                  <h2>Build relationships <span>securely</span>, not just contacts.</h2>
-                  <p>
-                    The Connection Room gives verified professionals a private space to message, meet, and
-                    collaborate — from quick check-ins to scheduled mentorship calls.
-                  </p>
-                  <ul className="feature-list">
-                    <li>A diverse, verified professional network</li>
-                    <li>Built on trust and transparency at every step</li>
-                    <li>A simple, distraction-free way to connect</li>
-                  </ul>
-                  <Link href={r("talent.connections-room")} className="btn-fc-primary">
-                    Skills Connect<i className="ti ti-arrow-right" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Marketplace */}
-          <div className={`fc-tab-panel${activeTab === "marketplace" ? " active" : ""}`}>
-            <div className="feature-panel-card">
-              <span className="fc-badge mb-3"><i className="ti ti-shopping-bag" /> Marketplace</span>
-              <h2>Buy, sell, and grow <span>on your terms.</span></h2>
-              <p>
-                From templates to digital tools, the Marketplace lets creators sell their work with full payment
-                protection — and lets buyers shop with confidence.
-              </p>
-              <div className="fc-provide-grid">
-                <div className="fc-provide-box">
-                  <div className="provide-icon"><img src="/assets/img/icons/ipad-icon.svg" alt="" /></div>
-                  <h6>Browse Products</h6>
-                  <p>Everything you need for your craft, backed by secure payments through Future Connect.</p>
-                  <Link href={r("user.products.index")} className="btn-fc-primary" style={{ fontSize: "0.8rem", padding: "9px 18px" }}>
-                    Explore <i className="ti ti-arrow-right" />
-                  </Link>
-                </div>
-                <div className="fc-provide-box">
-                  <div className="provide-icon"><img src="/assets/img/icons/service-icon.svg" alt="" /></div>
-                  <h6>Sell a Product</h6>
-                  <p>Put your digital products in front of thousands of buyers already on the platform.</p>
-                  <a
-                    data-bs-toggle="modal"
-                    data-bs-target="#applySellerModal"
-                    className="btn-fc-outline"
-                    style={{ fontSize: "0.8rem", padding: "9px 18px", cursor: "pointer" }}
-                  >
-                    Learn More <i className="ti ti-arrow-right" />
-                  </a>
-                </div>
-                <div className="fc-provide-box">
-                  <div className="provide-icon"><img src="/assets/img/icons/user-icon-01.svg" alt="" /></div>
-                  <h6>Become a Seller</h6>
-                  <p>Get paid instantly — Future Connect keeps a small fee to cover logistics and support.</p>
-                  <a
-                    className="btn-fc-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#applySellerModal"
-                    style={{ fontSize: "0.8rem", padding: "9px 18px", cursor: "pointer" }}
-                  >
-                    Apply <i className="ti ti-arrow-right" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════
-           4b. FEATURES ACCORDION (MOBILE)
-      ════════════════════════════════════ */}
-      <div className="fc-accordion d-lg-none">
-        <div className="container">
-          <div className="fc-section-head">
-            <span className="eyebrow">Platform Features</span>
-            <h2>Everything You Need, In One Place</h2>
-          </div>
-          <div className="accordion" id="fcAccordion">
-            {ACCORDION_PANELS.map((panel) => {
-              const isOpen = openAccordion === panel.id;
-              return (
-                <div className="accordion-item" key={panel.id}>
-                  <h2 className="accordion-header">
-                    <button
-                      className={`accordion-button${isOpen ? "" : " collapsed"}`}
-                      onClick={() => setOpenAccordion(isOpen ? null : panel.id)}
-                    >
-                      <i className={`ti ${panel.icon} me-2`} style={{ color: "var(--accent)" }} />
-                      {panel.label}
-                    </button>
-                  </h2>
-                  {isOpen && (
-                    <div className="accordion-collapse collapse show">
-                      <div className="accordion-body">
-                        <p style={{ fontSize: "0.85rem", color: "var(--text-2)", marginBottom: 16 }}>{panel.desc}</p>
-                        <Link
-                          href={r(panel.routeName)}
-                          className="btn-fc-primary"
-                          style={{ fontSize: "0.82rem", padding: "10px 20px" }}
-                        >
-                          {panel.cta} <i className="ti ti-arrow-right" />
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
 
       {/* ════════════════════════════════════
            6. PARTNERS
@@ -840,7 +655,7 @@ export default function Home({
               <div className="fc-section-head" style={{ marginBottom: 0 }}>
                 <span className="eyebrow">Testimonials</span>
                 <h2>Real Stories From Real Talent</h2>
-                <p>Hear from professionals who've grown their careers, client lists, and networks through Future Connect.</p>
+                <p>Hear from professionals who've grown their careers, client lists, and networks through Future Connect — then imagine what's next for you.</p>
               </div>
             </div>
             <div className="col-md-5 text-md-end">
@@ -935,16 +750,17 @@ export default function Home({
               >
                 Join Future Connect
               </span>
-              <h2>Your skills deserve to be seen. Let's make that happen.</h2>
-              <p>Join a growing community of verified professionals building real careers, one connection at a time. It only takes a few minutes to start.</p>
-              <div className="hero-ctas" style={{ marginBottom: 0 }}>
+              <h2>Your Skills Deserve to Be Seen. Let's Make That Happen.</h2>
+              <p>Every day you wait is a day someone else takes the opportunity that should've been yours. Join a growing community of verified professionals building real careers — starting today.</p>
+              <div className="hero-ctas" style={{ marginBottom: 8 }}>
                 <Link href={r("user.register_skills")} className="btn-fc-primary">
-                  Get Started <i className="ti ti-arrow-right" />
+                  Get Started Free <i className="ti ti-arrow-right" />
                 </Link>
                 <Link href={r("user.talents")} className="btn-fc-outline">
                   Browse Skills
                 </Link>
               </div>
+              <p className="fc-cta-note">No credit card. No commitment. Just your next opportunity.</p>
             </div>
           </div>
         </div>

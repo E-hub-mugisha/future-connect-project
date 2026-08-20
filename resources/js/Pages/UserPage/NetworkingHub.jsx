@@ -1,39 +1,7 @@
 import React from "react";
 import { Head, Link } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
-/**
- * NetworkingHub
- * -------------
- * React/Inertia port of the Blade `networking-hub` page.
- *
- * Notes on the conversion from Blade:
- * - `@extends('layouts.guest')` / `@section` — this component assumes it's
- *   rendered inside your Inertia layout (e.g. via `Page.layout = GuestLayout`
- *   or a persistent layout wrapper). The page `<title>` is now set with
- *   Inertia's `<Head>` instead of `@section('title', ...)`.
- * - `\App\Models\Category::all()` became a `categories` prop — pass the
- *   categories (with `talents_count`, e.g. via `withCount('talents')`) from
- *   your controller: `Inertia::render('NetworkingHub', ['categories' => ...])`.
- * - `route('user.talents')` / `route('user.talents.category', $slug)` became
- *   lookups into a `routes` prop (see DEFAULT_ROUTES below for fallbacks).
- *   If you have Ziggy set up globally, swap `r(name)` calls for Ziggy's
- *   `route(name)` directly and drop the `routes` prop.
- * - `{{ asset(...) }}` became plain string paths — pass an `assetBase` prop
- *   if your built assets live somewhere other than `/`.
- * - `@foreach` loops became `.map()`.
- * - `optional($cat->talents)->count() ?? 0` became `cat.talents_count ?? 0`
- *   — make sure your controller eager-loads/counts this.
- * - The vanilla `document.addEventListener('DOMContentLoaded', ...)` talent
- *   tab-filter script referenced `#talentTabs` / `.talent-item`, which don't
- *   exist on this page — it was dead code in the original Blade file, so it
- *   was dropped. If you have a talent tab filter elsewhere, wire it with
- *   React state (`useState` for the active filter) instead of DOM queries.
- * - Swiper's CSS/JS `<script>` tags weren't actually used anywhere in this
- *   page's markup (no `.swiper` elements), so they were left out. If you
- *   add a Swiper carousel later, install the `swiper` npm package and
- *   `import 'swiper/css'` / `import { Swiper, SwiperSlide } from 'swiper/react'`
- *   instead of loading it from a CDN inside a page component.
- */
+
 
 const DEFAULT_ROUTES = {
   "user.talents": "/skills-marketplace",
@@ -57,15 +25,18 @@ export default function NetworkingHub({
 
   return (
     <>
-      <Head title="Networking Hub – Connect with Skills & Opportunities" />
-
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&display=swap"
-        rel="stylesheet"
-      />
+      <Head title="Networking Hub – Every Connection You Need, In One Place" />
 
       <style>{`
+        /*
+          Font note: Apple does not license the SF Pro / San Francisco font
+          files for embedding on non-Apple-platform web pages. The correct,
+          fully-licensed way to render actual San Francisco on Apple devices
+          is the system-font stack below — Safari/macOS/iOS resolve
+          -apple-system / BlinkMacSystemFont straight to San Francisco,
+          and every other OS falls back to its own native UI font.
+        */
+
         /* ── Tokens ──────────────────────────────────────────────── */
         :root {
             --bg-base: #0e1618;
@@ -84,11 +55,14 @@ export default function NetworkingHub({
             --radius-sm: 6px;
             --radius-md: 10px;
             --radius-lg: 16px;
+            --font-head: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
             background: var(--bg-base) !important;
             color: var(--text-primary) !important;
+            font-family: var(--font-body);
         }
 
         /* ── Hero ────────────────────────────────────────────────── */
@@ -160,7 +134,7 @@ export default function NetworkingHub({
         }
 
         .nh-hero-title {
-            font-family: 'Syne', sans-serif;
+            font-family: var(--font-head);
             font-size: clamp(1.8rem, 4vw, 3rem);
             font-weight: 900;
             color: var(--text-primary);
@@ -178,6 +152,13 @@ export default function NetworkingHub({
             line-height: 1.7;
             max-width: 520px;
             margin-bottom: 1.75rem;
+        }
+
+        .nh-cta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .nh-cta-btn {
@@ -202,7 +183,30 @@ export default function NetworkingHub({
             color: #fff;
         }
 
-        .nh-cta-btn i {
+        .nh-cta-btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: .85rem 1.9rem;
+            font-weight: 700;
+            font-size: .95rem;
+            text-decoration: none;
+            transition: border-color .2s, color .2s, background .2s;
+            letter-spacing: .3px;
+        }
+
+        .nh-cta-btn-outline:hover {
+            border-color: var(--accent-muted);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .nh-cta-btn i,
+        .nh-cta-btn-outline i {
             font-size: 1rem;
         }
 
@@ -277,7 +281,7 @@ export default function NetworkingHub({
         }
 
         .nh-stat-num {
-            font-family: 'Syne', sans-serif;
+            font-family: var(--font-head);
             font-size: 1.1rem;
             font-weight: 900;
             color: var(--accent);
@@ -318,7 +322,7 @@ export default function NetworkingHub({
         }
 
         .nh-section-title {
-            font-family: 'Syne', sans-serif;
+            font-family: var(--font-head);
             font-size: clamp(1.4rem, 2.5vw, 1.9rem);
             font-weight: 800;
             color: var(--text-primary);
@@ -423,116 +427,95 @@ export default function NetworkingHub({
             background-size: 10px;
         }
 
-        /* ── Categories Grid (desktop) ───────────────────────────── */
-        .nh-cats {
+        /* ── Marketing / Start Connecting panel (replaces categories) ── */
+        .nh-market {
             padding: 3.5rem 0;
         }
 
-        .nh-cat-card {
+        .nh-market-panel {
+            position: relative;
+            overflow: hidden;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 1.4rem;
+            padding: 3rem 2.5rem;
+        }
+
+        .nh-market-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .nh-market-glow {
+            position: absolute;
+            top: -70px;
+            left: -70px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-muted) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .nh-market-title {
+            font-family: var(--font-head);
+            font-size: clamp(1.5rem, 3vw, 2.1rem);
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: .85rem;
+            position: relative;
+        }
+
+        .nh-market-title span {
+            color: var(--accent);
+        }
+
+        .nh-market-sub {
+            color: var(--text-secondary);
+            font-size: .92rem;
+            line-height: 1.75;
+            max-width: 560px;
+            margin-bottom: 1.75rem;
+            position: relative;
+        }
+
+        .nh-market-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2.25rem;
+            position: relative;
+        }
+
+        .nh-market-point {
             display: flex;
             flex-direction: column;
-            gap: .6rem;
-            transition: border-color .25s, transform .25s;
-            height: 100%;
+            gap: .4rem;
         }
 
-        .nh-cat-card:hover {
-            border-color: var(--accent-muted);
-            transform: translateY(-3px);
-        }
-
-        .nh-cat-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: var(--radius-sm);
-            background: var(--accent-dim);
-            border: 1px solid var(--accent-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .nh-cat-name {
-            font-size: .9rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-decoration: none;
-            line-height: 1.3;
-        }
-
-        .nh-cat-name:hover {
+        .nh-market-point-num {
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: 1.6rem;
             color: var(--accent);
         }
 
-        .nh-cat-count {
-            font-size: .72rem;
-            color: var(--text-muted);
-        }
-
-        .nh-cat-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: .75rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-decoration: none;
-            margin-top: auto;
-            transition: gap .2s;
-        }
-
-        .nh-cat-link:hover {
-            gap: 8px;
-            color: var(--accent-hover);
-        }
-
-        /* ── Trending scroll (mobile) ────────────────────────────── */
-        .nh-trend-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 6px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--border) transparent;
-        }
-
-        .nh-trend-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .nh-trend-scroll::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        .nh-trend-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+        .nh-market-point-lbl {
+            font-size: .82rem;
             color: var(--text-secondary);
-            font-size: .8rem;
-            font-weight: 600;
-            padding: 7px 16px;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: border-color .2s, color .2s, background .2s;
-            white-space: nowrap;
+            line-height: 1.5;
         }
 
-        .nh-trend-chip:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: var(--accent-dim);
+        .nh-market-note {
+            font-size: .78rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            position: relative;
         }
 
         /* ── Benefits ────────────────────────────────────────────── */
@@ -583,6 +566,44 @@ export default function NetworkingHub({
             margin: 0;
         }
 
+        /* ── Closing CTA ─────────────────────────────────────────── */
+        .nh-close-cta {
+            margin: 1rem 0 3.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .nh-close-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .nh-close-cta h2 {
+            font-family: var(--font-head);
+            font-size: clamp(1.4rem, 2.8vw, 2rem);
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: .75rem;
+        }
+
+        .nh-close-cta p {
+            color: var(--text-secondary);
+            font-size: .92rem;
+            max-width: 480px;
+            margin: 0 auto 1.75rem;
+            line-height: 1.7;
+        }
+
         /* ── Divider ─────────────────────────────────────────────── */
         .nh-divider {
             border: none;
@@ -603,6 +624,14 @@ export default function NetworkingHub({
 
             .nh-hero-img-wrap {
                 margin-top: 2rem;
+            }
+
+            .nh-market-panel {
+                padding: 2.25rem 1.5rem;
+            }
+
+            .nh-close-cta {
+                padding: 2.25rem 1.5rem;
             }
         }
 
@@ -642,6 +671,10 @@ export default function NetworkingHub({
             background: radial-gradient(circle, rgba(0, 166, 103, 0.08) 0%, transparent 70%);
         }
 
+        [data-h-theme="light"] .nh-market-glow {
+            background: radial-gradient(circle, rgba(0, 166, 103, 0.14) 0%, transparent 65%);
+        }
+
         /* Feature-list checkmark icon uses a hardcoded green stroke (#00a667),
        already correct for light mode as-is — no override needed. */
       `}</style>
@@ -658,14 +691,20 @@ export default function NetworkingHub({
                 <i className="fa-solid fa-network-wired"></i> Networking Hub
               </span>
               <h1 className="nh-hero-title">
-                Connect with <span>Skills</span><br />&amp; Opportunities
+                Every Connection <span>You Need</span><br />Is Already Here
               </h1>
               <p className="nh-hero-sub">
-                A large number of individuals use us to transform their thoughts into the real world and connect with like-minded professionals.
+                Stop networking the slow way. Future Connect puts verified skills, real opportunities, and the
+                people who can change your career one conversation away — starting the moment you sign in.
               </p>
-              <Link href={r("user.talents")} className="nh-cta-btn">
-                Explore Skills <i className="feather-arrow-right"></i>
-              </Link>
+              <div className="nh-cta-row">
+                <Link href={r("user.talents")} className="nh-cta-btn">
+                  Start Connecting <i className="feather-arrow-right"></i>
+                </Link>
+                <Link href={r("user.talents")} className="nh-cta-btn-outline">
+                  Explore Skills <i className="feather-arrow-right"></i>
+                </Link>
+              </div>
               <div className="nh-popular">
                 <span className="nh-popular-label">Popular:</span>
                 {popularCategories.map((cat) => (
@@ -723,11 +762,15 @@ export default function NetworkingHub({
                     Your gateway to meaningful<br />professional connections.
                   </h2>
                   <p>
-                    Whether you are a skill seeker looking for opportunities, a project owner looking for collaborators, or an entrepreneur looking to expand your network — this hub connects you with the right people.
+                    Whether you are a skill seeker looking for opportunities, a project owner looking for
+                    collaborators, or an entrepreneur looking to expand your network — this hub puts the right
+                    people directly in front of you, without the wait.
                   </p>
                   <h5>Our Mission</h5>
                   <p>
-                    At Future Connect, our mission is to empower individuals and businesses by facilitating easy access to a diverse range of high-quality services. We believe in creating a collaborative and inclusive marketplace that fosters growth, creativity, and mutual success.
+                    At Future Connect, our mission is to empower individuals and businesses by facilitating easy
+                    access to a diverse range of high-quality services. We believe in creating a collaborative and
+                    inclusive marketplace that fosters growth, creativity, and mutual success.
                   </p>
                 </div>
                 <ul className="nh-feature-list">
@@ -743,53 +786,42 @@ export default function NetworkingHub({
 
         <hr className="nh-divider" />
 
-        {/* ── Trending Categories (mobile scroll) ──────────────── */}
-        <section className="nh-cats d-md-none">
-          <div className="nh-section-head">
-            <div className="nh-section-eyebrow">Explore</div>
-            <h2 className="nh-section-title">Trending Categories</h2>
-            <p className="nh-section-sub">Discover inspiring stories, impactful skills, and creative people across Africa</p>
-          </div>
-          <div className="nh-trend-scroll">
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={categoryRoute(routes, cat.slug)}
-                className="nh-trend-chip"
-              >
-                {cat.name}
-                <span style={{ background: "var(--bg-elevated)", color: "var(--text-muted)", fontSize: ".65rem", padding: "1px 7px", borderRadius: "50px" }}>
-                  {cat.talents_count ?? 0}
-                </span>
+        {/* ── Marketing panel: Start Connecting (replaces categories section) ── */}
+        <section className="nh-market">
+          <div className="nh-market-panel">
+            <div className="nh-market-glow"></div>
+            <span className="nh-eyebrow">Why Wait?</span>
+            <h2 className="nh-market-title">
+              Your Next Opportunity Is <span>One Connection Away.</span>
+            </h2>
+            <p className="nh-market-sub">
+              Every day you're not connected is a day someone else claims the client, the collaborator, or the
+              mentor who should've found you. Future Connect brings the network to you — verified people, real
+              opportunities, no cold outreach required.
+            </p>
+            <div className="nh-cta-row">
+              <Link href={r("user.talents")} className="nh-cta-btn">
+                Start Connecting <i className="feather-arrow-right"></i>
               </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Trending Categories (desktop grid) ────────────────── */}
-        <section className="nh-cats d-none d-md-block">
-          <div className="nh-section-head">
-            <div className="nh-section-eyebrow">Explore</div>
-            <h2 className="nh-section-title">Trending Categories of Skilled People</h2>
-            <p className="nh-section-sub">Discover inspiring stories, impactful skills, and creative people across Africa</p>
-          </div>
-          <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
-            {categories.map((cat) => (
-              <div className="col" key={cat.id}>
-                <div className="nh-cat-card">
-                  <div className="nh-cat-icon">
-                    <i className="ti ti-speakerphone"></i>
-                  </div>
-                  <Link href={categoryRoute(routes, cat.slug)} className="nh-cat-name">
-                    {cat.name}
-                  </Link>
-                  <span className="nh-cat-count">{cat.talents_count ?? 0} skills</span>
-                  <Link href={categoryRoute(routes, cat.slug)} className="nh-cat-link">
-                    View skills <i className="feather-arrow-right"></i>
-                  </Link>
-                </div>
+              <Link href={r("user.talents")} className="nh-cta-btn-outline">
+                Explore Skills <i className="feather-arrow-right"></i>
+              </Link>
+            </div>
+            <div className="nh-market-points">
+              <div className="nh-market-point">
+                <span className="nh-market-point-num">10K+</span>
+                <span className="nh-market-point-lbl">Verified skills ready to work with you</span>
               </div>
-            ))}
+              <div className="nh-market-point">
+                <span className="nh-market-point-num">98%</span>
+                <span className="nh-market-point-lbl">Satisfaction from people who made the switch</span>
+              </div>
+              <div className="nh-market-point">
+                <span className="nh-market-point-num">3 min</span>
+                <span className="nh-market-point-lbl">Average time to set up your profile</span>
+              </div>
+            </div>
+            <p className="nh-market-note">Free to join. No credit card required.</p>
           </div>
         </section>
 
@@ -844,6 +876,17 @@ export default function NetworkingHub({
             </div>
           </div>
         </section>
+
+        {/* ── Closing CTA ─────────────────────────────────────────── */}
+        <div className="nh-close-cta">
+          <h2>Ready to Start Connecting?</h2>
+          <p>Join the professionals already building real careers and real networks on Future Connect. It only takes a few minutes to begin.</p>
+          <div className="nh-cta-row" style={{ justifyContent: "center" }}>
+            <Link href={r("user.talents")} className="nh-cta-btn">
+              Start Connecting <i className="feather-arrow-right"></i>
+            </Link>
+          </div>
+        </div>
 
       </div>
     </>
