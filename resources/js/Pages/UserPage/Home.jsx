@@ -635,6 +635,8 @@ export default function Home({
       {partners.length > 0 && (
         <section className="fc-partners">
           <div className="container">
+            <h2>Our Partners</h2>
+            <h1>Building a Global Network</h1>
             <p className="partners-label">Trusted by {partners.length}+ Partners Worldwide</p>
             <div className="partners-scroll">
               {partners.map((partner, i) => (
