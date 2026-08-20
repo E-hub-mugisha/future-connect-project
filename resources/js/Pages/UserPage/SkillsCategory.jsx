@@ -5,7 +5,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 const routes = {
     talentsCategory: (slug) => `/skills/category/${slug}`,
     talentDetails: (id) => `/skills/${id}`,
-    skills: '/skills',
+    skills: '/register/skills',
     search: '/search'
 };
 
@@ -50,19 +50,17 @@ export default function SkillsCategory({
 
     const filterTabs = [
         { key: 'all', label: 'All' },
-        { key: 'latest', label: 'Latest' },
-        { key: 'popular', label: 'Popular' },
+        { key: 'latest', label: 'Newest' },
+        { key: 'popular', label: 'Most Popular' },
         { key: 'featured', label: 'Featured' },
         { key: 'recommended', label: 'Recommended' },
     ];
 
     return (
         <>
-            <Head title={`${categoryName} Skills`} />
-            <link
-                href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
-                rel="stylesheet"
-            />
+            <Head title={`Hire ${categoryName} Talent — Verified Skilled People`} />
+
+            {/* Apple's system font is used instead of a web-font import — see developer.apple.com/fonts */}
 
             <style>{`
                 :root {
@@ -76,15 +74,20 @@ export default function SkillsCategory({
                     --text:       #e8eef0;
                     --muted:      #7a9199;
                     --white:      #ffffff;
-                    --font-head:  'Syne', sans-serif;
-                    --font-body:  'DM Sans', sans-serif;
+
+                    /* Apple system font stack — renders native San Francisco / SF Pro
+                       on Apple devices (see https://developer.apple.com/fonts/) and
+                       each platform's own system font elsewhere. No web-font request. */
+                    --font-head:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                    --font-body:  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
                     --radius:     12px;
                     --radius-lg:  18px;
                     --t:          .25s ease;
                 }
 
                 .fc-talents, .fc-talents *, .fc-talents *::before, .fc-talents *::after { box-sizing: border-box; }
-                .fc-talents { background: var(--bg); font-family: var(--font-body); color: var(--text); }
+                .fc-talents { background: var(--bg); font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
 
                 /* ─── PAGE HEADER ─── */
                 .page-header {
@@ -139,6 +142,13 @@ export default function SkillsCategory({
                     color: var(--muted);
                     font-size: 0.92rem;
                     max-width: 480px;
+                }
+
+                .page-header-cta {
+                    margin-top: 20px;
+                    display: flex;
+                    gap: 10px;
+                    flex-wrap: wrap;
                 }
 
                 /* ─── BUTTONS ─── */
@@ -388,6 +398,8 @@ export default function SkillsCategory({
                     margin-bottom: 8px;
                 }
 
+                .empty-state .btn-green { margin-top: 18px; }
+
                 /* ─── SIDEBAR (desktop) ─── */
                 .sidebar-card {
                     background: var(--bg2);
@@ -395,6 +407,27 @@ export default function SkillsCategory({
                     border-radius: var(--radius);
                     padding: 20px;
                     margin-bottom: 18px;
+                }
+
+                .sidebar-card.promo {
+                    background: linear-gradient(160deg, var(--green-dim), var(--bg2) 70%);
+                    border-color: rgba(0,166,103,0.3);
+                    text-align: center;
+                }
+
+                .sidebar-card.promo h6 {
+                    font-family: var(--font-head);
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    color: var(--white);
+                    margin-bottom: 6px;
+                }
+
+                .sidebar-card.promo p {
+                    font-size: 0.8rem;
+                    color: var(--muted);
+                    margin-bottom: 14px;
+                    line-height: 1.5;
                 }
 
                 .sidebar-title {
@@ -532,9 +565,14 @@ export default function SkillsCategory({
                     <div className="container">
                         <div className="page-header-eyebrow">Category</div>
                         <h1>
-                            Explore <span className="accent">{categoryName}</span> Skilled People
+                            Hire verified <span className="accent">{categoryName}</span> skills today
                         </h1>
-                        <p>Connect with the next wave of skilled professionals — fresh perspectives, verified talent.</p>
+                        <p>Every profile below is a real, verified professional ready to work — browse, compare, and message the right one in minutes.</p>
+                        <div className="page-header-cta">
+                            <Link href={routes.skills} className="btn-green">
+                                <i className="ti ti-star" /> Register Your Own Skills
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
@@ -575,12 +613,12 @@ export default function SkillsCategory({
                             <div className="col-lg-3 d-none d-lg-block">
                                 <div className="sidebar-card">
                                     <div className="sidebar-title">
-                                        <i className="ti ti-search" /> Search
+                                        <i className="ti ti-search" /> Find Someone Fast
                                     </div>
                                     <input
                                         type="text"
                                         className="sidebar-search"
-                                        placeholder="Search talents..."
+                                        placeholder="Search by name or skill..."
                                         value={sidebarQuery}
                                         onChange={(e) => setSidebarQuery(e.target.value)}
                                     />
@@ -588,7 +626,7 @@ export default function SkillsCategory({
 
                                 <div className="sidebar-card">
                                     <div className="sidebar-title">
-                                        <i className="ti ti-layout-grid" /> Categories
+                                        <i className="ti ti-layout-grid" /> Browse Categories
                                     </div>
                                     {categories.map((cat) => (
                                         <Link
@@ -600,6 +638,14 @@ export default function SkillsCategory({
                                             <span className="count">{cat.talents?.length ?? 0}</span>
                                         </Link>
                                     ))}
+                                </div>
+
+                                <div className="sidebar-card promo">
+                                    <h6>Have this skill yourself?</h6>
+                                    <p>Create a free profile and start getting discovered by clients browsing this category.</p>
+                                    <Link href={routes.skills} className="btn-green" style={{ width: '100%', justifyContent: 'center' }}>
+                                        Join Free
+                                    </Link>
                                 </div>
                             </div>
                             {/* /Sidebar */}
@@ -625,7 +671,7 @@ export default function SkillsCategory({
                                             data-bs-toggle="modal"
                                             data-bs-target="#searchModal"
                                         >
-                                            <i className="ti ti-search" /> Search Skills
+                                            <i className="ti ti-search" /> Refine Search
                                         </button>
                                     </div>
                                 </div>
@@ -689,8 +735,11 @@ export default function SkillsCategory({
                                     ) : (
                                         <div className="empty-state">
                                             <i className="ti ti-users-off" />
-                                            <h4>No skills found</h4>
-                                            <p>Try a different category or search keyword.</p>
+                                            <h4>No matches yet — but this could be you</h4>
+                                            <p>Try a different category or search keyword, or be the first to claim this space.</p>
+                                            <Link href={routes.skills} className="btn-green">
+                                                <i className="ti ti-star" /> Register Your Skills
+                                            </Link>
                                         </div>
                                     )}
                                 </div>
@@ -746,7 +795,10 @@ export default function SkillsCategory({
                                             <div className="carousel-item active">
                                                 <div className="empty-state">
                                                     <i className="ti ti-users-off" />
-                                                    <h4>No talents found</h4>
+                                                    <h4>No matches yet — but this could be you</h4>
+                                                    <Link href={routes.skills} className="btn-green">
+                                                        <i className="ti ti-star" /> Register Your Skills
+                                                    </Link>
                                                 </div>
                                             </div>
                                         )}
@@ -814,13 +866,13 @@ export default function SkillsCategory({
                         <input
                             type="text"
                             className="sidebar-search mb-4"
-                            placeholder="Search talents..."
+                            placeholder="Search by name or skill..."
                             value={sidebarQuery}
                             onChange={(e) => setSidebarQuery(e.target.value)}
                         />
 
                         <div className="sidebar-title mb-3">
-                            <i className="ti ti-layout-grid" /> Categories
+                            <i className="ti ti-layout-grid" /> Browse Categories
                         </div>
                         {categories.map((cat) => (
                             <Link
@@ -859,7 +911,7 @@ export default function SkillsCategory({
                                     style={{ fontFamily: 'var(--font-head)', color: 'var(--white)' }}
                                 >
                                     <i className="ti ti-search me-2" style={{ color: 'var(--green)' }} />
-                                    Find Skills
+                                    Find the Right Talent, Fast
                                 </h5>
                                 <button
                                     type="button"
@@ -925,7 +977,7 @@ export default function SkillsCategory({
                                             Cancel
                                         </button>
                                         <button type="submit" className="btn-green">
-                                            <i className="ti ti-search" /> Search
+                                            <i className="ti ti-search" /> Search Talent
                                         </button>
                                     </div>
                                 </form>

@@ -55,14 +55,10 @@ export default function SkillsMarketPlace({ categories = [] }) {
 
   return (
     <>
-      <Head title="Skilled Marketplace – Discover Skilled Professionals" />
+      <Head title="Skilled Marketplace – Get Discovered. Get Hired. Get Growing." />
 
-      {/* SwiperJS + fonts */}
+      {/* SwiperJS (Apple's system font is used instead of a web-font import — see developer.apple.com/fonts) */}
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
-        rel="stylesheet"
-      />
 
       <style>{`
         :root {
@@ -76,8 +72,15 @@ export default function SkillsMarketPlace({ categories = [] }) {
           --text:      #e8eef0;
           --muted:     #7a9199;
           --white:     #ffffff;
-          --font-head: 'Syne', sans-serif;
-          --font-body: 'DM Sans', sans-serif;
+
+          /* Apple system font stack — pulls the native San Francisco / SF Pro
+             font on Apple devices (see https://developer.apple.com/fonts/)
+             and falls back to each platform's own system font elsewhere,
+             so type always looks native and loads instantly with no
+             external font request. */
+          --font-head: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
           --radius:    12px;
           --radius-lg: 20px;
           --transition:.25s ease;
@@ -89,6 +92,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
           background: var(--bg);
           font-family: var(--font-body);
           color: var(--text);
+          -webkit-font-smoothing: antialiased;
         }
 
         /* ─── HERO ─── */
@@ -118,7 +122,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
           border-radius: 50px;
           padding: 6px 16px;
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 600;
           color: var(--green);
           letter-spacing: 0.06em;
           text-transform: uppercase;
@@ -177,6 +181,14 @@ export default function SkillsMarketPlace({ categories = [] }) {
           gap: 12px;
           align-items: center;
         }
+
+        .hero-trust {
+          margin-top: 18px;
+          font-size: 0.8rem;
+          color: var(--muted);
+        }
+
+        .hero-trust strong { color: var(--text); font-weight: 600; }
 
         /* ─── BUTTONS ─── */
         .btn-green {
@@ -848,31 +860,31 @@ export default function SkillsMarketPlace({ categories = [] }) {
             {/* Left */}
             <div className="col-lg-6">
               <div className="hero-eyebrow">
-                <span></span> Africa&apos;s Top Skills Marketplace
+                <span></span> 74,000+ Skilled People, One Platform
               </div>
               <h1 className="hero-headline">
-                Your gateway to <span className="accent">skills</span>, opportunities &amp; growth.
+                Your skills deserve to be <span className="accent">found</span>.
               </h1>
               <p className="hero-sub">
-                Connect with verified professionals, showcase your expertise, and build the career you deserve — all in one platform.
+                Stop sending your CV into the void. List your skills, get verified, and let clients across Africa come to you — free to join, live in minutes.
               </p>
               <div className="hero-cta-group">
+                <Link className="btn-green" href={route('user.register_skills')}>
+                  <i className="ti ti-star"></i> Join Free — Get Discovered
+                </Link>
                 <a
-                  className="btn-green"
+                  className="btn-outline"
                   role="button"
                   data-bs-toggle="modal"
                   data-bs-target="#searchModal"
                   onClick={() => setSearchModalOpen(true)}
                 >
-                  <i className="ti ti-search"></i> Find Skills
+                  <i className="ti ti-search"></i> Hire Skilled Talent
                 </a>
-                <Link className="btn-outline" href={route('user.register_skills')}>
-                  <i className="ti ti-star"></i> Register your Skills
-                </Link>
-                <Link className="btn-outline" href={route('talent.connections-room')}>
-                  <i className="ti ti-users"></i> Connection Room
-                </Link>
               </div>
+              <p className="hero-trust">
+                <strong>No listing fees.</strong> Verified profiles. Trusted by employers in 30+ countries.
+              </p>
             </div>
 
             {/* Right — 3 feature cards (desktop) */}
@@ -880,37 +892,31 @@ export default function SkillsMarketPlace({ categories = [] }) {
               <div className="hero-cards">
                 <div className="hero-card">
                   <div className="hero-card-icon"><i className="ti ti-speakerphone"></i></div>
-                  <h5>Promote Your Skills</h5>
-                  <p>Boost your profile and reach 3× more employers. Get verified and feature your story on our homepage.</p>
-                  <a
-                    className="card-link"
-                    role="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#searchModal"
-                    onClick={() => setSearchModalOpen(true)}
-                  >
-                    Search skilled people <i className="ti ti-arrow-right"></i>
-                  </a>
+                  <h5>Get Seen by 3× More Employers</h5>
+                  <p>A verified badge and a featured spot on our homepage put your profile in front of the people actually hiring — not lost in a pile of applications.</p>
+                  <Link className="card-link" href={route('user.register_skills')}>
+                    Claim your spot <i className="ti ti-arrow-right"></i>
+                  </Link>
                 </div>
 
                 <div className="row g-4">
                   <div className="col-6">
                     <div className="hero-card">
                       <div className="hero-card-icon"><i className="ti ti-badge"></i></div>
-                      <h5>Join Our Skill Hub</h5>
-                      <p>Showcase skills, get verified, and connect with global clients.</p>
+                      <h5>Build Instant Credibility</h5>
+                      <p>Verification turns "just another profile" into proof you can be trusted.</p>
                       <Link className="card-link" href={route('user.register_skills')}>
-                        Register now <i className="ti ti-arrow-right"></i>
+                        Get verified <i className="ti ti-arrow-right"></i>
                       </Link>
                     </div>
                   </div>
                   <div className="col-6">
                     <div className="hero-card">
                       <div className="hero-card-icon"><i className="ti ti-world"></i></div>
-                      <h5>Expand Network</h5>
-                      <p>Join groups, attend virtual events, and build connections that matter.</p>
+                      <h5>Grow Beyond Your City</h5>
+                      <p>Tap into a network spanning 30+ countries — new clients, mentors, and collaborators.</p>
                       <Link className="card-link" href={route('talent.connections-room')}>
-                        Connection Room <i className="ti ti-arrow-right"></i>
+                        Start networking <i className="ti ti-arrow-right"></i>
                       </Link>
                     </div>
                   </div>
@@ -930,33 +936,27 @@ export default function SkillsMarketPlace({ categories = [] }) {
                   <div className="carousel-item active">
                     <div className="m-hero-card">
                       <div className="hero-card-icon mx-auto mb-3"><i className="ti ti-speakerphone"></i></div>
-                      <h4>Promote Your Skills</h4>
-                      <p>Stand out! Boost your profile and reach 3× more employers. Get verified today.</p>
-                      <a
-                        className="btn-green mx-auto"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#searchModal"
-                        onClick={() => setSearchModalOpen(true)}
-                      >
-                        <i className="ti ti-search"></i> Search Talent
-                      </a>
+                      <h4>Get Seen by 3× More Employers</h4>
+                      <p>Verify your profile and get featured — stand out from day one.</p>
+                      <Link className="btn-green mx-auto" href={route('user.register_skills')}>
+                        <i className="ti ti-star"></i> Join Free
+                      </Link>
                     </div>
                   </div>
                   <div className="carousel-item">
                     <div className="m-hero-card">
                       <div className="hero-card-icon mx-auto mb-3"><i className="ti ti-badge"></i></div>
-                      <h4>Join Our Skill Hub</h4>
-                      <p>Showcase your skills, get verified, and connect with clients globally.</p>
+                      <h4>Build Instant Credibility</h4>
+                      <p>A verified badge turns your profile into proof clients can trust.</p>
                       <Link className="btn-green mx-auto" href={route('user.register_skills')}>Register Skills</Link>
                     </div>
                   </div>
                   <div className="carousel-item">
                     <div className="m-hero-card">
                       <div className="hero-card-icon mx-auto mb-3"><i className="ti ti-world"></i></div>
-                      <h4>Expand Your Network</h4>
-                      <p>Connect with industry professionals, mentors, and peers across Africa.</p>
-                      <Link className="btn-green mx-auto" href={route('register')}>Join Community</Link>
+                      <h4>Grow Beyond Your City</h4>
+                      <p>Connect with clients, mentors, and peers across 30+ countries.</p>
+                      <Link className="btn-green mx-auto" href={route('register')}>Join the Community</Link>
                     </div>
                   </div>
                 </div>
@@ -975,25 +975,25 @@ export default function SkillsMarketPlace({ categories = [] }) {
             <div className="col-6 col-md-3">
               <div className="stat-item">
                 <span className="stat-num">74K<span style={{ color: 'var(--green)' }}>+</span></span>
-                <span className="stat-label">Skilled People</span>
+                <span className="stat-label">Skilled People Hired</span>
               </div>
             </div>
             <div className="col-6 col-md-3">
               <div className="stat-item">
                 <span className="stat-num">120<span style={{ color: 'var(--green)' }}>+</span></span>
-                <span className="stat-label">Categories</span>
+                <span className="stat-label">Skill Categories</span>
               </div>
             </div>
             <div className="col-6 col-md-3">
               <div className="stat-item">
                 <span className="stat-num">98<span style={{ color: 'var(--green)' }}>%</span></span>
-                <span className="stat-label">Satisfaction Rate</span>
+                <span className="stat-label">Would Recommend Us</span>
               </div>
             </div>
             <div className="col-6 col-md-3">
               <div className="stat-item">
                 <span className="stat-num">30+</span>
-                <span className="stat-label">Countries</span>
+                <span className="stat-label">Countries Reached</span>
               </div>
             </div>
           </div>
@@ -1005,8 +1005,8 @@ export default function SkillsMarketPlace({ categories = [] }) {
       {/* ═══ CATEGORIES (Mobile scroll) ═══ */}
       <div className="container d-lg-none py-5">
         <div className="mb-3">
-          <div className="section-label">Browse</div>
-          <div className="section-title">Trending Categories</div>
+          <div className="section-label">Find Your Fit</div>
+          <div className="section-title">Whatever your skill, there's a home for it here</div>
         </div>
         <div className="cat-scroll">
           {categories.map((cat) => (
@@ -1022,9 +1022,9 @@ export default function SkillsMarketPlace({ categories = [] }) {
         <div className="container">
           <div className="d-flex align-items-end justify-content-between mb-8 flex-wrap gap-3">
             <div>
-              <div className="section-label">Explore</div>
-              <div className="section-title">Trending Categories of Skilled People</div>
-              <p className="section-sub">Discover inspiring stories, impactful skills, and creative people across Africa</p>
+              <div className="section-label">Find Your Fit</div>
+              <div className="section-title">Whatever your skill, there's a home for it here</div>
+              <p className="section-sub">Browse 120+ categories of talented professionals — or claim yours and start getting discovered today.</p>
             </div>
           </div>
 
@@ -1036,9 +1036,9 @@ export default function SkillsMarketPlace({ categories = [] }) {
                   <h6 className="mb-1">
                     <Link href={route('user.talents.category', cat.slug)}>{cat.name}</Link>
                   </h6>
-                  <p>{cat.talents_count ?? 0} skills</p>
+                  <p>{cat.talents_count ?? 0} skilled people ready to hire</p>
                   <Link href={route('user.talents.category', cat.slug)} className="slide-line-btn">
-                    <i className="feather-arrow-right"></i> View Skills
+                    <i className="feather-arrow-right"></i> Browse Talent
                   </Link>
                 </div>
               </div>
@@ -1054,10 +1054,10 @@ export default function SkillsMarketPlace({ categories = [] }) {
         <div className="container">
           <div className="row align-items-center g-5">
             <div className="col-md-8">
-              <div className="section-label">Join Today</div>
-              <div className="section-title">Want to Showcase Your Skills?</div>
+              <div className="section-label">Free to Join</div>
+              <div className="section-title">Your next opportunity is one profile away.</div>
               <p className="section-sub mt-2">
-                Over 74K skilled people on the platform, available today for employers and clients. Join our community and take the first step towards your dream career.
+                Join 74K+ skilled people already getting discovered by employers and clients across Africa. It takes less than five minutes to set up your profile — and it's free.
               </p>
             </div>
             <div className="col-md-4 text-md-end">
@@ -1067,7 +1067,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
                 className="btn-green"
                 style={{ fontSize: '1rem', padding: '14px 32px' }}
               >
-                Register Your Skills <i className="ti ti-chevron-right"></i>
+                Create My Free Profile <i className="ti ti-chevron-right"></i>
               </Link>
             </div>
           </div>
@@ -1082,12 +1082,12 @@ export default function SkillsMarketPlace({ categories = [] }) {
           <div className="row g-5">
             <div className="col-lg-4">
               <div className="section-label">FAQ</div>
-              <div className="section-title">Skilled People Frequently Asked Questions</div>
+              <div className="section-title">Still deciding? Here's what people ask us first.</div>
               <p className="section-sub mt-3">
-                Don&apos;t see your question? We&apos;re here to help you connect with the right skilled people.
+                Can't find your answer? Our team will walk you through exactly how to get set up and start getting hired.
               </p>
               <Link href={route('user.contact')} className="btn-green mt-4 d-inline-flex">
-                Ask a Question <i className="ti ti-arrow-badge-right ms-1"></i>
+                Ask Us Anything <i className="ti ti-arrow-badge-right ms-1"></i>
               </Link>
             </div>
 
@@ -1112,7 +1112,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="searchModalLabel">
-                <i className="ti ti-search me-2" style={{ color: 'var(--green)' }}></i>Find Your Skills
+                <i className="ti ti-search me-2" style={{ color: 'var(--green)' }}></i>Find the Right Talent, Fast
               </h5>
               <button
                 type="button"
@@ -1158,7 +1158,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
                     Cancel
                   </button>
                   <button type="submit" className="btn-green">
-                    <i className="ti ti-search"></i> Search
+                    <i className="ti ti-search"></i> Search Talent
                   </button>
                 </div>
               </form>
@@ -1172,7 +1172,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
         <div className="modal-dialog modal-lg modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="talentModalLabel">Skill Registration</h5>
+              <h5 className="modal-title" id="talentModalLabel">Get Discovered — Set Up Your Profile</h5>
               <button
                 type="button"
                 className="btn-close btn-close-white"
@@ -1199,9 +1199,9 @@ export default function SkillsMarketPlace({ categories = [] }) {
               <form onSubmit={handleTalentSubmit}>
                 {/* Step 1 */}
                 <div className={`step-section${step === 0 ? ' active' : ''}`}>
-                  <div className="step-title">Personal Info</div>
-                  <div className="step-sub">Fill your basic information for profile setup.</div>
-                  <div className="info-note">This information will appear on your public profile.</div>
+                  <div className="step-title">Let's start with you</div>
+                  <div className="step-sub">Two minutes of basics — this is what clients see first.</div>
+                  <div className="info-note">A complete profile gets found first. Make this one count.</div>
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label className="form-label">Full Name</label>
@@ -1237,9 +1237,9 @@ export default function SkillsMarketPlace({ categories = [] }) {
 
                 {/* Step 2 */}
                 <div className={`step-section${step === 1 ? ' active' : ''}`}>
-                  <div className="step-title">Contact Info</div>
-                  <div className="step-sub">Provide your contact details for clients to reach you.</div>
-                  <div className="info-note">Your email will not be shared publicly.</div>
+                  <div className="step-title">How should clients reach you?</div>
+                  <div className="step-sub">This is how real opportunities land in your inbox.</div>
+                  <div className="info-note">Your email stays private — only your public profile is visible.</div>
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label className="form-label">Phone</label>
@@ -1278,9 +1278,9 @@ export default function SkillsMarketPlace({ categories = [] }) {
 
                 {/* Step 3 */}
                 <div className={`step-section${step === 2 ? ' active' : ''}`}>
-                  <div className="step-title">Skill Info</div>
-                  <div className="step-sub">Define your skills and expertise to attract the right clients.</div>
-                  <div className="info-note">Be specific — detailed descriptions get 2× more views.</div>
+                  <div className="step-title">Show off what you do best</div>
+                  <div className="step-sub">This is your pitch — make clients want to hire you.</div>
+                  <div className="info-note">Specific, detailed descriptions get 2× more profile views.</div>
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label className="form-label">Languages Spoken</label>
@@ -1314,7 +1314,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
                       <textarea
                         className="form-control"
                         rows="4"
-                        placeholder="Describe your talent and experience..."
+                        placeholder="Tell clients what you do, how you do it, and why they should hire you..."
                         value={data.description}
                         onChange={(e) => setData('description', e.target.value)}
                       ></textarea>
@@ -1333,8 +1333,8 @@ export default function SkillsMarketPlace({ categories = [] }) {
 
                 {/* Step 4 */}
                 <div className={`step-section${step === 3 ? ' active' : ''}`}>
-                  <div className="step-title">Profile Photo</div>
-                  <div className="step-sub">Add a professional photo to complete your profile.</div>
+                  <div className="step-title">One last thing — your face</div>
+                  <div className="step-sub">Profiles with a real photo get trusted (and hired) faster.</div>
                   <div className="info-note">A clear headshot increases profile views by 40%.</div>
                   <div className="mb-3">
                     <label className="form-label">Profile Image</label>
@@ -1364,7 +1364,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
                       <i className="ti ti-arrow-left me-1"></i> Back
                     </button>
                     <button type="submit" className="btn-green" style={{ background: '#48d597' }} disabled={processing}>
-                      <i className="ti ti-check me-1"></i> Submit Registration
+                      <i className="ti ti-check me-1"></i> Get Discovered Now
                     </button>
                   </div>
                 </div>
@@ -1381,34 +1381,34 @@ export default function SkillsMarketPlace({ categories = [] }) {
 const FAQ_ITEMS = [
   {
     id: 'faq-1',
-    question: 'How can I find the right skilled people for my project?',
+    question: 'How fast can I find the right skilled person for my project?',
     answer:
-      'Our Skilled People Marketplace lets you filter professionals by skills, categories, experience, and location — making it easy to find the perfect match for your project.',
+      'Filter by skill, category, experience, and location, and you\'ll have a shortlist of qualified, verified professionals in minutes — not days of scrolling.',
   },
   {
     id: 'faq-2',
-    question: 'How do I hire a skilled person?',
+    question: 'How do I actually hire someone once I find them?',
     answer:
-      'After browsing profiles, you can contact skilled people directly through the platform or request a proposal. Our messaging system ensures smooth communication and collaboration.',
+      'Message them directly through the platform or request a proposal on the spot. No middlemen, no waiting — just a straight line from "I found them" to "we\'re working together."',
   },
   {
     id: 'faq-3',
-    question: 'Can skilled people showcase their past projects?',
+    question: 'Can I see proof of someone\'s past work before I hire?',
     answer:
-      'Yes! Skilled people can upload portfolios, project samples, and certifications to highlight their skills and achievements, helping you make informed hiring decisions.',
+      'Yes — every profile can include a portfolio, project samples, and certifications, so you\'re hiring based on evidence, not guesswork.',
   },
   {
     id: 'faq-4',
-    question: 'Is there a verification process for talents?',
+    question: 'How do I know a talent is actually who they say they are?',
     answer:
-      'We verify all registered talents to ensure authenticity. Verified talents are marked with a badge on their profiles, giving you full confidence in your collaboration.',
+      'We verify every registered talent and mark verified profiles with a badge, so you can hire with confidence from the very first message.',
   },
   {
     id: 'faq-5',
-    question: 'How much does it cost to hire a talent?',
+    question: 'What does it cost to hire — or to list my own skills?',
     answer:
-      "Costs vary depending on the talent's experience, skills, and project scope. The platform provides transparent pricing or allows you to negotiate directly with the talent.",
+      'Creating your profile is free. Hiring costs vary by the talent\'s experience and scope of work, with transparent pricing or direct negotiation — no hidden platform fees.',
   },
 ];
 
-SkillsMarketPlace.layout = (page) => <GuestLayout children={page} title="Skills Marketplace" description="Discover skilled people across Africa, showcase your expertise, and connect with opportunities in our Skills Marketplace." />;
+SkillsMarketPlace.layout = (page) => <GuestLayout children={page} title="Skills Marketplace" description="Join 74,000+ skilled people getting discovered by employers and clients across Africa. Create your free profile today." />;

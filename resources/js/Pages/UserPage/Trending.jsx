@@ -2,39 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * Trending (Inertia page component)
- * ------------------------------------
- * React/Inertia port of the Blade "Trending Now" view.
- *
- * Notes on the conversion from Blade:
- * - `route('name', $slug ?? $id)` calls go through the safe `r()` wrapper
- *   used across the other pages (falls back to `#` + a console warning if
- *   Ziggy's `window.Ziggy` isn't set up).
- * - All the Eloquent collections ($tickerItems, $trendingSkills,
- *   $trendingCategories, $trendingProjects, $trendingProducts,
- *   $trendingTalent) and the $counts array became props, passed straight
- *   through from `Inertia::render('Trending', [...])`.
- * - `Str::limit($project->description, 90)` became a small `truncate()`
- *   helper.
- * - `mb_substr($name, 0, 1)` (first-letter avatar/icon tiles) became
- *   `firstLetter()`.
- * - `number_format(...)` became `.toLocaleString()`.
- * - The vanilla-JS tab filter + sliding indicator (`#trTabs`,
- *   `#trTabIndicator`, the `@push('scripts')` block) became an
- *   `activeFilter` state plus a `useEffect` that measures the active tab's
- *   `ref` and positions the indicator — same visual behavior, no direct
- *   DOM queries.
- * - The ticker's "duplicate the list for a seamless loop" trick
- *   (`$tickerItems->concat($tickerItems)`) became
- *   `[...tickerItems, ...tickerItems]`.
- *
- * Light theme:
- * - No light theme existed in this file — only unconditional dark tokens in
- *   `:root`. Added a `[data-h-theme="light"]` override block following the
- *   same token-swap pattern used on your other pages, so this page now
- *   respects the same header theme toggle they do.
- */
 
 function r(name, params) {
   try {
@@ -56,6 +23,33 @@ function firstLetter(str = "", fallback = "?") {
   return (str || fallback).slice(0, 1).toUpperCase();
 }
 
+// Route name each "recently added" item type resolves to — keep this in
+// sync with the per-section Link hrefs further down the page.
+const RECENT_ROUTE_BY_TYPE = {
+  skill: "skills.show",
+  project: "projects.show",
+  product: "products.show",
+  talent: "talent.show",
+};
+
+function timeAgo(dateString) {
+  if (!dateString) return "Just now";
+  const then = new Date(dateString).getTime();
+  if (Number.isNaN(then)) return "Just now";
+  const seconds = Math.max(0, Math.floor((Date.now() - then) / 1000));
+  if (seconds < 60) return "Just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return `${weeks}w ago`;
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
+}
+
 function Delta({ up, delta, floating = false }) {
   return (
     <span className={`tr-delta${floating ? " tr-delta--floating" : ""} ${up ? "is-up" : "is-down"}`}>
@@ -66,6 +60,7 @@ function Delta({ up, delta, floating = false }) {
 
 const FILTERS = [
   { key: "all", label: "All" },
+  { key: "recent", label: "Just Added" },
   { key: "skills", label: "Skills" },
   { key: "categories", label: "Categories" },
   { key: "projects", label: "Projects" },
@@ -75,12 +70,13 @@ const FILTERS = [
 
 export default function Trending({
   tickerItems = [],
-  counts = { all: 0, skills: 0, categories: 0, projects: 0, products: 0, talent: 0 },
+  counts = { all: 0, recent: 0, skills: 0, categories: 0, projects: 0, products: 0, talent: 0 },
   trendingSkills = [],
   trendingCategories = [],
   trendingProjects = [],
   trendingProducts = [],
   trendingTalent = [],
+  recentlyAdded = [],
 }) {
   const [activeFilter, setActiveFilter] = useState("all");
   const tabRefs = useRef({});
@@ -101,21 +97,35 @@ export default function Trending({
     return () => window.removeEventListener("resize", moveIndicator);
   }, [activeFilter]);
 
+  // "Just Added" is its own dedicated view rather than folded into "All" —
+  // it's the same underlying records as the sections below, just re-sorted
+  // by recency instead of by trend volume, so showing both under "All"
+  // would just duplicate cards.
   const showSection = (key) => activeFilter === "all" || activeFilter === key;
+  const showRecent = activeFilter === "recent";
   const tickerLoop = tickerItems.length ? [...tickerItems, ...tickerItems] : [];
 
   return (
     <>
-      <Head title="Trending Now | FutureConnect" />
+      <Head title="Trending Now" />
 
       <div className="tr-page">
         <header className="tr-hero">
           <div className="tr-hero__inner">
-            <span className="tr-eyebrow"><span className="tr-dot" /> Updated live</span>
-            <h1 className="tr-title">What's moving on FutureConnect</h1>
+            <span className="tr-eyebrow"><span className="tr-dot" /> Live activity, updated hourly</span>
+            <h1 className="tr-title">See who's winning on FutureConnect right now</h1>
             <p className="tr-subtitle">
-              The skills, gigs, and talent gaining momentum across Rwanda's marketplace right now.
+              Rwanda's sharpest freelancers, the gigs pulling the most proposals, and the newest listings —
+              all in one feed, so you never miss the opportunity that was made for you.
             </p>
+            <div className="tr-hero__cta">
+              <Link href={r("projects.create")} className="tr-btn tr-btn--primary">
+                Post a project — get proposals today
+              </Link>
+              <Link href={r("register")} className="tr-btn tr-btn--ghost">
+                Join as talent
+              </Link>
+            </div>
           </div>
 
           <div className="tr-ticker" aria-label="Trending skills ticker">
@@ -130,7 +140,7 @@ export default function Trending({
                   </span>
                 ))
               ) : (
-                <span className="tr-ticker__item">Trending data will appear here once activity picks up</span>
+                <span className="tr-ticker__item">Momentum is building — check back shortly for live trends</span>
               )}
             </div>
           </div>
@@ -150,11 +160,41 @@ export default function Trending({
           <span className="tr-tab__indicator" style={indicatorStyle} />
         </nav>
 
+        {showRecent && (
+          <section className="tr-section" data-section="recent">
+            <div className="tr-section__head">
+              <h2>Just added</h2>
+              <p>Fresh off the press — reach out first and skip the competition.</p>
+            </div>
+
+            {recentlyAdded.length === 0 ? (
+              <div className="tr-empty">Nothing new in the last few hours — be the first to add something.</div>
+            ) : (
+              <div className="tr-grid tr-grid--recent">
+                {recentlyAdded.map((item) => (
+                  <Link
+                    key={`${item.type}-${item.id}`}
+                    href={r(RECENT_ROUTE_BY_TYPE[item.type] ?? "home", item.slug ?? item.id)}
+                    className="tr-card tr-card--recent"
+                  >
+                    <div className="tr-card__top">
+                      <span className="tr-badge tr-badge--new">New · {item.type_label}</span>
+                      <span className="tr-timestamp">{timeAgo(item.created_at)}</span>
+                    </div>
+                    <h3 className="tr-card__title">{item.name}</h3>
+                    <p className="tr-card__desc">{item.subtitle}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
         {showSection("skills") && (
           <section className="tr-section" data-section="skills">
             <div className="tr-section__head">
-              <h2>Trending skills</h2>
-              <p>What clients are hiring for this month</p>
+              <h2>In-demand skills</h2>
+              <p>What clients can't stop hiring for — list one of these and get found faster.</p>
             </div>
 
             {trendingSkills.length === 0 ? (
@@ -181,8 +221,8 @@ export default function Trending({
         {showSection("categories") && (
           <section className="tr-section" data-section="categories">
             <div className="tr-section__head">
-              <h2>Trending categories</h2>
-              <p>Where the most new work is landing</p>
+              <h2>Where the work is</h2>
+              <p>The categories pulling the most new work this month — find your lane and start pitching.</p>
             </div>
 
             {trendingCategories.length === 0 ? (
@@ -209,8 +249,8 @@ export default function Trending({
         {showSection("projects") && (
           <section className="tr-section" data-section="projects">
             <div className="tr-section__head">
-              <h2>Trending projects</h2>
-              <p>Fresh gigs drawing the most proposals</p>
+              <h2>Fresh opportunities</h2>
+              <p>New gigs are landing daily — get your proposal in before the best ones fill up.</p>
             </div>
 
             {trendingProjects.length === 0 ? (
@@ -245,8 +285,8 @@ export default function Trending({
         {showSection("products") && (
           <section className="tr-section" data-section="products">
             <div className="tr-section__head">
-              <h2>Trending products</h2>
-              <p>Digital products and services selling fastest</p>
+              <h2>Best-selling services</h2>
+              <p>Ready-made products and services converting fastest this month.</p>
             </div>
 
             {trendingProducts.length === 0 ? (
@@ -278,8 +318,8 @@ export default function Trending({
         {showSection("talent") && (
           <section className="tr-section" data-section="talent">
             <div className="tr-section__head">
-              <h2>Trending talent</h2>
-              <p>Professionals getting hired the most this month</p>
+              <h2>Rising stars</h2>
+              <p>Professionals getting hired again and again — book them before their calendar fills up.</p>
             </div>
 
             {trendingTalent.length === 0 ? (
@@ -320,11 +360,22 @@ export default function Trending({
           --tr-muted: #9fb3b0;
           --tr-border: rgba(255, 255, 255, .08);
           --tr-danger: #ef7b6a;
+          --tr-new: #ffb648;
+          --tr-new-glow: rgba(255, 182, 72, .16);
+          /* SF Pro is the San Francisco system font. Apple's font license only
+             permits shipping the actual SF Pro font files inside apps that run
+             on Apple platforms — it can't be self-hosted for a public website.
+             The -apple-system / BlinkMacSystemFont stack below is the
+             license-safe way to get real San Francisco rendering on macOS/iOS
+             (Safari and Chrome resolve it to the OS's system font), with
+             sensible fallbacks elsewhere. */
+          --tr-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+            "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         .tr-page {
           background: var(--tr-bg); color: var(--tr-white);
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: var(--tr-font);
           padding: 0 0 80px;
         }
 
@@ -341,10 +392,22 @@ export default function Trending({
         @keyframes tr-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 
         .tr-title {
-          font-family: 'Sora', 'Inter', sans-serif; font-size: clamp(32px, 4.5vw, 48px); font-weight: 700;
+          font-family: var(--tr-font); font-size: clamp(32px, 4.5vw, 48px); font-weight: 700;
           line-height: 1.1; letter-spacing: -.02em; margin: 0 0 14px;
         }
-        .tr-subtitle { color: var(--tr-muted); font-size: 16px; line-height: 1.6; margin: 0 0 40px; }
+        .tr-subtitle { color: var(--tr-muted); font-size: 16px; line-height: 1.6; margin: 0 0 28px; }
+
+        .tr-hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+        .tr-btn {
+          display: inline-flex; align-items: center; justify-content: center; padding: 13px 22px;
+          border-radius: 12px; font-size: 14.5px; font-weight: 700; text-decoration: none;
+          transition: transform .2s ease, background .2s ease, border-color .2s ease;
+        }
+        .tr-btn:hover { transform: translateY(-2px); }
+        .tr-btn--primary { background: var(--tr-accent); color: var(--tr-bg); }
+        .tr-btn--primary:hover { background: var(--tr-accent-dim); }
+        .tr-btn--ghost { background: transparent; color: var(--tr-white); border: 1px solid var(--tr-border); }
+        .tr-btn--ghost:hover { border-color: var(--tr-accent-dim); }
 
         .tr-ticker {
           border-top: 1px solid var(--tr-border); border-bottom: 1px solid var(--tr-border); overflow: hidden;
@@ -387,7 +450,7 @@ export default function Trending({
 
         .tr-section { max-width: 1180px; margin: 0 auto; padding: 56px 24px 0; scroll-margin-top: 90px; }
         .tr-section__head { margin-bottom: 24px; }
-        .tr-section__head h2 { font-family: 'Sora', 'Inter', sans-serif; font-size: 24px; font-weight: 700; margin: 0 0 4px; }
+        .tr-section__head h2 { font-family: var(--tr-font); font-size: 24px; font-weight: 700; margin: 0 0 4px; }
         .tr-section__head p { color: var(--tr-muted); font-size: 14.5px; margin: 0; }
 
         .tr-empty {
@@ -410,7 +473,7 @@ export default function Trending({
         .tr-grid { display: grid; gap: 16px; }
         .tr-grid--skills { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
         .tr-grid--categories { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-        .tr-grid--projects, .tr-grid--products { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+        .tr-grid--projects, .tr-grid--products, .tr-grid--recent { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
         .tr-grid--talent { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 
         .tr-card--skill { gap: 8px; }
@@ -421,14 +484,16 @@ export default function Trending({
         .tr-card--category { gap: 10px; align-items: flex-start; }
         .tr-icon-tile {
           width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-          background: var(--tr-accent-glow); color: var(--tr-accent); font-family: 'Sora', sans-serif; font-weight: 700; font-size: 18px;
+          background: var(--tr-accent-glow); color: var(--tr-accent); font-family: var(--tr-font); font-weight: 700; font-size: 18px;
         }
 
-        .tr-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .tr-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 10px; }
         .tr-badge {
           font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tr-muted);
           border: 1px solid var(--tr-border); border-radius: 999px; padding: 3px 10px;
         }
+        .tr-badge--new { color: var(--tr-new); background: var(--tr-new-glow); border-color: transparent; }
+        .tr-timestamp { font-size: 12px; font-weight: 600; color: var(--tr-muted); white-space: nowrap; }
         .tr-card__title { font-size: 17px; font-weight: 700; margin: 0 0 8px; line-height: 1.35; }
         .tr-card__desc { font-size: 13.5px; color: var(--tr-muted); line-height: 1.55; margin: 0 0 16px; }
         .tr-card__foot {
@@ -437,10 +502,14 @@ export default function Trending({
         }
         .tr-card__foot span:first-child { color: var(--tr-accent); }
 
+        .tr-card--recent { border-color: rgba(255, 182, 72, .18); }
+        .tr-card--recent:hover { border-color: var(--tr-new); }
+        .tr-card--recent .tr-card__desc { margin-bottom: 0; }
+
         .tr-card--talent { align-items: flex-start; padding-top: 24px; }
         .tr-avatar {
           width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-          background: var(--tr-accent); color: var(--tr-bg); font-family: 'Sora', sans-serif; font-weight: 700;
+          background: var(--tr-accent); color: var(--tr-bg); font-family: var(--tr-font); font-weight: 700;
           font-size: 18px; margin-bottom: 14px;
         }
 
@@ -448,6 +517,7 @@ export default function Trending({
           .tr-hero { padding-top: 40px; }
           .tr-section { padding-top: 40px; }
           .tr-tabs { top: 0; }
+          .tr-hero__cta { flex-direction: column; align-items: stretch; }
         }
         @media (prefers-reduced-motion: reduce) {
           .tr-ticker__track { animation: none; }
@@ -466,6 +536,8 @@ export default function Trending({
           --tr-muted: #5b7a70;
           --tr-border: rgba(0, 100, 60, .12);
           --tr-danger: #c0392b;
+          --tr-new: #b3690a;
+          --tr-new-glow: rgba(179, 105, 10, .12);
         }
 
         /* Active tab used --tr-bg as its (dark) contrast text color against the
@@ -489,6 +561,13 @@ export default function Trending({
            an otherwise light page */
         [data-h-theme="light"] .tr-tabs {
           background: rgba(255, 255, 255, .85);
+        }
+
+        /* Primary CTA button used --tr-bg as its (dark) contrast text color —
+           same pattern as the active tab above, needs an explicit override
+           on light theme so the label doesn't vanish against the green fill */
+        [data-h-theme="light"] .tr-btn--primary {
+          color: #ffffff;
         }
       `}</style>
     </>

@@ -25,7 +25,7 @@ export default function NetworkingHub({
 
   return (
     <>
-      <Head title="Networking Hub – Every Connection You Need, In One Place" />
+      <Head title="Connection Room – Every Connection You Need, In One Place" />
 
       <style>{`
         /*

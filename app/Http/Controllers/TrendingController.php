@@ -25,6 +25,7 @@ class TrendingController extends Controller
         $trendingProjects   = $this->getTrendingProjects();
         $trendingProducts   = $this->getTrendingProducts();
         $trendingTalent     = $this->getTrendingTalent();
+        $recentlyAdded      = $this->getRecentlyAdded();
 
         // Feeds the scrolling ticker at the top of the page
         $tickerItems = $trendingSkills->take(10);
@@ -32,6 +33,7 @@ class TrendingController extends Controller
         // Simple aggregate counts for the tab badges
         $counts = [
             'all'        => $trendingSkills->count() + $trendingCategories->count() + $trendingProjects->count() + $trendingProducts->count() + $trendingTalent->count(),
+            'recent'     => $recentlyAdded->count(),
             'skills'     => $trendingSkills->count(),
             'categories' => $trendingCategories->count(),
             'projects'   => $trendingProjects->count(),
@@ -45,6 +47,7 @@ class TrendingController extends Controller
             'trendingProjects',
             'trendingProducts',
             'trendingTalent',
+            'recentlyAdded',
             'tickerItems',
             'counts'
         ));
@@ -153,6 +156,104 @@ class TrendingController extends Controller
                 ->map(fn ($talent) => $this->attachTrend($talent, $talent->hires_count ?? 0));
         } catch (\Throwable $e) {
             Log::warning('[Trending] talent query failed: '.$e->getMessage());
+            return collect();
+        }
+    }
+
+    /**
+     * Recently added — a single, unified "just landed" feed pulled from every
+     * model type and interleaved by created_at. This is what powers the new
+     * "Just Added" tab and is intentionally separate from the trending
+     * (volume-ranked) queries above, since "newest" and "most popular" are
+     * different signals and shouldn't be conflated.
+     *
+     * Adjust the per-type pull size (6 each below) and the overall $limit to
+     * taste. Everything is normalized into a flat shape the frontend can
+     * render without needing to know which Eloquent model it came from.
+     */
+    protected function getRecentlyAdded(int $limit = 12)
+    {
+        try {
+            $items = collect();
+
+            Skill::query()
+                ->withCount('talents')
+                ->latest()
+                ->limit(6)
+                ->get()
+                ->each(function ($skill) use (&$items) {
+                    $items->push([
+                        'id'         => $skill->id,
+                        'type'       => 'skill',
+                        'type_label' => 'Skill',
+                        'name'       => $skill->name,
+                        'subtitle'   => ($skill->talents_count ?? 0).' talents offer this',
+                        'slug'       => $skill->slug ?? $skill->id,
+                        'created_at' => $skill->created_at,
+                    ]);
+                });
+
+            Project::query()
+                ->with('category')
+                ->where('status', 'open')
+                ->latest()
+                ->limit(6)
+                ->get()
+                ->each(function ($project) use (&$items) {
+                    $items->push([
+                        'id'         => $project->id,
+                        'type'       => 'project',
+                        'type_label' => 'Project',
+                        'name'       => $project->title,
+                        'subtitle'   => $project->category->name ?? 'General',
+                        'slug'       => $project->slug ?? $project->id,
+                        'created_at' => $project->created_at,
+                    ]);
+                });
+
+            Product::query()
+                ->with('seller')
+                ->where('is_active', true)
+                ->latest()
+                ->limit(6)
+                ->get()
+                ->each(function ($product) use (&$items) {
+                    $items->push([
+                        'id'         => $product->id,
+                        'type'       => 'product',
+                        'type_label' => 'Product',
+                        'name'       => $product->title,
+                        'subtitle'   => 'RWF '.number_format($product->price ?? 0),
+                        'slug'       => $product->slug ?? $product->id,
+                        'created_at' => $product->created_at,
+                    ]);
+                });
+
+            User::query()
+                ->where('role', 'talent')
+                ->where('is_active', true)
+                ->with('topSkill')
+                ->latest()
+                ->limit(6)
+                ->get()
+                ->each(function ($talent) use (&$items) {
+                    $items->push([
+                        'id'         => $talent->id,
+                        'type'       => 'talent',
+                        'type_label' => 'Talent',
+                        'name'       => $talent->name,
+                        'subtitle'   => $talent->topSkill->name ?? $talent->title ?? 'Freelance professional',
+                        'slug'       => $talent->slug ?? $talent->id,
+                        'created_at' => $talent->created_at,
+                    ]);
+                });
+
+            return $items
+                ->sortByDesc(fn ($item) => $item['created_at'])
+                ->take($limit)
+                ->values();
+        } catch (\Throwable $e) {
+            Log::warning('[Trending] recently-added query failed: '.$e->getMessage());
             return collect();
         }
     }
