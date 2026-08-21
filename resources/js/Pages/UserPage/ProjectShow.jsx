@@ -257,7 +257,7 @@ export default function ProjectShow({ project, recent = [] }) {
                     &nbsp;•&nbsp;
                     <i className="bi bi-geo-alt me-1"></i> {project.location ?? 'Remote'}
                     &nbsp;•&nbsp;
-                    <i className="bi bi-briefcase me-1"></i> {project.category ?? 'General'}
+                    <i className="bi bi-briefcase me-1"></i> {project.category?.name ?? 'General'}
                   </p>
                 </div>
 
@@ -384,7 +384,7 @@ export default function ProjectShow({ project, recent = [] }) {
                       <div>
                         <h6 className="mb-1">{item.title}</h6>
                         <small>
-                          <i className="bi bi-tag me-1"></i>{item.category ?? 'General'}
+                          <i className="bi bi-tag me-1"></i>{item.category?.name ?? 'General'}
                         </small>
                       </div>
                       {item.verified && (

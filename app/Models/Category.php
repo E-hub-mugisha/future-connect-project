@@ -33,4 +33,9 @@ class Category extends Model
     {
         return $this->hasMany(Blog::class);
     }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

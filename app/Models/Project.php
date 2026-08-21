@@ -12,14 +12,19 @@ class Project extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'category',
         'description',
         'budget_amount',
         'budget_currency',
         'location',
         'status',
-        'verified'
+        'verified',
+        'category_id'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     public function user()
     {

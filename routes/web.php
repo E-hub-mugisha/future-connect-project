@@ -194,6 +194,7 @@ Route::get('/ticket/order/{order}/summary', [UserEventTicketOrderController::cla
 Route::get('/tickets/{id}/download', [UserEventTicketOrderController::class, 'downloadTicket'])->name('user.tickets.download');
 
 Route::get('/projects', [UserProjectController::class, 'index'])->name('user.projects.index');
+Route::get('/projects/all', [UserProjectController::class, 'all'])->name('user.projects.all');
 Route::get('/projects/{id}', [UserProjectController::class, 'show'])->name('user.projects.show');
 Route::post('/projects/{id}/apply', [UserProjectController::class, 'store'])->name('user.projects.apply');
 Route::post('/projects/{project}/sponsor', [UserProjectController::class, 'storeSponsorship'])
@@ -202,6 +203,9 @@ Route::get('/sponsorship/{sponsorship}/payment/', [UserProjectController::class,
     ->name('diaspora.sponsorship.payment');
 Route::get('/project/payment/callback', [UserProjectController::class, 'handleCallback'])->name('project.sponsor.callback');
 Route::get('/project/create', [UserProjectController::class, 'create'])->name('user.projects.create');
+
+Route::get('/user/projects/submit', [UserProjectController::class, 'create'])->name('user.projects.create');
+    Route::post('/projects/submit', [UserProjectController::class, 'storeProject'])->name('user.projects.store');
 
 Route::prefix('quick-hire')->name('quick-hire.')->group(function () {
     Route::get('/create', [QuickHireController::class, 'create'])->name('create');

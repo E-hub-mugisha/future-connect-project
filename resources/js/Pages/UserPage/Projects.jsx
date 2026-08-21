@@ -2,25 +2,29 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
 
-export default function Projects({ categories = [], projects }) {
-  // `projects` comes from Project::paginate(10) on the backend, so Inertia passes it
-  // as a paginator object ({ data, links, current_page, ... }), not a plain array.
-  const projectList = projects?.data ?? [];
-  const paginationLinks = projects?.links ?? [];
+export default function Projects({ categories = [], projects = [] }) {
+  // On the landing page `projects` is a plain preview array (see
+  // ProjectController@index), not a paginator, so no `.data` unwrap here.
   const [search, setSearch] = useState({ category: '', location: '', keyword: '' });
 
   function handleSearchSubmit(e) {
     e.preventDefault();
-    router.get(route('user.projects'), search);
+    // Fixed: this used to post back to `user.projects` (this same landing
+    // page), which never read the filters. It now goes to the real
+    // filterable listing page, and drops empty fields from the query string.
+    const query = Object.fromEntries(
+      Object.entries(search).filter(([, value]) => value !== '')
+    );
+    router.get(route('user.projects.all'), query);
   }
 
   function searchPopular(keyword) {
-    router.get(route('user.projects'), { keyword });
+    router.get(route('user.projects.all'), { keyword });
   }
 
   return (
     <>
-      <Head title="Ongoing Projects" />
+      <Head title="Projects Collaborations" />
 
       <style>{`
         :root {
@@ -186,6 +190,13 @@ export default function Projects({ categories = [], projects }) {
           margin-bottom: 40px;
         }
 
+        .fc-section-header.fc-section-header-split {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          text-align: left;
+        }
+
         .fc-section-header h2 {
           font-weight: 700;
           font-size: 1.9rem;
@@ -209,6 +220,8 @@ export default function Projects({ categories = [], projects }) {
           text-align: center;
           transition: .25s ease;
           height: 100%;
+          text-decoration: none;
+          display: block;
         }
 
         .fc-cat-card:hover {
@@ -230,13 +243,14 @@ export default function Projects({ categories = [], projects }) {
           font-size: 1.3rem;
         }
 
-        .fc-cat-card h6 a {
+        .fc-cat-card h6 {
           color: var(--fc-white);
           text-decoration: none;
           font-weight: 600;
+          margin-bottom: 1px;
         }
 
-        .fc-cat-card h6 a:hover {
+        .fc-cat-card:hover h6 {
           color: var(--fc-accent);
         }
 
@@ -382,6 +396,9 @@ export default function Projects({ categories = [], projects }) {
           font-weight: 600;
           text-decoration: none;
           transition: .2s;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
         }
 
         .btn-fc-outline:hover {
@@ -569,45 +586,51 @@ export default function Projects({ categories = [], projects }) {
             <div className="row row-gap-4 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1">
               {categories.map((category) => (
                 <div className="col d-flex" key={category.id}>
-                  <div className="fc-cat-card flex-fill">
+                  {/* Category cards now route into the filterable listing,
+                      pre-filtered to this category. */}
+                  <Link
+                    href={route('user.projects.all', { category: category.id })}
+                    className="fc-cat-card flex-fill"
+                  >
                     <span className="fc-icon"><i className="ti ti-speakerphone"></i></span>
-                    <h6 className="mb-1"><a href="javascript:void(0);">{category.name}</a></h6>
+                    <h6 className="mb-1">{category.name}</h6>
                     <p>{category.projects_count ? category.projects_count : 0} Projects</p>
-                  </div>
+                  </Link>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Projects */}
+        {/* Ongoing projects (preview only — full list lives on the "all projects" page) */}
         <div className="fc-projects">
           <div className="container">
-            <div className="fc-section-header">
-              <h2>Our ongoing <span className="accent-dot">projects</span></h2>
-              <p>Get inspired with projects like these</p>
+            <div className="fc-section-header fc-section-header-split">
+              <div>
+                <h2>Our ongoing <span className="accent-dot">projects</span></h2>
+                <p>Get inspired with projects like these</p>
+              </div>
+              <Link href={route('user.projects.all')} className="btn-fc-outline">
+                View all projects <i className="ti ti-arrow-right"></i>
+              </Link>
             </div>
             <div className="row g-4">
-              {projectList.map((project) => (
+              {projects.map((project) => (
                 <div className="col-lg-4 col-md-6" key={project.id}>
                   <div className="fc-gig-card">
                     <div className="fc-gig-img">
                       <div className="fc-badge-row">
-                        <Link href={route('user.projects.show', project.id)} className="text-decoration-none">
-                          <span className="fc-badge fc-badge-verified">
-                            <i className="feather-star"></i>{project.verified ? 'Verified' : 'Pending'}
-                          </span>
-                        </Link>
-                        <Link href={route('user.projects.show', project.id)} className="text-decoration-none">
-                          <span className="fc-badge fc-badge-status">
-                            <i className="fa-solid fa-meteor"></i>{project.status ?? 'Open'}
-                          </span>
-                        </Link>
+                        <span className="fc-badge fc-badge-verified">
+                          <i className="feather-star"></i>{project.verified ? 'Verified' : 'Pending'}
+                        </span>
+                        <span className="fc-badge fc-badge-status">
+                          <i className="fa-solid fa-meteor"></i>{project.status ?? 'Open'}
+                        </span>
                       </div>
                     </div>
                     <div className="fc-gig-body">
-                      <Link href={route('user.projects.show', project.id)} className="fc-gig-cat">
-                        {project.category ?? 'General'}
+                      <Link href={route('user.projects.all', { category: project.category?.id })} className="fc-gig-cat">
+                        {project.category?.name ?? 'General'}
                       </Link>
                       <div className="fc-gig-location">
                         <i className="ti ti-map-pin-check"></i>{project.location ?? 'Remote'}
@@ -625,27 +648,6 @@ export default function Projects({ categories = [], projects }) {
                 </div>
               ))}
             </div>
-
-            {paginationLinks.length > 3 && (
-              <div className="d-flex justify-content-center gap-2 mt-5">
-                {paginationLinks.map((link, i) => (
-                  <button
-                    key={i}
-                    disabled={!link.url}
-                    className="btn-fc-outline"
-                    style={{
-                      opacity: link.url ? 1 : 0.4,
-                      cursor: link.url ? 'pointer' : 'default',
-                      background: link.active ? 'var(--fc-accent)' : 'transparent',
-                      color: link.active ? '#06231a' : 'var(--fc-accent)',
-                    }}
-                    onClick={() => link.url && router.get(link.url, {}, { preserveScroll: true })}
-                    // Laravel's paginator labels use HTML entities (&laquo; / &raquo;)
-                    dangerouslySetInnerHTML={{ __html: link.label }}
-                  />
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
@@ -659,7 +661,7 @@ export default function Projects({ categories = [], projects }) {
               <div className="col-lg-5">
                 <h2 className="mb-3">Want to Get Involved?</h2>
                 <p>Explore more projects, collaborate with talented individuals, or submit your own initiatives to make a meaningful impact.</p>
-                <a href="#" className="btn btn-fc-primary">Submit a Project</a>
+                <a href="/user/projects/submit" className="btn btn-fc-primary">Submit a Project</a>
               </div>
             </div>
           </div>
@@ -679,7 +681,7 @@ function truncate(text, length) {
 Projects.layout = (page) => (
   <GuestLayout
     children={page}
-    title="Ongoing Projects"
+    title="Projects ollaboration"
     description="Discover the latest initiatives, programs, and collaborations that drive impact."
   />
 );
