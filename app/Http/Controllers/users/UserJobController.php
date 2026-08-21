@@ -12,10 +12,18 @@ use App\Models\Project;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class UserJobController extends Controller
 {
+    protected array $salaryBands = [
+        'Under 300K RWF',
+        '300K - 800K RWF',
+        '800K - 1.5M RWF',
+        '1.5M+ RWF',
+    ];
+
     public function index(Request $request)
     {
         // Fetch only categories that contain jobs
@@ -162,4 +170,65 @@ class UserJobController extends Controller
 
         return redirect()->back()->with('success', 'Job posted successfully!');
     }
+
+    /**
+     * GET /jobs/browse — full filtered, sorted, paginated listing.
+     */
+    public function browse(Request $request)
+    {
+        $validated = $request->validate([
+            'category' => ['nullable', 'integer', 'exists:job_categories,id'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'salary'   => ['nullable', 'string', Rule::in($this->salaryBands)],
+            'sort'     => ['nullable', 'string', Rule::in(['latest', 'salary'])],
+        ]);
+ 
+        $query = JobSection::query()
+            ->with(['company:id,name,logo']);
+ 
+        if (!empty($validated['category'])) {
+            $query->where('job_category_id', $validated['category']);
+        }
+ 
+        if (!empty($validated['location'])) {
+            $query->where('location', $validated['location']);
+        }
+ 
+        if (!empty($validated['salary'])) {
+            $query->where('salary_range', $validated['salary']);
+        }
+ 
+        match ($validated['sort'] ?? 'latest') {
+            'salary' => $query->orderByDesc('salary_min'),
+            default  => $query->latest(),
+        };
+ 
+        $jobs = $query->paginate(9)->withQueryString();
+ 
+        $categories = JobCategory::query()
+            ->withCount(['jobSections as job_sections_count'])
+            ->orderBy('name')
+            ->get(['id', 'name', 'slug']);
+ 
+        // Distinct, non-empty locations currently in use by published jobs.
+        $locations = JobSection::whereNotNull('location')
+            ->distinct()
+            ->orderBy('location')
+            ->pluck('location');
+ 
+        return Inertia::render('UserPage/BrowseJobs', [
+            'jobs' => [
+                'data'  => $jobs->items(),
+                'total' => $jobs->total(),
+                'links' => $jobs->linkCollection(),
+            ],
+            'categories' => $categories,
+            'locations'  => $locations,
+            'salary'     => $this->salaryBands,
+            'filters'    => $validated,
+        ]);
+    }
+ 
+    
+    
 }
