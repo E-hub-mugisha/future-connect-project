@@ -7,7 +7,7 @@ const DEFAULT_ROUTES = {
   "user.jobs.index": "/jobs",
   "user.jobs.browse": "/jobs/browse",
   "user.jobs.store": "/jobs",
-  "user.talents": "/talents",
+  "user.talents": "/skills-marketplace",
 };
 
 const JOB_TYPES = [

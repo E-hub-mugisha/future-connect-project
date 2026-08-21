@@ -141,6 +141,7 @@ Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, '
 Route::get('/connection/payment/callback', [TalentConnectionController::class, 'handleCallback'])->name('connection.payment.callback');
 
 Route::get('/learning_center', [CourseController::class, 'index'])->name('user.courses');
+Route::get('/browse/courses', [CourseController::class, 'browse'])->name('user.courses.browse');
 Route::get('/course/details/{slug}', [CourseController::class, 'show'])->name('user.courses.show');
 Route::get('/course/category/{slug}', [CourseController::class, 'category'])->name('user.courses.category');
 Route::post('/courses/{id}/review', [CourseController::class, 'storeReview'])
