@@ -7,7 +7,9 @@ use App\Models\Category;
 use App\Models\Project;
 use App\Models\ProjectApplication;
 use App\Mail\ProjectAccountCreated;
+use App\Models\Talent;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +25,7 @@ class UserProjectController extends Controller
         $categories = Category::withCount('projects')
             ->orderBy('name')
             ->get();
- 
+
         $projects = Project::with(['category', 'user'])
             ->where('status', 'approved')
             ->latest()
@@ -72,18 +74,18 @@ class UserProjectController extends Controller
         ]);
     }
     public function show($id)
-{
-    $project = Project::with(['user:id,name,email', 'category:id,name'])
-        ->findOrFail($id);
+    {
+        $project = Project::with(['user:id,name,email', 'category:id,name'])
+            ->findOrFail($id);
 
-    $recent = Project::with('category:id,name')
-        ->where('id', '!=', $id)
-        ->latest()
-        ->take(5)
-        ->get(['id', 'title', 'category_id', 'verified']);
+        $recent = Project::with('category:id,name')
+            ->where('id', '!=', $id)
+            ->latest()
+            ->take(5)
+            ->get(['id', 'title', 'category_id', 'verified']);
 
-    return Inertia::render('UserPage/ProjectShow', compact('project', 'recent'));
-}
+        return Inertia::render('UserPage/ProjectShow', compact('project', 'recent'));
+    }
 
     public function store(Request $request, $id)
     {
@@ -114,7 +116,7 @@ class UserProjectController extends Controller
         return redirect()->route('user.projects.show', $project->id)
             ->with('success', 'Your application has been sent successfully!');
     }
-    
+
     /**
      * Show the "submit a project" form.
      */
@@ -198,4 +200,6 @@ class UserProjectController extends Controller
     {
         return 'Fc-' . Str::upper(Str::random(2)) . random_int(1000, 9999) . Str::lower(Str::random(2));
     }
+
+    
 }

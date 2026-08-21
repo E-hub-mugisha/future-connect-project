@@ -5,6 +5,7 @@ import GuestLayout from "@/Layouts/GuestLayout";
 
 const DEFAULT_ROUTES = {
   "user.talents": "/skills-marketplace",
+  "talent.start-connecting": "/start-connecting"
 };
 
 const categoryRoute = (routes, slug) =>
@@ -25,7 +26,7 @@ export default function NetworkingHub({
 
   return (
     <>
-      <Head title="Connection Room – Every Connection You Need, In One Place" />
+      <Head title="Connection Room – Stop Searching. Start Connecting." />
 
       <style>{`
         /*
@@ -76,20 +77,15 @@ export default function NetworkingHub({
             margin: 2rem 0 3rem;
         }
 
-        /* subtle grid pattern */
         .nh-hero::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 40px 40px;
             opacity: .4;
             pointer-events: none;
         }
 
-        /* glow blobs */
         .nh-hero-glow-1 {
             position: absolute;
             top: -80px;
@@ -210,7 +206,6 @@ export default function NetworkingHub({
             font-size: 1rem;
         }
 
-        /* Popular search tags */
         .nh-popular {
             margin-top: 1.5rem;
             display: flex;
@@ -245,7 +240,6 @@ export default function NetworkingHub({
             text-decoration: none;
         }
 
-        /* Hero image collage */
         .nh-hero-img-wrap {
             position: relative;
             z-index: 2;
@@ -427,7 +421,163 @@ export default function NetworkingHub({
             background-size: 10px;
         }
 
-        /* ── Marketing / Start Connecting panel (replaces categories) ── */
+        /* ── Connection animation section ───────────────────────── */
+        .nh-connect {
+            padding: 4rem 0 2rem;
+        }
+
+        .nh-connect-visual {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            overflow: hidden;
+        }
+
+        .nh-connect-line {
+            flex: 1;
+            height: 120px;
+            min-width: 120px;
+        }
+
+        .nh-connect-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .6rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nh-connect-avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            animation: nhPulseRing 2.6s ease-in-out infinite;
+        }
+
+        .nh-connect-avatar.accent {
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-muted);
+            color: var(--accent);
+            animation-delay: .6s;
+        }
+
+        @keyframes nhPulseRing {
+            0%   { box-shadow: 0 0 0 0 var(--accent-muted); }
+            70%  { box-shadow: 0 0 0 14px transparent; }
+            100% { box-shadow: 0 0 0 0 transparent; }
+        }
+
+        .nh-connect-node span {
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nh-connect-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1.75rem;
+        }
+
+        .nh-connect-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: .76rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 50px;
+            animation: nhFloat 3.2s ease-in-out infinite;
+        }
+
+        .nh-connect-badge i { color: var(--accent); font-size: .7rem; }
+        .nh-connect-badge:nth-child(2) { animation-delay: .4s; }
+        .nh-connect-badge:nth-child(3) { animation-delay: .8s; }
+        .nh-connect-badge:nth-child(4) { animation-delay: 1.2s; }
+
+        @keyframes nhFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .nh-connect-avatar,
+            .nh-connect-badge {
+                animation: none !important;
+            }
+        }
+
+        /* ── Dashboard preview section ───────────────────────────── */
+        .nh-dashboard {
+            padding: 3.5rem 0;
+        }
+
+        .nh-dashboard-frame {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,.35);
+        }
+
+        .nh-browser-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: .7rem 1rem;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nh-browser-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--border-hover);
+        }
+
+        .nh-dashboard-img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .nh-dashboard-glow {
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-muted) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .nh-dashboard-copy-wrap { position: relative; }
+
+        /* ── Marketing / Start Connecting panel ─────────────────── */
         .nh-market {
             padding: 3.5rem 0;
         }
@@ -604,6 +754,8 @@ export default function NetworkingHub({
             line-height: 1.7;
         }
 
+        .nh-close-cta .nh-cta-row { justify-content: center; }
+
         /* ── Divider ─────────────────────────────────────────────── */
         .nh-divider {
             border: none;
@@ -633,6 +785,16 @@ export default function NetworkingHub({
             .nh-close-cta {
                 padding: 2.25rem 1.5rem;
             }
+
+            .nh-connect-visual {
+                flex-direction: column;
+                padding: 2.25rem 1.5rem;
+            }
+
+            .nh-connect-line {
+                width: 100%;
+                height: 80px;
+            }
         }
 
         [data-h-theme="light"] {
@@ -656,13 +818,11 @@ export default function NetworkingHub({
             color: var(--text-primary) !important;
         }
 
-        /* CTA button text stays white on the solid accent green */
         [data-h-theme="light"] .nh-cta-btn,
         [data-h-theme="light"] .nh-cta-btn:hover {
             color: #fff;
         }
 
-        /* Hero glow blobs were tuned for a dark background; soften for light */
         [data-h-theme="light"] .nh-hero-glow-1 {
             background: radial-gradient(circle, rgba(0, 166, 103, 0.14) 0%, transparent 65%);
         }
@@ -671,12 +831,14 @@ export default function NetworkingHub({
             background: radial-gradient(circle, rgba(0, 166, 103, 0.08) 0%, transparent 70%);
         }
 
-        [data-h-theme="light"] .nh-market-glow {
+        [data-h-theme="light"] .nh-market-glow,
+        [data-h-theme="light"] .nh-dashboard-glow {
             background: radial-gradient(circle, rgba(0, 166, 103, 0.14) 0%, transparent 65%);
         }
 
-        /* Feature-list checkmark icon uses a hardcoded green stroke (#00a667),
-       already correct for light mode as-is — no override needed. */
+        [data-h-theme="light"] .nh-dashboard-frame {
+            box-shadow: 0 20px 50px rgba(0, 60, 40, .1);
+        }
       `}</style>
 
       <div className="container">
@@ -691,14 +853,15 @@ export default function NetworkingHub({
                 <i className="fa-solid fa-network-wired"></i> Networking Hub
               </span>
               <h1 className="nh-hero-title">
-                Every Connection <span>You Need</span><br />Is Already Here
+                Your Next Opportunity <span>Is Waiting</span><br />On the Other Side of a Connection
               </h1>
               <p className="nh-hero-sub">
-                Stop networking the slow way. Future Connect puts verified skills, real opportunities, and the
-                people who can change your career one conversation away — starting the moment you sign in.
+                Every day you're not on Future Connect, someone else is booking the client, hiring the designer,
+                or landing the collaborator who should've found you. Join now — verified people, real
+                opportunities, one conversation away.
               </p>
               <div className="nh-cta-row">
-                <Link href={r("user.talents")} className="nh-cta-btn">
+                <Link href={r("talent.start-connecting")} className="nh-cta-btn">
                   Start Connecting <i className="feather-arrow-right"></i>
                 </Link>
                 <Link href={r("user.talents")} className="nh-cta-btn-outline">
@@ -757,27 +920,27 @@ export default function NetworkingHub({
             <div className="col-lg-7">
               <div className="nh-about-text">
                 <div className="nh-section-head">
-                  <div className="nh-section-eyebrow">About the Hub</div>
+                  <div className="nh-section-eyebrow">Why Join</div>
                   <h2 className="nh-section-title">
-                    Your gateway to meaningful<br />professional connections.
+                    Stop searching alone.<br />Start connecting instead.
                   </h2>
                   <p>
-                    Whether you are a skill seeker looking for opportunities, a project owner looking for
-                    collaborators, or an entrepreneur looking to expand your network — this hub puts the right
-                    people directly in front of you, without the wait.
+                    Whether you're chasing your next client, hunting for a collaborator, or trying to grow a
+                    network from scratch — doing it the old way costs you weeks. Future Connect puts the right
+                    people directly in front of you the moment you sign in.
                   </p>
-                  <h5>Our Mission</h5>
+                  <h5>Built for people who move fast</h5>
                   <p>
-                    At Future Connect, our mission is to empower individuals and businesses by facilitating easy
-                    access to a diverse range of high-quality services. We believe in creating a collaborative and
-                    inclusive marketplace that fosters growth, creativity, and mutual success.
+                    We believe finding the right person shouldn't take longer than doing the work itself. So we
+                    built a platform where every profile is verified, every opportunity is real, and every
+                    connection actually goes somewhere.
                   </p>
                 </div>
                 <ul className="nh-feature-list">
-                  <li>Diverse Network of Professionals</li>
-                  <li>Trust and Transparency</li>
-                  <li>User Friendly Platform</li>
-                  <li>Innovation In Technology</li>
+                  <li>Verified professionals, not empty profiles</li>
+                  <li>Real opportunities, updated daily</li>
+                  <li>A platform built for speed, not friction</li>
+                  <li>Your network, growing while you sleep</li>
                 </ul>
               </div>
             </div>
@@ -786,7 +949,101 @@ export default function NetworkingHub({
 
         <hr className="nh-divider" />
 
-        {/* ── Marketing panel: Start Connecting (replaces categories section) ── */}
+        {/* ── Connection animation section ───────────────────────── */}
+        <section className="nh-connect">
+          <div className="nh-section-head text-center mx-auto" style={{ maxWidth: 620 }}>
+            <div className="nh-section-eyebrow justify-content-center">How It Works</div>
+            <h2 className="nh-section-title">One click. One connection. One step closer.</h2>
+            <p className="nh-section-sub">
+              You post what you need — Future Connect quietly matches you with the right talent in the background.
+            </p>
+          </div>
+
+          <div className="nh-connect-visual">
+            <div className="nh-connect-node">
+              <div className="nh-connect-avatar">
+                <i className="fa-solid fa-user"></i>
+              </div>
+              <span>You</span>
+            </div>
+
+            <svg className="nh-connect-line" viewBox="0 0 600 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20,60 C 150,10 450,110 580,60"
+                stroke="var(--border-hover)"
+                strokeWidth="2"
+                strokeDasharray="6 10"
+                fill="none"
+              />
+              <circle r="5" fill="var(--accent)">
+                <animateMotion dur="3.2s" repeatCount="indefinite" path="M20,60 C 150,10 450,110 580,60" />
+              </circle>
+              <circle r="5" fill="var(--accent)" opacity="0.6">
+                <animateMotion dur="3.2s" begin="1.05s" repeatCount="indefinite" path="M20,60 C 150,10 450,110 580,60" />
+              </circle>
+              <circle r="5" fill="var(--accent)" opacity="0.3">
+                <animateMotion dur="3.2s" begin="2.1s" repeatCount="indefinite" path="M20,60 C 150,10 450,110 580,60" />
+              </circle>
+            </svg>
+
+            <div className="nh-connect-node">
+              <div className="nh-connect-avatar accent">
+                <i className="fa-solid fa-user-tie"></i>
+              </div>
+              <span>Skills</span>
+            </div>
+          </div>
+
+          <div className="nh-connect-badges">
+            <span className="nh-connect-badge"><i className="fa-solid fa-circle-check"></i> Verified</span>
+            <span className="nh-connect-badge"><i className="fa-solid fa-bolt"></i> Instant match</span>
+            <span className="nh-connect-badge"><i className="fa-solid fa-shield-halved"></i> Secure messaging</span>
+            <span className="nh-connect-badge"><i className="fa-solid fa-star"></i> Rated by real clients</span>
+          </div>
+        </section>
+
+        {/* ── Dashboard preview section ───────────────────────────── */}
+        <section className="nh-dashboard">
+          <div className="row align-items-center g-5">
+            <div className="col-lg-5 order-lg-2">
+              <div className="nh-dashboard-copy-wrap">
+                <div className="nh-dashboard-glow"></div>
+                <div className="nh-section-eyebrow">Your Command Center</div>
+                <h2 className="nh-section-title">Everything you need, in one dashboard.</h2>
+                <p className="nh-section-sub mb-3">
+                  Track conversations, manage active projects, and see new matches roll in — all from a single,
+                  clean dashboard built to keep you moving instead of digging through tabs.
+                </p>
+                <ul className="nh-feature-list mb-4">
+                  <li>See new matches the moment they land</li>
+                  <li>Manage every conversation in one inbox</li>
+                  <li>Track projects from first message to done</li>
+                </ul>
+                <Link href={r("user.talents")} className="nh-cta-btn">
+                  Get Your Dashboard <i className="feather-arrow-right"></i>
+                </Link>
+              </div>
+            </div>
+            <div className="col-lg-7 order-lg-1">
+              <div className="nh-dashboard-frame">
+                <div className="nh-browser-bar">
+                  <span className="nh-browser-dot"></span>
+                  <span className="nh-browser-dot"></span>
+                  <span className="nh-browser-dot"></span>
+                </div>
+                <img
+                  src={asset("/assets/img/dashboard/dashboard-preview.jpg")}
+                  alt="Future Connect dashboard preview"
+                  className="nh-dashboard-img"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <hr className="nh-divider" />
+
+        {/* ── Marketing panel: Start Connecting ──────────────────── */}
         <section className="nh-market">
           <div className="nh-market-panel">
             <div className="nh-market-glow"></div>
@@ -800,7 +1057,7 @@ export default function NetworkingHub({
               opportunities, no cold outreach required.
             </p>
             <div className="nh-cta-row">
-              <Link href={r("user.talents")} className="nh-cta-btn">
+              <Link href={r("talent.start-connecting")} className="nh-cta-btn">
                 Start Connecting <i className="feather-arrow-right"></i>
               </Link>
               <Link href={r("user.talents")} className="nh-cta-btn-outline">
@@ -824,69 +1081,6 @@ export default function NetworkingHub({
             <p className="nh-market-note">Free to join. No credit card required.</p>
           </div>
         </section>
-
-        <hr className="nh-divider" />
-
-        {/* ── Key Benefits ───────────────────────────────────────── */}
-        <section className="nh-benefits">
-          <div className="row align-items-end mb-4">
-            <div className="col-lg-6">
-              <div className="nh-section-eyebrow">Why Us</div>
-              <h2 className="nh-section-title">Key Benefits</h2>
-            </div>
-            <div className="col-lg-6">
-              <p className="nh-section-sub mb-0">
-                Find professionals across various fields and expand your network effortlessly.
-              </p>
-            </div>
-          </div>
-          <div className="row g-4">
-            <div className="col-md-4">
-              <div className="nh-benefit-card">
-                <div className="nh-benefit-icon">
-                  <i className="fa-solid fa-people-arrows"></i>
-                </div>
-                <div>
-                  <h5 className="nh-benefit-title">Collaborate on Projects</h5>
-                  <p className="nh-benefit-desc">Work together with skilled individuals to bring your ideas to life and create something remarkable.</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="nh-benefit-card">
-                <div className="nh-benefit-icon">
-                  <i className="fa-solid fa-user-tie"></i>
-                </div>
-                <div>
-                  <h5 className="nh-benefit-title">Connect with Skills</h5>
-                  <p className="nh-benefit-desc">Find professionals across various fields and expand your network effortlessly with verified profiles.</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="nh-benefit-card">
-                <div className="nh-benefit-icon">
-                  <i className="fa-solid fa-calendar-check"></i>
-                </div>
-                <div>
-                  <h5 className="nh-benefit-title">Attend Networking Events</h5>
-                  <p className="nh-benefit-desc">Discover and participate in events designed to foster professional relationships and career growth.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Closing CTA ─────────────────────────────────────────── */}
-        <div className="nh-close-cta">
-          <h2>Ready to Start Connecting?</h2>
-          <p>Join the professionals already building real careers and real networks on Future Connect. It only takes a few minutes to begin.</p>
-          <div className="nh-cta-row" style={{ justifyContent: "center" }}>
-            <Link href={r("user.talents")} className="nh-cta-btn">
-              Start Connecting <i className="feather-arrow-right"></i>
-            </Link>
-          </div>
-        </div>
 
       </div>
     </>

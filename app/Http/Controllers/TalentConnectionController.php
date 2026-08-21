@@ -7,6 +7,7 @@ use App\Models\ConnectionPayment;
 use App\Models\Talent;
 use App\Models\TalentConnection;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -103,5 +104,45 @@ class TalentConnectionController extends Controller
 
         $connection->update(['status' => $request->status]); // accepted / declined
         return back()->with('success', 'Connection updated successfully.');
+    }
+
+    public function StartConnecting()
+    {
+        // Fetch featured talents - modify query as needed
+        $talents = Talent::with('category', 'feedback', 'stories')->paginate(8);
+
+        $now = Carbon::now();
+        $oneMonthAgo = $now->copy()->subMonth();
+
+        $talents->transform(function ($talent) use ($oneMonthAgo) {
+            $avgRating = $talent->feedback->avg('rating') ?? 0;
+            $feedbackCount = $talent->feedback->count();
+            $createdAt = $talent->created_at;
+
+            if ($talent->featured) {
+                $talent->tag = 'featured';
+            } elseif ($feedbackCount >= 20) {
+                $talent->tag = 'popular';
+            } elseif ($createdAt >= $oneMonthAgo) {
+                $talent->tag = 'latest';
+            } elseif ($avgRating >= 4 && $avgRating < 4.5) {
+                $talent->tag = 'recommended';
+            } else {
+                $talent->tag = 'latest';
+            }
+
+            return $talent;
+        });
+
+
+        return Inertia::render('UserPage/StartConnecting', [
+            'talents' => $talents,
+            'categories' => Category::withCount('talents')->take(10)->get(),
+            'featuredTalents' => Talent::inRandomOrder()->where('featured', 1)->get(),
+            'popularCategories' => Category::withCount('talents')
+                ->orderBy('talents_count', 'desc')
+                ->take(3)
+                ->get(),
+        ]);
     }
 }

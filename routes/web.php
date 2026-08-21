@@ -132,6 +132,7 @@ Route::get('/story/watch/{video_id}/{story_id}', [UsersPaymentController::class,
 Route::get('/story/payment/callback', [UsersPaymentController::class, 'handleCallback'])->name('payment.callback');
 
 Route::get('/connection-room', [TalentConnectionController::class, 'index'])->name('talent.connections-room');
+Route::get('/start-connecting', [TalentConnectionController::class, 'StartConnecting'])->name('talent.start-connecting');
 Route::get('/connection/{talent}', [TalentConnectionController::class, 'show'])->name('talent.profile.show');
 Route::post('/connection/{talent}/request', [TalentConnectionController::class, 'store'])->name('talent.connections.request');
 Route::get('/connection/{id}/payment', [TalentConnectionController::class, 'paymentChoice'])->name('connections.payment.choice');
