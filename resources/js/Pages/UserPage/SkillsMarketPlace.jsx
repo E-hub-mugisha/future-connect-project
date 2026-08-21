@@ -240,68 +240,75 @@ export default function SkillsMarketPlace({ categories = [] }) {
           transform: translateY(-2px);
         }
 
-        /* ─── HERO CARDS ─── */
-        .hero-cards {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-        }
-
-        .hero-card {
+        /* ─── HERO ABOUT PANEL ─── */
+        .hero-about {
           background: var(--bg3);
           border: 1px solid var(--border);
           border-radius: var(--radius-lg);
-          padding: 24px;
+          padding: 32px;
           position: relative;
           overflow: hidden;
-          transition: var(--transition);
         }
 
-        .hero-card::before {
+        .hero-about::before {
           content: '';
           position: absolute;
           top: 0; left: 0; right: 0;
           height: 2px;
           background: linear-gradient(90deg, var(--green), transparent);
-          opacity: 0;
-          transition: opacity var(--transition);
         }
 
-        .hero-card:hover {
-          border-color: rgba(0,166,103,0.3);
-          transform: translateY(-3px);
-          box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        }
+        .hero-about .section-label { margin-bottom: 14px; }
 
-        .hero-card:hover::before { opacity: 1; }
-
-        .hero-card-icon {
-          width: 42px; height: 42px;
-          background: var(--green-dim);
-          border-radius: 10px;
-          display: flex; align-items: center; justify-content: center;
-          margin-bottom: 14px;
-          color: var(--green);
-          font-size: 18px;
-        }
-
-        .hero-card h5 {
+        .hero-about h4 {
           font-family: var(--font-head);
-          font-size: 1rem;
-          font-weight: 700;
+          font-size: 1.3rem;
+          font-weight: 800;
           color: var(--white);
-          margin-bottom: 6px;
+          letter-spacing: -0.02em;
+          margin-bottom: 12px;
         }
 
-        .hero-card p {
-          font-size: 0.85rem;
+        .hero-about p {
+          font-size: 0.92rem;
           color: var(--muted);
-          line-height: 1.6;
-          margin: 0 0 16px;
+          line-height: 1.75;
+          margin: 0;
         }
 
-        .hero-card .card-link {
-          font-size: 0.83rem;
+        .hero-about-list {
+          list-style: none;
+          padding: 0;
+          margin: 24px 0 0;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .hero-about-list li {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          font-size: 0.88rem;
+          color: var(--text);
+          line-height: 1.5;
+        }
+
+        .hero-about-list li strong { display: block; color: var(--white); font-weight: 700; margin-bottom: 2px; }
+
+        .hero-about-icon {
+          flex-shrink: 0;
+          width: 30px; height: 30px;
+          background: var(--green-dim);
+          border-radius: 9px;
+          display: flex; align-items: center; justify-content: center;
+          color: var(--green);
+          font-size: 14px;
+        }
+
+        .hero-about .card-link {
+          margin-top: 24px;
+          font-size: 0.85rem;
           color: var(--green);
           font-weight: 600;
           text-decoration: none;
@@ -311,38 +318,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
           transition: gap var(--transition);
         }
 
-        .hero-card .card-link:hover { gap: 10px; }
-
-        /* ─── STATS BAR ─── */
-        .stats-bar {
-          background: var(--bg2);
-          border-top: 1px solid var(--border);
-          border-bottom: 1px solid var(--border);
-          padding: 24px 0;
-        }
-
-        .stat-item {
-          text-align: center;
-          padding: 0 20px;
-          border-right: 1px solid var(--border);
-        }
-
-        .stat-item:last-child { border-right: none; }
-
-        .stat-num {
-          font-family: var(--font-head);
-          font-size: 1.8rem;
-          font-weight: 800;
-          color: var(--green);
-          display: block;
-        }
-
-        .stat-label {
-          font-size: 0.78rem;
-          color: var(--muted);
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-        }
+        .hero-about .card-link:hover { gap: 10px; }
 
         /* ─── SECTION COMMON ─── */
         .section-label {
@@ -451,6 +427,12 @@ export default function SkillsMarketPlace({ categories = [] }) {
           font-size: 0.75rem;
           color: var(--muted);
           position: relative; z-index: 1;
+        }
+
+        /* ─── LEARNING CENTER ─── */
+        #learning-section {
+          padding: 80px 0;
+          background: var(--bg);
         }
 
         /* ─── CTA BAND ─── */
@@ -680,7 +662,6 @@ export default function SkillsMarketPlace({ categories = [] }) {
           border: 1px solid var(--border);
           border-radius: var(--radius-lg);
           padding: 28px 24px;
-          text-align: center;
         }
 
         .m-hero-card h4 {
@@ -693,22 +674,8 @@ export default function SkillsMarketPlace({ categories = [] }) {
         .m-hero-card p {
           color: var(--muted);
           font-size: 0.9rem;
-          margin-bottom: 20px;
+          margin-bottom: 0;
           line-height: 1.6;
-        }
-
-        .carousel-indicators [data-bs-target] {
-          background-color: var(--green);
-          border-radius: 2px;
-          width: 18px; height: 3px;
-          border: none;
-          opacity: 0.4;
-          transition: opacity var(--transition), width var(--transition);
-        }
-
-        .carousel-indicators .active {
-          opacity: 1;
-          width: 28px;
         }
 
         /* mobile category strip */
@@ -739,7 +706,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
           color: var(--green);
         }
 
-        /* Popular Section */
+        /* Popular Section / Learning Center cards */
         .pop-category {
           background: var(--bg2);
           border: 1px solid var(--border);
@@ -870,7 +837,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
               </p>
               <div className="hero-cta-group">
                 <Link className="btn-green" href={route('user.register_skills')}>
-                  <i className="ti ti-star"></i> Join Free — Get Discovered
+                  <i className="ti ti-star"></i> Join Free — It Takes 3 Minutes
                 </Link>
                 <a
                   className="btn-outline"
@@ -879,126 +846,59 @@ export default function SkillsMarketPlace({ categories = [] }) {
                   data-bs-target="#searchModal"
                   onClick={() => setSearchModalOpen(true)}
                 >
-                  <i className="ti ti-search"></i> Hire Skilled Talent
+                  <i className="ti ti-search"></i> Search Skilled People
                 </a>
               </div>
               <p className="hero-trust">
-                <strong>No listing fees.</strong> Verified profiles. Trusted by employers in 30+ countries.
+                <strong>No listing fees. No waiting.</strong> Verified profiles, trusted by employers in 30+ countries — your next opportunity could be one profile away.
               </p>
             </div>
 
-            {/* Right — 3 feature cards (desktop) */}
+            {/* Right — About section (desktop) */}
             <div className="col-lg-6 d-none d-lg-block">
-              <div className="hero-cards">
-                <div className="hero-card">
-                  <div className="hero-card-icon"><i className="ti ti-speakerphone"></i></div>
-                  <h5>Get Seen by 3× More Employers</h5>
-                  <p>A verified badge and a featured spot on our homepage put your profile in front of the people actually hiring — not lost in a pile of applications.</p>
-                  <Link className="card-link" href={route('user.register_skills')}>
-                    Claim your spot <i className="ti ti-arrow-right"></i>
-                  </Link>
-                </div>
-
-                <div className="row g-4">
-                  <div className="col-6">
-                    <div className="hero-card">
-                      <div className="hero-card-icon"><i className="ti ti-badge"></i></div>
-                      <h5>Build Instant Credibility</h5>
-                      <p>Verification turns "just another profile" into proof you can be trusted.</p>
-                      <Link className="card-link" href={route('user.register_skills')}>
-                        Get verified <i className="ti ti-arrow-right"></i>
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="hero-card">
-                      <div className="hero-card-icon"><i className="ti ti-world"></i></div>
-                      <h5>Grow Beyond Your City</h5>
-                      <p>Tap into a network spanning 30+ countries — new clients, mentors, and collaborators.</p>
-                      <Link className="card-link" href={route('talent.connections-room')}>
-                        Start networking <i className="ti ti-arrow-right"></i>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+              <div className="hero-about">
+                <div className="section-label">About Us</div>
+                <h4>A home for Africa's skilled workforce</h4>
+                <p>
+                  We built this platform because too many talented people were staying invisible — buried under CVs no one reads. Here, your skills speak first. Create a verified profile, showcase real work, and let employers come to you.
+                </p>
+                <ul className="hero-about-list">
+                  <li>
+                    <span className="hero-about-icon"><i className="ti ti-users"></i></span>
+                    <span><strong>74,000+ members</strong>already growing their careers on the platform.</span>
+                  </li>
+                  <li>
+                    <span className="hero-about-icon"><i className="ti ti-shield-check"></i></span>
+                    <span><strong>Verified, trusted profiles</strong>so employers can hire with confidence.</span>
+                  </li>
+                  <li>
+                    <span className="hero-about-icon"><i className="ti ti-world"></i></span>
+                    <span><strong>Reach across 30+ countries</strong>— your skills, seen far beyond your city.</span>
+                  </li>
+                </ul>
+                <Link className="card-link" href={route('user.register_skills')}>
+                  Join now, it's free <i className="ti ti-arrow-right"></i>
+                </Link>
               </div>
             </div>
 
-            {/* Mobile carousel */}
+            {/* Mobile about panel */}
             <div className="col-12 d-lg-none">
-              <div id="heroCarousel" className="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
-                <div className="carousel-indicators" style={{ bottom: '-30px' }}>
-                  <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" className="active"></button>
-                  <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-                  <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-                </div>
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <div className="m-hero-card">
-                      <div className="hero-card-icon mx-auto mb-3"><i className="ti ti-speakerphone"></i></div>
-                      <h4>Get Seen by 3× More Employers</h4>
-                      <p>Verify your profile and get featured — stand out from day one.</p>
-                      <Link className="btn-green mx-auto" href={route('user.register_skills')}>
-                        <i className="ti ti-star"></i> Join Free
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="carousel-item">
-                    <div className="m-hero-card">
-                      <div className="hero-card-icon mx-auto mb-3"><i className="ti ti-badge"></i></div>
-                      <h4>Build Instant Credibility</h4>
-                      <p>A verified badge turns your profile into proof clients can trust.</p>
-                      <Link className="btn-green mx-auto" href={route('user.register_skills')}>Register Skills</Link>
-                    </div>
-                  </div>
-                  <div className="carousel-item">
-                    <div className="m-hero-card">
-                      <div className="hero-card-icon mx-auto mb-3"><i className="ti ti-world"></i></div>
-                      <h4>Grow Beyond Your City</h4>
-                      <p>Connect with clients, mentors, and peers across 30+ countries.</p>
-                      <Link className="btn-green mx-auto" href={route('register')}>Join the Community</Link>
-                    </div>
-                  </div>
-                </div>
+              <div className="m-hero-card">
+                <div className="section-label">About Us</div>
+                <h4>A home for Africa's skilled workforce</h4>
+                <p>
+                  Too many talented people stay invisible — buried under CVs no one reads. Here, your skills speak first: create a verified profile, showcase real work, and let employers come to you across 30+ countries.
+                </p>
+                <Link className="btn-green mt-3" href={route('user.register_skills')}>
+                  <i className="ti ti-star"></i> Join Free — Get Discovered
+                </Link>
               </div>
-              <div style={{ height: '36px' }}></div>
             </div>
 
           </div>
         </div>
       </section>
-
-      {/* ═══ STATS BAR ═══ */}
-      <div className="stats-bar">
-        <div className="container">
-          <div className="row g-0">
-            <div className="col-6 col-md-3">
-              <div className="stat-item">
-                <span className="stat-num">74K<span style={{ color: 'var(--green)' }}>+</span></span>
-                <span className="stat-label">Skilled People Hired</span>
-              </div>
-            </div>
-            <div className="col-6 col-md-3">
-              <div className="stat-item">
-                <span className="stat-num">120<span style={{ color: 'var(--green)' }}>+</span></span>
-                <span className="stat-label">Skill Categories</span>
-              </div>
-            </div>
-            <div className="col-6 col-md-3">
-              <div className="stat-item">
-                <span className="stat-num">98<span style={{ color: 'var(--green)' }}>%</span></span>
-                <span className="stat-label">Would Recommend Us</span>
-              </div>
-            </div>
-            <div className="col-6 col-md-3">
-              <div className="stat-item">
-                <span className="stat-num">30+</span>
-                <span className="stat-label">Countries Reached</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="section-divider"></div>
 
@@ -1036,13 +936,86 @@ export default function SkillsMarketPlace({ categories = [] }) {
                   <h6 className="mb-1">
                     <Link href={route('user.talents.category', cat.slug)}>{cat.name}</Link>
                   </h6>
-                  <p>{cat.talents_count ?? 0} skilled people ready to hire</p>
+                  <p>{cat.talents_count ?? 0} skilled people ready to work</p>
                   <Link href={route('user.talents.category', cat.slug)} className="slide-line-btn">
-                    <i className="feather-arrow-right"></i> Browse Talent
+                    <i className="feather-arrow-right"></i> Browse Skills
                   </Link>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider"></div>
+
+      {/* ═══ LEARNING CENTER ═══ */}
+      <section id="learning-section">
+        <div className="container">
+          <div className="d-flex align-items-end justify-content-between mb-4 flex-wrap gap-3">
+            <div>
+              <div className="section-label">Learning Center</div>
+              <div className="section-title">Don't have a listed skill yet? Go learn one.</div>
+              <p className="section-sub">Free, practical courses to help you build real, hireable skills — then bring them straight to your profile and start getting discovered.</p>
+            </div>
+            <Link href={route('user.courses')} className="btn-outline">
+              Explore All Courses <i className="ti ti-arrow-right ms-1"></i>
+            </Link>
+          </div>
+
+          <div className="row row-gap-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-4">
+            <div className="col d-flex">
+              <div className="pop-category flex-fill">
+                <span><i className="ti ti-code"></i></span>
+                <h6 className="mb-1">
+                  <Link href={route('user.courses')}>Digital & Tech Skills</Link>
+                </h6>
+                <p>Web design, coding basics, and freelancing fundamentals.</p>
+                <Link href={route('user.courses')} className="slide-line-btn">
+                  <i className="feather-arrow-right"></i> Start Learning
+                </Link>
+              </div>
+            </div>
+            <div className="col d-flex">
+              <div className="pop-category flex-fill">
+                <span><i className="ti ti-hammer"></i></span>
+                <h6 className="mb-1">
+                  <Link href={route('user.courses')}>Trades & Craftsmanship</Link>
+                </h6>
+                <p>Hands-on courses in carpentry, tailoring, repairs, and more.</p>
+                <Link href={route('user.courses')} className="slide-line-btn">
+                  <i className="feather-arrow-right"></i> Start Learning
+                </Link>
+              </div>
+            </div>
+            <div className="col d-flex">
+              <div className="pop-category flex-fill">
+                <span><i className="ti ti-briefcase"></i></span>
+                <h6 className="mb-1">
+                  <Link href={route('user.courses')}>Business & Client Skills</Link>
+                </h6>
+                <p>Pricing your work, pitching clients, and getting hired again.</p>
+                <Link href={route('user.courses')} className="slide-line-btn">
+                  <i className="feather-arrow-right"></i> Start Learning
+                </Link>
+              </div>
+            </div>
+            <div className="col d-flex">
+              <div className="pop-category flex-fill">
+                <span><i className="ti ti-certificate"></i></span>
+                <h6 className="mb-1">
+                  <Link href={route('user.courses')}>Get Certified</Link>
+                </h6>
+                <p>Earn a certificate that shows on your verified profile.</p>
+                <Link href={route('user.courses')} className="slide-line-btn">
+                  <i className="feather-arrow-right"></i> Start Learning
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="info-note mt-4 d-inline-block">
+            Finish any course and we'll help you turn it into a skill listing — free, in minutes.
           </div>
         </div>
       </section>
@@ -1067,7 +1040,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
                 className="btn-green"
                 style={{ fontSize: '1rem', padding: '14px 32px' }}
               >
-                Create My Free Profile <i className="ti ti-chevron-right"></i>
+                Join the Platform <i className="ti ti-chevron-right"></i>
               </Link>
             </div>
           </div>
@@ -1112,7 +1085,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="searchModalLabel">
-                <i className="ti ti-search me-2" style={{ color: 'var(--green)' }}></i>Find the Right Talent, Fast
+                <i className="ti ti-search me-2" style={{ color: 'var(--green)' }}></i>Find the Right skills, Fast
               </h5>
               <button
                 type="button"
@@ -1158,7 +1131,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
                     Cancel
                   </button>
                   <button type="submit" className="btn-green">
-                    <i className="ti ti-search"></i> Search Talent
+                    <i className="ti ti-search"></i> Search Skills
                   </button>
                 </div>
               </form>
@@ -1167,213 +1140,7 @@ export default function SkillsMarketPlace({ categories = [] }) {
         </div>
       </div>
 
-      {/* ═══ TALENT REGISTRATION MODAL ═══ */}
-      <div className="modal fade" id="talentModal" tabIndex="-1" aria-labelledby="talentModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="talentModalLabel">Get Discovered — Set Up Your Profile</h5>
-              <button
-                type="button"
-                className="btn-close btn-close-white"
-                data-bs-dismiss="modal"
-                onClick={() => setTalentModalOpen(false)}
-              ></button>
-            </div>
-            <div className="modal-body">
-
-              {/* Step indicator */}
-              <div className="step-indicator">
-                {Array.from({ length: stepCount }).map((_, i) => (
-                  <React.Fragment key={i}>
-                    <div className={`step-dot${step === i ? ' active' : ''}${step > i ? ' done' : ''}`}>
-                      {i + 1}
-                    </div>
-                    {i < stepCount - 1 && (
-                      <div className={`step-line${step > i ? ' done' : ''}`}></div>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-
-              <form onSubmit={handleTalentSubmit}>
-                {/* Step 1 */}
-                <div className={`step-section${step === 0 ? ' active' : ''}`}>
-                  <div className="step-title">Let's start with you</div>
-                  <div className="step-sub">Two minutes of basics — this is what clients see first.</div>
-                  <div className="info-note">A complete profile gets found first. Make this one count.</div>
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <label className="form-label">Full Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="e.g. John Doe"
-                        required
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                      />
-                      {errors.name && <div className="text-danger small mt-1">{errors.name}</div>}
-                    </div>
-                    <div className="col-md-6">
-                      <label className="form-label">Address</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="e.g. Kigali, Rwanda"
-                        required
-                        value={data.address}
-                        onChange={(e) => setData('address', e.target.value)}
-                      />
-                      {errors.address && <div className="text-danger small mt-1">{errors.address}</div>}
-                    </div>
-                  </div>
-                  <div className="text-end mt-4">
-                    <button type="button" className="btn-green" onClick={goNext}>
-                      Next <i className="ti ti-arrow-right ms-1"></i>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Step 2 */}
-                <div className={`step-section${step === 1 ? ' active' : ''}`}>
-                  <div className="step-title">How should clients reach you?</div>
-                  <div className="step-sub">This is how real opportunities land in your inbox.</div>
-                  <div className="info-note">Your email stays private — only your public profile is visible.</div>
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <label className="form-label">Phone</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="e.g. +250 788 123 456"
-                        required
-                        value={data.phone}
-                        onChange={(e) => setData('phone', e.target.value)}
-                      />
-                      {errors.phone && <div className="text-danger small mt-1">{errors.phone}</div>}
-                    </div>
-                    <div className="col-md-6">
-                      <label className="form-label">Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="e.g. john@example.com"
-                        required
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                      />
-                      {errors.email && <div className="text-danger small mt-1">{errors.email}</div>}
-                    </div>
-                  </div>
-                  <div className="d-flex justify-content-between mt-4">
-                    <button type="button" className="btn-outline" onClick={goPrev}>
-                      <i className="ti ti-arrow-left me-1"></i> Back
-                    </button>
-                    <button type="button" className="btn-green" onClick={goNext}>
-                      Next <i className="ti ti-arrow-right ms-1"></i>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Step 3 */}
-                <div className={`step-section${step === 2 ? ' active' : ''}`}>
-                  <div className="step-title">Show off what you do best</div>
-                  <div className="step-sub">This is your pitch — make clients want to hire you.</div>
-                  <div className="info-note">Specific, detailed descriptions get 2× more profile views.</div>
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <label className="form-label">Languages Spoken</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="e.g. English, Kinyarwanda"
-                        required
-                        value={data.language}
-                        onChange={(e) => setData('language', e.target.value)}
-                      />
-                      {errors.language && <div className="text-danger small mt-1">{errors.language}</div>}
-                    </div>
-                    <div className="col-md-6">
-                      <label className="form-label">Skill Category</label>
-                      <select
-                        className="form-select"
-                        required
-                        value={data.category_id}
-                        onChange={(e) => setData('category_id', e.target.value)}
-                      >
-                        <option value="">Select Category</option>
-                        {categories.map((cat) => (
-                          <option value={cat.id} key={cat.id}>{cat.name}</option>
-                        ))}
-                      </select>
-                      {errors.category_id && <div className="text-danger small mt-1">{errors.category_id}</div>}
-                    </div>
-                    <div className="col-12">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        className="form-control"
-                        rows="4"
-                        placeholder="Tell clients what you do, how you do it, and why they should hire you..."
-                        value={data.description}
-                        onChange={(e) => setData('description', e.target.value)}
-                      ></textarea>
-                      {errors.description && <div className="text-danger small mt-1">{errors.description}</div>}
-                    </div>
-                  </div>
-                  <div className="d-flex justify-content-between mt-4">
-                    <button type="button" className="btn-outline" onClick={goPrev}>
-                      <i className="ti ti-arrow-left me-1"></i> Back
-                    </button>
-                    <button type="button" className="btn-green" onClick={goNext}>
-                      Next <i className="ti ti-arrow-right ms-1"></i>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Step 4 */}
-                <div className={`step-section${step === 3 ? ' active' : ''}`}>
-                  <div className="step-title">One last thing — your face</div>
-                  <div className="step-sub">Profiles with a real photo get trusted (and hired) faster.</div>
-                  <div className="info-note">A clear headshot increases profile views by 40%.</div>
-                  <div className="mb-3">
-                    <label className="form-label">Profile Image</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      accept="image/*"
-                      required
-                      onChange={(e) => setData('image', e.target.files[0])}
-                    />
-                    {errors.image && <div className="text-danger small mt-1">{errors.image}</div>}
-                  </div>
-                  <div className="form-check mt-3 mb-3">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="terms"
-                      required
-                      style={{ accentColor: 'var(--green)' }}
-                    />
-                    <label className="form-check-label" htmlFor="terms" style={{ fontSize: '.88rem', color: 'var(--muted)' }}>
-                      I accept the <Link href={route('user.terms-condition')} style={{ color: 'var(--green)' }}>Terms &amp; Conditions</Link>
-                    </label>
-                  </div>
-                  <div className="d-flex justify-content-between mt-4">
-                    <button type="button" className="btn-outline" onClick={goPrev}>
-                      <i className="ti ti-arrow-left me-1"></i> Back
-                    </button>
-                    <button type="submit" className="btn-green" style={{ background: '#48d597' }} disabled={processing}>
-                      <i className="ti ti-check me-1"></i> Get Discovered Now
-                    </button>
-                  </div>
-                </div>
-              </form>
-
-            </div>
-          </div>
-        </div>
-      </div>
+    
     </>
   );
 }
