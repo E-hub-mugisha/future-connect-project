@@ -941,4 +941,11 @@ class HomeController extends Controller
             ],
         ]);
     }
+
+    public function partnerships()
+    {
+        return Inertia::render('UserPage/Partnerships', [
+            'partners' => Partner::all(),
+        ]);
+    }
 }

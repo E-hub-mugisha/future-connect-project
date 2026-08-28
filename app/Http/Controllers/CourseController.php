@@ -45,19 +45,94 @@ class CourseController extends Controller
         return Inertia::render('UserPage/CourseShow', compact('course', 'relatedCourses'));
     }
 
-    public function getCoursesByCategory($slug)
+    public function AllCourses()
     {
-        $category = Category::where('slug', $slug)->firstOrFail();
-
-        $courses = Course::with(['category', 'feedback', 'talent'])
-            ->where('category_id', $category->id)
+        $courses = Course::query()
+            ->with(['category', 'talent'])
+            ->withAvg('feedback', 'rating')
+            ->withCount('feedback')
             ->latest()
-            ->get();
-
-        $categories = Category::all();
-        $categoryName = $category->name;
-
-        return Inertia::render('UserPage/CoursesByCategory', compact('courses', 'categories', 'categoryName'));
+            ->get()
+            ->map(function (Course $course) {
+                return [
+                    'id' => $course->id,
+                    'title' => $course->title,
+                    'slug' => $course->slug,
+                    'thumbnail' => $course->thumbnail,
+                    'is_free' => (bool) $course->is_free,
+                    'price' => $course->price,
+                    'tag' => $course->tag,
+                    'avg_rating' => $course->feedback_avg_rating,
+                    'reviews_count' => $course->feedback_count,
+                    'category' => $course->category ? [
+                        'id' => $course->category->id,
+                        'name' => $course->category->name,
+                        'slug' => $course->category->slug,
+                    ] : null,
+                    'talent' => $course->talent ? [
+                        'id' => $course->talent->id,
+                        'name' => $course->talent->name,
+                        'image' => $course->talent->image,
+                        'region' => $course->talent->region,
+                    ] : null,
+                ];
+            });
+ 
+        $categories = Category::query()
+            ->withCount('courses')
+            ->orderBy('name')
+            ->get(['id', 'name', 'slug']);
+ 
+        return Inertia::render('UserPage/AllCourses', [
+            'courses' => $courses,
+            'categories' => $categories,
+        ]);
+    }
+ 
+    public function byCategory(Category $category)
+    {
+        $courses = Course::query()
+            ->where('category_id', $category->id)
+            ->with(['category', 'talent'])
+            ->withAvg('feedback', 'rating')
+            ->withCount('feedback')
+            ->latest()
+            ->get()
+            ->map(function (Course $course) {
+                return [
+                    'id' => $course->id,
+                    'title' => $course->title,
+                    'slug' => $course->slug,
+                    'thumbnail' => $course->thumbnail,
+                    'is_free' => (bool) $course->is_free,
+                    'price' => $course->price,
+                    'tag' => $course->tag,
+                    'avg_rating' => $course->feedback_avg_rating,
+                    'reviews_count' => $course->feedback_count,
+                    'category' => $course->category ? [
+                        'id' => $course->category->id,
+                        'name' => $course->category->name,
+                        'slug' => $course->category->slug,
+                    ] : null,
+                    'talent' => $course->talent ? [
+                        'id' => $course->talent->id,
+                        'name' => $course->talent->name,
+                        'image' => $course->talent->image,
+                        'region' => $course->talent->region,
+                    ] : null,
+                ];
+            });
+ 
+        $categories = Category::query()
+            ->withCount('courses')
+            ->orderBy('name')
+            ->get(['id', 'name', 'slug']);
+ 
+        return Inertia::render('UserPage/CoursesByCategory', [
+            'categoryName' => $category->name,
+            'courses' => $courses,
+            'categories' => $categories,
+        ]);
     }
 
     public function storeReview(Request $request, $courseId)

@@ -34,7 +34,6 @@ const DEFAULT_STORIES = [
 ];
 
 export default function LearningCenter({
-  popularCourses = [],
   categories = [],
   stats = {},
   stories = DEFAULT_STORIES,
@@ -47,38 +46,9 @@ export default function LearningCenter({
     return category.courses_count ?? category.courses?.length ?? 0;
   }
 
-  function avgRating(course) {
-    if (course.feedback_avg_rating != null) return Number(course.feedback_avg_rating);
-    if (course.avg_rating != null) return Number(course.avg_rating);
-    if (Array.isArray(course.feedback) && course.feedback.length) {
-      return course.feedback.reduce((sum, f) => sum + f.rating, 0) / course.feedback.length;
-    }
-    return 0;
-  }
-
-  function reviewsCount(course) {
-    if (course.feedback_count != null) return course.feedback_count;
-    if (course.reviews_count != null) return course.reviews_count;
-    if (Array.isArray(course.feedback)) return course.feedback.length;
-    return 0;
-  }
-
-  function enrolledCount(course) {
-    if (course.enrollments_count != null) return course.enrollments_count;
-    if (Array.isArray(course.enrollments)) return course.enrollments.length;
-    return 0;
-  }
-
-  function formatEnrolled(n) {
-    if (n >= 1000) return `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k`;
-    return `${n}`;
-  }
-
   return (
     <>
       <Head title="Learning Center and Courses" />
-
-      <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
       <style>{`
         :root {
@@ -94,8 +64,8 @@ export default function LearningCenter({
           --text:       #e8eef0;
           --muted:      #7a9199;
           --white:      #ffffff;
-          --font-head:  'Syne', sans-serif;
-          --font-body:  'DM Sans', sans-serif;
+          --font-head:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+          --font-body:  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
           --radius:     12px;
           --radius-lg:  18px;
           --t:          .25s ease;
@@ -393,91 +363,8 @@ export default function LearningCenter({
 
         .about-lc-point p { font-size: 0.8rem; color: var(--muted); margin: 0; line-height: 1.55; }
 
-        /* ─── POPULAR COURSES ─── */
-        .popular-section { padding: 56px 0 8px; }
-
-        .popular-scroll {
-          display: flex; gap: 18px; overflow-x: auto;
-          scroll-snap-type: x mandatory; padding: 6px 2px 14px;
-          scrollbar-width: thin;
-        }
-
-        .popular-card {
-          scroll-snap-align: start;
-          flex: 0 0 300px;
-          background: var(--bg2); border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          overflow: hidden; position: relative;
-          transition: transform var(--t), border-color var(--t), box-shadow var(--t);
-        }
-        .popular-card:hover {
-          transform: translateY(-5px);
-          border-color: rgba(245,185,66,0.4);
-          box-shadow: 0 16px 40px rgba(0,0,0,0.4);
-        }
-
-        .popular-rank {
-          position: absolute; top: 14px; left: 14px; z-index: 2;
-          width: 30px; height: 30px; border-radius: 8px;
-          background: rgba(14,22,24,0.75); backdrop-filter: blur(4px);
-          border: 1px solid rgba(245,185,66,0.4);
-          color: var(--gold); font-family: var(--font-head); font-weight: 800; font-size: 0.85rem;
-          display: flex; align-items: center; justify-content: center;
-        }
-
-        .popular-badge {
-          position: absolute; top: 14px; right: 14px; z-index: 2;
-          background: var(--gold); color: #1a1400;
-          font-size: 0.66rem; font-weight: 800; text-transform: uppercase;
-          letter-spacing: 0.06em; padding: 4px 10px; border-radius: 50px;
-        }
-
-        .popular-thumb { position: relative; height: 160px; overflow: hidden; }
-        .popular-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
-        .popular-card:hover .popular-thumb img { transform: scale(1.06); }
-        .popular-thumb-overlay {
-          position: absolute; inset: 0;
-          background: linear-gradient(to top, rgba(14,22,24,0.75) 0%, transparent 55%);
-        }
-
-        .popular-body { padding: 16px 18px 18px; }
-        .popular-cat { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); margin-bottom: 6px; }
-        .popular-title {
-          font-family: var(--font-head); font-size: 0.92rem; font-weight: 700;
-          color: var(--white); text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.35;
-          overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-          transition: color var(--t);
-        }
-        .popular-title:hover { color: var(--gold); }
-
-        .popular-meta {
-          display: flex; align-items: center; justify-content: space-between;
-          font-size: 0.75rem; color: var(--muted); margin-bottom: 12px;
-        }
-        .popular-meta .stars { color: var(--gold); font-size: 10px; margin-right: 4px; }
-        .popular-meta .score { color: var(--text); font-weight: 600; }
-
-        .popular-footer {
-          display: flex; align-items: center; justify-content: space-between;
-          padding-top: 12px; border-top: 1px solid var(--border);
-        }
-        .popular-price { font-family: var(--font-head); font-weight: 800; color: var(--green); font-size: 0.95rem; }
-        .popular-price.free { color: var(--green); }
-
-        .scroll-hint { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
-        .scroll-hint i { margin: 0 4px; }
-
-        .course-view-btn {
-          display: inline-flex; align-items: center; gap: 6px;
-          background: var(--green-dim); border: 1px solid rgba(0,166,103,0.2);
-          color: var(--green); border-radius: 50px;
-          padding: 6px 14px; font-size: 0.75rem; font-weight: 700;
-          text-decoration: none; transition: var(--t); flex-shrink: 0;
-        }
-        .course-view-btn:hover { background: var(--green); color:#fff; border-color:var(--green); }
-
         /* ─── CATEGORY STRIP ─── */
-        .cat-strip { padding: 48px 0 0; }
+        .cat-strip { padding: 56px 0 0; }
 
         .cat-scroll {
           display: flex; gap: 10px; overflow-x: auto;
@@ -735,10 +622,6 @@ export default function LearningCenter({
         [data-h-theme="light"] .popular-thumb-overlay {
           background: linear-gradient(to top, rgba(16,32,27,0.35) 0%, transparent 50%);
         }
-
-        [data-h-theme="light"] .popular-rank {
-          background: rgba(255,255,255,0.85);
-        }
       `}</style>
 
       {/* ═══ HERO ═══ */}
@@ -896,58 +779,6 @@ export default function LearningCenter({
         </div>
       </section>
 
-      {/* ═══ POPULAR COURSES ═══ */}
-      {popularCourses.length > 0 && (
-        <div className="popular-section">
-          <div className="container">
-            <div className="d-flex align-items-end justify-content-between flex-wrap gap-3">
-              <div>
-                <div className="section-label gold">Trending Now</div>
-                <div className="section-title">Popular Courses</div>
-                <p className="section-sub">Handpicked by our learners &mdash; the courses everyone's talking about</p>
-              </div>
-              <Link href={route('user.courses.browse')} className="btn-outline">
-                See All Courses <i className="ti ti-arrow-right ms-1"></i>
-              </Link>
-            </div>
-
-            <div className="popular-scroll">
-              {popularCourses.map((course, index) => (
-                <div className="popular-card" key={course.id}>
-                  <span className="popular-rank">#{index + 1}</span>
-                  {index === 0 && <span className="popular-badge">Bestseller</span>}
-                  <Link href={route('user.courses.show', course.slug)} className="popular-thumb">
-                    <img src={`/image/thumbnails/${course.thumbnail}`} alt={course.title} />
-                    <div className="popular-thumb-overlay"></div>
-                  </Link>
-                  <div className="popular-body">
-                    <div className="popular-cat">{course.category?.name ?? 'Course'}</div>
-                    <Link href={route('user.courses.show', course.slug)} className="popular-title">
-                      {course.title}
-                    </Link>
-                    <div className="popular-meta">
-                      <span><span className="stars">★★★★★</span><span className="score">{avgRating(course).toFixed(1)}</span> ({reviewsCount(course)})</span>
-                      <span>{formatEnrolled(enrolledCount(course))} enrolled</span>
-                    </div>
-                    <div className="popular-footer">
-                      <span className={`popular-price${course.is_free ? ' free' : ''}`}>
-                        {course.is_free ? 'Free' : `$${Number(course.price).toFixed(2)}`}
-                      </span>
-                      <Link href={route('user.courses.show', course.slug)} className="course-view-btn">
-                        View <i className="feather-arrow-right"></i>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="scroll-hint d-lg-none"><i className="ti ti-arrow-left"></i>Swipe to see more<i className="ti ti-arrow-right"></i></p>
-          </div>
-        </div>
-      )}
-
-      <div className="section-divider" style={{ marginTop: '16px' }}></div>
-
       {/* ═══ CATEGORIES ═══ */}
       <div className="cat-strip">
         <div className="container">
@@ -958,7 +789,7 @@ export default function LearningCenter({
           {/* Mobile: horizontal scroll chips */}
           <div className="cat-scroll d-lg-none">
             {categories.map((category) => (
-              <Link key={category.id} href={route('user.courses.browse', { category: category.slug })} className="cat-chip">
+              <Link key={category.id} href={route('user.courses.category', { category: category.slug })} className="cat-chip">
                 {category.name}
                 <span style={{ color: 'var(--green)', marginLeft: '4px' }}>({categoryCoursesCount(category)})</span>
               </Link>
@@ -968,7 +799,7 @@ export default function LearningCenter({
           {/* Desktop: card grid */}
           <div className="cat-cards-grid d-none d-lg-grid">
             {categories.map((category) => (
-              <Link key={category.id} href={route('user.courses.browse', { category: category.slug })} className="cat-card-item">
+              <Link key={category.id} href={route('user.courses.category', { category: category.slug })} className="cat-card-item">
                 <div className="cci-icon"><i className="ti ti-book"></i></div>
                 <div className="cci-name">{category.name}</div>
                 <div className="cci-count">{categoryCoursesCount(category)} courses</div>

@@ -141,13 +141,12 @@ Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, '
 Route::get('/connection/payment/callback', [TalentConnectionController::class, 'handleCallback'])->name('connection.payment.callback');
 
 Route::get('/learning_center', [CourseController::class, 'index'])->name('user.courses');
-Route::get('/browse/courses', [CourseController::class, 'browse'])->name('user.courses.browse');
+Route::get('/browse/courses', [CourseController::class, 'AllCourses'])->name('user.courses.browse');
+Route::get('/courses/category/{category:slug}', [CourseController::class, 'byCategory'])->name('user.courses.category');
 Route::get('/course/details/{slug}', [CourseController::class, 'show'])->name('user.courses.show');
-Route::get('/course/category/{slug}', [CourseController::class, 'category'])->name('user.courses.category');
 Route::post('/courses/{id}/review', [CourseController::class, 'storeReview'])
     ->name('courses.review')
     ->middleware('auth');
-Route::get('/courses/category/{slug}', [CourseController::class, 'getCoursesByCategory'])->name('user.courses.category');
 Route::post('/courses/{id}/enroll', [CourseController::class, 'enroll'])
     ->name('user.courses.enroll')
     ->middleware('auth');
@@ -231,6 +230,8 @@ Route::prefix('solutions')->name('solutions.')->controller(HomeController::class
 });
 
 Route::get('/trending', [TrendingController::class, 'index'])->name('user.trending.index');
+Route::get('/partnerships', [HomeController::class, 'partnerships'])->name('user.partnerships');
+Route::post('/partnerships/apply', [HomeController::class, 'store'])->name('user.partnerships.apply');
 /*
 |--------------------------------------------------------------------------
 | Authenticated Routes

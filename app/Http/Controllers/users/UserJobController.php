@@ -184,7 +184,7 @@ class UserJobController extends Controller
         ]);
  
         $query = JobSection::query()
-            ->with(['company:id,name,logo']);
+            ->with(['company:id,name']);
  
         if (!empty($validated['category'])) {
             $query->where('job_category_id', $validated['category']);

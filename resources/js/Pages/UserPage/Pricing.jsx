@@ -2,51 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
-/**
- * Pricing (Inertia page component)
- * ---------------------------------
- * React/Inertia port of the Blade "Pricing" view, redesigned toward a
- * cleaner, more professional (Upwork-style) marketplace look: a lot more
- * whitespace, a pill-style billing switch instead of tabs, prices shown up
- * front, a single confident accent color, and cards that lean on subtle
- * borders/shadows rather than glow effects.
- *
- * Notes on the conversion from Blade:
- * - `route('name')` goes through the same safe `r()` wrapper used across
- *   the other pages (falls back to `#` + a console warning if Ziggy's
- *   `window.Ziggy` isn't set up — see the `@routes` note from Home.jsx).
- * - `$plans` (Eloquent collection with nested `prices` and `features`)
- *   became a `plans` prop: `{ id, name, subtitle, is_featured, limit_text,
- *   features: string[], prices: [{ billing_cycle: 'monthly'|'annually', price }] }`.
- * - `auth()->guest()` / `auth()->user()->hasUsedTrial()` became an `auth`
- *   prop: `null` for a guest, or `{ hasUsedTrial: boolean }` for a logged-in
- *   user — pass this from a shared Inertia prop (e.g. via
- *   `HandleInertiaRequests::share()`) rather than a page-specific one if
- *   you already share `auth.user` globally.
- * - The trial-activation `<form>` and the "Confirm & Subscribe" modal form
- *   became Inertia's `useForm()` — this gets you CSRF handling, validation
- *   error propagation, and a `processing` state for free, no manual
- *   `@csrf` hidden input needed.
- * - The Bootstrap tab toggle (`data-bs-toggle="tab"`) became a `billing`
- *   state (`'monthly' | 'annually'`), rendered as a pill switch.
- * - The Bootstrap "Confirm Subscription" modal (opened via
- *   `data-bs-toggle="modal"` + a `show.bs.modal` listener reading
- *   `data-*` attributes off the clicked button) still uses Bootstrap's own
- *   modal component (same as the rest of this app), but driven
- *   imperatively from React: a `bootstrap.Modal` instance is created once
- *   in a `useEffect`, and "Choose Plan" sets `selectedPlan` state *then*
- *   calls `.show()` on it — no DOM `data-*` attribute round-trip needed.
- *   This assumes `window.bootstrap` is available globally (Bootstrap's JS
- *   bundle loaded in your app entry/layout, same as elsewhere in this app).
- * - The page's own light/dark theme sync script (for standalone use
- *   outside the header) became a `useEffect` — see `useStandaloneTheme()`
- *   below. It's optional: if this page always renders inside the shared
- *   `GuestLayout`/`UserHeader`, you can delete it and rely on the header's
- *   toggle alone. The page's colors are CSS variables scoped under
- *   `.pp-page`, with a dark-mode default and a `[data-h-theme="light"]`
- *   override — same pattern as the rest of the site, so the header's
- *   theme toggle now actually changes this page's palette.
- */
 
 function r(name, params) {
   try {
@@ -96,7 +51,7 @@ function priceForCycle(plan, cycle) {
 export default function Pricing({ plans = [], auth = null }) {
   useStandaloneTheme();
 
-  const [billing, setBilling] = useState("annually");
+  const [billing, setBilling] = useState("monthly");
   const [selectedPlan, setSelectedPlan] = useState(null); // { id, name, price, cycle }
 
   const modalRef = useRef(null);

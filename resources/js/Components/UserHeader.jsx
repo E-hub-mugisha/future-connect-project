@@ -19,6 +19,7 @@ const DEFAULT_ROUTES = {
     "user.how-it-works": "/how-it-works",
     "user.contact": "/contact",
     "user.success-stories": "/success-stories",
+    "user.partnerships": "/partnerships",
     "user.faq": "/faq",
     pricing: "/pricing",
     "demo.request": "/demo-request",
@@ -133,7 +134,7 @@ const COMPANY_LINKS = [
         desc: "Real outcomes from real talent.",
     },
     {
-        route: "user.contact",
+        route: "user.partnerships",
         title: "Partnerships",
         desc: "Team up with FutureConnect.",
     },

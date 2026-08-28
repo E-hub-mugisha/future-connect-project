@@ -57,8 +57,6 @@ export default function ProductDetails({ product }) {
             <Head title={product.name} />
 
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-
         :root {
           --bg-deep:    #0e1618;
           --bg-card:    #121d1f;
@@ -70,14 +68,24 @@ export default function ProductDetails({ product }) {
           --text:       #f0f4f3;
           --muted:      #7a9490;
           --white:      #ffffff;
+          --font-head:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+          --font-body:  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
         }
 
         * { box-sizing: border-box; }
-        body { background: var(--bg-deep); color: var(--text); font-family: 'DM Sans', sans-serif; }
+        body { background: var(--bg-deep); color: var(--text); font-family: var(--font-body); }
 
         .pd-wrapper { max-width: 1280px; margin: 0 auto; padding: 2.5rem 2rem; }
-        .pd-grid { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+
+        /* ── LAYOUT: sidebar (left) + content (right) ── */
+        .pd-grid { display: grid; grid-template-columns: 340px 1fr; gap: 2rem; align-items: start; }
         @media (max-width: 1024px) { .pd-grid { grid-template-columns: 1fr; } }
+        .pd-grid > .pd-sidebar-col { order: 1; }
+        .pd-grid > .pd-content-col { order: 2; }
+        @media (max-width: 1024px) {
+          .pd-grid > .pd-sidebar-col { order: 2; }
+          .pd-grid > .pd-content-col { order: 1; }
+        }
 
         .breadcrumb-row { display: flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--muted); margin-bottom: 2rem; }
         .breadcrumb-row a { color: var(--muted); text-decoration: none; transition: color .2s; }
@@ -102,7 +110,7 @@ export default function ProductDetails({ product }) {
 
         .tab-nav { display: flex; gap: 0; border-bottom: 1px solid var(--border); padding: 0 1.5rem; margin-top: 0; }
         .tab-btn {
-          font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700;
+          font-family: var(--font-head); font-size: .85rem; font-weight: 700;
           color: var(--muted); padding: 1rem 1.25rem;
           border-bottom: 2px solid transparent; border-top: none; border-left: none; border-right: none;
           background: none; cursor: pointer; transition: all .2s; text-decoration: none; display: block;
@@ -113,18 +121,18 @@ export default function ProductDetails({ product }) {
         .tab-pane { display: none; padding: 2rem 1.5rem; }
         .tab-pane.active { display: block; }
 
-        .description-section h3 { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--white); margin-bottom: 1rem; }
+        .description-section h3 { font-family: var(--font-head); font-size: 1.2rem; font-weight: 700; color: var(--white); margin-bottom: 1rem; }
         .description-section p { color: var(--muted); line-height: 1.8; font-size: .95rem; }
 
         .review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-        .review-header h3 { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--white); }
+        .review-header h3 { font-family: var(--font-head); font-weight: 700; color: var(--white); }
         .btn-write-review {
           display: inline-flex; align-items: center; gap: .4rem;
           background: var(--accent-dim); border: 1px solid rgba(0,166,103,.3);
           color: var(--accent); font-size: .8rem; font-weight: 700;
           padding: .5rem 1.25rem; border-radius: 8px; cursor: pointer;
           text-decoration: none; transition: all .2s;
-          font-family: 'Syne', sans-serif;
+          font-family: var(--font-head);
         }
         .btn-write-review:hover { background: var(--accent); color: var(--white); }
 
@@ -132,7 +140,7 @@ export default function ProductDetails({ product }) {
           background: var(--bg-raised); border: 1px solid var(--border);
           border-radius: 14px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem;
         }
-        .rating-summary .big-score { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--white); line-height: 1; }
+        .rating-summary .big-score { font-family: var(--font-head); font-size: 3rem; font-weight: 800; color: var(--white); line-height: 1; }
         .rating-summary .out-of { font-size: .85rem; color: var(--muted); margin-bottom: .5rem; }
         .rating-summary .stars { color: #f59e0b; font-size: 1.1rem; margin: .5rem 0; }
         .rating-summary p { font-size: .8rem; color: var(--muted); }
@@ -145,7 +153,7 @@ export default function ProductDetails({ product }) {
         .review-item:hover { border-color: rgba(0,166,103,.25); }
         .review-user { display: flex; align-items: center; gap: .85rem; margin-bottom: .75rem; }
         .review-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
-        .review-user-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; color: var(--white); }
+        .review-user-name { font-family: var(--font-head); font-weight: 700; font-size: .9rem; color: var(--white); }
         .review-time { font-size: .75rem; color: var(--muted); }
         .review-stars { color: #f59e0b; font-size: .85rem; margin-bottom: .5rem; }
         .review-text { color: var(--muted); font-size: .9rem; line-height: 1.7; }
@@ -159,12 +167,12 @@ export default function ProductDetails({ product }) {
           padding: 1.75rem; border-bottom: 1px solid rgba(0,166,103,.2);
         }
         .price-label { font-size: .78rem; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin-bottom: .25rem; }
-        .price-amount { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--white); }
+        .price-amount { font-family: var(--font-head); font-size: 2rem; font-weight: 800; color: var(--white); }
         .price-currency { font-size: .9rem; color: rgba(255,255,255,.6); margin-left: .25rem; }
         .btn-buy-now {
           display: flex; align-items: center; justify-content: center; gap: .5rem;
           background: var(--accent); color: var(--white);
-          font-family: 'Syne', sans-serif; font-weight: 800; font-size: .95rem;
+          font-family: var(--font-head); font-weight: 800; font-size: .95rem;
           padding: .9rem; border-radius: 10px; text-decoration: none; border: none;
           cursor: pointer; width: 100%; margin-top: 1.25rem;
           box-shadow: 0 0 24px var(--accent-glow);
@@ -175,7 +183,7 @@ export default function ProductDetails({ product }) {
         .seller-block { padding: 1.5rem; }
         .seller-header { display: flex; align-items: center; gap: .85rem; margin-bottom: 1.25rem; }
         .seller-avatar { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 2px solid rgba(0,166,103,.3); }
-        .seller-name { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--white); font-size: .95rem; }
+        .seller-name { font-family: var(--font-head); font-weight: 700; color: var(--white); font-size: .95rem; }
         .seller-online { display: inline-flex; align-items: center; gap: .35rem; font-size: .75rem; color: var(--accent); }
         .seller-online::before { content:''; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
 
@@ -189,7 +197,7 @@ export default function ProductDetails({ product }) {
         .btn-contact {
           display: flex; align-items: center; justify-content: center; gap: .5rem;
           background: var(--bg-raised); border: 1px solid var(--border);
-          color: var(--text); font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem;
+          color: var(--text); font-family: var(--font-head); font-weight: 700; font-size: .85rem;
           padding: .8rem; border-radius: 10px; text-decoration: none; width: 100%;
           transition: all .2s; cursor: pointer;
         }
@@ -209,7 +217,7 @@ export default function ProductDetails({ product }) {
         .btn-accent {
           background: var(--accent); color: var(--white); border: none;
           padding: .7rem 2rem; border-radius: 10px; font-weight: 700;
-          font-family: 'Syne', sans-serif; cursor: pointer; transition: all .2s;
+          font-family: var(--font-head); cursor: pointer; transition: all .2s;
           box-shadow: 0 0 20px var(--accent-glow);
         }
         .btn-accent:hover { transform: translateY(-1px); color: var(--white); }
@@ -221,7 +229,7 @@ export default function ProductDetails({ product }) {
           color: var(--text); font-size: 1rem; cursor: pointer; transition: all .2s;
         }
         .qty-btn:hover { background: var(--accent-dim); color: var(--accent); }
-        .qty-num { width: 56px; height: 40px; text-align: center; background: var(--bg-deep); border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border); color: var(--white); font-family: 'Syne', sans-serif; font-weight: 700; outline: none; }
+        .qty-num { width: 56px; height: 40px; text-align: center; background: var(--bg-deep); border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border); color: var(--white); font-family: var(--font-head); font-weight: 700; outline: none; }
 
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
@@ -303,8 +311,120 @@ export default function ProductDetails({ product }) {
                 </div>
 
                 <div className="pd-grid">
-                    {/* LEFT: product content */}
-                    <div>
+                    {/* LEFT: sidebar (price / seller / meta) */}
+                    <div className="pd-sidebar-col">
+                        <div className="sidebar-card">
+                            <div className="price-block">
+                                <div className="price-label">Price</div>
+                                <div className="price-amount">
+                                    {Number(product.price).toLocaleString()}
+                                    <span className="price-currency">RWF</span>
+                                </div>
+                                <Link
+                                    href={route(
+                                        "checkout.create",
+                                        product.slug,
+                                    )}
+                                    className="btn-buy-now"
+                                >
+                                    <i className="feather-shopping-cart"></i>{" "}
+                                    Buy This Product
+                                </Link>
+                            </div>
+
+                            <div className="seller-block">
+                                <div className="seller-header">
+                                    <img
+                                        src="/assets/img/user/user-05.jpg"
+                                        alt="Seller"
+                                        className="seller-avatar"
+                                    />
+                                    <div>
+                                        <div className="seller-name">
+                                            {product.seller?.company_name}
+                                        </div>
+                                        <div className="seller-online">
+                                            Online
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul className="meta-list">
+                                    <li>
+                                        <i className="ti ti-tag"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Category
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.category?.name ??
+                                                    "Uncategorized"}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-user"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Seller
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.seller?.company_name}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-calendar-check"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Listed
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.listed_ago ?? "—"}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-stack"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Stock / Queue
+                                            </div>
+                                            <div className="meta-val">
+                                                {product.stock} units
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i className="ti ti-star"></i>
+                                        <div>
+                                            <div className="meta-key">
+                                                Rating
+                                            </div>
+                                            <div className="meta-val">
+                                                {avgRating.toFixed(1)} / 5 (
+                                                {product.reviews?.length ?? 0}{" "}
+                                                reviews)
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <a
+                                    href="#"
+                                    className="btn-contact"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#contact_me"
+                                >
+                                    <i className="feather-message-circle"></i>{" "}
+                                    Contact Seller
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* RIGHT: product content (image, tabs, reviews) */}
+                    <div className="pd-content-col">
                         {/* Image */}
                         <div
                             className="product-image-panel"
@@ -446,118 +566,6 @@ export default function ProductDetails({ product }) {
                             </div>
                         </div>
                     </div>
-
-                    {/* RIGHT: sidebar */}
-                    <div>
-                        <div className="sidebar-card">
-                            <div className="price-block">
-                                <div className="price-label">Price</div>
-                                <div className="price-amount">
-                                    {Number(product.price).toLocaleString()}
-                                    <span className="price-currency">RWF</span>
-                                </div>
-                                <Link
-                                    href={route(
-                                        "checkout.create",
-                                        product.slug,
-                                    )}
-                                    className="btn-buy-now"
-                                >
-                                    <i className="feather-shopping-cart"></i>{" "}
-                                    Buy This Product
-                                </Link>
-                            </div>
-
-                            <div className="seller-block">
-                                <div className="seller-header">
-                                    <img
-                                        src="/assets/img/user/user-05.jpg"
-                                        alt="Seller"
-                                        className="seller-avatar"
-                                    />
-                                    <div>
-                                        <div className="seller-name">
-                                            {product.seller?.company_name}
-                                        </div>
-                                        <div className="seller-online">
-                                            Online
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <ul className="meta-list">
-                                    <li>
-                                        <i className="ti ti-tag"></i>
-                                        <div>
-                                            <div className="meta-key">
-                                                Category
-                                            </div>
-                                            <div className="meta-val">
-                                                {product.category?.name ??
-                                                    "Uncategorized"}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i className="ti ti-user"></i>
-                                        <div>
-                                            <div className="meta-key">
-                                                Seller
-                                            </div>
-                                            <div className="meta-val">
-                                                {product.seller?.company_name}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i className="ti ti-calendar-check"></i>
-                                        <div>
-                                            <div className="meta-key">
-                                                Listed
-                                            </div>
-                                            <div className="meta-val">
-                                                {product.listed_ago ?? "—"}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i className="ti ti-stack"></i>
-                                        <div>
-                                            <div className="meta-key">
-                                                Stock / Queue
-                                            </div>
-                                            <div className="meta-val">
-                                                {product.stock} units
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i className="ti ti-star"></i>
-                                        <div>
-                                            <div className="meta-key">
-                                                Rating
-                                            </div>
-                                            <div className="meta-val">
-                                                {avgRating.toFixed(1)} / 5 (
-                                                {product.reviews?.length ?? 0}{" "}
-                                                reviews)
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                                <a
-                                    href="#"
-                                    className="btn-contact"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#contact_me"
-                                >
-                                    <i className="feather-message-circle"></i>{" "}
-                                    Contact Seller
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -588,7 +596,8 @@ export default function ProductDetails({ product }) {
                             >
                                 <h5
                                     style={{
-                                        fontFamily: "'Syne',sans-serif",
+                                        fontFamily:
+                                            "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif",
                                         fontWeight: 800,
                                         color: "#fff",
                                         margin: 0,
@@ -725,7 +734,8 @@ export default function ProductDetails({ product }) {
                         >
                             <h5
                                 style={{
-                                    fontFamily: "'Syne',sans-serif",
+                                    fontFamily:
+                                        "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif",
                                     fontWeight: 800,
                                     color: "#fff",
                                     margin: 0,
@@ -753,7 +763,8 @@ export default function ProductDetails({ product }) {
                                     <div className="col-md-7">
                                         <h4
                                             style={{
-                                                fontFamily: "'Syne',sans-serif",
+                                                fontFamily:
+                                                    "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif",
                                                 fontWeight: 800,
                                                 color: "var(--white)",
                                                 marginBottom: ".5rem",
@@ -898,7 +909,7 @@ export default function ProductDetails({ product }) {
                                             <span
                                                 style={{
                                                     fontFamily:
-                                                        "'Syne',sans-serif",
+                                                        "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif",
                                                     fontSize: "1.3rem",
                                                     fontWeight: 800,
                                                     color: "var(--white)",
