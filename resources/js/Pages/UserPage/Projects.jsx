@@ -412,7 +412,7 @@ export default function Projects({ categories = [], projects = [] }) {
           border: 1px solid var(--fc-border);
           border-radius: 24px;
           padding: 50px;
-          margin-bottom: 70px;
+          // margin-bottom: 70px;
           position: relative;
           overflow: hidden;
         }
@@ -681,7 +681,7 @@ function truncate(text, length) {
 Projects.layout = (page) => (
   <GuestLayout
     children={page}
-    title="Projects ollaboration"
+    title="Projects collaboration"
     description="Discover the latest initiatives, programs, and collaborations that drive impact."
   />
 );
