@@ -191,7 +191,6 @@ Route::post('/jobs/store', [UserJobController::class, 'store'])->name('user.jobs
 
 Route::post('/tickets/order', [UserEventTicketOrderController::class, 'checkout'])->name('event.orders.checkout');
 Route::get('/orders/{id}/tickets', [UserEventTicketOrderController::class, 'showticket'])->name('order.tickets');
-Route::get('/event/payment/callback', [UserEventTicketOrderController::class, 'callback'])->name('payment.callback');
 Route::get('/ticket/order/{order}/summary', [UserEventTicketOrderController::class, 'summary'])->name('user.ticket.order-summary');
 Route::get('/tickets/{id}/download', [UserEventTicketOrderController::class, 'downloadTicket'])->name('user.tickets.download');
 
