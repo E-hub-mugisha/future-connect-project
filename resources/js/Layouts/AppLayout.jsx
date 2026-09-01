@@ -23,24 +23,11 @@ const Toast = Swal.mixin({
     },
 });
 
-/**
- * Drop-in replacement for the old Blade master layout.
- * Usage in a page component:
- *
- *   export default function SomePage() {
- *       return (
- *           <AppLayout title="Dashboard">
- *               ...page content...
- *           </AppLayout>
- *       );
- *   }
- */
 export default function AppLayout({ title, children, notifications = [] }) {
     const { flash } = usePage().props;
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const appName = import.meta.env.VITE_APP_NAME || "App";
 
-    // Flash message toasts — same behavior as the old Blade @if(session('success')) blocks
     useEffect(() => {
         if (!flash) return;
 

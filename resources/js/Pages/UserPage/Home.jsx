@@ -14,11 +14,11 @@ function r(name, params) {
 }
 
 // ── Online image helpers (no local asset storage needed) ──────────────
-// Talent photos: use the uploaded image if present, otherwise a real
+// Photos of skilled people: use the uploaded image if present, otherwise a real
 // photograph of a person from randomuser.me (free, no key, alternates
 // gender by index so the avatar row doesn't repeat one face).
-function talentImage(t, seedIndex = 1) {
-  if (t?.image) return t.image.startsWith("http") ? t.image : `/image/talents/${t.image}`;
+function personImage(p, seedIndex = 1) {
+  if (p?.image) return p.image.startsWith("http") ? p.image : `/image/talents/${p.image}`;
   const n = ((seedIndex - 1) % 90) + 1; // randomuser.me portraits go 0..99
   const gender = seedIndex % 2 === 0 ? "women" : "men";
   return `https://randomuser.me/api/portraits/${gender}/${n}.jpg`;
@@ -46,6 +46,7 @@ const PHOTO = {
   jobs: "https://images.unsplash.com/photo-1758518730384-be3d205838e8?auto=format&fit=crop&w=900&q=80", // handshake, hired
   connect1: "https://images.unsplash.com/photo-1758691737083-0e7fdbde0f05?auto=format&fit=crop&w=700&q=80", // two colleagues at a laptop
   connect2: "https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?auto=format&fit=crop&w=700&q=80", // team talking
+  volunteer: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80", // volunteers working together
 };
 
 // Real Rwandan companies for a live testing state when no partners have
@@ -58,6 +59,24 @@ const DEMO_PARTNERS = [
   { name: "RwandAir", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/RwandAir_Logotype.png?width=300" },
   { name: "Airtel Rwanda", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Airtel_Africa_logo.svg" },
   { name: "Equity Bank Rwanda", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Equity_Group_Logo.png?width=300" },
+];
+
+// The 5 pathways of the ecosystem (Solution section)
+const PATHWAYS = [
+  { icon: "ti-briefcase", label: "Job Opportunities" },
+  { icon: "ti-users", label: "Professional Connections" },
+  { icon: "ti-books", label: "Learning" },
+  { icon: "ti-rocket", label: "Project Collaboration" },
+  { icon: "ti-shopping-bag", label: "Future Connect Market" },
+];
+
+const DIFFERENCE_STEPS = ["Discover", "Connect", "Learn", "Collaborate", "Earn", "Grow"];
+
+const WHO_IT_SERVES = [
+  { icon: "ti-code", title: "Technical Graduates", desc: "Engineers, developers, and competition winners ready to be found." },
+  { icon: "ti-palette", title: "Creatives & Freelancers", desc: "Designers, writers, and makers looking for steady, real work." },
+  { icon: "ti-building-community", title: "Organizations & Mentors", desc: "Teams and mentors looking for the exact expertise they need." },
+  { icon: "ti-heart-handshake", title: "Volunteers & Changemakers", desc: "People ready to give their time and skills to a cause." },
 ];
 
 function Stars({ rating = 0 }) {
@@ -95,7 +114,7 @@ export default function Home({
 
   return (
     <>
-      <Head title="Future Connect — Get Discovered. Get Hired." />
+      <Head title="Future Connect — Your Skills Are Your Capital." />
 
       <style>{`
         :root {
@@ -199,6 +218,31 @@ export default function Home({
           color: var(--accent); font-size: 1rem; margin-bottom: 14px;
         }
 
+        /* Problem section */
+        .fc-problem { padding: 72px 0; background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; background: var(--border); margin-top: 20px; }
+        .problem-card { background: var(--bg-card); padding: 30px 26px; transition: background .2s; }
+        .problem-card:hover { background: var(--bg-glass2); }
+        .problem-icon { font-size: 1.6rem; margin-bottom: 14px; display: block; }
+        .problem-card h5 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--text-1); margin-bottom: 8px; }
+        .problem-card p { font-size: 0.85rem; color: var(--text-2); line-height: 1.65; }
+
+        /* Solution / pathways section */
+        .fc-solution { padding: 72px 0; }
+        .pathway-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 28px; }
+        .pathway-chip {
+          display: inline-flex; align-items: center; gap: 8px; background: var(--bg-glass2);
+          border: 1px solid var(--border-h); color: var(--text-1); border-radius: var(--r-pill);
+          padding: 10px 18px; font-size: 0.85rem; font-weight: 600;
+        }
+        .pathway-chip i { color: var(--accent); }
+        .pathway-arrow { color: var(--text-3); font-size: 1.1rem; }
+        .difference-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; }
+        .difference-step {
+          font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--accent);
+          background: var(--bg-glass); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 8px 18px;
+        }
+
         .fc-feature-section { padding: 64px 0; }
         .fc-feature-section.alt { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .feature-panel-card h2 { font-family: var(--font-head); font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; color: var(--text-1); margin-bottom: 14px; line-height: 1.2; }
@@ -234,6 +278,24 @@ export default function Home({
         .step-card h5 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--text-1); margin-bottom: 8px; }
         .step-card p { font-size: 0.83rem; color: var(--text-2); line-height: 1.6; margin-bottom: 14px; }
 
+        /* Who it serves */
+        .fc-who { padding: 72px 0; }
+        .who-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 20px; }
+        .who-card { background: var(--bg-glass); border: 1px solid var(--border); border-radius: var(--r-md); padding: 24px; transition: border-color .2s, transform .2s; }
+        .who-card:hover { border-color: var(--border-h); transform: translateY(-3px); }
+        .who-card .provide-icon { width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--bg-glass2); border: 1px solid var(--border-h); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.2rem; margin-bottom: 14px; }
+        .who-card h6 { font-family: var(--font-head); font-size: 0.95rem; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+        .who-card p { font-size: 0.83rem; color: var(--text-2); line-height: 1.6; }
+
+        /* Philosophy banner */
+        .fc-philosophy { padding: 76px 0; background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: center; }
+        .fc-philosophy .eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; margin-bottom: 14px; display: block; }
+        .fc-philosophy h2 { font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: var(--text-1); margin-bottom: 18px; }
+        .fc-philosophy p { color: var(--text-2); font-size: 1rem; line-height: 1.75; max-width: 640px; margin: 0 auto; }
+
+        /* Volunteering section */
+        .fc-volunteer .feature-panel-card p.tagline { color: var(--accent); font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; }
+
         /* ── Partners: full-color logos, laid out as a list/grid (no scroll) ── */
         .fc-partners { padding: 56px 0; }
         .partners-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); font-weight: 600; text-align: center; margin-bottom: 28px; }
@@ -262,6 +324,7 @@ export default function Home({
         .testimonial-stars { color: var(--accent); font-size: 0.8rem; margin-left: auto; }
         .testimonial-body p { font-size: 0.85rem; color: var(--text-2); line-height: 1.65; }
         .testimonial-loc { font-size: 0.75rem; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
+        .testimonial-support { font-size: 0.75rem; color: var(--accent); font-weight: 600; margin-top: -4px; }
 
         .fc-cta { margin: 0 0 72px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 48px 44px; position: relative; overflow: hidden; }
         .fc-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
@@ -283,7 +346,7 @@ export default function Home({
         }
       `}</style>
 
-      {/* 1. HERO */}
+      {/* 1. HERO — "Your skills are your capital." */}
       <section className="fc-hero">
         <div className="fc-hero-bg">
           <div id="heroBgCarousel" className="carousel slide" ref={heroCarouselRef}>
@@ -302,23 +365,23 @@ export default function Home({
         <div className="container fc-hero-content">
           <div className="row align-items-center">
             <div className="col-lg-7">
-              <p className="hero-eyebrow">{totalTalents}+ verified professionals, already hired</p>
+              <p className="hero-eyebrow">{totalTalents}+ verified skilled people, already connected</p>
               <h1>
-                Stop getting overlooked. <span className="hl">Start getting hired.</span>
+                Your skills are <span className="hl">your capital.</span>
               </h1>
-              <p>Put your verified skills in front of people actively hiring — no cold applications, no algorithm burying your profile.</p>
+              <p>The digital ecosystem connecting Africa's skilled people to opportunities, collaborators, mentors, and organizations.</p>
               <div className="hero-ctas">
                 <Link href={r("user.register_skills")} className="btn-fc-primary">
-                  Claim Your Free Profile <i className="ti ti-arrow-right" />
+                  Join Future Connect <i className="ti ti-arrow-right" />
                 </Link>
                 <Link href={r("user.talents")} className="btn-fc-outline">
-                  See Who's Hiring <i className="ti ti-arrow-right" />
+                  Explore the Network <i className="ti ti-arrow-right" />
                 </Link>
               </div>
               <div className="hero-stats">
                 <div>
                   <div className="hero-stat-val">{totalTalents}+</div>
-                  <div className="hero-stat-lbl">Verified Professionals</div>
+                  <div className="hero-stat-lbl">Verified Skilled People</div>
                 </div>
                 <div>
                   <div className="hero-stat-val">{displayPartners.length}+</div>
@@ -342,7 +405,7 @@ export default function Home({
               <div className="strip-icon"><i className="ti ti-rocket" /></div>
               <h5>Get Seen Faster</h5>
               <p>Verified, boosted profiles jump the queue and get featured on our homepage.</p>
-              <Link href={r("user.talents")} className="strip-link">Find Skills <i className="ti ti-arrow-right" /></Link>
+              <Link href={r("user.talents")} className="strip-link">Find Skilled People <i className="ti ti-arrow-right" /></Link>
             </div>
             <div className="feature-strip-item">
               <div className="strip-icon"><i className="ti ti-briefcase" /></div>
@@ -360,8 +423,84 @@ export default function Home({
         </div>
       </div>
 
-      {/* 3. SKILLS MARKETPLACE */}
-      <section className="fc-feature-section" id="skills">
+      {/* 3. THE PROBLEM */}
+      <section className="fc-problem" id="problem">
+        <div className="container">
+          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "0 auto 0" }}>
+            <span className="eyebrow">The Problem</span>
+            <h2>Brilliant skills, disconnected from opportunity.</h2>
+          </div>
+          <div className="problem-grid">
+            <div className="problem-card">
+              <span className="problem-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <ellipse cx="12" cy="12" rx="9" ry="3.2" />
+                  <path d="M6.5 9.5c1.4 1 3.4 1.6 5.5 1.6s4.1-.6 5.5-1.6" />
+                </svg>
+              </span>
+              <h5>The Unseen Void</h5>
+              <p>Thousands of brilliant technical minds and competition winners disappear from the grid right after graduation.</p>
+            </div>
+            <div className="problem-card">
+              <span className="problem-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 3v4M15 3v4" />
+                  <path d="M7 7h10v4a5 5 0 0 1-10 0V7Z" />
+                  <path d="M12 16v3M9 21h6" />
+                </svg>
+              </span>
+              <h5>The Connection Deficit</h5>
+              <p>Skilled graduates often struggle to find the professional networks and opportunities needed to build careers around their expertise.</p>
+            </div>
+            <div className="problem-card">
+              <span className="problem-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3 2.5 20h19L12 3Z" strokeLinejoin="round" />
+                  <path d="M12 9.5v4.2" />
+                  <circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none" />
+                </svg>
+              </span>
+              <h5>The Solution Shortage</h5>
+              <p>Society's biggest challenges persist while the exact experts trained to solve them remain disconnected and underemployed.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. THE SOLUTION — One ecosystem, multiple pathways */}
+      <section className="fc-solution" id="solution">
+        <div className="container">
+          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "0 auto" }}>
+            <span className="eyebrow">The Solution</span>
+            <h2>One ecosystem. Multiple pathways.</h2>
+          </div>
+
+          <div className="pathway-row">
+            {PATHWAYS.map((p, i) => (
+              <React.Fragment key={p.label}>
+                <span className="pathway-chip"><i className={`ti ${p.icon}`} /> {p.label}</span>
+                {i < PATHWAYS.length - 1 && <span className="pathway-arrow">→</span>}
+              </React.Fragment>
+            ))}
+          </div>
+
+          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "56px auto 0" }}>
+            <span className="eyebrow">The Future Connect Difference</span>
+          </div>
+          <div className="difference-row">
+            {DIFFERENCE_STEPS.map((step, i) => (
+              <React.Fragment key={step}>
+                <span className="difference-step">{step}</span>
+                {i < DIFFERENCE_STEPS.length - 1 && <span className="pathway-arrow">→</span>}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. SKILLS MARKETPLACE */}
+      <section className="fc-feature-section alt" id="skills">
         <div className="container">
           <div className="feature-panel-card">
             <div className="row align-items-center g-5">
@@ -378,26 +517,26 @@ export default function Home({
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div className="avatar-stack">
                       {featuredTalents.map((t, i) => (
-                        <img key={t.id ?? i} src={talentImage(t, i + 1)} alt="" />
+                        <img key={t.id ?? i} src={personImage(t, i + 1)} alt="" />
                       ))}
                     </div>
                     <div>
                       <div style={{ color: "var(--accent)", fontSize: "0.8rem" }}>★★★★★ 4.8/5</div>
-                      <div style={{ fontSize: "0.72rem", color: "var(--text-3)" }}>{totalTalents}+ already in</div>
+                      <div style={{ fontSize: "0.72rem", color: "var(--text-3)" }}>{totalTalents}+ skilled people already in</div>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="col-lg-6 feature-img-wrap">
-                <img src={PHOTO.skills} alt="Professional showcasing a portfolio" />
+                <img src={PHOTO.skills} alt="Skilled person showcasing a portfolio" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. LEARNING CENTER */}
-      <section className="fc-feature-section alt" id="learning">
+      {/* 6. LEARNING CENTER */}
+      <section className="fc-feature-section" id="learning">
         <div className="container">
           <div className="feature-panel-card">
             <div className="row align-items-center g-5">
@@ -419,15 +558,15 @@ export default function Home({
         </div>
       </section>
 
-      {/* 5. OPPORTUNITIES */}
-      <section className="fc-feature-section" id="opportunities">
+      {/* 7. OPPORTUNITIES */}
+      <section className="fc-feature-section alt" id="opportunities">
         <div className="container">
           <div className="feature-panel-card">
             <div className="row align-items-center g-5">
               <div className="col-lg-6">
                 <span className="fc-badge mb-3"><i className="ti ti-briefcase" /> Opportunities</span>
                 <h2>Real roles. <span>Zero noise.</span></h2>
-                <p>Skip the open job boards. Get matched with verified people and real work.</p>
+                <p>Skip the open job boards. Get matched with verified skilled people and real work.</p>
                 <ul className="feature-list">
                   <li>Post roles in minutes</li>
                   <li>Set alerts so the right match finds you</li>
@@ -442,15 +581,15 @@ export default function Home({
         </div>
       </section>
 
-      {/* 6. CONNECTION ROOM */}
-      <section className="fc-feature-section alt" id="connect">
+      {/* 8. CONNECTION ROOM */}
+      <section className="fc-feature-section" id="connect">
         <div className="container">
           <div className="feature-panel-card">
             <div className="row align-items-center g-5">
               <div className="col-lg-5">
                 <div className="row g-3">
                   <div className="col-6">
-                    <img src={PHOTO.connect1} alt="Two professionals collaborating at a laptop" className="img-fluid" style={{ borderRadius: "var(--r-md)", width: "100%", height: "260px", objectFit: "cover" }} />
+                    <img src={PHOTO.connect1} alt="Two skilled people collaborating at a laptop" className="img-fluid" style={{ borderRadius: "var(--r-md)", width: "100%", height: "260px", objectFit: "cover" }} />
                   </div>
                   <div className="col-6">
                     <img src={PHOTO.connect2} alt="Colleagues talking together" className="img-fluid" style={{ borderRadius: "var(--r-md)", width: "100%", height: "260px", objectFit: "cover" }} />
@@ -460,7 +599,7 @@ export default function Home({
               <div className="col-lg-7">
                 <span className="fc-badge mb-3"><i className="ti ti-users" /> Connection Room</span>
                 <h2>Your next break <span>starts with one message.</span></h2>
-                <p>A private space for verified professionals to message, meet, and collaborate.</p>
+                <p>A private space for verified skilled people to message, meet, and collaborate.</p>
                 <ul className="feature-list">
                   <li>A diverse, verified professional network</li>
                   <li>A simple, distraction-free way to connect</li>
@@ -472,8 +611,8 @@ export default function Home({
         </div>
       </section>
 
-      {/* 7. MARKETPLACE */}
-      <section className="fc-feature-section" id="marketplace">
+      {/* 9. MARKETPLACE */}
+      <section className="fc-feature-section alt" id="marketplace">
         <div className="container">
           <div className="feature-panel-card">
             <span className="fc-badge mb-3"><i className="ti ti-shopping-bag" /> Marketplace</span>
@@ -503,7 +642,43 @@ export default function Home({
         </div>
       </section>
 
-      {/* 8. HOW IT WORKS */}
+      {/* 10. VOLUNTEERING — request-for-volunteering portal, mirrors the "Request a Demo" pattern */}
+      <section className="fc-feature-section fc-volunteer" id="volunteer">
+        <div className="container">
+          <div className="feature-panel-card">
+            <div className="row align-items-center g-5">
+              <div className="col-lg-6">
+                <span className="fc-badge mb-3"><i className="ti ti-heart-handshake" /> Volunteering</span>
+                <p className="tagline">Give your skills, not just your time.</p>
+                <h2>Skills built to help <span>should get the chance to.</span></h2>
+                <p>Organizations post real needs, and skilled people step up to volunteer their expertise — from a one-off consultation to an ongoing project.</p>
+                <ul className="feature-list">
+                  <li>Organizations submit a request for volunteering in minutes</li>
+                  <li>Skilled people browse and apply to causes that match their expertise</li>
+                </ul>
+                <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                  <a
+                    data-bs-toggle="modal"
+                    data-bs-target="#requestVolunteeringModal"
+                    className="btn-fc-primary"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Request for Volunteering <i className="ti ti-arrow-right" />
+                  </a>
+                  <Link href={r("user.volunteer.index")} className="btn-fc-outline">
+                    Become a Volunteer
+                  </Link>
+                </div>
+              </div>
+              <div className="col-lg-6 feature-img-wrap">
+                <img src={PHOTO.volunteer} alt="Volunteers working together" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 11. HOW IT WORKS */}
       <section className="fc-how">
         <div className="container">
           <div className="fc-section-head text-center" style={{ maxWidth: 560, margin: "0 auto 40px" }}>
@@ -520,7 +695,7 @@ export default function Home({
             <div className="step-card">
               <span className="step-num">02</span>
               <h5>Get Discovered & Rated</h5>
-              <p>Employers browse, rate, and build your reputation.</p>
+              <p>Organizations browse, rate, and build your reputation.</p>
               <Link href={r("user.talents")} className="strip-link">Explore Skills <i className="ti ti-arrow-right" /></Link>
             </div>
             <div className="step-card">
@@ -533,7 +708,35 @@ export default function Home({
         </div>
       </section>
 
-      {/* 9. PARTNERS — full-color logos in a fixed list/grid, no scrolling */}
+      {/* 12. WHO IT SERVES */}
+      <section className="fc-who" id="who">
+        <div className="container">
+          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "0 auto" }}>
+            <span className="eyebrow">Who It Serves</span>
+            <h2>Built for everyone with skills.</h2>
+          </div>
+          <div className="who-grid">
+            {WHO_IT_SERVES.map((w) => (
+              <div className="who-card" key={w.title}>
+                <div className="provide-icon"><i className={`ti ${w.icon}`} /></div>
+                <h6>{w.title}</h6>
+                <p>{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 13. PHILOSOPHY */}
+      <section className="fc-philosophy">
+        <div className="container">
+          <span className="eyebrow">The Core Philosophy</span>
+          <h2>Your knowledge is your capital.</h2>
+          <p>In a world rich in knowledge but limited in opportunity, Future Connect helps turn skills into connections, opportunities, collaboration, and income.</p>
+        </div>
+      </section>
+
+      {/* 14. PARTNERS — full-color logos in a fixed list/grid, no scrolling */}
       <section className="fc-partners">
         <div className="container">
           <div className="fc-section-head text-center" style={{ margin: "0 auto 8px" }}>
@@ -551,21 +754,21 @@ export default function Home({
         </div>
       </section>
 
-      {/* 10. TESTIMONIALS */}
+      {/* 15. TESTIMONIALS */}
       <section className="fc-testimonials">
         <div className="container">
           <div className="row align-items-end mb-5">
             <div className="col-md-7">
               <div className="fc-section-head" style={{ marginBottom: 0 }}>
                 <span className="eyebrow">Testimonials</span>
-                <h2>Real stories from real talent</h2>
-                <p>Professionals who've grown their careers through Future Connect.</p>
+                <h2>Real stories from real skilled people</h2>
+                <p>People who've grown their careers through Future Connect.</p>
               </div>
             </div>
             <div className="col-md-5 text-md-end">
               <div className="avatar-stack" style={{ justifyContent: "flex-end", marginBottom: 8 }}>
                 {testimonials.map((t, i) => (
-                  <img key={t.id ?? i} src={talentImage(t.talent, i + 1)} alt="" />
+                  <img key={t.id ?? i} src={personImage(t.talent, i + 1)} alt="" />
                 ))}
               </div>
               <p style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>Building a global talent community</p>
@@ -576,9 +779,9 @@ export default function Home({
             {testimonials.map((test, i) => (
               <div className="testimonial-card" key={test.id ?? i}>
                 <div className="testimonial-head">
-                  <img src={talentImage(test.talent, i + 1)} alt="" />
+                  <img src={personImage(test.talent, i + 1)} alt="" />
                   <div>
-                    <div className="testimonial-name">{test.talent?.name ?? "Talent"}</div>
+                    <div className="testimonial-name">{test.talent?.name ?? "Skilled Person"}</div>
                     <div className="testimonial-role">{test.title ?? "Creative Professional"}</div>
                   </div>
                   <div className="testimonial-stars"><Stars rating={test.rating} /></div>
@@ -586,6 +789,11 @@ export default function Home({
                 <div className="testimonial-body">
                   <p>{test.content ?? "Future Connect helped me turn my skills into steady, real opportunities."}</p>
                 </div>
+                {test.talent?.username && (
+                  <div className="testimonial-support">
+                    <i className="ti ti-heart" /> Support @{test.talent.username}
+                  </div>
+                )}
                 <div className="testimonial-loc">
                   <i className="ti ti-map-pin" style={{ color: "var(--accent)" }} />
                   {test.talent?.address ?? "Kigali, Rwanda"}
@@ -600,9 +808,9 @@ export default function Home({
                 <div className={`carousel-item${i === 0 ? " active" : ""}`} key={test.id ?? i}>
                   <div className="testimonial-card" style={{ margin: "0 auto", maxWidth: 380 }}>
                     <div className="testimonial-head">
-                      <img src={talentImage(test.talent, i + 1)} alt="" />
+                      <img src={personImage(test.talent, i + 1)} alt="" />
                       <div>
-                        <div className="testimonial-name">{test.talent?.name ?? "Talent"}</div>
+                        <div className="testimonial-name">{test.talent?.name ?? "Skilled Person"}</div>
                         <div className="testimonial-role">{test.title ?? "Creative Professional"}</div>
                       </div>
                       <div className="testimonial-stars"><Stars rating={test.rating} /></div>
@@ -610,6 +818,11 @@ export default function Home({
                     <div className="testimonial-body">
                       <p>{test.content ?? "Future Connect helped me turn my skills into steady, real opportunities."}</p>
                     </div>
+                    {test.talent?.username && (
+                      <div className="testimonial-support">
+                        <i className="ti ti-heart" /> Support @{test.talent.username}
+                      </div>
+                    )}
                     <div className="testimonial-loc">
                       <i className="ti ti-map-pin" style={{ color: "var(--accent)" }} />
                       {test.talent?.address ?? "Kigali, Rwanda"}
@@ -622,7 +835,7 @@ export default function Home({
         </div>
       </section>
 
-      {/* 11. CTA */}
+      {/* 16. CTA */}
       <div className="container">
         <div className="fc-cta">
           <div className="fc-cta-glow" />
@@ -632,13 +845,42 @@ export default function Home({
                 Join Future Connect
               </span>
               <h2>Your skills deserve to be seen.</h2>
-              <p>Join a growing community of verified professionals building real careers.</p>
+              <p>Join a growing community of verified skilled people building real careers.</p>
               <div className="hero-ctas" style={{ marginBottom: 6 }}>
-                <Link href={r("user.register_skills")} className="btn-fc-primary">Get Started Free <i className="ti ti-arrow-right" /></Link>
+                <Link href={r("user.register_skills")} className="btn-fc-primary">Get Started Today <i className="ti ti-arrow-right" /></Link>
                 <Link href={r("user.talents")} className="btn-fc-outline">Browse Skills</Link>
               </div>
               <p className="fc-cta-note">No credit card. No commitment.</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Request for Volunteering modal — same interaction pattern as "Request a Demo" */}
+      <div className="modal fade" id="requestVolunteeringModal" tabIndex="-1" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content" style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "var(--r-lg)" }}>
+            <div className="modal-header" style={{ borderBottom: "1px solid var(--border)" }}>
+              <h5 className="modal-title" style={{ color: "var(--text-1)", fontFamily: "var(--font-head)", fontWeight: 700 }}>
+                Request for Volunteering
+              </h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <form method="POST" action={r("user.volunteer.request.store")}>
+              <div className="modal-body" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <p style={{ color: "var(--text-2)", fontSize: "0.85rem", marginBottom: 0 }}>
+                  Tell us what your organization or cause needs, and we'll match you with skilled people ready to volunteer.
+                </p>
+                <input type="text" name="organization" placeholder="Organization / cause name" className="form-control" required />
+                <input type="email" name="email" placeholder="Contact email" className="form-control" required />
+                <input type="text" name="skills_needed" placeholder="Skills needed (e.g. design, web development)" className="form-control" required />
+                <textarea name="details" rows="4" placeholder="Describe the volunteering opportunity" className="form-control" required />
+              </div>
+              <div className="modal-footer" style={{ borderTop: "1px solid var(--border)" }}>
+                <button type="button" className="btn-fc-outline" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" className="btn-fc-primary">Submit Request <i className="ti ti-arrow-right" /></button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

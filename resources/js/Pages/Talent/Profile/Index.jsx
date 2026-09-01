@@ -16,109 +16,212 @@ export default function Profile({ talent, categories, flash }) {
 
             <div data-h-scope="talent-profile">
                 <style>{`
+                    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
                     [data-h-scope="talent-profile"] {
                         --h-accent: #48d597;
-                        --h-accent-dark: #2fb87c;
-                        --h-ink: #060f11;
+                        --h-accent-ink: #0f3d2b;   /* readable text on accent */
+                        --h-ink: #000000;
                         --h-white: #ffffff;
-                        --h-bg: #f4f9f7;
+                        --h-bg: #f6f8f7;
+                        --h-line: rgba(0, 0, 0, 0.1);
+                        --h-line-soft: rgba(0, 0, 0, 0.06);
+                        --h-muted: rgba(0, 0, 0, 0.56);
                         background-color: var(--h-bg);
+                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                        color: var(--h-ink);
                     }
-                    [data-h-scope="talent-profile"] .h-card {
+                    [data-h-scope="talent-profile"] h1,
+                    [data-h-scope="talent-profile"] h2,
+                    [data-h-scope="talent-profile"] h3,
+                    [data-h-scope="talent-profile"] h4,
+                    [data-h-scope="talent-profile"] h5,
+                    [data-h-scope="talent-profile"] h6,
+                    [data-h-scope="talent-profile"] .h-display {
+                        font-family: 'Space Grotesk', 'Inter', sans-serif;
+                        letter-spacing: -0.01em;
+                    }
+
+                    /* ---- flat panels, no shared shadow-kit look ---- */
+                    [data-h-scope="talent-profile"] .h-panel {
                         background: var(--h-white);
-                        border: 1px solid rgba(6, 15, 17, 0.06);
+                        border: 1px solid var(--h-line-soft);
+                        border-radius: 14px;
                     }
-                    [data-h-scope="talent-profile"] .h-header-card {
+
+                    /* ---- header: solid black band, editorial layout ---- */
+                    [data-h-scope="talent-profile"] .h-header {
                         background: var(--h-ink);
                         color: var(--h-white);
+                        border-radius: 16px;
+                        position: relative;
+                        overflow: hidden;
                     }
-                    [data-h-scope="talent-profile"] .h-header-card .text-secondary {
-                        color: rgba(255,255,255,0.65) !important;
+                    [data-h-scope="talent-profile"] .h-header::before {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        bottom: 0;
+                        width: 4px;
+                        background: var(--h-accent);
+                    }
+                    [data-h-scope="talent-profile"] .h-header .text-secondary {
+                        color: rgba(255, 255, 255, 0.6) !important;
                     }
                     [data-h-scope="talent-profile"] .h-avatar {
-                        border: 3px solid var(--h-accent) !important;
+                        border: 2px solid var(--h-accent) !important;
                     }
                     [data-h-scope="talent-profile"] .h-badge-accent {
                         background: var(--h-accent);
-                        color: var(--h-ink);
+                        color: var(--h-accent-ink);
                         font-weight: 600;
+                        font-size: 0.78rem;
                     }
                     [data-h-scope="talent-profile"] .h-badge-outline {
-                        background: rgba(255,255,255,0.08);
+                        background: transparent;
                         color: var(--h-white);
-                        border: 1px solid rgba(255,255,255,0.2);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        font-size: 0.78rem;
+                        font-weight: 500;
                     }
+
+                    /* ---- buttons ---- */
                     [data-h-scope="talent-profile"] .h-btn-accent {
                         background: var(--h-accent);
-                        color: var(--h-ink);
-                        border: none;
+                        color: var(--h-accent-ink);
+                        border: 1px solid var(--h-accent);
                         font-weight: 600;
-                        transition: background 0.15s ease;
+                        transition: background 0.15s ease, border-color 0.15s ease;
                     }
                     [data-h-scope="talent-profile"] .h-btn-accent:hover {
-                        background: var(--h-accent-dark);
-                        color: var(--h-ink);
+                        background: #34c084;
+                        border-color: #34c084;
+                        color: var(--h-accent-ink);
                     }
                     [data-h-scope="talent-profile"] .h-btn-accent:disabled {
-                        opacity: 0.6;
-                    }
-                    [data-h-scope="talent-profile"] .h-icon-tile {
-                        background: rgba(72, 213, 151, 0.12);
-                    }
-                    [data-h-scope="talent-profile"] .h-icon-tile i {
-                        color: var(--h-accent-dark);
-                    }
-                    [data-h-scope="talent-profile"] .h-label {
-                        color: var(--h-ink);
                         opacity: 0.55;
-                        letter-spacing: 0.04em;
                     }
-                    [data-h-scope="talent-profile"] .h-section-title {
-                        color: var(--h-ink);
+                    [data-h-scope="talent-profile"] .h-btn-ghost-dark {
+                        background: transparent;
+                        color: var(--h-white);
+                        border: 1px solid rgba(255, 255, 255, 0.35);
+                        font-weight: 500;
+                        transition: border-color 0.15s ease, background 0.15s ease;
                     }
-                    [data-h-scope="talent-profile"] .h-chip-count {
-                        background: rgba(6,15,17,0.05);
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-profile"] .h-star-value {
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-profile"] .h-course-badge {
-                        background: rgba(72, 213, 151, 0.12);
-                        color: var(--h-accent-dark);
-                        border: 1px solid rgba(72, 213, 151, 0.3);
-                    }
-                    [data-h-scope="talent-profile"] .h-alert-success {
-                        background: rgba(72, 213, 151, 0.15);
-                        border: 1px solid rgba(72, 213, 151, 0.4);
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-profile"] .form-control:focus,
-                    [data-h-scope="talent-profile"] .form-select:focus {
-                        border-color: var(--h-accent);
-                        box-shadow: 0 0 0 0.2rem rgba(72, 213, 151, 0.25);
+                    [data-h-scope="talent-profile"] .h-btn-ghost-dark:hover {
+                        background: rgba(255, 255, 255, 0.08);
+                        border-color: rgba(255, 255, 255, 0.6);
+                        color: var(--h-white);
                     }
                     [data-h-scope="talent-profile"] .h-btn-ghost {
                         background: transparent;
                         color: var(--h-ink);
-                        border: 1px solid rgba(6,15,17,0.15);
+                        border: 1px solid var(--h-line);
+                        font-weight: 500;
                     }
                     [data-h-scope="talent-profile"] .h-btn-ghost:hover {
-                        background: rgba(6,15,17,0.04);
+                        background: var(--h-bg);
+                    }
+
+                    /* ---- section labels: rule instead of uppercase tracking ---- */
+                    [data-h-scope="talent-profile"] .h-section-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        color: var(--h-ink);
+                        font-weight: 600;
+                    }
+                    [data-h-scope="talent-profile"] .h-section-title::before {
+                        content: "";
+                        width: 4px;
+                        height: 18px;
+                        background: var(--h-accent);
+                        border-radius: 2px;
+                        display: inline-block;
+                    }
+                    [data-h-scope="talent-profile"] .h-label {
+                        color: var(--h-muted);
+                        font-weight: 500;
+                        font-size: 0.8rem;
+                    }
+                    [data-h-scope="talent-profile"] .h-chip-count {
+                        background: var(--h-bg);
+                        border: 1px solid var(--h-line-soft);
+                        color: var(--h-muted);
+                        font-weight: 500;
+                    }
+
+                    [data-h-scope="talent-profile"] .h-icon-tile {
+                        background: var(--h-bg);
+                        border: 1px solid var(--h-line-soft);
+                    }
+                    [data-h-scope="talent-profile"] .h-icon-tile i {
+                        color: var(--h-ink);
+                    }
+
+                    [data-h-scope="talent-profile"] .h-review-card,
+                    [data-h-scope="talent-profile"] .h-course-card {
+                        border: 1px solid var(--h-line-soft);
+                        border-radius: 12px;
+                        transition: border-color 0.15s ease;
+                    }
+                    [data-h-scope="talent-profile"] .h-review-card:hover,
+                    [data-h-scope="talent-profile"] .h-course-card:hover {
+                        border-color: var(--h-line);
+                    }
+                    [data-h-scope="talent-profile"] .h-star-filled {
+                        color: var(--h-accent-ink);
+                    }
+                    [data-h-scope="talent-profile"] .h-star-empty {
+                        color: var(--h-line);
+                    }
+                    [data-h-scope="talent-profile"] .h-star-value {
+                        color: var(--h-ink);
+                        font-weight: 600;
+                    }
+                    [data-h-scope="talent-profile"] .h-course-badge {
+                        background: transparent;
+                        color: var(--h-ink);
+                        border: 1px solid var(--h-ink);
+                        font-weight: 500;
+                    }
+
+                    [data-h-scope="talent-profile"] .h-alert-success {
+                        background: var(--h-white);
+                        border: 1px solid var(--h-accent);
+                        border-left: 4px solid var(--h-accent);
+                        color: var(--h-ink);
+                        border-radius: 10px;
+                    }
+
+                    [data-h-scope="talent-profile"] .form-control,
+                    [data-h-scope="talent-profile"] .form-select {
+                        border: 1px solid var(--h-line);
+                    }
+                    [data-h-scope="talent-profile"] .form-control:focus,
+                    [data-h-scope="talent-profile"] .form-select:focus {
+                        border-color: var(--h-accent);
+                        box-shadow: 0 0 0 3px rgba(72, 213, 151, 0.2);
+                    }
+                    [data-h-scope="talent-profile"] .form-label {
+                        color: var(--h-ink);
+                        font-weight: 500;
+                        font-size: 0.85rem;
                     }
                 `}</style>
 
-                <div className="container-fluid px-4 py-4">
+                <div className="container-fluid px-4 py-4" style={{ maxWidth: 1180, margin: "0 auto" }}>
                     {flash?.success && (
-                        <div className="alert h-alert-success rounded-3 border-0">
-                            <i className="fas fa-circle-check me-2"></i>
+                        <div className="alert h-alert-success px-3 py-3 mb-4 d-flex align-items-center">
+                            <i className="fas fa-circle-check me-2" style={{ color: "#0f3d2b" }}></i>
                             {flash.success}
                         </div>
                     )}
 
                     {/* Header */}
-                    <div className="card h-card h-header-card border-0 shadow-sm rounded-4 mb-4">
-                        <div className="card-body p-4">
+                    <div className="h-header mb-4">
+                        <div className="p-4 ps-4">
                             <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
                                 <div className="d-flex align-items-center gap-3">
                                     <img
@@ -136,7 +239,7 @@ export default function Profile({ talent, categories, flash }) {
                                         }}
                                     />
                                     <div>
-                                        <h5 className="fw-bold mb-1">
+                                        <h5 className="fw-bold mb-2">
                                             {talent.name}
                                         </h5>
                                         <div className="d-flex flex-wrap gap-2">
@@ -156,8 +259,7 @@ export default function Profile({ talent, categories, flash }) {
                                 <div className="d-flex gap-2">
                                     <Link
                                         href={route("talent.page.stories.index")}
-                                        className="btn h-btn-ghost rounded-pill px-4 py-2"
-                                        style={{ color: "#ffffff", borderColor: "rgba(255,255,255,0.3)" }}
+                                        className="btn h-btn-ghost-dark rounded-pill px-4 py-2"
                                     >
                                         <i className="fas fa-book-open me-2"></i>
                                         My Story
@@ -176,7 +278,7 @@ export default function Profile({ talent, categories, flash }) {
                             {talent.description && (
                                 <p
                                     className="mt-3 mb-0"
-                                    style={{ maxWidth: 720, opacity: 0.85 }}
+                                    style={{ maxWidth: 640, opacity: 0.8 }}
                                 >
                                     {talent.description}
                                 </p>
@@ -187,35 +289,33 @@ export default function Profile({ talent, categories, flash }) {
                     <div className="row g-4">
                         {/* Left: contact only */}
                         <div className="col-lg-4">
-                            <div className="card h-card border-0 shadow-sm rounded-4">
-                                <div className="card-body p-4">
-                                    <label className="text-uppercase h-label small fw-semibold mb-3 d-block">
-                                        Contact Information
-                                    </label>
-                                    <div className="d-flex flex-column gap-3">
+                            <div className="h-panel p-4">
+                                <div className="h-section-title mb-3">
+                                    Contact Information
+                                </div>
+                                <div className="d-flex flex-column gap-3">
+                                    <ContactRow
+                                        icon="fa-mobile-screen-button"
+                                        label="Mobile"
+                                        value={talent.phone}
+                                    />
+                                    <ContactRow
+                                        icon="fa-envelope"
+                                        label="Email"
+                                        value={talent.email}
+                                    />
+                                    <ContactRow
+                                        icon="fa-location-dot"
+                                        label="Address"
+                                        value={talent.address}
+                                    />
+                                    {talent.language && (
                                         <ContactRow
-                                            icon="fa-mobile-screen-button"
-                                            label="Mobile"
-                                            value={talent.phone}
+                                            icon="fa-language"
+                                            label="Language"
+                                            value={talent.language}
                                         />
-                                        <ContactRow
-                                            icon="fa-envelope"
-                                            label="Email"
-                                            value={talent.email}
-                                        />
-                                        <ContactRow
-                                            icon="fa-location-dot"
-                                            label="Address"
-                                            value={talent.address}
-                                        />
-                                        {talent.language && (
-                                            <ContactRow
-                                                icon="fa-language"
-                                                label="Language"
-                                                value={talent.language}
-                                            />
-                                        )}
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -223,71 +323,67 @@ export default function Profile({ talent, categories, flash }) {
                         {/* Right: recent reviews + courses */}
                         <div className="col-lg-8">
                             {/* Recent Reviews */}
-                            <div className="card h-card border-0 shadow-sm rounded-4 mb-4">
-                                <div className="card-body p-4">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h6 className="fw-bold mb-0 h-section-title">
-                                            Recent Reviews
-                                        </h6>
-                                        {talent.feedback?.length > 0 && (
-                                            <span className="small h-chip-count px-2 py-1 rounded-pill">
-                                                {talent.feedback.length} total
-                                            </span>
-                                        )}
+                            <div className="h-panel p-4 mb-4">
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <div className="h-section-title">
+                                        Recent Reviews
                                     </div>
-
-                                    {recentReviews.length === 0 ? (
-                                        <EmptyState
-                                            icon="fa-comment-slash"
-                                            text="No reviews yet."
-                                        />
-                                    ) : (
-                                        <div className="d-flex flex-column gap-3">
-                                            {recentReviews.map((review) => (
-                                                <ReviewCard
-                                                    key={review.id}
-                                                    review={review}
-                                                />
-                                            ))}
-                                        </div>
+                                    {talent.feedback?.length > 0 && (
+                                        <span className="small h-chip-count px-2 py-1 rounded-pill">
+                                            {talent.feedback.length} total
+                                        </span>
                                     )}
                                 </div>
+
+                                {recentReviews.length === 0 ? (
+                                    <EmptyState
+                                        icon="fa-comment-slash"
+                                        text="No reviews yet."
+                                    />
+                                ) : (
+                                    <div className="d-flex flex-column gap-3">
+                                        {recentReviews.map((review) => (
+                                            <ReviewCard
+                                                key={review.id}
+                                                review={review}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             {/* Recent Courses */}
-                            <div className="card h-card border-0 shadow-sm rounded-4">
-                                <div className="card-body p-4">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h6 className="fw-bold mb-0 h-section-title">
-                                            Recent Courses
-                                        </h6>
-                                        {talent.courses?.length > 0 && (
-                                            <span className="small h-chip-count px-2 py-1 rounded-pill">
-                                                {talent.courses.length} total
-                                            </span>
-                                        )}
+                            <div className="h-panel p-4">
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <div className="h-section-title">
+                                        Recent Courses
                                     </div>
-
-                                    {recentCourses.length === 0 ? (
-                                        <EmptyState
-                                            icon="fa-book"
-                                            text="No courses available."
-                                        />
-                                    ) : (
-                                        <div className="row g-3">
-                                            {recentCourses.map((course) => (
-                                                <div
-                                                    className="col-md-6"
-                                                    key={course.id}
-                                                >
-                                                    <CourseCard
-                                                        course={course}
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
+                                    {talent.courses?.length > 0 && (
+                                        <span className="small h-chip-count px-2 py-1 rounded-pill">
+                                            {talent.courses.length} total
+                                        </span>
                                     )}
                                 </div>
+
+                                {recentCourses.length === 0 ? (
+                                    <EmptyState
+                                        icon="fa-book"
+                                        text="No courses available."
+                                    />
+                                ) : (
+                                    <div className="row g-3">
+                                        {recentCourses.map((course) => (
+                                            <div
+                                                className="col-md-6"
+                                                key={course.id}
+                                            >
+                                                <CourseCard
+                                                    course={course}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -332,11 +428,17 @@ function Modal({ show, onClose, title, size, children }) {
                     role="document"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="modal-content rounded-4 border-0 shadow">
-                        <div className="modal-header border-0 pb-0">
+                    <div
+                        className="modal-content border-0"
+                        style={{ borderRadius: 16, overflow: "hidden" }}
+                    >
+                        <div
+                            className="modal-header pb-3"
+                            style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}
+                        >
                             <h5
-                                className="modal-title fw-bold"
-                                style={{ color: "#060f11" }}
+                                className="modal-title fw-bold mb-0"
+                                style={{ color: "#000000" }}
                             >
                                 {title}
                             </h5>
@@ -368,7 +470,7 @@ function ContactRow({ icon, label, value }) {
                 <i className={`fas ${icon}`}></i>
             </div>
             <div>
-                <div className="small h-label">{label}</div>
+                <div className="h-label">{label}</div>
                 <div className="fw-semibold">{value || "—"}</div>
             </div>
         </div>
@@ -377,33 +479,39 @@ function ContactRow({ icon, label, value }) {
 
 function ReviewCard({ review }) {
     return (
-        <div className="border rounded-4 p-3">
+        <div className="h-review-card p-3">
             <div className="d-flex justify-content-between align-items-start mb-2">
                 <strong>{review.reviewer_name ?? "Anonymous"}</strong>
                 <StarRating rating={review.rating} />
             </div>
-            <p className="text-secondary mb-2">{review.comment}</p>
-            <small className="text-secondary">{review.created_at_human}</small>
+            <p className="mb-2" style={{ color: "rgba(0,0,0,0.65)" }}>
+                {review.comment}
+            </p>
+            <small style={{ color: "rgba(0,0,0,0.45)" }}>
+                {review.created_at_human}
+            </small>
         </div>
     );
 }
 
 function StarRating({ rating }) {
     return (
-        <span className="small">
-            <span style={{ color: "#48d597" }}>{"★".repeat(rating)}</span>
-            <span className="text-secondary">{"★".repeat(5 - rating)}</span>
-            <span className="h-star-value ms-1 fw-semibold">{rating}/5</span>
+        <span className="small d-flex align-items-center gap-1">
+            <span className="h-star-filled">{"★".repeat(rating)}</span>
+            <span className="h-star-empty">{"★".repeat(5 - rating)}</span>
+            <span className="h-star-value ms-1">{rating}/5</span>
         </span>
     );
 }
 
 function CourseCard({ course }) {
     return (
-        <div className="border rounded-4 p-3 h-100">
+        <div className="h-course-card p-3 h-100">
             <h6 className="fw-bold mb-2">{course.title}</h6>
-            <p className="text-secondary small mb-3">{course.description}</p>
-            <span className="badge h-course-badge">
+            <p className="small mb-3" style={{ color: "rgba(0,0,0,0.6)" }}>
+                {course.description}
+            </p>
+            <span className="badge h-course-badge px-2 py-1 rounded-pill">
                 {course.category?.name}
             </span>
         </div>
@@ -412,9 +520,14 @@ function CourseCard({ course }) {
 
 function EmptyState({ icon, text }) {
     return (
-        <div className="text-center py-4 text-secondary">
-            <i className={`fas ${icon} fs-2 mb-2 d-block opacity-25`}></i>
-            <p className="mb-0 small">{text}</p>
+        <div className="text-center py-4">
+            <i
+                className={`fas ${icon} fs-2 mb-2 d-block`}
+                style={{ color: "rgba(0,0,0,0.15)" }}
+            ></i>
+            <p className="mb-0 small" style={{ color: "rgba(0,0,0,0.45)" }}>
+                {text}
+            </p>
         </div>
     );
 }
@@ -476,19 +589,18 @@ function EditProfileForm({ talent, categories, onSaved }) {
                             style={{
                                 width: 84,
                                 height: 84,
-                                background: "rgba(72,213,151,0.12)",
+                                background: "#f6f8f7",
+                                border: "1px solid rgba(0,0,0,0.1)",
                             }}
                         >
                             <i
                                 className="fas fa-user fs-4"
-                                style={{ color: "#2fb87c" }}
+                                style={{ color: "#000000", opacity: 0.4 }}
                             ></i>
                         </div>
                     )}
                     <div className="flex-grow-1">
-                        <label className="form-label small fw-semibold">
-                            Profile Image
-                        </label>
+                        <label className="form-label">Profile Image</label>
                         <input
                             type="file"
                             accept="image/*"
@@ -503,7 +615,7 @@ function EditProfileForm({ talent, categories, onSaved }) {
                         {progress && (
                             <div
                                 className="progress mt-2"
-                                style={{ height: 6 }}
+                                style={{ height: 6, background: "#f0f0f0" }}
                             >
                                 <div
                                     className="progress-bar"
@@ -533,9 +645,7 @@ function EditProfileForm({ talent, categories, onSaved }) {
                 />
 
                 <div className="col-md-12">
-                    <label className="form-label small fw-semibold">
-                        Description
-                    </label>
+                    <label className="form-label">Description</label>
                     <textarea
                         className={`form-control rounded-3 ${errors.description ? "is-invalid" : ""}`}
                         rows={3}
@@ -580,9 +690,7 @@ function EditProfileForm({ talent, categories, onSaved }) {
                 />
 
                 <div className="col-md-6">
-                    <label className="form-label small fw-semibold">
-                        Category
-                    </label>
+                    <label className="form-label">Category</label>
                     <select
                         className={`form-select rounded-3 ${errors.category_id ? "is-invalid" : ""}`}
                         value={data.category_id}
@@ -633,7 +741,7 @@ function EditProfileForm({ talent, categories, onSaved }) {
 function Field({ label, value, onChange, error, col, type = "text" }) {
     return (
         <div className={col}>
-            <label className="form-label small fw-semibold">{label}</label>
+            <label className="form-label">{label}</label>
             <input
                 type={type}
                 className={`form-control rounded-3 ${error ? "is-invalid" : ""}`}

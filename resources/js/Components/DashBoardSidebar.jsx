@@ -6,11 +6,9 @@ export default function Sidebar() {
     const user = auth?.user;
     const role = user?.role;
 
-    // current path, used for "active" state instead of Blade's Route::currentRouteName()
     const current =
         typeof window !== "undefined" ? window.location.pathname : url || "";
     const isActive = (pattern) => {
-        // supports simple trailing-wildcard patterns like "talent.courses*"
         if (pattern.endsWith("*")) {
             return current.startsWith(pattern.slice(0, -1));
         }
@@ -32,38 +30,25 @@ export default function Sidebar() {
         router.post(route("logout"));
     };
 
-    const initials = user?.name ? user.name.slice(0, 2).toUpperCase() : "";
-
     return (
         <>
             <style>{`
-                /*
-                   Sidebar chrome tokens. The sidebar stays dark in both light and dark
-                   modes (it's an intentional dark control surface), but we expose the
-                   values as CSS vars so [data-bs-theme="dark"] can subtly deepen them
-                   when the rest of the app goes dark.
-                */
+                /* Light palette: white bg, #48d597 accent, dark ink text — no theme switching. */
                 .fc-sidebar {
-                    --sb-bg:       #060f11;
-                    --sb-surface:  #0d1e22;
-                    --sb-border:   rgba(72, 213, 151, 0.10);
+                    --sb-bg:       #ffffff;
+                    --sb-border:   rgba(0, 0, 0, 0.08);
                     --accent:      #48d597;
                     --accent-dim:  rgba(72, 213, 151, 0.10);
-                    --accent-glow: rgba(72, 213, 151, 0.18);
-                    --text-hi:     #f0faf6;
-                    --text-mid:    #7aa89f;
-                    --text-lo:     #3e5e58;
-                    --danger:      #e85c6a;
-                }
-                [data-bs-theme="dark"] .fc-sidebar {
-                    --sb-bg:       #050b0c;
-                    --sb-surface:  #0a1719;
-                    --sb-border:   rgba(72, 213, 151, 0.14);
-                    --text-mid:    #6a9a90;
+                    --accent-glow: rgba(72, 213, 151, 0.16);
+                    --text-hi:     #14181a;
+                    --text-mid:    rgba(20, 24, 26, 0.62);
+                    --text-lo:     rgba(20, 24, 26, 0.38);
+                    --danger:      #14181a;
                 }
                 .fc-sidebar {
                     position: fixed; top: 0; left: 0; width: 248px; height: 100vh;
                     background: var(--sb-bg); border-right: 1px solid var(--sb-border);
+                    box-shadow: 2px 0 12px rgba(20, 24, 26, 0.04);
                     display: flex; flex-direction: column; overflow: hidden; z-index: 1040;
                 }
                 .fc-sidebar-brand {
@@ -78,14 +63,14 @@ export default function Sidebar() {
                 }
                 .fc-avatar {
                     width: 36px; height: 36px; border-radius: 50%; background: var(--accent-dim);
-                    border: 1.5px solid rgba(72,213,151,.25); color: var(--accent); font-size: .72rem;
+                    border: 1.5px solid rgba(72,213,151,.35); color: var(--accent); font-size: .72rem;
                     font-weight: 700; display: flex; align-items: center; justify-content: center;
                     flex-shrink: 0; letter-spacing: .5px;
                 }
                 .fc-profile-info { flex: 1; min-width: 0; }
                 .fc-profile-name { color: var(--text-hi); font-size: .82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 .fc-profile-role { color: var(--text-lo); font-size: .7rem; text-transform: uppercase; letter-spacing: .5px; }
-                .fc-online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; box-shadow: 0 0 0 2px rgba(72,213,151,.2); }
+                .fc-online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; box-shadow: 0 0 0 2px rgba(72,213,151,.25); }
                 .fc-nav-body { flex: 1; overflow-y: auto; padding: 10px 0 20px; scrollbar-width: thin; scrollbar-color: var(--sb-border) transparent; }
                 .fc-nav-body::-webkit-scrollbar { width: 3px; }
                 .fc-nav-body::-webkit-scrollbar-track { background: transparent; }
@@ -98,7 +83,7 @@ export default function Sidebar() {
                     text-align: left; cursor: pointer; transition: background .15s, color .15s; position: relative;
                 }
                 .fc-nav-item:hover { background: var(--accent-dim); color: var(--text-hi); text-decoration: none; }
-                .fc-nav-item.active { background: var(--accent-glow); color: var(--accent); font-weight: 600; }
+                .fc-nav-item.active { background: var(--accent-glow); color: #1a9b6a; font-weight: 600; }
                 .fc-nav-item.active::before {
                     content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
                     width: 3px; height: 60%; background: var(--accent); border-radius: 0 3px 3px 0;
@@ -113,14 +98,13 @@ export default function Sidebar() {
                 .fc-sidebar-footer { flex-shrink: 0; border-top: 1px solid var(--sb-border); padding: 10px 8px; }
                 .fc-logout-btn {
                     display: flex; align-items: center; gap: 10px; padding: 9px 18px; border-radius: 8px;
-                    color: var(--danger); font-size: .82rem; font-weight: 500; background: transparent;
-                    border: none; width: 100%; text-align: left; cursor: pointer; transition: background .15s;
+                    color: var(--text-hi); font-size: .82rem; font-weight: 500; background: transparent;
+                    border: none; width: 100%; text-align: left; cursor: pointer; transition: background .15s, color .15s;
                 }
-                .fc-logout-btn:hover { background: rgba(232,92,106,.10); }
+                .fc-logout-btn:hover { background: var(--accent-dim); color: #1a9b6a; }
             `}</style>
 
             <nav className="fc-sidebar" id="sidebar">
-                {/* Brand */}
                 <div className="fc-sidebar-brand">
                     <img
                         className="fc-brand-logo"
@@ -129,7 +113,6 @@ export default function Sidebar() {
                     />
                 </div>
 
-                {/* Nav body */}
                 <div className="fc-nav-body">
                     {role === "admin" && <AdminNav isActive={isActive} />}
                     {role === "talent" && (
@@ -143,14 +126,13 @@ export default function Sidebar() {
                     {role === "user" && <UserNav isActive={isActive} />}
                 </div>
 
-                {/* Footer: Sign out */}
                 <div className="fc-sidebar-footer">
                     <button
                         type="button"
                         className="fc-logout-btn"
                         onClick={handleLogout}
                     >
-                        <Icon path="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9" />
+                        <Icon />
                         Sign Out
                     </button>
                 </div>
@@ -159,8 +141,6 @@ export default function Sidebar() {
     );
 }
 
-/* ── Small icon helper (renders one or more path/polyline defs separated by " M" resets is fragile,
-     so real icons are inlined per-item below instead). Kept here only for the logout button reuse. ── */
 function Icon() {
     return (
         <span className="fc-nav-icon">
@@ -210,16 +190,9 @@ function Collapsible({ label, icon, open, onToggle, active, children }) {
     );
 }
 
-/* ── Icon set (kept minimal, reused across nav groups) ── */
 const icons = {
     dashboard: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <rect x="3" y="3" width="7" height="9" rx="1" />
             <rect x="14" y="3" width="7" height="5" rx="1" />
             <rect x="14" y="12" width="7" height="9" rx="1" />
@@ -227,13 +200,7 @@ const icons = {
         </svg>
     ),
     users: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -241,24 +208,12 @@ const icons = {
         </svg>
     ),
     star: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
     ),
     grid: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <rect x="3" y="3" width="7" height="7" rx="1" />
             <rect x="14" y="3" width="7" height="7" rx="1" />
             <rect x="14" y="14" width="7" height="7" rx="1" />
@@ -266,94 +221,46 @@ const icons = {
         </svg>
     ),
     skill: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
     ),
     book: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
     ),
     story: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M12 20h9" />
             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
         </svg>
     ),
     testimonial: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
     ),
     announce: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
     ),
     job: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <rect x="2" y="7" width="20" height="14" rx="2" />
             <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
         </svg>
     ),
     project: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
         </svg>
     ),
     event: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <line x1="16" y1="2" x2="16" y2="6" />
             <line x1="8" y1="2" x2="8" y2="6" />
@@ -361,97 +268,49 @@ const icons = {
         </svg>
     ),
     connection: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <circle cx="12" cy="12" r="3" />
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
         </svg>
     ),
     product: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
             <line x1="3" y1="6" x2="21" y2="6" />
             <path d="M16 10a4 4 0 0 1-8 0" />
         </svg>
     ),
     seller: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
         </svg>
     ),
     payment: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <line x1="12" y1="1" x2="12" y2="23" />
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
     ),
     wallet: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <rect x="1" y="4" width="22" height="16" rx="2" />
             <line x1="1" y1="10" x2="23" y2="10" />
         </svg>
     ),
     activity: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
         </svg>
     ),
     settings: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <circle cx="12" cy="12" r="3" />
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
     ),
     subscription: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M20 12V22H4V12" />
             <path d="M22 7H2v5h20V7z" />
             <path d="M12 22V7" />
@@ -460,24 +319,12 @@ const icons = {
         </svg>
     ),
     demo: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
     ),
     course: (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-        >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
@@ -488,170 +335,38 @@ function AdminNav({ isActive }) {
     return (
         <>
             <NavSection>Overview</NavSection>
-            <NavItem
-                href="/admin/dashboard"
-                active={isActive("/admin/dashboard")}
-                icon={icons.dashboard}
-            >
-                Dashboard
-            </NavItem>
+            <NavItem href="/admin/dashboard" active={isActive("/admin/dashboard")} icon={icons.dashboard}>Dashboard</NavItem>
 
             <NavSection>Users & Access</NavSection>
-            <NavItem
-                href="/admin/users"
-                active={isActive("/admin/users")}
-                icon={icons.users}
-            >
-                Users
-            </NavItem>
-            <NavItem
-                href="/admin/talents"
-                active={isActive("/admin/talents")}
-                icon={icons.star}
-            >
-                Talents
-            </NavItem>
-            <NavItem
-                href="/admin/partners"
-                active={isActive("/admin/partners")}
-                icon={icons.users}
-            >
-                Partners
-            </NavItem>
+            <NavItem href="/admin/users" active={isActive("/admin/users")} icon={icons.users}>Users</NavItem>
+            <NavItem href="/admin/talents" active={isActive("/admin/talents")} icon={icons.star}>Talents</NavItem>
+            <NavItem href="/admin/partners" active={isActive("/admin/partners")} icon={icons.users}>Partners</NavItem>
 
             <NavSection>Content</NavSection>
-            <NavItem
-                href="/admin/categories"
-                active={isActive("/admin/categories")}
-                icon={icons.grid}
-            >
-                Categories
-            </NavItem>
-            <NavItem
-                href="/admin/skills"
-                active={isActive("/admin/skills")}
-                icon={icons.skill}
-            >
-                Skills
-            </NavItem>
-            <NavItem
-                href="/admin/courses"
-                active={isActive("/admin/courses")}
-                icon={icons.book}
-            >
-                Courses
-            </NavItem>
-            <NavItem
-                href="/admin/stories"
-                active={isActive("/admin/stories")}
-                icon={icons.story}
-            >
-                Stories
-            </NavItem>
-            <NavItem
-                href="/admin/testimonials"
-                active={isActive("/admin/testimonials")}
-                icon={icons.testimonial}
-            >
-                Testimonials
-            </NavItem>
-            <NavItem
-                href="/admin/announcements"
-                active={isActive("/admin/announcements")}
-                icon={icons.announce}
-            >
-                Announcements
-            </NavItem>
+            <NavItem href="/admin/categories" active={isActive("/admin/categories")} icon={icons.grid}>Categories</NavItem>
+            <NavItem href="/admin/skills" active={isActive("/admin/skills")} icon={icons.skill}>Skills</NavItem>
+            <NavItem href="/admin/courses" active={isActive("/admin/courses")} icon={icons.book}>Courses</NavItem>
+            <NavItem href="/admin/stories" active={isActive("/admin/stories")} icon={icons.story}>Stories</NavItem>
+            <NavItem href="/admin/testimonials" active={isActive("/admin/testimonials")} icon={icons.testimonial}>Testimonials</NavItem>
+            <NavItem href="/admin/announcements" active={isActive("/admin/announcements")} icon={icons.announce}>Announcements</NavItem>
 
             <NavSection>Platform</NavSection>
-            <NavItem
-                href="/admin/jobs"
-                active={isActive("/admin/jobs")}
-                icon={icons.job}
-            >
-                Jobs
-            </NavItem>
-            <NavItem
-                href="/admin/projects"
-                active={isActive("/admin/projects")}
-                icon={icons.project}
-            >
-                Projects
-            </NavItem>
-            <NavItem
-                href="/admin/events"
-                active={isActive("/admin/events")}
-                icon={icons.event}
-            >
-                Events
-            </NavItem>
-            <NavItem
-                href="/admin/connections"
-                active={isActive("/admin/connections")}
-                icon={icons.connection}
-            >
-                Connections
-            </NavItem>
+            <NavItem href="/admin/jobs" active={isActive("/admin/jobs")} icon={icons.job}>Jobs</NavItem>
+            <NavItem href="/admin/projects" active={isActive("/admin/projects")} icon={icons.project}>Projects</NavItem>
+            <NavItem href="/admin/events" active={isActive("/admin/events")} icon={icons.event}>Events</NavItem>
+            <NavItem href="/admin/connections" active={isActive("/admin/connections")} icon={icons.connection}>Connections</NavItem>
 
             <NavSection>Commerce</NavSection>
-            <NavItem
-                href="/admin/products"
-                active={isActive("/admin/products")}
-                icon={icons.product}
-            >
-                Products
-            </NavItem>
-            <NavItem
-                href="/admin/product-categories"
-                active={isActive("/admin/product-categories")}
-                icon={icons.grid}
-            >
-                Product Categories
-            </NavItem>
-            <NavItem
-                href="/admin/sellers"
-                active={isActive("/admin/sellers")}
-                icon={icons.seller}
-            >
-                Sellers
-            </NavItem>
-            <NavItem
-                href="/admin/orders"
-                active={isActive("/admin/orders")}
-                icon={icons.payment}
-            >
-                Orders
-            </NavItem>
-            <NavItem
-                href="/admin/pricing-plans"
-                active={isActive("/admin/pricing-plans")}
-                icon={icons.subscription}
-            >
-                Pricing Plans
-            </NavItem>
+            <NavItem href="/admin/products" active={isActive("/admin/products")} icon={icons.product}>Products</NavItem>
+            <NavItem href="/admin/product-categories" active={isActive("/admin/product-categories")} icon={icons.grid}>Product Categories</NavItem>
+            <NavItem href="/admin/sellers" active={isActive("/admin/sellers")} icon={icons.seller}>Sellers</NavItem>
+            <NavItem href="/admin/orders" active={isActive("/admin/orders")} icon={icons.payment}>Orders</NavItem>
+            <NavItem href="/admin/pricing-plans" active={isActive("/admin/pricing-plans")} icon={icons.subscription}>Pricing Plans</NavItem>
 
             <NavSection>System</NavSection>
-            <NavItem
-                href="/admin/demo-requests"
-                active={isActive("/admin/demo-requests")}
-                icon={icons.demo}
-            >
-                Demo Requests
-            </NavItem>
-            <NavItem
-                href="/admin/login-activity"
-                active={isActive("/admin/login-activity")}
-                icon={icons.activity}
-            >
-                Login Activity
-            </NavItem>
-            <NavItem
-                href="/admin/settings"
-                active={isActive("/admin/settings")}
-                icon={icons.settings}
-            >
-                Settings
-            </NavItem>
+            <NavItem href="/admin/demo-requests" active={isActive("/admin/demo-requests")} icon={icons.demo}>Demo Requests</NavItem>
+            <NavItem href="/admin/login-activity" active={isActive("/admin/login-activity")} icon={icons.activity}>Login Activity</NavItem>
+            <NavItem href="/admin/settings" active={isActive("/admin/settings")} icon={icons.settings}>Settings</NavItem>
         </>
     );
 }
@@ -660,63 +375,21 @@ function TalentNav({ isActive, openMenus, toggleMenu, user }) {
     return (
         <>
             <NavSection>Overview</NavSection>
-            <NavItem
-                href={route("talent.dashboard")}
-                active={route().current("talent.dashboard")}
-                icon={icons.dashboard}
-            >
-                Dashboard
-            </NavItem>
-            <NavItem
-                href={route("talent.get.profile")}
-                active={route().current("talent.get.profile")}
-                icon={icons.seller}
-            >
-                My Profile
-            </NavItem>
+            <NavItem href={route("talent.dashboard")} active={route().current("talent.dashboard")} icon={icons.dashboard}>Dashboard</NavItem>
+            <NavItem href={route("talent.get.profile")} active={route().current("talent.get.profile")} icon={icons.seller}>My Profile</NavItem>
 
             <NavSection>Skills & Learning</NavSection>
-
-            <NavItem
-                href={route("talent.courses.index")}
-                active={route().current("talent.courses.index")}
-                icon={icons.course}
-            >
-                My Courses
-            </NavItem>
+            <NavItem href={route("talent.courses.index")} active={route().current("talent.courses.index")} icon={icons.course}>My Courses</NavItem>
 
             <NavSection>Network</NavSection>
-            <NavItem
-                href={route("talent.connections.index")}
-                active={route().current("talent.connections*")}
-                icon={icons.connection}
-            >
-                Connections
-            </NavItem>
-            <NavItem
-                href={route("talent.testimonials.index")}
-                active={route().current("talent.testimonials*")}
-                icon={icons.testimonial}
-            >
-                Testimonials
-            </NavItem>
+            <NavItem href={route("talent.connections.requests.index")} active={route().current("talent.connections.requests*")} icon={icons.connection}>Connections</NavItem>
+            <NavItem href={route("talent.testimonials.index")} active={route().current("talent.testimonials*")} icon={icons.testimonial}>Testimonials</NavItem>
 
             <NavSection>Commerce</NavSection>
-            <NavItem
-                href={route("talent.products.index")}
-                active={route().current("talent.products.index")}
-                icon={icons.product}
-            >
-                My Products
-            </NavItem>
-            
-            {/* Show "Become a Seller" only if the user doesn't have a seller profile yet */}
+            <NavItem href={route("talent.products.index")} active={route().current("talent.products.index")} icon={icons.product}>My Products</NavItem>
+
             {!user?.seller && (
-                <NavItem
-                    href={route("talent.products.seller")}
-                    active={route().current("talent.products.seller")}
-                    icon={icons.seller}
-                >
+                <NavItem href={route("talent.products.seller")} active={route().current("talent.products.seller")} icon={icons.seller}>
                     Become a Seller
                 </NavItem>
             )}
@@ -728,91 +401,25 @@ function UserNav({ isActive }) {
     return (
         <>
             <NavSection>Overview</NavSection>
-            <NavItem
-                href={route("user.dashboard")}
-                active={route().current("user.dashboard")}
-                icon={icons.dashboard}
-            >
-                Dashboard
-            </NavItem>
+            <NavItem href={route("user.dashboard")} active={route().current("user.dashboard")} icon={icons.dashboard}>Dashboard</NavItem>
 
             <NavSection>Network</NavSection>
-            <NavItem
-                href={route("user.talents.connected")}
-                active={route().current("user.talents.connected")}
-                icon={icons.star}
-            >
-                Talents Connected
-            </NavItem>
-            <NavItem
-                href={route("user.connections")}
-                active={route().current("user.connections")}
-                icon={icons.users}
-            >
-                Connection Requests
-            </NavItem>
+            <NavItem href={route("user.talents.connected")} active={route().current("user.talents.connected")} icon={icons.star}>Talents Connected</NavItem>
+            <NavItem href={route("user.connections")} active={route().current("user.connections")} icon={icons.users}>Connection Requests</NavItem>
 
             <NavSection>Learning</NavSection>
-            <NavItem
-                href="/user/courses"
-                active={isActive("/user/courses")}
-                icon={icons.book}
-            >
-                Courses
-            </NavItem>
-            <NavItem
-                href="/admin/skills"
-                active={isActive("/admin/skills")}
-                icon={icons.skill}
-            >
-                Skills
-            </NavItem>
+            <NavItem href="/user/courses" active={isActive("/user/courses")} icon={icons.book}>Courses</NavItem>
+            <NavItem href="/admin/skills" active={isActive("/admin/skills")} icon={icons.skill}>Skills</NavItem>
 
             <NavSection>Discover</NavSection>
-            <NavItem
-                href="/admin/announcements"
-                active={isActive("/admin/announcements")}
-                icon={icons.announce}
-            >
-                Announcements
-            </NavItem>
-            <NavItem
-                href="/admin/partners"
-                active={isActive("/admin/partners")}
-                icon={icons.users}
-            >
-                Partners
-            </NavItem>
-            <NavItem
-                href="/admin/testimonials"
-                active={isActive("/admin/testimonials")}
-                icon={icons.testimonial}
-            >
-                Testimonials
-            </NavItem>
+            <NavItem href="/admin/announcements" active={isActive("/admin/announcements")} icon={icons.announce}>Announcements</NavItem>
+            <NavItem href="/admin/partners" active={isActive("/admin/partners")} icon={icons.users}>Partners</NavItem>
+            <NavItem href="/admin/testimonials" active={isActive("/admin/testimonials")} icon={icons.testimonial}>Testimonials</NavItem>
 
             <NavSection>Finance</NavSection>
-            <NavItem
-                href="/admin/payments"
-                active={isActive("/admin/payments")}
-                icon={icons.payment}
-            >
-                Payments
-            </NavItem>
-            <NavItem
-                href="/user/subscription"
-                active={isActive("/user/subscription")}
-                icon={icons.subscription}
-            >
-                Subscriptions
-            </NavItem>
-            <NavItem
-                href="/admin/users"
-                active={isActive("/admin/users")}
-                icon={icons.users}
-            >
-                Users
-            </NavItem>
+            <NavItem href="/admin/payments" active={isActive("/admin/payments")} icon={icons.payment}>Payments</NavItem>
+            <NavItem href="/user/subscription" active={isActive("/user/subscription")} icon={icons.subscription}>Subscriptions</NavItem>
+            <NavItem href="/admin/users" active={isActive("/admin/users")} icon={icons.users}>Users</NavItem>
         </>
     );
 }
