@@ -25,7 +25,7 @@ Str::is($pattern, $current ?? '') ? 'active' : '';
         --fc-green: #48d597;
         --fc-green-dim: rgba(0, 166, 103, 0.12);
         --fc-green-border: rgba(0, 166, 103, 0.30);
-        --fc-white: #ffffff;
+        --fc-white: #F5f5f7;
         --fc-w90: rgba(255, 255, 255, 0.90);
         --fc-w60: rgba(255, 255, 255, 0.60);
         --fc-w30: rgba(255, 255, 255, 0.30);

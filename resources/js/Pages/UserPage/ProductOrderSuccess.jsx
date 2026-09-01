@@ -59,7 +59,7 @@ const OrderSuccessThemeStyles = () => (
 
         .order-success-page {
             --os-bg: #f4f7f7;
-            --os-panel: #ffffff;
+            --os-panel: #F5f5f7;
             --os-panel-alt: #fafcfc;
             --os-border: rgba(14,22,24,0.08);
             --os-text: #10201f;

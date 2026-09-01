@@ -320,7 +320,7 @@ function CheckIcon() { return <svg width="14" height="14" viewBox="0 0 24 24" fi
 const css = `
 [data-h-scope="skill-form"] {
     --bg-base: #F5F6F8;
-    --bg-surface: #FFFFFF;
+    --bg-surface: #F5f5f7;
     --bg-muted: #F0F2F5;
     --bg-input: #F8F9FB;
     --border: #E2E6EC;

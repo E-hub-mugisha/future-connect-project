@@ -9,5 +9,5 @@
   <!-- Rounded square background with gradient -->
   <rect width="64" height="64" rx="12" fill="url(#grad)" />
   <!-- Stylised "A" -->
-  <path d="M20 46L32 18l12 28h-6l-3-7H29l-3 7h-6zm13-11l-4-10-4 10h8z" fill="#FFFFFF" />
+  <path d="M20 46L32 18l12 28h-6l-3-7H29l-3 7h-6zm13-11l-4-10-4 10h8z" fill="#F5f5f7" />
 </svg> 

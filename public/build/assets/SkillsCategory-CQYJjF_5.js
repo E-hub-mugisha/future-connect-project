@@ -9,7 +9,7 @@ import{r as d,j as e,H as R,L as o,a as A}from"./app-DQcVR1sC.js";import{G as T}
                     --green-glow: rgba(0,166,103,0.3);
                     --text:       #e8eef0;
                     --muted:      #7a9199;
-                    --white:      #ffffff;
+                    --white:      #F5f5f7;
 
                     /* Apple system font stack — renders native San Francisco / SF Pro
                        on Apple devices (see https://developer.apple.com/fonts/) and
@@ -474,7 +474,7 @@ import{r as d,j as e,H as R,L as o,a as A}from"./app-DQcVR1sC.js";import{G as T}
                 /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
                 [data-h-theme="light"] {
                     --bg:         #f6faf8;
-                    --bg2:        #ffffff;
+                    --bg2:        #F5f5f7;
                     --bg3:        #eef4f1;
                     --border:     rgba(0, 100, 60, 0.1);
                     --green:      #00a667;

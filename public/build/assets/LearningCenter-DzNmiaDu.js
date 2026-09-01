@@ -11,7 +11,7 @@ import{j as e,H as h,L as a}from"./app-DQcVR1sC.js";import{G as p}from"./GuestLa
           --gold-dim:   rgba(245,185,66,0.12);
           --text:       #e8eef0;
           --muted:      #7a9199;
-          --white:      #ffffff;
+          --white:      #F5f5f7;
           --font-head:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
           --font-body:  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
           --radius:     12px;
@@ -535,7 +535,7 @@ import{j as e,H as h,L as a}from"./app-DQcVR1sC.js";import{G as p}from"./GuestLa
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg:         #f6faf8;
-          --bg2:        #ffffff;
+          --bg2:        #F5f5f7;
           --bg3:        #eef4f1;
           --border:     rgba(0, 100, 60, 0.1);
           --green:      #00a667;

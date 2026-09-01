@@ -1,13 +1,13 @@
 import{r as u,j as e,H as x,L as l,a as m}from"./app-DQcVR1sC.js";import{A as g}from"./AppLayout-D93w9Ma6.js";function f({orders:t,filters:o,statusCounts:b}){var i;const[s,p]=u.useState(o.search??"");function n(r){m.get(route("admin.orders.index"),{status:r,search:o.search},{preserveState:!0})}function h(r){r.preventDefault(),m.get(route("admin.orders.index"),{status:o.status,search:s},{preserveState:!0})}const d={pending:{bg:"rgba(245,158,11,.15)",color:"#f59e0b"},processing:{bg:"rgba(0,166,103,.15)",color:"#48d597"},completed:{bg:"rgba(59,130,246,.15)",color:"#3b82f6"},cancelled:{bg:"rgba(248,113,113,.15)",color:"#f87171"}};return e.jsxs(e.Fragment,{children:[e.jsx(x,{title:"Orders"}),e.jsx("style",{children:`
         :root {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
         }
         [data-h-theme="dark"] {
           --bg-deep: #0e1618; --bg-card: #121d1f; --bg-raised: #172224;
           --accent: #48d597; --accent-dim: rgba(0,166,103,.15);
-          --border: rgba(255,255,255,.07); --text: #f0f4f3; --muted: #7a9490; --white: #ffffff;
+          --border: rgba(255,255,255,.07); --text: #f0f4f3; --muted: #7a9490; --white: #F5f5f7;
         }
         body { background: var(--bg-deep); color: var(--text); font-family: 'DM Sans', sans-serif; }
         .oi-wrap { max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem; }
@@ -51,5 +51,5 @@ import{r as u,j as e,H as x,L as l,a as m}from"./app-DQcVR1sC.js";import{A as g}
           border: 1px solid var(--border); color: var(--muted); text-decoration: none;
         }
         .pagination a:hover { border-color: var(--accent); color: var(--accent); }
-        .pagination .current { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+        .pagination .current { background: var(--accent); color: #F5f5f7; border-color: var(--accent); }
       `}),e.jsxs("div",{className:"oi-wrap",children:[e.jsx("h1",{className:"oi-title",children:"Orders"}),e.jsxs("div",{className:"status-tabs",children:[e.jsx("div",{className:`status-tab${o.status?"":" active"}`,onClick:()=>n(null),children:"All"}),Object.entries(b).map(([r,a])=>e.jsxs("div",{className:`status-tab${o.status===r?" active":""}`,onClick:()=>n(r),children:[e.jsx("span",{style:{textTransform:"capitalize"},children:r}),e.jsx("span",{className:"count",children:a})]},r))]}),e.jsx("form",{className:"search-row",onSubmit:h,children:e.jsx("input",{type:"text",placeholder:"Search by order #, name, email, or phone...",value:s,onChange:r=>p(r.target.value)})}),e.jsxs("table",{className:"orders-table",children:[e.jsx("thead",{children:e.jsxs("tr",{children:[e.jsx("th",{children:"Order #"}),e.jsx("th",{children:"Customer"}),e.jsx("th",{children:"Items"}),e.jsx("th",{children:"Total"}),e.jsx("th",{children:"Payment"}),e.jsx("th",{children:"Status"}),e.jsx("th",{children:"Date"})]})}),e.jsxs("tbody",{children:[t.data.map(r=>{var a,c;return e.jsxs("tr",{children:[e.jsx("td",{className:"order-no",children:e.jsx(l,{href:route("admin.orders.show",r.id),children:r.order_number})}),e.jsxs("td",{children:[r.customer_name,e.jsx("div",{className:"cust-type",children:r.user?"Account":"Guest"})]}),e.jsx("td",{children:r.items_count}),e.jsxs("td",{children:[Number(r.total_amount).toLocaleString()," RWF"]}),e.jsx("td",{style:{textTransform:"uppercase",fontSize:".75rem",color:"var(--muted)"},children:r.payment_method}),e.jsx("td",{children:e.jsx("span",{className:"badge",style:{background:(a=d[r.status])==null?void 0:a.bg,color:(c=d[r.status])==null?void 0:c.color},children:r.status})}),e.jsx("td",{style:{color:"var(--muted)"},children:new Date(r.created_at).toLocaleDateString()})]},r.id)}),t.data.length===0&&e.jsx("tr",{children:e.jsx("td",{colSpan:"7",style:{textAlign:"center",color:"var(--muted)",padding:"2rem"},children:"No orders found."})})]})]}),((i=t.links)==null?void 0:i.length)>3&&e.jsx("div",{className:"pagination",children:t.links.map((r,a)=>r.url?e.jsx(l,{href:r.url,className:r.active?"current":"",dangerouslySetInnerHTML:{__html:r.label}},a):e.jsx("span",{style:{opacity:.4},dangerouslySetInnerHTML:{__html:r.label}},a))})]})]})}f.layout=t=>e.jsx(g,{children:t,title:"Orders"});export{f as default};

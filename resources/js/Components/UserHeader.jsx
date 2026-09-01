@@ -857,7 +857,7 @@ export default function UserHeader({
         .btn-fc-outline:hover { border-color: var(--border-h); color: var(--accent); background: var(--bg-glass2); }
 
         [data-h-theme="light"] {
-          --h-bg: #f6faf8; --h-surface: #ffffff; --h-surface2: #eef4f1; --h-green: #00a667;
+          --h-bg: #f6faf8; --h-surface: #F5f5f7; --h-surface2: #eef4f1; --h-green: #00a667;
           --h-green-d: rgba(0, 166, 103, 0.08); --h-green-b: rgba(0, 166, 103, 0.18);
           --h-text: #10201b; --h-muted: #5b7a70; --h-border: rgba(0, 100, 60, 0.12); --h-border-h: rgba(0, 100, 60, 0.3);
           --h-hover: #10201b;

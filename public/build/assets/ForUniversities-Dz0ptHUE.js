@@ -9,7 +9,7 @@ import{j as e,H as c,L as t}from"./app-DQcVR1sC.js";import{G as o}from"./GuestLa
           --fc-border: #243033;
           --fc-accent: #48d597;
           --fc-accent-dark: #33a876;
-          --fc-white: #ffffff;
+          --fc-white: #F5f5f7;
           --fc-muted: #9fb0ae;
           background: var(--fc-bg);
           color: var(--fc-white);
@@ -20,7 +20,7 @@ import{j as e,H as c,L as t}from"./app-DQcVR1sC.js";import{G as o}from"./GuestLa
         [data-h-theme="light"] .fc-sol-page {
           --fc-bg: #f6faf8;
           --fc-bg-alt: #eef4f1;
-          --fc-card: #ffffff;
+          --fc-card: #F5f5f7;
           --fc-border: rgba(0, 100, 60, 0.14);
           --fc-accent: #00a667;
           --fc-accent-dark: #00814f;
@@ -58,8 +58,8 @@ import{j as e,H as c,L as t}from"./app-DQcVR1sC.js";import{G as o}from"./GuestLa
           text-decoration: none;
         }
         .btn-fc-primary:hover { background: var(--fc-accent-dark); color: #06231a; transform: translateY(-2px); }
-        [data-h-theme="light"] .btn-fc-primary { color: #ffffff; }
-        [data-h-theme="light"] .btn-fc-primary:hover { color: #ffffff; }
+        [data-h-theme="light"] .btn-fc-primary { color: #F5f5f7; }
+        [data-h-theme="light"] .btn-fc-primary:hover { color: #F5f5f7; }
 
         .btn-fc-ghost {
           background: transparent; border: 1px solid var(--fc-border); color: var(--fc-white); font-weight: 600;

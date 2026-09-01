@@ -3,7 +3,7 @@ import{u as x,r as g,j as e,H as p,L as c}from"./app-DQcVR1sC.js";import{A as v}
                         --h-accent: #48d597;
                         --h-accent-dark: #2fb87c;
                         --h-ink: #060f11;
-                        --h-white: #ffffff;
+                        --h-white: #F5f5f7;
                         --h-bg: #f4f9f7;
                         background-color: var(--h-bg);
                     }

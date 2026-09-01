@@ -6,7 +6,7 @@ import{r as h,j as e,H as g,L as t,a as d}from"./app-DQcVR1sC.js";import{G as p}
           --fc-border: #243033;
           --fc-accent: #48d597;
           --fc-accent-dark: #33a876;
-          --fc-white: #ffffff;
+          --fc-white: #F5f5f7;
           --fc-muted: #9fb0ae;
         }
 
@@ -417,7 +417,7 @@ import{r as h,j as e,H as g,L as t,a as d}from"./app-DQcVR1sC.js";import{G as p}
         [data-h-theme="light"] {
           --fc-bg: #f6faf8;
           --fc-bg-alt: #eef4f1;
-          --fc-card: #ffffff;
+          --fc-card: #F5f5f7;
           --fc-border: rgba(0, 100, 60, 0.12);
           --fc-accent: #00a667;
           --fc-accent-dark: #00c07a;

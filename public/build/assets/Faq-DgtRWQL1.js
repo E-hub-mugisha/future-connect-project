@@ -437,7 +437,7 @@ import{r as c,u as q,j as e,H as b}from"./app-DQcVR1sC.js";import{G as v}from"./
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --fq-bg: #f6faf8;
-          --fq-surface: #ffffff;
+          --fq-surface: #F5f5f7;
           --fq-surface2: #eef4f1;
           --fq-green: #00a667;
           --fq-green-d: rgba(0, 166, 103, 0.08);

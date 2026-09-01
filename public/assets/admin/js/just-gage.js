@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       bottomlength: 10,
       bottomwidth: 12,
       color: '#8e8e93',
-      stroke: '#ffffff',
+      stroke: '#F5f5f7',
       stroke_width: 3,
       stroke_linecap: 'round'
     },

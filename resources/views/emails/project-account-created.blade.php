@@ -11,7 +11,7 @@
                 <table width="480" cellpadding="0" cellspacing="0" style="background:#172124; border:1px solid #243033; border-radius:18px; overflow:hidden;">
                     <tr>
                         <td style="padding:32px;">
-                            <h2 style="color:#ffffff; margin:0 0 6px; font-size:20px;">
+                            <h2 style="color:#F5f5f7; margin:0 0 6px; font-size:20px;">
                                 Welcome, {{ $user->first_name }} 👋
                             </h2>
                             <p style="color:#9fb0ae; margin:0 0 24px; font-size:14px;">
@@ -22,7 +22,7 @@
                                 <tr>
                                     <td style="padding:16px 20px;">
                                         <p style="color:#9fb0ae; font-size:12px; text-transform:uppercase; letter-spacing:.05em; margin:0 0 4px;">Email</p>
-                                        <p style="color:#ffffff; font-size:14px; margin:0 0 14px;">{{ $user->email }}</p>
+                                        <p style="color:#F5f5f7; font-size:14px; margin:0 0 14px;">{{ $user->email }}</p>
 
                                         <p style="color:#9fb0ae; font-size:12px; text-transform:uppercase; letter-spacing:.05em; margin:0 0 4px;">Temporary password</p>
                                         <p style="color:#48d597; font-size:16px; font-weight:700; margin:0;">{{ $password }}</p>

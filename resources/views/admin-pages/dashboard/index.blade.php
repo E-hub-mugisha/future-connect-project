@@ -6,7 +6,7 @@
     /* ── TOKENS (LIGHT THEME) ── */
     :root {
         --bg: #f0f4f5;
-        --bg-2: #ffffff;
+        --bg-2: #F5f5f7;
         --bg-3: #f5f8f9;
         --bg-4: #e8eef0;
         --green: #1da870;
@@ -708,7 +708,7 @@
     /* ── BUTTONS ── */
     .btn-green {
         background: var(--green);
-        color: #ffffff;
+        color: #F5f5f7;
         border: none;
         font-size: 12px;
         font-weight: 700;
@@ -722,7 +722,7 @@
     }
 
     .btn-green:hover {
-        color: #ffffff;
+        color: #F5f5f7;
         opacity: 0.88;
         transform: translateY(-1px);
     }
@@ -879,7 +879,7 @@
 
     .btn-modal-primary {
         background: var(--green);
-        color: #ffffff;
+        color: #F5f5f7;
         border: none;
         font-size: 13px;
         font-weight: 700;
@@ -890,7 +890,7 @@
 
     .btn-modal-primary:hover {
         opacity: 0.88;
-        color: #ffffff;
+        color: #F5f5f7;
     }
 
     .btn-modal-secondary {

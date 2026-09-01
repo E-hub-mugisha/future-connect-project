@@ -41,7 +41,7 @@ export default function Show({ demoRequest }) {
       <Head title={demoRequest.full_name} />
       <style>{`
         [data-h-scope="demo-request-show"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1); --accent-glow: rgba(0,166,103,.22);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
           --danger: #dc4c4c; --danger-dim: rgba(220,76,76,.08);
@@ -84,7 +84,7 @@ export default function Show({ demoRequest }) {
         [data-h-scope="demo-request-show"] .ds-no-message { font-size: .85rem; color: var(--muted); }
 
         [data-h-scope="demo-request-show"] .btn-primary {
-          width: 100%; background: var(--accent); color: #ffffff; border: none;
+          width: 100%; background: var(--accent); color: #F5f5f7; border: none;
           font-family: 'Syne', sans-serif; font-weight: 800; font-size: .9rem;
           padding: .85rem; border-radius: 10px; cursor: pointer; margin-bottom: .6rem;
           box-shadow: 0 0 24px var(--accent-glow); transition: transform .25s;

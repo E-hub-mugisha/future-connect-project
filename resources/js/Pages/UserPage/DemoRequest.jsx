@@ -133,7 +133,7 @@ export default function DemoRequest({
 
         [data-h-theme="light"] {
           --bg: #f6faf8;
-          --surface: #ffffff;
+          --surface: #F5f5f7;
           --surface2: #eef4f1;
           --green: #00a667;
           --green-mid: #00a667;

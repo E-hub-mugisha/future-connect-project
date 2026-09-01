@@ -8,7 +8,7 @@ import{d as k,r as u,j as e,H as w,L as f,u as h}from"./app-DQcVR1sC.js";import{
                 --line:         #E3E6EC;
                 --line-soft:    #EEF0F4;
                 --canvas:       #F5F6F9;
-                --surface:      #FFFFFF;
+                --surface:      #F5f5f7;
                 --surface-alt:  #FAFBFD;
 
                 --accent:       #1E3A5F;

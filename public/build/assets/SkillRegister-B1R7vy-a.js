@@ -755,7 +755,7 @@ import{r as o,u as I,j as e,H as _,L as d,R as $}from"./app-DQcVR1sC.js";const q
         }
 
         [data-h-theme="light"] .fc-field select option {
-          background: #ffffff;
+          background: #F5f5f7;
           color: var(--text);
         }
 
@@ -1082,7 +1082,7 @@ import{r as o,u as I,j as e,H as _,L as d,R as $}from"./app-DQcVR1sC.js";const q
         ══════════════════════════════════════ */
         [data-h-theme="light"] {
           --bg: #f6faf8;
-          --surface: #ffffff;
+          --surface: #F5f5f7;
           --surface2: #eef4f1;
           --surface3: #e6f1ec;
           --green: #00a667;

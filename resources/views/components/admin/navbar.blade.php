@@ -7,7 +7,7 @@
         --green: #48d597;
         --green-dim: rgba(72, 213, 151, 0.10);
         --green-border: rgba(72, 213, 151, 0.25);
-        --white: #ffffff;
+        --white: #F5f5f7;
         --white-70: rgba(255, 255, 255, 0.70);
         --white-30: rgba(255, 255, 255, 0.30);
         --white-10: rgba(255, 255, 255, 0.08);

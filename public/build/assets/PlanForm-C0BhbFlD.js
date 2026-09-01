@@ -1,6 +1,6 @@
 import{j as e,L as l}from"./app-DQcVR1sC.js";const u=()=>e.jsx("svg",{width:"15",height:"15",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",children:e.jsx("path",{d:"M12 5v14M5 12h14"})}),x=()=>e.jsx("svg",{width:"15",height:"15",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"})}),b=()=>e.jsx("svg",{width:"15",height:"15",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.2",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"m12 19-7-7 7-7M5 12h14"})});function j({mode:s,form:d,onSubmit:f,backHref:p}){const{data:r,setData:i,errors:n,processing:c}=d;function m(a,t){const o=[...r.features];o[a]=t,i("features",o)}function h(){i("features",[...r.features,""])}function g(a){i("features",r.features.filter((t,o)=>o!==a))}return e.jsxs("div",{"data-h-scope":"pricing-plan-form",children:[e.jsx("style",{children:`
         [data-h-scope="pricing-plan-form"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1); --accent-glow: rgba(0,166,103,.22);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
           --danger: #dc4c4c; --danger-dim: rgba(220,76,76,.08);
@@ -87,7 +87,7 @@ import{j as e,L as l}from"./app-DQcVR1sC.js";const u=()=>e.jsx("svg",{width:"15"
 
         [data-h-scope="pricing-plan-form"] .pf-actions { display: flex; gap: .75rem; margin-top: 1.75rem; }
         [data-h-scope="pricing-plan-form"] .pf-submit {
-          background: var(--accent); color: #ffffff; border: none; font-family: 'Syne', sans-serif;
+          background: var(--accent); color: #F5f5f7; border: none; font-family: 'Syne', sans-serif;
           font-weight: 800; font-size: .88rem; padding: .8rem 1.6rem; border-radius: 10px; cursor: pointer;
           box-shadow: 0 0 20px var(--accent-glow); transition: transform .15s;
         }

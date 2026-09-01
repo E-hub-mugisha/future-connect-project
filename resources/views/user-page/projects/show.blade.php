@@ -11,7 +11,7 @@
         --fc-border:#243033;
         --fc-accent:#48d597;
         --fc-accent-dark:#33a876;
-        --fc-white:#ffffff;
+        --fc-white:#F5f5f7;
         --fc-muted:#9fb0ae;
     }
 

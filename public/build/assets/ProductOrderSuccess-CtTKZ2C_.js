@@ -3,7 +3,7 @@ import{j as e,H as p,L as u}from"./app-DQcVR1sC.js";import{G as g}from"./GuestLa
 
         .order-success-page {
             --os-bg: #f4f7f7;
-            --os-panel: #ffffff;
+            --os-panel: #F5f5f7;
             --os-panel-alt: #fafcfc;
             --os-border: rgba(14,22,24,0.08);
             --os-text: #10201f;

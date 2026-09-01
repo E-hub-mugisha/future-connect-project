@@ -12,7 +12,7 @@ import{d as F,r as m,u as D,j as s,H as M,L as p,a as y}from"./app-DQcVR1sC.js";
           --ss-border-h: rgba(0, 166, 103, .38);
           --ss-radius: 14px;
           --ss-btn-text: #06120d;
-          --ss-heading: #ffffff;
+          --ss-heading: #F5f5f7;
           --ss-placeholder: #3d5a52;
           --ss-error: #ff8a8a;
           --ss-card-shadow: rgba(0, 0, 0, .4);
@@ -27,7 +27,7 @@ import{d as F,r as m,u as D,j as s,H as M,L as p,a as y}from"./app-DQcVR1sC.js";
            whatever the header's toggle already decided. ── */
         [data-h-theme="light"] {
           --ss-bg: #f6faf8;
-          --ss-surface: #ffffff;
+          --ss-surface: #F5f5f7;
           --ss-surface2: #eef4f1;
           --ss-green: #00a667;
           --ss-green-dim: rgba(0, 166, 103, .08);
@@ -36,13 +36,13 @@ import{d as F,r as m,u as D,j as s,H as M,L as p,a as y}from"./app-DQcVR1sC.js";
           --ss-muted: #5b7a70;
           --ss-border: rgba(0, 100, 60, .12);
           --ss-border-h: rgba(0, 100, 60, .3);
-          --ss-btn-text: #ffffff;
+          --ss-btn-text: #F5f5f7;
           --ss-heading: #10201b;
           --ss-placeholder: #a9c2b8;
           --ss-error: #c94040;
           --ss-card-shadow: rgba(16, 32, 27, .12);
           --ss-quote-bg: rgba(255, 255, 255, .85);
-          --ss-hero-grad: linear-gradient(145deg, #eef7f2 0%, #ffffff 65%, #f2f8f5 100%);
+          --ss-hero-grad: linear-gradient(145deg, #eef7f2 0%, #F5f5f7 65%, #f2f8f5 100%);
         }
 
         [data-h-theme="light"] .ss-modal .btn-close {

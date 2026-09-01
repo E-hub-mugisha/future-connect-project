@@ -67,7 +67,7 @@ export default function ProductDetails({ product }) {
           --border:     rgba(255,255,255,.07);
           --text:       #f0f4f3;
           --muted:      #7a9490;
-          --white:      #ffffff;
+          --white:      #F5f5f7;
           --font-head:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
           --font-body:  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
         }
@@ -234,7 +234,7 @@ export default function ProductDetails({ product }) {
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg-deep:    #f6faf8;
-          --bg-card:    #ffffff;
+          --bg-card:    #F5f5f7;
           --bg-raised:  #eef4f1;
           --accent:     #00a667;
           --accent-dim: rgba(0, 166, 103, 0.1);

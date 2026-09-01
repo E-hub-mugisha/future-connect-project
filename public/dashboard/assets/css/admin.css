@@ -3812,7 +3812,7 @@ textarea.form-control-lg {
 }
 
 .form-check-input:checked[type=checkbox] {
-    --dx-form-check-bg-image: url("data:image/svg+xml,%3csvg%20version='1.2'%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%201244'%20width='1280'%20height='1244'%3e%3ctitle%3e27820-svg%3c/title%3e%3cstyle%3e%20.s0%20{%20fill:%20%23ffffff%20}%20%3c/style%3e%3cg%20id='Layer'%3e%3cpath%20id='Layer'%20class='s0'%20d='m1237.8%201.5c-32%206.4-78.2%2037-144.3%2095.4-30.3%2026.8-54.1%2049.6-106.6%20102.1-84.5%2084.5-142.4%20146-296.4%20315-72.9%2080-116.4%20127.5-143.9%20157-76.2%2081.8-122.6%20126.6-133.2%20128.6-7.5%201.4-35.5-0.3-51.4-3.1-35.1-6.1-86-20.4-165.5-46.5-109.9-36-133.8-42.5-158.5-42.5-12.8%200-13.8%200.1-19.8%202.9-7.6%203.5-13.3%209.6-16.2%2017.2-4.2%2011.2-2.7%2017%2011.5%2045.9%2045.4%2092.1%20125.2%20198.4%20224.5%20298.9%2093.2%2094.3%20173%20153.5%20227.5%20168.7%2010.6%203%2028.2%203.3%2036.9%200.6%208.7-2.7%2017.4-11.3%2022.6-22.4%2012.4-26.6%2056.5-98.9%20133.8-219.8%2049.5-77.2%20103.6-160.5%20297.7-457.5%20161.7-247.4%20240.6-370.5%20286.5-447%2014-23.2%2034-58.9%2034-60.5%200-0.6-3.9-8.4-8.6-17.2-6.2-11.6-9.2-16.3-10.7-16.7-3.5-0.9-12.7-0.5-19.9%200.9z'/%3e%3c/g%3e%3c/svg%3e")
+    --dx-form-check-bg-image: url("data:image/svg+xml,%3csvg%20version='1.2'%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201280%201244'%20width='1280'%20height='1244'%3e%3ctitle%3e27820-svg%3c/title%3e%3cstyle%3e%20.s0%20{%20fill:%20%23F5f5f7%20}%20%3c/style%3e%3cg%20id='Layer'%3e%3cpath%20id='Layer'%20class='s0'%20d='m1237.8%201.5c-32%206.4-78.2%2037-144.3%2095.4-30.3%2026.8-54.1%2049.6-106.6%20102.1-84.5%2084.5-142.4%20146-296.4%20315-72.9%2080-116.4%20127.5-143.9%20157-76.2%2081.8-122.6%20126.6-133.2%20128.6-7.5%201.4-35.5-0.3-51.4-3.1-35.1-6.1-86-20.4-165.5-46.5-109.9-36-133.8-42.5-158.5-42.5-12.8%200-13.8%200.1-19.8%202.9-7.6%203.5-13.3%209.6-16.2%2017.2-4.2%2011.2-2.7%2017%2011.5%2045.9%2045.4%2092.1%20125.2%20198.4%20224.5%20298.9%2093.2%2094.3%20173%20153.5%20227.5%20168.7%2010.6%203%2028.2%203.3%2036.9%200.6%208.7-2.7%2017.4-11.3%2022.6-22.4%2012.4-26.6%2056.5-98.9%20133.8-219.8%2049.5-77.2%20103.6-160.5%20297.7-457.5%20161.7-247.4%20240.6-370.5%20286.5-447%2014-23.2%2034-58.9%2034-60.5%200-0.6-3.9-8.4-8.6-17.2-6.2-11.6-9.2-16.3-10.7-16.7-3.5-0.9-12.7-0.5-19.9%200.9z'/%3e%3c/g%3e%3c/svg%3e")
 }
 
 .form-check-input:checked[type=radio] {
@@ -13360,7 +13360,7 @@ fieldset:disabled .btn {
 
 .text-white-50 {
     --dx-text-opacity: 1;
-    color: #ffffff80 !important
+    color: #F5f5f780 !important
 }
 
 .text-body-secondary {
@@ -65957,7 +65957,7 @@ h6 {
 }
 
 .card-primary:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-primary:hover .icon-hover-bg {
@@ -66014,7 +66014,7 @@ h6 {
 }
 
 .card-secondary:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-secondary:hover .icon-hover-bg {
@@ -66071,7 +66071,7 @@ h6 {
 }
 
 .card-success:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-success:hover .icon-hover-bg {
@@ -66128,7 +66128,7 @@ h6 {
 }
 
 .card-info:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-info:hover .icon-hover-bg {
@@ -66185,7 +66185,7 @@ h6 {
 }
 
 .card-warning:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-warning:hover .icon-hover-bg {
@@ -66242,7 +66242,7 @@ h6 {
 }
 
 .card-danger:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-danger:hover .icon-hover-bg {
@@ -66299,7 +66299,7 @@ h6 {
 }
 
 .card-light:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-light:hover .icon-hover-bg {
@@ -66356,7 +66356,7 @@ h6 {
 }
 
 .card-dark:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-dark:hover .icon-hover-bg {
@@ -66413,7 +66413,7 @@ h6 {
 }
 
 .card-pink:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-pink:hover .icon-hover-bg {
@@ -66470,7 +66470,7 @@ h6 {
 }
 
 .card-orange:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-orange:hover .icon-hover-bg {
@@ -66527,7 +66527,7 @@ h6 {
 }
 
 .card-indigo:hover .icon-bg {
-    background-color: #ffffff25
+    background-color: #F5f5f725
 }
 
 .card-indigo:hover .icon-hover-bg {
@@ -68686,7 +68686,7 @@ h6 {
 }
 
 :is([data-topbar-colors=dark], [data-topbar-colors=green], [data-topbar-colors=blue], [data-topbar-colors=purple]) .profile-dropdown .pr-desc {
-    color: #ffffffb3 !important
+    color: #F5f5f7b3 !important
 }
 
 :is([data-topbar-colors=dark], [data-topbar-colors=green], [data-topbar-colors=blue], [data-topbar-colors=purple]) .profile-dropdown .dropdown-toggle:after {
@@ -68788,7 +68788,7 @@ h6 {
 }
 
 [data-layout=modern][data-nav-type=pattern] .profile-dropdown .pr-desc {
-    color: #ffffffb3 !important
+    color: #F5f5f7b3 !important
 }
 
 [data-layout=modern][data-nav-type=pattern] .profile-dropdown .dropdown-toggle:after {
@@ -71312,7 +71312,7 @@ h6 {
 
 .deckgo-highlight-code-carbon {
     --deckgo-highlight-code-carbon-background: #1a1c1b;
-    --deckgo-highlight-code-carbon-color: #ffffff;
+    --deckgo-highlight-code-carbon-color: #F5f5f7;
     --deckgo-highlight-code-token-atrule: #ec4899;
     --deckgo-highlight-code-token-function: #eab308;
     --deckgo-highlight-code-carbon-header-button-red-background: #ef4444;
@@ -73641,7 +73641,7 @@ div:where(.swal2-container) div:where(.swal2-validation-message):before {
 
 .card-slide:hover a {
     color: #fff;
-    border-color: #ffffff42
+    border-color: #F5f5f742
 }
 
 [class*=icon-outline] {
@@ -74082,7 +74082,7 @@ div:where(.swal2-container) div:where(.swal2-validation-message):before {
 }
 
 .auth-modern .card {
-    background-color: #ffffff1a;
+    background-color: #F5f5f71a;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     box-shadow: none;
@@ -74091,13 +74091,13 @@ div:where(.swal2-container) div:where(.swal2-validation-message):before {
 }
 
 .auth-modern .card a {
-    color: #ffffffbf
+    color: #F5f5f7bf
 }
 
 .auth-modern .card .form-control.pattern-input,
 .auth-modern .card .form-control.pattern-input:focus,
 .auth-modern .card .form-control {
-    background-color: #ffffff1a !important;
+    background-color: #F5f5f71a !important;
     border: none;
     color: var(--dx-white);
     box-shadow: none
@@ -74110,15 +74110,15 @@ div:where(.swal2-container) div:where(.swal2-validation-message):before {
 }
 
 .auth-modern .card .form-check-input {
-    border-color: #ffffff1a !important
+    border-color: #F5f5f71a !important
 }
 
 .auth-modern .card .btn-light {
-    background-color: #ffffff0e
+    background-color: #F5f5f70e
 }
 
 .auth-modern .card .social-link:hover {
-    background-color: #ffffff1a;
+    background-color: #F5f5f71a;
     color: #fff
 }
 

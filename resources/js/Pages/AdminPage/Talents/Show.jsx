@@ -320,7 +320,7 @@ const css = `
     --accent:        #4F46E5;
     --accent-light:  #EEF0FE;
     --accent-dark:   #4338CA;
-    --surface:       #FFFFFF;
+    --surface:       #F5f5f7;
     --canvas:        #F6F7FB;
     --text-hi:       #101323;
     --text-mid:      #565D72;

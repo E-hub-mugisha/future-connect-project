@@ -203,7 +203,7 @@
         --tr-accent: #48d597;
         --tr-accent-dim: #2f8f68;
         --tr-accent-glow: rgba(72, 213, 151, .16);
-        --tr-white: #ffffff;
+        --tr-white: #F5f5f7;
         --tr-muted: #9fb3b0;
         --tr-border: rgba(255, 255, 255, .08);
         --tr-danger: #ef7b6a;

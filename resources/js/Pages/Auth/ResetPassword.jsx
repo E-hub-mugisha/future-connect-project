@@ -305,7 +305,7 @@ export default function ResetPassword({ token, email }) {
                 }
 
                 [data-theme="light"] {
-                    --rp-bg: #f4f9f7; --rp-surface: #ffffff; --rp-border: #dde8e4;
+                    --rp-bg: #f4f9f7; --rp-surface: #F5f5f7; --rp-border: #dde8e4;
                     --rp-green: #00a65e; --rp-green-hover: #00bd76;
                     --rp-green-dim: rgba(0, 166, 94, .10); --rp-green-glow: rgba(0, 166, 94, .22);
                     --rp-text: #0e1618; --rp-muted: #5c7570; --rp-input-bg: #f3f8f6;

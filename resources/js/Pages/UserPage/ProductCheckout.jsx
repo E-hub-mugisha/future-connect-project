@@ -73,7 +73,7 @@ export default function ProductCheckout({ product, quantity: initialQuantity }) 
           --border:     rgba(255,255,255,.07);
           --text:       #f0f4f3;
           --muted:      #7a9490;
-          --white:      #ffffff;
+          --white:      #F5f5f7;
           --danger:     #f87171;
         }
 
@@ -175,7 +175,7 @@ export default function ProductCheckout({ product, quantity: initialQuantity }) 
 
         [data-h-theme="light"] {
           --bg-deep:    #f6faf8;
-          --bg-card:    #ffffff;
+          --bg-card:    #F5f5f7;
           --bg-raised:  #eef4f1;
           --accent:     #00a667;
           --accent-dim: rgba(0, 166, 103, 0.1);

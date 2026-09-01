@@ -240,7 +240,7 @@ import{j as e,H as t,L as a}from"./app-DQcVR1sC.js";function c({talent:s}){var r
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg: #f6faf8;
-          --surface: #ffffff;
+          --surface: #F5f5f7;
           --surface2: #eef4f1;
           --green: #00a667;
           --green-mid: #00c07a;

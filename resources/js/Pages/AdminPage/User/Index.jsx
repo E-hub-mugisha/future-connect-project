@@ -512,7 +512,7 @@ function UsersStyles() {
                 --line:         #E3E6EC;
                 --line-soft:    #EEF0F4;
                 --canvas:       #F5F6F9;
-                --surface:      #FFFFFF;
+                --surface:      #F5f5f7;
                 --surface-alt:  #FAFBFD;
 
                 --accent:       #1E3A5F;

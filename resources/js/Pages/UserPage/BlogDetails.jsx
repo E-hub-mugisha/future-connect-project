@@ -326,7 +326,7 @@ export default function BlogDetails({ blog, previous, next, relatedPosts = [], c
                 }
 
                 [data-h-theme="light"] {
-                    --tb-bg: #f6faf8; --tb-surface: #ffffff; --tb-surface2: #eef4f1;
+                    --tb-bg: #f6faf8; --tb-surface: #F5f5f7; --tb-surface2: #eef4f1;
                     --tb-green: #00a667; --tb-green-dim: rgba(0, 166, 103, .08); --tb-green-glow: rgba(0, 166, 103, .18);
                     --tb-text: #10201b; --tb-muted: #5b7a70;
                     --tb-border: rgba(0, 100, 60, .12); --tb-border-h: rgba(0, 100, 60, .3);

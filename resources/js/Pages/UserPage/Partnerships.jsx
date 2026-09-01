@@ -93,8 +93,8 @@ export default function Partnerships() {
 
                 .partnerships-page[data-theme="light"] {
                     --p-bg-primary: #f6f9f8;
-                    --p-bg-secondary: #ffffff;
-                    --p-bg-card: #ffffff;
+                    --p-bg-secondary: #F5f5f7;
+                    --p-bg-card: #F5f5f7;
                     --p-bg-elevated: #eef3f1;
                     --p-border-color: rgba(14, 22, 24, 0.08);
                     --p-border-hover: rgba(0, 166, 103, 0.35);

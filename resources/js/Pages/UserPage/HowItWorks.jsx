@@ -966,7 +966,7 @@ export default function HowItWorks({ successStories = [] }) {
         .seller-head h3 {
           font-size: 28px;
           font-weight: 600;
-          color: #ffffff;
+          color: #F5f5f7;
           line-height: 1.35;
           margin-bottom: 10px;
         }
@@ -1058,7 +1058,7 @@ export default function HowItWorks({ successStories = [] }) {
         .about-us-header h2 {
           font-size: 26px;
           font-weight: 600;
-          color: #ffffff;
+          color: #F5f5f7;
           margin-bottom: 8px;
         }
 
@@ -1152,7 +1152,7 @@ export default function HowItWorks({ successStories = [] }) {
         }
 
         .client-review-sec .about-us-header h2 {
-          color: #ffffff;
+          color: #F5f5f7;
         }
 
         .review-card {
@@ -1309,7 +1309,7 @@ export default function HowItWorks({ successStories = [] }) {
         .cta-info h3 {
           font-size: 22px;
           font-weight: 600;
-          color: #ffffff;
+          color: #F5f5f7;
           line-height: 1.4;
           margin: 0;
         }
@@ -1381,7 +1381,7 @@ export default function HowItWorks({ successStories = [] }) {
 
         [data-h-theme="light"] {
           --bg: #f6faf8;
-          --bg-card: #ffffff;
+          --bg-card: #F5f5f7;
           --bg-glass: rgba(0, 60, 40, 0.03);
           --bg-glass2: rgba(0, 166, 103, 0.07);
           --accent: #00a667;
@@ -1438,7 +1438,7 @@ export default function HowItWorks({ successStories = [] }) {
           background: #f6faf8;
         }
         [data-h-theme="light"] .seller-inner-img {
-          background: #ffffff;
+          background: #F5f5f7;
           border-color: rgba(0, 100, 60, 0.12);
         }
         [data-h-theme="light"] .seller-head h3 {
@@ -1449,7 +1449,7 @@ export default function HowItWorks({ successStories = [] }) {
         }
         [data-h-theme="light"] .sllers-list ul li {
           color: #2d453f;
-          background: #ffffff;
+          background: #F5f5f7;
           border-color: rgba(0, 100, 60, 0.12);
         }
         [data-h-theme="light"] .sllers-list ul li:hover {
@@ -1491,7 +1491,7 @@ export default function HowItWorks({ successStories = [] }) {
           color: #00a667;
         }
         [data-h-theme="light"] .why-choose-card {
-          background: #ffffff;
+          background: #F5f5f7;
           border-color: rgba(0, 100, 60, 0.12);
         }
         [data-h-theme="light"] .why-choose-card:hover {
@@ -1519,7 +1519,7 @@ export default function HowItWorks({ successStories = [] }) {
           color: #10201b;
         }
         [data-h-theme="light"] .review-card {
-          background: #ffffff;
+          background: #F5f5f7;
           border-color: rgba(0, 100, 60, 0.12);
         }
         [data-h-theme="light"] .review-card:hover {
@@ -1562,7 +1562,7 @@ export default function HowItWorks({ successStories = [] }) {
           background: #f6faf8;
         }
         [data-h-theme="light"] .cta-wrap {
-          background: linear-gradient(135deg, #eaf7f1 0%, #ffffff 60%, #eaf3f6 100%);
+          background: linear-gradient(135deg, #eaf7f1 0%, #F5f5f7 60%, #eaf3f6 100%);
           border-color: rgba(0, 166, 103, 0.22);
         }
         [data-h-theme="light"] .cta-info .badge {

@@ -9,7 +9,7 @@ import{r as n,j as e,H as l,L as c,R as d}from"./app-DQcVR1sC.js";import{G as h}
         .breadcrumb-bar .breadcrumb-item a { color: #48d597; text-decoration: none; }
         .breadcrumb-bar .breadcrumb-item.active { color: #c8dde0; }
         .breadcrumb-bar .breadcrumb-item + .breadcrumb-item::before { content: '/'; color: #4a6670; padding-right: 8px; }
-        .breadcrumb-title { font-size: 26px; font-weight: 600; color: #ffffff; }
+        .breadcrumb-title { font-size: 26px; font-weight: 600; color: #F5f5f7; }
         .breadcrumb-title span { color: #48d597; }
 
         .about-us-section { background: #0e1618; padding: 60px 0; }
@@ -24,7 +24,7 @@ import{r as n,j as e,H as l,L as c,R as d}from"./app-DQcVR1sC.js";import{G as h}
           border-radius: 20px; font-size: 11px; font-weight: 600; padding: 4px 14px; margin-bottom: 14px;
           letter-spacing: 0.5px; text-transform: uppercase;
         }
-        .about-us-head h2 { font-size: 28px; font-weight: 600; color: #ffffff; line-height: 1.35; margin-bottom: 14px; }
+        .about-us-head h2 { font-size: 28px; font-weight: 600; color: #F5f5f7; line-height: 1.35; margin-bottom: 14px; }
         .about-us-head p { font-size: 14px; color: #8aa4aa; line-height: 1.8; margin-bottom: 14px; }
         .about-us-head h5 { font-size: 14px; font-weight: 600; color: #48d597; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
 
@@ -47,7 +47,7 @@ import{r as n,j as e,H as l,L as c,R as d}from"./app-DQcVR1sC.js";import{G as h}
 
         .why-choose-sec { background: #0b1416; padding: 60px 0; border-top: 1px solid #1a2a2e; border-bottom: 1px solid #1a2a2e; }
         .about-us-header { text-align: center; margin-bottom: 36px; }
-        .about-us-header h2 { font-size: 26px; font-weight: 600; color: #ffffff; margin-bottom: 8px; }
+        .about-us-header h2 { font-size: 26px; font-weight: 600; color: #F5f5f7; margin-bottom: 8px; }
         .about-us-header h2 span { color: #48d597; }
         .about-us-header p { font-size: 14px; color: #6b8a90; }
 
@@ -65,7 +65,7 @@ import{r as n,j as e,H as l,L as c,R as d}from"./app-DQcVR1sC.js";import{G as h}
         .why-choose-card p { font-size: 13px; color: #6b8a90; line-height: 1.7; margin: 0; }
 
         .faq-section { background: #0e1618; padding: 60px 0; }
-        .faq-section .section-title h2 { font-size: 26px; font-weight: 600; color: #ffffff; margin-bottom: 6px; }
+        .faq-section .section-title h2 { font-size: 26px; font-weight: 600; color: #F5f5f7; margin-bottom: 6px; }
         .faq-section .section-title p { font-size: 14px; color: #6b8a90; }
 
         .faq-card { background: #0f1e21; border: 1px solid #1e3035; border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
@@ -94,24 +94,24 @@ import{r as n,j as e,H as l,L as c,R as d}from"./app-DQcVR1sC.js";import{G as h}
         [data-h-theme="light"] .breadcrumb-title { color: #10201b; }
 
         [data-h-theme="light"] .about-us-section { background: #f6faf8; }
-        [data-h-theme="light"] .about-inner-img { background: #ffffff; border-color: rgba(0, 100, 60, 0.12); }
+        [data-h-theme="light"] .about-inner-img { background: #F5f5f7; border-color: rgba(0, 100, 60, 0.12); }
         [data-h-theme="light"] .about-us-head h2 { color: #10201b; }
         [data-h-theme="light"] .about-us-head p { color: #4f6b65; }
         [data-h-theme="light"] .about-badge { background: rgba(0, 166, 103, 0.08); border-color: rgba(0, 166, 103, 0.28); color: #00a667; }
         [data-h-theme="light"] .about-us-head h5 { color: #00a667; }
-        [data-h-theme="light"] .about-features ul li { color: #2d453f; background: #ffffff; border-color: rgba(0, 100, 60, 0.12); }
+        [data-h-theme="light"] .about-features ul li { color: #2d453f; background: #F5f5f7; border-color: rgba(0, 100, 60, 0.12); }
         [data-h-theme="light"] .about-features ul li:hover { border-color: rgba(0, 166, 103, 0.4); }
         [data-h-theme="light"] .about-features ul li span { background: #00a667; }
 
         [data-h-theme="light"] .stats-strip { background: rgba(0, 100, 60, 0.1); }
-        [data-h-theme="light"] .stats-strip .stat-item { background: #ffffff; }
+        [data-h-theme="light"] .stats-strip .stat-item { background: #F5f5f7; }
         [data-h-theme="light"] .stats-strip .stat-num { color: #00a667; }
         [data-h-theme="light"] .stats-strip .stat-label { color: #6f8a85; }
 
         [data-h-theme="light"] .why-choose-sec { background: #eef4f1; border-top-color: rgba(0, 100, 60, 0.1); border-bottom-color: rgba(0, 100, 60, 0.1); }
         [data-h-theme="light"] .about-us-header h2 { color: #10201b; }
         [data-h-theme="light"] .about-us-header p { color: #6f8a85; }
-        [data-h-theme="light"] .why-choose-card { background: #ffffff; border-color: rgba(0, 100, 60, 0.12); }
+        [data-h-theme="light"] .why-choose-card { background: #F5f5f7; border-color: rgba(0, 100, 60, 0.12); }
         [data-h-theme="light"] .why-choose-card:hover { border-color: rgba(0, 166, 103, 0.45); }
         [data-h-theme="light"] .why-choose-card .card-icon { background: rgba(0, 166, 103, 0.08); border-color: rgba(0, 166, 103, 0.25); }
         [data-h-theme="light"] .why-choose-card .card-icon img { filter: invert(38%) sepia(90%) saturate(900%) hue-rotate(115deg) brightness(90%); }
@@ -121,7 +121,7 @@ import{r as n,j as e,H as l,L as c,R as d}from"./app-DQcVR1sC.js";import{G as h}
         [data-h-theme="light"] .faq-section { background: #f6faf8; }
         [data-h-theme="light"] .faq-section .section-title h2 { color: #10201b; }
         [data-h-theme="light"] .faq-section .section-title p { color: #6f8a85; }
-        [data-h-theme="light"] .faq-card { background: #ffffff; border-color: rgba(0, 100, 60, 0.12); }
+        [data-h-theme="light"] .faq-card { background: #F5f5f7; border-color: rgba(0, 100, 60, 0.12); }
         [data-h-theme="light"] .faq-card:hover { border-color: rgba(0, 166, 103, 0.35); }
         [data-h-theme="light"] .faq-title button { color: #2d453f; }
         [data-h-theme="light"] .faq-title button:hover,

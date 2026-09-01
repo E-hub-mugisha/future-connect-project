@@ -21,7 +21,7 @@ import{d as j,r as p,u as y,j as e,H as w,L as c}from"./app-DQcVR1sC.js";functio
 
         [data-h-theme="light"] {
           --bg: #f6faf8;
-          --surface: #ffffff;
+          --surface: #F5f5f7;
           --surface2: #eef4f1;
           --green: #00a667;
           --green-mid: #00a667;

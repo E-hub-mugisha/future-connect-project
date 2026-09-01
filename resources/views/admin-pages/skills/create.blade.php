@@ -5,7 +5,7 @@
 <style>
     :root {
         --bg-deep:       #f0f4f8;
-        --bg-card:       #ffffff;
+        --bg-card:       #F5f5f7;
         --bg-surface:    #f8fafc;
         --bg-hover:      #f1f5f9;
         --accent:        #00a667;
@@ -160,7 +160,7 @@
         border-color: var(--accent) !important;
         box-shadow: var(--focus-ring) !important;
         outline: none !important;
-        background: #ffffff !important;
+        background: #F5f5f7 !important;
     }
 
     .form-control::placeholder { color: var(--text-muted) !important; }

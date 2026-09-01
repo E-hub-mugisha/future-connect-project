@@ -868,7 +868,7 @@
 ══════════════════════════════════════ */
 [data-h-theme="light"] {
     --bg: #f6faf8;
-    --bg-card: #ffffff;
+    --bg-card: #F5f5f7;
     --bg-glass: rgba(0, 60, 40, 0.03);
     --bg-glass2: rgba(0, 166, 103, 0.07);
     --accent: #00a667;

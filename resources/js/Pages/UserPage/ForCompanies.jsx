@@ -59,7 +59,7 @@ export default function ForCompanies() {
             <style>{`
                 :root{
                     --fc-bg:#0e1618; --fc-bg-alt:#141d20; --fc-card:#172124; --fc-border:#243033;
-                    --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#ffffff; --fc-muted:#9fb0ae;
+                    --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#F5f5f7; --fc-muted:#9fb0ae;
                     --fc-cta-text:#06231a;
                 }
                 .fc-sol-page{ background:var(--fc-bg); color:var(--fc-white); }
@@ -118,13 +118,13 @@ export default function ForCompanies() {
                 [data-h-theme="light"] {
                     --fc-bg:      #f6faf8;
                     --fc-bg-alt:  #eef4f1;
-                    --fc-card:    #ffffff;
+                    --fc-card:    #F5f5f7;
                     --fc-border:  rgba(0,100,60,0.12);
                     --fc-accent:  #00a667;
                     --fc-accent-dark: #00854f;
                     --fc-white:   #10201b;
                     --fc-muted:   #5b7a70;
-                    --fc-cta-text:#ffffff;
+                    --fc-cta-text:#F5f5f7;
                 }
 
                 /* Hero radial glows tuned for dark bg — soften for light */

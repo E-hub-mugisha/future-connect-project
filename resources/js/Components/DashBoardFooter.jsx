@@ -9,7 +9,7 @@ export default function Footer() {
             <style>{`
                 .t-footer {
                     margin-left: 250px; padding: 14px 28px; border-top: 1px solid rgba(0, 0, 0, 0.07);
-                    background: #ffffff; display: flex; align-items: center; justify-content: space-between;
+                    background: #F5f5f7; display: flex; align-items: center; justify-content: space-between;
                     gap: 16px; font-family: 'DM Sans', sans-serif;
                 }
                 .t-footer-links { display: flex; align-items: center; gap: 6px; list-style: none; margin: 0; padding: 0; }

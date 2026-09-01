@@ -87,7 +87,7 @@ export default function Contact() {
            whatever the header's toggle already decided. ── */
         [data-h-theme="light"] {
           --bg-deep: #f6faf8;
-          --bg-card: #ffffff;
+          --bg-card: #F5f5f7;
           --bg-input: #f2f7f4;
           --accent: #00a667;
           --accent-dim: rgba(0, 166, 103, .08);
@@ -102,7 +102,7 @@ export default function Contact() {
           --border-soft: rgba(0, 100, 60, .16);
           --focus-ring: rgba(0, 166, 103, .12);
           --success-text: #0a8a56;
-          --submit-text: #ffffff;
+          --submit-text: #F5f5f7;
         }
 
         [data-h-theme="light"] .cp-page {

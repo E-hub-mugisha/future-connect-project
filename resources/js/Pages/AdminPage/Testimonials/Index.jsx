@@ -310,7 +310,7 @@ export default function Testimonials({ testimonials, talents }) {
                     --testi-text: #1f2430;
                     --testi-muted: #7c8397;
                     --testi-border: #e6e8ef;
-                    --testi-bg-card: #ffffff;
+                    --testi-bg-card: #F5f5f7;
                     --testi-bg-page: #f6f7fb;
                     --testi-radius: 12px;
                 }

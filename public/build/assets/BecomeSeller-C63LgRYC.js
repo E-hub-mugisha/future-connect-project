@@ -5,7 +5,7 @@ import{r as h,u,j as e,H as x}from"./app-DQcVR1sC.js";import{A as b}from"./AppLa
                         --sp-accent-hover: rgba(72, 213, 151, 0.12);
                         --sp-black: #0a0a0a;
                         --sp-surface: #fafafa;
-                        --sp-card: #ffffff;
+                        --sp-card: #F5f5f7;
                         --sp-border: #e8e8e8;
                         --sp-text: #171717;
                         --sp-muted: #737373;
@@ -49,7 +49,7 @@ import{r as h,u,j as e,H as x}from"./app-DQcVR1sC.js";import{A as b}from"./AppLa
 
                     [data-scope="seller-page"] .sp-btn-primary {
                         background: var(--sp-black);
-                        color: #ffffff;
+                        color: #F5f5f7;
                         border: none;
                         font-weight: 600;
                         border-radius: 0.75rem;
@@ -93,7 +93,7 @@ import{r as h,u,j as e,H as x}from"./app-DQcVR1sC.js";import{A as b}from"./AppLa
 
                     [data-scope="seller-page"] .sp-modal-header {
                         background: var(--sp-black);
-                        color: #ffffff;
+                        color: #F5f5f7;
                         padding: 1.5rem;
                         position: relative;
                     }
@@ -110,7 +110,7 @@ import{r as h,u,j as e,H as x}from"./app-DQcVR1sC.js";import{A as b}from"./AppLa
                     [data-scope="seller-page"] .sp-btn-close {
                         background: rgba(255,255,255,0.1);
                         border: none;
-                        color: #ffffff;
+                        color: #F5f5f7;
                         width: 36px;
                         height: 36px;
                         border-radius: 0.5rem;

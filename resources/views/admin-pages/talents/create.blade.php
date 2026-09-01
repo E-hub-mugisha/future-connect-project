@@ -4,7 +4,7 @@
 <style>
     :root {
         --bg-base: #f5f6f8;
-        --bg-surface: #ffffff;
+        --bg-surface: #F5f5f7;
         --bg-muted: #f0f2f5;
         --bg-input: #f8f9fb;
         --border: #e2e6ec;

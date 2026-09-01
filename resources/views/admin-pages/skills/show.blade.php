@@ -5,7 +5,7 @@
 <style>
     :root {
         --bg-deep:       #f0f4f8;
-        --bg-card:       #ffffff;
+        --bg-card:       #F5f5f7;
         --bg-surface:    #f8fafc;
         --bg-hover:      #f1f5f9;
         --accent:        #00a667;

@@ -131,7 +131,7 @@ export default function JobShow({
             --accent: #48d597;
             --accent-dim: rgba(72, 213, 151, .10);
             --accent-glow: rgba(72, 213, 151, .18);
-            --text: #ffffff;
+            --text: #F5f5f7;
             --muted: rgba(255, 255, 255, .45);
             --radius: 12px;
             --radius-sm: 8px;
@@ -740,7 +740,7 @@ export default function JobShow({
         ══════════════════════════════════════ */
         [data-h-theme="light"] {
             --bg: #f6faf8;
-            --surface: #ffffff;
+            --surface: #F5f5f7;
             --surface-2: #eef6f2;
             --border: rgba(0, 100, 60, .1);
             --accent: #00a667;

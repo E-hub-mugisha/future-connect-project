@@ -23,7 +23,7 @@ export default function ForProfessionals() {
       <style>{`
         :root{
           --fc-bg:#0e1618; --fc-bg-alt:#141d20; --fc-card:#172124; --fc-border:#243033;
-          --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#ffffff; --fc-muted:#9fb0ae;
+          --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#F5f5f7; --fc-muted:#9fb0ae;
         }
         .fc-sol-page{ background:var(--fc-bg); color:var(--fc-white); }
         .fc-sol-hero{ padding:90px 0 70px; background:radial-gradient(circle at 12% 15%, rgba(72,213,151,.14), transparent 45%), radial-gradient(circle at 88% 85%, rgba(72,213,151,.08), transparent 50%), var(--fc-bg); border-bottom:1px solid var(--fc-border); }
@@ -74,7 +74,7 @@ export default function ForProfessionals() {
         [data-h-theme="light"] {
           --fc-bg: #f6faf8;
           --fc-bg-alt: #eef4f1;
-          --fc-card: #ffffff;
+          --fc-card: #F5f5f7;
           --fc-border: rgba(0, 100, 60, 0.12);
           --fc-accent: #00a667;
           --fc-accent-dark: #00c07a;

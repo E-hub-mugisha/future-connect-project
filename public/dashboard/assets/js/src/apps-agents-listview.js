@@ -12,7 +12,7 @@ import { c as o, i as l } from "../../admin.bundle-CEbNEZ37.js"; import "../../m
                             <stop offset=".525" stop-color="#dafaff"></stop>
                             <stop offset=".687" stop-color="#eefdff"></stop>
                             <stop offset=".846" stop-color="#fbfeff"></stop>
-                            <stop offset="1" stop-color="#ffffff"></stop>
+                            <stop offset="1" stop-color="#F5f5f7"></stop>
                         </linearGradient>
                         <path fill="url(#SVGID_1)" d="M40.036,33.826L31.68,25.6c0.847-1.739,1.335-3.684,1.335-5.748
                             c0-7.27-5.894-13.164-13.164-13.164S6.688,12.582,6.688,19.852c0,7.27,5.894,13.164,13.164,13.164

@@ -336,7 +336,7 @@ export default function Home({
         .fc-accordion .accordion-body { padding: 24px; }
 
         [data-h-theme="light"] {
-          --bg: #f6faf8; --bg-card: #ffffff; --bg-glass: rgba(0, 60, 40, 0.03); --bg-glass2: rgba(0, 166, 103, 0.07);
+          --bg: #f6faf8; --bg-card: #F5f5f7; --bg-glass: rgba(0, 60, 40, 0.03); --bg-glass2: rgba(0, 166, 103, 0.07);
           --accent: #00a667; --accent-dim: #00814f; --accent-glow: rgba(0, 166, 103, 0.16); --accent-line: rgba(0, 166, 103, 0.3);
           --border: rgba(0, 60, 40, 0.08); --border-h: rgba(0, 166, 103, 0.28);
           --text-1: #10201b; --text-2: #4f6b65; --text-3: #7d9791;

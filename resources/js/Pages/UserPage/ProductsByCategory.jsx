@@ -349,7 +349,7 @@ export default function ProductsByCategory({ category, categories = [], products
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg-base:        #f6faf8;
-          --bg-card:        #ffffff;
+          --bg-card:        #F5f5f7;
           --bg-card-alt:    #eef4f1;
           --bg-elevated:    #e6f0eb;
           --accent:         #00a667;

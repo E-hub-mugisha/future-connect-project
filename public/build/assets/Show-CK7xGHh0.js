@@ -1,6 +1,6 @@
 import{d as h,j as e,H as m,L as p,a}from"./app-DQcVR1sC.js";import{A as f}from"./AppLayout-D93w9Ma6.js";const x=()=>e.jsx("svg",{width:"15",height:"15",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.2",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"m12 19-7-7 7-7M5 12h14"})}),g=()=>e.jsx("svg",{width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"})});function u({demoRequest:r}){var n,d;const{flash:s}=h().props,o={pending:{bg:"rgba(245,158,11,.15)",color:"#f59e0b"},confirmed:{bg:"rgba(0,166,103,.15)",color:"#00a667"},completed:{bg:"rgba(59,130,246,.15)",color:"#3b82f6"},cancelled:{bg:"rgba(220,76,76,.12)",color:"#dc4c4c"}};function t(){a.patch(route("admin.demo-requests.confirm",r.id),{},{preserveScroll:!0})}function i(){a.patch(route("admin.demo-requests.cancel",r.id),{},{preserveScroll:!0})}function c(){a.patch(route("admin.demo-requests.complete",r.id),{},{preserveScroll:!0})}function l(){confirm(`Delete the demo request from ${r.full_name}? This cannot be undone.`)&&a.delete(route("admin.demo-requests.destroy",r.id))}return e.jsxs("div",{"data-h-scope":"demo-request-show",children:[e.jsx(m,{title:r.full_name}),e.jsx("style",{children:`
         [data-h-scope="demo-request-show"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1); --accent-glow: rgba(0,166,103,.22);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
           --danger: #dc4c4c; --danger-dim: rgba(220,76,76,.08);
@@ -43,7 +43,7 @@ import{d as h,j as e,H as m,L as p,a}from"./app-DQcVR1sC.js";import{A as f}from"
         [data-h-scope="demo-request-show"] .ds-no-message { font-size: .85rem; color: var(--muted); }
 
         [data-h-scope="demo-request-show"] .btn-primary {
-          width: 100%; background: var(--accent); color: #ffffff; border: none;
+          width: 100%; background: var(--accent); color: #F5f5f7; border: none;
           font-family: 'Syne', sans-serif; font-weight: 800; font-size: .9rem;
           padding: .85rem; border-radius: 10px; cursor: pointer; margin-bottom: .6rem;
           box-shadow: 0 0 24px var(--accent-glow); transition: transform .25s;

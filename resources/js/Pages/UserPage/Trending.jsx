@@ -356,7 +356,7 @@ export default function Trending({
           --tr-accent: #48d597;
           --tr-accent-dim: #2f8f68;
           --tr-accent-glow: rgba(72, 213, 151, .16);
-          --tr-white: #ffffff;
+          --tr-white: #F5f5f7;
           --tr-muted: #9fb3b0;
           --tr-border: rgba(255, 255, 255, .08);
           --tr-danger: #ef7b6a;
@@ -527,7 +527,7 @@ export default function Trending({
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --tr-bg: #f6faf8;
-          --tr-bg-elevated: #ffffff;
+          --tr-bg-elevated: #F5f5f7;
           --tr-bg-elevated-2: #eef4f1;
           --tr-accent: #00a667;
           --tr-accent-dim: #00c07a;
@@ -544,16 +544,16 @@ export default function Trending({
            green pill background. On light theme --tr-bg is now pale, so that
            text would vanish — force explicit white instead */
         [data-h-theme="light"] .tr-tab.is-active {
-          color: #ffffff;
+          color: #F5f5f7;
         }
         [data-h-theme="light"] .tr-tab.is-active span {
           background: rgba(255, 255, 255, .25);
-          color: #ffffff;
+          color: #F5f5f7;
         }
 
         /* Talent avatar tile has the same --tr-bg-as-dark-text pattern */
         [data-h-theme="light"] .tr-avatar {
-          color: #ffffff;
+          color: #F5f5f7;
         }
 
         /* Sticky tabs bar background was a translucent dark-navy blur — swap
@@ -567,7 +567,7 @@ export default function Trending({
            same pattern as the active tab above, needs an explicit override
            on light theme so the label doesn't vanish against the green fill */
         [data-h-theme="light"] .tr-btn--primary {
-          color: #ffffff;
+          color: #F5f5f7;
         }
       `}</style>
     </>

@@ -553,7 +553,7 @@ $categories = \App\Models\Category::all();
 
     [data-h-theme="light"] {
         --bg-base: #f6faf8;
-        --bg-card: #ffffff;
+        --bg-card: #F5f5f7;
         --bg-card-alt: #eef4f1;
         --bg-elevated: #e7f0ec;
         --accent: #00a667;

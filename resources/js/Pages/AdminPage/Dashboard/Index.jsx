@@ -104,7 +104,7 @@ const ThemeStyles = () => (
     <style>{`
         .fc-dash {
             --bg: #f4f7f7;
-            --panel: #ffffff;
+            --panel: #F5f5f7;
             --panel-border: rgba(14,22,24,0.08);
             --panel-border-hover: rgba(14,22,24,0.14);
             --text: #10201f;
@@ -374,7 +374,7 @@ function Dashboard({
                                     paddingAngle={3}
                                 >
                                     {talentsByLevel?.map((_, i) => (
-                                        <Cell key={i} fill={PALETTE[i % PALETTE.length]} stroke="#ffffff" />
+                                        <Cell key={i} fill={PALETTE[i % PALETTE.length]} stroke="#F5f5f7" />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<ChartTooltip />} />
@@ -447,7 +447,7 @@ function Dashboard({
                                     paddingAngle={3}
                                 >
                                     {courseEnrollments?.map((entry, i) => (
-                                        <Cell key={i} fill={statusColor(entry.status, i)} stroke="#ffffff" />
+                                        <Cell key={i} fill={statusColor(entry.status, i)} stroke="#F5f5f7" />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<ChartTooltip />} />
@@ -489,7 +489,7 @@ function Dashboard({
                                     paddingAngle={3}
                                 >
                                     {quickHiresByStatus?.map((entry, i) => (
-                                        <Cell key={i} fill={statusColor(entry.status, i)} stroke="#ffffff" />
+                                        <Cell key={i} fill={statusColor(entry.status, i)} stroke="#F5f5f7" />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<ChartTooltip />} />

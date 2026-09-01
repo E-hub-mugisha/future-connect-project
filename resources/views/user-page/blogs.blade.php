@@ -672,7 +672,7 @@ $tbSort = request('sort', 'latest');
     /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
     [data-h-theme="light"] {
         --tb-bg: #f6faf8;
-        --tb-surface: #ffffff;
+        --tb-surface: #F5f5f7;
         --tb-surface2: #eef4f1;
         --tb-green: #00a667;
         --tb-green-dim: rgba(0, 166, 103, .08);

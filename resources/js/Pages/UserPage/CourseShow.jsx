@@ -443,7 +443,7 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg-base:        #f6faf8;
-          --bg-card:        #ffffff;
+          --bg-card:        #F5f5f7;
           --bg-card-alt:    #eef4f1;
           --bg-elevated:    #e6f0eb;
           --accent:         #00a667;
@@ -470,7 +470,7 @@ export default function CourseShow({ course, relatedCourses = [], flutterwavePub
         }
 
         [data-h-theme="light"] .cs-content-item.playing .cs-content-num {
-          color: #ffffff;
+          color: #F5f5f7;
         }
       `}</style>
 

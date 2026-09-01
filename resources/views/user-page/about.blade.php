@@ -35,7 +35,7 @@
   .breadcrumb-title {
     font-size: 26px;
     font-weight: 600;
-    color: #ffffff;
+    color: #F5f5f7;
   }
   .breadcrumb-title span {
     color: #48d597;
@@ -83,7 +83,7 @@
   .about-us-head h2 {
     font-size: 28px;
     font-weight: 600;
-    color: #ffffff;
+    color: #F5f5f7;
     line-height: 1.35;
     margin-bottom: 14px;
   }
@@ -183,7 +183,7 @@
   .about-us-header h2 {
     font-size: 26px;
     font-weight: 600;
-    color: #ffffff;
+    color: #F5f5f7;
     margin-bottom: 8px;
   }
   .about-us-header h2 span {
@@ -242,7 +242,7 @@
   .faq-section .section-title h2 {
     font-size: 26px;
     font-weight: 600;
-    color: #ffffff;
+    color: #F5f5f7;
     margin-bottom: 6px;
   }
   .faq-section .section-title p {
@@ -335,7 +335,7 @@
     background: #f6faf8;
 }
 [data-h-theme="light"] .about-inner-img {
-    background: #ffffff;
+    background: #F5f5f7;
     border-color: rgba(0, 100, 60, 0.12);
 }
 [data-h-theme="light"] .about-us-head h2 {
@@ -354,7 +354,7 @@
 }
 [data-h-theme="light"] .about-features ul li {
     color: #2d453f;
-    background: #ffffff;
+    background: #F5f5f7;
     border-color: rgba(0, 100, 60, 0.12);
 }
 [data-h-theme="light"] .about-features ul li:hover {
@@ -369,7 +369,7 @@
     background: rgba(0, 100, 60, 0.1);
 }
 [data-h-theme="light"] .stats-strip .stat-item {
-    background: #ffffff;
+    background: #F5f5f7;
 }
 [data-h-theme="light"] .stats-strip .stat-num {
     color: #00a667;
@@ -391,7 +391,7 @@
     color: #6f8a85;
 }
 [data-h-theme="light"] .why-choose-card {
-    background: #ffffff;
+    background: #F5f5f7;
     border-color: rgba(0, 100, 60, 0.12);
 }
 [data-h-theme="light"] .why-choose-card:hover {
@@ -422,7 +422,7 @@
     color: #6f8a85;
 }
 [data-h-theme="light"] .faq-card {
-    background: #ffffff;
+    background: #F5f5f7;
     border-color: rgba(0, 100, 60, 0.12);
 }
 [data-h-theme="light"] .faq-card:hover {

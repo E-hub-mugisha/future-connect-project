@@ -32,7 +32,7 @@ export default function PlanForm({ mode, form, onSubmit, backHref }) {
     <div data-h-scope="pricing-plan-form">
       <style>{`
         [data-h-scope="pricing-plan-form"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1); --accent-glow: rgba(0,166,103,.22);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
           --danger: #dc4c4c; --danger-dim: rgba(220,76,76,.08);
@@ -119,7 +119,7 @@ export default function PlanForm({ mode, form, onSubmit, backHref }) {
 
         [data-h-scope="pricing-plan-form"] .pf-actions { display: flex; gap: .75rem; margin-top: 1.75rem; }
         [data-h-scope="pricing-plan-form"] .pf-submit {
-          background: var(--accent); color: #ffffff; border: none; font-family: 'Syne', sans-serif;
+          background: var(--accent); color: #F5f5f7; border: none; font-family: 'Syne', sans-serif;
           font-weight: 800; font-size: .88rem; padding: .8rem 1.6rem; border-radius: 10px; cursor: pointer;
           box-shadow: 0 0 20px var(--accent-glow); transition: transform .15s;
         }

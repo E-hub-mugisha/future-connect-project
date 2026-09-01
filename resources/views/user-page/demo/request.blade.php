@@ -42,7 +42,7 @@
        theme toggle sets on <html>. */
     [data-h-theme="light"] {
       --bg: #f6faf8;
-      --surface: #ffffff;
+      --surface: #F5f5f7;
       --surface2: #eef4f1;
       --green: #00a667;
       --green-mid: #00a667;
@@ -1589,7 +1589,7 @@
     /* ── LIGHT THEME OVERRIDES ── */
     [data-h-theme="light"] {
       --h-bg: #f6faf8;
-      --h-surface: #ffffff;
+      --h-surface: #F5f5f7;
       --h-surface2: #eef4f1;
       --h-green: #00a667;
       --h-green-d: rgba(0, 166, 103, 0.08);

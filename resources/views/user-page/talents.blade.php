@@ -21,7 +21,7 @@ $categories = \App\Models\Category::all();
     --green-glow:rgba(0,166,103,0.35);
     --text:      #e8eef0;
     --muted:     #7a9199;
-    --white:     #ffffff;
+    --white:     #F5f5f7;
     --font-head: 'Syne', sans-serif;
     --font-body: 'DM Sans', sans-serif;
     --radius:    12px;
@@ -762,7 +762,7 @@ $categories = \App\Models\Category::all();
   /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
   [data-h-theme="light"] {
     --bg:         #f6faf8;
-    --bg2:        #ffffff;
+    --bg2:        #F5f5f7;
     --bg3:        #eef4f1;
     --border:     rgba(0, 100, 60, 0.1);
     --green:      #00a667;

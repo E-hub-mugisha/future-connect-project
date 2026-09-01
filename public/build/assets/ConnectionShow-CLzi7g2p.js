@@ -1,7 +1,7 @@
 import{u as l,j as e,H as x,L as g}from"./app-DQcVR1sC.js";import{A as b}from"./AppLayout-D93w9Ma6.js";const t={connectionsIndex:"/admin/connections",connectionRespond:a=>`/admin/connections/${a}/respond`,connectionAccept:a=>`/admin/connections/${a}/accept`};function f({status:a,map:n}){const r=n[a]??n.default;return e.jsxs("span",{className:`badge ${r.className}`,children:[e.jsx("i",{className:`ti ${r.icon}`})," ",r.label]})}const h={accepted:{label:"Accepted",icon:"ti-check",className:"badge-success"},rejected:{label:"Rejected",icon:"ti-x",className:"badge-danger"},default:{label:"Pending",icon:"ti-clock",className:"badge-neutral"}};function u({connection:a}){var i,d,c;const n=a.status==="accepted",r=l({response:a.response??""}),p=s=>{s.preventDefault(),r.post(t.connectionRespond(a.id),{preserveScroll:!0})},o=l({}),m=s=>{s.preventDefault(),o.post(t.connectionAccept(a.id),{preserveScroll:!0})};return e.jsxs(e.Fragment,{children:[e.jsx(x,{title:`Connection Request #${a.id}`}),e.jsx("link",{href:"https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap",rel:"stylesheet"}),e.jsx("style",{children:`
                 :root {
                     --bg-deep:    #f6faf8;
-                    --bg-card:    #ffffff;
+                    --bg-card:    #F5f5f7;
                     --bg-glass:   rgba(0,100,60,0.035);
                     --bg-glass2:  rgba(0,166,103,0.08);
                     --accent:     #00a667;

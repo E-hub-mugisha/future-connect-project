@@ -1,7 +1,7 @@
 import{j as e,H as s,L as t}from"./app-DQcVR1sC.js";import{G as o}from"./GuestLayout-AyS9Rfgz.js";const i={talentsSearch:"/skills-marketplace",postJob:"/jobs/create",startHiring:"/quick-hire/create"};function n(){const a=[{icon:"ti-filter",title:"Skill-based search",text:"Search by skill, category, and location instead of sorting through résumés one by one."},{icon:"ti-badge",title:"Verification badges",text:"Every verified profile has been checked — hire with confidence, not guesswork."},{icon:"ti-adjustments",title:"Flexible engagement",text:"Hire for a one-off project, ongoing freelance work, or a full-time role — your choice."},{icon:"ti-users-group",title:"Team & bulk hiring",text:"Post multiple roles for a project at once and manage applicants from a single dashboard."}],c=[{capability:"Verified skill profiles",traditional:"Rarely",fc:"Always"},{capability:"Search by exact skill",traditional:"Limited",fc:"Built-in"},{capability:"Direct messaging with candidates",traditional:"Through recruiters",fc:"Connect Room"},{capability:"Local talent focus",traditional:"Varies",fc:"Yes"}];return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"For Companies"}),e.jsx("style",{children:`
                 :root{
                     --fc-bg:#0e1618; --fc-bg-alt:#141d20; --fc-card:#172124; --fc-border:#243033;
-                    --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#ffffff; --fc-muted:#9fb0ae;
+                    --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#F5f5f7; --fc-muted:#9fb0ae;
                     --fc-cta-text:#06231a;
                 }
                 .fc-sol-page{ background:var(--fc-bg); color:var(--fc-white); }
@@ -60,13 +60,13 @@ import{j as e,H as s,L as t}from"./app-DQcVR1sC.js";import{G as o}from"./GuestLa
                 [data-h-theme="light"] {
                     --fc-bg:      #f6faf8;
                     --fc-bg-alt:  #eef4f1;
-                    --fc-card:    #ffffff;
+                    --fc-card:    #F5f5f7;
                     --fc-border:  rgba(0,100,60,0.12);
                     --fc-accent:  #00a667;
                     --fc-accent-dark: #00854f;
                     --fc-white:   #10201b;
                     --fc-muted:   #5b7a70;
-                    --fc-cta-text:#ffffff;
+                    --fc-cta-text:#F5f5f7;
                 }
 
                 /* Hero radial glows tuned for dark bg — soften for light */

@@ -9,7 +9,7 @@ import{j as e,H as s,L as a}from"./app-DQcVR1sC.js";import{G as c}from"./GuestLa
         --fc-border: #243033;
         --fc-accent: #2a9d6a;
         --fc-accent-dark: #1f7a52;
-        --fc-white: #ffffff;
+        --fc-white: #F5f5f7;
         --fc-muted: #9fb0ae;
         background: var(--fc-bg);
         color: var(--fc-white);
@@ -22,7 +22,7 @@ import{j as e,H as s,L as a}from"./app-DQcVR1sC.js";import{G as c}from"./GuestLa
     [data-h-theme="light"] .fc-sol-page {
         --fc-bg: #f8fafb;
         --fc-bg-alt: #f0f4f5;
-        --fc-card: #ffffff;
+        --fc-card: #F5f5f7;
         --fc-border: #e1e8ea;
         --fc-accent: #2a9d6a;
         --fc-accent-dark: #1f7a52;
@@ -80,7 +80,7 @@ import{j as e,H as s,L as a}from"./app-DQcVR1sC.js";import{G as c}from"./GuestLa
     .btn-fc-primary {
         background: var(--fc-accent);
         border: none;
-        color: #ffffff;
+        color: #F5f5f7;
         font-weight: 700;
         border-radius: 30px;
         padding: 0.8rem 2rem;
@@ -93,7 +93,7 @@ import{j as e,H as s,L as a}from"./app-DQcVR1sC.js";import{G as c}from"./GuestLa
 
     .btn-fc-primary:hover {
         background: var(--fc-accent-dark);
-        color: #ffffff;
+        color: #F5f5f7;
         transform: translateY(-2px);
     }
 

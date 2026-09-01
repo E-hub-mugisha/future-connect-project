@@ -118,7 +118,7 @@ export default function CourseForm({ course, categories }) {
                         --cf-primary-light: #14b8a6;
                         --cf-primary-soft: rgba(20, 184, 166, 0.08);
                         --cf-surface: #f8fafc;
-                        --cf-card: #ffffff;
+                        --cf-card: #F5f5f7;
                         --cf-text: #0f172a;
                         --cf-text-secondary: #64748b;
                         --cf-border: #e2e8f0;

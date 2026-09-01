@@ -196,7 +196,7 @@ export default function Index({
                     --td-ink-faint:    rgba(20, 24, 26, 0.38);
                     --td-ink-dim:      rgba(20, 24, 26, 0.08);
                     --td-border:       rgba(20, 24, 26, 0.08);
-                    background-color: #ffffff;
+                    background-color: #F5f5f7;
                 }
                 .td-header {
                     background: linear-gradient(135deg, var(--td-accent) 0%, var(--td-ink) 100%);
@@ -205,18 +205,18 @@ export default function Index({
                 .td-icon-ink { background: var(--td-ink-dim); color: var(--td-ink); }
                 .td-text-soft { color: var(--td-ink-soft) !important; }
                 .td-badge-accent { background: var(--td-accent-dim); color: var(--td-accent); }
-                .td-badge-matched { background: var(--td-accent); color: #ffffff; }
+                .td-badge-matched { background: var(--td-accent); color: #F5f5f7; }
                 .td-badge-unmatched { background: var(--td-ink-dim); color: var(--td-ink-soft); }
-                .td-pill { background: #ffffff; }
+                .td-pill { background: #F5f5f7; }
                 .td-pill .nav-link { color: var(--td-ink-soft); }
-                .td-pill .nav-link.active { background: var(--td-accent) !important; color: #ffffff !important; }
-                .td-action-btn { background: #ffffff; border: 1px solid var(--td-border); color: var(--td-ink-soft); }
+                .td-pill .nav-link.active { background: var(--td-accent) !important; color: #F5f5f7 !important; }
+                .td-action-btn { background: #F5f5f7; border: 1px solid var(--td-border); color: var(--td-ink-soft); }
                 .td-action-btn:hover { background: var(--td-accent-dim); color: var(--td-ink); }
-                .td-btngroup .td-btn-active { background: var(--td-accent); border-color: var(--td-accent); color: #ffffff; }
-                .td-btngroup .td-btn-inactive { background: #ffffff; border-color: var(--td-border); color: var(--td-ink-soft); }
+                .td-btngroup .td-btn-active { background: var(--td-accent); border-color: var(--td-accent); color: #F5f5f7; }
+                .td-btngroup .td-btn-inactive { background: #F5f5f7; border-color: var(--td-border); color: var(--td-ink-soft); }
                 .td-card { border: 1px solid var(--td-border); }
                 .td-alert { background: var(--td-ink-dim); border: 1px solid var(--td-border); color: var(--td-ink-soft); }
-                .td-export-btn { background: #ffffff; color: var(--td-ink); }
+                .td-export-btn { background: #F5f5f7; color: var(--td-ink); }
             `}</style>
 
             <div className="td-dashboard container-fluid px-4 py-4">

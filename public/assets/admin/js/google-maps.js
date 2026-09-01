@@ -146,7 +146,7 @@ function initMap() {
         "featureType": "road.arterial",
         "elementType": "geometry.fill",
         "stylers": [{
-          "color": "#ffffff"
+          "color": "#F5f5f7"
         }]
       },
       {
@@ -513,7 +513,7 @@ function initMap() {
         "featureType": "administrative",
         "elementType": "labels.text.stroke",
         "stylers": [{
-            "color": "#ffffff"
+            "color": "#F5f5f7"
           },
           {
             "visibility": "on"
@@ -569,7 +569,7 @@ function initMap() {
             "weight": 0.4
           },
           {
-            "color": "#ffffff"
+            "color": "#F5f5f7"
           }
         ]
       },
@@ -580,7 +580,7 @@ function initMap() {
             "weight": 1.3
           },
           {
-            "color": "#FFFFFF"
+            "color": "#F5f5f7"
           }
         ]
       },
@@ -625,7 +625,7 @@ function initMap() {
             "weight": 0.8
           },
           {
-            "color": "#ffffff"
+            "color": "#F5f5f7"
           },
           {
             "visibility": "on"
@@ -643,7 +643,7 @@ function initMap() {
         "featureType": "road.arterial",
         "elementType": "labels",
         "stylers": [{
-            "color": "#ffffff"
+            "color": "#F5f5f7"
           },
           {
             "weight": 0.7

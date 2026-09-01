@@ -17,10 +17,10 @@ export const ADMIN_PAGE_CSS = `
 /* ── Light tokens (default) ── */
 [data-ap-scope] {
     --ap-bg-deep:        #f0f4f8;
-    --ap-bg-card:        #ffffff;
+    --ap-bg-card:        #F5f5f7;
     --ap-bg-surface:     #f8fafc;
     --ap-bg-hover:       #f1f5f9;
-    --ap-bg-inset:       #ffffff;
+    --ap-bg-inset:       #F5f5f7;
     --ap-accent:         #00a667;
     --ap-accent-dark:    #008f57;
     --ap-accent-dim:     rgba(0, 166, 103, 0.10);
@@ -40,7 +40,7 @@ export const ADMIN_PAGE_CSS = `
     --ap-shadow-card:    0 1px 4px rgba(15,28,46,0.07), 0 4px 16px rgba(15,28,46,0.05);
     --ap-shadow-glow:    0 0 18px rgba(0,166,103,0.18);
     --ap-focus-ring:     0 0 0 3px rgba(0, 166, 103, 0.22);
-    --ap-input-focus-bg: #ffffff;
+    --ap-input-focus-bg: #F5f5f7;
     color: var(--ap-text);
 }
 

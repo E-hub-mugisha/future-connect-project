@@ -26,14 +26,14 @@ export default function OrdersIndex({ orders, filters, statusCounts }) {
       <Head title="Orders" />
       <style>{`
         :root {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
         }
         [data-h-theme="dark"] {
           --bg-deep: #0e1618; --bg-card: #121d1f; --bg-raised: #172224;
           --accent: #48d597; --accent-dim: rgba(0,166,103,.15);
-          --border: rgba(255,255,255,.07); --text: #f0f4f3; --muted: #7a9490; --white: #ffffff;
+          --border: rgba(255,255,255,.07); --text: #f0f4f3; --muted: #7a9490; --white: #F5f5f7;
         }
         body { background: var(--bg-deep); color: var(--text); font-family: 'DM Sans', sans-serif; }
         .oi-wrap { max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem; }
@@ -77,7 +77,7 @@ export default function OrdersIndex({ orders, filters, statusCounts }) {
           border: 1px solid var(--border); color: var(--muted); text-decoration: none;
         }
         .pagination a:hover { border-color: var(--accent); color: var(--accent); }
-        .pagination .current { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+        .pagination .current { background: var(--accent); color: #F5f5f7; border-color: var(--accent); }
       `}</style>
 
       <div className="oi-wrap">

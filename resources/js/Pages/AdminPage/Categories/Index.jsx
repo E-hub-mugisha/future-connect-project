@@ -351,7 +351,7 @@ function CloseIcon() { return <svg width="13" height="13" viewBox="0 0 24 24" fi
 const css = `
 [data-h-scope="categories"] {
     --bg-deep:       #F0F4F8;
-    --bg-card:       #FFFFFF;
+    --bg-card:       #F5f5f7;
     --bg-surface:    #F8FAFC;
     --bg-hover:      #F1F5F9;
     --accent:        #00A667;

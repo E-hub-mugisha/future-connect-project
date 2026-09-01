@@ -18,7 +18,7 @@ import{d as z,r as i,j as e,L as n,a as C}from"./app-DQcVR1sC.js";const y=[{rout
         }
         [data-h-theme="light"] .up-shell {
           --up-bg: #f6faf8;
-          --up-surface: #ffffff;
+          --up-surface: #F5f5f7;
           --up-surface2: #eef4f1;
           --up-border: rgba(0, 100, 60, 0.12);
           --up-border-h: rgba(0, 100, 60, 0.28);

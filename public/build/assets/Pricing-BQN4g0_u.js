@@ -27,7 +27,7 @@ import{r as c,u as v,j as e,H as k,L as N,R as z}from"./app-DQcVR1sC.js";import{
            the same attribute the header's theme switch sets. */
         [data-h-theme="light"] .pp-page {
           --pp-bg: #f7f8fa;
-          --pp-surface: #ffffff;
+          --pp-surface: #F5f5f7;
           --pp-border: #e4e7eb;
           --pp-border-soft: #edeff2;
           --pp-accent: #00a667;

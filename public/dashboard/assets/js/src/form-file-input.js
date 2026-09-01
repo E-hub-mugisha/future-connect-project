@@ -18,7 +18,7 @@ import"../../admin.bundle-CEbNEZ37.js";import"../../main-O_SKZbQk.js";/*!
             <stop offset='81%' stop-color='#b1b1b1'/>
             <stop offset='88%' stop-color='#dadada'/>
             <stop offset='94%' stop-color='#f6f6f6'/>
-            <stop offset='100%' stop-color='#ffffff'/>
+            <stop offset='100%' stop-color='#F5f5f7'/>
         </radialGradient>
         <mask id="mask-__UID__">
             <rect x="0" y="0" width="500" height="200" fill="url(#gradient-__UID__)"></rect>

@@ -296,7 +296,7 @@ export default function Login({ status, canResetPassword }) {
 
                 [data-theme="light"] {
                     --bg: #f4f9f7;
-                    --surface: #ffffff;
+                    --surface: #F5f5f7;
                     --border: #dde8e4;
                     --green: #00a65e;
                     --green-hover: #00bd76;

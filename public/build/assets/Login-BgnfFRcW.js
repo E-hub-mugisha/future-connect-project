@@ -25,7 +25,7 @@ import{r as a,u as w,j as e,H as k,L as n}from"./app-DQcVR1sC.js";const x="fc-th
 
                 [data-theme="light"] {
                     --bg: #f4f9f7;
-                    --surface: #ffffff;
+                    --surface: #F5f5f7;
                     --border: #dde8e4;
                     --green: #00a65e;
                     --green-hover: #00bd76;

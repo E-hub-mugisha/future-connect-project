@@ -1,7 +1,7 @@
 import{u as j,r as u,j as e,H as g,L as c}from"./app-DQcVR1sC.js";import{A as N}from"./AppLayout-D93w9Ma6.js";function y({course:a=null,categories:n=[],talents:o=[]}){const t=!!a,{data:s,setData:r,post:m,put:b,processing:h,errors:l}=j({title:(a==null?void 0:a.title)??"",description:(a==null?void 0:a.description)??"",category_id:(a==null?void 0:a.category_id)??"",talent_id:(a==null?void 0:a.talent_id)??"",level:(a==null?void 0:a.level)??"Beginner",status:(a==null?void 0:a.status)??"draft",video:(a==null?void 0:a.video)??"",is_free:(a==null?void 0:a.is_free)??!1,price:(a==null?void 0:a.price)??0,thumbnail:null}),[f,p]=u.useState(a!=null&&a.thumbnail?`/images/thumbnails/${a.thumbnail}`:"/images/placeholder-course.png");function x(i){const d=i.target.files[0];d&&(r("thumbnail",d),p(URL.createObjectURL(d)))}function v(i){i.preventDefault(),t?b(route("admin.courses.update",a.id),{forceFormData:!0}):m(route("admin.courses.store"),{forceFormData:!0})}return e.jsxs(N,{children:[e.jsx(g,{title:t?"Edit Course":"New Course"}),e.jsx("style",{children:`
                 :root{
                     --c-bg:#f7f8fa;
-                    --c-card:#ffffff;
+                    --c-card:#F5f5f7;
                     --c-border:#e9ecf1;
                     --c-text:#1f2430;
                     --c-muted:#7b828f;

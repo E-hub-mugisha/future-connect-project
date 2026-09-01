@@ -110,7 +110,7 @@ export default function ProductCategoryIndex({ categories, filters = {} }) {
             <style>{`
                 [data-h-scope="category-admin"] {
                     --bg-page:    #f6faf8;
-                    --bg-card:    #ffffff;
+                    --bg-card:    #F5f5f7;
                     --bg-soft:    rgba(0,100,60,0.035);
                     --bg-accent:  rgba(0,166,103,0.08);
                     --accent:     #00a667;

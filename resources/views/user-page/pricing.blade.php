@@ -19,7 +19,7 @@
         --pp-green: #48d597;
         --pp-green-dark: #008f58;
         --pp-green-deep-bg: #0d2219;
-        --pp-text: #ffffff;
+        --pp-text: #F5f5f7;
         --pp-text-soft: #e0f0f0;
         --pp-text-body: #c8dde0;
         --pp-muted: #8aa4aa;
@@ -40,7 +40,7 @@
     [data-h-theme="light"] {
         --pp-bg: #f6faf8;
         --pp-bg-deep: #eef4f1;
-        --pp-surface: #ffffff;
+        --pp-surface: #F5f5f7;
         --pp-border: rgba(0, 100, 60, 0.14);
         --pp-border-soft: rgba(0, 100, 60, 0.12);
         --pp-green: #00a667;

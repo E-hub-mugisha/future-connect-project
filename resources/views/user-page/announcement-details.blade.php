@@ -15,7 +15,7 @@
         --border:     rgba(255,255,255,.07);
         --text:       #f0f4f3;
         --muted:      #7a9490;
-        --white:      #ffffff;
+        --white:      #F5f5f7;
     }
 
     *, *::before, *::after { box-sizing: border-box; }

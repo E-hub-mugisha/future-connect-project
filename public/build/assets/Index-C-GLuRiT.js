@@ -1,6 +1,6 @@
 import{d as c,j as e,H as p,L as s,a as l}from"./app-DQcVR1sC.js";import{A as m}from"./AppLayout-D93w9Ma6.js";const g=()=>e.jsx("svg",{width:"15",height:"15",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",children:e.jsx("path",{d:"M12 5v14M5 12h14"})}),x=()=>e.jsx("svg",{width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"})}),h=()=>e.jsx("svg",{width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"})}),f=()=>e.jsx("svg",{width:"13",height:"13",viewBox:"0 0 24 24",fill:"currentColor",children:e.jsx("path",{d:"m12 2 2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7-5.4-4.7 7.1-.6Z"})}),u=()=>e.jsx("svg",{width:"13",height:"13",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round",children:e.jsx("path",{d:"M20 6 9 17l-5-5"})});function v({plans:r}){const{flash:a}=c().props;function t(i){confirm(`Delete "${i.name}"? This cannot be undone.`)&&l.delete(route("admin.pricing-plans.destroy",i.id),{preserveScroll:!0})}function n(i){return i==null||i===""?null:Number(i).toLocaleString(void 0,{minimumFractionDigits:0,maximumFractionDigits:2})}return e.jsxs("div",{"data-h-scope":"pricing-plans-index",children:[e.jsx(p,{title:"Pricing Plans"}),e.jsx("style",{children:`
         [data-h-scope="pricing-plans-index"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1); --accent-glow: rgba(0,166,103,.22);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
           --danger: #dc4c4c; --danger-dim: rgba(220,76,76,.08);
@@ -12,7 +12,7 @@ import{d as c,j as e,H as p,L as s,a as l}from"./app-DQcVR1sC.js";import{A as m}
         [data-h-scope="pricing-plans-index"] .pi-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--white); }
         [data-h-scope="pricing-plans-index"] .pi-sub { color: var(--muted); font-size: .85rem; margin-top: .3rem; }
         [data-h-scope="pricing-plans-index"] .pi-new {
-          display: inline-flex; align-items: center; gap: .45rem; background: var(--accent); color: #ffffff;
+          display: inline-flex; align-items: center; gap: .45rem; background: var(--accent); color: #F5f5f7;
           border: none; font-family: 'Syne', sans-serif; font-weight: 800; font-size: .85rem;
           padding: .7rem 1.2rem; border-radius: 10px; text-decoration: none; box-shadow: 0 0 20px var(--accent-glow);
           transition: transform .15s;

@@ -35,7 +35,7 @@ export default function Index({ demoRequests, filters, statusCounts }) {
       <Head title="Demo Requests" />
       <style>{`
         [data-h-scope="demo-requests-index"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --bg-raised: #eef4f1;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --bg-raised: #eef4f1;
           --accent: #00a667; --accent-dim: rgba(0,166,103,.1);
           --border: rgba(0,100,60,.12); --text: #10201b; --muted: #5b7a70; --white: #10201b;
         }
@@ -79,7 +79,7 @@ export default function Index({ demoRequests, filters, statusCounts }) {
         [data-h-scope="demo-requests-index"] .badge { display: inline-block; padding: .25rem .7rem; border-radius: 50px; font-size: .72rem; font-weight: 700; text-transform: capitalize; }
 
         [data-h-scope="demo-requests-index"] .dr-confirm {
-          display: inline-flex; align-items: center; gap: .35rem; background: var(--accent); color: #ffffff;
+          display: inline-flex; align-items: center; gap: .35rem; background: var(--accent); color: #F5f5f7;
           border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .75rem;
           padding: .4rem .75rem; border-radius: 7px; cursor: pointer; transition: transform .15s;
         }
@@ -92,7 +92,7 @@ export default function Index({ demoRequests, filters, statusCounts }) {
           border: 1px solid var(--border); color: var(--muted); text-decoration: none;
         }
         [data-h-scope="demo-requests-index"] .pagination a:hover { border-color: var(--accent); color: var(--accent); }
-        [data-h-scope="demo-requests-index"] .pagination .current { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+        [data-h-scope="demo-requests-index"] .pagination .current { background: var(--accent); color: #F5f5f7; border-color: var(--accent); }
       `}</style>
 
       <div className="di-wrap">

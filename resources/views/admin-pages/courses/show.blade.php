@@ -6,7 +6,7 @@
 <style>
     :root{
         --c-bg:#f7f8fa;
-        --c-card:#ffffff;
+        --c-card:#F5f5f7;
         --c-border:#e9ecf1;
         --c-text:#1f2430;
         --c-muted:#7b828f;

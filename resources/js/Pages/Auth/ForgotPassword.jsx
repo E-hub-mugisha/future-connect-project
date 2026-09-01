@@ -225,7 +225,7 @@ export default function ForgotPassword({ status }) {
                 }
 
                 [data-theme="light"] {
-                    --fp-bg: #f4f9f7; --fp-surface: #ffffff; --fp-border: #dde8e4;
+                    --fp-bg: #f4f9f7; --fp-surface: #F5f5f7; --fp-border: #dde8e4;
                     --fp-green: #00a65e; --fp-green-hover: #00bd76;
                     --fp-green-dim: rgba(0, 166, 94, .10); --fp-green-glow: rgba(0, 166, 94, .22);
                     --fp-text: #0e1618; --fp-muted: #5c7570; --fp-input-bg: #f3f8f6;

@@ -1,7 +1,7 @@
 import{j as e,H as s,L as a}from"./app-DQcVR1sC.js";import{G as n}from"./GuestLayout-AyS9Rfgz.js";const t={contact:"/contact",metrics:"/platform-metrics"};function o(){const c=[{icon:"ti-chart-bar",title:"Platform metrics",text:"Skills listed, active users, and verified professionals — transparent platform traction."},{icon:"ti-trending-up",title:"Emerging skill trends",text:"See which skills and sectors are gaining traction by region in near real time."},{icon:"ti-bulb",title:"Marketplace signals",text:"Identify which sellers and creators are gaining early traction in the products marketplace."},{icon:"ti-handshake",title:"Partnership access",text:"Direct line to the Future Connect team for investment and partnership conversations."}],i=[{name:"Digital Marketing",growth:"+38%",width:80},{name:"Software Development",growth:"+31%",width:70},{name:"Writing & Content",growth:"+22%",width:55},{name:"Design & Creative",growth:"+19%",width:48}];return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"For Investors"}),e.jsx("style",{children:`
                 :root{
                     --fc-bg:#0e1618; --fc-bg-alt:#141d20; --fc-card:#172124; --fc-border:#243033;
-                    --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#ffffff; --fc-muted:#9fb0ae;
+                    --fc-accent:#48d597; --fc-accent-dark:#33a876; --fc-white:#F5f5f7; --fc-muted:#9fb0ae;
                     --fc-cta-text:#06231a;
                 }
                 .fc-sol-page{ background:var(--fc-bg); color:var(--fc-white); }
@@ -67,13 +67,13 @@ import{j as e,H as s,L as a}from"./app-DQcVR1sC.js";import{G as n}from"./GuestLa
                 [data-h-theme="light"] {
                     --fc-bg:      #f6faf8;
                     --fc-bg-alt:  #eef4f1;
-                    --fc-card:    #ffffff;
+                    --fc-card:    #F5f5f7;
                     --fc-border:  rgba(0,100,60,0.12);
                     --fc-accent:  #00a667;
                     --fc-accent-dark: #00854f;
                     --fc-white:   #10201b;
                     --fc-muted:   #5b7a70;
-                    --fc-cta-text:#ffffff;
+                    --fc-cta-text:#F5f5f7;
                 }
 
                 /* Hero radial glows tuned for dark bg — soften for light */

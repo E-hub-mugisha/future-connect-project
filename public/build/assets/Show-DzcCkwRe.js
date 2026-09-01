@@ -6,7 +6,7 @@ import{r as u,j as e,H as _,L,u as v,a as A}from"./app-DQcVR1sC.js";import{A as 
                         --h-ink: #0f172a;
                         --h-ink-soft: #475569;
                         --h-muted: #64748b;
-                        --h-white: #ffffff;
+                        --h-white: #F5f5f7;
                         --h-bg: #f7f8fb;
                         --h-border: #e6e8ee;
                         --h-border-soft: #eef0f4;
@@ -30,7 +30,7 @@ import{r as u,j as e,H as _,L,u as v,a as A}from"./app-DQcVR1sC.js";import{A as 
                         box-shadow: var(--h-shadow-sm);
                     }
                     [data-h-scope="talent-course-show"] .h-header-card {
-                        background: linear-gradient(135deg, #ffffff 0%, #fafbff 100%);
+                        background: linear-gradient(135deg, #F5f5f7 0%, #fafbff 100%);
                         border: 1px solid var(--h-border);
                         color: var(--h-ink);
                         position: relative;
@@ -46,7 +46,7 @@ import{r as u,j as e,H as _,L,u as v,a as A}from"./app-DQcVR1sC.js";import{A as 
                     }
                     [data-h-scope="talent-course-show"] .h-btn-accent {
                         background: var(--h-accent);
-                        color: #ffffff;
+                        color: #F5f5f7;
                         border: 1px solid var(--h-accent);
                         font-weight: 600;
                         transition: all .18s ease;
@@ -58,7 +58,7 @@ import{r as u,j as e,H as _,L,u as v,a as A}from"./app-DQcVR1sC.js";import{A as 
                     [data-h-scope="talent-course-show"] .h-btn-accent:hover {
                         background: var(--h-accent-dark);
                         border-color: var(--h-accent-dark);
-                        color: #ffffff;
+                        color: #F5f5f7;
                         box-shadow: 0 4px 12px rgba(79,70,229,0.25);
                         transform: translateY(-1px);
                     }
@@ -119,7 +119,7 @@ import{r as u,j as e,H as _,L,u as v,a as A}from"./app-DQcVR1sC.js";import{A as 
                     }
                     [data-h-scope="talent-course-show"] .h-btn-danger {
                         background: var(--h-danger);
-                        color: #ffffff;
+                        color: #F5f5f7;
                         border: 1px solid var(--h-danger);
                         font-weight: 600;
                         transition: all .18s ease;
@@ -221,7 +221,7 @@ import{r as u,j as e,H as _,L,u as v,a as A}from"./app-DQcVR1sC.js";import{A as 
                     [data-h-scope="talent-course-show"] .form-control,
                     [data-h-scope="talent-course-show"] .form-select {
                         border-color: var(--h-border);
-                        background-color: #ffffff;
+                        background-color: #F5f5f7;
                         color: var(--h-ink);
                         transition: border-color .15s ease, box-shadow .15s ease;
                     }

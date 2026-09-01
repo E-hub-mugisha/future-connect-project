@@ -18,7 +18,7 @@ import{r as s,u as B,j as e,H as M,L as d}from"./app-DQcVR1sC.js";const b="fc-th
                 }
 
                 [data-theme="light"] {
-                    --bg: #f4f9f7; --surface: #ffffff; --border: #dde8e4;
+                    --bg: #f4f9f7; --surface: #F5f5f7; --border: #dde8e4;
                     --green: #00a65e; --green-hover: #00bd76;
                     --green-dim: rgba(0, 166, 94, .10); --green-glow: rgba(0, 166, 94, .22);
                     --text: #0e1618; --muted: #5c7570; --input-bg: #f3f8f6;

@@ -1,7 +1,7 @@
 import{r as c,j as e,H as y,L as d,a as i}from"./app-DQcVR1sC.js";import{A as w}from"./AppLayout-D93w9Ma6.js";function C({courses:s,categories:v=[],stats:t,filters:l={}}){const[n,o]=c.useState(l.search??""),[m,b]=c.useState(l.status??""),[h,x]=c.useState(l.level??""),[f,u]=c.useState(l.category_id??"");function g(a){a.preventDefault(),i.get(route("admin.courses.index"),{search:n,status:m,level:h,category_id:f},{preserveState:!0,replace:!0})}function j(){o(""),b(""),x(""),u(""),i.get(route("admin.courses.index"))}function N(a){confirm("Delete this course? This action cannot be undone.")&&i.delete(route("admin.courses.destroy",a.id))}return e.jsxs(w,{children:[e.jsx(y,{title:"Courses"}),e.jsx("style",{children:`
                 :root{
                     --c-bg:#f7f8fa;
-                    --c-card:#ffffff;
+                    --c-card:#F5f5f7;
                     --c-border:#e9ecf1;
                     --c-text:#1f2430;
                     --c-muted:#7b828f;

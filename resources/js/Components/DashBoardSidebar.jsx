@@ -35,7 +35,7 @@ export default function Sidebar() {
             <style>{`
                 /* Light palette: white bg, #48d597 accent, dark ink text — no theme switching. */
                 .fc-sidebar {
-                    --sb-bg:       #ffffff;
+                    --sb-bg:       #F5f5f7;
                     --sb-border:   rgba(0, 0, 0, 0.08);
                     --accent:      #48d597;
                     --accent-dim:  rgba(72, 213, 151, 0.10);

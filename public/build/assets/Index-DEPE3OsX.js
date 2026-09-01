@@ -6,7 +6,7 @@ import{r as d,j as e,H as S,a as I,u as P}from"./app-DQcVR1sC.js";import{A as _}
     --ink-2:        #565F72;
     --ink-3:        #9AA2B1;
     --canvas:       #F4F5F9;
-    --surface:      #FFFFFF;
+    --surface:      #F5f5f7;
     --border:       #E5E7EF;
     --border-soft:  #EEF0F5;
     --accent:       #1E45D6;

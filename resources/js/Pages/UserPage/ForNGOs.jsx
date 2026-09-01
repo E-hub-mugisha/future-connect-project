@@ -206,7 +206,7 @@ export default function ForNGOs() {
         --fc-border: #243033;
         --fc-accent: #2a9d6a;
         --fc-accent-dark: #1f7a52;
-        --fc-white: #ffffff;
+        --fc-white: #F5f5f7;
         --fc-muted: #9fb0ae;
         background: var(--fc-bg);
         color: var(--fc-white);
@@ -219,7 +219,7 @@ export default function ForNGOs() {
     [data-h-theme="light"] .fc-sol-page {
         --fc-bg: #f8fafb;
         --fc-bg-alt: #f0f4f5;
-        --fc-card: #ffffff;
+        --fc-card: #F5f5f7;
         --fc-border: #e1e8ea;
         --fc-accent: #2a9d6a;
         --fc-accent-dark: #1f7a52;
@@ -277,7 +277,7 @@ export default function ForNGOs() {
     .btn-fc-primary {
         background: var(--fc-accent);
         border: none;
-        color: #ffffff;
+        color: #F5f5f7;
         font-weight: 700;
         border-radius: 30px;
         padding: 0.8rem 2rem;
@@ -290,7 +290,7 @@ export default function ForNGOs() {
 
     .btn-fc-primary:hover {
         background: var(--fc-accent-dark);
-        color: #ffffff;
+        color: #F5f5f7;
         transform: translateY(-2px);
     }
 

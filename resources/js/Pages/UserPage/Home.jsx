@@ -334,7 +334,7 @@ export default function Home({
         .fc-cta-note { font-size: 0.78rem; color: var(--text-3); margin-top: -12px; margin-bottom: 0; }
 
         [data-h-theme="light"] {
-          --bg: #f6faf8; --bg-card: #ffffff; --bg-glass: rgba(0, 60, 40, 0.03); --bg-glass2: rgba(0, 166, 103, 0.07);
+          --bg: #f6faf8; --bg-card: #F5f5f7; --bg-glass: rgba(0, 60, 40, 0.03); --bg-glass2: rgba(0, 166, 103, 0.07);
           --accent: #00a667; --accent-dim: #00814f; --accent-glow: rgba(0, 166, 103, 0.16); --accent-line: rgba(0, 166, 103, 0.3);
           --border: rgba(0, 60, 40, 0.08); --border-h: rgba(0, 166, 103, 0.28);
           --text-1: #10201b; --text-2: #4f6b65; --text-3: #7d9791;
@@ -367,7 +367,7 @@ export default function Home({
             <div className="col-lg-7">
               <p className="hero-eyebrow">{totalTalents}+ verified skilled people, already connected</p>
               <h1>
-                Your skills are <span className="hl">your capital.</span>
+                Hello, <br />Your skills are <span className="hl">your capital.</span>
               </h1>
               <p>The digital ecosystem connecting Africa's skilled people to opportunities, collaborators, mentors, and organizations.</p>
               <div className="hero-ctas">

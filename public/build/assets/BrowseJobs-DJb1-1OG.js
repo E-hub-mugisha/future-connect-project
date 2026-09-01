@@ -718,7 +718,7 @@ import{r as d,_ as D,u as P,j as e,H as A,L as s,a as J}from"./app-DQcVR1sC.js";
         /* ── LIGHT THEME OVERRIDES ── */
         [data-h-theme="light"] {
             --bg: #f6faf8;
-            --bg-card: #ffffff;
+            --bg-card: #F5f5f7;
             --bg-glass: rgba(0, 100, 60, 0.035);
             --bg-glass2: rgba(0, 166, 103, 0.08);
             --accent: #00a667;

@@ -38,10 +38,10 @@ export default function Topbar({ notifications = [], onToggleSidebar }) {
 
                 /* Single fixed palette: #48d597 (accent), white, black — no theme switching. */
                 .t-topbar, .t-search-input, .t-dropdown, .t-mobile-search-overlay {
-                    --tb-bg:           #ffffff;
-                    --tb-surface:      #ffffff;
+                    --tb-bg:           #F5f5f7;
+                    --tb-surface:      #F5f5f7;
                     --tb-input-bg:     rgba(0, 0, 0, 0.04);
-                    --tb-input-focus:  #ffffff;
+                    --tb-input-focus:  #F5f5f7;
                     --tb-text:         #000000;
                     --tb-text-strong:  #000000;
                     --tb-muted:        rgba(0, 0, 0, 0.55);
@@ -51,7 +51,7 @@ export default function Topbar({ notifications = [], onToggleSidebar }) {
                     --tb-hover:        rgba(72, 213, 151, 0.10);
                     --tb-shadow:       0 8px 32px rgba(0, 0, 0, 0.10);
                     --tb-input-border: rgba(0, 0, 0, 0.12);
-                    --tb-dot-ring:     #ffffff;
+                    --tb-dot-ring:     #F5f5f7;
                     --accent:          #48d597;
                 }
 
@@ -110,7 +110,7 @@ export default function Topbar({ notifications = [], onToggleSidebar }) {
                 .t-topbar-divider { width: 1px; height: 20px; background: var(--tb-border); margin: 0 4px; flex-shrink: 0; }
                 .t-profile-btn { display: flex; align-items: center; gap: 10px; padding: 5px 10px 5px 5px; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: background 0.15s; }
                 .t-profile-btn:hover { background: var(--tb-hover); }
-                .t-profile-avatar { width: 32px; height: 32px; border-radius: 50%; background: #000000; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #ffffff; flex-shrink: 0; letter-spacing: 0.04em; }
+                .t-profile-avatar { width: 32px; height: 32px; border-radius: 50%; background: #000000; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #F5f5f7; flex-shrink: 0; letter-spacing: 0.04em; }
                 .t-profile-info { text-align: left; }
                 .t-profile-name { font-size: 13px; font-weight: 500; color: var(--tb-text-strong); line-height: 1.2; }
                 .t-profile-role { font-size: 11px; color: var(--tb-muted); }

@@ -280,7 +280,7 @@ import{j as e,H as x,L as c,a as p}from"./app-DQcVR1sC.js";import{G as h}from"./
         /* ── LIGHT THEME OVERRIDES (matches header toggle) ── */
         [data-h-theme="light"] {
           --bg-base:        #f6faf8;
-          --bg-card:        #ffffff;
+          --bg-card:        #F5f5f7;
           --bg-card-alt:    #eef4f1;
           --bg-elevated:    #e6f0eb;
           --accent:         #00a667;

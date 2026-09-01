@@ -393,7 +393,7 @@ import{r as n,u as P,j as e,H as G,R as H}from"./app-DQcVR1sC.js";import{G as O}
                 /* ── LIGHT THEME ── */
                 [data-h-theme="light"] {
                     --bg-deep:    #f6faf8;
-                    --bg-card:    #ffffff;
+                    --bg-card:    #F5f5f7;
                     --bg-glass:   rgba(0,100,60,0.035);
                     --bg-glass2:  rgba(0,166,103,0.08);
                     --accent:     #00a667;

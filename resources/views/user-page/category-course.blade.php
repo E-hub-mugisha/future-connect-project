@@ -17,7 +17,7 @@
     --green-glow: rgba(0,166,103,0.3);
     --text:       #e8eef0;
     --muted:      #7a9199;
-    --white:      #ffffff;
+    --white:      #F5f5f7;
     --font-head:  'Syne', sans-serif;
     --font-body:  'DM Sans', sans-serif;
     --radius:     12px;

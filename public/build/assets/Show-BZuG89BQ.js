@@ -1,7 +1,7 @@
 import{j as e,H as n,L as o}from"./app-DQcVR1sC.js";import{A as l}from"./AppLayout-D93w9Ma6.js";function d(a){return a?a.split(" ").filter(Boolean).slice(0,2).map(i=>{var s;return(s=i[0])==null?void 0:s.toUpperCase()}).join(""):"—"}function c({type:a}){const i=(a??"").toLowerCase(),r={"full-time":{cls:"badge-success",label:"Full-Time"},"part-time":{cls:"badge-info",label:"Part-Time"},contract:{cls:"badge-warn",label:"Contract"},internship:{cls:"badge-muted",label:"Internship"},remote:{cls:"badge-info",label:"Remote"}}[i]??{cls:"badge-muted",label:a??"N/A"};return e.jsx("span",{className:`badge ${r.cls}`,children:r.label})}function b({job:a}){var s;const i=Array.isArray(a.skills)?a.skills.map(r=>String(r).trim()).filter(Boolean):typeof a.skills=="string"?a.skills.split(",").map(r=>r.trim()).filter(Boolean):[];return e.jsxs(l,{children:[e.jsx(n,{title:`Job Details: ${a.title}`}),e.jsx("link",{href:"https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap",rel:"stylesheet"}),e.jsx("style",{children:`
                 :root {
                     --bg-deep:    #f6faf8;
-                    --bg-card:    #ffffff;
+                    --bg-card:    #F5f5f7;
                     --bg-glass:   rgba(0,100,60,0.035);
                     --bg-glass2:  rgba(0,166,103,0.08);
                     --accent:     #00a667;

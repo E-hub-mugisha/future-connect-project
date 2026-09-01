@@ -29,7 +29,7 @@ export default function CoursesIndex({ courses }) {
                         --h-accent: #48d597;
                         --h-accent-ink: #0f3d2b;
                         --h-ink: #000000;
-                        --h-white: #ffffff;
+                        --h-white: #F5f5f7;
                         --h-bg: #f6f8f7;
                         --h-line: rgba(0, 0, 0, 0.1);
                         --h-line-soft: rgba(0, 0, 0, 0.06);

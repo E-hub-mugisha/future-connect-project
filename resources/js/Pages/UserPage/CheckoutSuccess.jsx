@@ -10,10 +10,10 @@ export default function CheckoutSuccess({ order }) {
         :root {
           --bg-deep: #0e1618; --bg-card: #121d1f; --accent: #48d597;
           --accent-dim: rgba(0,166,103,.15); --border: rgba(255,255,255,.07);
-          --text: #f0f4f3; --muted: #7a9490; --white: #ffffff;
+          --text: #f0f4f3; --muted: #7a9490; --white: #F5f5f7;
         }
         [data-h-theme="light"] {
-          --bg-deep: #f6faf8; --bg-card: #ffffff; --accent: #00a667;
+          --bg-deep: #f6faf8; --bg-card: #F5f5f7; --accent: #00a667;
           --accent-dim: rgba(0,166,103,.1); --border: rgba(0,100,60,.12);
           --text: #10201b; --muted: #5b7a70; --white: #10201b;
         }

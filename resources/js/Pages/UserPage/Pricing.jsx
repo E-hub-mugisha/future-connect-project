@@ -137,7 +137,7 @@ export default function Pricing({ plans = [], auth = null }) {
            the same attribute the header's theme switch sets. */
         [data-h-theme="light"] .pp-page {
           --pp-bg: #f7f8fa;
-          --pp-surface: #ffffff;
+          --pp-surface: #F5f5f7;
           --pp-border: #e4e7eb;
           --pp-border-soft: #edeff2;
           --pp-accent: #00a667;

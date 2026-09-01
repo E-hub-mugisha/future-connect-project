@@ -1,7 +1,7 @@
 import{u as _,j as e,H as L,L as o,a as C}from"./app-DQcVR1sC.js";import{A as z}from"./AppLayout-D93w9Ma6.js";function A({course:s}){var m,b,f,h,x;const{data:d,setData:n,post:p,processing:g,errors:t,reset:v}=_({course_id:s.id,title:"",content:"",video_url:"",order:(((m=s.lessons)==null?void 0:m.length)??0)+1}),c=[...s.lessons??[]].sort((a,l)=>a.order-l.order),u=s.feedback_avg_rating!=null?Number(s.feedback_avg_rating):s.feedback&&s.feedback.length?s.feedback.reduce((a,l)=>a+l.rating,0)/s.feedback.length:0,j=s.enrollments_count??((b=s.enrollments)==null?void 0:b.length)??0,N=s.feedback_count??((f=s.feedback)==null?void 0:f.length)??0;function y(a){a.preventDefault(),p(route("admin.courses.lessons.store",{course:s.id}),{onSuccess:()=>{var i;v();const l=document.getElementById("addLessonModal"),r=(i=window.bootstrap)==null?void 0:i.Modal.getInstance(l);r==null||r.hide()}})}function w(a){confirm("Delete this lesson?")&&C.delete(route("admin.courses.lessons.destroy",{course:s.id,lesson:a.id}))}function k(a,l){return a?a.length>l?`${a.slice(0,l)}…`:a:""}return e.jsxs(z,{children:[e.jsx(L,{title:s.title}),e.jsx("style",{children:`
                 :root{
                     --c-bg:#f7f8fa;
-                    --c-card:#ffffff;
+                    --c-card:#F5f5f7;
                     --c-border:#e9ecf1;
                     --c-text:#1f2430;
                     --c-muted:#7b828f;

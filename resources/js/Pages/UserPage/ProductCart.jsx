@@ -82,7 +82,7 @@ const CartThemeStyles = () => (
 
         .cart-page {
             --cp-bg: #f4f7f7;
-            --cp-panel: #ffffff;
+            --cp-panel: #F5f5f7;
             --cp-panel-alt: #fafcfc;
             --cp-border: rgba(14,22,24,0.08);
             --cp-text: #10201f;
