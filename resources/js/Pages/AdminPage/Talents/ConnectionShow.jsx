@@ -20,7 +20,7 @@ function StatusBadge({ status, map }) {
 const CONNECTION_STATUS_MAP = {
     accepted: { label: 'Accepted', icon: 'ti-check', className: 'badge-success' },
     rejected: { label: 'Rejected', icon: 'ti-x', className: 'badge-danger' },
-    default: { label: 'Pending', icon: 'ti-clock', className: 'badge-neutral' },
+    default: { label: 'Pending', icon: 'ti-clock', className: 'badge-pending' },
 };
 
 export default function ConnectionShow({ connection }) {
@@ -49,160 +49,166 @@ export default function ConnectionShow({ connection }) {
     return (
         <>
             <Head title={`Connection Request #${connection.id}`} />
-            <link
-                href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-                rel="stylesheet"
-            />
 
             <style>{`
                 :root {
-                    --bg-deep:    #f6faf8;
-                    --bg-card:    #F5f5f7;
-                    --bg-glass:   rgba(0,100,60,0.035);
-                    --bg-glass2:  rgba(0,166,103,0.08);
-                    --accent:     #00a667;
-                    --accent-dim: #00854f;
-                    --accent-glow:rgba(0,166,103,0.2);
-                    --text-primary:   #10201b;
-                    --text-secondary: #4c6b62;
-                    --text-muted:     #7f958d;
-                    --border:     rgba(0,100,60,0.1);
-                    --border-accent: rgba(0,166,103,0.3);
-                    --radius-lg:  16px;
-                    --radius-pill:50px;
-                    --font-head:  'Syne', sans-serif;
-                    --font-body:  'DM Sans', sans-serif;
-                    --warn:       #b3820f;
-                    --danger:     #c94a3f;
+                    --ink:        #0A0A0A;
+                    --ink-soft:   #4A4A4A;
+                    --bg-deep:    #FAFAFA;
+                    --bg-card:    #FFFFFF;
+                    --bg-muted:   #F2F2F2;
+                    --accent:     #00A667;
+                    --accent-dim: #00854F;
+                    --accent-tint:#E6F7EF;
+                    --text-label: #5C5C5C;
+                    --text-muted: #9A9A9A;
+                    --border:     #E1E1E1;
+                    --border-strong: #0A0A0A;
+                    --radius:     6px;
+                    --radius-lg:  4px;
+                    --font-head:  inherit;
+                    --font-body:  inherit;
+                    --warn:       #92650A;
+                    --warn-tint:  #FBF1DE;
+                    --danger:     #C0362C;
+                    --danger-tint:#FBEDEC;
                 }
 
                 .fc-admin-page, .fc-admin-page * { box-sizing: border-box; }
-                .fc-admin-page { background: var(--bg-deep); color: var(--text-primary); font-family: var(--font-body); min-height: 100%; }
+                .fc-admin-page { background: var(--bg-deep); color: var(--ink); font-family: var(--font-body); min-height: 100%; }
 
-                .admin-page { padding: 32px; }
-                @media(max-width: 768px) { .admin-page { padding: 20px 16px; } }
+                .admin-page { padding: 40px 32px 56px; }
+                @media(max-width: 768px) { .admin-page { padding: 24px 16px 40px; } }
                 .admin-page .container-narrow { max-width: 880px; margin: 0 auto; }
 
                 .admin-header {
-                    display: flex; align-items: center; justify-content: space-between;
+                    display: flex; align-items: flex-end; justify-content: space-between;
                     gap: 16px; flex-wrap: wrap;
-                    margin-bottom: 24px;
+                    margin-bottom: 28px;
+                    padding-bottom: 22px;
+                    border-bottom: 2px solid var(--ink);
                 }
-                .admin-header h2 { font-family: var(--font-head); font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0 0 4px; }
-                .admin-header p { font-size: 0.82rem; color: var(--text-secondary); margin: 0; }
+                .admin-header h2 { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; letter-spacing: -.3px; color: var(--ink); margin: 0 0 5px; }
+                .admin-header p { font-size: 0.85rem; color: var(--text-label); margin: 0; }
 
                 .btn-back {
                     display: inline-flex; align-items: center; gap: 8px;
-                    border: 1px solid var(--border);
+                    border: 1px solid var(--border-strong);
                     background: var(--bg-card);
-                    color: var(--text-secondary);
-                    border-radius: var(--radius-pill);
+                    color: var(--ink);
+                    border-radius: var(--radius);
                     padding: 9px 18px;
                     font-size: 0.82rem;
                     font-weight: 600;
                     text-decoration: none;
-                    transition: border-color 0.2s, color 0.2s;
+                    transition: background 0.15s, color 0.15s;
                     white-space: nowrap;
                 }
-                .btn-back:hover { border-color: var(--border-accent); color: var(--accent); }
+                .btn-back:hover { background: var(--ink); color: #fff; }
 
                 .info-card {
                     background: var(--bg-card);
                     border: 1px solid var(--border);
                     border-radius: var(--radius-lg);
-                    padding: 26px;
-                    margin-bottom: 20px;
+                    padding: 24px 26px;
+                    margin-bottom: 18px;
                 }
                 .info-card-title {
                     font-family: var(--font-head);
-                    font-size: 1rem;
-                    font-weight: 800;
-                    color: var(--text-primary);
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    color: var(--ink);
                     margin: 0 0 18px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--border);
                     display: flex; align-items: center; gap: 10px;
                 }
                 .info-card-title i { color: var(--accent); }
 
-                .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+                .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
                 @media(max-width: 700px) { .info-grid { grid-template-columns: 1fr; } }
 
                 .info-block h6 {
                     font-family: var(--font-head);
-                    font-size: 0.85rem;
+                    font-size: 0.72rem;
                     font-weight: 700;
-                    color: var(--text-primary);
-                    margin: 0 0 14px;
+                    color: var(--text-muted);
+                    margin: 0 0 12px;
                     text-transform: uppercase;
-                    letter-spacing: 0.04em;
+                    letter-spacing: 0.06em;
+                    padding-left: 10px;
+                    border-left: 3px solid var(--accent);
                 }
                 .info-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
                 .info-row:last-child { border-bottom: none; }
-                .info-row span:first-child { color: var(--text-muted); }
-                .info-row span:last-child { color: var(--text-primary); font-weight: 500; text-align: right; }
+                .info-row span:first-child { color: var(--text-label); }
+                .info-row span:last-child { color: var(--ink); font-weight: 500; text-align: right; }
 
                 .badge {
                     display: inline-flex; align-items: center; gap: 5px;
-                    border-radius: var(--radius-pill);
-                    padding: 4px 12px;
+                    border-radius: var(--radius);
+                    padding: 4px 11px;
                     font-size: 0.75rem;
                     font-weight: 700;
                 }
-                .badge-success { background: rgba(72,213,151,0.14); color: var(--accent); }
-                .badge-danger { background: rgba(224,100,90,0.14); color: var(--danger); }
-                .badge-pending { background: rgba(232,185,74,0.14); color: var(--warn); }
-                .badge-neutral { background: var(--bg-glass); color: var(--text-secondary); border: 1px solid var(--border); }
+                .badge-success { background: var(--accent-tint); color: var(--accent-dim); }
+                .badge-danger { background: var(--danger-tint); color: var(--danger); }
+                .badge-pending { background: var(--warn-tint); color: var(--warn); }
+                .badge-neutral { background: var(--bg-muted); color: var(--text-label); border: 1px solid var(--border); }
 
                 .response-note {
-                    background: var(--bg-glass2);
-                    border: 1px solid var(--border-accent);
-                    border-radius: 12px;
+                    background: var(--bg-deep);
+                    border: 1px solid var(--border);
+                    border-left: 3px solid var(--accent);
+                    border-radius: var(--radius-lg);
                     padding: 14px 16px;
                     font-size: 0.85rem;
-                    color: var(--text-secondary);
+                    color: var(--ink-soft);
                     margin-top: 14px;
                 }
-                .response-note strong { color: var(--text-primary); }
+                .response-note strong { color: var(--ink); }
 
                 .actions-card-header {
                     display: flex; align-items: center; gap: 10px;
                     margin-bottom: 20px;
+                    padding-bottom: 14px;
+                    border-bottom: 1px solid var(--border);
                 }
-                .actions-card-header i { color: var(--accent); font-size: 1.1rem; }
-                .actions-card-header h5 { font-family: var(--font-head); font-size: 1rem; font-weight: 800; margin: 0; }
+                .actions-card-header i { color: var(--accent); font-size: 1.05rem; }
+                .actions-card-header h5 { font-family: var(--font-head); font-size: 0.95rem; font-weight: 700; margin: 0; }
 
-                .form-label { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+                .form-label { font-size: 0.78rem; font-weight: 600; color: var(--text-label); margin-bottom: 6px; display: block; }
                 .form-control-dark {
                     width: 100%;
-                    background: rgba(255,255,255,0.04);
+                    background: var(--bg-card);
                     border: 1px solid var(--border);
-                    border-radius: 10px;
-                    color: var(--text-primary);
+                    border-radius: var(--radius);
+                    color: var(--ink);
                     padding: 11px 14px;
                     font-family: var(--font-body);
                     font-size: 0.85rem;
                     outline: none;
-                    transition: border-color 0.2s;
+                    transition: border-color 0.15s, box-shadow 0.15s;
                     margin-bottom: 14px;
                     resize: vertical;
                 }
-                .form-control-dark:focus { border-color: var(--border-accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+                .form-control-dark:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
                 .form-control-dark::placeholder { color: var(--text-muted); }
 
-                .action-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+                .action-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
 
                 .btn-send {
                     display: inline-flex; align-items: center; gap: 8px;
                     background: var(--accent);
                     border: none;
                     color: #fff;
-                    border-radius: var(--radius-pill);
+                    border-radius: var(--radius);
                     padding: 11px 22px;
                     font-family: var(--font-head);
                     font-size: 0.85rem;
                     font-weight: 700;
                     cursor: pointer;
-                    transition: background 0.2s, box-shadow 0.2s;
-                    box-shadow: 0 4px 18px var(--accent-glow);
+                    transition: background 0.15s;
                 }
                 .btn-send:hover { background: var(--accent-dim); }
                 .btn-send:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -212,29 +218,27 @@ export default function ConnectionShow({ connection }) {
                     background: var(--accent);
                     border: none;
                     color: #fff;
-                    border-radius: var(--radius-pill);
+                    border-radius: var(--radius);
                     padding: 11px 22px;
                     font-family: var(--font-head);
                     font-size: 0.85rem;
                     font-weight: 700;
                     cursor: pointer;
-                    transition: background 0.2s;
-                    box-shadow: 0 4px 18px var(--accent-glow);
+                    transition: background 0.15s;
                 }
                 .btn-accept:disabled {
-                    background: var(--bg-glass);
+                    background: var(--bg-muted);
                     color: var(--text-muted);
-                    box-shadow: none;
                     cursor: not-allowed;
                     border: 1px solid var(--border);
                 }
 
                 .accepted-flag {
                     display: inline-flex; align-items: center; gap: 8px;
-                    background: rgba(72,213,151,0.14);
-                    color: var(--accent);
-                    border: 1px solid var(--border-accent);
-                    border-radius: var(--radius-pill);
+                    background: var(--accent-tint);
+                    color: var(--accent-dim);
+                    border: 1px solid var(--accent);
+                    border-radius: var(--radius);
                     padding: 10px 20px;
                     font-family: var(--font-head);
                     font-weight: 700;
@@ -243,22 +247,24 @@ export default function ConnectionShow({ connection }) {
 
                 /* ── DARK THEME (opt-in override) ── */
                 [data-h-theme="dark"] {
-                    --bg-deep:    #0e1618;
-                    --bg-card:    #131e21;
-                    --bg-glass:   rgba(255,255,255,0.035);
-                    --bg-glass2:  rgba(0,166,103,0.07);
-                    --accent:     #48d597;
-                    --accent-dim: #008f59;
-                    --accent-glow:rgba(0,166,103,0.25);
-                    --text-primary:   #f0f4f3;
-                    --text-secondary: #8da4a0;
-                    --text-muted:     #4d6460;
-                    --border:     rgba(255,255,255,0.07);
-                    --border-accent: rgba(0,166,103,0.3);
-                    --warn: #e8b94a;
-                    --danger: #e0645a;
+                    --ink:        #F2F2F2;
+                    --ink-soft:   #C9C9C9;
+                    --bg-deep:    #0A0A0A;
+                    --bg-card:    #141414;
+                    --bg-muted:   #1E1E1E;
+                    --accent:     #00C97A;
+                    --accent-dim: #00A667;
+                    --accent-tint: rgba(0,201,122,0.12);
+                    --text-label: #9A9A9A;
+                    --text-muted: #6B6B6B;
+                    --border:     #2A2A2A;
+                    --border-strong: #F2F2F2;
+                    --warn: #E0B84E;
+                    --warn-tint: rgba(224,184,78,0.12);
+                    --danger: #E0645A;
+                    --danger-tint: rgba(224,100,90,0.12);
                 }
-                [data-h-theme="dark"] .form-control-dark { background: rgba(255,255,255,0.04); }
+                [data-h-theme="dark"] .btn-back:hover { color: var(--ink); }
             `}</style>
 
             <div className="fc-admin-page">
@@ -266,7 +272,7 @@ export default function ConnectionShow({ connection }) {
                     <div className="container-narrow">
                         <div className="admin-header">
                             <div>
-                                <h2>Connection Request #{connection.id}</h2>
+                                <h2>Connection request #{connection.id}</h2>
                                 <p>Review talent and requester details, and take action.</p>
                             </div>
                             <Link href={routes.connectionsIndex} className="btn-back">
@@ -278,7 +284,7 @@ export default function ConnectionShow({ connection }) {
                         <div className="info-card">
                             <div className="info-grid">
                                 <div className="info-block">
-                                    <h6>Talent Info</h6>
+                                    <h6>Talent info</h6>
                                     <div className="info-row">
                                         <span>Name</span>
                                         <span>{connection.talent?.name}</span>
@@ -293,7 +299,7 @@ export default function ConnectionShow({ connection }) {
                                     </div>
                                 </div>
                                 <div className="info-block">
-                                    <h6>Requester Info</h6>
+                                    <h6>Requester info</h6>
                                     <div className="info-row">
                                         <span>Name</span>
                                         <span>{connection.name}</span>
@@ -313,15 +319,15 @@ export default function ConnectionShow({ connection }) {
                         {/* ═══════════════ CONNECTION STATUS ═══════════════ */}
                         <div className="info-card">
                             <h5 className="info-card-title">
-                                <i className="ti ti-plug-connected" /> Connection Status
+                                <i className="ti ti-plug-connected" /> Connection status
                             </h5>
                             <div className="info-row" style={{ borderBottom: 'none' }}>
-                                <span>Current Status</span>
+                                <span>Current status</span>
                                 <span><StatusBadge status={connection.status} map={CONNECTION_STATUS_MAP} /></span>
                             </div>
                             {connection.response && (
                                 <div className="response-note">
-                                    <strong>Admin Response:</strong> {connection.response}
+                                    <strong>Admin response:</strong> {connection.response}
                                 </div>
                             )}
                         </div>
@@ -330,11 +336,11 @@ export default function ConnectionShow({ connection }) {
                         <div className="info-card">
                             <div className="actions-card-header">
                                 <i className="ti ti-settings" />
-                                <h5>Admin Actions</h5>
+                                <h5>Admin actions</h5>
                             </div>
 
                             <form onSubmit={submitResponse}>
-                                <label className="form-label">Send a Message to Requester</label>
+                                <label className="form-label">Send a message to requester</label>
                                 <textarea
                                     className="form-control-dark"
                                     rows={4}
@@ -343,7 +349,7 @@ export default function ConnectionShow({ connection }) {
                                     onChange={(e) => respondForm.setData('response', e.target.value)}
                                 />
                                 <button type="submit" className="btn-send" disabled={respondForm.processing}>
-                                    <i className="ti ti-send" /> {respondForm.processing ? 'Sending…' : 'Send Response'}
+                                    <i className="ti ti-send" /> {respondForm.processing ? 'Sending…' : 'Send response'}
                                 </button>
                             </form>
 
@@ -353,12 +359,12 @@ export default function ConnectionShow({ connection }) {
                                 <form onSubmit={submitAccept}>
                                     <button type="submit" className="btn-accept" disabled={acceptForm.processing}>
                                         <i className="ti ti-circle-check" />
-                                        {acceptForm.processing ? 'Accepting…' : 'Accept Connection'}
+                                        {acceptForm.processing ? 'Accepting…' : 'Accept connection'}
                                     </button>
                                 </form>
                             ) : (
                                 <span className="accepted-flag">
-                                    <i className="ti ti-check" /> Connection Already Accepted
+                                    <i className="ti ti-check" /> Connection already accepted
                                 </span>
                             )}
                         </div>

@@ -945,7 +945,9 @@ class HomeController extends Controller
     public function partnerships()
     {
         return Inertia::render('UserPage/Partnerships', [
-            'partners' => Partner::all(),
+            'partners' => Partner::where('is_active', true)
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 }

@@ -3,14 +3,14 @@ import { Head, Link } from "@inertiajs/react";
 import GuestLayout from "@/Layouts/GuestLayout";
 
 function r(name, params) {
-  try {
-    return route(name, params);
-  } catch (e) {
-    console.warn(
-      `route("${name}") failed — Ziggy config not found. Make sure @routes is included in resources/views/app.blade.php (in <head>, before the Inertia app div).`
-    );
-    return "#";
-  }
+    try {
+        return route(name, params);
+    } catch (e) {
+        console.warn(
+            `route("${name}") failed — Ziggy config not found. Make sure @routes is included in resources/views/app.blade.php (in <head>, before the Inertia app div).`,
+        );
+        return "#";
+    }
 }
 
 // ── Online image helpers (no local asset storage needed) ──────────────
@@ -18,10 +18,13 @@ function r(name, params) {
 // photograph of a person from randomuser.me (free, no key, alternates
 // gender by index so the avatar row doesn't repeat one face).
 function personImage(p, seedIndex = 1) {
-  if (p?.image) return p.image.startsWith("http") ? p.image : `/image/talents/${p.image}`;
-  const n = ((seedIndex - 1) % 90) + 1; // randomuser.me portraits go 0..99
-  const gender = seedIndex % 2 === 0 ? "women" : "men";
-  return `https://randomuser.me/api/portraits/${gender}/${n}.jpg`;
+    if (p?.image)
+        return p.image.startsWith("http")
+            ? p.image
+            : `/image/talents/${p.image}`;
+    const n = ((seedIndex - 1) % 90) + 1; // randomuser.me portraits go 0..99
+    const gender = seedIndex % 2 === 0 ? "women" : "men";
+    return `https://randomuser.me/api/portraits/${gender}/${n}.jpg`;
 }
 
 // Partner logos: use the uploaded logo if present, otherwise pull a real,
@@ -31,22 +34,28 @@ function personImage(p, seedIndex = 1) {
 // now just fails, which is why logos weren't rendering. Google's s2
 // favicon endpoint is free, needs no signup/API key, and is still live.
 function partnerLogo(p) {
-  if (p?.logo) return p.logo.startsWith("http") ? p.logo : `/image/partners/${p.logo}`;
-  if (p?.domain) return `https://www.google.com/s2/favicons?sz=128&domain=${p.domain}`;
-  return `https://www.google.com/s2/favicons?sz=128&domain=example.com`;
+    if (p?.logo)
+        return p.logo.startsWith("http") ? p.logo : `/image/partners/${p.logo}`;
+    if (p?.domain)
+        return `https://www.google.com/s2/favicons?sz=128&domain=${p.domain}`;
+    return `https://www.google.com/s2/favicons?sz=128&domain=example.com`;
 }
 
 // Real stock photography of real people (verified, currently-live Unsplash
 // photos — not random/abstract placeholder images) for section art.
 const PHOTO = {
-  heroA: "https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?auto=format&fit=crop&w=1600&q=80", // team meeting
-  heroB: "https://images.unsplash.com/photo-1758518730384-be3d205838e8?auto=format&fit=crop&w=1600&q=80", // handshake after interview
-  skills: "https://images.unsplash.com/photo-1758873268745-dd2cf0d677b5?auto=format&fit=crop&w=900&q=80", // team reviewing work together
-  learning: "https://images.unsplash.com/photo-1752650735119-8929e5f7d1ec?auto=format&fit=crop&w=900&q=80", // person on a video call/laptop
-  jobs: "https://images.unsplash.com/photo-1758518730384-be3d205838e8?auto=format&fit=crop&w=900&q=80", // handshake, hired
-  connect1: "https://images.unsplash.com/photo-1758691737083-0e7fdbde0f05?auto=format&fit=crop&w=700&q=80", // two colleagues at a laptop
-  connect2: "https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?auto=format&fit=crop&w=700&q=80", // team talking
-  volunteer: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80", // volunteers working together
+    heroA: "https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?auto=format&fit=crop&w=1600&q=80", // team meeting
+    heroB: "https://images.unsplash.com/photo-1758518730384-be3d205838e8?auto=format&fit=crop&w=1600&q=80", // handshake after interview
+    skills: "https://images.unsplash.com/photo-1758873268745-dd2cf0d677b5?auto=format&fit=crop&w=900&q=80", // team reviewing work together
+    learning:
+        "https://images.unsplash.com/photo-1752650735119-8929e5f7d1ec?auto=format&fit=crop&w=900&q=80", // person on a video call/laptop
+    jobs: "https://images.unsplash.com/photo-1758518730384-be3d205838e8?auto=format&fit=crop&w=900&q=80", // handshake, hired
+    connect1:
+        "https://images.unsplash.com/photo-1758691737083-0e7fdbde0f05?auto=format&fit=crop&w=700&q=80", // two colleagues at a laptop
+    connect2:
+        "https://images.unsplash.com/photo-1758518731706-be5d5230e5a5?auto=format&fit=crop&w=700&q=80", // team talking
+    volunteer:
+        "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=900&q=80", // volunteers working together
 };
 
 // Real Rwandan companies for a live testing state when no partners have
@@ -55,68 +64,108 @@ const PHOTO = {
 // substitutes. Once real partners are added with their own uploaded
 // `logo`, this list is unused (see displayPartners below).
 const DEMO_PARTNERS = [
-  { name: "MTN Rwanda", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/MTN_2022_logo.svg" },
-  { name: "RwandAir", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/RwandAir_Logotype.png?width=300" },
-  { name: "Airtel Rwanda", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Airtel_Africa_logo.svg" },
-  { name: "Equity Bank Rwanda", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Equity_Group_Logo.png?width=300" },
+    {
+        name: "MTN Rwanda",
+        logo: "https://commons.wikimedia.org/wiki/Special:FilePath/MTN_2022_logo.svg",
+    },
+    {
+        name: "RwandAir",
+        logo: "https://commons.wikimedia.org/wiki/Special:FilePath/RwandAir_Logotype.png?width=300",
+    },
+    {
+        name: "Airtel Rwanda",
+        logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Airtel_Africa_logo.svg",
+    },
+    {
+        name: "Equity Bank Rwanda",
+        logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Equity_Group_Logo.png?width=300",
+    },
 ];
 
 // The 5 pathways of the ecosystem (Solution section)
 const PATHWAYS = [
-  { icon: "ti-briefcase", label: "Job Opportunities" },
-  { icon: "ti-users", label: "Professional Connections" },
-  { icon: "ti-books", label: "Learning" },
-  { icon: "ti-rocket", label: "Project Collaboration" },
-  { icon: "ti-shopping-bag", label: "Future Connect Market" },
+    { icon: "ti-briefcase", label: "Job Opportunities" },
+    { icon: "ti-users", label: "Professional Connections" },
+    { icon: "ti-books", label: "Learning" },
+    { icon: "ti-rocket", label: "Project Collaboration" },
+    { icon: "ti-shopping-bag", label: "Future Connect Market" },
 ];
 
-const DIFFERENCE_STEPS = ["Discover", "Connect", "Learn", "Collaborate", "Earn", "Grow"];
+const DIFFERENCE_STEPS = [
+    "Discover",
+    "Connect",
+    "Learn",
+    "Collaborate",
+    "Earn",
+    "Grow",
+];
 
 const WHO_IT_SERVES = [
-  { icon: "ti-code", title: "Technical Graduates", desc: "Engineers, developers, and competition winners ready to be found." },
-  { icon: "ti-palette", title: "Creatives & Freelancers", desc: "Designers, writers, and makers looking for steady, real work." },
-  { icon: "ti-building-community", title: "Organizations & Mentors", desc: "Teams and mentors looking for the exact expertise they need." },
-  { icon: "ti-heart-handshake", title: "Volunteers & Changemakers", desc: "People ready to give their time and skills to a cause." },
+    {
+        icon: "ti-code",
+        title: "Technical Graduates",
+        desc: "Engineers, developers, and competition winners ready to be found.",
+    },
+    {
+        icon: "ti-palette",
+        title: "Creatives & Freelancers",
+        desc: "Designers, writers, and makers looking for steady, real work.",
+    },
+    {
+        icon: "ti-building-community",
+        title: "Organizations & Mentors",
+        desc: "Teams and mentors looking for the exact expertise they need.",
+    },
+    {
+        icon: "ti-heart-handshake",
+        title: "Volunteers & Changemakers",
+        desc: "People ready to give their time and skills to a cause.",
+    },
 ];
 
 function Stars({ rating = 0 }) {
-  return (
-    <>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i}>{i < rating ? "★" : "☆"}</span>
-      ))}
-    </>
-  );
+    return (
+        <>
+            {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i}>{i < rating ? "★" : "☆"}</span>
+            ))}
+        </>
+    );
 }
 
 export default function Home({
-  totalTalents = 0,
-  partners = [],
-  categories = [],
-  featuredTalents = [],
-  testimonials = [],
+    totalTalents = 0,
+    partners = [],
+    categories = [],
+    featuredTalents = [],
+    testimonials = [],
 }) {
-  const heroCarouselRef = useRef(null);
-  const testimonialCarouselRef = useRef(null);
-  const displayPartners = partners.length > 0 ? partners : DEMO_PARTNERS;
+    const heroCarouselRef = useRef(null);
+    const testimonialCarouselRef = useRef(null);
+    const displayPartners = partners.length > 0 ? partners : DEMO_PARTNERS;
 
-  useEffect(() => {
-    if (window.bootstrap && heroCarouselRef.current) {
-      new window.bootstrap.Carousel(heroCarouselRef.current, { interval: 6000, pause: false });
-    }
-  }, []);
+    useEffect(() => {
+        if (window.bootstrap && heroCarouselRef.current) {
+            new window.bootstrap.Carousel(heroCarouselRef.current, {
+                interval: 6000,
+                pause: false,
+            });
+        }
+    }, []);
 
-  useEffect(() => {
-    if (window.bootstrap && testimonialCarouselRef.current) {
-      new window.bootstrap.Carousel(testimonialCarouselRef.current, { interval: 6000 });
-    }
-  }, [testimonials.length]);
+    useEffect(() => {
+        if (window.bootstrap && testimonialCarouselRef.current) {
+            new window.bootstrap.Carousel(testimonialCarouselRef.current, {
+                interval: 6000,
+            });
+        }
+    }, [testimonials.length]);
 
-  return (
-    <>
-      <Head title="Future Connect — Your Skills Are Your Capital." />
+    return (
+        <>
+            <Head title="Future Connect — Your Skills Are Your Capital." />
 
-      <style>{`
+            <style>{`
         :root {
           --bg: #0e1618;
           --bg-card: #131e21;
@@ -346,546 +395,1149 @@ export default function Home({
         }
       `}</style>
 
-      {/* 1. HERO — "Your skills are your capital." */}
-      <section className="fc-hero">
-        <div className="fc-hero-bg">
-          <div id="heroBgCarousel" className="carousel slide" ref={heroCarouselRef}>
-            <div className="carousel-inner">
-              <div className="carousel-item active">
-                <div className="fc-hero-bg-slide" style={{ backgroundImage: `url('${PHOTO.heroA}')` }} />
-              </div>
-              <div className="carousel-item">
-                <div className="fc-hero-bg-slide" style={{ backgroundImage: `url('${PHOTO.heroB}')` }} />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="fc-hero-overlay" />
-
-        <div className="container fc-hero-content">
-          <div className="row align-items-center">
-            <div className="col-lg-7">
-              <p className="hero-eyebrow">{totalTalents}+ verified skilled people, already connected</p>
-              <h1>
-                Hello, <br />Your skills are <span className="hl">your capital.</span>
-              </h1>
-              <p>The digital ecosystem connecting Africa's skilled people to opportunities, collaborators, mentors, and organizations.</p>
-              <div className="hero-ctas">
-                <Link href={r("user.register_skills")} className="btn-fc-primary">
-                  Join Future Connect <i className="ti ti-arrow-right" />
-                </Link>
-                <Link href={r("user.talents")} className="btn-fc-outline">
-                  Explore the Network <i className="ti ti-arrow-right" />
-                </Link>
-              </div>
-              <div className="hero-stats">
-                <div>
-                  <div className="hero-stat-val">{totalTalents}+</div>
-                  <div className="hero-stat-lbl">Verified Skilled People</div>
-                </div>
-                <div>
-                  <div className="hero-stat-val">{displayPartners.length}+</div>
-                  <div className="hero-stat-lbl">Trusted Partners</div>
-                </div>
-                <div>
-                  <div className="hero-stat-val">4.8</div>
-                  <div className="hero-stat-lbl">Average Rating</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. FEATURE STRIP */}
-      <div className="fc-feature-strip">
-        <div className="container">
-          <div className="feature-strip-grid">
-            <div className="feature-strip-item">
-              <div className="strip-icon"><i className="ti ti-rocket" /></div>
-              <h5>Get Seen Faster</h5>
-              <p>Verified, boosted profiles jump the queue and get featured on our homepage.</p>
-              <Link href={r("user.talents")} className="strip-link">Find Skilled People <i className="ti ti-arrow-right" /></Link>
-            </div>
-            <div className="feature-strip-item">
-              <div className="strip-icon"><i className="ti ti-briefcase" /></div>
-              <h5>Never Miss the Right Job</h5>
-              <p>Gigs and roles matched to your actual skills, not keyword spam.</p>
-              <Link href={r("user.jobs.index")} className="strip-link">Start Exploring <i className="ti ti-arrow-right" /></Link>
-            </div>
-            <div className="feature-strip-item">
-              <div className="strip-icon"><i className="ti ti-users" /></div>
-              <h5>Build a Network That Works</h5>
-              <p>Meet the people and collaborators who move a career forward.</p>
-              <Link href={r("talent.connections-room")} className="strip-link">Skill Connect <i className="ti ti-arrow-right" /></Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. THE PROBLEM */}
-      <section className="fc-problem" id="problem">
-        <div className="container">
-          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "0 auto 0" }}>
-            <span className="eyebrow">The Problem</span>
-            <h2>Brilliant skills, disconnected from opportunity.</h2>
-          </div>
-          <div className="problem-grid">
-            <div className="problem-card">
-              <span className="problem-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="9" />
-                  <ellipse cx="12" cy="12" rx="9" ry="3.2" />
-                  <path d="M6.5 9.5c1.4 1 3.4 1.6 5.5 1.6s4.1-.6 5.5-1.6" />
-                </svg>
-              </span>
-              <h5>The Unseen Void</h5>
-              <p>Thousands of brilliant technical minds and competition winners disappear from the grid right after graduation.</p>
-            </div>
-            <div className="problem-card">
-              <span className="problem-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 3v4M15 3v4" />
-                  <path d="M7 7h10v4a5 5 0 0 1-10 0V7Z" />
-                  <path d="M12 16v3M9 21h6" />
-                </svg>
-              </span>
-              <h5>The Connection Deficit</h5>
-              <p>Skilled graduates often struggle to find the professional networks and opportunities needed to build careers around their expertise.</p>
-            </div>
-            <div className="problem-card">
-              <span className="problem-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3 2.5 20h19L12 3Z" strokeLinejoin="round" />
-                  <path d="M12 9.5v4.2" />
-                  <circle cx="12" cy="17" r="0.9" fill="currentColor" stroke="none" />
-                </svg>
-              </span>
-              <h5>The Solution Shortage</h5>
-              <p>Society's biggest challenges persist while the exact experts trained to solve them remain disconnected and underemployed.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. THE SOLUTION — One ecosystem, multiple pathways */}
-      <section className="fc-solution" id="solution">
-        <div className="container">
-          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "0 auto" }}>
-            <span className="eyebrow">The Solution</span>
-            <h2>One ecosystem. Multiple pathways.</h2>
-          </div>
-
-          <div className="pathway-row">
-            {PATHWAYS.map((p, i) => (
-              <React.Fragment key={p.label}>
-                <span className="pathway-chip"><i className={`ti ${p.icon}`} /> {p.label}</span>
-                {i < PATHWAYS.length - 1 && <span className="pathway-arrow">→</span>}
-              </React.Fragment>
-            ))}
-          </div>
-
-          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "56px auto 0" }}>
-            <span className="eyebrow">The Future Connect Difference</span>
-          </div>
-          <div className="difference-row">
-            {DIFFERENCE_STEPS.map((step, i) => (
-              <React.Fragment key={step}>
-                <span className="difference-step">{step}</span>
-                {i < DIFFERENCE_STEPS.length - 1 && <span className="pathway-arrow">→</span>}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. SKILLS MARKETPLACE */}
-      <section className="fc-feature-section alt" id="skills">
-        <div className="container">
-          <div className="feature-panel-card">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-6">
-                <span className="fc-badge mb-3"><i className="ti ti-sparkles" /> Skills Marketplace</span>
-                <h2>Turn your skills <span>into your next client.</span></h2>
-                <p>Get verified, showcase your best work, and turn profile views into paying opportunities.</p>
-                <ul className="feature-list">
-                  <li>Get verified and build instant credibility</li>
-                  <li>Feature your work on our homepage</li>
-                </ul>
-                <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
-                  <Link href={r("user.talents")} className="btn-fc-primary">Get Discovered <i className="ti ti-arrow-right" /></Link>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div className="avatar-stack">
-                      {featuredTalents.map((t, i) => (
-                        <img key={t.id ?? i} src={personImage(t, i + 1)} alt="" />
-                      ))}
+            {/* 1. HERO — "Your skills are your capital." */}
+            <section className="fc-hero">
+                <div className="fc-hero-bg">
+                    <div
+                        id="heroBgCarousel"
+                        className="carousel slide"
+                        ref={heroCarouselRef}
+                    >
+                        <div className="carousel-inner">
+                            <div className="carousel-item active">
+                                <div
+                                    className="fc-hero-bg-slide"
+                                    style={{
+                                        backgroundImage: `url('${PHOTO.heroA}')`,
+                                    }}
+                                />
+                            </div>
+                            <div className="carousel-item">
+                                <div
+                                    className="fc-hero-bg-slide"
+                                    style={{
+                                        backgroundImage: `url('${PHOTO.heroB}')`,
+                                    }}
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                      <div style={{ color: "var(--accent)", fontSize: "0.8rem" }}>★★★★★ 4.8/5</div>
-                      <div style={{ fontSize: "0.72rem", color: "var(--text-3)" }}>{totalTalents}+ skilled people already in</div>
+                </div>
+                <div className="fc-hero-overlay" />
+
+                <div className="container fc-hero-content">
+                    <div className="row align-items-center">
+                        <div className="col-lg-7">
+                            <p className="hero-eyebrow">
+                                {totalTalents}+ verified skilled people, already
+                                connected
+                            </p>
+                            <h1>
+                                Hello, <br />
+                                Your skills are{" "}
+                                <span className="hl">your capital.</span>
+                            </h1>
+                            <p>
+                                The digital ecosystem connecting Africa's
+                                skilled people to opportunities, collaborators,
+                                mentors, and organizations.
+                            </p>
+                            <div className="hero-ctas">
+                                <Link
+                                    href={r("user.register_skills")}
+                                    className="btn-fc-primary"
+                                >
+                                    Join Future Connect{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </Link>
+                                <Link
+                                    href={r("user.talents")}
+                                    className="btn-fc-outline"
+                                >
+                                    Explore the Network{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </Link>
+                            </div>
+                            <div className="hero-stats">
+                                <div>
+                                    <div className="hero-stat-val">
+                                        {totalTalents}+
+                                    </div>
+                                    <div className="hero-stat-lbl">
+                                        Verified Skilled People
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="hero-stat-val">
+                                        {displayPartners.length}+
+                                    </div>
+                                    <div className="hero-stat-lbl">
+                                        Trusted Partners
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="hero-stat-val">4.8</div>
+                                    <div className="hero-stat-lbl">
+                                        Average Rating
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <div className="col-lg-6 feature-img-wrap">
-                <img src={PHOTO.skills} alt="Skilled person showcasing a portfolio" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </section>
 
-      {/* 6. LEARNING CENTER */}
-      <section className="fc-feature-section" id="learning">
-        <div className="container">
-          <div className="feature-panel-card">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-6">
-                <span className="fc-badge mb-3"><i className="ti ti-school" /> Learning Center</span>
-                <h2>The skills gap ends <span>here.</span></h2>
-                <p>Short, sharp micro-courses taught by people doing the work right now.</p>
-                <ul className="feature-list">
-                  <li>Finish a course in a week, not a semester</li>
-                  <li>Shareable certificates for your profile</li>
-                </ul>
-                <Link href={r("user.courses")} className="btn-fc-primary">Start Learning Free <i className="ti ti-arrow-right" /></Link>
-              </div>
-              <div className="col-lg-6 feature-img-wrap">
-                <img src={PHOTO.learning} alt="Person learning online" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. OPPORTUNITIES */}
-      <section className="fc-feature-section alt" id="opportunities">
-        <div className="container">
-          <div className="feature-panel-card">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-6">
-                <span className="fc-badge mb-3"><i className="ti ti-briefcase" /> Opportunities</span>
-                <h2>Real roles. <span>Zero noise.</span></h2>
-                <p>Skip the open job boards. Get matched with verified skilled people and real work.</p>
-                <ul className="feature-list">
-                  <li>Post roles in minutes</li>
-                  <li>Set alerts so the right match finds you</li>
-                </ul>
-                <Link href={r("user.jobs.index")} className="btn-fc-primary">Browse Open Roles <i className="ti ti-arrow-right" /></Link>
-              </div>
-              <div className="col-lg-6 feature-img-wrap">
-                <img src={PHOTO.jobs} alt="Person reviewing job opportunities" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. CONNECTION ROOM */}
-      <section className="fc-feature-section" id="connect">
-        <div className="container">
-          <div className="feature-panel-card">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-5">
-                <div className="row g-3">
-                  <div className="col-6">
-                    <img src={PHOTO.connect1} alt="Two skilled people collaborating at a laptop" className="img-fluid" style={{ borderRadius: "var(--r-md)", width: "100%", height: "260px", objectFit: "cover" }} />
-                  </div>
-                  <div className="col-6">
-                    <img src={PHOTO.connect2} alt="Colleagues talking together" className="img-fluid" style={{ borderRadius: "var(--r-md)", width: "100%", height: "260px", objectFit: "cover" }} />
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-7">
-                <span className="fc-badge mb-3"><i className="ti ti-users" /> Connection Room</span>
-                <h2>Your next break <span>starts with one message.</span></h2>
-                <p>A private space for verified skilled people to message, meet, and collaborate.</p>
-                <ul className="feature-list">
-                  <li>A diverse, verified professional network</li>
-                  <li>A simple, distraction-free way to connect</li>
-                </ul>
-                <Link href={r("talent.connections-room")} className="btn-fc-primary">Join the Room <i className="ti ti-arrow-right" /></Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. MARKETPLACE */}
-      <section className="fc-feature-section alt" id="marketplace">
-        <div className="container">
-          <div className="feature-panel-card">
-            <span className="fc-badge mb-3"><i className="ti ti-shopping-bag" /> Marketplace</span>
-            <h2>Turn what you make <span>into what you earn.</span></h2>
-            <p>Sell your digital work with full payment protection, or shop with total confidence.</p>
-            <div className="fc-provide-grid">
-              <div className="fc-provide-box">
-                <div className="provide-icon"><i className="ti ti-shopping-cart" /></div>
-                <h6>Browse Products</h6>
-                <p>Secure payments through Future Connect.</p>
-                <Link href={r("user.products.index")} className="btn-fc-primary" style={{ fontSize: "0.8rem", padding: "9px 18px" }}>Explore <i className="ti ti-arrow-right" /></Link>
-              </div>
-              <div className="fc-provide-box">
-                <div className="provide-icon"><i className="ti ti-package" /></div>
-                <h6>Sell a Product</h6>
-                <p>Reach buyers already on the platform.</p>
-                <a data-bs-toggle="modal" data-bs-target="#applySellerModal" className="btn-fc-outline" style={{ fontSize: "0.8rem", padding: "9px 18px", cursor: "pointer" }}>Learn More <i className="ti ti-arrow-right" /></a>
-              </div>
-              <div className="fc-provide-box">
-                <div className="provide-icon"><i className="ti ti-user-check" /></div>
-                <h6>Become a Seller</h6>
-                <p>Get paid instantly, minus a small platform fee.</p>
-                <a className="btn-fc-primary" data-bs-toggle="modal" data-bs-target="#applySellerModal" style={{ fontSize: "0.8rem", padding: "9px 18px", cursor: "pointer" }}>Apply Now <i className="ti ti-arrow-right" /></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 10. VOLUNTEERING — request-for-volunteering portal, mirrors the "Request a Demo" pattern */}
-      <section className="fc-feature-section fc-volunteer" id="volunteer">
-        <div className="container">
-          <div className="feature-panel-card">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-6">
-                <span className="fc-badge mb-3"><i className="ti ti-heart-handshake" /> Volunteering</span>
-                <p className="tagline">Give your skills, not just your time.</p>
-                <h2>Skills built to help <span>should get the chance to.</span></h2>
-                <p>Organizations post real needs, and skilled people step up to volunteer their expertise — from a one-off consultation to an ongoing project.</p>
-                <ul className="feature-list">
-                  <li>Organizations submit a request for volunteering in minutes</li>
-                  <li>Skilled people browse and apply to causes that match their expertise</li>
-                </ul>
-                <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-                  <a
-                    data-bs-toggle="modal"
-                    data-bs-target="#requestVolunteeringModal"
-                    className="btn-fc-primary"
-                    style={{ cursor: "pointer" }}
-                  >
-                    Request for Volunteering <i className="ti ti-arrow-right" />
-                  </a>
-                  <Link href={r("user.volunteer.index")} className="btn-fc-outline">
-                    Become a Volunteer
-                  </Link>
-                </div>
-              </div>
-              <div className="col-lg-6 feature-img-wrap">
-                <img src={PHOTO.volunteer} alt="Volunteers working together" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 11. HOW IT WORKS */}
-      <section className="fc-how">
-        <div className="container">
-          <div className="fc-section-head text-center" style={{ maxWidth: 560, margin: "0 auto 40px" }}>
-            <span className="eyebrow">How It Works</span>
-            <h2>From sign-up to standout — in 3 steps</h2>
-          </div>
-          <div className="steps-grid">
-            <div className="step-card">
-              <span className="step-num">01</span>
-              <h5>Create Your Profile</h5>
-              <p>Sign up free and showcase your skills in minutes.</p>
-              <Link href={r("user.register_skills")} className="strip-link">Get Started <i className="ti ti-arrow-right" /></Link>
-            </div>
-            <div className="step-card">
-              <span className="step-num">02</span>
-              <h5>Get Discovered & Rated</h5>
-              <p>Organizations browse, rate, and build your reputation.</p>
-              <Link href={r("user.talents")} className="strip-link">Explore Skills <i className="ti ti-arrow-right" /></Link>
-            </div>
-            <div className="step-card">
-              <span className="step-num">03</span>
-              <h5>Grow With the Community</h5>
-              <p>Connect with peers and keep learning as you go.</p>
-              <Link href={r("talent.connections-room")} className="strip-link">Connection Room <i className="ti ti-arrow-right" /></Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 12. WHO IT SERVES */}
-      <section className="fc-who" id="who">
-        <div className="container">
-          <div className="fc-section-head text-center" style={{ maxWidth: 680, margin: "0 auto" }}>
-            <span className="eyebrow">Who It Serves</span>
-            <h2>Built for everyone with skills.</h2>
-          </div>
-          <div className="who-grid">
-            {WHO_IT_SERVES.map((w) => (
-              <div className="who-card" key={w.title}>
-                <div className="provide-icon"><i className={`ti ${w.icon}`} /></div>
-                <h6>{w.title}</h6>
-                <p>{w.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 13. PHILOSOPHY */}
-      <section className="fc-philosophy">
-        <div className="container">
-          <span className="eyebrow">The Core Philosophy</span>
-          <h2>Your knowledge is your capital.</h2>
-          <p>In a world rich in knowledge but limited in opportunity, Future Connect helps turn skills into connections, opportunities, collaboration, and income.</p>
-        </div>
-      </section>
-
-      {/* 14. PARTNERS — full-color logos in a fixed list/grid, no scrolling */}
-      <section className="fc-partners">
-        <div className="container">
-          <div className="fc-section-head text-center" style={{ margin: "0 auto 8px" }}>
-            <span className="eyebrow">Our Partners</span>
-            <h2>Building a global network</h2>
-          </div>
-          <p className="partners-label">Trusted by {displayPartners.length}+ partners worldwide</p>
-          <div className="partners-grid">
-            {displayPartners.map((partner, i) => (
-              <div className="partner-tile" key={partner.id ?? partner.domain ?? i}>
-                <img src={partnerLogo(partner)} alt={partner.name ?? "Partner"} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 15. TESTIMONIALS */}
-      <section className="fc-testimonials">
-        <div className="container">
-          <div className="row align-items-end mb-5">
-            <div className="col-md-7">
-              <div className="fc-section-head" style={{ marginBottom: 0 }}>
-                <span className="eyebrow">Testimonials</span>
-                <h2>Real stories from real skilled people</h2>
-                <p>People who've grown their careers through Future Connect.</p>
-              </div>
-            </div>
-            <div className="col-md-5 text-md-end">
-              <div className="avatar-stack" style={{ justifyContent: "flex-end", marginBottom: 8 }}>
-                {testimonials.map((t, i) => (
-                  <img key={t.id ?? i} src={personImage(t.talent, i + 1)} alt="" />
-                ))}
-              </div>
-              <p style={{ fontSize: "0.75rem", color: "var(--text-3)" }}>Building a global talent community</p>
-            </div>
-          </div>
-
-          <div className="testimonial-grid d-none d-md-grid">
-            {testimonials.map((test, i) => (
-              <div className="testimonial-card" key={test.id ?? i}>
-                <div className="testimonial-head">
-                  <img src={personImage(test.talent, i + 1)} alt="" />
-                  <div>
-                    <div className="testimonial-name">{test.talent?.name ?? "Skilled Person"}</div>
-                    <div className="testimonial-role">{test.title ?? "Creative Professional"}</div>
-                  </div>
-                  <div className="testimonial-stars"><Stars rating={test.rating} /></div>
-                </div>
-                <div className="testimonial-body">
-                  <p>{test.content ?? "Future Connect helped me turn my skills into steady, real opportunities."}</p>
-                </div>
-                {test.talent?.username && (
-                  <div className="testimonial-support">
-                    <i className="ti ti-heart" /> Support @{test.talent.username}
-                  </div>
-                )}
-                <div className="testimonial-loc">
-                  <i className="ti ti-map-pin" style={{ color: "var(--accent)" }} />
-                  {test.talent?.address ?? "Kigali, Rwanda"}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div id="testimonialCarousel" className="carousel slide d-md-none" ref={testimonialCarouselRef}>
-            <div className="carousel-inner">
-              {testimonials.map((test, i) => (
-                <div className={`carousel-item${i === 0 ? " active" : ""}`} key={test.id ?? i}>
-                  <div className="testimonial-card" style={{ margin: "0 auto", maxWidth: 380 }}>
-                    <div className="testimonial-head">
-                      <img src={personImage(test.talent, i + 1)} alt="" />
-                      <div>
-                        <div className="testimonial-name">{test.talent?.name ?? "Skilled Person"}</div>
-                        <div className="testimonial-role">{test.title ?? "Creative Professional"}</div>
-                      </div>
-                      <div className="testimonial-stars"><Stars rating={test.rating} /></div>
+            {/* 2. FEATURE STRIP */}
+            <div className="fc-feature-strip">
+                <div className="container">
+                    <div className="feature-strip-grid">
+                        <div className="feature-strip-item">
+                            <div className="strip-icon">
+                                <i className="ti ti-rocket" />
+                            </div>
+                            <h5>Get Seen Faster</h5>
+                            <p>
+                                Verified, boosted profiles jump the queue and
+                                get featured on our homepage.
+                            </p>
+                            <Link
+                                href={r("user.talents")}
+                                className="strip-link"
+                            >
+                                Find Skilled People{" "}
+                                <i className="ti ti-arrow-right" />
+                            </Link>
+                        </div>
+                        <div className="feature-strip-item">
+                            <div className="strip-icon">
+                                <i className="ti ti-briefcase" />
+                            </div>
+                            <h5>Never Miss the Right Job</h5>
+                            <p>
+                                Gigs and roles matched to your actual skills,
+                                not keyword spam.
+                            </p>
+                            <Link
+                                href={r("user.jobs.index")}
+                                className="strip-link"
+                            >
+                                Start Exploring{" "}
+                                <i className="ti ti-arrow-right" />
+                            </Link>
+                        </div>
+                        <div className="feature-strip-item">
+                            <div className="strip-icon">
+                                <i className="ti ti-users" />
+                            </div>
+                            <h5>Build a Network That Works</h5>
+                            <p>
+                                Meet the people and collaborators who move a
+                                career forward.
+                            </p>
+                            <Link
+                                href={r("talent.connections-room")}
+                                className="strip-link"
+                            >
+                                Skill Connect{" "}
+                                <i className="ti ti-arrow-right" />
+                            </Link>
+                        </div>
                     </div>
-                    <div className="testimonial-body">
-                      <p>{test.content ?? "Future Connect helped me turn my skills into steady, real opportunities."}</p>
-                    </div>
-                    {test.talent?.username && (
-                      <div className="testimonial-support">
-                        <i className="ti ti-heart" /> Support @{test.talent.username}
-                      </div>
-                    )}
-                    <div className="testimonial-loc">
-                      <i className="ti ti-map-pin" style={{ color: "var(--accent)" }} />
-                      {test.talent?.address ?? "Kigali, Rwanda"}
-                    </div>
-                  </div>
                 </div>
-              ))}
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* 16. CTA */}
-      <div className="container">
-        <div className="fc-cta">
-          <div className="fc-cta-glow" />
-          <div className="row align-items-center">
-            <div className="col-md-7" style={{ position: "relative" }}>
-              <span className="eyebrow" style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", fontWeight: 600, display: "block", marginBottom: 10 }}>
-                Join Future Connect
-              </span>
-              <h2>Your skills deserve to be seen.</h2>
-              <p>Join a growing community of verified skilled people building real careers.</p>
-              <div className="hero-ctas" style={{ marginBottom: 6 }}>
-                <Link href={r("user.register_skills")} className="btn-fc-primary">Get Started Today <i className="ti ti-arrow-right" /></Link>
-                <Link href={r("user.talents")} className="btn-fc-outline">Browse Skills</Link>
-              </div>
-              <p className="fc-cta-note">No credit card. No commitment.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+            {/* 3. THE PROBLEM */}
+            <section className="fc-problem" id="problem">
+                <div className="container">
+                    <div
+                        className="fc-section-head text-center"
+                        style={{ maxWidth: 680, margin: "0 auto 0" }}
+                    >
+                        <span className="eyebrow">The Problem</span>
+                        <h2>
+                            Brilliant skills, disconnected from opportunity.
+                        </h2>
+                    </div>
+                    <div className="problem-grid">
+                        <div className="problem-card">
+                            <span className="problem-icon" aria-hidden="true">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="1em"
+                                    height="1em"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <circle cx="12" cy="12" r="9" />
+                                    <ellipse cx="12" cy="12" rx="9" ry="3.2" />
+                                    <path d="M6.5 9.5c1.4 1 3.4 1.6 5.5 1.6s4.1-.6 5.5-1.6" />
+                                </svg>
+                            </span>
+                            <h5>The Unseen Void</h5>
+                            <p>
+                                Thousands of brilliant technical minds and
+                                competition winners disappear from the grid
+                                right after graduation.
+                            </p>
+                        </div>
+                        <div className="problem-card">
+                            <span className="problem-icon" aria-hidden="true">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="1em"
+                                    height="1em"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M9 3v4M15 3v4" />
+                                    <path d="M7 7h10v4a5 5 0 0 1-10 0V7Z" />
+                                    <path d="M12 16v3M9 21h6" />
+                                </svg>
+                            </span>
+                            <h5>The Connection Deficit</h5>
+                            <p>
+                                Skilled graduates often struggle to find the
+                                professional networks and opportunities needed
+                                to build careers around their expertise.
+                            </p>
+                        </div>
+                        <div className="problem-card">
+                            <span className="problem-icon" aria-hidden="true">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="1em"
+                                    height="1em"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path
+                                        d="M12 3 2.5 20h19L12 3Z"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path d="M12 9.5v4.2" />
+                                    <circle
+                                        cx="12"
+                                        cy="17"
+                                        r="0.9"
+                                        fill="currentColor"
+                                        stroke="none"
+                                    />
+                                </svg>
+                            </span>
+                            <h5>The Solution Shortage</h5>
+                            <p>
+                                Society's biggest challenges persist while the
+                                exact experts trained to solve them remain
+                                disconnected and underemployed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-      {/* Request for Volunteering modal — same interaction pattern as "Request a Demo" */}
-      <div className="modal fade" id="requestVolunteeringModal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content" style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "var(--r-lg)" }}>
-            <div className="modal-header" style={{ borderBottom: "1px solid var(--border)" }}>
-              <h5 className="modal-title" style={{ color: "var(--text-1)", fontFamily: "var(--font-head)", fontWeight: 700 }}>
-                Request for Volunteering
-              </h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            {/* 4. THE SOLUTION — One ecosystem, multiple pathways */}
+            <section className="fc-solution" id="solution">
+                <div className="container">
+                    <div
+                        className="fc-section-head text-center"
+                        style={{ maxWidth: 680, margin: "0 auto" }}
+                    >
+                        <span className="eyebrow">The Solution</span>
+                        <h2>One ecosystem. Multiple pathways.</h2>
+                    </div>
+
+                    <div className="pathway-row">
+                        {PATHWAYS.map((p, i) => (
+                            <React.Fragment key={p.label}>
+                                <span className="pathway-chip">
+                                    <i className={`ti ${p.icon}`} /> {p.label}
+                                </span>
+                                {i < PATHWAYS.length - 1 && (
+                                    <span className="pathway-arrow">→</span>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </div>
+
+                    <div
+                        className="fc-section-head text-center"
+                        style={{ maxWidth: 680, margin: "56px auto 0" }}
+                    >
+                        <span className="eyebrow">
+                            The Future Connect Difference
+                        </span>
+                    </div>
+                    <div className="difference-row">
+                        {DIFFERENCE_STEPS.map((step, i) => (
+                            <React.Fragment key={step}>
+                                <span className="difference-step">{step}</span>
+                                {i < DIFFERENCE_STEPS.length - 1 && (
+                                    <span className="pathway-arrow">→</span>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. SKILLS MARKETPLACE */}
+            <section className="fc-feature-section alt" id="skills">
+                <div className="container">
+                    <div className="feature-panel-card">
+                        <div className="row align-items-center g-5">
+                            <div className="col-lg-6">
+                                <span className="fc-badge mb-3">
+                                    <i className="ti ti-sparkles" /> Skills
+                                    Marketplace
+                                </span>
+                                <h2>
+                                    Turn your skills{" "}
+                                    <span>into your next client.</span>
+                                </h2>
+                                <p>
+                                    Get verified, showcase your best work, and
+                                    turn profile views into paying
+                                    opportunities.
+                                </p>
+                                <ul className="feature-list">
+                                    <li>
+                                        Get verified and build instant
+                                        credibility
+                                    </li>
+                                    <li>Feature your work on our homepage</li>
+                                </ul>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 20,
+                                        flexWrap: "wrap",
+                                    }}
+                                >
+                                    <Link
+                                        href={r("user.talents")}
+                                        className="btn-fc-primary"
+                                    >
+                                        Get Discovered{" "}
+                                        <i className="ti ti-arrow-right" />
+                                    </Link>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 12,
+                                        }}
+                                    >
+                                        <div className="avatar-stack">
+                                            {featuredTalents.map((t, i) => (
+                                                <img
+                                                    key={t.id ?? i}
+                                                    src={personImage(t, i + 1)}
+                                                    alt=""
+                                                />
+                                            ))}
+                                        </div>
+                                        <div>
+                                            <div
+                                                style={{
+                                                    color: "var(--accent)",
+                                                    fontSize: "0.8rem",
+                                                }}
+                                            >
+                                                ★★★★★ 4.8/5
+                                            </div>
+                                            <div
+                                                style={{
+                                                    fontSize: "0.72rem",
+                                                    color: "var(--text-3)",
+                                                }}
+                                            >
+                                                {totalTalents}+ skilled people
+                                                already in
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-6 feature-img-wrap">
+                                <img
+                                    src={PHOTO.skills}
+                                    alt="Skilled person showcasing a portfolio"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 6. LEARNING CENTER */}
+            <section className="fc-feature-section" id="learning">
+                <div className="container">
+                    <div className="feature-panel-card">
+                        <div className="row align-items-center g-5">
+                            <div className="col-lg-6">
+                                <span className="fc-badge mb-3">
+                                    <i className="ti ti-school" /> Learning
+                                    Center
+                                </span>
+                                <h2>
+                                    The skills gap ends <span>here.</span>
+                                </h2>
+                                <p>
+                                    Short, sharp micro-courses taught by people
+                                    doing the work right now.
+                                </p>
+                                <ul className="feature-list">
+                                    <li>
+                                        Finish a course in a week, not a
+                                        semester
+                                    </li>
+                                    <li>
+                                        Shareable certificates for your profile
+                                    </li>
+                                </ul>
+                                <Link
+                                    href={r("user.courses")}
+                                    className="btn-fc-primary"
+                                >
+                                    Start Learning Free{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </Link>
+                            </div>
+                            <div className="col-lg-6 feature-img-wrap">
+                                <img
+                                    src={PHOTO.learning}
+                                    alt="Person learning online"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 7. OPPORTUNITIES */}
+            <section className="fc-feature-section alt" id="opportunities">
+                <div className="container">
+                    <div className="feature-panel-card">
+                        <div className="row align-items-center g-5">
+                            <div className="col-lg-6">
+                                <span className="fc-badge mb-3">
+                                    <i className="ti ti-briefcase" />{" "}
+                                    Opportunities
+                                </span>
+                                <h2>
+                                    Real roles. <span>Zero noise.</span>
+                                </h2>
+                                <p>
+                                    Skip the open job boards. Get matched with
+                                    verified skilled people and real work.
+                                </p>
+                                <ul className="feature-list">
+                                    <li>Post roles in minutes</li>
+                                    <li>
+                                        Set alerts so the right match finds you
+                                    </li>
+                                </ul>
+                                <Link
+                                    href={r("user.jobs.index")}
+                                    className="btn-fc-primary"
+                                >
+                                    Browse Open Roles{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </Link>
+                            </div>
+                            <div className="col-lg-6 feature-img-wrap">
+                                <img
+                                    src={PHOTO.jobs}
+                                    alt="Person reviewing job opportunities"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 8. CONNECTION ROOM */}
+            <section className="fc-feature-section" id="connect">
+                <div className="container">
+                    <div className="feature-panel-card">
+                        <div className="row align-items-center g-5">
+                            <div className="col-lg-5">
+                                <div className="row g-3">
+                                    <div className="col-6">
+                                        <img
+                                            src={PHOTO.connect1}
+                                            alt="Two skilled people collaborating at a laptop"
+                                            className="img-fluid"
+                                            style={{
+                                                borderRadius: "var(--r-md)",
+                                                width: "100%",
+                                                height: "260px",
+                                                objectFit: "cover",
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <img
+                                            src={PHOTO.connect2}
+                                            alt="Colleagues talking together"
+                                            className="img-fluid"
+                                            style={{
+                                                borderRadius: "var(--r-md)",
+                                                width: "100%",
+                                                height: "260px",
+                                                objectFit: "cover",
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-7">
+                                <span className="fc-badge mb-3">
+                                    <i className="ti ti-users" /> Connection
+                                    Room
+                                </span>
+                                <h2>
+                                    Your next break{" "}
+                                    <span>starts with one message.</span>
+                                </h2>
+                                <p>
+                                    A private space for verified skilled people
+                                    to message, meet, and collaborate.
+                                </p>
+                                <ul className="feature-list">
+                                    <li>
+                                        A diverse, verified professional network
+                                    </li>
+                                    <li>
+                                        A simple, distraction-free way to
+                                        connect
+                                    </li>
+                                </ul>
+                                <Link
+                                    href={r("talent.connections-room")}
+                                    className="btn-fc-primary"
+                                >
+                                    Join the Room{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 9. MARKETPLACE */}
+            <section className="fc-feature-section alt" id="marketplace">
+                <div className="container">
+                    <div className="feature-panel-card">
+                        <span className="fc-badge mb-3">
+                            <i className="ti ti-shopping-bag" /> Marketplace
+                        </span>
+                        <h2>
+                            Turn what you make <span>into what you earn.</span>
+                        </h2>
+                        <p>
+                            Sell your digital work with full payment protection,
+                            or shop with total confidence.
+                        </p>
+                        <div className="fc-provide-grid">
+                            <div className="fc-provide-box">
+                                <div className="provide-icon">
+                                    <i className="ti ti-shopping-cart" />
+                                </div>
+                                <h6>Browse Products</h6>
+                                <p>Secure payments through Future Connect.</p>
+                                <Link
+                                    href={r("user.products.index")}
+                                    className="btn-fc-primary"
+                                    style={{
+                                        fontSize: "0.8rem",
+                                        padding: "9px 18px",
+                                    }}
+                                >
+                                    Explore <i className="ti ti-arrow-right" />
+                                </Link>
+                            </div>
+                            <div className="fc-provide-box">
+                                <div className="provide-icon">
+                                    <i className="ti ti-package" />
+                                </div>
+                                <h6>Sell a Product</h6>
+                                <p>Reach buyers already on the platform.</p>
+                                <a
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#applySellerModal"
+                                    className="btn-fc-outline"
+                                    style={{
+                                        fontSize: "0.8rem",
+                                        padding: "9px 18px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Learn More{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </a>
+                            </div>
+                            <div className="fc-provide-box">
+                                <div className="provide-icon">
+                                    <i className="ti ti-user-check" />
+                                </div>
+                                <h6>Become a Seller</h6>
+                                <p>
+                                    Get paid instantly, minus a small platform
+                                    fee.
+                                </p>
+                                <a
+                                    className="btn-fc-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#applySellerModal"
+                                    style={{
+                                        fontSize: "0.8rem",
+                                        padding: "9px 18px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Apply Now{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 10. VOLUNTEERING — request-for-volunteering portal, mirrors the "Request a Demo" pattern */}
+            <section className="fc-feature-section fc-volunteer" id="volunteer">
+                <div className="container">
+                    <div className="feature-panel-card">
+                        <div className="row align-items-center g-5">
+                            <div className="col-lg-6">
+                                <span className="fc-badge mb-3">
+                                    <i className="ti ti-heart-handshake" />{" "}
+                                    Volunteering
+                                </span>
+                                <p className="tagline">
+                                    Give your skills, not just your time.
+                                </p>
+                                <h2>
+                                    Skills built to help{" "}
+                                    <span>should get the chance to.</span>
+                                </h2>
+                                <p>
+                                    Organizations post real needs, and skilled
+                                    people step up to volunteer their expertise
+                                    — from a one-off consultation to an ongoing
+                                    project.
+                                </p>
+                                <ul className="feature-list">
+                                    <li>
+                                        Organizations submit a request for
+                                        volunteering in minutes
+                                    </li>
+                                    <li>
+                                        Skilled people browse and apply to
+                                        causes that match their expertise
+                                    </li>
+                                </ul>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        gap: 14,
+                                        flexWrap: "wrap",
+                                    }}
+                                >
+                                    <a
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#requestVolunteeringModal"
+                                        className="btn-fc-primary"
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        Request for Volunteering{" "}
+                                        <i className="ti ti-arrow-right" />
+                                    </a>
+                                    <Link
+                                        href={r("user.volunteer.index")}
+                                        className="btn-fc-outline"
+                                    >
+                                        Become a Volunteer
+                                    </Link>
+                                </div>
+                            </div>
+                            <div className="col-lg-6 feature-img-wrap">
+                                <img
+                                    src={PHOTO.volunteer}
+                                    alt="Volunteers working together"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 11. HOW IT WORKS */}
+            <section className="fc-how">
+                <div className="container">
+                    <div
+                        className="fc-section-head text-center"
+                        style={{ maxWidth: 560, margin: "0 auto 40px" }}
+                    >
+                        <span className="eyebrow">How It Works</span>
+                        <h2>From sign-up to standout — in 3 steps</h2>
+                    </div>
+                    <div className="steps-grid">
+                        <div className="step-card">
+                            <span className="step-num">01</span>
+                            <h5>Create Your Profile</h5>
+                            <p>
+                                Sign up free and showcase your skills in
+                                minutes.
+                            </p>
+                            <Link
+                                href={r("user.register_skills")}
+                                className="strip-link"
+                            >
+                                Get Started <i className="ti ti-arrow-right" />
+                            </Link>
+                        </div>
+                        <div className="step-card">
+                            <span className="step-num">02</span>
+                            <h5>Get Discovered & Rated</h5>
+                            <p>
+                                Organizations browse, rate, and build your
+                                reputation.
+                            </p>
+                            <Link
+                                href={r("user.talents")}
+                                className="strip-link"
+                            >
+                                Explore Skills{" "}
+                                <i className="ti ti-arrow-right" />
+                            </Link>
+                        </div>
+                        <div className="step-card">
+                            <span className="step-num">03</span>
+                            <h5>Grow With the Community</h5>
+                            <p>
+                                Connect with peers and keep learning as you go.
+                            </p>
+                            <Link
+                                href={r("talent.connections-room")}
+                                className="strip-link"
+                            >
+                                Connection Room{" "}
+                                <i className="ti ti-arrow-right" />
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 12. WHO IT SERVES */}
+            <section className="fc-who" id="who">
+                <div className="container">
+                    <div
+                        className="fc-section-head text-center"
+                        style={{ maxWidth: 680, margin: "0 auto" }}
+                    >
+                        <span className="eyebrow">Who It Serves</span>
+                        <h2>Built for everyone with skills.</h2>
+                    </div>
+                    <div className="who-grid">
+                        {WHO_IT_SERVES.map((w) => (
+                            <div className="who-card" key={w.title}>
+                                <div className="provide-icon">
+                                    <i className={`ti ${w.icon}`} />
+                                </div>
+                                <h6>{w.title}</h6>
+                                <p>{w.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 13. PHILOSOPHY */}
+            <section className="fc-philosophy">
+                <div className="container">
+                    <span className="eyebrow">The Core Philosophy</span>
+                    <h2>Your knowledge is your capital.</h2>
+                    <p>
+                        In a world rich in knowledge but limited in opportunity,
+                        Future Connect helps turn skills into connections,
+                        opportunities, collaboration, and income.
+                    </p>
+                </div>
+            </section>
+
+            {/* 14. PARTNERS — full-color logos in a fixed list/grid, no scrolling */}
+            <section className="fc-partners">
+                <div className="container">
+                    <div
+                        className="fc-section-head text-center"
+                        style={{ margin: "0 auto 8px" }}
+                    >
+                        <span className="eyebrow">Our Partners</span>
+                        <h2>Building a global network</h2>
+                    </div>
+                    <p className="partners-label">
+                        Trusted by {displayPartners.length}+ partners worldwide
+                    </p>
+                    <div className="partners-grid">
+                        {displayPartners.map((partner, i) => (
+                            <div
+                                className="partner-tile"
+                                key={partner.id ?? partner.domain ?? i}
+                            >
+                                <img
+                                    src={partnerLogo(partner)}
+                                    alt={partner.name ?? "Partner"}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 15. TESTIMONIALS */}
+            <section className="fc-testimonials">
+                <div className="container">
+                    <div className="row align-items-end mb-5">
+                        <div className="col-md-7">
+                            <div
+                                className="fc-section-head"
+                                style={{ marginBottom: 0 }}
+                            >
+                                <span className="eyebrow">Testimonials</span>
+                                <h2>Real stories from real skilled people</h2>
+                                <p>
+                                    People who've grown their careers through
+                                    Future Connect.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="col-md-5 text-md-end">
+                            <div
+                                className="avatar-stack"
+                                style={{
+                                    justifyContent: "flex-end",
+                                    marginBottom: 8,
+                                }}
+                            >
+                                {testimonials.map((t, i) => (
+                                    <img
+                                        key={t.id ?? i}
+                                        src={personImage(t.talent, i + 1)}
+                                        alt=""
+                                    />
+                                ))}
+                            </div>
+                            <p
+                                style={{
+                                    fontSize: "0.75rem",
+                                    color: "var(--text-3)",
+                                }}
+                            >
+                                Building a global talent community
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="testimonial-grid d-none d-md-grid">
+                        {testimonials.map((test, i) => (
+                            <div
+                                className="testimonial-card"
+                                key={test.id ?? i}
+                            >
+                                <div className="testimonial-head">
+                                    <img
+                                        src={personImage(test.talent, i + 1)}
+                                        alt=""
+                                    />
+                                    <div>
+                                        <div className="testimonial-name">
+                                            {test.talent?.name ??
+                                                "Skilled Person"}
+                                        </div>
+                                        <div className="testimonial-role">
+                                            {test.title ??
+                                                "Creative Professional"}
+                                        </div>
+                                    </div>
+                                    <div className="testimonial-stars">
+                                        <Stars rating={test.rating} />
+                                    </div>
+                                </div>
+                                <div className="testimonial-body">
+                                    <p>
+                                        {test.content ??
+                                            "Future Connect helped me turn my skills into steady, real opportunities."}
+                                    </p>
+                                </div>
+                                {test.talent?.username && (
+                                    <div className="testimonial-support">
+                                        <i className="ti ti-heart" /> Support @
+                                        {test.talent.username}
+                                    </div>
+                                )}
+                                <div className="testimonial-loc">
+                                    <i
+                                        className="ti ti-map-pin"
+                                        style={{ color: "var(--accent)" }}
+                                    />
+                                    {test.talent?.address ?? "Kigali, Rwanda"}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div
+                        id="testimonialCarousel"
+                        className="carousel slide d-md-none"
+                        ref={testimonialCarouselRef}
+                    >
+                        <div className="carousel-inner">
+                            {testimonials.map((test, i) => (
+                                <div
+                                    className={`carousel-item${i === 0 ? " active" : ""}`}
+                                    key={test.id ?? i}
+                                >
+                                    <div
+                                        className="testimonial-card"
+                                        style={{
+                                            margin: "0 auto",
+                                            maxWidth: 380,
+                                        }}
+                                    >
+                                        <div className="testimonial-head">
+                                            <img
+                                                src={personImage(
+                                                    test.talent,
+                                                    i + 1,
+                                                )}
+                                                alt=""
+                                            />
+                                            <div>
+                                                <div className="testimonial-name">
+                                                    {test.talent?.name ??
+                                                        "Skilled Person"}
+                                                </div>
+                                                <div className="testimonial-role">
+                                                    {test.title ??
+                                                        "Creative Professional"}
+                                                </div>
+                                            </div>
+                                            <div className="testimonial-stars">
+                                                <Stars rating={test.rating} />
+                                            </div>
+                                        </div>
+                                        <div className="testimonial-body">
+                                            <p>
+                                                {test.content ??
+                                                    "Future Connect helped me turn my skills into steady, real opportunities."}
+                                            </p>
+                                        </div>
+                                        {test.talent?.username && (
+                                            <div className="testimonial-support">
+                                                <i className="ti ti-heart" />{" "}
+                                                Support @{test.talent.username}
+                                            </div>
+                                        )}
+                                        <div className="testimonial-loc">
+                                            <i
+                                                className="ti ti-map-pin"
+                                                style={{
+                                                    color: "var(--accent)",
+                                                }}
+                                            />
+                                            {test.talent?.address ??
+                                                "Kigali, Rwanda"}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 16. CTA */}
+            <div className="container">
+                <div className="fc-cta">
+                    <div className="fc-cta-glow" />
+                    <div className="row align-items-center">
+                        <div
+                            className="col-md-7"
+                            style={{ position: "relative" }}
+                        >
+                            <span
+                                className="eyebrow"
+                                style={{
+                                    fontSize: "0.72rem",
+                                    textTransform: "uppercase",
+                                    letterSpacing: "0.1em",
+                                    color: "var(--accent)",
+                                    fontWeight: 600,
+                                    display: "block",
+                                    marginBottom: 10,
+                                }}
+                            >
+                                Join Future Connect
+                            </span>
+                            <h2>Your skills deserve to be seen.</h2>
+                            <p>
+                                Join a growing community of verified skilled
+                                people building real careers.
+                            </p>
+                            <div
+                                className="hero-ctas"
+                                style={{ marginBottom: 6 }}
+                            >
+                                <Link
+                                    href={r("user.register_skills")}
+                                    className="btn-fc-primary"
+                                >
+                                    Get Started Today{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </Link>
+                                <Link
+                                    href={r("user.talents")}
+                                    className="btn-fc-outline"
+                                >
+                                    Browse Skills
+                                </Link>
+                            </div>
+                            <p className="fc-cta-note">
+                                No credit card. No commitment.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <form method="POST" action={r("user.volunteer.request.store")}>
-              <div className="modal-body" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                <p style={{ color: "var(--text-2)", fontSize: "0.85rem", marginBottom: 0 }}>
-                  Tell us what your organization or cause needs, and we'll match you with skilled people ready to volunteer.
-                </p>
-                <input type="text" name="organization" placeholder="Organization / cause name" className="form-control" required />
-                <input type="email" name="email" placeholder="Contact email" className="form-control" required />
-                <input type="text" name="skills_needed" placeholder="Skills needed (e.g. design, web development)" className="form-control" required />
-                <textarea name="details" rows="4" placeholder="Describe the volunteering opportunity" className="form-control" required />
-              </div>
-              <div className="modal-footer" style={{ borderTop: "1px solid var(--border)" }}>
-                <button type="button" className="btn-fc-outline" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" className="btn-fc-primary">Submit Request <i className="ti ti-arrow-right" /></button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+
+            {/* Request for Volunteering modal — same interaction pattern as "Request a Demo" */}
+            <div
+                className="modal fade"
+                id="requestVolunteeringModal"
+                tabIndex="-1"
+                aria-hidden="true"
+            >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div
+                        className="modal-content"
+                        style={{
+                            background: "var(--bg-card)",
+                            border: "1px solid var(--border)",
+                            borderRadius: "var(--r-lg)",
+                        }}
+                    >
+                        <div
+                            className="modal-header"
+                            style={{ borderBottom: "1px solid var(--border)" }}
+                        >
+                            <h5
+                                className="modal-title"
+                                style={{
+                                    color: "var(--text-1)",
+                                    fontFamily: "var(--font-head)",
+                                    fontWeight: 700,
+                                }}
+                            >
+                                Request for Volunteering
+                            </h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            />
+                        </div>
+                        <form
+                            method="POST"
+                            action={r("user.volunteer.request.store")}
+                        >
+                            <div
+                                className="modal-body"
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 14,
+                                }}
+                            >
+                                <p
+                                    style={{
+                                        color: "var(--text-2)",
+                                        fontSize: "0.85rem",
+                                        marginBottom: 0,
+                                    }}
+                                >
+                                    Tell us what your organization or cause
+                                    needs, and we'll match you with skilled
+                                    people ready to volunteer.
+                                </p>
+                                <input
+                                    type="text"
+                                    name="organization"
+                                    placeholder="Organization / cause name"
+                                    className="form-control"
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Contact email"
+                                    className="form-control"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="skills_needed"
+                                    placeholder="Skills needed (e.g. design, web development)"
+                                    className="form-control"
+                                    required
+                                />
+                                <textarea
+                                    name="details"
+                                    rows="4"
+                                    placeholder="Describe the volunteering opportunity"
+                                    className="form-control"
+                                    required
+                                />
+                            </div>
+                            <div
+                                className="modal-footer"
+                                style={{ borderTop: "1px solid var(--border)" }}
+                            >
+                                <button
+                                    type="button"
+                                    className="btn-fc-outline"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn-fc-primary"
+                                >
+                                    Submit Request{" "}
+                                    <i className="ti ti-arrow-right" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }
 
 Home.layout = (page) => <GuestLayout children={page} />;

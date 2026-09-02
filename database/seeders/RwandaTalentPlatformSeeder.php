@@ -8,17 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
-/**
- * Realistic Rwandan-market seed data for the FutureConnect talent platform.
- * Seeds 5 rows per domain table, in dependency-safe order, using explicit
- * IDs so foreign keys line up. Laravel framework/internal tables
- * (cache, jobs, sessions, password_reset_tokens, personal_access_tokens,
- * migrations, failed_jobs, job_batches) are intentionally left alone.
- *
- * Usage: place in database/seeders/ then run
- *   php artisan db:seed --class=RwandaTalentPlatformSeeder
- * Recommended on a fresh migration: php artisan migrate:fresh then seed.
- */
+
 class RwandaTalentPlatformSeeder extends Seeder
 {
     public function run(): void

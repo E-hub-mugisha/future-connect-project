@@ -220,11 +220,11 @@ const icons = {
             <rect x="3" y="14" width="7" height="7" rx="1" />
         </svg>
     ),
-    skill: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
-    ),
+    // skill: (
+    //     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+    //         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    //     </svg>
+    // ),
     book: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -339,12 +339,12 @@ function AdminNav({ isActive }) {
 
             <NavSection>Users & Access</NavSection>
             <NavItem href="/admin/users" active={isActive("/admin/users")} icon={icons.users}>Users</NavItem>
-            <NavItem href="/admin/talents" active={isActive("/admin/talents")} icon={icons.star}>Talents</NavItem>
+            <NavItem href="/admin/talents" active={isActive("/admin/talents")} icon={icons.star}>Skills</NavItem>
             <NavItem href="/admin/partners" active={isActive("/admin/partners")} icon={icons.users}>Partners</NavItem>
 
             <NavSection>Content</NavSection>
             <NavItem href="/admin/categories" active={isActive("/admin/categories")} icon={icons.grid}>Categories</NavItem>
-            <NavItem href="/admin/skills" active={isActive("/admin/skills")} icon={icons.skill}>Skills</NavItem>
+            {/* <NavItem href="/admin/skills" active={isActive("/admin/skills")} icon={icons.skill}>Skills</NavItem> */}
             <NavItem href="/admin/courses" active={isActive("/admin/courses")} icon={icons.book}>Courses</NavItem>
             <NavItem href="/admin/stories" active={isActive("/admin/stories")} icon={icons.story}>Stories</NavItem>
             <NavItem href="/admin/testimonials" active={isActive("/admin/testimonials")} icon={icons.testimonial}>Testimonials</NavItem>
@@ -409,7 +409,7 @@ function UserNav({ isActive }) {
 
             <NavSection>Learning</NavSection>
             <NavItem href="/user/courses" active={isActive("/user/courses")} icon={icons.book}>Courses</NavItem>
-            <NavItem href="/admin/skills" active={isActive("/admin/skills")} icon={icons.skill}>Skills</NavItem>
+            {/* <NavItem href="/admin/skills" active={isActive("/admin/skills")} icon={icons.skill}>Skills</NavItem> */}
 
             <NavSection>Discover</NavSection>
             <NavItem href="/admin/announcements" active={isActive("/admin/announcements")} icon={icons.announce}>Announcements</NavItem>

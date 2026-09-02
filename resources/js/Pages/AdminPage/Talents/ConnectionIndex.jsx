@@ -104,70 +104,70 @@ export default function ConnectionIndex({
 
     return (
         <>
-            <Head title="Talent Connection" />
-            <link
-                href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-                rel="stylesheet"
-            />
+            <Head title="Skill Connections" />
 
             <style>{`
                 :root {
-                    --bg-deep:    #f6faf8;
-                    --bg-card:    #F5f5f7;
-                    --bg-glass:   rgba(0,100,60,0.035);
-                    --bg-glass2:  rgba(0,166,103,0.08);
-                    --accent:     #00a667;
-                    --accent-dim: #00854f;
-                    --accent-glow:rgba(0,166,103,0.2);
-                    --text-primary:   #10201b;
-                    --text-secondary: #4c6b62;
-                    --text-muted:     #7f958d;
-                    --border:     rgba(0,100,60,0.1);
-                    --border-accent: rgba(0,166,103,0.3);
-                    --radius-lg:  16px;
-                    --radius-pill:50px;
-                    --font-head:  'Syne', sans-serif;
-                    --font-body:  'DM Sans', sans-serif;
-                    --warn:       #b3820f;
-                    --danger:     #c94a3f;
+                    --ink:        #0A0A0A;
+                    --ink-soft:   #4A4A4A;
+                    --bg-deep:    #FAFAFA;
+                    --bg-card:    #FFFFFF;
+                    --bg-muted:   #F2F2F2;
+                    --accent:     #00A667;
+                    --accent-dim: #00854F;
+                    --accent-tint:#E6F7EF;
+                    --text-label: #5C5C5C;
+                    --text-muted: #9A9A9A;
+                    --border:     #E1E1E1;
+                    --border-strong: #0A0A0A;
+                    --radius:     6px;
+                    --radius-lg:  4px;
+                    --font-head:  inherit;
+                    --font-body:  inherit;
+                    --warn:       #92650A;
+                    --warn-tint:  #FBF1DE;
+                    --danger:     #C0362C;
+                    --danger-tint:#FBEDEC;
                 }
 
                 .fc-admin-page, .fc-admin-page * { box-sizing: border-box; }
-                .fc-admin-page { background: var(--bg-deep); color: var(--text-primary); font-family: var(--font-body); min-height: 100%; }
+                .fc-admin-page { background: var(--bg-deep); color: var(--ink); font-family: var(--font-body); min-height: 100%; }
 
-                .admin-page { padding: 32px; }
-                @media(max-width: 768px) { .admin-page { padding: 20px 16px; } }
+                .admin-page { padding: 40px 32px 56px; max-width: 1200px; margin: 0 auto; }
+                @media(max-width: 768px) { .admin-page { padding: 24px 16px 40px; } }
 
                 .admin-header {
-                    display: flex; align-items: flex-start; justify-content: space-between;
+                    display: flex; align-items: flex-end; justify-content: space-between;
                     gap: 20px; flex-wrap: wrap;
                     margin-bottom: 28px;
+                    padding-bottom: 22px;
+                    border-bottom: 2px solid var(--ink);
                 }
                 .admin-header h2 {
                     font-family: var(--font-head);
                     font-size: 1.5rem;
-                    font-weight: 800;
-                    color: var(--text-primary);
-                    margin: 0 0 4px;
+                    font-weight: 700;
+                    letter-spacing: -.3px;
+                    color: var(--ink);
+                    margin: 0 0 5px;
                 }
-                .admin-header p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+                .admin-header p { font-size: 0.85rem; color: var(--text-label); margin: 0; }
 
                 .btn-primary-pill {
                     display: inline-flex; align-items: center; gap: 8px;
                     background: var(--accent);
                     color: #fff;
                     border: none;
-                    border-radius: var(--radius-pill);
+                    border-radius: var(--radius);
                     padding: 11px 22px;
                     font-family: var(--font-head);
                     font-size: 0.85rem;
                     font-weight: 700;
                     cursor: pointer;
-                    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-                    box-shadow: 0 4px 18px var(--accent-glow);
+                    transition: background 0.15s;
                     white-space: nowrap;
                 }
-                .btn-primary-pill:hover { background: var(--accent-dim); transform: translateY(-1px); }
+                .btn-primary-pill:hover { background: var(--accent-dim); }
 
                 /* ── Stat cards ── */
                 .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
@@ -175,21 +175,16 @@ export default function ConnectionIndex({
                 .stat-card {
                     background: var(--bg-card);
                     border: 1px solid var(--border);
-                    border-radius: 14px;
-                    padding: 20px;
-                    display: flex; align-items: center; gap: 14px;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+                    border-left: 3px solid var(--ink);
+                    border-radius: var(--radius-lg);
+                    padding: 18px 20px;
+                    display: flex; align-items: center; justify-content: space-between; gap: 14px;
                 }
-                .stat-icon {
-                    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-                    display: flex; align-items: center; justify-content: center;
-                    background: var(--bg-glass2);
-                    color: var(--accent);
-                    font-size: 1.1rem;
-                }
-                .stat-card.pending .stat-icon { background: rgba(232,185,74,0.12); color: var(--warn); }
-                .stat-meta p { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0 0 4px; }
-                .stat-meta h4 { font-family: var(--font-head); font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0; }
+                .stat-card.pending { border-left-color: var(--warn); }
+                .stat-meta p { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0 0 6px; }
+                .stat-meta h4 { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: var(--ink); margin: 0; }
+                .stat-card i { font-size: 1.15rem; color: var(--border); }
+                .stat-card.pending i { color: var(--warn); }
 
                 /* ── Toolbar ── */
                 .table-card {
@@ -197,47 +192,46 @@ export default function ConnectionIndex({
                     border: 1px solid var(--border);
                     border-radius: var(--radius-lg);
                     overflow: hidden;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
                 }
                 .table-toolbar {
                     display: flex; align-items: center; justify-content: space-between;
                     gap: 16px; flex-wrap: wrap;
-                    padding: 20px 22px;
+                    padding: 18px 22px;
                     border-bottom: 1px solid var(--border);
                 }
                 .search-wrap {
                     display: flex; align-items: center; gap: 8px;
-                    background: rgba(0,0,0,0.02);
+                    background: var(--bg-deep);
                     border: 1px solid var(--border);
-                    border-radius: var(--radius-pill);
-                    padding: 8px 16px;
+                    border-radius: var(--radius);
+                    padding: 9px 14px;
                     flex: 1;
-                    max-width: 340px;
-                    transition: border-color 0.2s;
+                    max-width: 320px;
+                    transition: border-color 0.15s, box-shadow 0.15s;
                 }
-                .search-wrap:focus-within { border-color: var(--border-accent); }
-                .search-wrap i { color: var(--text-muted); font-size: 0.95rem; }
+                .search-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+                .search-wrap i { color: var(--text-muted); font-size: 0.9rem; }
                 .search-wrap input {
                     background: transparent; border: none; outline: none;
-                    color: var(--text-primary); font-size: 0.85rem; width: 100%;
+                    color: var(--ink); font-size: 0.85rem; width: 100%;
                     font-family: var(--font-body);
                 }
                 .search-wrap input::placeholder { color: var(--text-muted); }
 
-                .status-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+                .status-filters { display: flex; gap: 6px; flex-wrap: wrap; }
                 .status-chip {
                     border: 1px solid var(--border);
                     background: transparent;
-                    color: var(--text-secondary);
-                    border-radius: var(--radius-pill);
-                    padding: 7px 15px;
+                    color: var(--text-label);
+                    border-radius: var(--radius);
+                    padding: 8px 15px;
                     font-size: 0.78rem;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: border-color 0.2s, color 0.2s, background 0.2s;
+                    transition: border-color 0.15s, color 0.15s, background 0.15s;
                 }
-                .status-chip:hover { border-color: var(--border-accent); color: var(--accent); }
-                .status-chip.active { background: var(--bg-glass2); border-color: var(--border-accent); color: var(--accent); }
+                .status-chip:hover { border-color: var(--ink); color: var(--ink); }
+                .status-chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
 
                 /* ── Table ── */
                 .admin-table { width: 100%; border-collapse: collapse; }
@@ -247,47 +241,47 @@ export default function ConnectionIndex({
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
                     color: var(--text-muted);
-                    font-weight: 600;
+                    font-weight: 700;
                     padding: 14px 22px;
                     border-bottom: 1px solid var(--border);
                     white-space: nowrap;
                 }
                 .fc-admin-page .admin-table tr td {
-    background-color: var(--bg-card) !important;
-    padding: 16px 22px;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    vertical-align: middle;
-}
+                    background-color: var(--bg-card) !important;
+                    padding: 16px 22px;
+                    border-bottom: 1px solid var(--border);
+                    font-size: 0.85rem;
+                    color: var(--ink-soft);
+                    vertical-align: middle;
+                }
                 .admin-table tbody tr:last-child td { border-bottom: none; }
                 .admin-table tbody tr { transition: background 0.15s; }
-                .admin-table tbody tr:hover { background: var(--bg-glass); }
+                .admin-table tbody tr:hover td { background: var(--bg-deep) !important; }
 
                 .cell-person { display: flex; align-items: center; gap: 12px; }
                 .avatar-circle {
-                    width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-                    background: var(--bg-glass2);
-                    border: 1px solid var(--border-accent);
-                    color: var(--accent);
+                    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+                    background: var(--bg-muted);
+                    border: 1px solid var(--border);
+                    color: var(--ink);
                     display: flex; align-items: center; justify-content: center;
                     font-family: var(--font-head);
                     font-weight: 700;
-                    font-size: 0.78rem;
+                    font-size: 0.75rem;
                 }
-                .cell-person h6 { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px; }
+                .cell-person h6 { font-size: 0.85rem; font-weight: 700; color: var(--ink); margin: 0 0 2px; }
                 .cell-person p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
 
                 .badge {
                     display: inline-flex; align-items: center; gap: 5px;
-                    border-radius: var(--radius-pill);
-                    padding: 4px 12px;
+                    border-radius: var(--radius);
+                    padding: 4px 11px;
                     font-size: 0.72rem;
                     font-weight: 700;
                 }
-                .badge-success { background: rgba(0,166,103,0.12); color: var(--accent); }
-                .badge-danger { background: rgba(201,74,63,0.12); color: var(--danger); }
-                .badge-pending { background: rgba(179,130,15,0.12); color: var(--warn); }
+                .badge-success { background: var(--accent-tint); color: var(--accent-dim); }
+                .badge-danger { background: var(--danger-tint); color: var(--danger); }
+                .badge-pending { background: var(--warn-tint); color: var(--warn); }
 
                 .message-cell {
                     max-width: 260px;
@@ -298,43 +292,43 @@ export default function ConnectionIndex({
 
                 .btn-view {
                     display: inline-flex; align-items: center; gap: 6px;
-                    border: 1px solid var(--border);
+                    border: 1px solid var(--border-strong);
                     background: transparent;
-                    color: var(--text-secondary);
-                    border-radius: var(--radius-pill);
-                    padding: 7px 16px;
+                    color: var(--ink);
+                    border-radius: var(--radius);
+                    padding: 7px 15px;
                     font-size: 0.78rem;
                     font-weight: 600;
                     text-decoration: none;
-                    transition: border-color 0.2s, color 0.2s, background 0.2s;
+                    transition: background 0.15s, color 0.15s;
                 }
-                .btn-view:hover { border-color: var(--border-accent); color: var(--accent); background: var(--bg-glass2); }
+                .btn-view:hover { background: var(--ink); color: #fff; }
 
                 .empty-state { text-align: center; padding: 64px 24px; color: var(--text-muted); font-size: 0.9rem; }
                 .empty-state i { font-size: 2.2rem; margin-bottom: 12px; display: block; color: var(--text-muted); }
 
-                .table-footer { padding: 18px 22px; display: flex; justify-content: flex-end; }
+                .table-footer { padding: 18px 22px; display: flex; justify-content: flex-end; border-top: 1px solid var(--border); }
                 .pagination-nav { display: flex; gap: 6px; flex-wrap: wrap; }
                 .page-link {
-                    min-width: 36px; height: 36px;
+                    min-width: 34px; height: 34px;
                     display: inline-flex; align-items: center; justify-content: center;
                     padding: 0 10px;
-                    border-radius: 8px;
+                    border-radius: var(--radius);
                     border: 1px solid var(--border);
                     background: transparent;
-                    color: var(--text-secondary);
+                    color: var(--ink-soft);
                     font-size: 0.8rem;
                     font-weight: 600;
                     text-decoration: none;
-                    transition: border-color 0.2s, color 0.2s, background 0.2s;
+                    transition: border-color 0.15s, color 0.15s, background 0.15s;
                 }
-                .page-link:hover { border-color: var(--border-accent); color: var(--accent); }
+                .page-link:hover { border-color: var(--ink); color: var(--ink); }
                 .page-link.active { background: var(--accent); border-color: var(--accent); color: #fff; }
                 .page-link.disabled { opacity: 0.35; pointer-events: none; }
 
                 /* ── Modal ── */
                 .fc-modal-backdrop {
-                    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+                    position: fixed; inset: 0; background: rgba(10,10,10,.6);
                     display: flex; align-items: flex-start; justify-content: center;
                     z-index: 1050; padding: 3rem 1rem;
                     overflow-y: auto;
@@ -343,41 +337,40 @@ export default function ConnectionIndex({
                 .modal-dark {
                     background: var(--bg-card);
                     border: 1px solid var(--border);
-                    border-radius: 16px;
-                    color: var(--text-primary);
+                    border-radius: var(--radius-lg);
+                    color: var(--ink);
                     width: 100%;
-                    max-width: 480px;
+                    max-width: 460px;
                     margin: auto 0;
                     max-height: calc(100vh - 6rem);
                     display: flex;
                     flex-direction: column;
-                    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
                 }
                 .modal-dark .modal-header {
-                    border-bottom: 1px solid var(--border);
+                    border-bottom: 2px solid var(--ink);
                     padding: 20px 24px 18px;
                     display: flex; align-items: flex-start; justify-content: space-between;
                     flex-shrink: 0;
                 }
                 .modal-dark .modal-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin: 0; }
-                .modal-dark .accent-bar { display: block; width: 32px; height: 3px; background: var(--accent); border-radius: 2px; margin-top: 5px; }
+                .modal-dark .accent-bar { display: block; width: 28px; height: 3px; background: var(--accent); margin-top: 7px; }
                 .modal-dark .modal-body { padding: 24px; overflow-y: auto; }
-                .modal-dark .btn-close { background: transparent; border: none; color: var(--text-primary); font-size: 1.1rem; cursor: pointer; }
-                .form-label { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+                .modal-dark .btn-close { background: transparent; border: none; color: var(--ink); font-size: 1.1rem; cursor: pointer; line-height: 1; }
+                .form-label { font-size: 0.78rem; font-weight: 600; color: var(--text-label); margin-bottom: 6px; display: block; }
                 .form-control-dark {
                     width: 100%;
-                    background: rgba(0,0,0,0.02);
+                    background: var(--bg-card);
                     border: 1px solid var(--border);
-                    border-radius: 10px;
-                    color: var(--text-primary);
-                    padding: 11px 14px;
+                    border-radius: var(--radius);
+                    color: var(--ink);
+                    padding: 10px 13px;
                     font-family: var(--font-body);
                     font-size: 0.85rem;
                     outline: none;
-                    transition: border-color 0.2s;
+                    transition: border-color 0.15s, box-shadow 0.15s;
                     margin-bottom: 14px;
                 }
-                .form-control-dark:focus { border-color: var(--border-accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+                .form-control-dark:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
                 .form-control-dark::placeholder { color: var(--text-muted); }
                 textarea.form-control-dark { resize: vertical; min-height: 80px; }
                 select.form-control-dark { appearance: none; cursor: pointer; }
@@ -385,15 +378,14 @@ export default function ConnectionIndex({
                     width: 100%;
                     background: var(--accent);
                     border: none;
-                    border-radius: var(--radius-pill);
+                    border-radius: var(--radius);
                     color: #fff;
                     padding: 12px;
                     font-family: var(--font-head);
                     font-size: 0.875rem;
                     font-weight: 700;
                     cursor: pointer;
-                    transition: background 0.2s, box-shadow 0.2s;
-                    box-shadow: 0 4px 18px var(--accent-glow);
+                    transition: background 0.15s;
                 }
                 .btn-submit:hover { background: var(--accent-dim); }
                 .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -409,48 +401,42 @@ export default function ConnectionIndex({
                 <div className="admin-page">
                     <div className="admin-header">
                         <div>
-                            <h2>Talent Connection</h2>
+                            <h2>Skill connections</h2>
                             <p>
                                 Review and manage connection requests between
-                                users and talents.
+                                users and skills.
                             </p>
                         </div>
                         <button
                             className="btn-primary-pill"
                             onClick={() => setRequestModalOpen(true)}
                         >
-                            <i className="ti ti-plus" /> Connection Request
+                            <i className="ti ti-plus" /> Connection request
                         </button>
                     </div>
 
                     {/* ═══════════════ STATS ═══════════════ */}
                     <div className="stat-row">
                         <div className="stat-card">
-                            <div className="stat-icon">
-                                <i className="ti ti-users-group" />
-                            </div>
                             <div className="stat-meta">
-                                <p>Total Requests</p>
+                                <p>Total requests</p>
                                 <h4>{computedStats.total}</h4>
                             </div>
+                            <i className="ti ti-users-group" />
                         </div>
                         <div className="stat-card pending">
-                            <div className="stat-icon">
-                                <i className="ti ti-clock" />
-                            </div>
                             <div className="stat-meta">
                                 <p>Pending</p>
                                 <h4>{computedStats.pending}</h4>
                             </div>
+                            <i className="ti ti-clock" />
                         </div>
                         <div className="stat-card">
-                            <div className="stat-icon">
-                                <i className="ti ti-message-circle" />
-                            </div>
                             <div className="stat-meta">
                                 <p>Responded</p>
                                 <h4>{computedStats.responded}</h4>
                             </div>
+                            <i className="ti ti-message-circle" />
                         </div>
                     </div>
 
@@ -496,9 +482,9 @@ export default function ConnectionIndex({
                                         <tr>
                                             <th>#</th>
                                             <th>Requester</th>
-                                            <th>Talent</th>
+                                            <th>Skill</th>
                                             <th>Status</th>
-                                            <th>Requested At</th>
+                                            <th>Requested at</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -628,7 +614,7 @@ export default function ConnectionIndex({
                             <div className="modal-header">
                                 <div>
                                     <h5 className="modal-title">
-                                        New Connection Request
+                                        New connection request
                                     </h5>
                                     <span className="accent-bar" />
                                 </div>
@@ -680,7 +666,7 @@ export default function ConnectionIndex({
                                     )}
 
                                     <label className="form-label">
-                                        Requester Name
+                                        Requester name
                                     </label>
                                     <input
                                         type="text"
@@ -697,7 +683,7 @@ export default function ConnectionIndex({
                                     />
 
                                     <label className="form-label">
-                                        Requester Email
+                                        Requester email
                                     </label>
                                     <input
                                         type="email"
@@ -735,7 +721,7 @@ export default function ConnectionIndex({
                                     >
                                         {requestForm.processing
                                             ? "Submitting…"
-                                            : "Submit Request"}
+                                            : "Submit request"}
                                     </button>
                                 </div>
                             </form>

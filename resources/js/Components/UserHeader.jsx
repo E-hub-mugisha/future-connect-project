@@ -48,6 +48,145 @@ const DASHBOARD_ROUTE_BY_ROLE = {
 
 const SCROLL_THRESHOLD = 60;
 
+// ── Inline SVG icon set (replaces the ti-*/fa-brands icon-font classes). ──
+// Each icon sizes itself to 1em so it inherits the font-size of its
+// container, and uses currentColor so it inherits text color/theme.
+function IconBase({ className = "", size = "1em", children, viewBox = "0 0 24 24", fill = "none", ...rest }) {
+    return (
+        <svg
+            className={className}
+            width={size}
+            height={size}
+            viewBox={viewBox}
+            fill={fill}
+            stroke={fill === "none" ? "currentColor" : undefined}
+            strokeWidth={fill === "none" ? 2 : undefined}
+            strokeLinecap={fill === "none" ? "round" : undefined}
+            strokeLinejoin={fill === "none" ? "round" : undefined}
+            aria-hidden="true"
+            focusable="false"
+            {...rest}
+        >
+            {children}
+        </svg>
+    );
+}
+
+function IconSun(props) {
+    return (
+        <IconBase {...props}>
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </IconBase>
+    );
+}
+
+function IconMoon(props) {
+    return (
+        <IconBase {...props}>
+            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
+        </IconBase>
+    );
+}
+
+function IconSearch(props) {
+    return (
+        <IconBase {...props}>
+            <circle cx="11" cy="11" r="7" />
+            <path d="M21 21l-4.3-4.3" />
+        </IconBase>
+    );
+}
+
+function IconUser(props) {
+    return (
+        <IconBase {...props}>
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+        </IconBase>
+    );
+}
+
+function IconDashboard(props) {
+    return (
+        <IconBase {...props}>
+            <rect x="3" y="3" width="7" height="9" rx="1.5" />
+            <rect x="14" y="3" width="7" height="5" rx="1.5" />
+            <rect x="14" y="12" width="7" height="9" rx="1.5" />
+            <rect x="3" y="16" width="7" height="5" rx="1.5" />
+        </IconBase>
+    );
+}
+
+function IconLogout(props) {
+    return (
+        <IconBase {...props}>
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <path d="M16 17l5-5-5-5" />
+            <path d="M21 12H9" />
+        </IconBase>
+    );
+}
+
+function IconMail(props) {
+    return (
+        <IconBase {...props}>
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7l9 6 9-6" />
+        </IconBase>
+    );
+}
+
+function IconLock(props) {
+    return (
+        <IconBase {...props}>
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+        </IconBase>
+    );
+}
+
+function IconPlus(props) {
+    return (
+        <IconBase {...props}>
+            <path d="M12 5v14M5 12h14" />
+        </IconBase>
+    );
+}
+
+function IconMenu(props) {
+    return (
+        <IconBase {...props}>
+            <path d="M4 6h16M4 12h16M4 18h16" />
+        </IconBase>
+    );
+}
+
+function IconFacebook(props) {
+    return (
+        <IconBase {...props} fill="currentColor">
+            <path d="M14 9h3V6h-3c-1.93 0-3.5 1.57-3.5 3.5V11H8v3h2.5v7h3v-7H16l.5-3h-3V9.5c0-.28.22-.5.5-.5Z" />
+        </IconBase>
+    );
+}
+
+function IconX(props) {
+    return (
+        <IconBase {...props} fill="currentColor">
+            <path d="M4 4l7.2 9.4L4.4 20H7l5.4-5.8L17 20h3l-7.5-9.8L19.4 4H17l-5 5.4L8.9 4H4Z" />
+        </IconBase>
+    );
+}
+
+function IconLinkedin(props) {
+    return (
+        <IconBase {...props} fill="currentColor">
+            <path d="M6.94 8.5H4.06V19h2.88V8.5ZM5.5 4a1.67 1.67 0 1 0 0 3.34A1.67 1.67 0 0 0 5.5 4Z" />
+            <path d="M9.5 8.5h2.76v1.43h.04c.38-.72 1.32-1.48 2.72-1.48 2.91 0 3.45 1.92 3.45 4.41V19h-2.88v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V19H9.5V8.5Z" />
+        </IconBase>
+    );
+}
+
 // ── Shared nav data so desktop mega-menus and the mobile drawer
 //    are always generated from the exact same source (no more drift). ──
 const PLATFORM_LINKS = [
@@ -464,8 +603,8 @@ export default function UserHeader({
           content: ''; display: inline-block; width: 5px; height: 5px;
           border-radius: 50%; background: var(--h-green);
         }
-        .fc-topbar .fc-tb-social { display: flex; gap: 12px; }
-        .fc-topbar .fc-tb-social a { color: var(--h-muted); font-size: 13px; transition: color 0.2s; }
+        .fc-topbar .fc-tb-social { display: flex; gap: 12px; align-items: center; }
+        .fc-topbar .fc-tb-social a { color: var(--h-muted); font-size: 13px; display: flex; align-items: center; transition: color 0.2s; }
         .fc-topbar .fc-tb-social a:hover { color: var(--h-green); }
 
         .fc-header {
@@ -689,7 +828,7 @@ export default function UserHeader({
         .fc-user-panel-item:hover { background: var(--h-green-d); color: var(--h-hover); }
         .fc-user-panel-item.logout { color: var(--h-error); }
         .fc-user-panel-item.logout:hover { background: rgba(255, 107, 107, 0.1); color: var(--h-error); }
-        .fc-user-panel-item i { font-size: 14px; width: 16px; text-align: center; flex-shrink: 0; }
+        .fc-user-panel-item svg { font-size: 14px; width: 16px; flex-shrink: 0; }
 
         .fc-drawer-user-card {
           display: flex; align-items: center; gap: 10px; padding: 10px;
@@ -873,12 +1012,12 @@ export default function UserHeader({
         [data-h-theme="light"] .fc-lp-field input::placeholder, [data-h-theme="light"] .fc-search-input-wrap input::placeholder { color: #a9c2b8; }
         [data-h-theme="light"] .fc-search-overlay { background: rgba(246, 250, 248, 0.92); }
 
-        .fc-theme-toggle .ti-sun, .fc-drawer-theme-toggle .ti-sun { display: none; }
-        .fc-theme-toggle .ti-moon, .fc-drawer-theme-toggle .ti-moon { display: inline-flex; }
-        [data-h-theme="light"] .fc-theme-toggle .ti-sun,
-        [data-h-theme="light"] .fc-drawer-theme-toggle .ti-sun { display: inline-flex; }
-        [data-h-theme="light"] .fc-theme-toggle .ti-moon,
-        [data-h-theme="light"] .fc-drawer-theme-toggle .ti-moon { display: none; }
+        .fc-theme-toggle .icon-sun, .fc-drawer-theme-toggle .icon-sun { display: none; }
+        .fc-theme-toggle .icon-moon, .fc-drawer-theme-toggle .icon-moon { display: inline-flex; }
+        [data-h-theme="light"] .fc-theme-toggle .icon-sun,
+        [data-h-theme="light"] .fc-drawer-theme-toggle .icon-sun { display: inline-flex; }
+        [data-h-theme="light"] .fc-theme-toggle .icon-moon,
+        [data-h-theme="light"] .fc-drawer-theme-toggle .icon-moon { display: none; }
       `}</style>
 
             {/* ════════════════════ FIXED HEADER STACK ════════════════════ */}
@@ -894,13 +1033,13 @@ export default function UserHeader({
                         </div>
                         <div className="fc-tb-social">
                             <a href="#" aria-label="Facebook">
-                                <i className="fa-brands fa-facebook" />
+                                <IconFacebook />
                             </a>
                             <a href="#" aria-label="Twitter">
-                                <i className="fa-brands fa-x-twitter" />
+                                <IconX />
                             </a>
                             <a href="#" aria-label="LinkedIn">
-                                <i className="fa-brands fa-linkedin" />
+                                <IconLinkedin />
                             </a>
                         </div>
                     </div>
@@ -1043,8 +1182,8 @@ export default function UserHeader({
                                 aria-label="Toggle theme"
                                 onClick={toggleTheme}
                             >
-                                <i className="ti ti-sun" />
-                                <i className="ti ti-moon" />
+                                <IconSun className="icon-sun" />
+                                <IconMoon className="icon-moon" />
                             </button>
 
                             <button
@@ -1052,7 +1191,7 @@ export default function UserHeader({
                                 aria-label="Search"
                                 onClick={() => setSearchOpen(true)}
                             >
-                                <i className="ti ti-search" />
+                                <IconSearch />
                             </button>
 
                             {currentUser ? (
@@ -1117,7 +1256,7 @@ export default function UserHeader({
                                                 setUserMenuOpen(false)
                                             }
                                         >
-                                            <i className="ti ti-layout-dashboard" />
+                                            <IconDashboard />
                                             Dashboard
                                         </Link>
 
@@ -1126,7 +1265,7 @@ export default function UserHeader({
                                             className="fc-user-panel-item logout"
                                             onClick={handleLogout}
                                         >
-                                            <i className="ti ti-logout" />
+                                            <IconLogout />
                                             Logout
                                         </button>
                                     </div>
@@ -1142,7 +1281,7 @@ export default function UserHeader({
                                                 setLoginOpen((o) => !o);
                                             }}
                                         >
-                                            <i className="ti ti-user" /> Sign In
+                                            <IconUser /> Sign In
                                         </button>
 
                                         <div
@@ -1172,7 +1311,7 @@ export default function UserHeader({
                                                         Email
                                                     </label>
                                                     <div className="fc-lp-input-wrap">
-                                                        <i className="ti ti-mail fc-lp-icon" />
+                                                        <IconMail className="fc-lp-icon" />
                                                         <input
                                                             type="email"
                                                             id="lp_email"
@@ -1212,7 +1351,7 @@ export default function UserHeader({
                                                         Password
                                                     </label>
                                                     <div className="fc-lp-input-wrap">
-                                                        <i className="ti ti-lock fc-lp-icon" />
+                                                        <IconLock className="fc-lp-icon" />
                                                         <input
                                                             type="password"
                                                             id="lp_password"
@@ -1304,7 +1443,7 @@ export default function UserHeader({
                                         aria-label="Register"
                                         title="Register"
                                     >
-                                        <i className="ti ti-plus" />
+                                        <IconPlus />
                                     </Link>
 
                                     <Link
@@ -1321,7 +1460,7 @@ export default function UserHeader({
                                 aria-label="Menu"
                                 onClick={() => setDrawerOpen(true)}
                             >
-                                <i className="ti ti-menu-2" />
+                                <IconMenu />
                             </button>
                         </div>
                     </div>
@@ -1361,8 +1500,8 @@ export default function UserHeader({
                                 aria-label="Toggle theme"
                                 onClick={toggleTheme}
                             >
-                                <i className="ti ti-sun" />
-                                <i className="ti ti-moon" />
+                                <IconSun className="icon-sun" />
+                                <IconMoon className="icon-moon" />
                             </button>
                             <button
                                 className="fc-drawer-search-btn"
@@ -1372,7 +1511,7 @@ export default function UserHeader({
                                     setTimeout(() => setSearchOpen(true), 300);
                                 }}
                             >
-                                <i className="ti ti-search" />
+                                <IconSearch />
                             </button>
                             <button
                                 className="fc-drawer-close"
@@ -1545,7 +1684,7 @@ export default function UserHeader({
                                     className="fc-btn-ghost"
                                     onClick={handleLogout}
                                 >
-                                    <i className="ti ti-logout" /> Logout
+                                    <IconLogout /> Logout
                                 </button>
                             </>
                         ) : (
@@ -1596,7 +1735,7 @@ export default function UserHeader({
                                 required
                             />
                             <button type="submit" className="fc-search-submit">
-                                <i className="ti ti-search" />
+                                <IconSearch />
                             </button>
                         </div>
                     </form>

@@ -1,12 +1,20 @@
-import { Head } from '@inertiajs/react';
+import { Head } from "@inertiajs/react";
 import {
     ResponsiveContainer,
-    BarChart, Bar,
-    PieChart, Pie, Cell,
-    LineChart, Line,
-    CartesianGrid, XAxis, YAxis, Tooltip, Legend,
-} from 'recharts';
-import AppLayout from '@/Layouts/AppLayout';
+    BarChart,
+    Bar,
+    PieChart,
+    Pie,
+    Cell,
+    LineChart,
+    Line,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Tooltip,
+    Legend,
+} from "recharts";
+import AppLayout from "@/Layouts/AppLayout";
 
 /**
  * Admin Dashboard — Talent Platform (Bootstrap 5 edition)
@@ -27,19 +35,19 @@ import AppLayout from '@/Layouts/AppLayout';
 
 // Five accent hues, one per talent category — echoes the geometric
 // triangle motif used in the header strip.
-const PALETTE = ['#00a667', '#d9a441', '#c9683f', '#3f8fc9', '#8b6fc9'];
+const PALETTE = ["#00a667", "#d9a441", "#c9683f", "#3f8fc9", "#8b6fc9"];
 
 const STATUS_COLORS = {
-    pending: '#d9a441',
-    active: '#00a667',
-    matched: '#00a667',
-    contacted: '#3f8fc9',
-    in_progress: '#3f8fc9',
-    completed: '#00a667',
-    closed: '#7f9a9d',
-    cancelled: '#c9683f',
-    canceled: '#c9683f',
-    rejected: '#c9683f',
+    pending: "#d9a441",
+    active: "#00a667",
+    matched: "#00a667",
+    contacted: "#3f8fc9",
+    in_progress: "#3f8fc9",
+    completed: "#00a667",
+    closed: "#7f9a9d",
+    cancelled: "#c9683f",
+    canceled: "#c9683f",
+    rejected: "#c9683f",
 };
 
 function statusColor(status, fallbackIndex = 0) {
@@ -49,41 +57,89 @@ function statusColor(status, fallbackIndex = 0) {
 function formatLabel(value) {
     return value
         ?.toString()
-        .split('_')
+        .split("_")
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+        .join(" ");
 }
 
 function initials(name) {
-    if (!name) return '—';
-    return name.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase()).join('');
+    if (!name) return "—";
+    return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((p) => p[0]?.toUpperCase())
+        .join("");
 }
 
 /* ── Inline icon set for KPI cards ── */
 const Icon = {
     Users: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
-            <circle cx="9" cy="8" r="3.2" /><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5" />
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
+            <circle cx="9" cy="8" r="3.2" />
+            <path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5" />
             <path d="M16.5 8.5a3.2 3.2 0 1 1 0 6.4M22 20c0-2.8-1.8-5.1-4.3-6" />
         </svg>
     ),
     Check: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
             <path d="m20 7-11 11-5-5" />
         </svg>
     ),
     Book: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z" />
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z" />
         </svg>
     ),
     Clock: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
-            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" />
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3.5 2" />
         </svg>
     ),
     Bolt: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
             <path d="M13 2 3 14h7l-1 8 11-13h-7l1-7Z" />
         </svg>
     ),
@@ -93,8 +149,17 @@ const Icon = {
         </svg>
     ),
     Inbox: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}>
-            <path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.5 5h13l3.5 7v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7l3.5-7Z" />
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
+            <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+            <path d="M5.5 5h13l3.5 7v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7l3.5-7Z" />
         </svg>
     ),
 };
@@ -220,44 +285,59 @@ const ThemeStyles = () => (
 function StatCard({ label, value, accent, icon }) {
     return (
         <div className="col">
-            <div className="fc-card fc-stat-card h-100" style={{ '--accent': accent }}>
+            <div
+                className="fc-card fc-stat-card h-100"
+                style={{ "--accent": accent }}
+            >
                 <div className="d-flex align-items-start justify-content-between gap-3">
                     <div>
                         <p className="fc-stat-label mb-1">{label}</p>
-                        <p className="display-font fc-stat-value mb-0">{value ?? '—'}</p>
+                        <p className="display-font fc-stat-value mb-0">
+                            {value ?? "—"}
+                        </p>
                     </div>
-                    {icon && (
-                        <div className="fc-icon-chip">
-                            {icon}
-                        </div>
-                    )}
+                    {icon && <div className="fc-icon-chip">{icon}</div>}
                 </div>
             </div>
         </div>
     );
 }
 
-function EmptyChartState({ label = 'No data yet' }) {
+function EmptyChartState({ label = "No data yet" }) {
     return (
         <div className="fc-empty-state">
-            <Icon.Inbox style={{ width: '1.75rem', height: '1.75rem' }} />
+            <Icon.Inbox style={{ width: "1.75rem", height: "1.75rem" }} />
             <span>{label}</span>
         </div>
     );
 }
 
-function ChartCard({ title, subtitle, children, colClass = 'col-12 col-lg-4', accent, isEmpty }) {
+function ChartCard({
+    title,
+    subtitle,
+    children,
+    colClass = "col-12 col-lg-4",
+    accent,
+    isEmpty,
+}) {
     return (
         <div className={colClass}>
-            <div className="fc-card h-100 p-3 p-lg-4" style={{ '--accent': accent }}>
+            <div
+                className="fc-card h-100 p-3 p-lg-4"
+                style={{ "--accent": accent }}
+            >
                 <div className="fc-card-head">
                     <span className="fc-card-marker" />
                     <div>
                         <h3 className="display-font fc-card-title">{title}</h3>
-                        {subtitle && <p className="fc-card-subtitle">{subtitle}</p>}
+                        {subtitle && (
+                            <p className="fc-card-subtitle">{subtitle}</p>
+                        )}
                     </div>
                 </div>
-                <div className="fc-chart-body">{isEmpty ? <EmptyChartState /> : children}</div>
+                <div className="fc-chart-body">
+                    {isEmpty ? <EmptyChartState /> : children}
+                </div>
             </div>
         </div>
     );
@@ -267,17 +347,26 @@ function ChartTooltip({ active, payload, label }) {
     if (!active || !payload?.length) return null;
     return (
         <div className="fc-tooltip">
-            {label && <p className="fc-tooltip-label">{formatLabel(label) ?? label}</p>}
+            {label && (
+                <p className="fc-tooltip-label">
+                    {formatLabel(label) ?? label}
+                </p>
+            )}
             {payload.map((entry, i) => (
-                <p key={i} className="mb-0" style={{ color: entry.color || entry.fill }}>
-                    {formatLabel(entry.name)}: <span className="fw-semibold">{entry.value}</span>
+                <p
+                    key={i}
+                    className="mb-0"
+                    style={{ color: entry.color || entry.fill }}
+                >
+                    {formatLabel(entry.name)}:{" "}
+                    <span className="fw-semibold">{entry.value}</span>
                 </p>
             ))}
         </div>
     );
 }
 
-const RANK_CLASSES = ['fc-rank-1', 'fc-rank-2', 'fc-rank-3'];
+const RANK_CLASSES = ["fc-rank-1", "fc-rank-2", "fc-rank-3"];
 
 function Dashboard({
     kpis,
@@ -290,7 +379,11 @@ function Dashboard({
     topRatedTalents,
     skillsByCategory,
 }) {
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' });
+    const today = new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+    });
 
     return (
         <div className="fc-dash pb-5">
@@ -305,64 +398,150 @@ function Dashboard({
             />
             <ThemeStyles />
 
-            {/* Signature header strip — Imigongo-inspired triangle band */}
-            <div className="fc-triangle-strip">
-                {PALETTE.map((color) => (
-                    <span key={color} style={{ background: color }} />
-                ))}
-            </div>
 
-            <div className="container-fluid px-3 px-lg-4 pt-4" style={{ maxWidth: '1400px' }}>
-                <div className="d-flex flex-wrap align-items-end justify-content-between gap-3 pb-4 mb-4 border-bottom" style={{ borderColor: 'rgba(14,22,24,0.08)' }}>
+            <div
+                className="container-fluid px-3 px-lg-4 pt-4"
+                style={{ maxWidth: "1400px" }}
+            >
+                <div
+                    className="d-flex flex-wrap align-items-end justify-content-between gap-3 pb-4 mb-4 border-bottom"
+                    style={{ borderColor: "rgba(14,22,24,0.08)" }}
+                >
                     <div>
                         <p className="fc-eyebrow d-flex align-items-center gap-2 mb-1">
-                            <span style={{ width: 6, height: 6, background: '#00a667', display: 'inline-block', transform: 'rotate(45deg)' }} />
+                            <span
+                                style={{
+                                    width: 6,
+                                    height: 6,
+                                    background: "#00a667",
+                                    display: "inline-block",
+                                    transform: "rotate(45deg)",
+                                }}
+                            />
                             Overview
                         </p>
-                        <h1 className="display-font fw-bold mb-1" style={{ fontSize: '1.7rem', letterSpacing: '-0.01em' }}>
-                            Talent Platform Dashboard
+                        <h1
+                            className="display-font fw-bold mb-1"
+                            style={{
+                                fontSize: "1.7rem",
+                                letterSpacing: "-0.01em",
+                            }}
+                        >
+                            Future connect Platform Dashboard
                         </h1>
-                        <p className="mb-0" style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-                            Talents, courses, recruitment and hiring activity across the platform.
+                        <p
+                            className="mb-0"
+                            style={{
+                                color: "var(--muted)",
+                                fontSize: "0.9rem",
+                            }}
+                        >
+                            Skills, courses, recruitment and hiring activity
+                            across the platform.
                         </p>
                     </div>
-                    <p className="mb-0" style={{ color: 'var(--muted-dim)', fontSize: '0.78rem', fontWeight: 500 }}>{today}</p>
+                    <p
+                        className="mb-0"
+                        style={{
+                            color: "var(--muted-dim)",
+                            fontSize: "0.78rem",
+                            fontWeight: 500,
+                        }}
+                    >
+                        {today}
+                    </p>
                 </div>
 
                 {/* KPI row */}
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-6 g-3 mb-4">
-                    <StatCard label="Total Talents" value={kpis?.totalTalents} icon={<Icon.Users style={{ width: 16, height: 16 }} />} />
-                    <StatCard label="Approved" value={kpis?.approvedTalents} accent="#00a667" icon={<Icon.Check style={{ width: 16, height: 16 }} />} />
-                    <StatCard label="Total Users" value={kpis?.totalUsers} icon={<Icon.Users style={{ width: 16, height: 16 }} />} />
-                    <StatCard label="Active Courses" value={kpis?.activeCourses} icon={<Icon.Book style={{ width: 16, height: 16 }} />} />
-                    <StatCard label="Pending Recruitments" value={kpis?.pendingRecruitments} accent="#d9a441" icon={<Icon.Clock style={{ width: 16, height: 16 }} />} />
-                    <StatCard label="Open Quick Hires" value={kpis?.openQuickHires} accent="#3f8fc9" icon={<Icon.Bolt style={{ width: 16, height: 16 }} />} />
+                    <StatCard
+                        label="Total Skills"
+                        value={kpis?.totalTalents}
+                        icon={<Icon.Users style={{ width: 16, height: 16 }} />}
+                    />
+                    <StatCard
+                        label="Approved"
+                        value={kpis?.approvedTalents}
+                        accent="#00a667"
+                        icon={<Icon.Check style={{ width: 16, height: 16 }} />}
+                    />
+                    <StatCard
+                        label="Total Users"
+                        value={kpis?.totalUsers}
+                        icon={<Icon.Users style={{ width: 16, height: 16 }} />}
+                    />
+                    <StatCard
+                        label="Active Courses"
+                        value={kpis?.activeCourses}
+                        icon={<Icon.Book style={{ width: 16, height: 16 }} />}
+                    />
+                    <StatCard
+                        label="Pending Recruitments"
+                        value={kpis?.pendingRecruitments}
+                        accent="#d9a441"
+                        icon={<Icon.Clock style={{ width: 16, height: 16 }} />}
+                    />
+                    <StatCard
+                        label="Open Quick Hires"
+                        value={kpis?.openQuickHires}
+                        accent="#3f8fc9"
+                        icon={<Icon.Bolt style={{ width: 16, height: 16 }} />}
+                    />
                 </div>
 
                 {/* Charts grid */}
                 <div className="row g-3 g-lg-4">
                     <ChartCard
-                        title="Talents by Category"
+                        title="Skills by Category"
                         subtitle="Approved & pending, by skill category"
                         colClass="col-12 col-lg-8"
                         isEmpty={!talentsByCategory?.length}
                     >
                         <ResponsiveContainer>
-                            <BarChart data={talentsByCategory} margin={{ left: -20 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(14,22,24,0.08)" vertical={false} />
-                                <XAxis dataKey="category" tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} />
-                                <YAxis tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(14,22,24,0.04)' }} />
+                            <BarChart
+                                data={talentsByCategory}
+                                margin={{ left: -20 }}
+                            >
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="rgba(14,22,24,0.08)"
+                                    vertical={false}
+                                />
+                                <XAxis
+                                    dataKey="category"
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    allowDecimals={false}
+                                />
+                                <Tooltip
+                                    content={<ChartTooltip />}
+                                    cursor={{ fill: "rgba(14,22,24,0.04)" }}
+                                />
                                 <Bar dataKey="total" radius={[6, 6, 0, 0]}>
                                     {talentsByCategory?.map((_, i) => (
-                                        <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
+                                        <Cell
+                                            key={i}
+                                            fill={PALETTE[i % PALETTE.length]}
+                                        />
                                     ))}
                                 </Bar>
                             </BarChart>
                         </ResponsiveContainer>
                     </ChartCard>
 
-                    <ChartCard title="Talent Levels" subtitle="Skill level distribution" colClass="col-12 col-lg-4" accent="#d9a441" isEmpty={!talentsByLevel?.length}>
+                    <ChartCard
+                        title="Skill Levels"
+                        subtitle="Skill level distribution"
+                        colClass="col-12 col-lg-4"
+                        accent="#d9a441"
+                        isEmpty={!talentsByLevel?.length}
+                    >
                         <ResponsiveContainer>
                             <PieChart>
                                 <Pie
@@ -374,14 +553,25 @@ function Dashboard({
                                     paddingAngle={3}
                                 >
                                     {talentsByLevel?.map((_, i) => (
-                                        <Cell key={i} fill={PALETTE[i % PALETTE.length]} stroke="#F5f5f7" />
+                                        <Cell
+                                            key={i}
+                                            fill={PALETTE[i % PALETTE.length]}
+                                            stroke="#F5f5f7"
+                                        />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<ChartTooltip />} />
                                 <Legend
                                     verticalAlign="bottom"
                                     formatter={(value) => (
-                                        <span style={{ fontSize: 12, color: '#5c7274' }}>{formatLabel(value)}</span>
+                                        <span
+                                            style={{
+                                                fontSize: 12,
+                                                color: "#5c7274",
+                                            }}
+                                        >
+                                            {formatLabel(value)}
+                                        </span>
                                     )}
                                 />
                             </PieChart>
@@ -389,53 +579,105 @@ function Dashboard({
                     </ChartCard>
 
                     <ChartCard
-                        title="New Talent Signups"
+                        title="New Skill Signups"
                         subtitle="Last 6 months"
                         colClass="col-12 col-lg-8"
                         isEmpty={!signupsOverTime?.length}
                     >
                         <ResponsiveContainer>
-                            <LineChart data={signupsOverTime} margin={{ left: -20 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(14,22,24,0.08)" vertical={false} />
-                                <XAxis dataKey="month" tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} />
-                                <YAxis tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                <Tooltip content={<ChartTooltip />} cursor={{ stroke: 'rgba(14,22,24,0.15)' }} />
+                            <LineChart
+                                data={signupsOverTime}
+                                margin={{ left: -20 }}
+                            >
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="rgba(14,22,24,0.08)"
+                                    vertical={false}
+                                />
+                                <XAxis
+                                    dataKey="month"
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    allowDecimals={false}
+                                />
+                                <Tooltip
+                                    content={<ChartTooltip />}
+                                    cursor={{ stroke: "rgba(14,22,24,0.15)" }}
+                                />
                                 <Line
                                     type="monotone"
                                     dataKey="total"
                                     stroke="#00a667"
                                     strokeWidth={2.5}
-                                    dot={{ fill: '#00a667', r: 4 }}
+                                    dot={{ fill: "#00a667", r: 4 }}
                                     activeDot={{ r: 6 }}
                                 />
                             </LineChart>
                         </ResponsiveContainer>
                     </ChartCard>
 
-                    <ChartCard title="Skills by Category" subtitle="Published skill listings" colClass="col-12 col-lg-4" accent="#8b6fc9" isEmpty={!skillsByCategory?.length}>
+                    <ChartCard
+                        title="Skills by Category"
+                        subtitle="Published skill listings"
+                        colClass="col-12 col-lg-4"
+                        accent="#8b6fc9"
+                        isEmpty={!skillsByCategory?.length}
+                    >
                         <ResponsiveContainer>
-                            <BarChart data={skillsByCategory} layout="vertical" margin={{ left: 10 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(14,22,24,0.08)" horizontal={false} />
-                                <XAxis type="number" tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                            <BarChart
+                                data={skillsByCategory}
+                                layout="vertical"
+                                margin={{ left: 10 }}
+                            >
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="rgba(14,22,24,0.08)"
+                                    horizontal={false}
+                                />
+                                <XAxis
+                                    type="number"
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    allowDecimals={false}
+                                />
                                 <YAxis
                                     type="category"
                                     dataKey="category"
-                                    tick={{ fill: '#5c7274', fontSize: 12 }}
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
                                     axisLine={false}
                                     tickLine={false}
                                     width={110}
                                 />
-                                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(14,22,24,0.04)' }} />
+                                <Tooltip
+                                    content={<ChartTooltip />}
+                                    cursor={{ fill: "rgba(14,22,24,0.04)" }}
+                                />
                                 <Bar dataKey="total" radius={[0, 6, 6, 0]}>
                                     {skillsByCategory?.map((_, i) => (
-                                        <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
+                                        <Cell
+                                            key={i}
+                                            fill={PALETTE[i % PALETTE.length]}
+                                        />
                                     ))}
                                 </Bar>
                             </BarChart>
                         </ResponsiveContainer>
                     </ChartCard>
 
-                    <ChartCard title="Course Enrollments" subtitle="By status" colClass="col-12 col-md-6 col-lg-4" accent="#3f8fc9" isEmpty={!courseEnrollments?.length}>
+                    <ChartCard
+                        title="Course Enrollments"
+                        subtitle="By status"
+                        colClass="col-12 col-md-6 col-lg-4"
+                        accent="#3f8fc9"
+                        isEmpty={!courseEnrollments?.length}
+                    >
                         <ResponsiveContainer>
                             <PieChart>
                                 <Pie
@@ -447,37 +689,84 @@ function Dashboard({
                                     paddingAngle={3}
                                 >
                                     {courseEnrollments?.map((entry, i) => (
-                                        <Cell key={i} fill={statusColor(entry.status, i)} stroke="#F5f5f7" />
+                                        <Cell
+                                            key={i}
+                                            fill={statusColor(entry.status, i)}
+                                            stroke="#F5f5f7"
+                                        />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<ChartTooltip />} />
                                 <Legend
                                     verticalAlign="bottom"
                                     formatter={(value) => (
-                                        <span style={{ fontSize: 12, color: '#5c7274' }}>{formatLabel(value)}</span>
+                                        <span
+                                            style={{
+                                                fontSize: 12,
+                                                color: "#5c7274",
+                                            }}
+                                        >
+                                            {formatLabel(value)}
+                                        </span>
                                     )}
                                 />
                             </PieChart>
                         </ResponsiveContainer>
                     </ChartCard>
 
-                    <ChartCard title="Corporate Recruitments" subtitle="By status" colClass="col-12 col-md-6 col-lg-4" accent="#c9683f" isEmpty={!recruitmentsByStatus?.length}>
+                    <ChartCard
+                        title="Corporate Recruitment"
+                        subtitle="By status"
+                        colClass="col-12 col-md-6 col-lg-4"
+                        accent="#c9683f"
+                        isEmpty={!recruitmentsByStatus?.length}
+                    >
                         <ResponsiveContainer>
-                            <BarChart data={recruitmentsByStatus} margin={{ left: -20 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(14,22,24,0.08)" vertical={false} />
-                                <XAxis dataKey="status" tickFormatter={formatLabel} tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} />
-                                <YAxis tick={{ fill: '#5c7274', fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(14,22,24,0.04)' }} />
+                            <BarChart
+                                data={recruitmentsByStatus}
+                                margin={{ left: -20 }}
+                            >
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="rgba(14,22,24,0.08)"
+                                    vertical={false}
+                                />
+                                <XAxis
+                                    dataKey="status"
+                                    tickFormatter={formatLabel}
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <YAxis
+                                    tick={{ fill: "#5c7274", fontSize: 12 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    allowDecimals={false}
+                                />
+                                <Tooltip
+                                    content={<ChartTooltip />}
+                                    cursor={{ fill: "rgba(14,22,24,0.04)" }}
+                                />
                                 <Bar dataKey="total" radius={[6, 6, 0, 0]}>
                                     {recruitmentsByStatus?.map((entry, i) => (
-                                        <Cell key={i} fill={statusColor(entry.status, i)} />
+                                        <Cell
+                                            key={i}
+                                            fill={statusColor(entry.status, i)}
+                                        />
                                     ))}
                                 </Bar>
                             </BarChart>
                         </ResponsiveContainer>
                     </ChartCard>
 
-                    <ChartCard title="Quick Hires" subtitle="By status" colClass="col-12 col-md-12 col-lg-4" accent="#00a667" isEmpty={!quickHiresByStatus?.length}>
+                    <ChartCard
+                        title="Quick Hires"
+                        subtitle="By status"
+                        colClass="col-12 col-md-12 col-lg-4"
+                        accent="#00a667"
+                        isEmpty={!quickHiresByStatus?.length}
+                    >
                         <ResponsiveContainer>
                             <PieChart>
                                 <Pie
@@ -489,14 +778,25 @@ function Dashboard({
                                     paddingAngle={3}
                                 >
                                     {quickHiresByStatus?.map((entry, i) => (
-                                        <Cell key={i} fill={statusColor(entry.status, i)} stroke="#F5f5f7" />
+                                        <Cell
+                                            key={i}
+                                            fill={statusColor(entry.status, i)}
+                                            stroke="#F5f5f7"
+                                        />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<ChartTooltip />} />
                                 <Legend
                                     verticalAlign="bottom"
                                     formatter={(value) => (
-                                        <span style={{ fontSize: 12, color: '#5c7274' }}>{formatLabel(value)}</span>
+                                        <span
+                                            style={{
+                                                fontSize: 12,
+                                                color: "#5c7274",
+                                            }}
+                                        >
+                                            {formatLabel(value)}
+                                        </span>
                                     )}
                                 />
                             </PieChart>
@@ -505,42 +805,119 @@ function Dashboard({
 
                     {/* Top rated talents */}
                     <div className="col-12">
-                        <div className="fc-card p-3 p-lg-4" style={{ '--accent': '#d9a441' }}>
+                        <div
+                            className="fc-card p-3 p-lg-4"
+                            style={{ "--accent": "#d9a441" }}
+                        >
                             <div className="fc-card-head">
                                 <span className="fc-card-marker" />
                                 <div>
-                                    <h3 className="display-font fc-card-title">Top Rated Talents</h3>
-                                    <p className="fc-card-subtitle">By average client feedback rating</p>
+                                    <h3 className="display-font fc-card-title">
+                                        Top Rated Skills
+                                    </h3>
+                                    <p className="fc-card-subtitle">
+                                        By average client feedback rating
+                                    </p>
                                 </div>
                             </div>
 
                             {topRatedTalents?.length ? (
                                 <div className="table-responsive">
-                                    <table className="table mb-0">
+                                    <table
+                                        className="table mb-0"
+                                        data-bs-theme="light"
+                                    >
                                         <tbody>
                                             {topRatedTalents.map((t, i) => {
-                                                const pct = Math.min(100, (Number(t.avg_rating) / 5) * 100);
+                                                const pct = Math.min(
+                                                    100,
+                                                    (Number(t.avg_rating) / 5) *
+                                                        100,
+                                                );
                                                 return (
-                                                    <tr key={t.name} className="fc-table-row border-top">
-                                                        <td style={{ width: 44 }}>
-                                                            <span className={`fc-rank-badge ${RANK_CLASSES[i] ?? ''}`}>{i + 1}</span>
+                                                    <tr
+                                                        key={t.name}
+                                                        className="fc-table-row border-top"
+                                                    >
+                                                        <td
+                                                            style={{
+                                                                width: 44,
+                                                            }}
+                                                        >
+                                                            <span
+                                                                className={`fc-rank-badge ${RANK_CLASSES[i] ?? ""}`}
+                                                            >
+                                                                {i + 1}
+                                                            </span>
                                                         </td>
-                                                        <td style={{ width: 52 }}>
-                                                            <span className="fc-avatar">{initials(t.name)}</span>
+                                                        <td
+                                                            style={{
+                                                                width: 52,
+                                                            }}
+                                                        >
+                                                            <span className="fc-avatar">
+                                                                {initials(
+                                                                    t.name,
+                                                                )}
+                                                            </span>
                                                         </td>
                                                         <td>
-                                                            <p className="mb-1 fw-medium" style={{ fontSize: '0.9rem' }}>{t.name}</p>
-                                                            <div className="fc-progress-track" style={{ maxWidth: 180 }}>
-                                                                <div className="fc-progress-fill" style={{ width: `${pct}%` }} />
+                                                            <p
+                                                                className="mb-1 fw-medium"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "0.9rem",
+                                                                }}
+                                                            >
+                                                                {t.name}
+                                                            </p>
+                                                            <div
+                                                                className="fc-progress-track"
+                                                                style={{
+                                                                    maxWidth: 180,
+                                                                }}
+                                                            >
+                                                                <div
+                                                                    className="fc-progress-fill"
+                                                                    style={{
+                                                                        width: `${pct}%`,
+                                                                    }}
+                                                                />
                                                             </div>
                                                         </td>
                                                         <td className="text-nowrap">
-                                                            <Icon.Star style={{ width: 14, height: 14, color: '#d9a441', marginRight: 4 }} />
-                                                            <span className="display-font fw-bold">{t.avg_rating}</span>
-                                                            <span style={{ color: 'var(--muted)' }}> / 5</span>
+                                                            <Icon.Star
+                                                                style={{
+                                                                    width: 14,
+                                                                    height: 14,
+                                                                    color: "#d9a441",
+                                                                    marginRight: 4,
+                                                                }}
+                                                            />
+                                                            <span className="display-font fw-bold">
+                                                                {t.avg_rating}
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    color: "var(--muted)",
+                                                                }}
+                                                            >
+                                                                {" "}
+                                                                / 5
+                                                            </span>
                                                         </td>
-                                                        <td className="text-end text-nowrap" style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>
-                                                            {t.reviews} review{t.reviews === 1 ? '' : 's'}
+                                                        <td
+                                                            className="text-end text-nowrap"
+                                                            style={{
+                                                                color: "var(--muted)",
+                                                                fontSize:
+                                                                    "0.78rem",
+                                                            }}
+                                                        >
+                                                            {t.reviews} review
+                                                            {t.reviews === 1
+                                                                ? ""
+                                                                : "s"}
                                                         </td>
                                                     </tr>
                                                 );
