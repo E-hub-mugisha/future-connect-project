@@ -21,8 +21,7 @@ export default function Index({
     const lineCanvasRef = useRef(null);
 
     useEffect(() => {
-        // Single fixed palette: #48d597 (accent), white, black — only opacity
-        // variants of these two hues are used to distinguish chart series.
+        
         const palette = {
             accent: '#48d597',
             accent70: 'rgba(72, 213, 151, 0.70)',
@@ -182,7 +181,7 @@ export default function Index({
 
     return (
         <AppLayout>
-            <Head title="Dashboard" />
+            <Head title="Skills Dashboard" />
 
             <style>{`
                 /* Scoped overrides so this page only ever renders #48d597 / white / black,
