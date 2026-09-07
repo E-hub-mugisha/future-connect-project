@@ -7,177 +7,32 @@ export default function Footer() {
     return (
         <>
             <style>{`
+                /* =========================================================
+                   TALENTHUB LIGHT FOOTER
+                ========================================================= */
+
                 .talent-footer {
                     position: relative;
                     margin-left: 250px;
-                    background: #0b1220;
-                    color: #fff;
+                    background: #ffffff;
+                    color: #172033;
                     font-family: 'DM Sans', sans-serif;
-                    border-top: 1px solid rgba(255,255,255,0.06);
+                    border-top: 1px solid #e8edf4;
                 }
 
                 .talent-footer-inner {
                     max-width: 1500px;
                     margin: 0 auto;
-                    padding: 52px 36px 28px;
+                    padding: 0 36px;
                 }
 
-                /* =========================
-                   TOP FOOTER
-                ========================= */
-
-                .footer-main {
-                    display: grid;
-                    grid-template-columns: minmax(250px, 1.8fr) repeat(3, minmax(130px, 1fr));
-                    gap: 50px;
-                    padding-bottom: 42px;
-                }
-
-                .footer-brand {
-                    max-width: 340px;
-                }
-
-                .footer-brand-logo {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin-bottom: 18px;
-                    text-decoration: none;
-                    color: #fff;
-                }
-
-                .footer-logo-mark {
-                    width: 42px;
-                    height: 42px;
-                    border-radius: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: linear-gradient(135deg, #5d89c8, #3d6fae);
-                    color: #fff;
-                    font-weight: 800;
-                    font-size: 17px;
-                    box-shadow: 0 8px 22px rgba(93,137,200,0.25);
-                }
-
-                .footer-logo-text {
-                    font-size: 19px;
-                    font-weight: 700;
-                    letter-spacing: -0.4px;
-                }
-
-                .footer-brand-description {
-                    margin: 0;
-                    color: rgba(255,255,255,0.58);
-                    font-size: 13.5px;
-                    line-height: 1.75;
-                    max-width: 320px;
-                }
-
-                .footer-column-title {
-                    margin: 4px 0 17px;
-                    color: #fff;
-                    font-size: 13px;
-                    font-weight: 700;
-                    letter-spacing: 0.2px;
-                }
-
-                .footer-links {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 11px;
-                    margin: 0;
-                    padding: 0;
-                    list-style: none;
-                }
-
-                .footer-links a {
-                    display: inline-flex;
-                    align-items: center;
-                    width: fit-content;
-                    color: rgba(255,255,255,0.53);
-                    text-decoration: none;
-                    font-size: 13px;
-                    transition:
-                        color 0.18s ease,
-                        transform 0.18s ease;
-                }
-
-                .footer-links a:hover {
-                    color: #fff;
-                    transform: translateX(3px);
-                }
-
-                /* =========================
-                   CTA
-                ========================= */
-
-                .footer-cta {
-                    margin-top: 28px;
-                    padding: 18px;
-                    border: 1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.035);
-                    border-radius: 14px;
-                }
-
-                .footer-cta-title {
-                    margin: 0 0 6px;
-                    font-size: 13px;
-                    font-weight: 700;
-                    color: #fff;
-                }
-
-                .footer-cta-text {
-                    margin: 0;
-                    font-size: 12px;
-                    line-height: 1.6;
-                    color: rgba(255,255,255,0.48);
-                }
-
-                /* =========================
-                   SOCIAL
-                ========================= */
-
-                .footer-socials {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-top: 22px;
-                }
-
-                .footer-social {
-                    width: 34px;
-                    height: 34px;
-                    border-radius: 9px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: rgba(255,255,255,0.62);
-                    border: 1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.035);
-                    text-decoration: none;
-                    transition:
-                        color 0.18s ease,
-                        background 0.18s ease,
-                        border-color 0.18s ease,
-                        transform 0.18s ease;
-                }
-
-                .footer-social:hover {
-                    color: #fff;
-                    background: rgba(93,137,200,0.18);
-                    border-color: rgba(93,137,200,0.4);
-                    transform: translateY(-2px);
-                }
-
-                /* =========================
+                /* =========================================================
                    BOTTOM BAR
-                ========================= */
+                ========================================================= */
 
                 .footer-bottom {
-                    min-height: 62px;
-                    padding-top: 22px;
-                    border-top: 1px solid rgba(255,255,255,0.07);
+                    min-height: 70px;
+                    padding: 20px 0;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -186,24 +41,29 @@ export default function Footer() {
 
                 .footer-copyright {
                     margin: 0;
-                    color: rgba(255,255,255,0.42);
+                    color: #7a8496;
                     font-size: 12px;
+                    line-height: 1.6;
                 }
 
                 .footer-copyright button {
                     border: 0;
                     padding: 0;
                     background: none;
-                    color: #82a9dc;
+                    color: #5d89c8;
                     font: inherit;
-                    font-weight: 600;
+                    font-weight: 700;
                     cursor: pointer;
                     transition: color 0.18s ease;
                 }
 
                 .footer-copyright button:hover {
-                    color: #fff;
+                    color: #3f6fae;
                 }
+
+                /* =========================================================
+                   BOTTOM LINKS
+                ========================================================= */
 
                 .footer-bottom-links {
                     display: flex;
@@ -212,25 +72,27 @@ export default function Footer() {
                 }
 
                 .footer-bottom-links a {
-                    color: rgba(255,255,255,0.42);
+                    color: #7a8496;
                     text-decoration: none;
                     font-size: 12px;
-                    transition: color 0.18s ease;
+                    transition:
+                        color 0.18s ease,
+                        transform 0.18s ease;
                 }
 
                 .footer-bottom-links a:hover {
-                    color: #fff;
+                    color: #5d89c8;
                 }
 
-                /* =========================
+                /* =========================================================
                    STATUS
-                ========================= */
+                ========================================================= */
 
                 .footer-status {
                     display: inline-flex;
                     align-items: center;
                     gap: 7px;
-                    color: rgba(255,255,255,0.42);
+                    color: #7a8496;
                     font-size: 11.5px;
                 }
 
@@ -239,12 +101,12 @@ export default function Footer() {
                     height: 7px;
                     border-radius: 50%;
                     background: #46c88a;
-                    box-shadow: 0 0 0 4px rgba(70,200,138,0.10);
+                    box-shadow: 0 0 0 4px rgba(70, 200, 138, 0.10);
                 }
 
-                /* =========================
-                   MODAL
-                ========================= */
+                /* =========================================================
+                   MODAL OVERLAY
+                ========================================================= */
 
                 .developer-overlay {
                     position: fixed;
@@ -254,19 +116,30 @@ export default function Footer() {
                     align-items: center;
                     justify-content: center;
                     padding: 20px;
-                    background: rgba(4,9,17,0.72);
+                    background: rgba(15, 23, 42, 0.38);
                     backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
                 }
+
+                /* =========================================================
+                   MODAL
+                ========================================================= */
 
                 .developer-modal {
                     width: 100%;
                     max-width: 470px;
                     overflow: hidden;
                     position: relative;
-                    border: 1px solid rgba(255,255,255,0.08);
+
+                    border: 1px solid #e5eaf1;
                     border-radius: 20px;
-                    background: #111a2a;
-                    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+
+                    background: #ffffff;
+
+                    box-shadow:
+                        0 30px 80px rgba(31, 45, 61, 0.18),
+                        0 10px 30px rgba(31, 45, 61, 0.08);
+
                     animation: developerModalIn 0.2s ease-out;
                 }
 
@@ -282,15 +155,22 @@ export default function Footer() {
                     }
                 }
 
+                /* =========================================================
+                   MODAL HEADER
+                ========================================================= */
+
                 .developer-modal-header {
                     padding: 25px;
+
                     background:
                         radial-gradient(
                             circle at top right,
-                            rgba(93,137,200,0.22),
+                            rgba(93, 137, 200, 0.14),
                             transparent 45%
-                        );
-                    border-bottom: 1px solid rgba(255,255,255,0.07);
+                        ),
+                        #f8fafc;
+
+                    border-bottom: 1px solid #e8edf4;
                 }
 
                 .developer-profile {
@@ -303,51 +183,82 @@ export default function Footer() {
                     width: 52px;
                     height: 52px;
                     flex-shrink: 0;
+
                     border-radius: 15px;
+
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background: linear-gradient(135deg, #5d89c8, #416fa8);
-                    color: #fff;
+
+                    background: linear-gradient(
+                        135deg,
+                        #5d89c8,
+                        #416fa8
+                    );
+
+                    color: #ffffff;
+
                     font-weight: 800;
                     font-size: 16px;
-                    box-shadow: 0 8px 25px rgba(93,137,200,0.25);
+
+                    box-shadow:
+                        0 8px 25px rgba(93, 137, 200, 0.24);
                 }
 
                 .developer-name {
                     margin: 0;
-                    color: #fff;
+                    color: #172033;
                     font-size: 16px;
                     font-weight: 700;
                 }
 
                 .developer-role {
                     margin: 4px 0 0;
-                    color: rgba(255,255,255,0.48);
+                    color: #7a8496;
                     font-size: 12px;
                 }
+
+                /* =========================================================
+                   CLOSE BUTTON
+                ========================================================= */
 
                 .developer-close {
                     position: absolute;
                     top: 18px;
                     right: 18px;
+
                     width: 32px;
                     height: 32px;
-                    border: 1px solid rgba(255,255,255,0.08);
+
+                    border: 1px solid #e3e8ef;
                     border-radius: 9px;
+
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background: rgba(255,255,255,0.04);
-                    color: rgba(255,255,255,0.6);
+
+                    background: #ffffff;
+                    color: #7a8496;
+
                     cursor: pointer;
-                    transition: all 0.18s ease;
+
+                    transition:
+                        background 0.18s ease,
+                        color 0.18s ease,
+                        border-color 0.18s ease,
+                        transform 0.18s ease;
                 }
 
                 .developer-close:hover {
-                    background: rgba(255,255,255,0.09);
-                    color: #fff;
+                    background: #f1f5f9;
+                    border-color: #d6deea;
+                    color: #172033;
+                    transform: rotate(3deg);
                 }
+
+                /* =========================================================
+                   MODAL BODY
+                ========================================================= */
 
                 .developer-body {
                     padding: 22px;
@@ -355,10 +266,16 @@ export default function Footer() {
 
                 .developer-intro {
                     margin: 0 0 18px;
-                    color: rgba(255,255,255,0.5);
+
+                    color: #6f7b8f;
+
                     font-size: 12.5px;
                     line-height: 1.65;
                 }
+
+                /* =========================================================
+                   CONTACT LIST
+                ========================================================= */
 
                 .developer-contact-list {
                     display: flex;
@@ -370,84 +287,98 @@ export default function Footer() {
                     display: flex;
                     align-items: center;
                     gap: 13px;
+
                     padding: 12px;
-                    border: 1px solid rgba(255,255,255,0.07);
+
+                    border: 1px solid #e7ecf2;
                     border-radius: 12px;
-                    background: rgba(255,255,255,0.025);
-                    color: #fff;
+
+                    background: #ffffff;
+
+                    color: #172033;
                     text-decoration: none;
+
                     transition:
                         background 0.18s ease,
                         border-color 0.18s ease,
-                        transform 0.18s ease;
+                        transform 0.18s ease,
+                        box-shadow 0.18s ease;
                 }
 
                 .developer-contact:hover {
-                    background: rgba(93,137,200,0.09);
-                    border-color: rgba(93,137,200,0.28);
+                    background: #f8fbff;
+                    border-color: rgba(93, 137, 200, 0.35);
+
                     transform: translateY(-1px);
+
+                    box-shadow:
+                        0 6px 18px rgba(31, 45, 61, 0.06);
                 }
+
+                /* =========================================================
+                   CONTACT ICON
+                ========================================================= */
 
                 .developer-contact-icon {
                     width: 36px;
                     height: 36px;
                     flex-shrink: 0;
+
                     display: flex;
                     align-items: center;
                     justify-content: center;
+
                     border-radius: 10px;
-                    background: rgba(93,137,200,0.14);
-                    color: #82a9dc;
+
+                    background: rgba(93, 137, 200, 0.10);
+                    color: #5d89c8;
                 }
 
                 .developer-contact-label {
                     margin: 0 0 2px;
-                    color: rgba(255,255,255,0.4);
+
+                    color: #98a2b3;
+
                     font-size: 10.5px;
+                    font-weight: 500;
                 }
 
                 .developer-contact-value {
                     margin: 0;
-                    color: #fff;
+
+                    color: #263247;
+
                     font-size: 12.5px;
                     font-weight: 600;
                 }
 
-                /* =========================
+                /* =========================================================
                    TABLET
-                ========================= */
+                ========================================================= */
 
                 @media (max-width: 1100px) {
                     .talent-footer {
                         margin-left: 0;
                     }
 
-                    .footer-main {
-                        grid-template-columns: 1.5fr repeat(3, 1fr);
-                        gap: 30px;
+                    .talent-footer-inner {
+                        padding-left: 30px;
+                        padding-right: 30px;
                     }
                 }
 
-                /* =========================
+                /* =========================================================
                    MOBILE
-                ========================= */
+                ========================================================= */
 
                 @media (max-width: 760px) {
                     .talent-footer-inner {
-                        padding: 38px 22px 22px;
-                    }
-
-                    .footer-main {
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 34px 25px;
-                    }
-
-                    .footer-brand {
-                        grid-column: 1 / -1;
-                        max-width: 100%;
+                        padding: 0 22px;
                     }
 
                     .footer-bottom {
+                        min-height: auto;
+                        padding: 25px 0;
                         flex-direction: column;
                         align-items: flex-start;
                         gap: 15px;
@@ -460,12 +391,8 @@ export default function Footer() {
                 }
 
                 @media (max-width: 480px) {
-                    .footer-main {
-                        grid-template-columns: 1fr 1fr;
-                    }
-
-                    .footer-brand {
-                        grid-column: 1 / -1;
+                    .footer-bottom {
+                        gap: 13px;
                     }
 
                     .footer-bottom-links {
@@ -497,9 +424,6 @@ export default function Footer() {
 
             <footer className="talent-footer">
                 <div className="talent-footer-inner">
-                    {/* =========================
-                        BOTTOM
-                    ========================= */}
 
                     <div className="footer-bottom">
 
@@ -541,9 +465,9 @@ export default function Footer() {
                 </div>
             </footer>
 
-            {/* =========================
+            {/* =========================================================
                 DEVELOPER MODAL
-            ========================= */}
+            ========================================================= */}
 
             {modalOpen && (
                 <div
@@ -657,7 +581,7 @@ export default function Footer() {
                                             viewBox="0 0 24 24"
                                             fill="currentColor"
                                         >
-                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                                         </svg>
                                     </span>
 

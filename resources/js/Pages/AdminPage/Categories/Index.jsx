@@ -1,9 +1,1240 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AppLayout';
 
+/*
+|--------------------------------------------------------------------------
+| Categories — Modern Admin Management
+|--------------------------------------------------------------------------
+| Backend contract preserved:
+| - admin.categories.store
+| - admin.categories.update
+| - admin.categories.destroy
+| - name
+| - description
+| - featured
+|--------------------------------------------------------------------------
+*/
 
-function slugify(value) {
+export default function Index({
+    categories = [],
+    flash = {},
+    errors: pageErrors = {},
+}) {
+    const categoryList = Array.isArray(categories)
+        ? categories
+        : categories?.data ?? [];
+
+    const routes = {
+        store: () => route('admin.categories.store'),
+        update: (id) => route('admin.categories.update', id),
+        destroy: (id) => route('admin.categories.destroy', id),
+    };
+
+    const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState('all');
+
+    const [addOpen, setAddOpen] = useState(false);
+    const [editingCategory, setEditingCategory] = useState(null);
+    const [deletingCategory, setDeletingCategory] = useState(null);
+
+    const stats = useMemo(() => {
+        const total = categoryList.length;
+        const featured = categoryList.filter(
+            (category) => Boolean(category.featured)
+        ).length;
+
+        return {
+            total,
+            featured,
+            standard: total - featured,
+        };
+    }, [categoryList]);
+
+    const filteredCategories = useMemo(() => {
+        const query = search.trim().toLowerCase();
+
+        return categoryList.filter((category) => {
+            const matchesSearch =
+                !query ||
+                String(category.name ?? '')
+                    .toLowerCase()
+                    .includes(query) ||
+                String(category.description ?? '')
+                    .toLowerCase()
+                    .includes(query) ||
+                String(category.slug ?? '')
+                    .toLowerCase()
+                    .includes(query);
+
+            const matchesFilter =
+                filter === 'all' ||
+                (filter === 'featured' && Boolean(category.featured)) ||
+                (filter === 'standard' && !Boolean(category.featured));
+
+            return matchesSearch && matchesFilter;
+        });
+    }, [categoryList, search, filter]);
+
+    const clearFilters = () => {
+        setSearch('');
+        setFilter('all');
+    };
+
+    const hasFilters = search.trim() !== '' || filter !== 'all';
+
+    const destroyCategory = () => {
+        if (!deletingCategory) return;
+
+        router.delete(routes.destroy(deletingCategory.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setDeletingCategory(null);
+            },
+        });
+    };
+
+    return (
+        <AdminLayout>
+            <Head title="Categories" />
+
+            <style>{styles}</style>
+
+            <div className="categories-page">
+                <ToastStack
+                    flash={flash}
+                    errors={pageErrors}
+                />
+
+                {/* ---------------------------------------------------------
+                    HERO / PAGE INTRO
+                --------------------------------------------------------- */}
+                <section className="categories-hero">
+                    <div className="hero-main">
+                        <div className="hero-kicker">
+                            <span className="kicker-line" />
+                            Content structure
+                        </div>
+
+                        <div className="hero-title-row">
+                            <div>
+                                <h1>Categories</h1>
+
+                                <p>
+                                    Organize your platform content into clear,
+                                    meaningful groups that are easy to discover
+                                    and manage.
+                                </p>
+                            </div>
+
+                            <div className="hero-count">
+                                <strong>{stats.total}</strong>
+                                <span>Total categories</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="primary-button hero-add"
+                        onClick={() => setAddOpen(true)}
+                    >
+                        <PlusIcon />
+                        <span>Create category</span>
+                    </button>
+                </section>
+
+                {/* ---------------------------------------------------------
+                    OVERVIEW
+                --------------------------------------------------------- */}
+                <section className="overview-panel">
+                    <div className="overview-intro">
+                        <div className="overview-icon">
+                            <LayersIcon />
+                        </div>
+
+                        <div>
+                            <span className="section-label">
+                                Category overview
+                            </span>
+
+                            <h2>
+                                Keep your content structure organized
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div className="overview-stats">
+                        <StatItem
+                            label="All categories"
+                            value={stats.total}
+                            icon={<LayersIcon />}
+                            active={filter === 'all'}
+                            onClick={() => setFilter('all')}
+                        />
+
+                        <StatItem
+                            label="Featured"
+                            value={stats.featured}
+                            icon={<StarIcon />}
+                            active={filter === 'featured'}
+                            onClick={() => setFilter('featured')}
+                        />
+
+                        <StatItem
+                            label="Standard"
+                            value={stats.standard}
+                            icon={<FolderIcon />}
+                            active={filter === 'standard'}
+                            onClick={() => setFilter('standard')}
+                        />
+                    </div>
+                </section>
+
+                {/* ---------------------------------------------------------
+                    TOOLBAR
+                --------------------------------------------------------- */}
+                <section className="content-toolbar">
+                    <div className="toolbar-search">
+                        <SearchIcon />
+
+                        <input
+                            type="search"
+                            value={search}
+                            onChange={(event) =>
+                                setSearch(event.target.value)
+                            }
+                            placeholder="Search categories, descriptions or slugs..."
+                            aria-label="Search categories"
+                        />
+
+                        {search && (
+                            <button
+                                type="button"
+                                className="search-clear"
+                                onClick={() => setSearch('')}
+                                aria-label="Clear search"
+                            >
+                                <CloseIcon />
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="toolbar-right">
+                        <div className="filter-group">
+                            <button
+                                type="button"
+                                className={
+                                    filter === 'all'
+                                        ? 'filter-button active'
+                                        : 'filter-button'
+                                }
+                                onClick={() => setFilter('all')}
+                            >
+                                All
+                            </button>
+
+                            <button
+                                type="button"
+                                className={
+                                    filter === 'featured'
+                                        ? 'filter-button active'
+                                        : 'filter-button'
+                                }
+                                onClick={() => setFilter('featured')}
+                            >
+                                <StarIcon />
+                                Featured
+                            </button>
+
+                            <button
+                                type="button"
+                                className={
+                                    filter === 'standard'
+                                        ? 'filter-button active'
+                                        : 'filter-button'
+                                }
+                                onClick={() => setFilter('standard')}
+                            >
+                                Standard
+                            </button>
+                        </div>
+
+                        {hasFilters && (
+                            <button
+                                type="button"
+                                className="reset-button"
+                                onClick={clearFilters}
+                            >
+                                Reset
+                            </button>
+                        )}
+                    </div>
+                </section>
+
+                {/* ---------------------------------------------------------
+                    RESULTS HEADER
+                --------------------------------------------------------- */}
+                <div className="results-header">
+                    <div>
+                        <strong>
+                            {filteredCategories.length}
+                        </strong>{' '}
+                        {filteredCategories.length === 1
+                            ? 'category'
+                            : 'categories'}{' '}
+                        displayed
+                    </div>
+
+                    {hasFilters && (
+                        <span>
+                            Filtered from {categoryList.length} total
+                        </span>
+                    )}
+                </div>
+
+                {/* ---------------------------------------------------------
+                    CATEGORY CONTENT
+                --------------------------------------------------------- */}
+                {categoryList.length === 0 ? (
+                    <EmptyState
+                        type="all"
+                        onAdd={() => setAddOpen(true)}
+                    />
+                ) : filteredCategories.length === 0 ? (
+                    <EmptyState
+                        type="filtered"
+                        onReset={clearFilters}
+                    />
+                ) : (
+                    <div className="category-grid">
+                        {filteredCategories.map((category, index) => (
+                            <CategoryCard
+                                key={category.id}
+                                category={category}
+                                index={index}
+                                onEdit={() =>
+                                    setEditingCategory(category)
+                                }
+                                onDelete={() =>
+                                    setDeletingCategory(category)
+                                }
+                            />
+                        ))}
+
+                        {/* Add another card */}
+                        <button
+                            type="button"
+                            className="create-card"
+                            onClick={() => setAddOpen(true)}
+                        >
+                            <span className="create-card-icon">
+                                <PlusIcon size={20} />
+                            </span>
+
+                            <span className="create-card-title">
+                                Add another category
+                            </span>
+
+                            <span className="create-card-subtitle">
+                                Create a new content group
+                            </span>
+                        </button>
+                    </div>
+                )}
+
+                {/* ---------------------------------------------------------
+                    MODALS
+                --------------------------------------------------------- */}
+                {addOpen && (
+                    <CategoryFormModal
+                        mode="add"
+                        routes={routes}
+                        onClose={() => setAddOpen(false)}
+                    />
+                )}
+
+                {editingCategory && (
+                    <CategoryFormModal
+                        mode="edit"
+                        category={editingCategory}
+                        routes={routes}
+                        onClose={() => setEditingCategory(null)}
+                    />
+                )}
+
+                {deletingCategory && (
+                    <DeleteConfirmModal
+                        category={deletingCategory}
+                        onCancel={() =>
+                            setDeletingCategory(null)
+                        }
+                        onConfirm={destroyCategory}
+                    />
+                )}
+            </div>
+        </AdminLayout>
+    );
+}
+
+/* ==========================================================================
+   STAT ITEM
+========================================================================== */
+
+function StatItem({
+    label,
+    value,
+    icon,
+    active,
+    onClick,
+}) {
+    return (
+        <button
+            type="button"
+            className={`stat-item ${active ? 'active' : ''}`}
+            onClick={onClick}
+        >
+            <span className="stat-icon">
+                {icon}
+            </span>
+
+            <span className="stat-copy">
+                <strong>{value}</strong>
+                <span>{label}</span>
+            </span>
+
+            <ArrowUpRightIcon />
+        </button>
+    );
+}
+
+/* ==========================================================================
+   CATEGORY CARD
+========================================================================== */
+
+function CategoryCard({
+    category,
+    index,
+    onEdit,
+    onDelete,
+}) {
+    const featured = Boolean(category.featured);
+
+    const initials = getInitials(category.name);
+
+    const description =
+        category.description ||
+        'No description has been added for this category yet.';
+
+    return (
+        <article
+            className={`category-card ${
+                featured ? 'is-featured' : ''
+            }`}
+        >
+            <div className="card-top-line">
+                <span className="category-index">
+                    {String(index + 1).padStart(2, '0')}
+                </span>
+
+                <ActionsDropdown
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
+            </div>
+
+            <div className="category-identity">
+                <div
+                    className={`category-mark ${
+                        featured ? 'featured-mark' : ''
+                    }`}
+                >
+                    {featured ? (
+                        <StarIcon />
+                    ) : (
+                        <span>{initials}</span>
+                    )}
+                </div>
+
+                <div className="category-title-area">
+                    <div className="category-status-row">
+                        <span
+                            className={`status-badge ${
+                                featured
+                                    ? 'featured'
+                                    : 'standard'
+                            }`}
+                        >
+                            <span className="status-dot" />
+                            {featured
+                                ? 'Featured'
+                                : 'Standard'}
+                        </span>
+                    </div>
+
+                    <h3>{category.name}</h3>
+                </div>
+            </div>
+
+            <p className="category-description">
+                {description}
+            </p>
+
+            <div className="card-divider" />
+
+            <div className="category-meta">
+                <div className="slug-block">
+                    <span>SLUG</span>
+
+                    <code>
+                        {category.slug ||
+                            slugify(category.name)}
+                    </code>
+                </div>
+
+                <button
+                    type="button"
+                    className="card-edit"
+                    onClick={onEdit}
+                >
+                    Edit
+                    <ArrowRightIcon />
+                </button>
+            </div>
+        </article>
+    );
+}
+
+/* ==========================================================================
+   ACTIONS DROPDOWN
+========================================================================== */
+
+function ActionsDropdown({
+    onEdit,
+    onDelete,
+}) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (!open) return;
+
+        const handleClick = (event) => {
+            if (
+                ref.current &&
+                !ref.current.contains(event.target)
+            ) {
+                setOpen(false);
+            }
+        };
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener(
+            'mousedown',
+            handleClick
+        );
+
+        document.addEventListener(
+            'keydown',
+            handleKeyDown
+        );
+
+        return () => {
+            document.removeEventListener(
+                'mousedown',
+                handleClick
+            );
+
+            document.removeEventListener(
+                'keydown',
+                handleKeyDown
+            );
+        };
+    }, [open]);
+
+    return (
+        <div
+            className="actions-container"
+            ref={ref}
+        >
+            <button
+                type="button"
+                className={`actions-button ${
+                    open ? 'open' : ''
+                }`}
+                onClick={() => setOpen((value) => !value)}
+                aria-label="Category actions"
+                aria-expanded={open}
+            >
+                <DotsIcon />
+            </button>
+
+            {open && (
+                <div className="actions-menu">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setOpen(false);
+                            onEdit();
+                        }}
+                    >
+                        <PencilIcon />
+                        Edit category
+                    </button>
+
+                    <div className="menu-separator" />
+
+                    <button
+                        type="button"
+                        className="danger"
+                        onClick={() => {
+                            setOpen(false);
+                            onDelete();
+                        }}
+                    >
+                        <TrashIcon />
+                        Delete category
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* ==========================================================================
+   EMPTY STATE
+========================================================================== */
+
+function EmptyState({
+    type,
+    onAdd,
+    onReset,
+}) {
+    if (type === 'filtered') {
+        return (
+            <section className="empty-state">
+                <div className="empty-visual">
+                    <SearchIcon size={28} />
+                </div>
+
+                <span className="empty-eyebrow">
+                    No matches
+                </span>
+
+                <h2>No categories found</h2>
+
+                <p>
+                    Try a different search term or change
+                    the current filter.
+                </p>
+
+                <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={onReset}
+                >
+                    Clear filters
+                </button>
+            </section>
+        );
+    }
+
+    return (
+        <section className="empty-state">
+            <div className="empty-visual">
+                <FolderIcon size={30} />
+            </div>
+
+            <span className="empty-eyebrow">
+                Get started
+            </span>
+
+            <h2>Your categories live here</h2>
+
+            <p>
+                Create your first category to start organizing
+                content across the platform.
+            </p>
+
+            <button
+                type="button"
+                className="primary-button"
+                onClick={onAdd}
+            >
+                <PlusIcon />
+                Create first category
+            </button>
+        </section>
+    );
+}
+
+/* ==========================================================================
+   FORM MODAL
+========================================================================== */
+
+function CategoryFormModal({
+    mode,
+    category,
+    routes,
+    onClose,
+}) {
+    const isEdit = mode === 'edit';
+
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        transform,
+    } = useForm({
+        name: category?.name ?? '',
+        description: category?.description ?? '',
+        featured: isEdit
+            ? Boolean(category?.featured)
+            : false,
+    });
+
+    const slug = useMemo(
+        () => slugify(data.name),
+        [data.name]
+    );
+
+    const descriptionLength =
+        data.description?.length ?? 0;
+
+    const submit = (event) => {
+        event.preventDefault();
+
+        const url = isEdit
+            ? routes.update(category.id)
+            : routes.store();
+
+        if (isEdit) {
+            transform((formData) => ({
+                ...formData,
+                _method: 'put',
+            }));
+        }
+
+        post(url, {
+            preserveScroll: true,
+            onSuccess: () => {
+                onClose();
+            },
+        });
+    };
+
+    return (
+        <ModalShell
+            title={
+                isEdit
+                    ? 'Edit category'
+                    : 'Create category'
+            }
+            subtitle={
+                isEdit
+                    ? 'Update the details and visibility of this category.'
+                    : 'Add a new category to organize your platform content.'
+            }
+            icon={
+                isEdit ? (
+                    <PencilIcon size={18} />
+                ) : (
+                    <FolderPlusIcon size={18} />
+                )
+            }
+            onClose={onClose}
+            size="large"
+        >
+            <form
+                onSubmit={submit}
+                className="category-form"
+            >
+                <div className="form-content">
+                    {/* NAME */}
+                    <div className="form-field">
+                        <div className="field-heading">
+                            <label
+                                htmlFor={`category-name-${mode}`}
+                            >
+                                Category name
+                            </label>
+
+                            <span>Required</span>
+                        </div>
+
+                        <div
+                            className={`input-shell ${
+                                errors.name
+                                    ? 'has-error'
+                                    : ''
+                            }`}
+                        >
+                            <FolderIcon />
+
+                            <input
+                                id={`category-name-${mode}`}
+                                type="text"
+                                value={data.name}
+                                onChange={(event) =>
+                                    setData(
+                                        'name',
+                                        event.target.value
+                                    )
+                                }
+                                placeholder="e.g. Web Development"
+                                autoComplete="off"
+                                autoFocus
+                                required
+                            />
+                        </div>
+
+                        {errors.name && (
+                            <FieldError>
+                                {errors.name}
+                            </FieldError>
+                        )}
+                    </div>
+
+                    {/* SLUG PREVIEW */}
+                    <div className="slug-preview">
+                        <div className="slug-preview-label">
+                            <HashIcon />
+                            <span>URL slug</span>
+                        </div>
+
+                        <code>
+                            {slug || 'your-category-slug'}
+                        </code>
+                    </div>
+
+                    {/* DESCRIPTION */}
+                    <div className="form-field">
+                        <div className="field-heading">
+                            <label
+                                htmlFor={`category-description-${mode}`}
+                            >
+                                Description
+                            </label>
+
+                            <span>
+                                {descriptionLength}/500
+                            </span>
+                        </div>
+
+                        <div
+                            className={`textarea-shell ${
+                                errors.description
+                                    ? 'has-error'
+                                    : ''
+                            }`}
+                        >
+                            <textarea
+                                id={`category-description-${mode}`}
+                                value={data.description}
+                                onChange={(event) =>
+                                    setData(
+                                        'description',
+                                        event.target.value.slice(
+                                            0,
+                                            500
+                                        )
+                                    )
+                                }
+                                placeholder="Briefly explain what belongs in this category..."
+                                rows={5}
+                                maxLength={500}
+                                required
+                            />
+                        </div>
+
+                        {errors.description && (
+                            <FieldError>
+                                {errors.description}
+                            </FieldError>
+                        )}
+                    </div>
+
+                    {/* FEATURED OPTION */}
+                    <label
+                        className={`featured-option ${
+                            data.featured
+                                ? 'selected'
+                                : ''
+                        }`}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={Boolean(data.featured)}
+                            onChange={(event) =>
+                                setData(
+                                    'featured',
+                                    event.target.checked
+                                )
+                            }
+                        />
+
+                        <span className="featured-option-icon">
+                            <StarIcon />
+                        </span>
+
+                        <span className="featured-option-copy">
+                            <strong>
+                                Feature this category
+                            </strong>
+
+                            <span>
+                                Give this category extra
+                                visibility across the platform.
+                            </span>
+                        </span>
+
+                        <span
+                            className={`toggle ${
+                                data.featured
+                                    ? 'on'
+                                    : ''
+                            }`}
+                        >
+                            <span />
+                        </span>
+                    </label>
+                </div>
+
+                <div className="modal-footer">
+                    <button
+                        type="button"
+                        className="secondary-button"
+                        onClick={onClose}
+                        disabled={processing}
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        className="primary-button"
+                        disabled={processing}
+                    >
+                        {processing ? (
+                            <>
+                                <SpinnerIcon />
+                                Saving...
+                            </>
+                        ) : (
+                            <>
+                                {isEdit ? (
+                                    <CheckIcon />
+                                ) : (
+                                    <PlusIcon />
+                                )}
+
+                                {isEdit
+                                    ? 'Save changes'
+                                    : 'Create category'}
+                            </>
+                        )}
+                    </button>
+                </div>
+            </form>
+        </ModalShell>
+    );
+}
+
+/* ==========================================================================
+   DELETE MODAL
+========================================================================== */
+
+function DeleteConfirmModal({
+    category,
+    onCancel,
+    onConfirm,
+}) {
+    return (
+        <ModalShell
+            title="Delete category"
+            subtitle="This action cannot be undone."
+            icon={<TrashIcon size={18} />}
+            onClose={onCancel}
+            size="small"
+            danger
+        >
+            <div className="delete-content">
+                <div className="delete-visual">
+                    <TrashIcon size={26} />
+                </div>
+
+                <h2>
+                    Delete "{category.name}"?
+                </h2>
+
+                <p>
+                    This category will be permanently removed.
+                    Any content associated with it may be
+                    affected.
+                </p>
+
+                <div className="delete-warning">
+                    <AlertTriangleIcon />
+
+                    <span>
+                        Please make sure this category is no
+                        longer needed before continuing.
+                    </span>
+                </div>
+            </div>
+
+            <div className="modal-footer delete-footer">
+                <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={onCancel}
+                >
+                    Keep category
+                </button>
+
+                <button
+                    type="button"
+                    className="danger-button"
+                    onClick={onConfirm}
+                >
+                    <TrashIcon />
+                    Delete permanently
+                </button>
+            </div>
+        </ModalShell>
+    );
+}
+
+/* ==========================================================================
+   MODAL SHELL
+========================================================================== */
+
+function ModalShell({
+    title,
+    subtitle,
+    icon,
+    onClose,
+    children,
+    size = 'medium',
+    danger = false,
+}) {
+    useEffect(() => {
+        const previousOverflow =
+            document.body.style.overflow;
+
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        document.addEventListener(
+            'keydown',
+            handleKeyDown
+        );
+
+        return () => {
+            document.body.style.overflow =
+                previousOverflow;
+
+            document.removeEventListener(
+                'keydown',
+                handleKeyDown
+            );
+        };
+    }, [onClose]);
+
+    return (
+        <div
+            className="modal-overlay"
+            onMouseDown={(event) => {
+                if (
+                    event.target === event.currentTarget
+                ) {
+                    onClose();
+                }
+            }}
+        >
+            <div
+                className={`modal-panel modal-${size} ${
+                    danger ? 'modal-danger' : ''
+                }`}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="category-modal-title"
+            >
+                <div className="modal-heading">
+                    <div
+                        className={`modal-heading-icon ${
+                            danger ? 'danger' : ''
+                        }`}
+                    >
+                        {icon}
+                    </div>
+
+                    <div className="modal-heading-copy">
+                        <h2 id="category-modal-title">
+                            {title}
+                        </h2>
+
+                        {subtitle && (
+                            <p>{subtitle}</p>
+                        )}
+                    </div>
+
+                    <button
+                        type="button"
+                        className="modal-close"
+                        onClick={onClose}
+                        aria-label="Close modal"
+                    >
+                        <CloseIcon />
+                    </button>
+                </div>
+
+                {children}
+            </div>
+        </div>
+    );
+}
+
+/* ==========================================================================
+   TOASTS
+========================================================================== */
+
+function ToastStack({
+    flash,
+    errors,
+}) {
+    const hasValidation =
+        errors &&
+        Object.keys(errors).length > 0;
+
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const next = [];
+
+        if (flash?.success) {
+            next.push({
+                id: 'success',
+                tone: 'success',
+                title: 'Changes saved',
+                message: flash.success,
+            });
+        }
+
+        if (flash?.error) {
+            next.push({
+                id: 'error',
+                tone: 'error',
+                title: 'Something went wrong',
+                message: flash.error,
+            });
+        }
+
+        if (hasValidation) {
+            next.push({
+                id: 'validation',
+                tone: 'warning',
+                title: 'Check the form',
+                message: Object.values(errors).join(' '),
+            });
+        }
+
+        setItems(next);
+    }, [
+        flash?.success,
+        flash?.error,
+        hasValidation,
+    ]);
+
+    useEffect(() => {
+        if (!items.length) return;
+
+        const timer = setTimeout(() => {
+            setItems([]);
+        }, 6000);
+
+        return () => clearTimeout(timer);
+    }, [items]);
+
+    if (!items.length) return null;
+
+    return (
+        <div className="toast-stack">
+            {items.map((item) => (
+                <div
+                    key={item.id}
+                    className={`toast toast-${item.tone}`}
+                >
+                    <div className="toast-icon">
+                        {item.tone === 'success' && (
+                            <CheckCircleIcon />
+                        )}
+
+                        {item.tone === 'error' && (
+                            <AlertCircleIcon />
+                        )}
+
+                        {item.tone === 'warning' && (
+                            <AlertTriangleIcon />
+                        )}
+                    </div>
+
+                    <div className="toast-copy">
+                        <strong>{item.title}</strong>
+                        <span>{item.message}</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setItems((current) =>
+                                current.filter(
+                                    (toast) =>
+                                        toast.id !==
+                                        item.id
+                                )
+                            )
+                        }
+                        aria-label="Close notification"
+                    >
+                        <CloseIcon />
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+/* ==========================================================================
+   FIELD ERROR
+========================================================================== */
+
+function FieldError({ children }) {
+    return (
+        <div className="field-error">
+            <AlertCircleIcon />
+            {children}
+        </div>
+    );
+}
+
+/* ==========================================================================
+   HELPERS
+========================================================================== */
+
+function slugify(value = '') {
     return value
         .toLowerCase()
         .trim()
@@ -13,468 +1244,2490 @@ function slugify(value) {
         .replace(/^-+|-+$/g, '');
 }
 
+function getInitials(name = '') {
+    const words = name
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
 
-export default function Index({ categories, flash, errors: pageErrors }) {
-    const routes = {
-        store:   () => route('admin.categories.store'),
-        update:  (id) => route('admin.categories.update', id),
-        destroy: (id) => route('admin.categories.destroy', id),
-    };
+    if (!words.length) return 'C';
 
-    const [addOpen, setAddOpen] = useState(false);
-    const [editingCategory, setEditingCategory] = useState(null);
-    const [deletingCategory, setDeletingCategory] = useState(null);
-
-    const destroyCategory = () => {
-        if (!deletingCategory) return;
-        router.delete(routes.destroy(deletingCategory.id), {
-            preserveScroll: true,
-            onSuccess: () => setDeletingCategory(null),
-        });
-    };
+    if (words.length === 1) {
+        return words[0].slice(0, 2).toUpperCase();
+    }
 
     return (
-        <AdminLayout>
-            <Head title="Categories" />
-            <style>{css}</style>
+        words[0][0] +
+        words[words.length - 1][0]
+    ).toUpperCase();
+}
 
-            <div data-h-scope="categories" className="container-fluid">
-                <ToastStack flash={flash} errors={pageErrors} />
+/* ==========================================================================
+   ICONS
+========================================================================== */
 
-                {/* Page header */}
-                <div className="page-header">
-                    <h2>Categories <span>Management</span></h2>
-                    <button type="button" className="btn-accent" onClick={() => setAddOpen(true)}>
-                        <PlusIcon /> Add Category
-                    </button>
-                </div>
-
-                {/* Grid of category cards */}
-                {categories.length === 0 ? (
-                    <div className="data-card">
-                        <div className="empty-state">
-                            <FolderOffIcon />
-                            <h5>No categories yet</h5>
-                            <p>Get started by creating your first category.</p>
-                            <button className="btn-accent" onClick={() => setAddOpen(true)}>
-                                <PlusIcon /> Add First Category
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="categories-grid">
-                        {categories.map((cat) => (
-                            <div className="cat-card" key={cat.id}>
-                                <div className="cat-card-top">
-                                    <div className="cat-card-heading">
-                                        <span className="cat-name">{cat.name}</span>
-                                        {cat.featured ? (
-                                            <span className="badge-featured yes"><CheckSmallIcon /> Featured</span>
-                                        ) : (
-                                            <span className="badge-featured no">Not Featured</span>
-                                        )}
-                                    </div>
-                                    <ActionsDropdown
-                                        onEdit={() => setEditingCategory(cat)}
-                                        onDelete={() => setDeletingCategory(cat)}
-                                    />
-                                </div>
-
-                                <p className="cat-desc" title={cat.description}>
-                                    {limit(cat.description, 110)}
-                                </p>
-
-                                <div className="cat-card-footer">
-                                    <span className="cat-slug-label">Slug</span>
-                                    <code className="cat-slug">{cat.slug}</code>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            {addOpen && (
-                <CategoryFormModal mode="add" routes={routes} onClose={() => setAddOpen(false)} />
-            )}
-            {editingCategory && (
-                <CategoryFormModal
-                    mode="edit"
-                    category={editingCategory}
-                    routes={routes}
-                    onClose={() => setEditingCategory(null)}
-                />
-            )}
-            {deletingCategory && (
-                <DeleteConfirmModal
-                    name={deletingCategory.name}
-                    onCancel={() => setDeletingCategory(null)}
-                    onConfirm={destroyCategory}
-                />
-            )}
-        </AdminLayout>
+function PlusIcon({ size = 16 }) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+        >
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+        </svg>
     );
 }
 
-/* ── Toasts ── */
-function ToastStack({ flash, errors }) {
-    const [visible, setVisible] = useState({ success: !!flash?.success, error: !!flash?.error, validation: !!(errors && Object.keys(errors).length) });
-
-    useEffect(() => {
-        setVisible({ success: !!flash?.success, error: !!flash?.error, validation: !!(errors && Object.keys(errors).length) });
-    }, [flash, errors]);
-
-    useEffect(() => {
-        const timers = [];
-        if (visible.success) timers.push(setTimeout(() => setVisible((v) => ({ ...v, success: false })), 5000));
-        if (visible.error) timers.push(setTimeout(() => setVisible((v) => ({ ...v, error: false })), 7000));
-        if (visible.validation) timers.push(setTimeout(() => setVisible((v) => ({ ...v, validation: false })), 8000));
-        return () => timers.forEach(clearTimeout);
-    }, [visible.success, visible.error, visible.validation]);
-
-    if (!visible.success && !visible.error && !visible.validation) return null;
-
+function SearchIcon({ size = 17 }) {
     return (
-        <div className="toast-stack">
-            {visible.success && (
-                <Toast tone="success" title="Success" onClose={() => setVisible((v) => ({ ...v, success: false }))}>
-                    {flash.success}
-                </Toast>
-            )}
-            {visible.error && (
-                <Toast tone="danger" title="Error" onClose={() => setVisible((v) => ({ ...v, error: false }))}>
-                    {flash.error}
-                </Toast>
-            )}
-            {visible.validation && errors && (
-                <Toast tone="warning" title="Validation Error" onClose={() => setVisible((v) => ({ ...v, validation: false }))}>
-                    <ul className="toast-error-list">
-                        {Object.values(errors).map((msg, i) => <li key={i}>{msg}</li>)}
-                    </ul>
-                </Toast>
-            )}
-        </div>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-4-4" />
+        </svg>
     );
 }
 
-function Toast({ tone, title, onClose, children }) {
+function FolderIcon({ size = 17 }) {
     return (
-        <div className="toast-item">
-            <div className="toast-header">
-                {tone === 'success' && <CheckCircleIcon />}
-                {tone === 'danger' && <AlertCircleIcon />}
-                {tone === 'warning' && <AlertTriangleIcon />}
-                <strong>{title}</strong>
-                <button type="button" className="btn-close" onClick={onClose} aria-label="Close"><CloseIcon /></button>
-            </div>
-            <div className="toast-body">{children}</div>
-        </div>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2.5h6.5A2.5 2.5 0 0 1 21 10v7a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17z" />
+            <path d="M3.5 10h17" />
+        </svg>
     );
 }
 
-/* ── Actions dropdown ── */
-function ActionsDropdown({ onEdit, onDelete }) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef(null);
-
-    useEffect(() => {
-        if (!open) return;
-        const handler = (e) => {
-            if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, [open]);
-
+function FolderPlusIcon({ size = 17 }) {
     return (
-        <div className="dropdown-wrap" ref={ref}>
-            <button type="button" className="btn-actions" onClick={() => setOpen((o) => !o)}>
-                <DotsIcon />
-            </button>
-            {open && (
-                <ul className="dropdown-menu">
-                    <li>
-                        <button type="button" className="dropdown-item" onClick={() => { setOpen(false); onEdit(); }}>
-                            <PencilIcon /> Edit
-                        </button>
-                    </li>
-                    <li className="dropdown-divider" />
-                    <li>
-                        <button type="button" className="dropdown-item text-danger" onClick={() => { setOpen(false); onDelete(); }}>
-                            <TrashIcon /> Delete
-                        </button>
-                    </li>
-                </ul>
-            )}
-        </div>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2.5h6.5A2.5 2.5 0 0 1 21 10v7a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17z" />
+            <path d="M3.5 10h17" />
+            <path d="M12 13v5" />
+            <path d="M9.5 15.5h5" />
+        </svg>
     );
 }
 
-/* ── Add / Edit modal ── */
-function CategoryFormModal({ mode, category, routes, onClose }) {
-    const isEdit = mode === 'edit';
-
-    const { data, setData, post, processing, errors, transform } = useForm({
-        name: category?.name ?? '',
-        description: category?.description ?? '',
-        featured: isEdit ? !!category?.featured : false,
-    });
-
-    const slugHint = useMemo(() => {
-        if (data.name.trim().length < 2) return '';
-        return `Suggested slug: ${slugify(data.name)}`;
-    }, [data.name]);
-
-    const submit = (e) => {
-        e.preventDefault();
-        const url = isEdit ? routes.update(category.id) : routes.store();
-        if (isEdit) transform((d) => ({ ...d, _method: 'put' }));
-        post(url, { onSuccess: onClose });
-    };
-
+function LayersIcon({ size = 18 }) {
     return (
-        <ModalShell onClose={onClose} title={isEdit ? 'Edit Category' : 'Add Category'} icon={isEdit ? <PencilIcon /> : <FolderPlusIcon />}>
-            <form onSubmit={submit}>
-                <div className="modal-body">
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor={`name-${mode}`}>Name</label>
-                        <input
-                            id={`name-${mode}`}
-                            className="form-control"
-                            placeholder="e.g. Web Development"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
-                            autoComplete="off"
-                            required
-                        />
-                        <small className="slug-hint">{slugHint}</small>
-                        {errors.name && <small className="text-danger">{errors.name}</small>}
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor={`desc-${mode}`}>Description</label>
-                        <input
-                            id={`desc-${mode}`}
-                            className="form-control"
-                            placeholder="Short description…"
-                            value={data.description}
-                            onChange={(e) => setData('description', e.target.value)}
-                            autoComplete="off"
-                            required
-                        />
-                        {errors.description && <small className="text-danger">{errors.description}</small>}
-                    </div>
-
-                    <div className="form-check">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`featured-${mode}`}
-                            checked={data.featured}
-                            onChange={(e) => setData('featured', e.target.checked)}
-                        />
-                        <label className="form-check-label" htmlFor={`featured-${mode}`}>Mark as Featured</label>
-                    </div>
-                </div>
-                <div className="modal-footer">
-                    <button type="button" className="btn-modal-cancel" onClick={onClose}>Cancel</button>
-                    <button type="submit" className="btn-modal-save" disabled={processing}>
-                        {isEdit ? <RefreshIcon /> : <CheckIcon />} {processing ? 'Saving…' : isEdit ? 'Update Category' : 'Save Category'}
-                    </button>
-                </div>
-            </form>
-        </ModalShell>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m12 3 9 5-9 5-9-5 9-5Z" />
+            <path d="m3 12 9 5 9-5" />
+            <path d="m3 16 9 5 9-5" />
+        </svg>
     );
 }
 
-/* ── Delete modal ── */
-function DeleteConfirmModal({ name, onCancel, onConfirm }) {
+function StarIcon({ size = 16 }) {
     return (
-        <ModalShell onClose={onCancel} title="Delete Category" icon={<AlertTriangleIcon />} noBorder>
-            <div className="modal-body" style={{ textAlign: 'center', paddingTop: 8 }}>
-                <div className="delete-icon-wrap"><TrashIcon size={20} /></div>
-                <h5 className="delete-title">Delete "{name}"?</h5>
-                <p className="delete-sub">This action cannot be undone. All associated data may be affected.</p>
-            </div>
-            <div className="modal-footer" style={{ justifyContent: 'center', borderTop: 'none', paddingTop: 0 }}>
-                <button type="button" className="btn-modal-cancel" onClick={onCancel}>Cancel</button>
-                <button type="button" className="btn-modal-delete" onClick={onConfirm}>
-                    <TrashIcon /> Yes, Delete
-                </button>
-            </div>
-        </ModalShell>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z" />
+        </svg>
     );
 }
 
-/* ── Modal shell ── */
-function ModalShell({ title, icon, onClose, noBorder, children }) {
+function HashIcon({ size = 14 }) {
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-content">
-                    <div className="modal-header" style={noBorder ? { borderBottom: 'none', paddingBottom: 0 } : undefined}>
-                        <h5 className="modal-title">{icon}{title}</h5>
-                        <button type="button" className="btn-close" onClick={onClose} aria-label="Close"><CloseIcon /></button>
-                    </div>
-                    {children}
-                </div>
-            </div>
-        </div>
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <path d="M10 3 8 21" />
+            <path d="m16 3-2 18" />
+            <path d="M4 9h17" />
+            <path d="M3 15h17" />
+        </svg>
     );
 }
 
-/* ── Helpers ── */
-function limit(str, n) {
-    if (!str) return '';
-    return str.length > n ? str.slice(0, n).trim() + '…' : str;
+function DotsIcon() {
+    return (
+        <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+        >
+            <circle cx="5" cy="12" r="1.7" />
+            <circle cx="12" cy="12" r="1.7" />
+            <circle cx="19" cy="12" r="1.7" />
+        </svg>
+    );
 }
 
-/* ── Inline icons ── */
-function PlusIcon() { return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>; }
-function DotsIcon() { return <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="12" cy="19" r="1.7" /></svg>; }
-function PencilIcon() { return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>; }
-function TrashIcon({ size = 14 }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" /></svg>; }
-function FolderOffIcon() { return <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: .45, marginBottom: 12 }}><path d="M3 7v11a2 2 0 002 2h14a2 2 0 002-2v-8a2 2 0 00-2-2h-8l-2-3H5a2 2 0 00-2 2z" /><line x1="2" y1="2" x2="22" y2="22" /></svg>; }
-function FolderPlusIcon() { return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v11a2 2 0 002 2h14a2 2 0 002-2v-8a2 2 0 00-2-2h-8l-2-3H5a2 2 0 00-2 2z" /><line x1="12" y1="11" x2="12" y2="17" /><line x1="9" y1="14" x2="15" y2="14" /></svg>; }
-function CheckIcon() { return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>; }
-function CheckSmallIcon() { return <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>; }
-function RefreshIcon() { return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 4v6h-6" /><path d="M1 20v-6h6" /><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" /></svg>; }
-function AlertTriangleIcon() { return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>; }
-function CheckCircleIcon() { return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>; }
-function AlertCircleIcon() { return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>; }
-function CloseIcon() { return <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>; }
+function PencilIcon({ size = 15 }) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z" />
+        </svg>
+    );
+}
 
-/* ── Styles ──
-   Table markup replaced with a responsive card grid. Icon field and
-   all icon-select/icon-preview chrome removed. Dropdown/toast/modal
-   chrome kept as real components rather than Bootstrap JS state classes. */
-const css = `
-[data-h-scope="categories"] {
-    --bg-deep:       #F0F4F8;
-    --bg-card:       #F5f5f7;
-    --bg-surface:    #F8FAFC;
-    --bg-hover:      #F1F5F9;
-    --accent:        #00A667;
-    --accent-dark:   #008F57;
-    --accent-dim:    rgba(0,166,103,.10);
-    --accent-glow:   rgba(0,166,103,.25);
-    --text-primary:  #0F1C2E;
-    --text-secondary:#4A6380;
-    --text-muted:    #8EA5BE;
-    --border:        rgba(15,28,46,.09);
-    --border-accent: rgba(0,166,103,.28);
-    --danger:        #DC3545;
-    --danger-dim:    rgba(220,53,69,.09);
-    --warning:       #F59E0B;
-    --warning-dim:   rgba(245,158,11,.10);
-    --radius-sm:     6px;
-    --radius-md:     10px;
-    --radius-lg:     16px;
-    --shadow-card:   0 1px 4px rgba(15,28,46,.07), 0 4px 16px rgba(15,28,46,.05);
-    --shadow-glow:   0 0 18px rgba(0,166,103,.18);
-    --focus-ring:    0 0 0 3px rgba(0,166,103,.22);
-    background: var(--bg-deep);
-    color: var(--text-primary);
+function TrashIcon({ size = 15 }) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M4 7h16" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="m6 7 1 13h10l1-13" />
+            <path d="M9 7V4h6v3" />
+        </svg>
+    );
+}
+
+function ArrowRightIcon() {
+    return (
+        <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M5 12h14" />
+            <path d="m13 6 6 6-6 6" />
+        </svg>
+    );
+}
+
+function ArrowUpRightIcon() {
+    return (
+        <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M7 17 17 7" />
+            <path d="M7 7h10v10" />
+        </svg>
+    );
+}
+
+function CheckIcon({ size = 15 }) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m5 12 4 4L19 6" />
+        </svg>
+    );
+}
+
+function CheckCircleIcon() {
+    return (
+        <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <circle cx="12" cy="12" r="9" />
+            <path d="m8 12 2.5 2.5L16 9" />
+        </svg>
+    );
+}
+
+function AlertCircleIcon() {
+    return (
+        <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 8v5" />
+            <path d="M12 16h.01" />
+        </svg>
+    );
+}
+
+function AlertTriangleIcon() {
+    return (
+        <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m12 3 10 18H2L12 3Z" />
+            <path d="M12 9v4" />
+            <path d="M12 17h.01" />
+        </svg>
+    );
+}
+
+function CloseIcon() {
+    return (
+        <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+        >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+        </svg>
+    );
+}
+
+function SpinnerIcon() {
+    return (
+        <svg
+            className="spinner"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+        >
+            <path d="M12 3a9 9 0 1 0 9 9" />
+        </svg>
+    );
+}
+
+/* ==========================================================================
+   STYLES
+========================================================================== */
+
+const styles = `
+:root {
+    --cat-blue: #5D89C8;
+    --cat-blue-dark: #426FAE;
+    --cat-blue-deep: #315B91;
+    --cat-blue-soft: #EEF4FB;
+    --cat-blue-pale: #F7FAFE;
+
+    --cat-text: #172033;
+    --cat-heading: #111827;
+    --cat-muted: #6B7280;
+    --cat-light-text: #94A3B8;
+
+    --cat-border: #E5EAF0;
+    --cat-border-dark: #D9E0E9;
+
+    --cat-bg: #F6F8FB;
+    --cat-white: #FFFFFF;
+
+    --cat-success: #198754;
+    --cat-success-bg: #EDF8F2;
+
+    --cat-danger: #D64545;
+    --cat-danger-bg: #FEF1F1;
+
+    --cat-warning: #B7791F;
+    --cat-warning-bg: #FFF8E7;
+
+    --cat-shadow:
+        0 1px 2px rgba(15, 23, 42, .03),
+        0 10px 30px rgba(15, 23, 42, .05);
+
+    --cat-shadow-lg:
+        0 20px 60px rgba(15, 23, 42, .15);
+}
+
+.categories-page {
+    min-height: calc(100vh - 70px);
+    padding: 32px 34px 60px;
+    background: var(--cat-bg);
+    color: var(--cat-text);
+}
+
+/* --------------------------------------------------------------------------
+   HERO
+-------------------------------------------------------------------------- */
+
+.categories-hero {
+    max-width: 1440px;
+    margin: 0 auto 24px;
+    min-height: 190px;
+    padding: 32px 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #FFFFFF 0%,
+            #FFFFFF 66%,
+            #F2F6FC 100%
+        );
+
+    border: 1px solid var(--cat-border);
+    border-radius: 22px;
+
+    box-shadow: var(--cat-shadow);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.categories-hero::after {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    right: -90px;
+    top: -145px;
+
+    border: 1px solid rgba(93, 137, 200, .13);
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.categories-hero::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: 40px;
+    bottom: -130px;
+
+    border: 1px solid rgba(93, 137, 200, .08);
+    border-radius: 50%;
+}
+
+.hero-main {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-kicker {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 14px;
+
+    color: var(--cat-blue-dark);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+
+.kicker-line {
+    width: 25px;
+    height: 2px;
+    background: var(--cat-blue);
+    border-radius: 10px;
+}
+
+.hero-title-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 55px;
+}
+
+.hero-title-row h1 {
+    margin: 0;
+    color: var(--cat-heading);
+
+    font-size: clamp(31px, 3vw, 43px);
+    line-height: 1.05;
+    letter-spacing: -.045em;
+    font-weight: 800;
+}
+
+.hero-title-row p {
+    max-width: 620px;
+    margin: 13px 0 0;
+
+    color: var(--cat-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.hero-count {
+    min-width: 125px;
+    padding-left: 24px;
+
+    border-left: 1px solid var(--cat-border);
+}
+
+.hero-count strong {
+    display: block;
+    color: var(--cat-heading);
+    font-size: 29px;
+    line-height: 1;
+    letter-spacing: -.04em;
+}
+
+.hero-count span {
+    display: block;
+    margin-top: 6px;
+
+    color: var(--cat-muted);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   BUTTONS
+-------------------------------------------------------------------------- */
+
+.primary-button,
+.secondary-button,
+.danger-button {
+    height: 43px;
+    padding: 0 17px;
+
+    border-radius: 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
     font-family: inherit;
-    padding: 24px 28px 40px;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
 }
 
-[data-h-scope="categories"] *:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.primary-button {
+    color: #FFFFFF;
+    background: var(--cat-blue);
+    border: 1px solid var(--cat-blue);
 
-.page-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 22px; border-bottom: 1px solid var(--border); margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-.page-header h2 { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); letter-spacing: -.02em; margin: 0; }
-.page-header h2 span { color: var(--accent); }
+    box-shadow: 0 5px 15px rgba(93, 137, 200, .20);
+}
 
-.btn-accent { background: var(--accent); color: #fff; border: none; padding: 9px 22px; border-radius: var(--radius-sm); font-weight: 700; font-size: .85rem; letter-spacing: .02em; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: background .15s, box-shadow .15s, transform .15s; }
-.btn-accent:hover { background: var(--accent-dark); box-shadow: var(--shadow-glow); transform: translateY(-1px); }
-.btn-accent:disabled { opacity: .7; cursor: default; }
+.primary-button:hover {
+    background: var(--cat-blue-dark);
+    border-color: var(--cat-blue-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(93, 137, 200, .25);
+}
 
-/* Card grid */
-.categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.primary-button:disabled,
+.secondary-button:disabled,
+.danger-button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
 
-.cat-card { position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 20px; display: flex; flex-direction: column; gap: 14px; transition: box-shadow .15s, transform .15s, border-color .15s; }
-.cat-card:hover, .cat-card:focus-within { box-shadow: var(--shadow-card), var(--shadow-glow); border-color: var(--border-accent); transform: translateY(-2px); z-index: 5; }
+.secondary-button {
+    color: #374151;
+    background: #FFFFFF;
+    border: 1px solid var(--cat-border-dark);
+}
 
-.cat-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-.cat-card-heading { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.secondary-button:hover {
+    border-color: #BBC7D6;
+    background: #F9FAFB;
+}
 
-.cat-name { font-weight: 700; font-size: 1.02rem; color: var(--text-primary); line-height: 1.3; word-break: break-word; }
+.danger-button {
+    color: #FFFFFF;
+    background: var(--cat-danger);
+    border: 1px solid var(--cat-danger);
+}
 
-.cat-desc { color: var(--text-secondary); font-size: .85rem; line-height: 1.5; margin: 0; flex: 1; }
+.danger-button:hover {
+    background: #C73B3B;
+}
 
-.cat-card-footer { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px solid var(--border); }
-.cat-slug-label { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.hero-add {
+    position: relative;
+    z-index: 2;
+    min-width: 157px;
+}
 
-.badge-featured { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: .7rem; font-weight: 700; letter-spacing: .04em; width: fit-content; }
-.badge-featured.yes { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--border-accent); }
-.badge-featured.no { background: #F1F5F9; color: var(--text-muted); border: 1px solid var(--border); }
+/* --------------------------------------------------------------------------
+   OVERVIEW
+-------------------------------------------------------------------------- */
 
-.cat-slug { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: .78rem; color: var(--text-secondary); background: #EEF2F7; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); display: inline-block; }
+.overview-panel {
+    max-width: 1440px;
+    margin: 0 auto 22px;
 
-.data-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; }
+    padding: 0;
 
-/* Dropdown */
-.dropdown-wrap { position: relative; display: inline-block; flex-shrink: 0; }
-.btn-actions { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-secondary); padding: 6px 10px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
-.btn-actions:hover { background: #EDF7F2; border-color: var(--accent); color: var(--accent); }
-.dropdown-menu { position: absolute; right: 0; top: calc(100% + 6px); background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: 0 8px 32px rgba(15,28,46,.12); min-width: 150px; padding: 6px; list-style: none; margin: 0; z-index: 40; animation: dropdownSlide .15s ease-out; }
-@keyframes dropdownSlide { from { opacity: 0; transform: scale(.95) translateY(-8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-.dropdown-item { width: 100%; background: none; border: none; text-align: left; color: var(--text-secondary); border-radius: var(--radius-sm); padding: 8px 12px; font-size: .83rem; font-weight: 500; transition: background .15s, color .15s; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-.dropdown-item:hover { background: var(--bg-hover); color: var(--text-primary); }
-.dropdown-item.text-danger { color: var(--danger); }
-.dropdown-item.text-danger:hover { background: var(--danger-dim); color: var(--danger); }
-.dropdown-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; list-style: none; }
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) minmax(560px, 1.45fr);
 
-/* Empty state */
-.empty-state { text-align: center; padding: 56px 24px; color: var(--text-muted); }
-.empty-state h5 { color: var(--text-primary); margin-bottom: 8px; font-weight: 700; }
-.empty-state p { margin: 0 0 20px; font-size: .9rem; }
+    background: #FFFFFF;
 
-/* Toasts */
-.toast-stack { position: fixed; top: 16px; right: 16px; z-index: 1100; display: flex; flex-direction: column; gap: 10px; width: 320px; max-width: calc(100vw - 32px); }
-.toast-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: 0 4px 20px rgba(15,28,46,.12); overflow: hidden; animation: toastIn .2s ease-out; }
-@keyframes toastIn { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
-.toast-header { background: var(--bg-surface); border-bottom: 1px solid var(--border); color: var(--text-secondary); display: flex; align-items: center; gap: 8px; padding: 10px 12px; font-size: .8rem; }
-.toast-header strong { color: var(--text-primary); margin-right: auto; }
-.toast-body { color: var(--text-primary); padding: 10px 12px; font-size: .82rem; }
-.toast-error-list { margin: 0; padding-left: 16px; }
+    border: 1px solid var(--cat-border);
+    border-radius: 18px;
 
-/* Modals */
-.modal-overlay { position: fixed; inset: 0; background: rgba(15,28,46,.35); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; animation: fadeIn .15s ease-out; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.modal-dialog { width: 100%; max-width: 480px; animation: slideUp .2s cubic-bezier(.4,0,.2,1); }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.modal-content { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: 0 20px 60px rgba(15,28,46,.14); color: var(--text-primary); overflow: hidden; }
-.modal-header { border-bottom: 1px solid var(--border); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); }
-.modal-title { font-weight: 700; font-size: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px; margin: 0; }
-.modal-body { padding: 24px; }
-.modal-footer { border-top: 1px solid var(--border); padding: 16px 24px; display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-surface); }
-.btn-close { background: none; border: none; opacity: .45; cursor: pointer; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 6px; transition: opacity .15s, background .15s; }
-.btn-close:hover { opacity: .8; background: var(--bg-hover); }
+    box-shadow: var(--cat-shadow);
 
-.form-label { font-size: .8rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 7px; display: block; }
-.form-control, .form-select { background: var(--bg-card); border: 1px solid #DAE2EC; color: var(--text-primary); border-radius: var(--radius-sm); padding: 10px 14px; font-size: .875rem; transition: border-color .15s, box-shadow .15s; width: 100%; font-family: inherit; }
-.form-control:focus, .form-select:focus { border-color: var(--accent); box-shadow: var(--focus-ring); outline: none; background: #fff; }
-.form-control::placeholder { color: var(--text-muted); }
-.slug-hint { color: var(--text-muted); display: block; margin-top: 4px; font-size: .75rem; min-height: 1.2em; }
-.mb-3 { margin-bottom: 16px; }
+    overflow: hidden;
+}
 
-.form-check { margin-top: 4px; display: flex; align-items: center; gap: 8px; }
-.form-check-input { background-color: var(--bg-card); border: 1.5px solid #C8D8E8; width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
-.form-check-label { color: var(--text-secondary); font-size: .875rem; cursor: pointer; margin: 0; }
+.overview-intro {
+    padding: 25px 28px;
 
-.text-danger { color: var(--danger); font-size: .78rem; display: block; margin-top: 4px; }
+    display: flex;
+    align-items: center;
+    gap: 15px;
 
-.btn-modal-save, .btn-modal-delete { color: #fff; border: none; padding: 9px 22px; border-radius: var(--radius-sm); font-weight: 700; font-size: .85rem; cursor: pointer; transition: background .15s, box-shadow .15s; display: inline-flex; align-items: center; gap: 6px; }
-.btn-modal-save { background: var(--accent); }
-.btn-modal-save:hover { background: var(--accent-dark); box-shadow: var(--shadow-glow); }
-.btn-modal-save:disabled { opacity: .7; cursor: default; }
-.btn-modal-delete { background: var(--danger); }
-.btn-modal-delete:hover { background: #B02A37; }
-.btn-modal-cancel { background: transparent; color: var(--text-secondary); border: 1px solid #DAE2EC; padding: 9px 22px; border-radius: var(--radius-sm); font-weight: 600; font-size: .85rem; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
-.btn-modal-cancel:hover { background: var(--bg-hover); color: var(--text-primary); border-color: #B0C4D8; }
+    border-right: 1px solid var(--cat-border);
+}
 
-.delete-icon-wrap { width: 52px; height: 52px; border-radius: 50%; background: var(--danger-dim); border: 1px solid rgba(220,53,69,.18); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--danger); }
-.delete-title { font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
-.delete-sub { color: var(--text-secondary); font-size: .875rem; margin: 0; }
+.overview-icon {
+    width: 43px;
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-blue-dark);
+    background: var(--cat-blue-soft);
+
+    border: 1px solid #DDE9F7;
+    border-radius: 12px;
+}
+
+.section-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--cat-light-text);
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+
+.overview-intro h2 {
+    margin: 0;
+
+    color: var(--cat-heading);
+
+    font-size: 15px;
+    line-height: 1.35;
+    font-weight: 750;
+    letter-spacing: -.01em;
+}
+
+.overview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.stat-item {
+    min-width: 0;
+    padding: 19px 21px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-align: left;
+
+    background: #FFFFFF;
+    border: 0;
+    border-left: 1px solid var(--cat-border);
+
+    cursor: pointer;
+    font-family: inherit;
+
+    position: relative;
+    transition:
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+.stat-item:first-child {
+    border-left: 0;
+}
+
+.stat-item:hover {
+    background: #FAFCFF;
+}
+
+.stat-item.active {
+    background: var(--cat-blue-pale);
+    box-shadow: inset 0 -2px 0 var(--cat-blue);
+}
+
+.stat-icon {
+    width: 37px;
+    height: 37px;
+
+    flex: 0 0 37px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-blue-dark);
+    background: var(--cat-blue-soft);
+
+    border-radius: 9px;
+}
+
+.stat-copy {
+    min-width: 0;
+}
+
+.stat-copy strong {
+    display: block;
+
+    color: var(--cat-heading);
+    font-size: 20px;
+    line-height: 1.1;
+    letter-spacing: -.03em;
+}
+
+.stat-copy span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--cat-muted);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.stat-item > svg {
+    margin-left: auto;
+    color: #B4C0CE;
+}
+
+/* --------------------------------------------------------------------------
+   TOOLBAR
+-------------------------------------------------------------------------- */
+
+.content-toolbar {
+    max-width: 1440px;
+    margin: 0 auto 14px;
+
+    padding: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    background: #FFFFFF;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 14px;
+
+    box-shadow: var(--cat-shadow);
+}
+
+.toolbar-search {
+    min-width: 260px;
+    max-width: 520px;
+    flex: 1;
+
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 12px;
+    gap: 9px;
+
+    color: #8A98A9;
+    background: #F8FAFC;
+
+    border: 1px solid #EDF0F4;
+    border-radius: 9px;
+
+    transition:
+        border-color .18s ease,
+        background .18s ease;
+}
+
+.toolbar-search:focus-within {
+    background: #FFFFFF;
+    border-color: #BDD0E7;
+    box-shadow: 0 0 0 3px rgba(93, 137, 200, .08);
+}
+
+.toolbar-search input {
+    width: 100%;
+    min-width: 0;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+
+    color: var(--cat-text);
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.toolbar-search input::placeholder {
+    color: #A5AFBB;
+}
+
+.toolbar-search input::-webkit-search-cancel-button {
+    display: none;
+}
+
+.search-clear {
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #8B98A8;
+    background: #FFFFFF;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    padding: 3px;
+
+    background: #F4F6F8;
+
+    border-radius: 9px;
+}
+
+.filter-button {
+    height: 35px;
+    padding: 0 12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    border: 0;
+    border-radius: 7px;
+
+    color: #697586;
+    background: transparent;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: .18s ease;
+}
+
+.filter-button svg {
+    width: 13px;
+    height: 13px;
+}
+
+.filter-button:hover {
+    color: var(--cat-text);
+}
+
+.filter-button.active {
+    color: var(--cat-blue-dark);
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, .08);
+}
+
+.reset-button {
+    height: 35px;
+    padding: 0 10px;
+
+    color: var(--cat-blue-dark);
+    background: transparent;
+
+    border: 0;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   RESULTS
+-------------------------------------------------------------------------- */
+
+.results-header {
+    max-width: 1440px;
+    margin: 0 auto 11px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #7A8797;
+
+    font-size: 11px;
+}
+
+.results-header strong {
+    color: var(--cat-heading);
+}
+
+.results-header span {
+    color: #A0AAB7;
+}
+
+/* --------------------------------------------------------------------------
+   GRID
+-------------------------------------------------------------------------- */
+
+.category-grid {
+    max-width: 1440px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(285px, 1fr)
+    );
+
+    gap: 15px;
+}
+
+.category-card {
+    min-height: 255px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #FFFFFF;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 16px;
+
+    box-shadow: var(--cat-shadow);
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #D5DFEB;
+
+    box-shadow:
+        0 2px 4px rgba(15, 23, 42, .04),
+        0 16px 36px rgba(15, 23, 42, .08);
+}
+
+.category-card.is-featured {
+    border-color: #D6E3F3;
+}
+
+.category-card.is-featured::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 20px;
+    right: 20px;
+
+    height: 2px;
+
+    background: var(--cat-blue);
+    border-radius: 0 0 5px 5px;
+}
+
+.card-top-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.category-index {
+    color: #B5BFCA;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .1em;
+}
+
+.category-identity {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.category-mark {
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-blue-dark);
+    background: #F2F6FB;
+
+    border: 1px solid #E4ECF5;
+    border-radius: 13px;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .03em;
+}
+
+.category-mark.featured-mark {
+    color: #FFFFFF;
+    background: var(--cat-blue);
+    border-color: var(--cat-blue);
+}
+
+.category-title-area {
+    min-width: 0;
+}
+
+.category-status-row {
+    margin-bottom: 5px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.status-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+}
+
+.status-badge.featured {
+    color: var(--cat-blue-dark);
+}
+
+.status-badge.featured .status-dot {
+    background: var(--cat-blue);
+}
+
+.status-badge.standard {
+    color: #7C8795;
+}
+
+.status-badge.standard .status-dot {
+    background: #AEB8C4;
+}
+
+.category-title-area h3 {
+    margin: 0;
+
+    color: var(--cat-heading);
+
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 780;
+    letter-spacing: -.02em;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-description {
+    min-height: 61px;
+
+    margin: 18px 0 17px;
+
+    color: #687587;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.card-divider {
+    height: 1px;
+
+    background: #EDF0F4;
+}
+
+.category-meta {
+    min-width: 0;
+
+    margin-top: auto;
+    padding-top: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.slug-block {
+    min-width: 0;
+}
+
+.slug-block > span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #A0AAB6;
+
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .13em;
+}
+
+.slug-block code {
+    display: block;
+
+    max-width: 145px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #607086;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 10px;
+}
+
+.card-edit {
+    height: 31px;
+    padding: 0 9px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: var(--cat-blue-dark);
+    background: transparent;
+
+    border: 1px solid #DCE6F1;
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+}
+
+.card-edit:hover {
+    color: #FFFFFF;
+    background: var(--cat-blue);
+    border-color: var(--cat-blue);
+}
+
+/* --------------------------------------------------------------------------
+   CARD ACTIONS
+-------------------------------------------------------------------------- */
+
+.actions-container {
+    position: relative;
+}
+
+.actions-button {
+    width: 31px;
+    height: 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #8B97A6;
+    background: transparent;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: .18s ease;
+}
+
+.actions-button:hover,
+.actions-button.open {
+    color: var(--cat-blue-dark);
+    background: var(--cat-blue-soft);
+    border-color: #DFE9F4;
+}
+
+.actions-menu {
+    position: absolute;
+    z-index: 30;
+
+    top: calc(100% + 7px);
+    right: 0;
+
+    width: 175px;
+
+    padding: 5px;
+
+    background: #FFFFFF;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 10px;
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, .12);
+
+    animation: menuIn .13s ease-out;
+}
+
+@keyframes menuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.actions-menu button {
+    width: 100%;
+    height: 35px;
+
+    padding: 0 9px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: #4B5563;
+    background: transparent;
+
+    border: 0;
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 650;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.actions-menu button:hover {
+    background: #F5F7FA;
+    color: var(--cat-heading);
+}
+
+.actions-menu button.danger {
+    color: var(--cat-danger);
+}
+
+.actions-menu button.danger:hover {
+    background: var(--cat-danger-bg);
+}
+
+.menu-separator {
+    height: 1px;
+    margin: 4px 2px;
+    background: #EEF1F4;
+}
+
+/* --------------------------------------------------------------------------
+   CREATE CARD
+-------------------------------------------------------------------------- */
+
+.create-card {
+    min-height: 255px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #718096;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.85),
+            rgba(248,250,253,.9)
+        );
+
+    border: 1px dashed #CAD5E2;
+    border-radius: 16px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        transform .18s ease;
+}
+
+.create-card:hover {
+    color: var(--cat-blue-dark);
+
+    background: var(--cat-blue-pale);
+
+    border-color: #AFC5DF;
+
+    transform: translateY(-2px);
+}
+
+.create-card-icon {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-blue-dark);
+    background: var(--cat-blue-soft);
+
+    border: 1px solid #DDE8F4;
+    border-radius: 13px;
+}
+
+.create-card-title {
+    color: var(--cat-heading);
+
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.create-card-subtitle {
+    margin-top: 5px;
+
+    color: #96A1AF;
+
+    font-size: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   EMPTY STATE
+-------------------------------------------------------------------------- */
+
+.empty-state {
+    max-width: 700px;
+    min-height: 330px;
+
+    margin: 15px auto 0;
+    padding: 45px 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background: #FFFFFF;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 18px;
+
+    box-shadow: var(--cat-shadow);
+}
+
+.empty-visual {
+    width: 62px;
+    height: 62px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-blue-dark);
+    background: var(--cat-blue-soft);
+
+    border: 1px solid #DFEAF6;
+    border-radius: 17px;
+}
+
+.empty-eyebrow {
+    margin-bottom: 6px;
+
+    color: var(--cat-blue-dark);
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+
+.empty-state h2 {
+    margin: 0;
+
+    color: var(--cat-heading);
+
+    font-size: 20px;
+    font-weight: 780;
+    letter-spacing: -.025em;
+}
+
+.empty-state p {
+    max-width: 410px;
+
+    margin: 9px 0 20px;
+
+    color: var(--cat-muted);
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* --------------------------------------------------------------------------
+   MODAL
+-------------------------------------------------------------------------- */
+
+.modal-overlay {
+    position: fixed;
+    z-index: 9999;
+
+    inset: 0;
+
+    padding: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(15, 23, 42, .54);
+
+    backdrop-filter: blur(4px);
+
+    animation: overlayIn .18s ease-out;
+}
+
+@keyframes overlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-panel {
+    width: 100%;
+    max-height: calc(100vh - 44px);
+
+    display: flex;
+    flex-direction: column;
+
+    background: #FFFFFF;
+
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: 18px;
+
+    box-shadow: var(--cat-shadow-lg);
+
+    overflow: hidden;
+
+    animation: modalIn .2s ease-out;
+}
+
+.modal-large {
+    max-width: 650px;
+}
+
+.modal-medium {
+    max-width: 570px;
+}
+
+.modal-small {
+    max-width: 455px;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(.985);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-heading {
+    padding: 21px 23px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    border-bottom: 1px solid #EDF0F4;
+}
+
+.modal-heading-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-blue-dark);
+    background: var(--cat-blue-soft);
+
+    border: 1px solid #DFEAF6;
+    border-radius: 10px;
+}
+
+.modal-heading-icon.danger {
+    color: var(--cat-danger);
+    background: var(--cat-danger-bg);
+    border-color: #F6DADA;
+}
+
+.modal-heading-copy {
+    min-width: 0;
+}
+
+.modal-heading-copy h2 {
+    margin: 1px 0 4px;
+
+    color: var(--cat-heading);
+
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 780;
+    letter-spacing: -.02em;
+}
+
+.modal-heading-copy p {
+    margin: 0;
+
+    color: var(--cat-muted);
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 32px;
+
+    color: #8C98A7;
+    background: transparent;
+
+    border: 0;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: var(--cat-heading);
+    background: #F3F5F7;
+}
+
+/* --------------------------------------------------------------------------
+   FORM
+-------------------------------------------------------------------------- */
+
+.category-form {
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.form-content {
+    padding: 23px;
+
+    overflow-y: auto;
+}
+
+.form-field {
+    margin-bottom: 19px;
+}
+
+.field-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+}
+
+.field-heading label {
+    color: #374151;
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.field-heading span {
+    color: #A0AAB6;
+
+    font-size: 9px;
+    font-weight: 650;
+}
+
+.input-shell {
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 0 12px;
+
+    background: #FAFBFC;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 9px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.input-shell:focus-within {
+    background: #FFFFFF;
+    border-color: #AFC5DF;
+    box-shadow: 0 0 0 3px rgba(93, 137, 200, .08);
+}
+
+.input-shell.has-error,
+.textarea-shell.has-error {
+    border-color: #E6A7A7;
+}
+
+.input-shell > svg {
+    flex: 0 0 auto;
+    color: #94A3B8;
+}
+
+.input-shell input {
+    width: 100%;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+
+    color: var(--cat-heading);
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.input-shell input::placeholder,
+.textarea-shell textarea::placeholder {
+    color: #AAB3BE;
+}
+
+.slug-preview {
+    min-height: 44px;
+
+    margin: -3px 0 20px;
+
+    padding: 9px 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    background: #F7F9FC;
+
+    border: 1px solid #E9EDF2;
+    border-radius: 9px;
+}
+
+.slug-preview-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #8995A4;
+
+    font-size: 9px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+
+.slug-preview code {
+    max-width: 60%;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: var(--cat-blue-dark);
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 10px;
+}
+
+.textarea-shell {
+    padding: 10px 12px;
+
+    background: #FAFBFC;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 9px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.textarea-shell:focus-within {
+    background: #FFFFFF;
+    border-color: #AFC5DF;
+    box-shadow: 0 0 0 3px rgba(93, 137, 200, .08);
+}
+
+.textarea-shell textarea {
+    display: block;
+
+    width: 100%;
+    min-height: 110px;
+
+    resize: vertical;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+
+    color: var(--cat-heading);
+
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.field-error {
+    margin-top: 6px;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    color: var(--cat-danger);
+
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   FEATURED TOGGLE
+-------------------------------------------------------------------------- */
+
+.featured-option {
+    min-height: 67px;
+
+    padding: 11px 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    background: #FAFBFC;
+
+    border: 1px solid #E7EBF0;
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+}
+
+.featured-option:hover {
+    border-color: #CBD8E7;
+    background: #F9FBFE;
+}
+
+.featured-option.selected {
+    background: var(--cat-blue-pale);
+    border-color: #C9D9EB;
+}
+
+.featured-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.featured-option-icon {
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #8997A7;
+    background: #FFFFFF;
+
+    border: 1px solid #DFE5EC;
+    border-radius: 9px;
+
+    transition: .18s ease;
+}
+
+.featured-option.selected .featured-option-icon {
+    color: var(--cat-blue-dark);
+    background: #E5EEF9;
+    border-color: #D0DEED;
+}
+
+.featured-option-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.featured-option-copy strong {
+    display: block;
+
+    color: var(--cat-heading);
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.featured-option-copy span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8A96A5;
+
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.toggle {
+    width: 37px;
+    height: 21px;
+
+    flex: 0 0 37px;
+
+    padding: 2px;
+
+    display: flex;
+    align-items: center;
+
+    background: #CBD3DC;
+
+    border-radius: 20px;
+
+    transition: .2s ease;
+}
+
+.toggle span {
+    width: 17px;
+    height: 17px;
+
+    display: block;
+
+    background: #FFFFFF;
+
+    border-radius: 50%;
+
+    box-shadow: 0 1px 3px rgba(0,0,0,.15);
+
+    transition: .2s ease;
+}
+
+.toggle.on {
+    justify-content: flex-end;
+    background: var(--cat-blue);
+}
+
+/* --------------------------------------------------------------------------
+   MODAL FOOTER
+-------------------------------------------------------------------------- */
+
+.modal-footer {
+    padding: 15px 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+
+    background: #FBFCFD;
+
+    border-top: 1px solid #EDF0F4;
+}
+
+/* --------------------------------------------------------------------------
+   DELETE
+-------------------------------------------------------------------------- */
+
+.delete-content {
+    padding: 29px 25px 21px;
+
+    text-align: center;
+}
+
+.delete-visual {
+    width: 59px;
+    height: 59px;
+
+    margin: 0 auto 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--cat-danger);
+    background: var(--cat-danger-bg);
+
+    border: 1px solid #F5D9D9;
+    border-radius: 16px;
+}
+
+.delete-content h2 {
+    margin: 0;
+
+    color: var(--cat-heading);
+
+    font-size: 18px;
+    font-weight: 780;
+    letter-spacing: -.025em;
+}
+
+.delete-content p {
+    max-width: 350px;
+
+    margin: 8px auto 17px;
+
+    color: var(--cat-muted);
+
+    font-size: 11px;
+    line-height: 1.65;
+}
+
+.delete-warning {
+    max-width: 360px;
+
+    margin: 0 auto;
+
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
+    text-align: left;
+
+    color: #8A6A2B;
+    background: var(--cat-warning-bg);
+
+    border: 1px solid #F4E6BC;
+    border-radius: 9px;
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.delete-warning svg {
+    flex: 0 0 auto;
+}
+
+.delete-footer {
+    background: #FFFFFF;
+}
+
+.delete-footer .secondary-button {
+    margin-right: auto;
+}
+
+/* --------------------------------------------------------------------------
+   TOAST
+-------------------------------------------------------------------------- */
+
+.toast-stack {
+    position: fixed;
+    z-index: 10000;
+
+    top: 22px;
+    right: 22px;
+
+    width: min(370px, calc(100vw - 30px));
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.toast {
+    min-height: 62px;
+
+    padding: 10px 11px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    background: #FFFFFF;
+
+    border: 1px solid var(--cat-border);
+    border-radius: 11px;
+
+    box-shadow:
+        0 12px 35px rgba(15, 23, 42, .13);
+
+    animation: toastIn .22s ease-out;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.toast-icon {
+    width: 31px;
+    height: 31px;
+
+    flex: 0 0 31px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+}
+
+.toast-success .toast-icon {
+    color: var(--cat-success);
+    background: var(--cat-success-bg);
+}
+
+.toast-error .toast-icon {
+    color: var(--cat-danger);
+    background: var(--cat-danger-bg);
+}
+
+.toast-warning .toast-icon {
+    color: var(--cat-warning);
+    background: var(--cat-warning-bg);
+}
+
+.toast-copy {
+    min-width: 0;
+    flex: 1;
+    padding-top: 1px;
+}
+
+.toast-copy strong {
+    display: block;
+
+    color: var(--cat-heading);
+
+    font-size: 11px;
+    font-weight: 780;
+}
+
+.toast-copy span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #718096;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.toast > button {
+    width: 25px;
+    height: 25px;
+
+    flex: 0 0 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #9AA5B2;
+    background: transparent;
+
+    border: 0;
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+.toast > button:hover {
+    background: #F3F5F7;
+    color: var(--cat-heading);
+}
+
+/* --------------------------------------------------------------------------
+   SPINNER
+-------------------------------------------------------------------------- */
+
+.spinner {
+    animation: spinner .7s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — TABLET
+-------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+    .categories-page {
+        padding: 25px 22px 45px;
+    }
+
+    .categories-hero {
+        padding: 27px;
+    }
+
+    .overview-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-intro {
+        border-right: 0;
+        border-bottom: 1px solid var(--cat-border);
+    }
+
+    .stat-item:first-child {
+        border-left: 0;
+    }
+
+    .stat-item {
+        border-left: 1px solid var(--cat-border);
+    }
+
+    .hero-title-row {
+        gap: 30px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — TABLET / SMALL
+-------------------------------------------------------------------------- */
+
+@media (max-width: 820px) {
+    .categories-page {
+        padding: 20px 16px 40px;
+    }
+
+    .categories-hero {
+        min-height: auto;
+
+        padding: 25px;
+
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .hero-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .hero-count {
+        padding-left: 0;
+        border-left: 0;
+
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+    }
+
+    .hero-count span {
+        margin-top: 0;
+    }
+
+    .hero-add {
+        width: 100%;
+    }
+
+    .content-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .toolbar-search {
+        max-width: none;
+        width: 100%;
+    }
+
+    .toolbar-right {
+        justify-content: space-between;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-button {
+        flex: 1;
+    }
+
+    .overview-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-item {
+        min-height: 62px;
+
+        border-left: 0;
+        border-top: 1px solid var(--cat-border);
+    }
+
+    .stat-item:first-child {
+        border-top: 0;
+    }
+
+    .stat-item.active {
+        box-shadow: inset 3px 0 0 var(--cat-blue);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — MOBILE
+-------------------------------------------------------------------------- */
+
+@media (max-width: 560px) {
+    .categories-page {
+        padding: 13px 10px 30px;
+    }
+
+    .categories-hero {
+        margin-bottom: 12px;
+        padding: 21px 18px;
+
+        border-radius: 15px;
+    }
+
+    .hero-kicker {
+        font-size: 9px;
+    }
+
+    .hero-title-row h1 {
+        font-size: 29px;
+    }
+
+    .hero-title-row p {
+        font-size: 11px;
+        line-height: 1.65;
+    }
+
+    .hero-count strong {
+        font-size: 24px;
+    }
+
+    .overview-panel {
+        margin-bottom: 12px;
+        border-radius: 13px;
+    }
+
+    .overview-intro {
+        padding: 18px;
+    }
+
+    .overview-intro h2 {
+        font-size: 13px;
+    }
+
+    .overview-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .content-toolbar {
+        padding: 7px;
+        border-radius: 12px;
+    }
+
+    .toolbar-right {
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        order: 1;
+    }
+
+    .reset-button {
+        order: 2;
+        margin-left: auto;
+    }
+
+    .results-header {
+        padding: 0 3px;
+        margin-top: 12px;
+    }
+
+    .results-header span {
+        display: none;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .category-card {
+        min-height: 235px;
+        padding: 17px;
+        border-radius: 13px;
+    }
+
+    .create-card {
+        min-height: 170px;
+        border-radius: 13px;
+    }
+
+    .modal-overlay {
+        padding: 10px;
+        align-items: flex-end;
+    }
+
+    .modal-panel {
+        max-height: calc(100vh - 20px);
+        border-radius: 17px 17px 12px 12px;
+    }
+
+    .modal-heading {
+        padding: 17px;
+    }
+
+    .form-content {
+        padding: 18px;
+    }
+
+    .modal-footer {
+        padding: 12px 17px;
+
+        position: relative;
+    }
+
+    .modal-footer .primary-button,
+    .modal-footer .secondary-button,
+    .modal-footer .danger-button {
+        flex: 1;
+    }
+
+    .delete-content {
+        padding: 24px 18px 17px;
+    }
+
+    .delete-footer .secondary-button {
+        margin-right: 0;
+    }
+
+    .toast-stack {
+        top: 10px;
+        right: 10px;
+        width: calc(100vw - 20px);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION
+-------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
 `;

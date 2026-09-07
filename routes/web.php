@@ -65,49 +65,10 @@ use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestControll
 
 /*
 |--------------------------------------------------------------------------
-| ⚠️ ROUTE NAME COLLISIONS FIXED IN THIS FILE
-|--------------------------------------------------------------------------
-| 1. user.projects.create — was assigned to BOTH /project/create and
-|    /user/projects/submit. The submission-form route is now named
-|    user.projects.submit. Update any route('user.projects.create')
-|    calls in views/JS that were meant to point at the submit form.
-|
-| 2. payment.callback — this file only defines it once (see PAYMENTS
-|    & CALLBACKS section below). If route:cache still fails with a
-|    "payment.callback" collision, the duplicate lives in another
-|    route file (routes/api.php, or an events/tickets route file not
-|    shown here). Run:
-|        grep -rn "payment.callback" routes/
-|    and rename the other occurrence (e.g. event.payment.callback).
-|
-| 3. talent.connections.index / talent.connections.respond — the
-|    "incoming connection requests" routes and the "dashboard
-|    connections" routes both used the generic connections.index /
-|    connections.respond names within the talent. group. The
-|    incoming-requests pair is now named connections.requests.index
-|    and connections.requests.respond. Update any route()/href calls
-|    in talent Blade views that referenced the old names.
-|
-| 4. admin.events.show — Route::resource('events', ...) already
-|    registers this name for GET events/{event}. A second explicit
-|    route at events/{event}/show duplicated it. The explicit route
-|    is kept (in case that URL is linked elsewhere) but is now unnamed.
-|
-| 5. admin.orders.index / admin.orders.show — Route::resource(
-|    'event/orders', ...) auto-generated these names, colliding with
-|    the separate product-orders routes (OrderController). The event-
-|    orders routes are now registered explicitly as event-orders.index
-|    / event-orders.show / event-orders.destroy. Update any
-|    route('admin.orders.index')-style calls in event/ticket-order
-|    Blade views to route('admin.event-orders.index') etc.
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
 | Public — Home / Static Pages
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', [HomeController::class, 'index'])->name('user.home');
 Route::get('/about', [HomeController::class, 'about'])->name('user.about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('user.contact');
@@ -576,12 +537,17 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/talent/create', [AdminTalentController::class, 'create'])->name('talents.create');
     Route::post('/talents', [AdminTalentController::class, 'store'])->name('talents.store');
     Route::put('/talent/update/{talent}', [AdminTalentController::class, 'update'])->name('talents.update');
-    Route::put('/talents/{talent}/status', [AdminTalentController::class, 'updateStatus'])->name('talents.updateStatus');
-    Route::put('/talents/{talent}/feature', [AdminTalentController::class, 'feature'])->name('talents.feature');
+    Route::patch('/talents/{talent}/status', [AdminTalentController::class, 'toggleStatus'])
+        ->name('talents.toggle-status');
+
+    Route::patch('/talents/{talent}/featured', [AdminTalentController::class, 'toggleFeatured'])
+        ->name('talents.toggle-featured');
+
+    Route::post('/talents/{talent}/approve', [AdminTalentController::class, 'approve'])
+        ->name('talents.approve');
     Route::delete('/talents/delete/{talent}', [AdminTalentController::class, 'destroy'])->name('talents.destroy');
     Route::get('/talents/{talent}', [AdminTalentController::class, 'show'])->name('talents.show');
     Route::get('/talents/edit/{talent}', [AdminTalentController::class, 'edit'])->name('talents.edit');
-    Route::put('/talents/{talent}/approve', [AdminTalentController::class, 'approve'])->name('talents.approve');
     Route::post('talents/bulk', [AdminTalentController::class, 'bulkAction'])->name('talents.bulk');
 
     // Users
@@ -591,7 +557,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
     Route::patch('/users/{user}', [AdminUserController::class, 'update']);
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
-
+    Route::post('/users/{user}/password-reset', [AdminUserController::class, 'sendPasswordReset'])->name('users.password-reset');
     // Content resources
     Route::resource('categories', AdminCategoryController::class);
 

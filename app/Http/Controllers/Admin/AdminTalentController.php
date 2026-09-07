@@ -149,7 +149,19 @@ class AdminTalentController extends Controller
             'user',
         ]);
 
-        return Inertia::render('AdminPage/Talents/Show', compact('talent'));
+        $categories = Category::orderBy('name')->get([
+            'id',
+            'name',
+        ]);
+
+        return Inertia::render('AdminPage/Talents/Show', [
+            'talent' => $talent,
+            'categories' => $categories,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
+        ]);
     }
 
     public function edit(Talent $talent)

@@ -1,8 +1,10 @@
-import { useState, useMemo } from "react";
+// resources/js/Pages/Admin/Talents/Index.jsx
+
+import { useMemo, useState } from "react";
 import { Head, Link, useForm, router } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AppLayout";
 
-export default function Index({ talents, categories, stats, filters }) {
+export default function Index({ talents, categories = [], stats = {}, filters = {} }) {
     const routes = {
         create: () => route("admin.talents.create"),
         index: () => route("admin.talents.index"),
@@ -13,7 +15,12 @@ export default function Index({ talents, categories, stats, filters }) {
         connections: () => route("admin.connections"),
     };
 
-    const { data, setData, get, processing } = useForm({
+    const {
+        data,
+        setData,
+        get,
+        processing,
+    } = useForm({
         search: filters?.search ?? "",
         status: filters?.status ?? "",
         category_id: filters?.category_id ?? "",
@@ -23,399 +30,723 @@ export default function Index({ talents, categories, stats, filters }) {
 
     const [selected, setSelected] = useState([]);
     const [bulkAction, setBulkAction] = useState("");
+    const [showFilters, setShowFilters] = useState(false);
+
+    const talentRows = talents?.data ?? [];
 
     const allChecked =
-        talents.data.length > 0 && selected.length === talents.data.length;
+        talentRows.length > 0 && selected.length === talentRows.length;
+
+    const hasSelection = selected.length > 0;
+
+    const activeFilterCount = [
+        data.status,
+        data.category_id,
+        data.level,
+        data.featured,
+    ].filter(Boolean).length;
 
     const toggleAll = (checked) => {
-        setSelected(checked ? talents.data.map((t) => t.id) : []);
+        setSelected(checked ? talentRows.map((talent) => talent.id) : []);
     };
 
     const toggleOne = (id) => {
         setSelected((prev) =>
-            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+            prev.includes(id)
+                ? prev.filter((item) => item !== id)
+                : [...prev, id],
         );
     };
 
     const submitFilters = (e) => {
         e.preventDefault();
-        get(routes.index(), { preserveState: true, preserveScroll: true });
+
+        get(routes.index(), {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
 
     const resetFilters = () => {
-        router.get(routes.index(), {}, { preserveState: false });
+        setData({
+            search: "",
+            status: "",
+            category_id: "",
+            level: "",
+            featured: "",
+        });
+
+        router.get(
+            routes.index(),
+            {},
+            {
+                preserveState: false,
+                preserveScroll: true,
+            },
+        );
+    };
+
+    const clearSearch = () => {
+        setData("search", "");
+
+        router.get(
+            routes.index(),
+            {
+                ...filters,
+                search: "",
+                page: 1,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     const applyBulk = () => {
-        if (!bulkAction) return alert("Please select a bulk action.");
-        if (selected.length === 0)
-            return alert("Please select at least one skill.");
-        if (bulkAction === "delete" && !confirm("Delete selected skills?"))
+        if (!bulkAction) {
+            window.alert("Please select a bulk action.");
             return;
+        }
+
+        if (selected.length === 0) {
+            window.alert("Please select at least one talent.");
+            return;
+        }
+
+        if (
+            bulkAction === "delete" &&
+            !window.confirm(
+                `Delete ${selected.length} selected talent profile(s)? This action cannot be undone.`,
+            )
+        ) {
+            return;
+        }
 
         router.post(
             routes.bulk(),
-            { action: bulkAction, ids: selected },
-            { preserveScroll: true, onSuccess: () => setSelected([]) },
+            {
+                action: bulkAction,
+                ids: selected,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setSelected([]);
+                    setBulkAction("");
+                },
+            },
         );
     };
 
     const destroyTalent = (id) => {
-        if (!confirm("Delete this skill?")) return;
-        router.delete(routes.destroy(id), { preserveScroll: true });
+        if (
+            !window.confirm(
+                "Delete this talent profile? This action cannot be undone.",
+            )
+        ) {
+            return;
+        }
+
+        router.delete(routes.destroy(id), {
+            preserveScroll: true,
+        });
     };
 
     const pageNumbers = useMemo(() => {
-        if (!talents.last_page || talents.last_page <= 1) return [];
-        const cur = talents.current_page;
-        const start = Math.max(1, cur - 2);
-        const end = Math.min(talents.last_page, cur + 2);
-        const range = [];
-        for (let i = start; i <= end; i++) range.push(i);
-        return range;
-    }, [talents.current_page, talents.last_page]);
+        if (!talents?.last_page || talents.last_page <= 1) {
+            return [];
+        }
+
+        const current = talents.current_page;
+        const start = Math.max(1, current - 2);
+        const end = Math.min(talents.last_page, current + 2);
+
+        return Array.from(
+            { length: end - start + 1 },
+            (_, index) => start + index,
+        );
+    }, [talents?.current_page, talents?.last_page]);
 
     return (
         <AdminLayout>
-            <Head title="Skills Management" />
+            <Head title="Talent Management" />
+
             <style>{css}</style>
 
-            <div data-h-scope="skills" className="skills-page">
-                {/* Flash */}
+            <div className="talent-admin-page">
+                {/* =====================================================
+                    FLASH MESSAGE
+                ====================================================== */}
+
                 {filters?.flash?.success && (
-                    <div className="flash-success mb-4">
-                        <CheckIcon />
-                        {filters.flash.success}
+                    <div className="flash-message flash-success">
+                        <div className="flash-icon">
+                            <CheckIcon size={16} />
+                        </div>
+
+                        <div>
+                            <strong>Success</strong>
+                            <span>{filters.flash.success}</span>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="flash-close"
+                            onClick={() => {}}
+                        >
+                            ×
+                        </button>
                     </div>
                 )}
 
-                {/* Header */}
-                <div className="page-head">
-                    <div>
-                        <div className="page-title">
-                            <span className="title-mark" />
-                            Skills registry
+                {/* =====================================================
+                    PAGE HEADER
+                ====================================================== */}
+
+                <header className="talent-header">
+                    <div className="header-left">
+                        <div className="breadcrumb">
+                            <span>Admin</span>
+                            <ChevronIcon />
+                            <span className="current">Talent</span>
                         </div>
-                        <p className="page-sub">
-                            Manage talent skills, categories, and levels
-                        </p>
+
+                        <div className="title-row">
+                            <div className="title-icon">
+                                <TalentIcon />
+                            </div>
+
+                            <div>
+                                <h1>Talent management</h1>
+
+                                <p>
+                                    Manage talent profiles, skills,
+                                    categories and professional levels.
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="head-actions">
+
+                    <div className="header-actions">
                         <Link
                             href={routes.connections()}
-                            className="btn-outline"
+                            className="secondary-button"
                         >
-                            <UsersIcon /> Connections requests
+                            <UsersIcon />
+                            <span>Connections</span>
                         </Link>
-                        <Link href={routes.create()} className="btn-accent">
-                            <PlusIcon /> Add Skill
+
+                        <Link
+                            href={routes.create()}
+                            className="primary-button"
+                        >
+                            <PlusIcon />
+                            <span>Add talent</span>
                         </Link>
                     </div>
-                </div>
+                </header>
 
-                {/* Stat cards */}
-                <div className="stat-grid">
+                {/* =====================================================
+                    KPI CARDS
+                ====================================================== */}
+
+                <section className="stats-grid">
                     <StatCard
-                        tone="neutral"
-                        label="Total Skills"
+                        label="Total talent"
                         value={stats?.total}
-                        sub="All registered"
-                        icon={<GridIcon />}
+                        description="Registered profiles"
+                        icon={<UsersIcon />}
+                        accent
                     />
+
                     <StatCard
-                        tone="accent"
                         label="Active"
                         value={stats?.active}
-                        sub="Currently live"
+                        description="Currently available"
                         icon={<CheckIcon />}
                     />
+
                     <StatCard
-                        tone="neutral"
                         label="Featured"
                         value={stats?.featured}
-                        sub="Highlighted profiles"
+                        description="Highlighted talent"
                         icon={<StarIcon />}
                     />
+
                     <StatCard
-                        tone="neutral"
                         label="Matched"
                         value={stats?.matched}
-                        sub="Successfully placed"
-                        icon={<RepeatIcon />}
+                        description="Successfully connected"
+                        icon={<ConnectionIcon />}
                     />
+
                     <StatCard
-                        tone="neutral"
                         label="Categories"
                         value={stats?.categories}
-                        sub="Skill types"
+                        description="Skill categories"
                         icon={<LayersIcon />}
                     />
-                </div>
+                </section>
 
-                {/* Filter bar */}
-                <form onSubmit={submitFilters} className="filter-card">
-                    <div className="filter-grid">
-                        <div className="filter-field filter-field--wide">
-                            <label className="filter-label">Search</label>
+                {/* =====================================================
+                    SEARCH + FILTER AREA
+                ====================================================== */}
+
+                <form onSubmit={submitFilters} className="search-panel">
+                    <div className="search-main">
+                        <div className="search-box">
+                            <SearchIcon />
+
                             <input
                                 type="text"
-                                className="filter-input"
-                                placeholder="Name, email, phone…"
                                 value={data.search}
                                 onChange={(e) =>
                                     setData("search", e.target.value)
                                 }
+                                placeholder="Search by name, email or phone..."
                             />
+
+                            {data.search && (
+                                <button
+                                    type="button"
+                                    className="clear-search"
+                                    onClick={clearSearch}
+                                >
+                                    ×
+                                </button>
+                            )}
                         </div>
 
-                        <div className="filter-field">
-                            <label className="filter-label">Status</label>
-                            <select
-                                className="filter-input"
-                                value={data.status}
-                                onChange={(e) =>
-                                    setData("status", e.target.value)
-                                }
-                            >
-                                <option value="">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="pending">Pending</option>
-                            </select>
-                        </div>
+                        <button
+                            type="button"
+                            className={`filter-toggle ${
+                                showFilters ? "active" : ""
+                            }`}
+                            onClick={() => setShowFilters((value) => !value)}
+                        >
+                            <FilterIcon />
 
-                        <div className="filter-field">
-                            <label className="filter-label">Category</label>
-                            <select
-                                className="filter-input"
-                                value={data.category_id}
-                                onChange={(e) =>
-                                    setData("category_id", e.target.value)
-                                }
-                            >
-                                <option value="">All Categories</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>
-                                        {cat.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                            <span>Filters</span>
 
-                        <div className="filter-field">
-                            <label className="filter-label">Level</label>
-                            <select
-                                className="filter-input"
-                                value={data.level}
-                                onChange={(e) =>
-                                    setData("level", e.target.value)
-                                }
-                            >
-                                <option value="">All Levels</option>
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">
-                                    Intermediate
-                                </option>
-                                <option value="advanced">Advanced</option>
-                                <option value="expert">Expert</option>
-                            </select>
-                        </div>
+                            {activeFilterCount > 0 && (
+                                <span className="filter-count">
+                                    {activeFilterCount}
+                                </span>
+                            )}
 
-                        <div className="filter-field filter-field--sm">
-                            <label className="filter-label">Featured</label>
-                            <select
-                                className="filter-input"
-                                value={data.featured}
-                                onChange={(e) =>
-                                    setData("featured", e.target.value)
-                                }
-                            >
-                                <option value="">All</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
+                            <ChevronDownIcon
+                                className={showFilters ? "rotate" : ""}
+                            />
+                        </button>
 
-                        <div className="filter-actions">
-                            <button
-                                type="submit"
-                                className="btn-filter"
-                                disabled={processing}
-                            >
-                                Filter
-                            </button>
-                            <button
-                                type="button"
-                                className="btn-reset"
-                                onClick={resetFilters}
-                            >
-                                Reset
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            className="search-button"
+                            disabled={processing}
+                        >
+                            {processing ? (
+                                <SpinnerIcon />
+                            ) : (
+                                <SearchIcon />
+                            )}
+
+                            <span>{processing ? "Searching..." : "Search"}</span>
+                        </button>
                     </div>
+
+                    {showFilters && (
+                        <div className="advanced-filters">
+                            <div className="filter-field">
+                                <label>Status</label>
+
+                                <select
+                                    value={data.status}
+                                    onChange={(e) =>
+                                        setData("status", e.target.value)
+                                    }
+                                >
+                                    <option value="">All statuses</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+
+                            <div className="filter-field">
+                                <label>Category</label>
+
+                                <select
+                                    value={data.category_id}
+                                    onChange={(e) =>
+                                        setData(
+                                            "category_id",
+                                            e.target.value,
+                                        )
+                                    }
+                                >
+                                    <option value="">
+                                        All categories
+                                    </option>
+
+                                    {categories.map((category) => (
+                                        <option
+                                            key={category.id}
+                                            value={category.id}
+                                        >
+                                            {category.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="filter-field">
+                                <label>Professional level</label>
+
+                                <select
+                                    value={data.level}
+                                    onChange={(e) =>
+                                        setData("level", e.target.value)
+                                    }
+                                >
+                                    <option value="">All levels</option>
+                                    <option value="beginner">
+                                        Beginner
+                                    </option>
+                                    <option value="intermediate">
+                                        Intermediate
+                                    </option>
+                                    <option value="advanced">
+                                        Advanced
+                                    </option>
+                                    <option value="expert">
+                                        Expert
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div className="filter-field">
+                                <label>Featured</label>
+
+                                <select
+                                    value={data.featured}
+                                    onChange={(e) =>
+                                        setData("featured", e.target.value)
+                                    }
+                                >
+                                    <option value="">All</option>
+                                    <option value="1">Featured only</option>
+                                    <option value="0">Not featured</option>
+                                </select>
+                            </div>
+
+                            <div className="filter-actions">
+                                <button
+                                    type="button"
+                                    className="reset-button"
+                                    onClick={resetFilters}
+                                >
+                                    <RefreshIcon />
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </form>
 
-                {/* Table card */}
-                <div className="ui-card">
-                    <div className="card-bar">
-                        <span className="card-bar-label">
-                            All Skills{" "}
-                            <span className="count-badge">{talents.total}</span>
-                        </span>
-                        <div className="bulk-row">
-                            <select
-                                className="bulk-select"
-                                value={bulkAction}
-                                onChange={(e) => setBulkAction(e.target.value)}
-                            >
-                                <option value="">Bulk action</option>
-                                <option value="activate">Activate</option>
-                                <option value="deactivate">Deactivate</option>
-                                <option value="feature">Mark Featured</option>
-                                <option value="delete">Delete</option>
-                            </select>
-                            <button
-                                className="btn-bulk-apply"
-                                onClick={applyBulk}
-                            >
-                                Apply
-                            </button>
+                {/* =====================================================
+                    RESULTS CARD
+                ====================================================== */}
+
+                <section className="talent-card">
+                    {/* Toolbar */}
+
+                    <div className="results-toolbar">
+                        <div className="results-heading">
+                            <div className="results-title">
+                                Talent profiles
+                            </div>
+
+                            <span className="results-count">
+                                {Number(talents?.total ?? 0).toLocaleString()}
+                            </span>
+
+                            {activeFilterCount > 0 && (
+                                <span className="filtered-label">
+                                    Filtered
+                                </span>
+                            )}
                         </div>
+
+                        {hasSelection ? (
+                            <div className="selection-toolbar">
+                                <span className="selected-count">
+                                    <CheckCircleIcon />
+                                    {selected.length} selected
+                                </span>
+
+                                <select
+                                    value={bulkAction}
+                                    onChange={(e) =>
+                                        setBulkAction(e.target.value)
+                                    }
+                                    className="bulk-select"
+                                >
+                                    <option value="">
+                                        Bulk action
+                                    </option>
+
+                                    <option value="activate">
+                                        Activate
+                                    </option>
+
+                                    <option value="deactivate">
+                                        Deactivate
+                                    </option>
+
+                                    <option value="feature">
+                                        Mark featured
+                                    </option>
+
+                                    <option value="delete">
+                                        Delete
+                                    </option>
+                                </select>
+
+                                <button
+                                    type="button"
+                                    className="bulk-apply"
+                                    onClick={applyBulk}
+                                >
+                                    Apply
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="cancel-selection"
+                                    onClick={() => setSelected([])}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="toolbar-meta">
+                                <span>
+                                    Showing{" "}
+                                    <strong>{talents?.from ?? 0}</strong>–
+                                    <strong>{talents?.to ?? 0}</strong>
+                                </span>
+                            </div>
+                        )}
                     </div>
 
-                    {talents.data.length > 0 ? (
-                        <div className="table-scroll">
-                            <table className="ui-table">
+                    {/* Table */}
+
+                    {talentRows.length > 0 ? (
+                        <div className="table-wrapper">
+                            <table className="talent-table">
                                 <thead>
                                     <tr>
-                                        <th style={{ width: 44 }}>
+                                        <th className="checkbox-column">
                                             <input
                                                 type="checkbox"
                                                 checked={allChecked}
                                                 onChange={(e) =>
-                                                    toggleAll(e.target.checked)
+                                                    toggleAll(
+                                                        e.target.checked,
+                                                    )
                                                 }
                                             />
                                         </th>
-                                        <th>Skill</th>
+
+                                        <th>Talent</th>
+
                                         <th>Category</th>
+
                                         <th>Level</th>
+
                                         <th>Language</th>
+
                                         <th>Status</th>
-                                        <th style={{ textAlign: "right" }}>
+
+                                        <th className="actions-column">
                                             Actions
                                         </th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    {talents.data.map((talent) => {
+                                    {talentRows.map((talent) => {
                                         const status = (
                                             talent.status || "inactive"
                                         ).toLowerCase();
+
                                         return (
                                             <tr key={talent.id}>
-                                                <td>
+                                                <td className="checkbox-column">
                                                     <input
                                                         type="checkbox"
                                                         checked={selected.includes(
                                                             talent.id,
                                                         )}
                                                         onChange={() =>
-                                                            toggleOne(talent.id)
+                                                            toggleOne(
+                                                                talent.id,
+                                                            )
                                                         }
                                                     />
                                                 </td>
+
+                                                {/* Talent */}
+
                                                 <td>
-                                                    <div className="skill-cell">
-                                                        {talent.image ? (
-                                                            <img
-                                                                src={
-                                                                    talent.image
-                                                                }
-                                                                alt={
-                                                                    talent.name
-                                                                }
-                                                                className="skill-avatar"
-                                                            />
-                                                        ) : (
-                                                            <div className="skill-avatar-placeholder">
-                                                                {talent.name
-                                                                    ?.charAt(0)
-                                                                    ?.toUpperCase()}
-                                                            </div>
-                                                        )}
-                                                        <div>
-                                                            <div className="skill-name">
-                                                                {talent.name}
+                                                    <div className="talent-identity">
+                                                        <div className="avatar-wrapper">
+                                                            {talent.image ? (
+                                                                <img
+                                                                    src={
+                                                                        talent.image
+                                                                    }
+                                                                    alt={
+                                                                        talent.name
+                                                                    }
+                                                                    className="talent-avatar"
+                                                                />
+                                                            ) : (
+                                                                <div className="talent-avatar-placeholder">
+                                                                    {getInitials(
+                                                                        talent.name,
+                                                                    )}
+                                                                </div>
+                                                            )}
+
+                                                            {status ===
+                                                                "active" && (
+                                                                <span className="online-indicator" />
+                                                            )}
+                                                        </div>
+
+                                                        <div className="talent-details">
+                                                            <div className="talent-name-row">
+                                                                <Link
+                                                                    href={routes.show(
+                                                                        talent.id,
+                                                                    )}
+                                                                    className="talent-name"
+                                                                >
+                                                                    {talent.name ||
+                                                                        "Unnamed talent"}
+                                                                </Link>
+
                                                                 {talent.featured && (
-                                                                    <span className="badge-featured">
+                                                                    <span className="featured-badge">
                                                                         <StarIcon
                                                                             size={
-                                                                                9
+                                                                                10
                                                                             }
-                                                                        />{" "}
+                                                                        />
                                                                         Featured
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <div className="skill-meta">
+
+                                                            <div className="talent-contact">
                                                                 {talent.email ||
                                                                     talent.phone ||
-                                                                    "—"}
+                                                                    "No contact information"}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="col-muted">
-                                                    {talent.category?.name ??
-                                                        "—"}
+
+                                                {/* Category */}
+
+                                                <td>
+                                                    <div className="category-cell">
+                                                        <span className="category-icon">
+                                                            <LayersIcon
+                                                                size={14}
+                                                            />
+                                                        </span>
+
+                                                        <span>
+                                                            {talent.category
+                                                                ?.name ?? "—"}
+                                                        </span>
+                                                    </div>
                                                 </td>
+
+                                                {/* Level */}
+
                                                 <td>
                                                     {talent.level ? (
-                                                        <span className="level-pill">
-                                                            {cap(talent.level)}
+                                                        <span
+                                                            className={`level-badge level-${String(
+                                                                talent.level,
+                                                            ).toLowerCase()}`}
+                                                        >
+                                                            {cap(
+                                                                talent.level,
+                                                            )}
                                                         </span>
                                                     ) : (
-                                                        <span className="col-muted">
+                                                        <span className="muted">
+                                                            Not specified
+                                                        </span>
+                                                    )}
+                                                </td>
+
+                                                {/* Language */}
+
+                                                <td>
+                                                    {talent.language ? (
+                                                        <span className="language-value">
+                                                            <GlobeIcon />
+                                                            {talent.language}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="muted">
                                                             —
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td className="col-muted">
-                                                    {talent.language ?? "—"}
-                                                </td>
+
+                                                {/* Status */}
+
                                                 <td>
-                                                    <span
-                                                        className={`badge badge-${status}`}
-                                                    >
-                                                        <span className="badge-dot" />
-                                                        {cap(status)}
-                                                    </span>
+                                                    <StatusBadge
+                                                        status={status}
+                                                    />
                                                 </td>
-                                                <td>
-                                                    <div className="action-group">
+
+                                                {/* Actions */}
+
+                                                <td className="actions-column">
+                                                    <div className="row-actions">
                                                         <Link
                                                             href={routes.show(
                                                                 talent.id,
                                                             )}
-                                                            className="action-btn"
-                                                            title="View"
+                                                            className="row-action view"
+                                                            title="View profile"
                                                         >
                                                             <EyeIcon />
                                                         </Link>
+
                                                         <Link
                                                             href={routes.edit(
                                                                 talent.id,
                                                             )}
-                                                            className="action-btn btn-edit"
-                                                            title="Edit"
+                                                            className="row-action edit"
+                                                            title="Edit profile"
                                                         >
                                                             <PencilIcon />
                                                         </Link>
+
                                                         <button
                                                             type="button"
-                                                            className="action-btn btn-del"
-                                                            title="Delete"
+                                                            className="row-action delete"
+                                                            title="Delete profile"
                                                             onClick={() =>
                                                                 destroyTalent(
                                                                     talent.id,
@@ -433,104 +764,257 @@ export default function Index({ talents, categories, stats, filters }) {
                             </table>
                         </div>
                     ) : (
-                        <div className="empty-state">
-                            <div className="empty-icon">
-                                <SparkleIcon />
-                            </div>
-                            <h3>No skills found</h3>
-                            <p>
-                                Try adjusting your filters or add a new skill.
-                            </p>
-                        </div>
+                        <EmptyState
+                            search={data.search}
+                            hasFilters={activeFilterCount > 0}
+                            onReset={resetFilters}
+                            createRoute={routes.create}
+                        />
                     )}
 
-                    {talents.last_page > 1 && (
-                        <div className="pg-bar">
-                            <span className="pg-info">
-                                Showing {talents.from}–{talents.to} of{" "}
-                                {talents.total} skills
-                            </span>
-                            <div className="pg-links">
+                    {/* Pagination */}
+
+                    {talents?.last_page > 1 && (
+                        <div className="pagination-bar">
+                            <div className="pagination-info">
+                                Showing{" "}
+                                <strong>{talents.from}</strong> to{" "}
+                                <strong>{talents.to}</strong> of{" "}
+                                <strong>{talents.total}</strong> talent
+                                profiles
+                            </div>
+
+                            <div className="pagination">
                                 <PgLink
-                                    disabled={talents.current_page === 1}
                                     href={pageUrl(
                                         routes,
                                         talents.current_page - 1,
                                     )}
+                                    disabled={talents.current_page === 1}
                                 >
-                                    ‹
+                                    <ChevronLeftIcon />
                                 </PgLink>
-                                {pageNumbers.map((pg) => (
+
+                                {pageNumbers.map((page) => (
                                     <PgLink
-                                        key={pg}
-                                        active={pg === talents.current_page}
-                                        href={pageUrl(routes, pg)}
+                                        key={page}
+                                        href={pageUrl(routes, page)}
+                                        active={
+                                            page === talents.current_page
+                                        }
                                     >
-                                        {pg}
+                                        {page}
                                     </PgLink>
                                 ))}
+
                                 <PgLink
-                                    disabled={
-                                        talents.current_page ===
-                                        talents.last_page
-                                    }
                                     href={pageUrl(
                                         routes,
                                         talents.current_page + 1,
                                     )}
+                                    disabled={
+                                        talents.current_page ===
+                                        talents.last_page
+                                    }
                                 >
-                                    ›
+                                    <ChevronRightIcon />
                                 </PgLink>
                             </div>
                         </div>
                     )}
-                </div>
+                </section>
             </div>
         </AdminLayout>
     );
 
     function pageUrl(r, page) {
-        const params = new URLSearchParams({ ...filters, page });
+        const params = new URLSearchParams();
+
+        Object.entries(filters || {}).forEach(([key, value]) => {
+            if (
+                key !== "flash" &&
+                value !== null &&
+                value !== undefined &&
+                value !== ""
+            ) {
+                params.set(key, value);
+            }
+        });
+
+        params.set("page", page);
+
         return `${r.index()}?${params.toString()}`;
     }
 }
 
-function cap(s) {
-    return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
-}
+/* ============================================================
+   COMPONENTS
+============================================================ */
 
-function StatCard({ tone, label, value, sub, icon }) {
+function StatCard({
+    label,
+    value,
+    description,
+    icon,
+    accent = false,
+}) {
     return (
-        <div className="stat-card" data-tone={tone}>
-            <div className="stat-label">{label}</div>
+        <div className={`stat-card ${accent ? "stat-card-accent" : ""}`}>
+            <div className="stat-top">
+                <span className="stat-label">{label}</span>
+
+                <span className="stat-icon">{icon}</span>
+            </div>
+
             <div className="stat-value">
                 {Number(value ?? 0).toLocaleString()}
             </div>
-            <div className="stat-sub">{sub}</div>
-            <div className="stat-icon">{icon}</div>
+
+            <div className="stat-description">{description}</div>
         </div>
     );
 }
 
-function PgLink({ href, active, disabled, children }) {
-    if (disabled) return <span className="pg-btn disabled">{children}</span>;
+function StatusBadge({ status }) {
+    const normalized = status || "inactive";
+
+    return (
+        <span className={`status-badge status-${normalized}`}>
+            <span className="status-dot" />
+
+            {cap(normalized)}
+        </span>
+    );
+}
+
+function EmptyState({
+    search,
+    hasFilters,
+    onReset,
+    createRoute,
+}) {
+    return (
+        <div className="empty-state">
+            <div className="empty-illustration">
+                <div className="empty-circle">
+                    <TalentIcon size={28} />
+                </div>
+
+                <span className="empty-dot empty-dot-one" />
+                <span className="empty-dot empty-dot-two" />
+                <span className="empty-dot empty-dot-three" />
+            </div>
+
+            <h3>
+                {search || hasFilters
+                    ? "No talent profiles found"
+                    : "Your talent registry is empty"}
+            </h3>
+
+            <p>
+                {search || hasFilters
+                    ? "Try changing your search or filter criteria."
+                    : "Start building your talent network by adding your first profile."}
+            </p>
+
+            <div className="empty-actions">
+                {(search || hasFilters) && (
+                    <button
+                        type="button"
+                        className="secondary-button"
+                        onClick={onReset}
+                    >
+                        <RefreshIcon />
+                        Reset filters
+                    </button>
+                )}
+
+                <Link href={createRoute()} className="primary-button">
+                    <PlusIcon />
+                    Add talent
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+function PgLink({
+    href,
+    active = false,
+    disabled = false,
+    children,
+}) {
+    if (disabled) {
+        return (
+            <span className="pagination-button disabled">
+                {children}
+            </span>
+        );
+    }
+
     return (
         <Link
             href={href}
-            className={`pg-btn ${active ? "active" : ""}`}
             preserveScroll
+            className={`pagination-button ${
+                active ? "active" : ""
+            }`}
         >
             {children}
         </Link>
     );
 }
 
-/* ── Inline icon set (no external icon dependency) ── */
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function cap(value) {
+    if (!value) return "";
+
+    return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function getInitials(name) {
+    if (!name) return "?";
+
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part.charAt(0))
+        .join("")
+        .toUpperCase();
+}
+
+/* ============================================================
+   ICONS
+============================================================ */
+
+function TalentIcon({ size = 18 }) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21a8 8 0 0116 0" />
+            <path d="M19 5v4M21 7h-4" />
+        </svg>
+    );
+}
+
 function PlusIcon() {
     return (
         <svg
-            width="14"
-            height="14"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -541,26 +1025,32 @@ function PlusIcon() {
         </svg>
     );
 }
-function UsersIcon() {
+
+function UsersIcon({ size = 16 }) {
     return (
         <svg
-            width="14"
-            height="14"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.8"
             strokeLinecap="round"
+            strokeLinejoin="round"
         >
-            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
         </svg>
     );
 }
-function CheckIcon() {
+
+function CheckIcon({ size = 16 }) {
     return (
         <svg
-            width="16"
-            height="16"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -572,6 +1062,23 @@ function CheckIcon() {
         </svg>
     );
 }
+
+function CheckCircleIcon() {
+    return (
+        <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+        >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M8 12l2.5 2.5L16 9" />
+        </svg>
+    );
+}
+
 function GridIcon() {
     return (
         <svg
@@ -580,7 +1087,7 @@ function GridIcon() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.8"
         >
             <rect x="3" y="3" width="7" height="7" rx="1.5" />
             <rect x="14" y="3" width="7" height="7" rx="1.5" />
@@ -589,14 +1096,21 @@ function GridIcon() {
         </svg>
     );
 }
+
 function StarIcon({ size = 18 }) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+        >
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
     );
 }
-function RepeatIcon() {
+
+function ConnectionIcon() {
     return (
         <svg
             width="18"
@@ -604,272 +1118,1495 @@ function RepeatIcon() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3" />
+            <path d="M18 8a6 6 0 01-6 6H6" />
+            <path d="M6 18l-3-3 3-3" />
+            <path d="M6 8a6 6 0 016-6h6" />
+            <path d="M18 2l3 3-3 3" />
         </svg>
     );
 }
-function LayersIcon() {
+
+function LayersIcon({ size = 18 }) {
     return (
         <svg
-            width="18"
-            height="18"
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M12 2l9 5-9 5-9-5 9-5z" />
+            <path d="M3 12l9 5 9-5" />
+            <path d="M3 17l9 5 9-5" />
+        </svg>
+    );
+}
+
+function SearchIcon() {
+    return (
+        <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-4-4" />
+        </svg>
+    );
+}
+
+function FilterIcon() {
+    return (
+        <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        >
+            <path d="M4 6h16M7 12h10M10 18h4" />
+        </svg>
+    );
+}
+
+function ChevronDownIcon({ className = "" }) {
+    return (
+        <svg
+            className={className}
+            width="14"
+            height="14"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
-            strokeLinejoin="round"
         >
-            <path d="M12 2l9 5-9 5-9-5 9-5zM3 12l9 5 9-5M3 17l9 5 9-5" />
+            <path d="M6 9l6 6 6-6" />
         </svg>
     );
 }
+
+function ChevronIcon() {
+    return (
+        <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+        >
+            <path d="M9 18l6-6-6-6" />
+        </svg>
+    );
+}
+
+function ChevronLeftIcon() {
+    return (
+        <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+        >
+            <path d="M15 18l-6-6 6-6" />
+        </svg>
+    );
+}
+
+function ChevronRightIcon() {
+    return (
+        <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+        >
+            <path d="M9 18l6-6-6-6" />
+        </svg>
+    );
+}
+
+function RefreshIcon() {
+    return (
+        <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M20 11a8.1 8.1 0 00-15.5-2M4 5v4h4" />
+            <path d="M4 13a8.1 8.1 0 0015.5 2M20 19v-4h-4" />
+        </svg>
+    );
+}
+
 function EyeIcon() {
     return (
         <svg
-            width="14"
-            height="14"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z"
-            />
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            />
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+            <circle cx="12" cy="12" r="3" />
         </svg>
     );
 }
+
 function PencilIcon() {
     return (
         <svg
-            width="14"
-            height="14"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"
-            />
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.12 2.12 0 013 3L8 18l-4 1 1-4z" />
         </svg>
     );
 }
+
 function TrashIcon() {
     return (
         <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M4 7h16" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M6 7l1 14h10l1-14" />
+            <path d="M9 7V4h6v3" />
+        </svg>
+    );
+}
+
+function GlobeIcon() {
+    return (
+        <svg
             width="14"
             height="14"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.8"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-            />
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18" />
+            <path d="M12 3a14 14 0 010 18" />
         </svg>
     );
 }
-function SparkleIcon() {
+
+function SpinnerIcon() {
     return (
         <svg
-            width="22"
-            height="22"
+            className="spinner"
+            width="15"
+            height="15"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.5"
+            strokeWidth="2"
         >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+            <circle
+                cx="12"
+                cy="12"
+                r="9"
+                strokeDasharray="40 20"
             />
         </svg>
     );
 }
 
-/* ── Design tokens & styles: monochrome + single green accent, shared with Users/Profile ── */
+/* ============================================================
+   CSS
+============================================================ */
+
 const css = `
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
-[data-h-scope="skills"] {
-    --ink:          #0A0A0A;
-    --ink-2:        #45474A;
-    --ink-faint:    #90928F;
-    --line:         #E2E2DF;
-    --line-soft:    #EEEEEB;
-    --canvas:       #F5F5F3;
-    --surface:      #FFFFFF;
-    --surface-alt:  #FAFAF8;
+.talent-admin-page {
+    --brand: #5D89C8;
+    --brand-dark: #4775B3;
+    --brand-light: #EEF4FC;
+    --brand-lighter: #F6F9FD;
 
-    --accent:       #00A667;
-    --accent-ink:   #00814F;
-    --accent-soft:  #E3F5EC;
+    --ink: #172033;
+    --ink-2: #39445A;
+    --muted: #7C879A;
+    --muted-2: #A5ADBB;
 
-    --radius-lg: 12px;
-    --radius-md: 10px;
-    --radius-sm: 7px;
+    --border: #E7EAF0;
+    --border-light: #EFF1F5;
 
-    font-family: var(--font-sans, 'Inter', sans-serif);
+    --canvas: #F6F8FB;
+    --white: #FFFFFF;
+
+    --success: #198754;
+    --success-bg: #EAF7F0;
+
+    --warning: #B7791F;
+    --warning-bg: #FFF6E4;
+
+    --danger: #D64545;
+    --danger-bg: #FFF0F0;
+
+    --purple: #7556B5;
+    --purple-bg: #F2EEFA;
+
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    background: var(--canvas);
+    min-height: 100%;
+    padding: 30px 32px 45px;
 }
 
-.skills-page { padding: 28px 32px; background: var(--canvas); }
+.talent-admin-page *,
+.talent-admin-page *::before,
+.talent-admin-page *::after {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   FLASH
+============================================================ */
+
+.flash-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+}
 
 .flash-success {
-    background: var(--accent-soft); border: 1px solid var(--accent);
-    color: var(--accent-ink); border-radius: var(--radius-md); padding: 12px 18px;
-    font-size: 13px; display: flex; align-items: center; gap: 9px;
+    background: var(--success-bg);
+    border: 1px solid #CBE9D9;
+    color: var(--success);
 }
 
-.page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-.page-title {
-    font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; color: var(--ink);
-    display: flex; align-items: center; gap: 10px; margin: 0;
+.flash-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #D7F1E2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.title-mark { width: 8px; height: 8px; background: var(--accent); flex-shrink: 0; transform: rotate(45deg); }
-.page-sub { font-size: 13px; color: var(--ink-faint); margin-top: 4px; margin-left: 18px; }
-.head-actions { display: flex; gap: 10px; }
 
-.btn-accent {
-    background: var(--accent); color: #fff; border: none;
-    border-radius: 8px; font-size: 13px; font-weight: 500;
-    padding: 10px 18px; display: inline-flex; align-items: center; gap: 7px;
-    transition: background .18s; text-decoration: none; cursor: pointer;
+.flash-message strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 1px;
 }
-.btn-accent:hover { background: var(--accent-ink); color: #fff; }
 
-.btn-outline {
-    background: var(--surface); color: var(--ink); border: 1px solid var(--ink);
-    border-radius: 8px; font-size: 13px; font-weight: 500;
-    padding: 9px 18px; display: inline-flex; align-items: center; gap: 7px;
-    transition: all .18s; text-decoration: none; cursor: pointer;
+.flash-message span {
+    display: block;
+    font-size: 12px;
 }
-.btn-outline:hover { background: var(--ink); color: #fff; }
 
-.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 22px; }
-@media (max-width: 1200px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 720px)  { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+.flash-close {
+    margin-left: auto;
+    border: 0;
+    background: transparent;
+    color: currentColor;
+    opacity: .55;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.talent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 25px;
+    margin-bottom: 28px;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.breadcrumb .current {
+    color: var(--ink-2);
+    font-weight: 600;
+}
+
+.breadcrumb svg {
+    color: #B8BFCA;
+}
+
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.title-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--brand-light);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #DDE8F7;
+}
+
+.title-row h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 25px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -.5px;
+    color: var(--ink);
+    margin: 0 0 5px;
+}
+
+.title-row p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.primary-button,
+.secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 9px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .18s ease;
+    white-space: nowrap;
+}
+
+.primary-button {
+    background: var(--brand);
+    border: 1px solid var(--brand);
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(93,137,200,.18);
+}
+
+.primary-button:hover {
+    background: var(--brand-dark);
+    border-color: var(--brand-dark);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.secondary-button {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+}
+
+.secondary-button:hover {
+    border-color: #C7D3E5;
+    background: var(--brand-lighter);
+    color: var(--brand-dark);
+}
+
+/* ============================================================
+   STAT CARDS
+============================================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
 
 .stat-card {
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius-lg); padding: 18px 20px 16px;
-    position: relative; overflow: hidden;
+    position: relative;
+    min-height: 135px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 17px 18px;
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
 }
-.stat-card[data-tone="accent"]  { --tone: var(--accent); --tone-bg: var(--accent-soft); }
-.stat-card[data-tone="neutral"] { --tone: var(--ink); --tone-bg: var(--surface-alt); }
-.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--tone); opacity: .8; }
-.stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint); margin-bottom: 10px; }
-.stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--ink); letter-spacing: -.4px; line-height: 1; font-variant-numeric: tabular-nums; }
-.stat-sub { font-size: 12px; color: var(--ink-faint); margin-top: 6px; }
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(24,39,75,.06);
+}
+
+.stat-card-accent {
+    border-color: #D9E6F6;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FBFF 100%);
+}
+
+.stat-card-accent::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    right: -25px;
+    bottom: -25px;
+    border-radius: 50%;
+    background: var(--brand-light);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .065em;
+}
+
 .stat-icon {
-    position: absolute; right: 16px; top: 16px; width: 34px; height: 34px; border-radius: 9px;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--tone-bg); color: var(--tone);
+    width: 33px;
+    height: 33px;
+    border-radius: 9px;
+    background: #F5F7FA;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.filter-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 22px; }
-.filter-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr .8fr auto; gap: 14px; align-items: end; }
-@media (max-width: 1100px) { .filter-grid { grid-template-columns: repeat(2, 1fr); } }
-.filter-field--wide { grid-column: span 1; }
-.filter-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-faint); margin-bottom: 6px; display: block; }
-.filter-input {
-    border: 1px solid var(--line); border-radius: var(--radius-sm);
-    padding: 9px 12px; font-size: 13px; color: var(--ink);
-    background: var(--surface-alt); outline: none; width: 100%; font-family: inherit;
-    transition: border-color .15s, background .15s, box-shadow .15s;
+.stat-card-accent .stat-icon {
+    background: var(--brand-light);
+    color: var(--brand);
 }
-.filter-input:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px rgba(0,166,103,.12); }
-.filter-actions { display: flex; gap: 8px; }
-.btn-filter {
-    background: var(--ink); color: #fff; border: none; border-radius: var(--radius-sm);
-    padding: 9px 18px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background .18s;
+
+.stat-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 25px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
 }
-.btn-filter:hover { background: #000; }
-.btn-filter:disabled { opacity: .6; cursor: default; }
-.btn-reset {
-    background: var(--surface-alt); color: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius-sm);
-    padding: 9px 16px; font-size: 13px; cursor: pointer; transition: background .15s;
+
+.stat-description {
+    color: var(--muted);
+    font-size: 11.5px;
+    margin-top: 8px;
 }
-.btn-reset:hover { background: var(--line-soft); color: var(--ink); }
 
-.ui-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
-.card-bar { padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.card-bar-label { font-size: 13px; font-weight: 600; color: var(--ink-2); }
-.count-badge { background: var(--accent-soft); color: var(--accent-ink); border-radius: 6px; font-size: 11px; font-weight: 600; padding: 2px 8px; margin-left: 6px; font-variant-numeric: tabular-nums; }
-.bulk-row { display: flex; gap: 8px; }
-.bulk-select { background: var(--surface-alt); border: 1px solid var(--line); color: var(--ink-2); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 12.5px; outline: none; cursor: pointer; }
-.bulk-select:focus { border-color: var(--accent); }
-.btn-bulk-apply { background: var(--surface-alt); border: 1px solid var(--line); color: var(--ink-2); border-radius: var(--radius-sm); padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: all .15s; }
-.btn-bulk-apply:hover { border-color: var(--ink); color: #fff; background: var(--ink); }
+/* ============================================================
+   SEARCH
+============================================================ */
 
-.table-scroll { overflow-x: auto; }
-.ui-table { width: 100%; border-collapse: collapse; }
-.ui-table thead tr { background: var(--surface-alt); }
-.ui-table thead th { padding: 11px 18px; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-faint); white-space: nowrap; text-align: left; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface-alt); z-index: 1; }
-.ui-table thead th:first-child { padding-left: 20px; }
-.ui-table tbody tr { border-bottom: 1px solid var(--line-soft); transition: background .12s; }
-.ui-table tbody tr:last-child { border-bottom: none; }
-.ui-table tbody tr:hover { background: var(--surface-alt); }
-.ui-table tbody td { padding: 12px 18px; font-size: 13.5px; color: var(--ink-2); vertical-align: middle; }
-.ui-table tbody td:first-child { padding-left: 20px; }
-.col-muted { color: var(--ink-faint); font-size: 13px; }
+.search-panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    padding: 13px;
+}
 
-.skill-cell { display: flex; align-items: center; gap: 11px; }
-.skill-avatar { width: 36px; height: 36px; border-radius: 9px; object-fit: cover; border: 1px solid var(--line); flex-shrink: 0; }
-.skill-avatar-placeholder { width: 36px; height: 36px; border-radius: 9px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.skill-name { font-weight: 600; color: var(--ink); font-size: 13.5px; display: flex; align-items: center; }
-.skill-meta { font-size: 11.5px; color: var(--ink-faint); margin-top: 2px; }
+.search-main {
+    display: flex;
+    gap: 9px;
+}
 
-.badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-.badge-active   { background: var(--accent-soft); color: var(--accent-ink); }
-.badge-inactive { background: var(--surface-alt); color: var(--ink-faint); border: 1px solid var(--line); }
-.badge-pending  { background: var(--surface-alt); color: var(--ink-2); border: 1px dashed var(--ink-2); }
-.badge-featured { display: inline-flex; align-items: center; gap: 4px; background: var(--surface); color: var(--ink); border: 1px solid var(--ink); border-radius: 5px; font-size: 10px; font-weight: 700; letter-spacing: .03em; padding: 2px 8px; margin-left: 8px; }
-.level-pill { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; background: var(--surface-alt); color: var(--ink-2); border: 1px solid var(--line); }
+.search-box {
+    position: relative;
+    flex: 1;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    background: #FBFCFE;
+    border-radius: 9px;
+    color: var(--muted);
+    transition: border-color .15s, box-shadow .15s;
+}
 
-input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
+.search-box:focus-within {
+    border-color: var(--brand);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(93,137,200,.10);
+}
 
-.action-group { display: flex; gap: 5px; justify-content: flex-end; }
-.action-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); color: var(--ink-faint); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s; text-decoration: none; }
-.action-btn:hover { background: var(--accent-soft); color: var(--accent-ink); border-color: var(--accent); }
-.action-btn.btn-edit:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
-.action-btn.btn-del { border-style: dashed; }
-.action-btn.btn-del:hover { background: var(--ink); color: #fff; border-color: var(--ink); border-style: solid; }
+.search-box > svg {
+    margin-left: 13px;
+    flex-shrink: 0;
+}
 
-.pg-bar { padding: 13px 20px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.pg-info { font-size: 12.5px; color: var(--ink-faint); }
-.pg-links { display: flex; gap: 4px; }
-.pg-btn { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font-size: 12.5px; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all .15s; cursor: pointer; }
-.pg-btn:hover { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); }
-.pg-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
-.pg-btn.disabled { opacity: .35; pointer-events: none; }
+.search-box input {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    padding: 0 36px 0 10px;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13px;
+}
 
-.empty-state { text-align: center; padding: 64px 24px; }
-.empty-icon { width: 52px; height: 52px; border-radius: 50%; background: var(--surface-alt); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 14px; color: var(--ink-faint); }
-.empty-state h3 { font-size: 14px; font-weight: 700; color: var(--ink-2); margin-bottom: 5px; }
-.empty-state p { font-size: 13px; color: var(--ink-faint); }
+.search-box input::placeholder {
+    color: #A2AAB7;
+}
 
-@media (max-width: 900px) {
-    .ui-table th:nth-child(4), .ui-table th:nth-child(5),
-    .ui-table td:nth-child(4), .ui-table td:nth-child(5) { display: none; }
+.clear-search {
+    position: absolute;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: #E9EDF3;
+    color: var(--muted);
+    cursor: pointer;
+    line-height: 18px;
+    font-size: 17px;
+}
+
+.filter-toggle,
+.search-button {
+    height: 42px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.filter-toggle {
+    min-width: 105px;
+    padding: 0 13px;
+    background: #fff;
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+}
+
+.filter-toggle:hover,
+.filter-toggle.active {
+    color: var(--brand-dark);
+    border-color: #C7D7EA;
+    background: var(--brand-lighter);
+}
+
+.filter-toggle svg:last-child {
+    transition: transform .2s ease;
+}
+
+.filter-toggle svg.rotate {
+    transform: rotate(180deg);
+}
+
+.filter-count {
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+
+.search-button {
+    min-width: 92px;
+    padding: 0 15px;
+    background: var(--ink);
+    color: #fff;
+    border: 1px solid var(--ink);
+}
+
+.search-button:hover {
+    background: #0E1420;
+}
+
+.search-button:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
+.advanced-filters {
+    border-top: 1px solid var(--border-light);
+    margin-top: 13px;
+    padding-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.filter-field label {
+    display: block;
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 6px;
+}
+
+.filter-field select {
+    width: 100%;
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #FBFCFE;
+    color: var(--ink-2);
+    font-family: inherit;
+    font-size: 12.5px;
+    outline: none;
+}
+
+.filter-field select:focus {
+    border-color: var(--brand);
+}
+
+.reset-button {
+    height: 38px;
+    padding: 0 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.reset-button:hover {
+    color: var(--ink);
+    background: #F7F8FA;
+}
+
+/* ============================================================
+   TABLE CARD
+============================================================ */
+
+.talent-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 7px rgba(23,32,51,.02);
+}
+
+.results-toolbar {
+    min-height: 62px;
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.results-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.results-title {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.results-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 27px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 6px;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.filtered-label {
+    border: 1px solid #D9E4F3;
+    color: var(--brand);
+    background: #F8FBFF;
+    border-radius: 20px;
+    padding: 3px 8px;
+    font-size: 9.5px;
+    font-weight: 700;
+}
+
+.toolbar-meta {
+    color: var(--muted);
+    font-size: 11.5px;
+}
+
+.toolbar-meta strong {
+    color: var(--ink-2);
+}
+
+.selection-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.selected-count {
+    height: 31px;
+    padding: 0 9px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 7px;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.bulk-select {
+    height: 31px;
+    padding: 0 9px;
+    border: 1px solid var(--border);
+    background: #FBFCFE;
+    color: var(--ink-2);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 11.5px;
+    outline: none;
+}
+
+.bulk-apply,
+.cancel-selection {
+    height: 31px;
+    padding: 0 11px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.bulk-apply {
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+}
+
+.cancel-selection {
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+}
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.talent-table {
+    width: 100%;
+    min-width: 920px;
+    border-collapse: collapse;
+}
+
+.talent-table thead {
+    background: #FAFBFD;
+}
+
+.talent-table th {
+    height: 43px;
+    padding: 0 15px;
+    border-bottom: 1px solid var(--border);
+    color: #8993A4;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: .065em;
+    white-space: nowrap;
+}
+
+.talent-table th:first-child,
+.talent-table td:first-child {
+    padding-left: 18px;
+}
+
+.talent-table th:last-child,
+.talent-table td:last-child {
+    padding-right: 18px;
+}
+
+.talent-table td {
+    padding: 13px 15px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--ink-2);
+    font-size: 12.5px;
+    vertical-align: middle;
+}
+
+.talent-table tbody tr {
+    transition: background .12s ease;
+}
+
+.talent-table tbody tr:hover {
+    background: #FBFCFE;
+}
+
+.talent-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.checkbox-column {
+    width: 45px;
+}
+
+.actions-column {
+    width: 125px;
+    text-align: right !important;
+}
+
+input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--brand);
+    cursor: pointer;
+}
+
+/* ============================================================
+   TALENT IDENTITY
+============================================================ */
+
+.talent-identity {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 230px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 39px;
+    height: 39px;
+    flex-shrink: 0;
+}
+
+.talent-avatar,
+.talent-avatar-placeholder {
+    width: 39px;
+    height: 39px;
+    border-radius: 10px;
+}
+
+.talent-avatar {
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+
+.talent-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #6D96CD, #4E79B7);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .02em;
+}
+
+.online-indicator {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #28A66A;
+    border: 2px solid #fff;
+}
+
+.talent-details {
+    min-width: 0;
+}
+
+.talent-name-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.talent-name {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+}
+
+.talent-name:hover {
+    color: var(--brand-dark);
+}
+
+.talent-contact {
+    color: var(--muted);
+    font-size: 10.5px;
+    margin-top: 3px;
+    max-width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.featured-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    height: 19px;
+    padding: 0 6px;
+    border-radius: 5px;
+    background: var(--warning-bg);
+    color: var(--warning);
+    font-size: 8.5px;
+    font-weight: 800;
+}
+
+/* ============================================================
+   CATEGORY
+============================================================ */
+
+.category-cell {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+.category-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: #F5F7FA;
+    color: #7C879A;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================
+   LEVEL
+============================================================ */
+
+.level-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 25px;
+    padding: 0 9px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.level-beginner {
+    color: #56708F;
+    background: #EFF4F9;
+}
+
+.level-intermediate {
+    color: #607B42;
+    background: #F0F6E9;
+}
+
+.level-advanced {
+    color: #7562A3;
+    background: #F2EFF9;
+}
+
+.level-expert {
+    color: #9B6A22;
+    background: #FFF5E5;
+}
+
+.muted {
+    color: var(--muted-2);
+    font-size: 11.5px;
+}
+
+.language-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-2);
+    font-size: 11.5px;
+}
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 25px;
+    padding: 0 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.status-active {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.status-inactive {
+    background: #F2F3F5;
+    color: #7F8998;
+}
+
+.status-pending {
+    background: var(--warning-bg);
+    color: var(--warning);
+}
+
+/* ============================================================
+   ROW ACTIONS
+============================================================ */
+
+.row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.row-action {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: #8A94A5;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s ease;
+}
+
+.row-action:hover {
+    color: var(--brand-dark);
+    border-color: #C9D8EA;
+    background: var(--brand-light);
+}
+
+.row-action.edit:hover {
+    color: var(--ink);
+    border-color: #CCD2DB;
+    background: #F5F6F8;
+}
+
+.row-action.delete:hover {
+    color: var(--danger);
+    border-color: #F0C9C9;
+    background: var(--danger-bg);
+}
+
+/* ============================================================
+   EMPTY
+============================================================ */
+
+.empty-state {
+    padding: 75px 25px;
+    text-align: center;
+}
+
+.empty-illustration {
+    position: relative;
+    width: 90px;
+    height: 70px;
+    margin: 0 auto 19px;
+}
+
+.empty-circle {
+    width: 58px;
+    height: 58px;
+    border-radius: 17px;
+    background: var(--brand-light);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.empty-dot {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #DDE8F6;
+}
+
+.empty-dot-one {
+    top: 3px;
+    left: 9px;
+}
+
+.empty-dot-two {
+    right: 6px;
+    top: 17px;
+    width: 5px;
+    height: 5px;
+}
+
+.empty-dot-three {
+    left: 15px;
+    bottom: 3px;
+    width: 5px;
+    height: 5px;
+}
+
+.empty-state h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+.empty-state p {
+    color: var(--muted);
+    font-size: 12.5px;
+    margin: 0 auto 18px;
+    max-width: 420px;
+    line-height: 1.6;
+}
+
+.empty-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ============================================================
+   PAGINATION
+============================================================ */
+
+.pagination-bar {
+    min-height: 59px;
+    border-top: 1px solid var(--border);
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.pagination-info {
+    color: var(--muted);
+    font-size: 11.5px;
+}
+
+.pagination-info strong {
+    color: var(--ink-2);
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pagination-button {
+    min-width: 31px;
+    height: 31px;
+    padding: 0 8px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--ink-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    transition: all .15s ease;
+}
+
+.pagination-button:hover {
+    border-color: #C8D8EB;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+}
+
+.pagination-button.active {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+}
+
+.pagination-button.disabled {
+    opacity: .35;
+    cursor: default;
+}
+
+/* ============================================================
+   SPINNER
+============================================================ */
+
+.spinner {
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1250px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .advanced-filters {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 950px) {
+    .talent-admin-page {
+        padding: 24px 20px 35px;
+    }
+
+    .talent-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions .primary-button,
+    .header-actions .secondary-button {
+        flex: 1;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .advanced-filters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .filter-actions {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 680px) {
+    .talent-admin-page {
+        padding: 18px 13px 28px;
+    }
+
+    .title-row h1 {
+        font-size: 21px;
+    }
+
+    .title-row p {
+        font-size: 12px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .stat-card {
+        min-height: 118px;
+        padding: 14px;
+    }
+
+    .stat-value {
+        font-size: 22px;
+    }
+
+    .stat-description {
+        font-size: 10.5px;
+    }
+
+    .header-actions {
+        flex-direction: column;
+    }
+
+    .header-actions .primary-button,
+    .header-actions .secondary-button {
+        width: 100%;
+    }
+
+    .search-main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .search-box {
+        grid-column: span 2;
+    }
+
+    .search-button,
+    .filter-toggle {
+        width: 100%;
+    }
+
+    .advanced-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-actions {
+        grid-column: auto;
+    }
+
+    .results-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .selection-toolbar {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .pagination-bar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagination {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .empty-actions {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 220px;
+        margin: auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .title-icon {
+        width: 39px;
+        height: 39px;
+    }
+
+    .breadcrumb {
+        margin-bottom: 8px;
+    }
 }
 `;

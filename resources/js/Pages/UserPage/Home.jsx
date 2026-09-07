@@ -379,7 +379,7 @@ export default function Home({
         .fc-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
         .fc-cta-glow { position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: var(--accent-glow); filter: blur(80px); pointer-events: none; }
         .fc-cta h2 { font-family: var(--font-head); font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; color: var(--text-1); margin-bottom: 10px; }
-        .fc-cta p { color: var(--text-2); font-size: 0.95rem; max-width: 460px; margin-bottom: 24px; }
+        .fc-cta p { color: var(--text-2); font-size: 0.95rem; max-width: 460px; margin-bottom: 24px; margin-top: 10px; }
         .fc-cta-note { font-size: 0.78rem; color: var(--text-3); margin-top: -12px; margin-bottom: 0; }
 
         [data-h-theme="light"] {
