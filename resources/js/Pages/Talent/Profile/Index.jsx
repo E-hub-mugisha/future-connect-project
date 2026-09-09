@@ -1,400 +1,1577 @@
-// resources/js/Pages/Talent/Profile/Index.jsx
-import { Head, useForm, Link } from "@inertiajs/react";
-import { useState } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 import AppLayout from "@/Layouts/AppLayout";
 
-export default function Profile({ talent, categories, flash }) {
+export default function Profile({
+    talent,
+    categories = [],
+    flash = {},
+}) {
     const [editOpen, setEditOpen] = useState(false);
+    const [passwordOpen, setPasswordOpen] = useState(false);
 
-    // Show only the most recent items — no "view all" modals anymore
-    const recentReviews = talent.feedback?.slice(0, 3) ?? [];
-    const recentCourses = talent.courses?.slice(0, 3) ?? [];
+    const reviews = talent?.feedback ?? [];
+    const courses = talent?.courses ?? [];
+
+    const recentReviews = reviews.slice(0, 5);
+    const recentCourses = courses.slice(0, 5);
+
+    const averageRating =
+        reviews.length > 0
+            ? (
+                  reviews.reduce(
+                      (sum, review) =>
+                          sum + Number(review.rating || 0),
+                      0
+                  ) / reviews.length
+              ).toFixed(1)
+            : "0.0";
+
+    const profileFields = [
+        talent?.name,
+        talent?.email,
+        talent?.phone,
+        talent?.address,
+        talent?.language,
+        talent?.description,
+        talent?.category_id,
+        talent?.level,
+        talent?.image,
+    ];
+
+    const completion = Math.round(
+        (profileFields.filter(Boolean).length /
+            profileFields.length) *
+            100
+    );
 
     return (
         <AppLayout>
-            <Head title={`${talent.name} — Profile`} />
+            <Head title={`${talent?.name || "Talent"} — Profile`} />
 
             <div data-h-scope="talent-profile">
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
                     [data-h-scope="talent-profile"] {
-                        --h-accent: #48d597;
-                        --h-accent-ink: #0f3d2b;   /* readable text on accent */
-                        --h-ink: #000000;
-                        --h-white: #F5f5f7;
-                        --h-bg: #f6f8f7;
-                        --h-line: rgba(0, 0, 0, 0.1);
-                        --h-line-soft: rgba(0, 0, 0, 0.06);
-                        --h-muted: rgba(0, 0, 0, 0.56);
-                        background-color: var(--h-bg);
-                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                        color: var(--h-ink);
+                        --tp-primary: #48d597;
+                        --tp-primary-dark: #2fbc7e;
+                        --tp-primary-soft: rgba(72, 213, 151, .12);
+                        --tp-primary-soft-2: #edf9f3;
+                        --tp-primary-ink: #0f3d2b;
+
+                        --tp-text: #151918;
+                        --tp-muted: #6b7470;
+                        --tp-light-text: #8a938f;
+
+                        --tp-bg: #f5f7f6;
+                        --tp-card: #ffffff;
+                        --tp-border: #e5ebe8;
+
+                        background: var(--tp-bg);
+                        color: var(--tp-text);
+                        min-height: 100vh;
+                        font-family: 'Inter', sans-serif;
                     }
+
+                    [data-h-scope="talent-profile"] *,
+                    [data-h-scope="talent-profile"] *::before,
+                    [data-h-scope="talent-profile"] *::after {
+                        box-sizing: border-box;
+                    }
+
                     [data-h-scope="talent-profile"] h1,
                     [data-h-scope="talent-profile"] h2,
                     [data-h-scope="talent-profile"] h3,
                     [data-h-scope="talent-profile"] h4,
                     [data-h-scope="talent-profile"] h5,
-                    [data-h-scope="talent-profile"] h6,
-                    [data-h-scope="talent-profile"] .h-display {
-                        font-family: 'Space Grotesk', 'Inter', sans-serif;
-                        letter-spacing: -0.01em;
+                    [data-h-scope="talent-profile"] h6 {
+                        font-family: 'Space Grotesk', sans-serif;
                     }
 
-                    /* ---- flat panels, no shared shadow-kit look ---- */
-                    [data-h-scope="talent-profile"] .h-panel {
-                        background: var(--h-white);
-                        border: 1px solid var(--h-line-soft);
-                        border-radius: 14px;
+                    .tp-container {
+                        max-width: 1250px;
+                        margin: 0 auto;
+                        padding: 30px 24px 70px;
                     }
 
-                    /* ---- header: solid black band, editorial layout ---- */
-                    [data-h-scope="talent-profile"] .h-header {
-                        background: var(--h-ink);
-                        color: var(--h-white);
-                        border-radius: 16px;
+                    /* =====================================================
+                       HERO
+                    ===================================================== */
+
+                    .tp-hero {
                         position: relative;
                         overflow: hidden;
+                        margin-bottom: 24px;
+                        background:
+                            radial-gradient(
+                                circle at 95% 10%,
+                                rgba(72,213,151,.15),
+                                transparent 28%
+                            ),
+                            linear-gradient(
+                                135deg,
+                                #ffffff 0%,
+                                #f9fcfa 52%,
+                                #eef8f3 100%
+                            );
+                        border: 1px solid #e1e9e5;
+                        border-radius: 24px;
+                        box-shadow: 0 12px 40px rgba(21, 35, 28, .055);
                     }
-                    [data-h-scope="talent-profile"] .h-header::before {
+
+                    .tp-hero::before {
                         content: "";
                         position: absolute;
-                        left: 0;
-                        top: 0;
-                        bottom: 0;
-                        width: 4px;
-                        background: var(--h-accent);
-                    }
-                    [data-h-scope="talent-profile"] .h-header .text-secondary {
-                        color: rgba(255, 255, 255, 0.6) !important;
-                    }
-                    [data-h-scope="talent-profile"] .h-avatar {
-                        border: 2px solid var(--h-accent) !important;
-                    }
-                    [data-h-scope="talent-profile"] .h-badge-accent {
-                        background: var(--h-accent);
-                        color: var(--h-accent-ink);
-                        font-weight: 600;
-                        font-size: 0.78rem;
-                    }
-                    [data-h-scope="talent-profile"] .h-badge-outline {
-                        background: transparent;
-                        color: var(--h-white);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
-                        font-size: 0.78rem;
-                        font-weight: 500;
+                        width: 240px;
+                        height: 240px;
+                        border-radius: 50%;
+                        right: -90px;
+                        bottom: -130px;
+                        background: rgba(72,213,151,.07);
                     }
 
-                    /* ---- buttons ---- */
-                    [data-h-scope="talent-profile"] .h-btn-accent {
-                        background: var(--h-accent);
-                        color: var(--h-accent-ink);
-                        border: 1px solid var(--h-accent);
-                        font-weight: 600;
-                        transition: background 0.15s ease, border-color 0.15s ease;
-                    }
-                    [data-h-scope="talent-profile"] .h-btn-accent:hover {
-                        background: #34c084;
-                        border-color: #34c084;
-                        color: var(--h-accent-ink);
-                    }
-                    [data-h-scope="talent-profile"] .h-btn-accent:disabled {
-                        opacity: 0.55;
-                    }
-                    [data-h-scope="talent-profile"] .h-btn-ghost-dark {
-                        background: transparent;
-                        color: var(--h-white);
-                        border: 1px solid rgba(255, 255, 255, 0.35);
-                        font-weight: 500;
-                        transition: border-color 0.15s ease, background 0.15s ease;
-                    }
-                    [data-h-scope="talent-profile"] .h-btn-ghost-dark:hover {
-                        background: rgba(255, 255, 255, 0.08);
-                        border-color: rgba(255, 255, 255, 0.6);
-                        color: var(--h-white);
-                    }
-                    [data-h-scope="talent-profile"] .h-btn-ghost {
-                        background: transparent;
-                        color: var(--h-ink);
-                        border: 1px solid var(--h-line);
-                        font-weight: 500;
-                    }
-                    [data-h-scope="talent-profile"] .h-btn-ghost:hover {
-                        background: var(--h-bg);
+                    .tp-hero-inner {
+                        position: relative;
+                        z-index: 2;
+                        padding: 34px;
                     }
 
-                    /* ---- section labels: rule instead of uppercase tracking ---- */
-                    [data-h-scope="talent-profile"] .h-section-title {
+                    .tp-profile-row {
                         display: flex;
                         align-items: center;
-                        gap: 10px;
-                        color: var(--h-ink);
+                        justify-content: space-between;
+                        gap: 28px;
+                    }
+
+                    .tp-profile-main {
+                        display: flex;
+                        align-items: center;
+                        gap: 22px;
+                        min-width: 0;
+                    }
+
+                    .tp-avatar-wrapper {
+                        position: relative;
+                        flex-shrink: 0;
+                    }
+
+                    .tp-avatar {
+                        width: 112px;
+                        height: 112px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        display: block;
+                        border: 4px solid white;
+                        outline: 3px solid var(--tp-primary);
+                        background: #edf2ef;
+                        box-shadow: 0 10px 25px rgba(20, 45, 34, .12);
+                    }
+
+                    .tp-avatar-camera {
+                        position: absolute;
+                        right: 0;
+                        bottom: 2px;
+                        width: 36px;
+                        height: 36px;
+                        border-radius: 50%;
+                        background: var(--tp-primary);
+                        color: var(--tp-primary-ink);
+                        border: 3px solid white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 13px;
+                        box-shadow: 0 4px 12px rgba(30, 100, 70, .15);
+                    }
+
+                    .tp-name {
+                        margin: 0 0 8px;
+                        font-size: 32px;
+                        line-height: 1.15;
+                        font-weight: 800;
+                        color: var(--tp-text);
+                        letter-spacing: -.03em;
+                    }
+
+                    .tp-email {
+                        color: #69736e;
+                        font-size: 13px;
+                        display: flex;
+                        align-items: center;
+                        gap: 7px;
+                    }
+
+                    .tp-email i {
+                        color: var(--tp-primary-dark);
+                    }
+
+                    .tp-badges {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 8px;
+                        margin-top: 14px;
+                    }
+
+                    .tp-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 7px;
+                        padding: 7px 11px;
+                        border-radius: 999px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        line-height: 1;
+                    }
+
+                    .tp-badge-primary {
+                        background: var(--tp-primary);
+                        color: var(--tp-primary-ink);
+                    }
+
+                    .tp-badge-soft {
+                        background: var(--tp-primary-soft);
+                        color: var(--tp-primary-ink);
+                        border: 1px solid rgba(72,213,151,.15);
+                    }
+
+                    .tp-badge-status {
+                        background: #f1f5f3;
+                        color: #59635e;
+                        border: 1px solid #e3e9e6;
+                    }
+
+                    .tp-actions {
+                        display: flex;
+                        gap: 9px;
+                        flex-wrap: wrap;
+                        flex-shrink: 0;
+                    }
+
+                    .tp-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        border: 0;
+                        border-radius: 11px;
+                        padding: 11px 16px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-decoration: none;
+                        transition: all .2s ease;
+                        cursor: pointer;
+                        white-space: nowrap;
+                    }
+
+                    .tp-btn-primary {
+                        background: var(--tp-primary);
+                        color: var(--tp-primary-ink);
+                        box-shadow: 0 5px 15px rgba(72,213,151,.16);
+                    }
+
+                    .tp-btn-primary:hover {
+                        background: var(--tp-primary-dark);
+                        color: white;
+                        transform: translateY(-1px);
+                    }
+
+                    .tp-btn-secondary {
+                        background: white;
+                        color: #27302c;
+                        border: 1px solid #dce4e0;
+                    }
+
+                    .tp-btn-secondary:hover {
+                        background: #f7faf8;
+                        border-color: #cbd7d1;
+                        color: #151918;
+                    }
+
+                    .tp-hero-description {
+                        max-width: 760px;
+                        margin: 27px 0 0;
+                        color: #69736e;
+                        line-height: 1.75;
+                        font-size: 13px;
+                    }
+
+                    /* =====================================================
+                       STATS
+                    ===================================================== */
+
+                    .tp-stats {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        margin-top: 30px;
+                        padding-top: 22px;
+                        border-top: 1px solid #e2e9e5;
+                    }
+
+                    .tp-stat {
+                        padding: 0 22px;
+                        border-right: 1px solid #e2e9e5;
+                    }
+
+                    .tp-stat:first-child {
+                        padding-left: 0;
+                    }
+
+                    .tp-stat:last-child {
+                        border-right: 0;
+                    }
+
+                    .tp-stat-value {
+                        font-family: 'Space Grotesk', sans-serif;
+                        font-size: 24px;
+                        font-weight: 700;
+                        color: #17201c;
+                    }
+
+                    .tp-stat-label {
+                        margin-top: 4px;
+                        color: #89928e;
+                        font-size: 10px;
+                        text-transform: uppercase;
+                        letter-spacing: .06em;
+                        font-weight: 700;
+                    }
+
+                    /* =====================================================
+                       MAIN GRID
+                    ===================================================== */
+
+                    .tp-grid {
+                        display: grid;
+                        grid-template-columns: 345px minmax(0, 1fr);
+                        gap: 24px;
+                    }
+
+                    .tp-card {
+                        background: var(--tp-card);
+                        border: 1px solid var(--tp-border);
+                        border-radius: 18px;
+                        overflow: hidden;
+                        box-shadow: 0 5px 20px rgba(20,35,28,.025);
+                    }
+
+                    .tp-card + .tp-card {
+                        margin-top: 20px;
+                    }
+
+                    .tp-card-header {
+                        padding: 18px 21px;
+                        border-bottom: 1px solid var(--tp-border);
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 12px;
+                    }
+
+                    .tp-card-title {
+                        margin: 0;
+                        color: #18201c;
+                        font-size: 16px;
+                        font-weight: 700;
+                    }
+
+                    .tp-card-subtitle {
+                        color: #8a938f;
+                        font-size: 11px;
+                        margin-top: 3px;
+                    }
+
+                    .tp-card-body {
+                        padding: 21px;
+                    }
+
+                    .tp-count {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-width: 28px;
+                        height: 28px;
+                        padding: 0 8px;
+                        border-radius: 8px;
+                        background: #f1f4f2;
+                        color: #626b67;
+                        font-size: 11px;
+                        font-weight: 700;
+                    }
+
+                    /* =====================================================
+                       COMPLETION
+                    ===================================================== */
+
+                    .tp-completion-top {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 9px;
+                    }
+
+                    .tp-completion-top strong {
+                        font-size: 13px;
+                        color: #28312d;
+                    }
+
+                    .tp-completion-top span {
+                        color: var(--tp-primary-dark);
+                        font-size: 12px;
+                        font-weight: 800;
+                    }
+
+                    .tp-progress {
+                        width: 100%;
+                        height: 8px;
+                        overflow: hidden;
+                        border-radius: 999px;
+                        background: #edf1ef;
+                    }
+
+                    .tp-progress-bar {
+                        height: 100%;
+                        border-radius: inherit;
+                        background: linear-gradient(
+                            90deg,
+                            #48d597,
+                            #68e0aa
+                        );
+                    }
+
+                    .tp-completion-text {
+                        margin: 12px 0 0;
+                        color: #7b8580;
+                        font-size: 11px;
+                        line-height: 1.6;
+                    }
+
+                    /* =====================================================
+                       CONTACT
+                    ===================================================== */
+
+                    .tp-contact {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 12px;
+                        margin-bottom: 19px;
+                    }
+
+                    .tp-contact:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    .tp-contact-icon {
+                        width: 39px;
+                        height: 39px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 11px;
+                        background: var(--tp-primary-soft);
+                        color: var(--tp-primary-dark);
+                        font-size: 14px;
+                    }
+
+                    .tp-section-label {
+                        margin-bottom: 4px;
+                        color: #929a96;
+                        font-size: 9px;
+                        font-weight: 800;
+                        text-transform: uppercase;
+                        letter-spacing: .07em;
+                    }
+
+                    .tp-contact-value {
+                        color: #303935;
+                        font-size: 12px;
                         font-weight: 600;
-                    }
-                    [data-h-scope="talent-profile"] .h-section-title::before {
-                        content: "";
-                        width: 4px;
-                        height: 18px;
-                        background: var(--h-accent);
-                        border-radius: 2px;
-                        display: inline-block;
-                    }
-                    [data-h-scope="talent-profile"] .h-label {
-                        color: var(--h-muted);
-                        font-weight: 500;
-                        font-size: 0.8rem;
-                    }
-                    [data-h-scope="talent-profile"] .h-chip-count {
-                        background: var(--h-bg);
-                        border: 1px solid var(--h-line-soft);
-                        color: var(--h-muted);
-                        font-weight: 500;
+                        line-height: 1.5;
+                        word-break: break-word;
                     }
 
-                    [data-h-scope="talent-profile"] .h-icon-tile {
-                        background: var(--h-bg);
-                        border: 1px solid var(--h-line-soft);
-                    }
-                    [data-h-scope="talent-profile"] .h-icon-tile i {
-                        color: var(--h-ink);
+                    /* =====================================================
+                       SECURITY
+                    ===================================================== */
+
+                    .tp-security {
+                        display: flex;
+                        align-items: center;
+                        gap: 13px;
                     }
 
-                    [data-h-scope="talent-profile"] .h-review-card,
-                    [data-h-scope="talent-profile"] .h-course-card {
-                        border: 1px solid var(--h-line-soft);
-                        border-radius: 12px;
-                        transition: border-color 0.15s ease;
-                    }
-                    [data-h-scope="talent-profile"] .h-review-card:hover,
-                    [data-h-scope="talent-profile"] .h-course-card:hover {
-                        border-color: var(--h-line);
-                    }
-                    [data-h-scope="talent-profile"] .h-star-filled {
-                        color: var(--h-accent-ink);
-                    }
-                    [data-h-scope="talent-profile"] .h-star-empty {
-                        color: var(--h-line);
-                    }
-                    [data-h-scope="talent-profile"] .h-star-value {
-                        color: var(--h-ink);
-                        font-weight: 600;
-                    }
-                    [data-h-scope="talent-profile"] .h-course-badge {
-                        background: transparent;
-                        color: var(--h-ink);
-                        border: 1px solid var(--h-ink);
-                        font-weight: 500;
+                    .tp-security-icon {
+                        width: 48px;
+                        height: 48px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 14px;
+                        background: var(--tp-primary-soft);
+                        color: var(--tp-primary-dark);
+                        font-size: 18px;
                     }
 
-                    [data-h-scope="talent-profile"] .h-alert-success {
-                        background: var(--h-white);
-                        border: 1px solid var(--h-accent);
-                        border-left: 4px solid var(--h-accent);
-                        color: var(--h-ink);
+                    .tp-security-title {
+                        color: #252e2a;
+                        font-size: 12px;
+                        font-weight: 700;
+                    }
+
+                    .tp-security-text {
+                        margin-top: 3px;
+                        color: #8a938f;
+                        font-size: 10px;
+                        line-height: 1.5;
+                    }
+
+                    .tp-security-button {
+                        width: 100%;
+                        margin-top: 17px;
+                        padding: 10px 14px;
+                        border: 1px solid #dce4e0;
                         border-radius: 10px;
+                        background: white;
+                        color: #303834;
+                        font-size: 11px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: .2s;
                     }
 
-                    [data-h-scope="talent-profile"] .form-control,
-                    [data-h-scope="talent-profile"] .form-select {
-                        border: 1px solid var(--h-line);
+                    .tp-security-button:hover {
+                        background: #f7faf8;
+                        border-color: #cbd7d1;
                     }
-                    [data-h-scope="talent-profile"] .form-control:focus,
-                    [data-h-scope="talent-profile"] .form-select:focus {
-                        border-color: var(--h-accent);
-                        box-shadow: 0 0 0 3px rgba(72, 213, 151, 0.2);
+
+                    /* =====================================================
+                       REVIEWS
+                    ===================================================== */
+
+                    .tp-rating-summary {
+                        display: flex;
+                        align-items: center;
+                        gap: 14px;
+                        padding: 15px;
+                        margin-bottom: 20px;
+                        border-radius: 13px;
+                        background: #f8faf9;
+                        border: 1px solid #edf1ef;
                     }
-                    [data-h-scope="talent-profile"] .form-label {
-                        color: var(--h-ink);
-                        font-weight: 500;
-                        font-size: 0.85rem;
+
+                    .tp-rating-number {
+                        font-family: 'Space Grotesk', sans-serif;
+                        font-size: 30px;
+                        font-weight: 700;
+                        line-height: 1;
+                        color: #1c2521;
+                    }
+
+                    .tp-rating-stars {
+                        color: #f3b63f;
+                        font-size: 14px;
+                        letter-spacing: 1px;
+                    }
+
+                    .tp-rating-text {
+                        margin-top: 3px;
+                        color: #8a938f;
+                        font-size: 10px;
+                    }
+
+                    .tp-review {
+                        display: flex;
+                        gap: 13px;
+                        padding: 17px 0;
+                        border-bottom: 1px solid var(--tp-border);
+                    }
+
+                    .tp-review:first-child {
+                        padding-top: 0;
+                    }
+
+                    .tp-review:last-child {
+                        padding-bottom: 0;
+                        border-bottom: 0;
+                    }
+
+                    .tp-review-avatar {
+                        width: 42px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        background: var(--tp-primary-soft);
+                        color: var(--tp-primary-ink);
+                        font-size: 11px;
+                        font-weight: 800;
+                    }
+
+                    .tp-review-content {
+                        flex: 1;
+                        min-width: 0;
+                    }
+
+                    .tp-review-top {
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                        gap: 12px;
+                    }
+
+                    .tp-review-name {
+                        color: #252d29;
+                        font-size: 12px;
+                        font-weight: 700;
+                    }
+
+                    .tp-stars {
+                        color: #f3b63f;
+                        font-size: 11px;
+                        white-space: nowrap;
+                    }
+
+                    .tp-review-comment {
+                        margin: 7px 0 5px;
+                        color: #68726d;
+                        font-size: 11px;
+                        line-height: 1.65;
+                    }
+
+                    .tp-review-date {
+                        color: #a0a7a4;
+                        font-size: 9px;
+                    }
+
+                    /* =====================================================
+                       COURSES
+                    ===================================================== */
+
+                    .tp-table-wrapper {
+                        overflow-x: auto;
+                    }
+
+                    .tp-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .tp-table th {
+                        padding: 12px 14px;
+                        background: #f8faf9;
+                        border-bottom: 1px solid var(--tp-border);
+                        color: #858e8a;
+                        text-align: left;
+                        font-size: 9px;
+                        text-transform: uppercase;
+                        letter-spacing: .07em;
+                        font-weight: 800;
+                    }
+
+                    .tp-table td {
+                        padding: 15px 14px;
+                        border-bottom: 1px solid var(--tp-border);
+                        color: #444d49;
+                        font-size: 11px;
+                        vertical-align: middle;
+                    }
+
+                    .tp-table tbody tr:last-child td {
+                        border-bottom: 0;
+                    }
+
+                    .tp-table tbody tr {
+                        transition: background .15s ease;
+                    }
+
+                    .tp-table tbody tr:hover {
+                        background: #fbfcfb;
+                    }
+
+                    .tp-course-title {
+                        color: #252e2a;
+                        font-size: 12px;
+                        font-weight: 700;
+                    }
+
+                    .tp-course-description {
+                        max-width: 390px;
+                        overflow: hidden;
+                        color: #7c8581;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+
+                    .tp-course-category {
+                        display: inline-flex;
+                        padding: 5px 9px;
+                        border-radius: 7px;
+                        background: var(--tp-primary-soft);
+                        color: var(--tp-primary-ink);
+                        font-size: 9px;
+                        font-weight: 800;
+                    }
+
+                    /* =====================================================
+                       EMPTY
+                    ===================================================== */
+
+                    .tp-empty {
+                        padding: 45px 20px;
+                        text-align: center;
+                        color: var(--tp-muted);
+                    }
+
+                    .tp-empty-icon {
+                        width: 50px;
+                        height: 50px;
+                        margin: 0 auto 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 15px;
+                        background: #f1f4f2;
+                        color: #9aa39e;
+                        font-size: 17px;
+                    }
+
+                    .tp-empty-text {
+                        color: #7c8581;
+                        font-size: 11px;
+                    }
+
+                    /* =====================================================
+                       MODALS
+                    ===================================================== */
+
+                    .tp-modal-backdrop {
+                        position: fixed;
+                        inset: 0;
+                        z-index: 1050;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 20px;
+                        background: rgba(12,18,15,.55);
+                        backdrop-filter: blur(6px);
+                    }
+
+                    .tp-modal {
+                        width: 100%;
+                        max-width: 780px;
+                        max-height: 90vh;
+                        overflow-y: auto;
+                        background: white;
+                        border-radius: 20px;
+                        box-shadow: 0 30px 80px rgba(0,0,0,.25);
+                    }
+
+                    .tp-modal-sm {
+                        max-width: 500px;
+                    }
+
+                    .tp-modal-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 15px;
+                        padding: 20px 23px;
+                        border-bottom: 1px solid var(--tp-border);
+                    }
+
+                    .tp-modal-title {
+                        margin: 0;
+                        color: #1c2420;
+                        font-size: 18px;
+                        font-weight: 700;
+                    }
+
+                    .tp-modal-close {
+                        width: 34px;
+                        height: 34px;
+                        border: 0;
+                        border-radius: 9px;
+                        background: #f1f4f2;
+                        color: #69736e;
+                        cursor: pointer;
+                        transition: .2s;
+                    }
+
+                    .tp-modal-close:hover {
+                        background: #e7ece9;
+                        color: #252d29;
+                    }
+
+                    .tp-modal-body {
+                        padding: 23px;
+                    }
+
+                    /* =====================================================
+                       FORM
+                    ===================================================== */
+
+                    .tp-form-label {
+                        display: block;
+                        margin-bottom: 7px;
+                        color: #333c38;
+                        font-size: 11px;
+                        font-weight: 800;
+                    }
+
+                    .tp-form-control {
+                        width: 100%;
+                        min-height: 42px;
+                        padding: 10px 12px;
+                        border: 1px solid #dfe5e2;
+                        border-radius: 10px;
+                        outline: none;
+                        background: white;
+                        color: #303834;
+                        font-family: 'Inter', sans-serif;
+                        font-size: 12px;
+                        transition: .2s;
+                    }
+
+                    .tp-form-control::placeholder {
+                        color: #a2aaa6;
+                    }
+
+                    .tp-form-control:focus {
+                        border-color: var(--tp-primary);
+                        box-shadow: 0 0 0 3px rgba(72,213,151,.12);
+                    }
+
+                    textarea.tp-form-control {
+                        resize: vertical;
+                    }
+
+                    .tp-form-control.is-invalid {
+                        border-color: #dc3545;
+                    }
+
+                    .tp-error {
+                        margin-top: 5px;
+                        color: #dc3545;
+                        font-size: 10px;
+                    }
+
+                    .tp-photo-editor {
+                        display: flex;
+                        align-items: center;
+                        gap: 17px;
+                        margin-bottom: 23px;
+                        padding: 15px;
+                        border: 1px solid var(--tp-border);
+                        border-radius: 14px;
+                        background: #f8faf9;
+                    }
+
+                    .tp-photo-preview {
+                        width: 82px;
+                        height: 82px;
+                        flex-shrink: 0;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        border: 3px solid white;
+                        outline: 2px solid var(--tp-primary);
+                    }
+
+                    .tp-upload-note {
+                        margin-top: 5px;
+                        color: #929b97;
+                        font-size: 9px;
+                    }
+
+                    .tp-modal-footer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 8px;
+                        margin-top: 22px;
+                        padding-top: 17px;
+                        border-top: 1px solid var(--tp-border);
+                    }
+
+                    .tp-cancel-btn {
+                        border: 1px solid #dfe5e2;
+                        border-radius: 10px;
+                        background: white;
+                        color: #59625e;
+                        padding: 10px 15px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        cursor: pointer;
+                    }
+
+                    .tp-cancel-btn:hover {
+                        background: #f7f9f8;
+                    }
+
+                    .tp-password-intro {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        margin-bottom: 22px;
+                        padding: 14px;
+                        border: 1px solid #e7ece9;
+                        border-radius: 13px;
+                        background: #f7faf8;
+                    }
+
+                    .tp-password-intro-icon {
+                        width: 43px;
+                        height: 43px;
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 12px;
+                        background: var(--tp-primary-soft);
+                        color: var(--tp-primary-dark);
+                    }
+
+                    .tp-password-intro-title {
+                        color: #2b342f;
+                        font-size: 11px;
+                        font-weight: 800;
+                    }
+
+                    .tp-password-intro-text {
+                        margin: 3px 0 0;
+                        color: #89928e;
+                        font-size: 9px;
+                        line-height: 1.5;
+                    }
+
+                    /* =====================================================
+                       ALERT
+                    ===================================================== */
+
+                    .tp-success-alert {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        padding: 12px 15px;
+                        margin-bottom: 20px;
+                        border: 1px solid #cdeede;
+                        border-radius: 12px;
+                        background: #effaf4;
+                        color: #17643f;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    /* =====================================================
+                       RESPONSIVE
+                    ===================================================== */
+
+                    @media (max-width: 1100px) {
+                        .tp-grid {
+                            grid-template-columns: 300px minmax(0, 1fr);
+                        }
+
+                        .tp-name {
+                            font-size: 28px;
+                        }
+                    }
+
+                    @media (max-width: 992px) {
+                        .tp-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .tp-profile-row {
+                            align-items: flex-start;
+                            flex-direction: column;
+                        }
+
+                        .tp-actions {
+                            width: 100%;
+                        }
+                    }
+
+                    @media (max-width: 700px) {
+                        .tp-container {
+                            padding: 17px 13px 45px;
+                        }
+
+                        .tp-hero-inner {
+                            padding: 22px;
+                        }
+
+                        .tp-profile-main {
+                            width: 100%;
+                            align-items: flex-start;
+                            flex-direction: column;
+                        }
+
+                        .tp-avatar {
+                            width: 94px;
+                            height: 94px;
+                        }
+
+                        .tp-name {
+                            font-size: 25px;
+                        }
+
+                        .tp-actions {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                        }
+
+                        .tp-actions .tp-btn {
+                            width: 100%;
+                        }
+
+                        .tp-stats {
+                            grid-template-columns: repeat(2, 1fr);
+                            gap: 20px 0;
+                        }
+
+                        .tp-stat {
+                            padding: 0 15px;
+                            border-right: 0;
+                        }
+
+                        .tp-stat:nth-child(odd) {
+                            padding-left: 0;
+                        }
+
+                        .tp-stat:nth-child(even) {
+                            border-left: 1px solid #e2e9e5;
+                        }
+
+                        .tp-table {
+                            min-width: 650px;
+                        }
+
+                        .tp-photo-editor {
+                            align-items: flex-start;
+                            flex-direction: column;
+                        }
+
+                        .tp-modal-backdrop {
+                            padding: 10px;
+                        }
+
+                        .tp-modal {
+                            max-height: 94vh;
+                            border-radius: 16px;
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        .tp-actions {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .tp-profile-main {
+                            gap: 16px;
+                        }
+
+                        .tp-stats {
+                            gap: 17px 0;
+                        }
+
+                        .tp-stat-value {
+                            font-size: 21px;
+                        }
+
+                        .tp-card-body {
+                            padding: 17px;
+                        }
+
+                        .tp-modal-body {
+                            padding: 18px;
+                        }
                     }
                 `}</style>
 
-                <div className="container-fluid px-4 py-4" style={{ maxWidth: 1180, margin: "0 auto" }}>
+                <div className="tp-container">
+
+                    {/* =====================================================
+                        SUCCESS MESSAGE
+                    ===================================================== */}
+
                     {flash?.success && (
-                        <div className="alert h-alert-success px-3 py-3 mb-4 d-flex align-items-center">
-                            <i className="fas fa-circle-check me-2" style={{ color: "#0f3d2b" }}></i>
-                            {flash.success}
+                        <div className="tp-success-alert">
+                            <i className="fas fa-circle-check"></i>
+                            <span>{flash.success}</span>
                         </div>
                     )}
 
-                    {/* Header */}
-                    <div className="h-header mb-4">
-                        <div className="p-4 ps-4">
-                            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                                <div className="d-flex align-items-center gap-3">
-                                    <img
-                                        src={
-                                            talent.image
-                                                ? `/${talent.image}`
-                                                : "/img/faces/face10.jpg"
-                                        }
-                                        alt={talent.name}
-                                        className="rounded-circle h-avatar"
-                                        style={{
-                                            width: 72,
-                                            height: 72,
-                                            objectFit: "cover",
-                                        }}
-                                    />
+                    {/* =====================================================
+                        HERO
+                    ===================================================== */}
+
+                    <div className="tp-hero">
+                        <div className="tp-hero-inner">
+
+                            <div className="tp-profile-row">
+
+                                <div className="tp-profile-main">
+
+                                    <div className="tp-avatar-wrapper">
+                                        <img
+                                            src={
+                                                talent?.image
+                                                    ? `/${talent.image}`
+                                                    : "/img/faces/face10.jpg"
+                                            }
+                                            alt={talent?.name || "Profile"}
+                                            className="tp-avatar"
+                                        />
+
+                                        <div className="tp-avatar-camera">
+                                            <i className="fas fa-camera"></i>
+                                        </div>
+                                    </div>
+
                                     <div>
-                                        <h5 className="fw-bold mb-2">
-                                            {talent.name}
-                                        </h5>
-                                        <div className="d-flex flex-wrap gap-2">
-                                            <span className="badge h-badge-accent px-3 py-2 rounded-pill">
-                                                {talent.category?.name ??
-                                                    "No Category"}
+
+                                        <h1 className="tp-name">
+                                            {talent?.name || "Unnamed Talent"}
+                                        </h1>
+
+                                        <div className="tp-email">
+                                            <i className="fas fa-envelope"></i>
+                                            <span>
+                                                {talent?.email ||
+                                                    "Email not provided"}
                                             </span>
-                                            {talent.level && (
-                                                <span className="badge h-badge-outline px-3 py-2 rounded-pill">
-                                                    {capitalize(talent.level)}
+                                        </div>
+
+                                        <div className="tp-badges">
+
+                                            {talent?.category?.name && (
+                                                <span className="tp-badge tp-badge-primary">
+                                                    <i className="fas fa-layer-group"></i>
+                                                    {talent.category.name}
                                                 </span>
                                             )}
+
+                                            {talent?.level && (
+                                                <span className="tp-badge tp-badge-soft">
+                                                    <i className="fas fa-chart-line"></i>
+                                                    {capitalize(
+                                                        talent.level
+                                                    )}
+                                                </span>
+                                            )}
+
+                                            {talent?.status && (
+                                                <span className="tp-badge tp-badge-status">
+                                                    <i className="fas fa-circle-check"></i>
+                                                    {capitalize(
+                                                        talent.status
+                                                    )}
+                                                </span>
+                                            )}
+
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="d-flex gap-2">
+                                <div className="tp-actions">
+
                                     <Link
-                                        href={route("talent.page.stories.index")}
-                                        className="btn h-btn-ghost-dark rounded-pill px-4 py-2"
+                                        href={route(
+                                            "talent.page.stories.index"
+                                        )}
+                                        className="tp-btn tp-btn-secondary"
                                     >
-                                        <i className="fas fa-book-open me-2"></i>
+                                        <i className="fas fa-book-open"></i>
                                         My Story
                                     </Link>
+
                                     <button
                                         type="button"
-                                        className="btn h-btn-accent rounded-pill px-4 py-2"
-                                        onClick={() => setEditOpen(true)}
+                                        className="tp-btn tp-btn-primary"
+                                        onClick={() =>
+                                            setEditOpen(true)
+                                        }
                                     >
-                                        <i className="fas fa-pen me-2"></i>
+                                        <i className="fas fa-pen"></i>
                                         Edit Profile
                                     </button>
+
                                 </div>
+
                             </div>
 
-                            {talent.description && (
-                                <p
-                                    className="mt-3 mb-0"
-                                    style={{ maxWidth: 640, opacity: 0.8 }}
-                                >
+                            {talent?.description && (
+                                <p className="tp-hero-description">
                                     {talent.description}
                                 </p>
                             )}
+
+                            {/* =================================================
+                                STATS
+                            ================================================= */}
+
+                            <div className="tp-stats">
+
+                                <div className="tp-stat">
+                                    <div className="tp-stat-value">
+                                        {reviews.length}
+                                    </div>
+
+                                    <div className="tp-stat-label">
+                                        Reviews
+                                    </div>
+                                </div>
+
+                                <div className="tp-stat">
+                                    <div className="tp-stat-value">
+                                        {averageRating}
+                                    </div>
+
+                                    <div className="tp-stat-label">
+                                        Average Rating
+                                    </div>
+                                </div>
+
+                                <div className="tp-stat">
+                                    <div className="tp-stat-value">
+                                        {courses.length}
+                                    </div>
+
+                                    <div className="tp-stat-label">
+                                        Courses
+                                    </div>
+                                </div>
+
+                                <div className="tp-stat">
+                                    <div className="tp-stat-value">
+                                        {completion}%
+                                    </div>
+
+                                    <div className="tp-stat-label">
+                                        Profile Complete
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
-                    <div className="row g-4">
-                        {/* Left: contact only */}
-                        <div className="col-lg-4">
-                            <div className="h-panel p-4">
-                                <div className="h-section-title mb-3">
-                                    Contact Information
+                    {/* =====================================================
+                        MAIN CONTENT
+                    ===================================================== */}
+
+                    <div className="tp-grid">
+
+                        {/* =================================================
+                            LEFT SIDEBAR
+                        ================================================= */}
+
+                        <div>
+
+                            {/* Profile completion */}
+
+                            <div className="tp-card">
+
+                                <div className="tp-card-body">
+
+                                    <div className="tp-completion-top">
+                                        <strong>
+                                            Profile completion
+                                        </strong>
+
+                                        <span>
+                                            {completion}%
+                                        </span>
+                                    </div>
+
+                                    <div className="tp-progress">
+                                        <div
+                                            className="tp-progress-bar"
+                                            style={{
+                                                width: `${completion}%`,
+                                            }}
+                                        />
+                                    </div>
+
+                                    <p className="tp-completion-text">
+                                        A complete profile helps clients
+                                        understand your expertise and
+                                        improves your visibility.
+                                    </p>
+
                                 </div>
-                                <div className="d-flex flex-column gap-3">
+                            </div>
+
+                            {/* Contact information */}
+
+                            <div className="tp-card">
+
+                                <div className="tp-card-header">
+                                    <h2 className="tp-card-title">
+                                        Contact Information
+                                    </h2>
+                                </div>
+
+                                <div className="tp-card-body">
+
                                     <ContactRow
-                                        icon="fa-mobile-screen-button"
-                                        label="Mobile"
-                                        value={talent.phone}
+                                        icon="fa-phone"
+                                        label="Phone"
+                                        value={talent?.phone}
                                     />
+
                                     <ContactRow
                                         icon="fa-envelope"
                                         label="Email"
-                                        value={talent.email}
+                                        value={talent?.email}
                                     />
+
                                     <ContactRow
                                         icon="fa-location-dot"
                                         label="Address"
-                                        value={talent.address}
+                                        value={talent?.address}
                                     />
-                                    {talent.language && (
-                                        <ContactRow
-                                            icon="fa-language"
-                                            label="Language"
-                                            value={talent.language}
-                                        />
-                                    )}
+
+                                    <ContactRow
+                                        icon="fa-language"
+                                        label="Language"
+                                        value={talent?.language}
+                                    />
+
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Right: recent reviews + courses */}
-                        <div className="col-lg-8">
-                            {/* Recent Reviews */}
-                            <div className="h-panel p-4 mb-4">
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <div className="h-section-title">
-                                        Recent Reviews
-                                    </div>
-                                    {talent.feedback?.length > 0 && (
-                                        <span className="small h-chip-count px-2 py-1 rounded-pill">
-                                            {talent.feedback.length} total
-                                        </span>
-                                    )}
+                            {/* Security */}
+
+                            <div className="tp-card">
+
+                                <div className="tp-card-header">
+                                    <h2 className="tp-card-title">
+                                        Account Security
+                                    </h2>
                                 </div>
 
-                                {recentReviews.length === 0 ? (
-                                    <EmptyState
-                                        icon="fa-comment-slash"
-                                        text="No reviews yet."
-                                    />
-                                ) : (
-                                    <div className="d-flex flex-column gap-3">
-                                        {recentReviews.map((review) => (
+                                <div className="tp-card-body">
+
+                                    <div className="tp-security">
+
+                                        <div className="tp-security-icon">
+                                            <i className="fas fa-shield-halved"></i>
+                                        </div>
+
+                                        <div>
+                                            <div className="tp-security-title">
+                                                Password protected
+                                            </div>
+
+                                            <div className="tp-security-text">
+                                                Keep your account secure with
+                                                a strong password.
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="tp-security-button"
+                                        onClick={() =>
+                                            setPasswordOpen(true)
+                                        }
+                                    >
+                                        <i className="fas fa-key me-2"></i>
+                                        Change Password
+                                    </button>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* =================================================
+                            RIGHT CONTENT
+                        ================================================= */}
+
+                        <div>
+
+                            {/* Reviews */}
+
+                            <div className="tp-card">
+
+                                <div className="tp-card-header">
+
+                                    <div>
+                                        <h2 className="tp-card-title">
+                                            Client Reviews
+                                        </h2>
+
+                                        <div className="tp-card-subtitle">
+                                            Feedback from your clients
+                                        </div>
+                                    </div>
+
+                                    <span className="tp-count">
+                                        {reviews.length}
+                                    </span>
+
+                                </div>
+
+                                <div className="tp-card-body">
+
+                                    {reviews.length > 0 && (
+                                        <div className="tp-rating-summary">
+
+                                            <div className="tp-rating-number">
+                                                {averageRating}
+                                            </div>
+
+                                            <div>
+                                                <div className="tp-rating-stars">
+                                                    {renderStars(
+                                                        Number(
+                                                            averageRating
+                                                        )
+                                                    )}
+                                                </div>
+
+                                                <div className="tp-rating-text">
+                                                    Based on{" "}
+                                                    {reviews.length}{" "}
+                                                    {reviews.length === 1
+                                                        ? "review"
+                                                        : "reviews"}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    )}
+
+                                    {recentReviews.length === 0 ? (
+                                        <EmptyState
+                                            icon="fa-comment-slash"
+                                            text="You don't have any reviews yet."
+                                        />
+                                    ) : (
+                                        recentReviews.map((review) => (
                                             <ReviewCard
                                                 key={review.id}
                                                 review={review}
                                             />
-                                        ))}
-                                    </div>
-                                )}
+                                        ))
+                                    )}
+
+                                </div>
                             </div>
 
-                            {/* Recent Courses */}
-                            <div className="h-panel p-4">
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <div className="h-section-title">
-                                        Recent Courses
+                            {/* Courses */}
+
+                            <div className="tp-card">
+
+                                <div className="tp-card-header">
+
+                                    <div>
+                                        <h2 className="tp-card-title">
+                                            My Courses
+                                        </h2>
+
+                                        <div className="tp-card-subtitle">
+                                            Courses and professional
+                                            training
+                                        </div>
                                     </div>
-                                    {talent.courses?.length > 0 && (
-                                        <span className="small h-chip-count px-2 py-1 rounded-pill">
-                                            {talent.courses.length} total
-                                        </span>
-                                    )}
+
+                                    <span className="tp-count">
+                                        {courses.length}
+                                    </span>
+
                                 </div>
 
                                 {recentCourses.length === 0 ? (
                                     <EmptyState
-                                        icon="fa-book"
-                                        text="No courses available."
+                                        icon="fa-book-open"
+                                        text="No courses available yet."
                                     />
                                 ) : (
-                                    <div className="row g-3">
-                                        {recentCourses.map((course) => (
-                                            <div
-                                                className="col-md-6"
-                                                key={course.id}
-                                            >
-                                                <CourseCard
-                                                    course={course}
-                                                />
-                                            </div>
-                                        ))}
+                                    <div className="tp-table-wrapper">
+
+                                        <table className="tp-table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Course
+                                                    </th>
+
+                                                    <th>
+                                                        Category
+                                                    </th>
+
+                                                    <th>
+                                                        Description
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                                {recentCourses.map(
+                                                    (course) => (
+                                                        <tr
+                                                            key={
+                                                                course.id
+                                                            }
+                                                        >
+
+                                                            <td>
+                                                                <div className="tp-course-title">
+                                                                    {
+                                                                        course.title
+                                                                    }
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <span className="tp-course-category">
+                                                                    {course
+                                                                        .category
+                                                                        ?.name ||
+                                                                        "General"}
+                                                                </span>
+                                                            </td>
+
+                                                            <td>
+                                                                <div className="tp-course-description">
+                                                                    {course.description ||
+                                                                        "No description"}
+                                                                </div>
+                                                            </td>
+
+                                                        </tr>
+                                                    )
+                                                )}
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 )}
+
                             </div>
+
                         </div>
                     </div>
                 </div>
 
-                {/* Edit Profile modal */}
+                {/* =========================================================
+                    EDIT PROFILE MODAL
+                ========================================================= */}
+
                 <Modal
                     show={editOpen}
                     onClose={() => setEditOpen(false)}
                     title="Edit Profile"
-                    size="lg"
                 >
                     <EditProfileForm
                         talent={talent}
@@ -402,358 +1579,960 @@ export default function Profile({ talent, categories, flash }) {
                         onSaved={() => setEditOpen(false)}
                     />
                 </Modal>
+
+                {/* =========================================================
+                    CHANGE PASSWORD MODAL
+                ========================================================= */}
+
+                <Modal
+                    show={passwordOpen}
+                    onClose={() => setPasswordOpen(false)}
+                    title="Change Password"
+                    small
+                >
+                    <ChangePasswordForm
+                        onSaved={() => setPasswordOpen(false)}
+                    />
+                </Modal>
+
             </div>
         </AppLayout>
     );
 }
 
-/* ---------- inline modal (no external import) ---------- */
+/* =============================================================
+   CONTACT ROW
+============================================================= */
 
-function Modal({ show, onClose, title, size, children }) {
-    if (!show) return null;
-
-    const sizeClass =
-        size === "lg" ? "modal-lg" : size === "sm" ? "modal-sm" : "";
-
+function ContactRow({
+    icon,
+    label,
+    value,
+}) {
     return (
-        <div data-h-scope="talent-profile">
-            <div
-                className="modal fade show d-block"
-                tabIndex="-1"
-                role="dialog"
-                onClick={onClose}
-            >
-                <div
-                    className={`modal-dialog modal-dialog-centered ${sizeClass}`}
-                    role="document"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <div
-                        className="modal-content border-0"
-                        style={{ borderRadius: 16, overflow: "hidden" }}
-                    >
-                        <div
-                            className="modal-header pb-3"
-                            style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}
-                        >
-                            <h5
-                                className="modal-title fw-bold mb-0"
-                                style={{ color: "#000000" }}
-                            >
-                                {title}
-                            </h5>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                aria-label="Close"
-                                onClick={onClose}
-                            />
-                        </div>
-                        <div className="modal-body p-4">{children}</div>
-                    </div>
-                </div>
-            </div>
-            <div className="modal-backdrop fade show" onClick={onClose}></div>
-        </div>
-    );
-}
+        <div className="tp-contact">
 
-/* ---------- small presentational pieces ---------- */
-
-function ContactRow({ icon, label, value }) {
-    return (
-        <div className="d-flex align-items-center gap-3">
-            <div
-                className="d-flex align-items-center justify-content-center rounded-3 h-icon-tile"
-                style={{ width: 38, height: 38, flexShrink: 0 }}
-            >
+            <div className="tp-contact-icon">
                 <i className={`fas ${icon}`}></i>
             </div>
+
             <div>
-                <div className="h-label">{label}</div>
-                <div className="fw-semibold">{value || "—"}</div>
+                <div className="tp-section-label">
+                    {label}
+                </div>
+
+                <div className="tp-contact-value">
+                    {value || "Not provided"}
+                </div>
             </div>
+
         </div>
     );
 }
+
+/* =============================================================
+   REVIEW CARD
+============================================================= */
 
 function ReviewCard({ review }) {
+    const rating = Math.max(
+        0,
+        Math.min(5, Number(review?.rating || 0))
+    );
+
+    const reviewerName =
+        review?.reviewer_name || "Anonymous";
+
+    const initials = reviewerName
+        .split(" ")
+        .filter(Boolean)
+        .map((word) => word.charAt(0))
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
     return (
-        <div className="h-review-card p-3">
-            <div className="d-flex justify-content-between align-items-start mb-2">
-                <strong>{review.reviewer_name ?? "Anonymous"}</strong>
-                <StarRating rating={review.rating} />
+        <div className="tp-review">
+
+            <div className="tp-review-avatar">
+                {initials || "AN"}
             </div>
-            <p className="mb-2" style={{ color: "rgba(0,0,0,0.65)" }}>
-                {review.comment}
-            </p>
-            <small style={{ color: "rgba(0,0,0,0.45)" }}>
-                {review.created_at_human}
-            </small>
+
+            <div className="tp-review-content">
+
+                <div className="tp-review-top">
+
+                    <div className="tp-review-name">
+                        {reviewerName}
+                    </div>
+
+                    <div className="tp-stars">
+                        {renderStars(rating)}
+                    </div>
+
+                </div>
+
+                <div className="tp-review-comment">
+                    {review?.comment ||
+                        "No comment provided."}
+                </div>
+
+                <div className="tp-review-date">
+                    {review?.created_at_human || ""}
+                </div>
+
+            </div>
         </div>
     );
 }
 
-function StarRating({ rating }) {
-    return (
-        <span className="small d-flex align-items-center gap-1">
-            <span className="h-star-filled">{"★".repeat(rating)}</span>
-            <span className="h-star-empty">{"★".repeat(5 - rating)}</span>
-            <span className="h-star-value ms-1">{rating}/5</span>
-        </span>
-    );
-}
+/* =============================================================
+   EMPTY STATE
+============================================================= */
 
-function CourseCard({ course }) {
+function EmptyState({
+    icon,
+    text,
+}) {
     return (
-        <div className="h-course-card p-3 h-100">
-            <h6 className="fw-bold mb-2">{course.title}</h6>
-            <p className="small mb-3" style={{ color: "rgba(0,0,0,0.6)" }}>
-                {course.description}
-            </p>
-            <span className="badge h-course-badge px-2 py-1 rounded-pill">
-                {course.category?.name}
-            </span>
-        </div>
-    );
-}
+        <div className="tp-empty">
 
-function EmptyState({ icon, text }) {
-    return (
-        <div className="text-center py-4">
-            <i
-                className={`fas ${icon} fs-2 mb-2 d-block`}
-                style={{ color: "rgba(0,0,0,0.15)" }}
-            ></i>
-            <p className="mb-0 small" style={{ color: "rgba(0,0,0,0.45)" }}>
+            <div className="tp-empty-icon">
+                <i className={`fas ${icon}`}></i>
+            </div>
+
+            <div className="tp-empty-text">
                 {text}
-            </p>
+            </div>
+
         </div>
     );
 }
 
-/* ---------- edit form (inside the modal) ---------- */
+/* =============================================================
+   MODAL
+============================================================= */
 
-function EditProfileForm({ talent, categories, onSaved }) {
-    const { data, setData, post, processing, errors, progress } = useForm({
+function Modal({
+    show,
+    onClose,
+    title,
+    children,
+    small = false,
+}) {
+    useEffect(() => {
+        if (!show) return;
+
+        const originalOverflow =
+            document.body.style.overflow;
+
+        document.body.style.overflow = "hidden";
+
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") {
+                onClose();
+            }
+        };
+
+        document.addEventListener(
+            "keydown",
+            handleKeyDown
+        );
+
+        return () => {
+            document.body.style.overflow =
+                originalOverflow;
+
+            document.removeEventListener(
+                "keydown",
+                handleKeyDown
+            );
+        };
+    }, [show, onClose]);
+
+    if (!show) {
+        return null;
+    }
+
+    return (
+        <div
+            className="tp-modal-backdrop"
+            onClick={onClose}
+        >
+            <div
+                className={`tp-modal ${
+                    small ? "tp-modal-sm" : ""
+                }`}
+                onClick={(event) =>
+                    event.stopPropagation()
+                }
+            >
+
+                <div className="tp-modal-header">
+
+                    <h2 className="tp-modal-title">
+                        {title}
+                    </h2>
+
+                    <button
+                        type="button"
+                        className="tp-modal-close"
+                        onClick={onClose}
+                        aria-label="Close"
+                    >
+                        <i className="fas fa-xmark"></i>
+                    </button>
+
+                </div>
+
+                <div className="tp-modal-body">
+                    {children}
+                </div>
+
+            </div>
+        </div>
+    );
+}
+
+/* =============================================================
+   EDIT PROFILE FORM
+============================================================= */
+
+function EditProfileForm({
+    talent,
+    categories = [],
+    onSaved,
+}) {
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        progress,
+    } = useForm({
         _method: "put",
-        name: talent.name ?? "",
-        level: talent.level ?? "",
-        description: talent.description ?? "",
-        address: talent.address ?? "",
-        phone: talent.phone ?? "",
-        email: talent.email ?? "",
-        language: talent.language ?? "",
-        category_id: talent.category_id ?? "",
+        name: talent?.name ?? "",
+        level: talent?.level ?? "",
+        description: talent?.description ?? "",
+        address: talent?.address ?? "",
+        phone: talent?.phone ?? "",
+        email: talent?.email ?? "",
+        language: talent?.language ?? "",
+        category_id: talent?.category_id ?? "",
         image: null,
     });
 
-    const [preview, setPreview] = useState(
-        talent.image ? `/${talent.image}` : null,
-    );
+    const [preview, setPreview] =
+        useState(
+            talent?.image
+                ? `/${talent.image}`
+                : "/img/faces/face10.jpg"
+        );
 
-    function handleImageChange(e) {
-        const file = e.target.files[0];
+    function handleImageChange(event) {
+        const file =
+            event.target.files?.[0];
+
+        if (!file) {
+            return;
+        }
+
         setData("image", file);
-        if (file) setPreview(URL.createObjectURL(file));
+
+        const objectUrl =
+            URL.createObjectURL(file);
+
+        setPreview(objectUrl);
     }
 
-    function submit(e) {
-        e.preventDefault();
-        post(route("talent.profile.update", talent.id), {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => onSaved(),
-        });
+    useEffect(() => {
+        return () => {
+            if (
+                preview &&
+                preview.startsWith("blob:")
+            ) {
+                URL.revokeObjectURL(preview);
+            }
+        };
+    }, [preview]);
+
+    function submit(event) {
+        event.preventDefault();
+
+        post(
+            route(
+                "talent.profile.update",
+                talent.id
+            ),
+            {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    onSaved();
+                },
+            }
+        );
     }
 
     return (
         <form onSubmit={submit}>
-            <div className="row g-3">
-                <div className="col-md-12 d-flex align-items-center gap-3">
-                    {preview ? (
-                        <img
-                            src={preview}
-                            alt="Profile preview"
-                            className="rounded-3"
-                            style={{
-                                width: 84,
-                                height: 84,
-                                objectFit: "cover",
-                                border: "2px solid #48d597",
-                            }}
-                        />
-                    ) : (
+
+            {/* =================================================
+                PHOTO
+            ================================================= */}
+
+            <div className="tp-photo-editor">
+
+                <img
+                    src={preview}
+                    alt="Profile preview"
+                    className="tp-photo-preview"
+                />
+
+                <div className="flex-grow-1">
+
+                    <label className="tp-form-label">
+                        Profile Photo
+                    </label>
+
+                    <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        className={`tp-form-control ${
+                            errors.image
+                                ? "is-invalid"
+                                : ""
+                        }`}
+                        onChange={
+                            handleImageChange
+                        }
+                    />
+
+                    <div className="tp-upload-note">
+                        JPG, PNG or WEBP. Maximum
+                        file size: 2MB.
+                    </div>
+
+                    {errors.image && (
+                        <div className="tp-error">
+                            {errors.image}
+                        </div>
+                    )}
+
+                    {progress && (
                         <div
-                            className="rounded-3 d-flex align-items-center justify-content-center"
+                            className="progress mt-2"
                             style={{
-                                width: 84,
-                                height: 84,
-                                background: "#f6f8f7",
-                                border: "1px solid rgba(0,0,0,0.1)",
+                                height: 5,
+                                borderRadius: 10,
                             }}
                         >
-                            <i
-                                className="fas fa-user fs-4"
-                                style={{ color: "#000000", opacity: 0.4 }}
-                            ></i>
-                        </div>
-                    )}
-                    <div className="flex-grow-1">
-                        <label className="form-label">Profile Image</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            className={`form-control rounded-3 ${errors.image ? "is-invalid" : ""}`}
-                            onChange={handleImageChange}
-                        />
-                        {errors.image && (
-                            <div className="text-danger small mt-1">
-                                {errors.image}
-                            </div>
-                        )}
-                        {progress && (
                             <div
-                                className="progress mt-2"
-                                style={{ height: 6, background: "#f0f0f0" }}
-                            >
-                                <div
-                                    className="progress-bar"
-                                    style={{
-                                        width: `${progress.percentage}%`,
-                                        backgroundColor: "#48d597",
-                                    }}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                <Field
-                    label="Name"
-                    value={data.name}
-                    onChange={(v) => setData("name", v)}
-                    error={errors.name}
-                    col="col-md-6"
-                />
-                <Field
-                    label="Level"
-                    value={data.level}
-                    onChange={(v) => setData("level", v)}
-                    error={errors.level}
-                    col="col-md-6"
-                />
-
-                <div className="col-md-12">
-                    <label className="form-label">Description</label>
-                    <textarea
-                        className={`form-control rounded-3 ${errors.description ? "is-invalid" : ""}`}
-                        rows={3}
-                        value={data.description}
-                        onChange={(e) => setData("description", e.target.value)}
-                    />
-                    {errors.description && (
-                        <div className="invalid-feedback">
-                            {errors.description}
+                                className="progress-bar"
+                                style={{
+                                    width: `${progress.percentage}%`,
+                                    background:
+                                        "#48d597",
+                                }}
+                            />
                         </div>
                     )}
-                </div>
 
-                <Field
-                    label="Address"
-                    value={data.address}
-                    onChange={(v) => setData("address", v)}
-                    error={errors.address}
-                    col="col-md-6"
-                />
-                <Field
-                    label="Phone"
-                    value={data.phone}
-                    onChange={(v) => setData("phone", v)}
-                    error={errors.phone}
-                    col="col-md-6"
-                />
-                <Field
-                    label="Email"
-                    value={data.email}
-                    onChange={(v) => setData("email", v)}
-                    error={errors.email}
-                    col="col-md-6"
-                    type="email"
-                />
-                <Field
-                    label="Language"
-                    value={data.language}
-                    onChange={(v) => setData("language", v)}
-                    error={errors.language}
-                    col="col-md-6"
-                />
-
-                <div className="col-md-6">
-                    <label className="form-label">Category</label>
-                    <select
-                        className={`form-select rounded-3 ${errors.category_id ? "is-invalid" : ""}`}
-                        value={data.category_id}
-                        onChange={(e) => setData("category_id", e.target.value)}
-                    >
-                        <option value="">Select a category</option>
-                        {categories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.category_id && (
-                        <div className="invalid-feedback">
-                            {errors.category_id}
-                        </div>
-                    )}
                 </div>
             </div>
 
-            <div className="d-flex justify-content-end gap-2 mt-4">
+            {/* =================================================
+                FORM FIELDS
+            ================================================= */}
+
+            <div className="row g-3">
+
+                <FormField
+                    label="Full Name"
+                    value={data.name}
+                    error={errors.name}
+                    col="col-md-6"
+                    onChange={(value) =>
+                        setData(
+                            "name",
+                            value
+                        )
+                    }
+                />
+
+                <FormField
+                    label="Email"
+                    type="email"
+                    value={data.email}
+                    error={errors.email}
+                    col="col-md-6"
+                    onChange={(value) =>
+                        setData(
+                            "email",
+                            value
+                        )
+                    }
+                />
+
+                <FormField
+                    label="Phone"
+                    value={data.phone}
+                    error={errors.phone}
+                    col="col-md-6"
+                    onChange={(value) =>
+                        setData(
+                            "phone",
+                            value
+                        )
+                    }
+                />
+
+                <FormField
+                    label="Address"
+                    value={data.address}
+                    error={errors.address}
+                    col="col-md-6"
+                    onChange={(value) =>
+                        setData(
+                            "address",
+                            value
+                        )
+                    }
+                />
+
+                <FormField
+                    label="Language"
+                    value={data.language}
+                    error={errors.language}
+                    col="col-md-6"
+                    placeholder="e.g. English, French"
+                    onChange={(value) =>
+                        setData(
+                            "language",
+                            value
+                        )
+                    }
+                />
+
+                {/* Category */}
+
+                <div className="col-md-6">
+
+                    <label className="tp-form-label">
+                        Professional Category
+                    </label>
+
+                    <select
+                        className={`tp-form-control ${
+                            errors.category_id
+                                ? "is-invalid"
+                                : ""
+                        }`}
+                        value={
+                            data.category_id
+                        }
+                        onChange={(event) =>
+                            setData(
+                                "category_id",
+                                event.target.value
+                            )
+                        }
+                    >
+
+                        <option value="">
+                            Select category
+                        </option>
+
+                        {categories.map(
+                            (category) => (
+                                <option
+                                    key={
+                                        category.id
+                                    }
+                                    value={
+                                        category.id
+                                    }
+                                >
+                                    {
+                                        category.name
+                                    }
+                                </option>
+                            )
+                        )}
+
+                    </select>
+
+                    {errors.category_id && (
+                        <div className="tp-error">
+                            {
+                                errors.category_id
+                            }
+                        </div>
+                    )}
+
+                </div>
+
+                {/* Professional Level */}
+
+                <div className="col-md-6">
+
+                    <label className="tp-form-label">
+                        Professional Level
+                    </label>
+
+                    <select
+                        className={`tp-form-control ${
+                            errors.level
+                                ? "is-invalid"
+                                : ""
+                        }`}
+                        value={
+                            data.level
+                        }
+                        onChange={(event) =>
+                            setData(
+                                "level",
+                                event.target.value
+                            )
+                        }
+                    >
+
+                        <option value="">
+                            Select level
+                        </option>
+
+                        <option value="beginner">
+                            Beginner
+                        </option>
+
+                        <option value="intermediate">
+                            Intermediate
+                        </option>
+
+                        <option value="advanced">
+                            Advanced
+                        </option>
+
+                        <option value="expert">
+                            Expert
+                        </option>
+
+                        <option value="senior">
+                            Senior
+                        </option>
+
+                    </select>
+
+                    {errors.level && (
+                        <div className="tp-error">
+                            {errors.level}
+                        </div>
+                    )}
+
+                </div>
+
+                {/* Description */}
+
+                <div className="col-12">
+
+                    <label className="tp-form-label">
+                        Professional Description
+                    </label>
+
+                    <textarea
+                        rows="5"
+                        className={`tp-form-control ${
+                            errors.description
+                                ? "is-invalid"
+                                : ""
+                        }`}
+                        value={
+                            data.description
+                        }
+                        onChange={(event) =>
+                            setData(
+                                "description",
+                                event.target.value
+                            )
+                        }
+                        placeholder="Tell clients about your experience, expertise and services..."
+                    />
+
+                    {errors.description && (
+                        <div className="tp-error">
+                            {
+                                errors.description
+                            }
+                        </div>
+                    )}
+
+                </div>
+
+            </div>
+
+            {/* =================================================
+                FOOTER
+            ================================================= */}
+
+            <div className="tp-modal-footer">
+
                 <button
                     type="button"
-                    className="btn h-btn-ghost rounded-pill px-4"
+                    className="tp-cancel-btn"
                     onClick={onSaved}
                 >
                     Cancel
                 </button>
+
                 <button
                     type="submit"
-                    className="btn h-btn-accent rounded-pill px-4"
+                    className="tp-btn tp-btn-primary"
                     disabled={processing}
                 >
+
                     {processing ? (
                         <>
-                            <span className="spinner-border spinner-border-sm me-2" />
+                            <span className="spinner-border spinner-border-sm" />
                             Saving...
                         </>
                     ) : (
-                        "Save Changes"
+                        <>
+                            <i className="fas fa-check"></i>
+                            Save Changes
+                        </>
                     )}
+
                 </button>
+
             </div>
+
         </form>
     );
 }
 
-function Field({ label, value, onChange, error, col, type = "text" }) {
+/* =============================================================
+   CHANGE PASSWORD FORM
+============================================================= */
+
+function ChangePasswordForm({
+    onSaved,
+}) {
+    const {
+        data,
+        setData,
+        put,
+        processing,
+        errors,
+        reset,
+    } = useForm({
+        current_password: "",
+        password: "",
+        password_confirmation: "",
+    });
+
+    function submit(event) {
+        event.preventDefault();
+
+        put(
+            route(
+                "talent.password.update"
+            ),
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset();
+                    onSaved();
+                },
+            }
+        );
+    }
+
+    return (
+        <form onSubmit={submit}>
+
+            {/* Intro */}
+
+            <div className="tp-password-intro">
+
+                <div className="tp-password-intro-icon">
+                    <i className="fas fa-shield-halved"></i>
+                </div>
+
+                <div>
+
+                    <div className="tp-password-intro-title">
+                        Secure your account
+                    </div>
+
+                    <p className="tp-password-intro-text">
+                        Choose a strong password
+                        that you don't use on
+                        other websites.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <PasswordField
+                label="Current Password"
+                value={
+                    data.current_password
+                }
+                error={
+                    errors.current_password
+                }
+                onChange={(value) =>
+                    setData(
+                        "current_password",
+                        value
+                    )
+                }
+            />
+
+            <PasswordField
+                label="New Password"
+                value={
+                    data.password
+                }
+                error={
+                    errors.password
+                }
+                onChange={(value) =>
+                    setData(
+                        "password",
+                        value
+                    )
+                }
+            />
+
+            <PasswordField
+                label="Confirm New Password"
+                value={
+                    data.password_confirmation
+                }
+                error={
+                    errors.password_confirmation
+                }
+                onChange={(value) =>
+                    setData(
+                        "password_confirmation",
+                        value
+                    )
+                }
+            />
+
+            <div className="tp-modal-footer">
+
+                <button
+                    type="button"
+                    className="tp-cancel-btn"
+                    onClick={onSaved}
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    className="tp-btn tp-btn-primary"
+                    disabled={processing}
+                >
+
+                    {processing ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm" />
+                            Updating...
+                        </>
+                    ) : (
+                        <>
+                            <i className="fas fa-key"></i>
+                            Update Password
+                        </>
+                    )}
+
+                </button>
+
+            </div>
+
+        </form>
+    );
+}
+
+/* =============================================================
+   FORM FIELD
+============================================================= */
+
+function FormField({
+    label,
+    value,
+    onChange,
+    error,
+    col = "col-12",
+    type = "text",
+    placeholder = "",
+}) {
     return (
         <div className={col}>
-            <label className="form-label">{label}</label>
+
+            <label className="tp-form-label">
+                {label}
+            </label>
+
             <input
                 type={type}
-                className={`form-control rounded-3 ${error ? "is-invalid" : ""}`}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
+                value={value ?? ""}
+                placeholder={placeholder}
+                className={`tp-form-control ${
+                    error
+                        ? "is-invalid"
+                        : ""
+                }`}
+                onChange={(event) =>
+                    onChange(
+                        event.target.value
+                    )
+                }
             />
-            {error && <div className="invalid-feedback">{error}</div>}
+
+            {error && (
+                <div className="tp-error">
+                    {error}
+                </div>
+            )}
+
         </div>
     );
 }
 
+/* =============================================================
+   PASSWORD FIELD
+============================================================= */
+
+function PasswordField({
+    label,
+    value,
+    onChange,
+    error,
+}) {
+    const [show, setShow] =
+        useState(false);
+
+    return (
+        <div className="mb-3">
+
+            <label className="tp-form-label">
+                {label}
+            </label>
+
+            <div className="position-relative">
+
+                <input
+                    type={
+                        show
+                            ? "text"
+                            : "password"
+                    }
+                    value={value ?? ""}
+                    className={`tp-form-control pe-5 ${
+                        error
+                            ? "is-invalid"
+                            : ""
+                    }`}
+                    onChange={(event) =>
+                        onChange(
+                            event.target.value
+                        )
+                    }
+                />
+
+                <button
+                    type="button"
+                    className="position-absolute top-50 end-0 translate-middle-y border-0 bg-transparent me-2"
+                    onClick={() =>
+                        setShow(!show)
+                    }
+                    style={{
+                        color: "#727b77",
+                        cursor: "pointer",
+                    }}
+                    aria-label={
+                        show
+                            ? "Hide password"
+                            : "Show password"
+                    }
+                >
+                    <i
+                        className={`fas ${
+                            show
+                                ? "fa-eye-slash"
+                                : "fa-eye"
+                        }`}
+                    ></i>
+                </button>
+
+            </div>
+
+            {error && (
+                <div className="tp-error">
+                    {error}
+                </div>
+            )}
+
+        </div>
+    );
+}
+
+/* =============================================================
+   STAR RENDERER
+============================================================= */
+
+function renderStars(rating) {
+    const rounded =
+        Math.round(
+            Number(rating || 0)
+        );
+
+    const safeRating = Math.max(
+        0,
+        Math.min(5, rounded)
+    );
+
+    return (
+        <>
+            {Array.from(
+                { length: 5 },
+                (_, index) => (
+                    <i
+                        key={index}
+                        className={`${
+                            index <
+                            safeRating
+                                ? "fas"
+                                : "far"
+                        } fa-star`}
+                        style={{
+                            marginRight:
+                                2,
+                        }}
+                    ></i>
+                )
+            )}
+        </>
+    );
+}
+
+/* =============================================================
+   HELPER
+============================================================= */
+
 function capitalize(value) {
-    if (!value) return "";
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    if (!value) {
+        return "";
+    }
+
+    return (
+        value.charAt(0).toUpperCase() +
+        value.slice(1)
+    );
 }

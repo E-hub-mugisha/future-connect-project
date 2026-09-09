@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Talent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -87,5 +88,38 @@ class TalentProfileController extends Controller
         $talent->update($validated);
 
         return back()->with('success', 'Profile updated successfully!');
+    }
+
+    /**
+     * Change account password.
+     */
+    public function updatePassword(Request $request)
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'current_password' => [
+                'required',
+                'current_password',
+            ],
+
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
+        ]);
+
+        $user->update([
+            'password' => Hash::make(
+                $validated['password']
+            ),
+        ]);
+
+        return back()->with(
+            'success',
+            'Your password has been changed successfully.'
+        );
     }
 }

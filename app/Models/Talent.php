@@ -9,17 +9,8 @@ class Talent extends Model
 {
     use SoftDeletes;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'talents';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'name',
         'user_id',
@@ -33,29 +24,34 @@ class Talent extends Model
         'language',
         'category_id',
         'matched',
-        'level'
+        'level',
     ];
 
-    // cast attributes
     protected $casts = [
         'featured' => 'boolean',
         'matched' => 'boolean',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
     ];
 
     public function category()
     {
-        return $this->belongsTo(Category::class,'category_id');
+        return $this->belongsTo(
+            Category::class,
+            'category_id'
+        );
     }
+
     public function stories()
     {
         return $this->hasMany(Story::class);
     }
+
     public function skills()
     {
         return $this->hasMany(Skill::class);
     }
+
     public function feedback()
     {
         return $this->hasMany(TalentFeedback::class);
@@ -70,6 +66,7 @@ class Talent extends Model
     {
         return $this->hasMany(TalentConnection::class);
     }
+
     public function courses()
     {
         return $this->hasMany(Course::class);

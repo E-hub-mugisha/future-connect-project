@@ -426,6 +426,15 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     // Profile
     Route::get('/get/profile', [TalentProfileController::class, 'index'])->name('get.profile');
     Route::put('/talent/profile/update/{id}', [TalentProfileController::class, 'update'])->name('profile.update');
+    Route::put(
+        '/get/profile/{talent}',
+        [TalentProfileController::class, 'update']
+    )->name('talent.profile.update');
+
+    Route::put(
+        '/get/password',
+        [TalentProfileController::class, 'updatePassword']
+    )->name('talent.password.update');
 
     // Connection requests received by this talent
     // NOTE: renamed from connections.index / connections.respond — those names
@@ -549,6 +558,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/talents/{talent}', [AdminTalentController::class, 'show'])->name('talents.show');
     Route::get('/talents/edit/{talent}', [AdminTalentController::class, 'edit'])->name('talents.edit');
     Route::post('talents/bulk', [AdminTalentController::class, 'bulkAction'])->name('talents.bulk');
+
 
     // Users
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');

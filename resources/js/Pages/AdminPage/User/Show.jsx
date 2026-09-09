@@ -1,40 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { useRef, useState } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import AppLayout from "@/Layouts/AppLayout";
 
 const TABS = [
-    {
-        key: "personal",
-        label: "Personal Info",
-        icon: "user",
-    },
-    {
-        key: "notifications",
-        label: "Notifications",
-        icon: "bell",
-    },
-    {
-        key: "activity",
-        label: "Account Activity",
-        icon: "activity",
-    },
-    {
-        key: "security",
-        label: "Security Settings",
-        icon: "lock",
-    },
-    {
-        key: "social",
-        label: "Connected Accounts",
-        icon: "grid",
-    },
+    { key: "personal", label: "Personal info", icon: "user" },
+    { key: "notifications", label: "Notifications", icon: "bell" },
+    { key: "activity", label: "Account activity", icon: "activity" },
+    { key: "security", label: "Security settings", icon: "lock" },
+    { key: "social", label: "Connected accounts", icon: "grid" },
 ];
 
-export default function UserShow({
-    user,
-    activities,
-    appName = "App",
-}) {
+export default function UserShow({ user, activities, appName = "App" }) {
     const [activeTab, setActiveTab] = useState("personal");
 
     const initials = getInitials(user?.name);
@@ -56,11 +32,7 @@ export default function UserShow({
 
     const setTab = (tab) => {
         setActiveTab(tab);
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     return (
@@ -72,79 +44,48 @@ export default function UserShow({
             <div className="user-profile-page">
                 {/* ───────────────── Header ───────────────── */}
                 <div className="profile-page-header">
-                    <div>
-                        <Link
-                            href={route("admin.users.index")}
-                            className="back-link"
-                        >
-                            <BackIcon size={15} />
-                            Back to Users
-                        </Link>
+                    <Link href={route("admin.users.index")} className="back-link">
+                        <BackIcon size={15} />
+                        Back to users
+                    </Link>
 
-                        <div className="page-heading">
-                            <div>
-                                <div className="eyebrow">
-                                    USER PROFILE
-                                </div>
-
-                                <h1>
-                                    {user?.name ?? "User"}
-                                </h1>
-
-                                <p>
-                                    Manage profile information,
-                                    access and account activity.
-                                </p>
-                            </div>
-
-                            <div className="header-status">
-                                <span
-                                    className={`status-chip ${
-                                        user?.active
-                                            ? "chip-active"
-                                            : "chip-inactive"
-                                    }`}
-                                >
-                                    {user?.active
-                                        ? "Active account"
-                                        : "Inactive account"}
-                                </span>
-                            </div>
+                    <div className="page-heading">
+                        <div>
+                            <h1>{user?.name ?? "User"}</h1>
+                            <p>
+                                Manage profile information, access and account
+                                activity.
+                            </p>
                         </div>
+
+                        <span
+                            className={`status-chip ${
+                                user?.active ? "chip-active" : "chip-inactive"
+                            }`}
+                        >
+                            {user?.active ? "Active account" : "Inactive account"}
+                        </span>
                     </div>
                 </div>
 
                 {/* ───────────────── Main ───────────────── */}
                 <div className="profile-grid">
-                    {/* Sidebar */}
                     <aside className="profile-sidebar">
                         <div className="profile-card">
-                            <div className="record-tag">
-                                FILE № {recordNo}
-                            </div>
-
                             <div className="profile-avatar-section">
-                                <div className="profile-avatar">
-                                    {initials}
-                                </div>
-
-                                <div className="profile-name">
-                                    {user?.name}
-                                </div>
-
-                                <div className="profile-email">
-                                    {user?.email}
-                                </div>
-
+                                <div className="profile-avatar">{initials}</div>
+                                <div className="profile-name">{user?.name}</div>
+                                <div className="profile-email">{user?.email}</div>
                                 <span className="role-badge">
                                     {formatRole(user?.role)}
                                 </span>
+                                <div className="record-tag">Record #{recordNo}</div>
                             </div>
 
                             <div className="profile-stats">
                                 <div className="profile-stat">
                                     <strong>{fmtYear}</strong>
-                                    <span>Member Since</span>
+                                    <span>Member since</span>
                                 </div>
 
                                 <div className="profile-stat">
@@ -155,11 +96,8 @@ export default function UserShow({
                                                 : "inactive-text"
                                         }
                                     >
-                                        {user?.active
-                                            ? "Active"
-                                            : "Inactive"}
+                                        {user?.active ? "Active" : "Inactive"}
                                     </strong>
-
                                     <span>Status</span>
                                 </div>
                             </div>
@@ -170,31 +108,21 @@ export default function UserShow({
                                         key={tab.key}
                                         type="button"
                                         className={`profile-nav-item ${
-                                            activeTab === tab.key
-                                                ? "active"
-                                                : ""
+                                            activeTab === tab.key ? "active" : ""
                                         }`}
-                                        onClick={() =>
-                                            setTab(tab.key)
-                                        }
+                                        onClick={() => setTab(tab.key)}
                                     >
                                         <span className="profile-nav-icon">
-                                            <TabIcon
-                                                name={tab.icon}
-                                            />
+                                            <TabIcon name={tab.icon} />
                                         </span>
-
                                         <span>{tab.label}</span>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Quick access */}
                         <div className="quick-card">
-                            <div className="quick-title">
-                                Quick Actions
-                            </div>
+                            <div className="quick-title">Quick actions</div>
 
                             <button
                                 type="button"
@@ -205,7 +133,6 @@ export default function UserShow({
                                 <span>
                                     <EditIcon size={15} />
                                 </span>
-
                                 Edit profile
                             </button>
 
@@ -218,65 +145,43 @@ export default function UserShow({
                                 <span>
                                     <KeyIcon size={15} />
                                 </span>
-
                                 Reset password
                             </button>
 
                             <button
                                 type="button"
                                 className="quick-action"
-                                onClick={() =>
-                                    setTab("activity")
-                                }
+                                onClick={() => setTab("activity")}
                             >
                                 <span>
                                     <ActivityIcon size={15} />
                                 </span>
-
                                 View activity
                             </button>
                         </div>
                     </aside>
 
-                    {/* Main content */}
                     <main className="profile-main">
                         {activeTab === "personal" && (
-                            <PersonalTab
-                                user={user}
-                                fmtFull={fmtFull}
-                            />
+                            <PersonalTab user={user} fmtFull={fmtFull} />
                         )}
-
-                        {activeTab === "notifications" && (
-                            <NotificationsTab />
-                        )}
-
+                        {activeTab === "notifications" && <NotificationsTab />}
                         {activeTab === "activity" && (
-                            <ActivityTab
-                                activities={activities}
-                            />
+                            <ActivityTab activities={activities} />
                         )}
-
                         {activeTab === "security" && (
                             <SecurityTab
                                 user={user}
-                                onViewActivity={() =>
-                                    setTab("activity")
-                                }
+                                onViewActivity={() => setTab("activity")}
                             />
                         )}
-
-                        {activeTab === "social" && (
-                            <ConnectedAccountsTab />
-                        )}
+                        {activeTab === "social" && <ConnectedAccountsTab />}
                     </main>
                 </div>
             </div>
 
             <EditUserModal user={user} />
-
             <ResetPasswordModal user={user} />
-
             <DeleteUserModal user={user} />
         </AppLayout>
     );
@@ -291,16 +196,8 @@ function PersonalTab({ user, fmtFull }) {
         <div className="content-card">
             <div className="content-header">
                 <div>
-                    <div className="section-kicker">
-                        PROFILE
-                    </div>
-
-                    <h2>Personal Information</h2>
-
-                    <p>
-                        Basic information and access details for
-                        this account.
-                    </p>
+                    <h2>Personal information</h2>
+                    <p>Basic information and access details for this account.</p>
                 </div>
 
                 <button
@@ -314,66 +211,40 @@ function PersonalTab({ user, fmtFull }) {
                 </button>
             </div>
 
-            <div className="section-title">
-                Basic Information
-            </div>
+            <div className="section-title">Basic information</div>
 
-            <DataRow
-                icon={<UserIcon />}
-                label="Full Name"
-                value={user?.name}
-            />
-
-            <DataRow
-                icon={<MailIcon />}
-                label="Email Address"
-                value={user?.email}
-            />
-
+            <DataRow icon={<UserIcon />} label="Full name" value={user?.name} />
+            <DataRow icon={<MailIcon />} label="Email address" value={user?.email} />
             <DataRow
                 icon={<PhoneIcon />}
-                label="Phone Number"
+                label="Phone number"
                 value={user?.phone || "Not provided"}
                 muted={!user?.phone}
             />
 
-            <div className="section-title">
-                Account Access
-            </div>
+            <div className="section-title">Account access</div>
 
             <DataRow
                 icon={<ShieldIcon />}
                 label="Role"
-                value={
-                    <span className="role-chip">
-                        {formatRole(user?.role)}
-                    </span>
-                }
+                value={<span className="role-chip">{formatRole(user?.role)}</span>}
             />
 
             <DataRow
                 icon={<ToggleIcon />}
-                label="Account Status"
+                label="Account status"
                 value={
                     <span
                         className={`status-chip ${
-                            user?.active
-                                ? "chip-active"
-                                : "chip-inactive"
+                            user?.active ? "chip-active" : "chip-inactive"
                         }`}
                     >
-                        {user?.active
-                            ? "Active"
-                            : "Inactive"}
+                        {user?.active ? "Active" : "Inactive"}
                     </span>
                 }
             />
 
-            <DataRow
-                icon={<CalendarIcon />}
-                label="Registered"
-                value={fmtFull}
-            />
+            <DataRow icon={<CalendarIcon />} label="Registered" value={fmtFull} />
 
             <div className="profile-summary">
                 <div className="summary-icon">
@@ -382,22 +253,15 @@ function PersonalTab({ user, fmtFull }) {
 
                 <div>
                     <strong>Account access</strong>
-
                     <p>
                         This account is currently{" "}
-                        {user?.active
-                            ? "allowed to access"
-                            : "restricted from accessing"}{" "}
-                        {user?.active ? appNameSafe() : appNameSafe()}.
+                        {user?.active ? "allowed to access" : "restricted from accessing"}{" "}
+                        the platform.
                     </p>
                 </div>
             </div>
         </div>
     );
-}
-
-function appNameSafe() {
-    return "the platform";
 }
 
 /* =========================================================
@@ -412,27 +276,15 @@ function NotificationsTab() {
         marketing: false,
     });
 
-    const toggle = (key) => {
-        setSettings((current) => ({
-            ...current,
-            [key]: !current[key],
-        }));
-    };
+    const toggle = (key) =>
+        setSettings((current) => ({ ...current, [key]: !current[key] }));
 
     return (
         <div className="content-card">
             <div className="content-header">
                 <div>
-                    <div className="section-kicker">
-                        PREFERENCES
-                    </div>
-
                     <h2>Notifications</h2>
-
-                    <p>
-                        Control which notifications this user
-                        receives.
-                    </p>
+                    <p>Control which notifications this user receives.</p>
                 </div>
             </div>
 
@@ -443,21 +295,18 @@ function NotificationsTab() {
                     checked={settings.account}
                     onChange={() => toggle("account")}
                 />
-
                 <NotificationRow
                     title="Security alerts"
                     description="Login alerts, password resets and security events."
                     checked={settings.security}
                     onChange={() => toggle("security")}
                 />
-
                 <NotificationRow
                     title="Platform updates"
                     description="New features, announcements and platform changes."
                     checked={settings.updates}
                     onChange={() => toggle("updates")}
                 />
-
                 <NotificationRow
                     title="Marketing communications"
                     description="Optional promotional and marketing messages."
@@ -468,15 +317,12 @@ function NotificationsTab() {
 
             <div className="info-banner">
                 <BellIcon size={17} />
-
                 <div>
                     <strong>Notification preferences</strong>
-
                     <p>
-                        These controls are currently displayed as
-                        account-level preferences. Connect them to
-                        your notification settings endpoint when
-                        available.
+                        These controls are currently displayed as account-level
+                        preferences. Connect them to your notification settings
+                        endpoint when available.
                     </p>
                 </div>
             </div>
@@ -484,12 +330,7 @@ function NotificationsTab() {
     );
 }
 
-function NotificationRow({
-    title,
-    description,
-    checked,
-    onChange,
-}) {
+function NotificationRow({ title, description, checked, onChange }) {
     return (
         <div className="notification-row">
             <div className="notification-icon">
@@ -503,9 +344,7 @@ function NotificationRow({
 
             <button
                 type="button"
-                className={`toggle-switch ${
-                    checked ? "checked" : ""
-                }`}
+                className={`toggle-switch ${checked ? "checked" : ""}`}
                 onClick={onChange}
                 aria-pressed={checked}
             >
@@ -526,21 +365,10 @@ function ActivityTab({ activities }) {
         <div className="content-card">
             <div className="content-header">
                 <div>
-                    <div className="section-kicker">
-                        AUDIT TRAIL
-                    </div>
-
-                    <h2>Account Activity</h2>
-
-                    <p>
-                        Recent login sessions and important account
-                        events.
-                    </p>
+                    <h2>Account activity</h2>
+                    <p>Recent login sessions and important account events.</p>
                 </div>
-
-                <div className="event-count">
-                    {activities?.total ?? items.length} events
-                </div>
+                <div className="event-count">{activities?.total ?? items.length} events</div>
             </div>
 
             {items.length === 0 ? (
@@ -549,17 +377,12 @@ function ActivityTab({ activities }) {
                 <>
                     <div className="activity-list">
                         {items.map((activity) => (
-                            <ActivityItem
-                                key={activity.id}
-                                activity={activity}
-                            />
+                            <ActivityItem key={activity.id} activity={activity} />
                         ))}
                     </div>
 
                     {activities?.links?.length > 3 && (
-                        <ActivityPagination
-                            activities={activities}
-                        />
+                        <ActivityPagination activities={activities} />
                     )}
                 </>
             )}
@@ -581,9 +404,7 @@ function ActivityItem({ activity }) {
     };
 
     const date = activity?.created_at
-        ? new Date(
-              activity.created_at
-          ).toLocaleString("en-GB", {
+        ? new Date(activity.created_at).toLocaleString("en-GB", {
               day: "2-digit",
               month: "short",
               year: "numeric",
@@ -594,71 +415,47 @@ function ActivityItem({ activity }) {
 
     return (
         <div className="activity-item">
-            <div
-                className={`activity-icon activity-${type}`}
-            >
-                {iconMap[type] ?? (
-                    <ActivityIcon size={17} />
-                )}
+            <div className={`activity-icon activity-${type}`}>
+                {iconMap[type] ?? <ActivityIcon size={17} />}
             </div>
 
             <div className="activity-body">
-                <div className="activity-title">
-                    {formatActivityTitle(type)}
-                </div>
-
+                <div className="activity-title">{formatActivityTitle(type)}</div>
                 <div className="activity-description">
-                    {activity?.description ||
-                        "Account activity recorded."}
+                    {activity?.description || "Account activity recorded."}
                 </div>
 
                 <div className="activity-meta">
                     <span>{date}</span>
-
                     {activity?.ip_address && (
                         <>
                             <span>•</span>
-                            <span>
-                                IP {activity.ip_address}
-                            </span>
+                            <span>IP {activity.ip_address}</span>
                         </>
                     )}
-
                     {activity?.device && (
                         <>
                             <span>•</span>
-                            <span>
-                                {activity.device}
-                            </span>
+                            <span>{activity.device}</span>
                         </>
                     )}
-
                     {activity?.browser && (
                         <>
                             <span>•</span>
-                            <span>
-                                {activity.browser}
-                            </span>
+                            <span>{activity.browser}</span>
                         </>
                     )}
-
                     {activity?.platform && (
                         <>
                             <span>•</span>
-                            <span>
-                                {activity.platform}
-                            </span>
+                            <span>{activity.platform}</span>
                         </>
                     )}
                 </div>
             </div>
 
             <div className="activity-result">
-                {type === "login" && (
-                    <span className="success-label">
-                        Successful
-                    </span>
-                )}
+                {type === "login" && <span className="success-label">Successful</span>}
             </div>
         </div>
     );
@@ -670,13 +467,8 @@ function EmptyActivity() {
             <div className="empty-state-icon">
                 <ActivityIcon size={28} />
             </div>
-
             <h3>No activity yet</h3>
-
-            <p>
-                Login sessions and important account events will
-                appear here.
-            </p>
+            <p>Login sessions and important account events will appear here.</p>
         </div>
     );
 }
@@ -685,8 +477,7 @@ function ActivityPagination({ activities }) {
     return (
         <div className="pagination-container">
             <div className="pagination-info">
-                Showing{" "}
-                <strong>{activities.from ?? 0}</strong>
+                Showing <strong>{activities.from ?? 0}</strong>
                 {" – "}
                 <strong>{activities.to ?? 0}</strong>
                 {" of "}
@@ -694,40 +485,29 @@ function ActivityPagination({ activities }) {
             </div>
 
             <div className="pagination-links">
-                {(activities.links ?? []).map(
-                    (link, index) => {
-                        const label = cleanPaginationLabel(
-                            link.label
-                        );
+                {(activities.links ?? []).map((link, index) => {
+                    const label = cleanPaginationLabel(link.label);
 
-                        if (!link.url) {
-                            return (
-                                <span
-                                    key={index}
-                                    className="page-button disabled"
-                                >
-                                    {label}
-                                </span>
-                            );
-                        }
-
+                    if (!link.url) {
                         return (
-                            <Link
-                                key={index}
-                                href={link.url}
-                                preserveScroll
-                                preserveState
-                                className={`page-button ${
-                                    link.active
-                                        ? "active"
-                                        : ""
-                                }`}
-                            >
+                            <span key={index} className="page-button disabled">
                                 {label}
-                            </Link>
+                            </span>
                         );
                     }
-                )}
+
+                    return (
+                        <Link
+                            key={index}
+                            href={link.url}
+                            preserveScroll
+                            preserveState
+                            className={`page-button ${link.active ? "active" : ""}`}
+                        >
+                            {label}
+                        </Link>
+                    );
+                })}
             </div>
         </div>
     );
@@ -737,24 +517,13 @@ function ActivityPagination({ activities }) {
    SECURITY TAB
 ========================================================= */
 
-function SecurityTab({
-    user,
-    onViewActivity,
-}) {
+function SecurityTab({ user, onViewActivity }) {
     return (
         <div className="content-card">
             <div className="content-header">
                 <div>
-                    <div className="section-kicker">
-                        SECURITY
-                    </div>
-
-                    <h2>Security Settings</h2>
-
-                    <p>
-                        Manage password and account security
-                        controls.
-                    </p>
+                    <h2>Security settings</h2>
+                    <p>Manage password and account security controls.</p>
                 </div>
 
                 <div className="security-status">
@@ -775,25 +544,21 @@ function SecurityTab({
                             data-bs-toggle="modal"
                             data-bs-target="#resetPasswordModal"
                         >
-                            Reset Password
+                            Reset password
                         </button>
                     }
                 />
 
                 <SecurityItem
                     icon={<ShieldIcon size={18} />}
-                    title="Two-Factor Authentication"
+                    title="Two-factor authentication"
                     description="Add an additional verification step when signing in."
-                    action={
-                        <span className="coming-badge">
-                            Not configured
-                        </span>
-                    }
+                    action={<span className="coming-badge">Not configured</span>}
                 />
 
                 <SecurityItem
                     icon={<ActivityIcon size={18} />}
-                    title="Login Activity"
+                    title="Login activity"
                     description="Review recent devices, IP addresses and sign-in events."
                     action={
                         <button
@@ -801,20 +566,16 @@ function SecurityTab({
                             className="security-button"
                             onClick={onViewActivity}
                         >
-                            View Activity
+                            View activity
                         </button>
                     }
                 />
 
                 <SecurityItem
                     icon={<MonitorIcon size={18} />}
-                    title="Active Sessions"
+                    title="Active sessions"
                     description="Review and revoke active sessions for this account."
-                    action={
-                        <span className="coming-badge">
-                            Coming soon
-                        </span>
-                    }
+                    action={<span className="coming-badge">Coming soon</span>}
                 />
             </div>
 
@@ -822,14 +583,11 @@ function SecurityTab({
                 <div className="security-note-icon">
                     <ShieldIcon size={17} />
                 </div>
-
                 <div>
                     <strong>Security recommendation</strong>
-
                     <p>
-                        Encourage users to maintain a unique
-                        password and enable two-factor
-                        authentication where available.
+                        Encourage users to maintain a unique password and enable
+                        two-factor authentication where available.
                     </p>
                 </div>
             </div>
@@ -837,26 +595,15 @@ function SecurityTab({
     );
 }
 
-function SecurityItem({
-    icon,
-    title,
-    description,
-    action,
-}) {
+function SecurityItem({ icon, title, description, action }) {
     return (
         <div className="security-item">
-            <div className="security-item-icon">
-                {icon}
-            </div>
-
+            <div className="security-item-icon">{icon}</div>
             <div className="security-item-content">
                 <strong>{title}</strong>
                 <span>{description}</span>
             </div>
-
-            <div className="security-item-action">
-                {action}
-            </div>
+            <div className="security-item-action">{action}</div>
         </div>
     );
 }
@@ -870,16 +617,8 @@ function ConnectedAccountsTab() {
         <div className="content-card">
             <div className="content-header">
                 <div>
-                    <div className="section-kicker">
-                        INTEGRATIONS
-                    </div>
-
-                    <h2>Connected Accounts</h2>
-
-                    <p>
-                        Social and third-party accounts connected
-                        to this profile.
-                    </p>
+                    <h2>Connected accounts</h2>
+                    <p>Social and third-party accounts connected to this profile.</p>
                 </div>
             </div>
 
@@ -887,20 +626,10 @@ function ConnectedAccountsTab() {
                 <div className="connected-icon">
                     <GridIcon size={27} />
                 </div>
-
                 <h3>No connected accounts</h3>
-
-                <p>
-                    No external accounts are currently linked to
-                    this user profile.
-                </p>
-
-                <button
-                    type="button"
-                    className="outline-button"
-                    disabled
-                >
-                    Connect Account
+                <p>No external accounts are currently linked to this user profile.</p>
+                <button type="button" className="outline-button" disabled>
+                    Connect account
                 </button>
             </div>
         </div>
@@ -911,29 +640,14 @@ function ConnectedAccountsTab() {
    DATA ROW
 ========================================================= */
 
-function DataRow({
-    icon,
-    label,
-    value,
-    muted = false,
-}) {
+function DataRow({ icon, label, value, muted = false }) {
     return (
         <div className="data-row">
             <div className="data-label">
-                <span className="data-label-icon">
-                    {icon}
-                </span>
-
+                <span className="data-label-icon">{icon}</span>
                 {label}
             </div>
-
-            <div
-                className={`data-value ${
-                    muted ? "muted-value" : ""
-                }`}
-            >
-                {value}
-            </div>
+            <div className={`data-value ${muted ? "muted-value" : ""}`}>{value}</div>
         </div>
     );
 }
@@ -945,59 +659,32 @@ function DataRow({
 function EditUserModal({ user }) {
     const modalRef = useRef(null);
 
-    const { data, setData, put, processing, errors } =
-        useForm({
-            name: user?.name ?? "",
-            email: user?.email ?? "",
-            role: user?.role ?? "user",
-            active: user?.active ? "1" : "0",
-        });
+    const { data, setData, put, processing, errors } = useForm({
+        name: user?.name ?? "",
+        email: user?.email ?? "",
+        role: user?.role ?? "user",
+        active: user?.active ? "1" : "0",
+    });
 
     const closeModal = () => {
-        const instance =
-            window.bootstrap?.Modal.getInstance(
-                modalRef.current
-            );
-
+        const instance = window.bootstrap?.Modal.getInstance(modalRef.current);
         instance?.hide();
     };
 
     const submit = (event) => {
         event.preventDefault();
-
-        put(
-            route("admin.users.update", user.id),
-            {
-                preserveScroll: true,
-                onSuccess: closeModal,
-            }
-        );
+        put(route("admin.users.update", user.id), {
+            preserveScroll: true,
+            onSuccess: closeModal,
+        });
     };
 
     return (
-        <div
-            className="modal fade"
-            id="editUserModal"
-            ref={modalRef}
-            tabIndex="-1"
-            aria-hidden="true"
-        >
+        <div className="modal fade" id="editUserModal" ref={modalRef} tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered">
-                <form
-                    className="modal-content modern-modal"
-                    onSubmit={submit}
-                >
+                <form className="modal-content modern-modal" onSubmit={submit}>
                     <div className="modal-header">
-                        <div>
-                            <div className="modal-kicker">
-                                USER MANAGEMENT
-                            </div>
-
-                            <h5 className="modal-title">
-                                Edit User
-                            </h5>
-                        </div>
-
+                        <h5 className="modal-title">Edit user</h5>
                         <button
                             type="button"
                             className="btn-close"
@@ -1008,104 +695,54 @@ function EditUserModal({ user }) {
 
                     <div className="modal-body">
                         <div className="modal-user-preview">
-                            <div className="modal-avatar">
-                                {getInitials(user?.name)}
-                            </div>
-
+                            <div className="modal-avatar">{getInitials(user?.name)}</div>
                             <div>
-                                <strong>
-                                    {user?.name}
-                                </strong>
-
-                                <span>
-                                    {user?.email}
-                                </span>
+                                <strong>{user?.name}</strong>
+                                <span>{user?.email}</span>
                             </div>
                         </div>
 
                         <div className="form-grid">
-                            <FormField
-                                label="Full Name"
-                                error={errors.name}
-                            >
+                            <FormField label="Full name" error={errors.name}>
                                 <input
                                     type="text"
                                     className="form-control modern-input"
                                     value={data.name}
-                                    onChange={(e) =>
-                                        setData(
-                                            "name",
-                                            e.target.value
-                                        )
-                                    }
+                                    onChange={(e) => setData("name", e.target.value)}
                                     required
                                 />
                             </FormField>
 
-                            <FormField
-                                label="Email Address"
-                                error={errors.email}
-                            >
+                            <FormField label="Email address" error={errors.email}>
                                 <input
                                     type="email"
                                     className="form-control modern-input"
                                     value={data.email}
-                                    onChange={(e) =>
-                                        setData(
-                                            "email",
-                                            e.target.value
-                                        )
-                                    }
+                                    onChange={(e) => setData("email", e.target.value)}
                                     required
                                 />
                             </FormField>
 
                             <div className="form-grid-two">
-                                <FormField
-                                    label="Role"
-                                    error={errors.role}
-                                >
+                                <FormField label="Role" error={errors.role}>
                                     <select
                                         className="form-select modern-input"
                                         value={data.role}
-                                        onChange={(e) =>
-                                            setData(
-                                                "role",
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => setData("role", e.target.value)}
                                     >
-                                        <option value="admin">
-                                            Admin
-                                        </option>
-
-                                        <option value="user">
-                                            User
-                                        </option>
+                                        <option value="admin">Admin</option>
+                                        <option value="user">User</option>
                                     </select>
                                 </FormField>
 
-                                <FormField
-                                    label="Account Status"
-                                    error={errors.active}
-                                >
+                                <FormField label="Account status" error={errors.active}>
                                     <select
                                         className="form-select modern-input"
                                         value={data.active}
-                                        onChange={(e) =>
-                                            setData(
-                                                "active",
-                                                e.target.value
-                                            )
-                                        }
+                                        onChange={(e) => setData("active", e.target.value)}
                                     >
-                                        <option value="1">
-                                            Active
-                                        </option>
-
-                                        <option value="0">
-                                            Inactive
-                                        </option>
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
                                     </select>
                                 </FormField>
                             </div>
@@ -1113,32 +750,19 @@ function EditUserModal({ user }) {
 
                         <div className="password-separation-note">
                             <KeyIcon size={16} />
-
                             <span>
-                                Password changes are handled
-                                separately through the secure
-                                password reset process.
+                                Password changes are handled separately through the
+                                secure password reset process.
                             </span>
                         </div>
                     </div>
 
                     <div className="modal-footer">
-                        <button
-                            type="button"
-                            className="cancel-button"
-                            data-bs-dismiss="modal"
-                        >
+                        <button type="button" className="cancel-button" data-bs-dismiss="modal">
                             Cancel
                         </button>
-
-                        <button
-                            type="submit"
-                            className="primary-button"
-                            disabled={processing}
-                        >
-                            {processing
-                                ? "Saving..."
-                                : "Save Changes"}
+                        <button type="submit" className="primary-button" disabled={processing}>
+                            {processing ? "Saving…" : "Save changes"}
                         </button>
                     </div>
                 </form>
@@ -1153,79 +777,36 @@ function EditUserModal({ user }) {
 
 function ResetPasswordModal({ user }) {
     const modalRef = useRef(null);
-
     const { post, processing } = useForm({});
 
     const closeModal = () => {
-        const instance =
-            window.bootstrap?.Modal.getInstance(
-                modalRef.current
-            );
-
+        const instance = window.bootstrap?.Modal.getInstance(modalRef.current);
         instance?.hide();
     };
 
     const submit = (event) => {
         event.preventDefault();
-
-        post(
-            route(
-                "admin.users.send-password-reset",
-                user.id
-            ),
-            {
-                preserveScroll: true,
-                onSuccess: closeModal,
-            }
-        );
+        post(route("admin.users.send-password-reset", user.id), {
+            preserveScroll: true,
+            onSuccess: closeModal,
+        });
     };
 
     return (
-        <div
-            className="modal fade"
-            id="resetPasswordModal"
-            ref={modalRef}
-            tabIndex="-1"
-            aria-hidden="true"
-        >
+        <div className="modal fade" id="resetPasswordModal" ref={modalRef} tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered modal-sm">
-                <form
-                    className="modal-content modern-modal"
-                    onSubmit={submit}
-                >
+                <form className="modal-content modern-modal" onSubmit={submit}>
                     <div className="modal-header">
-                        <div>
-                            <div className="modal-kicker">
-                                SECURITY
-                            </div>
-
-                            <h5 className="modal-title">
-                                Reset Password
-                            </h5>
-                        </div>
-
-                        <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        />
+                        <h5 className="modal-title">Reset password</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                     </div>
 
                     <div className="modal-body">
                         <div className="reset-profile">
-                            <div className="reset-avatar">
-                                {getInitials(user?.name)}
-                            </div>
-
+                            <div className="reset-avatar">{getInitials(user?.name)}</div>
                             <div>
-                                <strong>
-                                    {user?.name}
-                                </strong>
-
-                                <span>
-                                    {user?.email}
-                                </span>
+                                <strong>{user?.name}</strong>
+                                <span>{user?.email}</span>
                             </div>
                         </div>
 
@@ -1233,40 +814,23 @@ function ResetPasswordModal({ user }) {
                             <div className="reset-message-icon">
                                 <MailIcon size={18} />
                             </div>
-
                             <div>
-                                <strong>
-                                    Send secure reset link
-                                </strong>
-
+                                <strong>Send secure reset link</strong>
                                 <p>
-                                    A password reset link will
-                                    be sent to this user's email
-                                    address. The user will
-                                    create a new password through
-                                    the secure reset page.
+                                    A password reset link will be sent to this user's
+                                    email address. The user will create a new password
+                                    through the secure reset page.
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     <div className="modal-footer">
-                        <button
-                            type="button"
-                            className="cancel-button"
-                            data-bs-dismiss="modal"
-                        >
+                        <button type="button" className="cancel-button" data-bs-dismiss="modal">
                             Cancel
                         </button>
-
-                        <button
-                            type="submit"
-                            className="primary-button"
-                            disabled={processing}
-                        >
-                            {processing
-                                ? "Sending..."
-                                : "Send Reset Link"}
+                        <button type="submit" className="primary-button" disabled={processing}>
+                            {processing ? "Sending…" : "Send reset link"}
                         </button>
                     </div>
                 </form>
@@ -1281,62 +845,28 @@ function ResetPasswordModal({ user }) {
 
 function DeleteUserModal({ user }) {
     const modalRef = useRef(null);
-
-    const {
-        delete: destroy,
-        processing,
-    } = useForm({});
+    const { delete: destroy, processing } = useForm({});
 
     const closeModal = () => {
-        const instance =
-            window.bootstrap?.Modal.getInstance(
-                modalRef.current
-            );
-
+        const instance = window.bootstrap?.Modal.getInstance(modalRef.current);
         instance?.hide();
     };
 
     const submit = (event) => {
         event.preventDefault();
-
-        destroy(
-            route("admin.users.destroy", user.id),
-            {
-                preserveScroll: true,
-                onSuccess: closeModal,
-            }
-        );
+        destroy(route("admin.users.destroy", user.id), {
+            preserveScroll: true,
+            onSuccess: closeModal,
+        });
     };
 
     return (
-        <div
-            className="modal fade"
-            id="deleteUserModal"
-            ref={modalRef}
-            tabIndex="-1"
-            aria-hidden="true"
-        >
+        <div className="modal fade" id="deleteUserModal" ref={modalRef} tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered modal-sm">
-                <form
-                    className="modal-content modern-modal"
-                    onSubmit={submit}
-                >
+                <form className="modal-content modern-modal" onSubmit={submit}>
                     <div className="modal-header">
-                        <div>
-                            <div className="modal-kicker">
-                                DANGER ZONE
-                            </div>
-
-                            <h5 className="modal-title">
-                                Delete User
-                            </h5>
-                        </div>
-
-                        <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                        />
+                        <h5 className="modal-title">Delete user</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" />
                     </div>
 
                     <div className="modal-body">
@@ -1344,41 +874,23 @@ function DeleteUserModal({ user }) {
                             <div className="delete-warning-icon">
                                 <AlertIcon size={19} />
                             </div>
-
                             <div>
-                                <strong>
-                                    Delete {user?.name}?
-                                </strong>
-
+                                <strong>Delete {user?.name}?</strong>
                                 <p>
-                                    This permanently removes the
-                                    user account and associated
-                                    data. This action cannot be
-                                    undone.
+                                    This permanently removes the user account and
+                                    associated data. This action cannot be undone.
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     <div className="modal-footer">
-                        <button
-                            type="button"
-                            className="cancel-button"
-                            data-bs-dismiss="modal"
-                        >
-                            Keep User
+                        <button type="button" className="cancel-button" data-bs-dismiss="modal">
+                            Keep user
                         </button>
-
-                        <button
-                            type="submit"
-                            className="danger-button"
-                            disabled={processing}
-                        >
+                        <button type="submit" className="danger-button" disabled={processing}>
                             <TrashIcon size={14} />
-
-                            {processing
-                                ? "Deleting..."
-                                : "Delete User"}
+                            {processing ? "Deleting…" : "Delete user"}
                         </button>
                     </div>
                 </form>
@@ -1391,22 +903,12 @@ function DeleteUserModal({ user }) {
    FORM COMPONENTS
 ========================================================= */
 
-function FormField({
-    label,
-    error,
-    children,
-}) {
+function FormField({ label, error, children }) {
     return (
         <div className="form-field">
             <label>{label}</label>
-
             {children}
-
-            {error && (
-                <div className="form-error">
-                    {error}
-                </div>
-            )}
+            {error && <div className="form-error">{error}</div>}
         </div>
     );
 }
@@ -1416,50 +918,27 @@ function FormField({
 ========================================================= */
 
 function getInitials(name = "") {
-    const words = name
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
-    if (!words.length) {
-        return "U";
-    }
-
-    if (words.length === 1) {
-        return words[0].slice(0, 2).toUpperCase();
-    }
-
-    return (
-        words[0][0] + words[words.length - 1][0]
-    ).toUpperCase();
+    const words = name.trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return "U";
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
 }
 
 function formatRole(role) {
-    if (!role) {
-        return "User";
-    }
-
-    return role
-        .charAt(0)
-        .toUpperCase() + role.slice(1);
+    if (!role) return "User";
+    return role.charAt(0).toUpperCase() + role.slice(1);
 }
 
 function formatActivityTitle(type) {
     const titles = {
         login: "User login",
         logout: "User logout",
-        password_reset:
-            "Password reset requested",
-        password_changed:
-            "Password changed",
-        profile_updated:
-            "Profile updated",
-        account_activated:
-            "Account activated",
-        account_deactivated:
-            "Account deactivated",
+        password_reset: "Password reset requested",
+        password_changed: "Password changed",
+        profile_updated: "Profile updated",
+        account_activated: "Account activated",
+        account_deactivated: "Account deactivated",
     };
-
     return titles[type] ?? "Account activity";
 }
 
@@ -1475,12 +954,7 @@ function cleanPaginationLabel(label = "") {
    ICONS
 ========================================================= */
 
-function svgProps({
-    size = 15,
-    style,
-    className,
-    ...rest
-} = {}) {
+function svgProps({ size = 15, style, className, ...rest } = {}) {
     return {
         width: size,
         height: size,
@@ -1504,7 +978,6 @@ function BackIcon(p) {
         </svg>
     );
 }
-
 function EditIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1513,7 +986,6 @@ function EditIcon(p) {
         </svg>
     );
 }
-
 function TrashIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1525,7 +997,6 @@ function TrashIcon(p) {
         </svg>
     );
 }
-
 function UserIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1534,22 +1005,14 @@ function UserIcon(p) {
         </svg>
     );
 }
-
 function MailIcon(p) {
     return (
         <svg {...svgProps(p)}>
-            <rect
-                x="3"
-                y="5"
-                width="18"
-                height="14"
-                rx="2"
-            />
+            <rect x="3" y="5" width="18" height="14" rx="2" />
             <polyline points="3 7 12 13 21 7" />
         </svg>
     );
 }
-
 function PhoneIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1557,7 +1020,6 @@ function PhoneIcon(p) {
         </svg>
     );
 }
-
 function ShieldIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1566,39 +1028,24 @@ function ShieldIcon(p) {
         </svg>
     );
 }
-
 function ToggleIcon(p) {
     return (
         <svg {...svgProps(p)}>
-            <rect
-                x="2"
-                y="6"
-                width="20"
-                height="12"
-                rx="6"
-            />
+            <rect x="2" y="6" width="20" height="12" rx="6" />
             <circle cx="16" cy="12" r="3" />
         </svg>
     );
 }
-
 function CalendarIcon(p) {
     return (
         <svg {...svgProps(p)}>
-            <rect
-                x="3"
-                y="4"
-                width="18"
-                height="18"
-                rx="2"
-            />
+            <rect x="3" y="4" width="18" height="18" rx="2" />
             <line x1="16" y1="2" x2="16" y2="6" />
             <line x1="8" y1="2" x2="8" y2="6" />
             <line x1="3" y1="10" x2="21" y2="10" />
         </svg>
     );
 }
-
 function BellIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1607,7 +1054,6 @@ function BellIcon(p) {
         </svg>
     );
 }
-
 function ActivityIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1615,22 +1061,14 @@ function ActivityIcon(p) {
         </svg>
     );
 }
-
 function LockIcon(p) {
     return (
         <svg {...svgProps(p)}>
-            <rect
-                x="3"
-                y="11"
-                width="18"
-                height="11"
-                rx="2"
-            />
+            <rect x="3" y="11" width="18" height="11" rx="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
     );
 }
-
 function GridIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1641,7 +1079,6 @@ function GridIcon(p) {
         </svg>
     );
 }
-
 function LoginIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1651,7 +1088,6 @@ function LoginIcon(p) {
         </svg>
     );
 }
-
 function LogoutIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1661,7 +1097,6 @@ function LogoutIcon(p) {
         </svg>
     );
 }
-
 function KeyIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1672,7 +1107,6 @@ function KeyIcon(p) {
         </svg>
     );
 }
-
 function CheckIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1680,7 +1114,6 @@ function CheckIcon(p) {
         </svg>
     );
 }
-
 function AlertIcon(p) {
     return (
         <svg {...svgProps(p)}>
@@ -1690,23 +1123,15 @@ function AlertIcon(p) {
         </svg>
     );
 }
-
 function MonitorIcon(p) {
     return (
         <svg {...svgProps(p)}>
-            <rect
-                x="2"
-                y="3"
-                width="20"
-                height="14"
-                rx="2"
-            />
+            <rect x="2" y="3" width="20" height="14" rx="2" />
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
         </svg>
     );
 }
-
 function TabIcon({ name }) {
     const icons = {
         user: <UserIcon size={16} />,
@@ -1715,7 +1140,6 @@ function TabIcon({ name }) {
         lock: <LockIcon size={16} />,
         grid: <GridIcon size={16} />,
     };
-
     return icons[name] ?? null;
 }
 
@@ -1726,32 +1150,27 @@ function TabIcon({ name }) {
 function ProfileStyles() {
     return (
         <style>{`
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
             :root {
-                --profile-bg: #f6f8fb;
+                --profile-bg: #ffffff;
                 --profile-surface: #ffffff;
-                --profile-surface-soft: #f9fafc;
+                --profile-surface-soft: #f7f8f8;
 
-                --profile-ink: #172033;
-                --profile-ink-2: #465166;
-                --profile-muted: #8993a5;
+                --profile-ink: #0a0a0a;
+                --profile-ink-2: #4a4d52;
+                --profile-muted: #8b8d92;
 
-                --profile-border: #e5e9ef;
-                --profile-border-soft: #edf0f4;
+                --profile-border: #e7e8ea;
+                --profile-border-soft: #f0f1f2;
 
-                --profile-blue: #5d89c8;
-                --profile-blue-dark: #456fae;
-                --profile-blue-soft: #edf4fc;
+                --profile-green: #00a667;
+                --profile-green-dark: #00814f;
+                --profile-green-soft: #e6f7ef;
+                --profile-green-soft-2: #d1f0e2;
 
-                --profile-green: #1e9b67;
-                --profile-green-soft: #eaf8f1;
-
-                --profile-danger: #d65353;
-                --profile-danger-soft: #fff1f1;
-
-                --profile-purple: #775bb5;
-                --profile-purple-soft: #f4f0fb;
+                --profile-danger: #c73333;
+                --profile-danger-soft: #fbeaea;
 
                 --profile-font:
                     'Inter',
@@ -1759,24 +1178,19 @@ function ProfileStyles() {
                     BlinkMacSystemFont,
                     'Segoe UI',
                     sans-serif;
-
-                --profile-display:
-                    'Space Grotesk',
-                    'Inter',
-                    sans-serif;
             }
 
             .user-profile-page {
                 min-height: 100vh;
                 background: var(--profile-bg);
-                padding: 26px 28px 50px;
+                padding: 30px 32px 56px;
                 color: var(--profile-ink);
                 font-family: var(--profile-font);
             }
 
             .profile-page-header {
                 max-width: 1440px;
-                margin: 0 auto 24px;
+                margin: 0 auto 26px;
             }
 
             .back-link {
@@ -1787,12 +1201,12 @@ function ProfileStyles() {
                 text-decoration: none;
                 font-size: 12.5px;
                 font-weight: 500;
-                margin-bottom: 17px;
-                transition: all .15s ease;
+                margin-bottom: 18px;
+                transition: color .15s ease, transform .15s ease;
             }
 
             .back-link:hover {
-                color: var(--profile-blue-dark);
+                color: var(--profile-ink);
                 transform: translateX(-2px);
             }
 
@@ -1801,26 +1215,17 @@ function ProfileStyles() {
                 align-items: flex-end;
                 justify-content: space-between;
                 gap: 20px;
-            }
-
-            .eyebrow,
-            .section-kicker,
-            .modal-kicker {
-                color: var(--profile-blue);
-                font-size: 10px;
-                font-weight: 700;
-                letter-spacing: .12em;
-                text-transform: uppercase;
-                margin-bottom: 6px;
+                border-bottom: 1px solid var(--profile-border);
+                padding-bottom: 22px;
             }
 
             .page-heading h1 {
                 margin: 0;
-                font-family: var(--profile-display);
-                font-size: 28px;
-                line-height: 1.15;
-                letter-spacing: -.025em;
-                font-weight: 600;
+                font-size: 27px;
+                line-height: 1.2;
+                letter-spacing: -.02em;
+                font-weight: 700;
+                color: var(--profile-ink);
             }
 
             .page-heading p {
@@ -1829,15 +1234,11 @@ function ProfileStyles() {
                 font-size: 13px;
             }
 
-            .header-status {
-                flex-shrink: 0;
-            }
-
             .profile-grid {
                 max-width: 1440px;
                 margin: 0 auto;
                 display: grid;
-                grid-template-columns: 300px minmax(0, 1fr);
+                grid-template-columns: 292px minmax(0, 1fr);
                 gap: 22px;
                 align-items: start;
             }
@@ -1851,59 +1252,33 @@ function ProfileStyles() {
             .content-card {
                 background: var(--profile-surface);
                 border: 1px solid var(--profile-border);
-                border-radius: 14px;
-                box-shadow: 0 2px 8px rgba(23, 32, 51, .025);
-            }
-
-            .profile-card {
-                position: relative;
-                overflow: hidden;
-            }
-
-            .record-tag {
-                position: absolute;
-                top: 0;
-                left: 0;
-                padding: 6px 12px;
-                background: var(--profile-ink);
-                color: #fff;
-                border-bottom-right-radius: 9px;
-                font-size: 9px;
-                font-weight: 700;
-                letter-spacing: .08em;
+                border-radius: 12px;
             }
 
             .profile-avatar-section {
-                padding: 46px 20px 23px;
+                padding: 30px 20px 22px;
                 text-align: center;
                 border-bottom: 1px solid var(--profile-border);
             }
 
             .profile-avatar {
-                width: 76px;
-                height: 76px;
-                margin: 0 auto 13px;
-                border-radius: 19px;
-                background:
-                    linear-gradient(
-                        135deg,
-                        var(--profile-blue),
-                        var(--profile-blue-dark)
-                    );
+                width: 68px;
+                height: 68px;
+                margin: 0 auto 14px;
+                border-radius: 50%;
+                background: var(--profile-green);
                 color: #fff;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-family: var(--profile-display);
-                font-size: 24px;
-                font-weight: 600;
-                box-shadow: 0 8px 20px rgba(93, 137, 200, .2);
+                font-size: 22px;
+                font-weight: 700;
+                letter-spacing: -.01em;
             }
 
             .profile-name {
-                font-family: var(--profile-display);
-                font-size: 18px;
-                font-weight: 600;
+                font-size: 16.5px;
+                font-weight: 700;
                 color: var(--profile-ink);
             }
 
@@ -1916,15 +1291,20 @@ function ProfileStyles() {
 
             .role-badge {
                 display: inline-flex;
-                margin-top: 11px;
-                padding: 5px 10px;
-                border-radius: 6px;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
-                font-size: 9.5px;
-                font-weight: 700;
-                letter-spacing: .07em;
-                text-transform: uppercase;
+                margin-top: 12px;
+                padding: 5px 11px;
+                border-radius: 20px;
+                background: var(--profile-green-soft);
+                color: var(--profile-green-dark);
+                font-size: 10.5px;
+                font-weight: 600;
+            }
+
+            .record-tag {
+                margin-top: 13px;
+                color: var(--profile-muted);
+                font-size: 10px;
+                font-weight: 500;
             }
 
             .profile-stats {
@@ -1953,29 +1333,21 @@ function ProfileStyles() {
                 display: block;
                 margin-top: 4px;
                 color: var(--profile-muted);
-                font-size: 9px;
-                text-transform: uppercase;
-                letter-spacing: .07em;
+                font-size: 10.5px;
             }
 
-            .active-text {
-                color: var(--profile-green) !important;
-            }
+            .active-text { color: var(--profile-green) !important; }
+            .inactive-text { color: var(--profile-muted) !important; }
 
-            .inactive-text {
-                color: var(--profile-muted) !important;
-            }
-
-            .sidebar-navigation {
-                padding: 9px;
-            }
+            .sidebar-navigation { padding: 9px; }
 
             .profile-nav-item {
                 width: 100%;
                 border: 0;
+                border-left: 3px solid transparent;
                 background: transparent;
-                border-radius: 9px;
-                padding: 9px 10px;
+                border-radius: 8px;
+                padding: 9px 10px 9px 9px;
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -1984,7 +1356,7 @@ function ProfileStyles() {
                 font-weight: 500;
                 text-align: left;
                 cursor: pointer;
-                transition: all .15s ease;
+                transition: background .15s ease, color .15s ease;
             }
 
             .profile-nav-item:hover {
@@ -1993,14 +1365,15 @@ function ProfileStyles() {
             }
 
             .profile-nav-item.active {
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
+                background: var(--profile-green-soft);
+                border-left-color: var(--profile-green);
+                color: var(--profile-ink);
                 font-weight: 600;
             }
 
             .profile-nav-icon {
-                width: 29px;
-                height: 29px;
+                width: 28px;
+                height: 28px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -2011,22 +1384,17 @@ function ProfileStyles() {
             }
 
             .profile-nav-item.active .profile-nav-icon {
-                background: var(--profile-blue);
+                background: var(--profile-green);
                 color: #fff;
             }
 
-            .quick-card {
-                margin-top: 14px;
-                padding: 14px;
-            }
+            .quick-card { margin-top: 14px; padding: 14px; }
 
             .quick-title {
                 padding: 0 5px 8px;
                 color: var(--profile-muted);
-                font-size: 9.5px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: .09em;
+                font-size: 11px;
+                font-weight: 600;
             }
 
             .quick-action {
@@ -2046,7 +1414,7 @@ function ProfileStyles() {
 
             .quick-action:hover {
                 background: var(--profile-surface-soft);
-                color: var(--profile-blue-dark);
+                color: var(--profile-ink);
             }
 
             .quick-action span {
@@ -2058,29 +1426,26 @@ function ProfileStyles() {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
+                color: var(--profile-ink-2);
             }
 
-            .content-card {
-                min-width: 0;
-                overflow: hidden;
-            }
+            .content-card { min-width: 0; overflow: hidden; }
 
             .content-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-start;
                 gap: 20px;
-                padding: 25px 28px 21px;
+                padding: 24px 26px 20px;
                 border-bottom: 1px solid var(--profile-border);
             }
 
             .content-header h2 {
                 margin: 0;
-                font-family: var(--profile-display);
                 color: var(--profile-ink);
-                font-size: 19px;
-                font-weight: 600;
-                letter-spacing: -.015em;
+                font-size: 18px;
+                font-weight: 700;
+                letter-spacing: -.01em;
             }
 
             .content-header p {
@@ -2107,52 +1472,44 @@ function ProfileStyles() {
             }
 
             .outline-button:hover:not(:disabled) {
-                border-color: var(--profile-blue);
-                color: var(--profile-blue-dark);
-                background: var(--profile-blue-soft);
+                border-color: var(--profile-ink);
+                color: var(--profile-ink);
             }
 
-            .outline-button:disabled {
-                opacity: .5;
-                cursor: not-allowed;
-            }
+            .outline-button:disabled { opacity: .5; cursor: not-allowed; }
 
             .section-title {
-                padding: 11px 28px;
+                padding: 10px 26px;
                 background: var(--profile-surface-soft);
                 border-bottom: 1px solid var(--profile-border-soft);
-                color: var(--profile-muted);
-                font-size: 9.5px;
-                font-weight: 700;
-                letter-spacing: .1em;
-                text-transform: uppercase;
+                color: var(--profile-ink-2);
+                font-size: 11.5px;
+                font-weight: 600;
             }
 
             .data-row {
-                min-height: 57px;
+                min-height: 55px;
                 display: flex;
                 align-items: center;
                 gap: 18px;
-                padding: 12px 28px;
+                padding: 12px 26px;
                 border-bottom: 1px solid var(--profile-border-soft);
             }
 
             .data-label {
-                width: 185px;
+                width: 175px;
                 flex-shrink: 0;
                 display: flex;
                 align-items: center;
                 gap: 9px;
                 color: var(--profile-muted);
-                font-size: 10px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: .04em;
+                font-size: 11.5px;
+                font-weight: 500;
             }
 
             .data-label-icon {
-                width: 27px;
-                height: 27px;
+                width: 26px;
+                height: 26px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -2168,27 +1525,23 @@ function ProfileStyles() {
                 flex: 1;
             }
 
-            .muted-value {
-                color: var(--profile-muted);
-            }
+            .muted-value { color: var(--profile-muted); }
 
             .role-chip {
                 display: inline-flex;
-                padding: 5px 9px;
-                border-radius: 6px;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
-                font-size: 10px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: .04em;
+                padding: 5px 10px;
+                border-radius: 20px;
+                background: var(--profile-green-soft);
+                color: var(--profile-green-dark);
+                font-size: 11px;
+                font-weight: 600;
             }
 
             .status-chip {
                 display: inline-flex;
                 align-items: center;
                 gap: 7px;
-                font-size: 11.5px;
+                font-size: 12px;
                 font-weight: 600;
             }
 
@@ -2199,30 +1552,24 @@ function ProfileStyles() {
                 border-radius: 50%;
             }
 
-            .chip-active {
-                color: var(--profile-green);
-            }
-
+            .chip-active { color: var(--profile-green-dark); }
             .chip-active::before {
                 background: var(--profile-green);
                 box-shadow: 0 0 0 3px var(--profile-green-soft);
             }
 
-            .chip-inactive {
-                color: var(--profile-muted);
-            }
-
+            .chip-inactive { color: var(--profile-muted); }
             .chip-inactive::before {
                 background: transparent;
                 border: 1.5px solid var(--profile-muted);
             }
 
             .profile-summary {
-                margin: 22px 28px;
+                margin: 22px 26px;
                 padding: 14px;
                 border: 1px solid var(--profile-border);
                 border-radius: 10px;
-                background: var(--profile-blue-soft);
+                background: var(--profile-surface-soft);
                 display: flex;
                 align-items: flex-start;
                 gap: 11px;
@@ -2235,16 +1582,12 @@ function ProfileStyles() {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: var(--profile-blue);
+                background: var(--profile-green);
                 color: #fff;
                 flex-shrink: 0;
             }
 
-            .profile-summary strong {
-                color: var(--profile-ink);
-                font-size: 12px;
-            }
-
+            .profile-summary strong { color: var(--profile-ink); font-size: 12px; }
             .profile-summary p {
                 margin: 3px 0 0;
                 color: var(--profile-ink-2);
@@ -2259,80 +1602,48 @@ function ProfileStyles() {
                 border-radius: 7px;
                 background: var(--profile-surface-soft);
                 border: 1px solid var(--profile-border);
-                color: var(--profile-muted);
-                font-size: 10.5px;
+                color: var(--profile-ink-2);
+                font-size: 11px;
                 font-weight: 600;
                 white-space: nowrap;
             }
 
-            .activity-list {
-                width: 100%;
-            }
+            .activity-list { width: 100%; }
 
             .activity-item {
                 display: flex;
                 align-items: flex-start;
                 gap: 13px;
-                padding: 18px 28px;
+                padding: 17px 26px;
                 border-bottom: 1px solid var(--profile-border-soft);
                 transition: background .15s ease;
             }
 
-            .activity-item:hover {
-                background: var(--profile-surface-soft);
-            }
+            .activity-item:hover { background: var(--profile-surface-soft); }
 
             .activity-icon {
-                width: 37px;
-                height: 37px;
-                flex: 0 0 37px;
+                width: 36px;
+                height: 36px;
+                flex: 0 0 36px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 border-radius: 9px;
-            }
-
-            .activity-login {
-                background: var(--profile-green-soft);
-                color: var(--profile-green);
-            }
-
-            .activity-logout {
                 background: var(--profile-surface-soft);
                 color: var(--profile-ink-2);
             }
 
-            .activity-password_reset,
-            .activity-password_changed {
-                background: var(--profile-purple-soft);
-                color: var(--profile-purple);
-            }
-
-            .activity-profile_updated {
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
-            }
-
+            .activity-login,
             .activity-account_activated {
                 background: var(--profile-green-soft);
-                color: var(--profile-green);
+                color: var(--profile-green-dark);
             }
 
-            .activity-account_deactivated {
-                background: #f2f3f5;
-                color: var(--profile-muted);
-            }
+            .activity-account_deactivated { color: var(--profile-danger); }
 
-            .activity-body {
-                flex: 1;
-                min-width: 0;
-            }
+            .activity-body { flex: 1; min-width: 0; }
 
-            .activity-title {
-                color: var(--profile-ink);
-                font-size: 13px;
-                font-weight: 600;
-            }
+            .activity-title { color: var(--profile-ink); font-size: 13px; font-weight: 600; }
 
             .activity-description {
                 margin-top: 3px;
@@ -2350,27 +1661,22 @@ function ProfileStyles() {
                 font-size: 10.5px;
             }
 
-            .activity-result {
-                flex-shrink: 0;
-            }
+            .activity-result { flex-shrink: 0; }
 
             .success-label {
-                padding: 4px 7px;
-                border-radius: 5px;
+                padding: 4px 8px;
+                border-radius: 20px;
                 background: var(--profile-green-soft);
-                color: var(--profile-green);
-                font-size: 9px;
+                color: var(--profile-green-dark);
+                font-size: 9.5px;
                 font-weight: 700;
             }
 
-            .empty-state {
-                padding: 75px 25px;
-                text-align: center;
-            }
+            .empty-state { padding: 75px 25px; text-align: center; }
 
             .empty-state-icon {
-                width: 64px;
-                height: 64px;
+                width: 62px;
+                height: 62px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -2382,10 +1688,9 @@ function ProfileStyles() {
 
             .empty-state h3 {
                 margin: 0;
-                color: var(--profile-ink-2);
-                font-family: var(--profile-display);
+                color: var(--profile-ink);
                 font-size: 15px;
-                font-weight: 600;
+                font-weight: 700;
             }
 
             .empty-state p {
@@ -2400,27 +1705,18 @@ function ProfileStyles() {
                 align-items: center;
                 justify-content: space-between;
                 gap: 15px;
-                padding: 15px 28px;
+                padding: 15px 26px;
                 border-top: 1px solid var(--profile-border);
             }
 
-            .pagination-info {
-                color: var(--profile-muted);
-                font-size: 10.5px;
-            }
+            .pagination-info { color: var(--profile-muted); font-size: 11px; }
+            .pagination-info strong { color: var(--profile-ink-2); }
 
-            .pagination-info strong {
-                color: var(--profile-ink-2);
-            }
-
-            .pagination-links {
-                display: flex;
-                gap: 4px;
-            }
+            .pagination-links { display: flex; gap: 4px; }
 
             .page-button {
-                min-width: 29px;
-                height: 29px;
+                min-width: 28px;
+                height: 28px;
                 padding: 0 7px;
                 display: inline-flex;
                 align-items: center;
@@ -2430,26 +1726,23 @@ function ProfileStyles() {
                 background: #fff;
                 color: var(--profile-ink-2);
                 text-decoration: none;
-                font-size: 10.5px;
+                font-size: 11px;
                 transition: all .15s ease;
             }
 
             .page-button:hover {
-                border-color: var(--profile-blue);
-                color: var(--profile-blue-dark);
-                background: var(--profile-blue-soft);
+                border-color: var(--profile-green);
+                color: var(--profile-green-dark);
+                background: var(--profile-green-soft);
             }
 
             .page-button.active {
-                border-color: var(--profile-blue);
-                background: var(--profile-blue);
+                border-color: var(--profile-green);
+                background: var(--profile-green);
                 color: #fff;
             }
 
-            .page-button.disabled {
-                opacity: .4;
-                cursor: not-allowed;
-            }
+            .page-button.disabled { opacity: .4; cursor: not-allowed; }
 
             /* Security */
 
@@ -2457,49 +1750,38 @@ function ProfileStyles() {
                 display: inline-flex;
                 align-items: center;
                 gap: 5px;
-                padding: 6px 9px;
-                border-radius: 6px;
+                padding: 6px 10px;
+                border-radius: 20px;
                 background: var(--profile-green-soft);
-                color: var(--profile-green);
-                font-size: 10px;
+                color: var(--profile-green-dark);
+                font-size: 10.5px;
                 font-weight: 600;
             }
 
-            .security-list {
-                padding: 5px 0;
-            }
+            .security-list { padding: 5px 0; }
 
             .security-item {
                 display: flex;
                 align-items: center;
                 gap: 14px;
-                padding: 18px 28px;
+                padding: 17px 26px;
                 border-bottom: 1px solid var(--profile-border-soft);
             }
 
             .security-item-icon {
-                width: 38px;
-                height: 38px;
-                flex: 0 0 38px;
+                width: 37px;
+                height: 37px;
+                flex: 0 0 37px;
                 border-radius: 9px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
-            }
-
-            .security-item-content {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .security-item-content strong {
-                display: block;
+                background: var(--profile-surface-soft);
                 color: var(--profile-ink);
-                font-size: 12.5px;
             }
 
+            .security-item-content { flex: 1; min-width: 0; }
+            .security-item-content strong { display: block; color: var(--profile-ink); font-size: 12.5px; }
             .security-item-content span {
                 display: block;
                 margin-top: 3px;
@@ -2508,39 +1790,37 @@ function ProfileStyles() {
                 line-height: 1.45;
             }
 
-            .security-item-action {
-                flex-shrink: 0;
-            }
+            .security-item-action { flex-shrink: 0; }
 
             .security-button {
                 border: 1px solid var(--profile-border);
                 background: #fff;
                 color: var(--profile-ink-2);
                 border-radius: 7px;
-                padding: 7px 11px;
-                font-size: 10.5px;
+                padding: 7px 12px;
+                font-size: 11px;
                 font-weight: 600;
                 cursor: pointer;
             }
 
             .security-button:hover {
-                background: var(--profile-blue-soft);
-                border-color: var(--profile-blue);
-                color: var(--profile-blue-dark);
+                background: var(--profile-green-soft);
+                border-color: var(--profile-green);
+                color: var(--profile-green-dark);
             }
 
             .coming-badge {
-                padding: 5px 8px;
-                border-radius: 5px;
+                padding: 5px 9px;
+                border-radius: 20px;
                 background: var(--profile-surface-soft);
                 border: 1px solid var(--profile-border);
                 color: var(--profile-muted);
-                font-size: 9px;
+                font-size: 10px;
                 font-weight: 600;
             }
 
             .security-note {
-                margin: 22px 28px;
+                margin: 22px 26px;
                 padding: 14px;
                 border: 1px solid var(--profile-border);
                 border-radius: 10px;
@@ -2556,60 +1836,45 @@ function ProfileStyles() {
                 align-items: center;
                 justify-content: center;
                 border-radius: 8px;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
+                background: var(--profile-ink);
+                color: #fff;
                 flex-shrink: 0;
             }
 
-            .security-note strong {
-                color: var(--profile-ink);
-                font-size: 11.5px;
-            }
-
+            .security-note strong { color: var(--profile-ink); font-size: 12px; }
             .security-note p {
                 margin: 3px 0 0;
-                color: var(--profile-muted);
-                font-size: 10.5px;
+                color: var(--profile-ink-2);
+                font-size: 11px;
                 line-height: 1.5;
             }
 
             /* Notifications */
 
-            .notification-list {
-                padding: 4px 0;
-            }
+            .notification-list { padding: 4px 0; }
 
             .notification-row {
                 display: flex;
                 align-items: center;
                 gap: 13px;
-                padding: 18px 28px;
+                padding: 17px 26px;
                 border-bottom: 1px solid var(--profile-border-soft);
             }
 
             .notification-icon {
-                width: 37px;
-                height: 37px;
+                width: 36px;
+                height: 36px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 border-radius: 9px;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
+                background: var(--profile-surface-soft);
+                color: var(--profile-ink);
                 flex-shrink: 0;
             }
 
-            .notification-content {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .notification-content strong {
-                display: block;
-                color: var(--profile-ink);
-                font-size: 12.5px;
-            }
-
+            .notification-content { flex: 1; min-width: 0; }
+            .notification-content strong { display: block; color: var(--profile-ink); font-size: 12.5px; }
             .notification-content span {
                 display: block;
                 margin-top: 3px;
@@ -2639,30 +1904,21 @@ function ProfileStyles() {
                 transition: transform .15s ease;
             }
 
-            .toggle-switch.checked {
-                background: var(--profile-blue);
-            }
-
-            .toggle-switch.checked span {
-                transform: translateX(17px);
-            }
+            .toggle-switch.checked { background: var(--profile-green); }
+            .toggle-switch.checked span { transform: translateX(17px); }
 
             .info-banner {
                 display: flex;
                 gap: 10px;
-                margin: 22px 28px;
+                margin: 22px 26px;
                 padding: 13px;
                 border-radius: 9px;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
+                border: 1px solid var(--profile-border);
+                background: var(--profile-surface-soft);
+                color: var(--profile-ink-2);
             }
 
-            .info-banner strong {
-                display: block;
-                color: var(--profile-ink);
-                font-size: 11.5px;
-            }
-
+            .info-banner strong { display: block; color: var(--profile-ink); font-size: 11.5px; }
             .info-banner p {
                 margin: 3px 0 0;
                 color: var(--profile-ink-2);
@@ -2672,14 +1928,11 @@ function ProfileStyles() {
 
             /* Connected */
 
-            .connected-empty {
-                padding: 75px 25px;
-                text-align: center;
-            }
+            .connected-empty { padding: 75px 25px; text-align: center; }
 
             .connected-icon {
-                width: 65px;
-                height: 65px;
+                width: 64px;
+                height: 64px;
                 margin: 0 auto 14px;
                 display: flex;
                 align-items: center;
@@ -2689,14 +1942,7 @@ function ProfileStyles() {
                 color: var(--profile-muted);
             }
 
-            .connected-empty h3 {
-                margin: 0;
-                font-family: var(--profile-display);
-                font-size: 15px;
-                font-weight: 600;
-                color: var(--profile-ink-2);
-            }
-
+            .connected-empty h3 { margin: 0; font-size: 15px; font-weight: 700; color: var(--profile-ink); }
             .connected-empty p {
                 max-width: 400px;
                 margin: 6px auto 18px;
@@ -2712,7 +1958,7 @@ function ProfileStyles() {
                 border-radius: 14px !important;
                 overflow: hidden;
                 color: var(--profile-ink);
-                box-shadow: 0 20px 60px rgba(23, 32, 51, .15);
+                box-shadow: 0 20px 60px rgba(10, 10, 10, .12);
             }
 
             .modern-modal .modal-header {
@@ -2720,26 +1966,13 @@ function ProfileStyles() {
                 border-bottom: 1px solid var(--profile-border) !important;
             }
 
-            .modern-modal .modal-body {
-                padding: 20px 24px !important;
-            }
-
+            .modern-modal .modal-body { padding: 20px 24px !important; }
             .modern-modal .modal-footer {
                 padding: 14px 24px !important;
                 border-top: 1px solid var(--profile-border) !important;
             }
 
-            .modal-kicker {
-                margin-bottom: 3px;
-            }
-
-            .modal-title {
-                margin: 0;
-                color: var(--profile-ink);
-                font-family: var(--profile-display);
-                font-size: 17px;
-                font-weight: 600;
-            }
+            .modal-title { margin: 0; color: var(--profile-ink); font-size: 16.5px; font-weight: 700; }
 
             .modal-user-preview,
             .reset-profile {
@@ -2761,20 +1994,15 @@ function ProfileStyles() {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 9px;
-                background: var(--profile-blue);
+                border-radius: 50%;
+                background: var(--profile-green);
                 color: #fff;
-                font-family: var(--profile-display);
                 font-size: 12px;
-                font-weight: 600;
+                font-weight: 700;
             }
 
             .modal-user-preview strong,
-            .reset-profile strong {
-                display: block;
-                color: var(--profile-ink);
-                font-size: 12px;
-            }
+            .reset-profile strong { display: block; color: var(--profile-ink); font-size: 12px; }
 
             .modal-user-preview span,
             .reset-profile span {
@@ -2785,22 +2013,14 @@ function ProfileStyles() {
                 word-break: break-word;
             }
 
-            .form-grid {
-                display: grid;
-                gap: 15px;
-            }
-
-            .form-grid-two {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
+            .form-grid { display: grid; gap: 15px; }
+            .form-grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
             .form-field label {
                 display: block;
                 margin-bottom: 5px;
                 color: var(--profile-ink-2);
-                font-size: 11px;
+                font-size: 11.5px;
                 font-weight: 600;
             }
 
@@ -2815,9 +2035,9 @@ function ProfileStyles() {
             }
 
             .modern-input:focus {
-                border-color: var(--profile-blue) !important;
+                border-color: var(--profile-green) !important;
                 background: #fff !important;
-                box-shadow: 0 0 0 3px rgba(93, 137, 200, .11) !important;
+                box-shadow: 0 0 0 3px var(--profile-green-soft) !important;
             }
 
             .form-error {
@@ -2834,8 +2054,9 @@ function ProfileStyles() {
                 margin-top: 17px;
                 padding: 10px;
                 border-radius: 8px;
-                background: var(--profile-blue-soft);
-                color: var(--profile-blue-dark);
+                background: var(--profile-surface-soft);
+                border: 1px solid var(--profile-border);
+                color: var(--profile-ink-2);
                 font-size: 10.5px;
                 line-height: 1.45;
             }
@@ -2844,7 +2065,7 @@ function ProfileStyles() {
                 display: flex;
                 gap: 10px;
                 padding: 13px;
-                background: var(--profile-blue-soft);
+                background: var(--profile-green-soft);
                 border-radius: 9px;
             }
 
@@ -2856,16 +2077,11 @@ function ProfileStyles() {
                 align-items: center;
                 justify-content: center;
                 border-radius: 8px;
-                background: var(--profile-blue);
+                background: var(--profile-green);
                 color: #fff;
             }
 
-            .reset-message strong {
-                display: block;
-                color: var(--profile-ink);
-                font-size: 11.5px;
-            }
-
+            .reset-message strong { display: block; color: var(--profile-ink); font-size: 11.5px; }
             .reset-message p {
                 margin: 4px 0 0;
                 color: var(--profile-ink-2);
@@ -2879,7 +2095,7 @@ function ProfileStyles() {
                 padding: 13px;
                 border-radius: 9px;
                 background: var(--profile-danger-soft);
-                border: 1px solid #f5d8d8;
+                border: 1px solid #f2cfcf;
             }
 
             .delete-warning-icon {
@@ -2894,12 +2110,7 @@ function ProfileStyles() {
                 color: var(--profile-danger);
             }
 
-            .delete-warning strong {
-                display: block;
-                color: var(--profile-ink);
-                font-size: 12px;
-            }
-
+            .delete-warning strong { display: block; color: var(--profile-ink); font-size: 12px; }
             .delete-warning p {
                 margin: 4px 0 0;
                 color: var(--profile-ink-2);
@@ -2929,19 +2140,17 @@ function ProfileStyles() {
                 color: var(--profile-ink-2);
             }
 
-            .cancel-button:hover {
-                background: #eef1f5;
-            }
+            .cancel-button:hover { background: #eef0f1; }
 
             .primary-button {
-                border: 1px solid var(--profile-blue);
-                background: var(--profile-blue);
+                border: 1px solid var(--profile-green);
+                background: var(--profile-green);
                 color: #fff;
             }
 
             .primary-button:hover {
-                background: var(--profile-blue-dark);
-                border-color: var(--profile-blue-dark);
+                background: var(--profile-green-dark);
+                border-color: var(--profile-green-dark);
             }
 
             .danger-button {
@@ -2950,155 +2159,64 @@ function ProfileStyles() {
                 color: #fff;
             }
 
-            .danger-button:hover {
-                background: #bd4444;
-                border-color: #bd4444;
-            }
+            .danger-button:hover { background: #a82a2a; border-color: #a82a2a; }
 
             .primary-button:disabled,
-            .danger-button:disabled {
-                opacity: .6;
-                cursor: not-allowed;
-            }
+            .danger-button:disabled { opacity: .6; cursor: not-allowed; }
 
             @media (max-width: 991px) {
-                .user-profile-page {
-                    padding: 20px 18px 40px;
-                }
-
-                .profile-grid {
-                    grid-template-columns: 1fr;
-                }
-
+                .user-profile-page { padding: 22px 20px 44px; }
+                .profile-grid { grid-template-columns: 1fr; }
                 .profile-sidebar {
                     display: grid;
                     grid-template-columns: minmax(0, 1fr) 250px;
                     gap: 14px;
                 }
-
-                .quick-card {
-                    margin-top: 0;
-                    align-self: start;
-                }
+                .quick-card { margin-top: 0; align-self: start; }
             }
 
             @media (max-width: 767px) {
-                .user-profile-page {
-                    padding: 17px 12px 35px;
-                }
-
-                .page-heading {
-                    align-items: flex-start;
-                    flex-direction: column;
-                }
-
-                .page-heading h1 {
-                    font-size: 23px;
-                }
-
-                .profile-sidebar {
-                    display: block;
-                }
-
-                .quick-card {
-                    margin-top: 12px;
-                }
-
-                .content-header {
-                    padding: 20px 17px 17px;
-                }
-
+                .user-profile-page { padding: 18px 14px 38px; }
+                .page-heading { align-items: flex-start; flex-direction: column; }
+                .page-heading h1 { font-size: 22px; }
+                .profile-sidebar { display: block; }
+                .quick-card { margin-top: 12px; }
+                .content-header { padding: 20px 17px 17px; }
                 .data-row {
                     align-items: flex-start;
                     flex-direction: column;
                     gap: 7px;
                     padding: 14px 17px;
                 }
-
-                .data-label {
-                    width: auto;
-                }
-
-                .data-value {
-                    padding-left: 36px;
-                }
-
-                .profile-summary {
-                    margin: 18px 17px;
-                }
-
+                .data-label { width: auto; }
+                .data-value { padding-left: 35px; }
+                .profile-summary { margin: 18px 17px; }
                 .activity-item,
                 .security-item,
-                .notification-row {
-                    padding: 15px 17px;
-                }
-
-                .activity-result {
-                    display: none;
-                }
-
-                .activity-meta {
-                    line-height: 1.7;
-                }
-
+                .notification-row { padding: 15px 17px; }
+                .activity-result { display: none; }
+                .activity-meta { line-height: 1.7; }
                 .pagination-container {
                     padding: 14px 17px;
                     flex-direction: column;
                     align-items: flex-start;
                 }
-
-                .pagination-links {
-                    width: 100%;
-                    overflow-x: auto;
-                    padding-bottom: 2px;
-                }
-
-                .security-item {
-                    align-items: flex-start;
-                    flex-wrap: wrap;
-                }
-
-                .security-item-content {
-                    width: calc(100% - 55px);
-                }
-
-                .security-item-action {
-                    margin-left: 52px;
-                }
-
+                .pagination-links { width: 100%; overflow-x: auto; padding-bottom: 2px; }
+                .security-item { align-items: flex-start; flex-wrap: wrap; }
+                .security-item-content { width: calc(100% - 55px); }
+                .security-item-action { margin-left: 51px; }
                 .security-note,
-                .info-banner {
-                    margin-left: 17px;
-                    margin-right: 17px;
-                }
-
-                .form-grid-two {
-                    grid-template-columns: 1fr;
-                }
-
-                .modal-dialog {
-                    margin: 10px;
-                }
+                .info-banner { margin-left: 17px; margin-right: 17px; }
+                .form-grid-two { grid-template-columns: 1fr; }
+                .modal-dialog { margin: 10px; }
             }
 
             @media (max-width: 480px) {
-                .profile-avatar-section {
-                    padding-top: 48px;
-                }
-
-                .content-header {
-                    flex-direction: column;
-                }
-
+                .content-header { flex-direction: column; }
                 .outline-button,
                 .event-count,
-                .security-status {
-                    align-self: flex-start;
-                }
-
-                .profile-nav-item {
-                    padding: 10px;
-                }
+                .security-status { align-self: flex-start; }
+                .profile-nav-item { padding: 10px; }
             }
         `}</style>
     );

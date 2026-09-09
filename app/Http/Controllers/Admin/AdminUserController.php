@@ -15,16 +15,21 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $users = User::query()
+            ->whereIn('role', ['admin', 'user'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
         $stats = [
-            'total' => User::count(),
+            'total' => User::whereIn('role', ['admin', 'user'])->count(),
 
-            'active' => User::where('active', true)->count(),
+            'active' => User::where('role', 'user')
+                ->where('active', true)
+                ->count(),
 
-            'inactive' => User::where('active', false)->count(),
+            'inactive' => User::where('role', 'user')
+                ->where('active', false)
+                ->count(),
 
             'admins' => User::where('role', 'admin')->count(),
         ];
