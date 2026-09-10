@@ -1,540 +1,1642 @@
 // resources/js/Pages/Talent/Connections/Index.jsx
-import { Head, Link, router, useForm } from "@inertiajs/react";
-import { useState } from "react";
+
+import { Head, Link, router } from "@inertiajs/react";
 import AppLayout from "@/Layouts/AppLayout";
 
 const STATUS_TABS = [
-    { key: "all", label: "All" },
-    { key: "pending", label: "Pending" },
-    { key: "accepted", label: "Accepted" },
-    { key: "declined", label: "Declined" },
+    {
+        key: "all",
+        label: "All",
+        icon: "fa-layer-group",
+    },
+    {
+        key: "pending",
+        label: "Pending",
+        icon: "fa-clock",
+    },
+    {
+        key: "accepted",
+        label: "Accepted",
+        icon: "fa-check-circle",
+    },
+    {
+        key: "declined",
+        label: "Declined",
+        icon: "fa-times-circle",
+    },
 ];
 
-export default function Index({ connections, counts, filters, flash }) {
-    const [activeConnection, setActiveConnection] = useState(null);
+const PAID_STATUSES = [
+    "paid",
+    "completed",
+    "success",
+    "successful",
+];
 
+export default function Index({
+    connections,
+    counts = {},
+    filters = {},
+    earnings = {},
+    flash,
+}) {
     function switchTab(status) {
         router.get(
             route("talent.connections.index"),
-            status === "all" ? {} : { status },
-            { preserveState: true, preserveScroll: true, replace: true },
+            status === "all"
+                ? {}
+                : {
+                      status,
+                  },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            },
         );
     }
 
+    const activeStatus = filters.status ?? "all";
+
     return (
         <AppLayout>
-            <Head title="Connection Requests" />
+            <Head title="Connections & Earnings" />
 
             <div data-h-scope="talent-connections">
                 <style>{`
                     [data-h-scope="talent-connections"] {
-                        --h-accent: #48d597;
-                        --h-accent-dark: #2fb87c;
-                        --h-ink: #060f11;
-                        --h-white: #F5f5f7;
-                        --h-bg: #f4f9f7;
-                        --h-warn: #f5a623;
-                        --h-danger: #e5484d;
-                        background-color: var(--h-bg);
+                        --fc-green: #48d597;
+                        --fc-green-dark: #229365;
+                        --fc-green-soft: #eafaf3;
+                        --fc-black: #060f11;
+                        --fc-black-soft: #182326;
+                        --fc-white: #ffffff;
+                        --fc-bg: #f6f9f8;
+                        --fc-muted: #718083;
+                        --fc-border: #e4ebe8;
+                        --fc-warning: #f5a623;
+                        --fc-danger: #df4d52;
+
                         min-height: 100%;
+                        background:
+                            linear-gradient(
+                                180deg,
+                                #f8fbfa 0%,
+                                #f4f8f6 100%
+                            );
+                        color: var(--fc-black);
                     }
-                    [data-h-scope="talent-connections"] .h-card {
-                        background: var(--h-white);
-                        border: 1px solid rgba(6, 15, 17, 0.06);
+
+                    [data-h-scope="talent-connections"] .fc-page {
+                        max-width: 1480px;
+                        margin: 0 auto;
                     }
-                    [data-h-scope="talent-connections"] .h-stat {
-                        background: var(--h-white);
-                        border: 1px solid rgba(6, 15, 17, 0.06);
-                        transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+                    /* ==========================================
+                       PAGE HEADER
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-header {
+                        position: relative;
+                        overflow: hidden;
+                        background: var(--fc-black);
+                        color: white;
+                        border-radius: 24px;
+                        padding: 30px;
+                        box-shadow:
+                            0 18px 45px rgba(6, 15, 17, .12);
                     }
-                    [data-h-scope="talent-connections"] .h-stat:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 8px 20px rgba(6,15,17,0.06);
+
+                    [data-h-scope="talent-connections"] .fc-header::after {
+                        content: "";
+                        position: absolute;
+                        width: 300px;
+                        height: 300px;
+                        right: -100px;
+                        top: -150px;
+                        border-radius: 50%;
+                        background: rgba(72, 213, 151, .14);
+                        pointer-events: none;
                     }
-                    [data-h-scope="talent-connections"] .h-stat-icon {
-                        width: 44px;
-                        height: 44px;
+
+                    [data-h-scope="talent-connections"] .fc-header::before {
+                        content: "";
+                        position: absolute;
+                        width: 180px;
+                        height: 180px;
+                        right: 180px;
+                        bottom: -130px;
+                        border-radius: 50%;
+                        background: rgba(72, 213, 151, .07);
+                        pointer-events: none;
                     }
-                    [data-h-scope="talent-connections"] .h-tab {
-                        border: none;
-                        background: transparent;
-                        color: rgba(6,15,17,0.55);
-                        font-weight: 600;
-                        padding: 8px 16px;
-                        border-radius: 999px;
-                        transition: all 0.15s ease;
-                        white-space: nowrap;
+
+                    [data-h-scope="talent-connections"] .fc-header-content {
+                        position: relative;
+                        z-index: 2;
                     }
-                    [data-h-scope="talent-connections"] .h-tab.active {
-                        background: var(--h-ink);
-                        color: var(--h-white);
-                    }
-                    [data-h-scope="talent-connections"] .h-tab:not(.active):hover {
-                        background: rgba(6,15,17,0.05);
-                    }
-                    [data-h-scope="talent-connections"] .h-row {
-                        border: 1px solid rgba(6,15,17,0.06);
-                        transition: box-shadow 0.15s ease, border-color 0.15s ease;
-                    }
-                    [data-h-scope="talent-connections"] .h-row:hover {
-                        border-color: rgba(72, 213, 151, 0.4);
-                        box-shadow: 0 4px 14px rgba(6,15,17,0.05);
-                    }
-                    [data-h-scope="talent-connections"] .h-avatar {
-                        width: 44px;
-                        height: 44px;
-                        background: rgba(72, 213, 151, 0.14);
-                        color: var(--h-accent-dark);
-                        font-weight: 700;
-                        flex-shrink: 0;
-                    }
-                    [data-h-scope="talent-connections"] .h-badge-pending {
-                        background: rgba(245, 166, 35, 0.14);
-                        color: #b5750f;
-                    }
-                    [data-h-scope="talent-connections"] .h-badge-accepted {
-                        background: rgba(72, 213, 151, 0.14);
-                        color: var(--h-accent-dark);
-                    }
-                    [data-h-scope="talent-connections"] .h-badge-declined {
-                        background: rgba(229, 72, 77, 0.12);
-                        color: var(--h-danger);
-                    }
-                    [data-h-scope="talent-connections"] .h-btn-accent {
-                        background: var(--h-accent);
-                        color: var(--h-ink);
-                        border: none;
-                        font-weight: 600;
-                        transition: background 0.15s ease;
-                    }
-                    [data-h-scope="talent-connections"] .h-btn-accent:hover {
-                        background: var(--h-accent-dark);
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-connections"] .h-btn-ghost {
-                        background: transparent;
-                        color: var(--h-ink);
-                        border: 1px solid rgba(6,15,17,0.15);
-                    }
-                    [data-h-scope="talent-connections"] .h-btn-ghost:hover {
-                        background: rgba(6,15,17,0.04);
-                    }
-                    [data-h-scope="talent-connections"] .h-alert-success {
-                        background: rgba(72, 213, 151, 0.15);
-                        border: 1px solid rgba(72, 213, 151, 0.4);
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-connections"] .form-control:focus,
-                    [data-h-scope="talent-connections"] .form-select:focus {
-                        border-color: var(--h-accent);
-                        box-shadow: 0 0 0 0.2rem rgba(72, 213, 151, 0.25);
-                    }
-                    [data-h-scope="talent-connections"] .h-pagination a,
-                    [data-h-scope="talent-connections"] .h-pagination span {
+
+                    [data-h-scope="talent-connections"] .fc-header-icon {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 14px;
                         display: inline-flex;
                         align-items: center;
                         justify-content: center;
-                        min-width: 34px;
-                        height: 34px;
-                        padding: 0 8px;
-                        border-radius: 8px;
-                        color: var(--h-ink);
+                        background: rgba(72, 213, 151, .16);
+                        color: var(--fc-green);
+                        font-size: 19px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-eyebrow {
+                        color: var(--fc-green);
+                        font-size: 11px;
+                        font-weight: 800;
+                        letter-spacing: .12em;
+                        text-transform: uppercase;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-header h1 {
+                        font-size: clamp(25px, 3vw, 34px);
+                        line-height: 1.15;
+                        font-weight: 800;
+                        margin: 0;
+                        letter-spacing: -.025em;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-header p {
+                        color: rgba(255,255,255,.68);
+                        max-width: 680px;
+                        margin: 0;
+                        line-height: 1.6;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-fee-box {
+                        position: relative;
+                        z-index: 2;
+                        min-width: 190px;
+                        padding: 18px 20px;
+                        border: 1px solid rgba(255,255,255,.1);
+                        background: rgba(255,255,255,.055);
+                        border-radius: 16px;
+                        backdrop-filter: blur(8px);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-fee-box .fee {
+                        color: var(--fc-green);
+                        font-size: 26px;
+                        font-weight: 800;
+                    }
+
+                    /* ==========================================
+                       FLASH
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-alert {
+                        border: 1px solid rgba(72,213,151,.3);
+                        background: #ecfaf4;
+                        color: #1c7955;
+                    }
+
+                    /* ==========================================
+                       FINANCIAL CARDS
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-stat {
+                        height: 100%;
+                        background: white;
+                        border: 1px solid var(--fc-border);
+                        border-radius: 20px;
+                        padding: 22px;
+                        transition:
+                            transform .2s ease,
+                            box-shadow .2s ease,
+                            border-color .2s ease;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-stat:hover {
+                        transform: translateY(-3px);
+                        border-color: rgba(72,213,151,.45);
+                        box-shadow:
+                            0 15px 35px rgba(6,15,17,.07);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-stat-icon {
+                        width: 46px;
+                        height: 46px;
+                        border-radius: 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-stat-label {
+                        color: var(--fc-muted);
+                        font-size: 13px;
+                        font-weight: 600;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-stat-value {
+                        font-size: clamp(19px, 2vw, 25px);
+                        line-height: 1.2;
+                        font-weight: 800;
+                        letter-spacing: -.02em;
+                        color: var(--fc-black);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-stat-description {
+                        color: var(--fc-muted);
+                        font-size: 12px;
+                    }
+
+                    /* ==========================================
+                       SPLIT CARD
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-split-card {
+                        background: white;
+                        border: 1px solid var(--fc-border);
+                        border-radius: 20px;
+                        padding: 20px 22px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-split-track {
+                        height: 9px;
+                        background: #edf2f0;
+                        border-radius: 999px;
+                        overflow: hidden;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-split-talent {
+                        width: 95%;
+                        height: 100%;
+                        background: var(--fc-green);
+                        border-radius: 999px 0 0 999px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-split-platform {
+                        width: 5%;
+                        height: 100%;
+                        background: var(--fc-black);
+                        border-radius: 0 999px 999px 0;
+                    }
+
+                    /* ==========================================
+                       MAIN CARD
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-main-card {
+                        background: white;
+                        border: 1px solid var(--fc-border);
+                        border-radius: 24px;
+                        box-shadow:
+                            0 8px 30px rgba(6,15,17,.035);
+                        overflow: hidden;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-main-header {
+                        padding: 24px 26px 20px;
+                        border-bottom: 1px solid var(--fc-border);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-main-title {
+                        font-size: 18px;
+                        font-weight: 800;
+                        margin-bottom: 4px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-main-subtitle {
+                        color: var(--fc-muted);
+                        font-size: 13px;
+                    }
+
+                    /* ==========================================
+                       TABS
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-tabs {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        background: #f1f5f3;
+                        padding: 5px;
+                        border-radius: 13px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-tab {
+                        border: 0;
+                        background: transparent;
+                        color: #6f7c7e;
+                        font-size: 13px;
+                        font-weight: 700;
+                        padding: 9px 13px;
+                        border-radius: 9px;
+                        white-space: nowrap;
+                        transition: all .15s ease;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-tab:hover {
+                        color: var(--fc-black);
+                        background: rgba(255,255,255,.7);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-tab.active {
+                        background: var(--fc-black);
+                        color: white;
+                        box-shadow: 0 3px 9px rgba(6,15,17,.13);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-tab-count {
+                        margin-left: 5px;
+                        opacity: .7;
+                        font-size: 11px;
+                    }
+
+                    /* ==========================================
+                       COLUMN HEADER
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-columns {
+                        display: grid;
+                        grid-template-columns:
+                            minmax(260px, 1.5fr)
+                            140px
+                            200px
+                            160px
+                            120px;
+                        gap: 16px;
+                        padding: 16px 22px 9px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-column-label {
+                        color: #899496;
+                        font-size: 10px;
+                        font-weight: 800;
+                        letter-spacing: .08em;
+                        text-transform: uppercase;
+                    }
+
+                    /* ==========================================
+                       CONNECTION ROW
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-row {
+                        margin: 0 22px;
+                        padding: 17px;
+                        border: 1px solid var(--fc-border);
+                        border-radius: 18px;
+                        background: white;
+                        transition:
+                            border-color .18s ease,
+                            box-shadow .18s ease,
+                            transform .18s ease;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-row:hover {
+                        border-color: rgba(72,213,151,.5);
+                        box-shadow:
+                            0 10px 26px rgba(6,15,17,.055);
+                        transform: translateY(-1px);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-avatar {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 15px;
+                        background: var(--fc-green-soft);
+                        color: var(--fc-green-dark);
                         font-size: 14px;
+                        font-weight: 900;
+                        flex-shrink: 0;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-person-name {
+                        font-size: 14px;
+                        font-weight: 800;
+                        color: var(--fc-black);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-person-email {
+                        color: var(--fc-muted);
+                        font-size: 12px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-date {
+                        color: #899496;
+                        font-size: 11px;
+                    }
+
+                    /* ==========================================
+                       PAYMENT
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-payment {
+                        background: #f7faf9;
+                        border: 1px solid #e9efec;
+                        border-radius: 13px;
+                        padding: 11px 13px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-payment-amount {
+                        font-size: 14px;
+                        font-weight: 800;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-reference {
+                        max-width: 165px;
+                        color: #8a9698;
+                        font-size: 10px;
+                    }
+
+                    /* ==========================================
+                       EARNINGS
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-earning {
+                        color: #208d62;
+                        font-size: 14px;
+                        font-weight: 800;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-platform-fee {
+                        color: #9a6b13;
+                        font-size: 11px;
+                    }
+
+                    /* ==========================================
+                       BADGES
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        width: fit-content;
+                        padding: 6px 9px;
+                        border-radius: 999px;
+                        font-size: 10px;
+                        font-weight: 800;
+                        white-space: nowrap;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-badge-pending {
+                        background: #fff5df;
+                        color: #a66d08;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-badge-accepted {
+                        background: #e8f9f1;
+                        color: #208d62;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-badge-declined {
+                        background: #fcebed;
+                        color: #ce4147;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-badge-paid {
+                        background: #e8f9f1;
+                        color: #208d62;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-badge-unpaid {
+                        background: #fff5df;
+                        color: #a66d08;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-badge-neutral {
+                        background: #eef2f1;
+                        color: #647173;
+                    }
+
+                    /* ==========================================
+                       BUTTON
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-btn {
+                        border-radius: 10px;
+                        font-size: 12px;
+                        font-weight: 800;
+                        padding: 9px 13px;
+                        border: 0;
+                        transition: all .15s ease;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-btn-dark {
+                        color: white;
+                        background: var(--fc-black);
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-btn-dark:hover {
+                        color: white;
+                        background: #1b292c;
+                        transform: translateY(-1px);
+                    }
+
+                    /* ==========================================
+                       EMPTY STATE
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-empty {
+                        margin: 22px;
+                        padding: 65px 20px;
+                        border: 1px dashed #d9e2de;
+                        border-radius: 18px;
+                        background: #fbfdfc;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-empty-icon {
+                        width: 68px;
+                        height: 68px;
+                        border-radius: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 auto 18px;
+                        background: var(--fc-green-soft);
+                        color: var(--fc-green-dark);
+                        font-size: 25px;
+                    }
+
+                    /* ==========================================
+                       PAGINATION
+                    ========================================== */
+
+                    [data-h-scope="talent-connections"] .fc-pagination {
+                        padding: 20px 22px 24px;
+                    }
+
+                    [data-h-scope="talent-connections"] .fc-pagination a,
+                    [data-h-scope="talent-connections"] .fc-pagination span {
+                        min-width: 36px;
+                        height: 36px;
+                        padding: 0 10px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 10px;
+                        color: var(--fc-black);
+                        font-size: 12px;
+                        font-weight: 700;
                         text-decoration: none;
                     }
-                    [data-h-scope="talent-connections"] .h-pagination a:hover {
-                        background: rgba(6,15,17,0.05);
+
+                    [data-h-scope="talent-connections"] .fc-pagination a:hover {
+                        background: #edf2f0;
                     }
-                    [data-h-scope="talent-connections"] .h-pagination .active span {
-                        background: var(--h-ink);
-                        color: var(--h-white);
+
+                    [data-h-scope="talent-connections"] .fc-pagination .active span {
+                        color: white;
+                        background: var(--fc-black);
                     }
-                    [data-h-scope="talent-connections"] .h-pagination .disabled span {
-                        opacity: 0.35;
+
+                    /* ==========================================
+                       MOBILE
+                    ========================================== */
+
+                    @media (max-width: 1199px) {
+                        [data-h-scope="talent-connections"] .fc-desktop {
+                            display: none !important;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-row {
+                            margin: 0 14px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-empty {
+                            margin: 14px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-columns {
+                            display: none;
+                        }
+                    }
+
+                    @media (min-width: 1200px) {
+                        [data-h-scope="talent-connections"] .fc-mobile {
+                            display: none !important;
+                        }
+                    }
+
+                    @media (max-width: 767px) {
+                        [data-h-scope="talent-connections"] .fc-header {
+                            padding: 22px;
+                            border-radius: 20px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-fee-box {
+                            width: 100%;
+                            min-width: 0;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-main-header {
+                            padding: 20px 16px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-tabs {
+                            width: 100%;
+                            overflow-x: auto;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-tab {
+                            flex: 1;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-row {
+                            padding: 15px;
+                            border-radius: 16px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-avatar {
+                            width: 44px;
+                            height: 44px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-stat {
+                            padding: 17px;
+                        }
+
+                        [data-h-scope="talent-connections"] .fc-stat-icon {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 12px;
+                        }
                     }
                 `}</style>
 
-                <div className="container-fluid px-4 py-4">
-                    {flash?.success && (
-                        <div className="alert h-alert-success rounded-3 border-0 mb-4">
-                            <i className="fas fa-circle-check me-2"></i>
-                            {flash.success}
-                        </div>
-                    )}
+                <div className="container-fluid px-3 px-md-4 py-4">
+                    <div className="fc-page">
 
-                    <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-                        <div>
-                            <h4 className="fw-bold mb-1">Connection Requests</h4>
-                            <p className="text-secondary mb-0 small">
-                                People who want to connect with you
-                            </p>
-                        </div>
-                    </div>
+                        {/* ==================================================
+                            HEADER
+                        ================================================== */}
 
-                    {/* Stat cards */}
-                    <div className="row g-3 mb-4">
-                        <StatCard
-                            icon="fa-users"
-                            label="Total Requests"
-                            value={counts.all}
-                            color="#48d597"
-                        />
-                        <StatCard
-                            icon="fa-hourglass-half"
-                            label="Pending"
-                            value={counts.pending}
-                            color="#f5a623"
-                        />
-                        <StatCard
-                            icon="fa-circle-check"
-                            label="Accepted"
-                            value={counts.accepted}
-                            color="#48d597"
-                        />
-                        <StatCard
-                            icon="fa-circle-xmark"
-                            label="Declined"
-                            value={counts.declined}
-                            color="#e5484d"
-                        />
-                    </div>
+                        <div className="fc-header mb-4">
+                            <div className="fc-header-content">
+                                <div className="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-4">
 
-                    <div className="card h-card border-0 shadow-sm rounded-4">
-                        <div className="card-body p-4">
-                            {/* Filter tabs */}
-                            <div className="d-flex gap-2 flex-wrap mb-4">
-                                {STATUS_TABS.map((tab) => (
-                                    <button
-                                        key={tab.key}
-                                        type="button"
-                                        className={`h-tab ${filters.status === tab.key ? "active" : ""}`}
-                                        onClick={() => switchTab(tab.key)}
-                                    >
-                                        {tab.label}
-                                        {tab.key !== "all" && (
-                                            <span className="ms-2 opacity-75">
-                                                {counts[tab.key] ?? 0}
+                                    <div>
+                                        <div className="d-flex align-items-center gap-3 mb-3">
+                                            <div className="fc-header-icon">
+                                                <i className="fas fa-handshake" />
+                                            </div>
+
+                                            <span className="fc-eyebrow">
+                                                Talent workspace
                                             </span>
-                                        )}
-                                    </button>
-                                ))}
+                                        </div>
+
+                                        <h1 className="mb-2">
+                                            Connections & Earnings
+                                        </h1>
+
+                                        <p>
+                                            Manage people who want to connect
+                                            with you and monitor the income
+                                            generated through Future Connect.
+                                        </p>
+                                    </div>
+
+                                    <div className="fc-fee-box">
+                                        <div className="small text-white-50 mb-1">
+                                            Platform fee
+                                        </div>
+
+                                        <div className="fee">
+                                            5%
+                                        </div>
+
+                                        <div className="small text-white-50 mt-1">
+                                            You keep 95% of every paid
+                                            connection.
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* ==================================================
+                            FLASH MESSAGE
+                        ================================================== */}
+
+                        {flash?.success && (
+                            <div className="fc-alert rounded-4 p-3 mb-4">
+                                <i className="fas fa-circle-check me-2" />
+                                <strong>{flash.success}</strong>
+                            </div>
+                        )}
+
+                        {/* ==================================================
+                            FINANCIAL SUMMARY
+                        ================================================== */}
+
+                        <div className="row g-3 mb-3">
+
+                            <MoneyStat
+                                icon="fa-wallet"
+                                label="Total paid"
+                                value={money(
+                                    earnings.total_amount,
+                                    earnings.currency,
+                                )}
+                                description="Total value of paid connections"
+                                iconStyle="green"
+                            />
+
+                            <MoneyStat
+                                icon="fa-arrow-trend-up"
+                                label="Your earnings"
+                                value={money(
+                                    earnings.talent_earnings,
+                                    earnings.currency,
+                                )}
+                                description="95% paid directly to your share"
+                                iconStyle="green"
+                            />
+
+                            <MoneyStat
+                                icon="fa-building"
+                                label="Platform earnings"
+                                value={money(
+                                    earnings.future_connect_earnings,
+                                    earnings.currency,
+                                )}
+                                description="Future Connect's 5% share"
+                                iconStyle="black"
+                            />
+
+                            <MoneyStat
+                                icon="fa-circle-check"
+                                label="Paid connections"
+                                value={
+                                    earnings.paid_connections ?? 0
+                                }
+                                description="Successfully completed payments"
+                                iconStyle="orange"
+                            />
+
+                        </div>
+
+                        {/* ==================================================
+                            REVENUE SPLIT
+                        ================================================== */}
+
+                        <div className="fc-split-card mb-4">
+
+                            <div className="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
+
+                                <div>
+                                    <div className="fw-bold">
+                                        Connection revenue split
+                                    </div>
+
+                                    <div className="small text-secondary">
+                                        Every successful payment is
+                                        automatically divided between you and
+                                        Future Connect.
+                                    </div>
+                                </div>
+
+                                <div className="d-flex align-items-center gap-3">
+
+                                    <div className="d-flex align-items-center gap-2">
+                                        <span
+                                            style={{
+                                                width: 9,
+                                                height: 9,
+                                                borderRadius: "50%",
+                                                background: "#48d597",
+                                            }}
+                                        />
+
+                                        <span className="small fw-bold">
+                                            You 95%
+                                        </span>
+                                    </div>
+
+                                    <div className="d-flex align-items-center gap-2">
+                                        <span
+                                            style={{
+                                                width: 9,
+                                                height: 9,
+                                                borderRadius: "50%",
+                                                background: "#060f11",
+                                            }}
+                                        />
+
+                                        <span className="small fw-bold">
+                                            FC 5%
+                                        </span>
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            {connections.data.length === 0 ? (
-                                <EmptyState />
-                            ) : (
-                                <div className="d-flex flex-column gap-3">
-                                    {connections.data.map((connection) => (
-                                        <ConnectionRow
-                                            key={connection.id}
-                                            connection={connection}
-                                            onRespond={() => setActiveConnection(connection)}
-                                        />
-                                    ))}
+                            <div className="fc-split-track d-flex">
+                                <div className="fc-split-talent" />
+                                <div className="fc-split-platform" />
+                            </div>
+
+                        </div>
+
+                        {/* ==================================================
+                            MAIN CONNECTIONS CARD
+                        ================================================== */}
+
+                        <div className="fc-main-card">
+
+                            <div className="fc-main-header">
+
+                                <div className="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
+
+                                    <div>
+                                        <div className="fc-main-title">
+                                            Connection requests
+                                        </div>
+
+                                        <div className="fc-main-subtitle">
+                                            Review requests, payment activity
+                                            and your earnings.
+                                        </div>
+                                    </div>
+
+                                    <div className="fc-tabs">
+
+                                        {STATUS_TABS.map((tab) => (
+                                            <button
+                                                key={tab.key}
+                                                type="button"
+                                                className={`fc-tab ${
+                                                    activeStatus ===
+                                                    tab.key
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    switchTab(
+                                                        tab.key,
+                                                    )
+                                                }
+                                            >
+                                                <i
+                                                    className={`fas ${tab.icon} me-1`}
+                                                />
+
+                                                {tab.label}
+
+                                                <span className="fc-tab-count">
+                                                    {tab.key === "all"
+                                                        ? counts.all ?? 0
+                                                        : counts[
+                                                              tab.key
+                                                          ] ?? 0}
+                                                </span>
+                                            </button>
+                                        ))}
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {/* Desktop column headings */}
+
+                            {connections?.data?.length > 0 && (
+                                <div className="fc-columns fc-desktop">
+
+                                    <div className="fc-column-label">
+                                        Connection
+                                    </div>
+
+                                    <div className="fc-column-label">
+                                        Request
+                                    </div>
+
+                                    <div className="fc-column-label">
+                                        Payment
+                                    </div>
+
+                                    <div className="fc-column-label">
+                                        Earnings
+                                    </div>
+
+                                    <div />
                                 </div>
                             )}
 
-                            {connections.links && connections.data.length > 0 && (
-                                <Pagination links={connections.links} />
+                            {/* ==================================================
+                                LIST
+                            ================================================== */}
+
+                            {!connections?.data ||
+                            connections.data.length === 0 ? (
+                                <EmptyState />
+                            ) : (
+                                <div className="d-flex flex-column gap-3 py-2">
+
+                                    {connections.data.map(
+                                        (connection) => (
+                                            <ConnectionRow
+                                                key={
+                                                    connection.id
+                                                }
+                                                connection={
+                                                    connection
+                                                }
+                                            />
+                                        ),
+                                    )}
+
+                                </div>
                             )}
+
+                            {/* ==================================================
+                                PAGINATION
+                            ================================================== */}
+
+                            {connections?.links &&
+                                connections?.data?.length > 0 && (
+                                    <Pagination
+                                        links={
+                                            connections.links
+                                        }
+                                    />
+                                )}
+
                         </div>
                     </div>
                 </div>
-
-                <RespondModal
-                    connection={activeConnection}
-                    onClose={() => setActiveConnection(null)}
-                />
             </div>
         </AppLayout>
     );
 }
 
-/* ---------- pieces ---------- */
+/* ============================================================
+   FINANCIAL STAT
+============================================================ */
 
-function StatCard({ icon, label, value, color }) {
+function MoneyStat({
+    icon,
+    label,
+    value,
+    description,
+    iconStyle = "green",
+}) {
+    const styles = {
+        green: {
+            background: "#eafaf3",
+            color: "#229365",
+        },
+
+        black: {
+            background: "#eef1f0",
+            color: "#060f11",
+        },
+
+        orange: {
+            background: "#fff5df",
+            color: "#a66d08",
+        },
+    };
+
     return (
-        <div className="col-6 col-lg-3">
-            <div className="h-stat rounded-4 p-3 d-flex align-items-center gap-3">
+        <div className="col-6 col-xl-3">
+
+            <div className="fc-stat">
+
+                <div className="d-flex align-items-center justify-content-between mb-4">
+
+                    <div
+                        className="fc-stat-icon"
+                        style={
+                            styles[iconStyle] ??
+                            styles.green
+                        }
+                    >
+                        <i className={`fas ${icon}`} />
+                    </div>
+
+                </div>
+
+                <div className="fc-stat-label mb-1">
+                    {label}
+                </div>
+
                 <div
-                    className="h-stat-icon rounded-3 d-flex align-items-center justify-content-center"
-                    style={{ background: `${color}22`, color }}
+                    className="fc-stat-value text-truncate"
+                    title={String(value)}
                 >
-                    <i className={`fas ${icon}`}></i>
+                    {value}
                 </div>
-                <div>
-                    <div className="fw-bold fs-4 lh-1">{value}</div>
-                    <div className="small text-secondary">{label}</div>
+
+                <div className="fc-stat-description mt-2">
+                    {description}
                 </div>
+
             </div>
+
         </div>
     );
 }
 
-function ConnectionRow({ connection, onRespond }) {
+/* ============================================================
+   CONNECTION ROW
+============================================================ */
+
+function ConnectionRow({ connection }) {
     const initials = (connection.name || "?")
-        .split(" ")
-        .map((p) => p[0])
+        .trim()
+        .split(/\s+/)
+        .map((part) => part[0])
         .slice(0, 2)
         .join("")
         .toUpperCase();
 
+    /*
+     * ==========================================================
+     * IMPORTANT PAYMENT RULE
+     * ==========================================================
+     *
+     * All financial information MUST come from:
+     *
+     * connection.payment
+     *
+     * which represents:
+     *
+     * connection_payments
+     *
+     * Do NOT use:
+     *
+     * connection.amount
+     * connection.currency
+     * connection.payment_status
+     *
+     */
+
+    const payment = connection.payment ?? null;
+
+    const amount = payment
+        ? Number(payment.amount || 0)
+        : 0;
+
+    const currency =
+        payment?.currency || "RWF";
+
+    const talentEarning =
+        amount * 0.95;
+
+    const futureConnectFee =
+        amount * 0.05;
+
+    const isPaid = payment
+        ? PAID_STATUSES.includes(
+              String(
+                  payment.status || "",
+              ).toLowerCase(),
+          )
+        : false;
+
     return (
-        <div className="h-row rounded-4 p-3 d-flex flex-wrap align-items-center gap-3">
-            <div className="h-avatar rounded-circle d-flex align-items-center justify-content-center">
-                {initials}
-            </div>
+        <div className="fc-row">
 
-            <div className="flex-grow-1" style={{ minWidth: 200 }}>
-                <div className="fw-semibold">{connection.name || "N/A"}</div>
-                <div className="small text-secondary">{connection.email || "—"}</div>
-                {connection.message && (
-                    <div className="small text-secondary mt-1" style={{ maxWidth: 480 }}>
-                        “{connection.message}”
+            {/* ==================================================
+                DESKTOP
+            ================================================== */}
+
+            <div
+                className="fc-desktop"
+                style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                        "minmax(260px,1.5fr) 140px 200px 160px 120px",
+                    gap: "16px",
+                    alignItems: "center",
+                }}
+            >
+
+                {/* Connection */}
+
+                <div className="d-flex align-items-center gap-3">
+
+                    <div className="fc-avatar d-flex align-items-center justify-content-center">
+                        {initials}
                     </div>
-                )}
+
+                    <div className="min-w-0">
+
+                        <div className="fc-person-name text-truncate">
+                            {connection.name ||
+                                "Unknown user"}
+                        </div>
+
+                        <div className="fc-person-email text-truncate">
+                            {connection.email ||
+                                "No email provided"}
+                        </div>
+
+                        <div className="fc-date mt-1">
+                            <i className="far fa-calendar me-1" />
+
+                            {connection.created_at_human ??
+                                connection.created_at ??
+                                "—"}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {/* Request status */}
+
+                <div>
+                    <div className="small text-secondary mb-1">
+                        Status
+                    </div>
+
+                    <StatusBadge
+                        status={
+                            connection.status
+                        }
+                    />
+                </div>
+
+                {/* Payment */}
+
+                <div className="fc-payment">
+
+                    {payment ? (
+                        <>
+                            <div className="d-flex align-items-center justify-content-between gap-2">
+
+                                <div className="min-w-0">
+
+                                    <div className="small text-secondary">
+                                        Paid amount
+                                    </div>
+
+                                    <div className="fc-payment-amount text-truncate">
+                                        {money(
+                                            amount,
+                                            currency,
+                                        )}
+                                    </div>
+
+                                </div>
+
+                                <PaymentBadge
+                                    status={
+                                        payment.status
+                                    }
+                                />
+
+                            </div>
+
+                            {payment.reference && (
+                                <div
+                                    className="fc-reference text-truncate mt-1"
+                                    title={
+                                        payment.reference
+                                    }
+                                >
+                                    Ref:{" "}
+                                    {
+                                        payment.reference
+                                    }
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="small text-secondary">
+                            <i className="fas fa-receipt me-1" />
+                            No payment record
+                        </div>
+                    )}
+
+                </div>
+
+                {/* Earnings */}
+
+                <div>
+
+                    <div className="small text-secondary">
+                        Your 95%
+                    </div>
+
+                    <div className="fc-earning">
+                        {payment
+                            ? money(
+                                  talentEarning,
+                                  currency,
+                              )
+                            : "—"}
+                    </div>
+
+                    {payment && (
+                        <div className="fc-platform-fee mt-1">
+                            FC 5%:{" "}
+                            {money(
+                                futureConnectFee,
+                                currency,
+                            )}
+                        </div>
+                    )}
+
+                </div>
+
+                {/* Action */}
+
+                <div className="text-end">
+
+                    <Link
+                        href={route(
+                            "talent.connections.show",
+                            connection.id,
+                        )}
+                        className="btn fc-btn fc-btn-dark"
+                    >
+                        Details
+                        <i className="fas fa-arrow-right ms-2" />
+                    </Link>
+
+                </div>
+
             </div>
 
-            <div className="text-secondary small" style={{ minWidth: 140 }}>
-                {connection.created_at_human ?? connection.created_at}
+            {/* ==================================================
+                MOBILE / TABLET
+            ================================================== */}
+
+            <div className="fc-mobile">
+
+                {/* User header */}
+
+                <div className="d-flex align-items-center gap-3">
+
+                    <div className="fc-avatar d-flex align-items-center justify-content-center">
+                        {initials}
+                    </div>
+
+                    <div className="min-w-0 flex-grow-1">
+
+                        <div className="fc-person-name text-truncate">
+                            {connection.name ||
+                                "Unknown user"}
+                        </div>
+
+                        <div className="fc-person-email text-truncate">
+                            {connection.email ||
+                                "No email provided"}
+                        </div>
+
+                        <div className="fc-date mt-1">
+                            <i className="far fa-calendar me-1" />
+
+                            {connection.created_at_human ??
+                                connection.created_at ??
+                                "—"}
+                        </div>
+
+                    </div>
+
+                    <StatusBadge
+                        status={
+                            connection.status
+                        }
+                    />
+
+                </div>
+
+                {/* Financial information */}
+
+                <div className="border-top mt-3 pt-3">
+
+                    <div className="row g-3">
+
+                        {/* Amount */}
+
+                        <div className="col-6">
+
+                            <div className="small text-secondary mb-1">
+                                Paid amount
+                            </div>
+
+                            <div className="fw-bold">
+                                {payment
+                                    ? money(
+                                          amount,
+                                          currency,
+                                      )
+                                    : "—"}
+                            </div>
+
+                        </div>
+
+                        {/* Payment status */}
+
+                        <div className="col-6">
+
+                            <div className="small text-secondary mb-1">
+                                Payment
+                            </div>
+
+                            {payment ? (
+                                <PaymentBadge
+                                    status={
+                                        payment.status
+                                    }
+                                />
+                            ) : (
+                                <span className="fc-badge fc-badge-unpaid">
+                                    <i className="fas fa-clock" />
+                                    No payment
+                                </span>
+                            )}
+
+                        </div>
+
+                        {/* Talent earning */}
+
+                        <div className="col-6">
+
+                            <div className="small text-secondary mb-1">
+                                Your 95%
+                            </div>
+
+                            <div className="fc-earning">
+                                {payment
+                                    ? money(
+                                          talentEarning,
+                                          currency,
+                                      )
+                                    : "—"}
+                            </div>
+
+                        </div>
+
+                        {/* Platform earning */}
+
+                        <div className="col-6">
+
+                            <div className="small text-secondary mb-1">
+                                Future Connect 5%
+                            </div>
+
+                            <div className="fc-platform-fee fw-bold">
+                                {payment
+                                    ? money(
+                                          futureConnectFee,
+                                          currency,
+                                      )
+                                    : "—"}
+                            </div>
+
+                        </div>
+
+                        {/* Reference */}
+
+                        {payment?.reference && (
+                            <div className="col-12">
+
+                                <div className="small text-secondary mb-1">
+                                    Payment reference
+                                </div>
+
+                                <div
+                                    className="small fw-bold text-truncate"
+                                    title={
+                                        payment.reference
+                                    }
+                                >
+                                    {payment.reference}
+                                </div>
+
+                            </div>
+                        )}
+
+                        {/* Payment provider */}
+
+                        {payment?.provider && (
+                            <div className="col-12">
+
+                                <div className="small text-secondary mb-1">
+                                    Payment provider
+                                </div>
+
+                                <div className="small fw-semibold text-capitalize">
+                                    {payment.provider}
+                                </div>
+
+                            </div>
+                        )}
+
+                        {/* Action */}
+
+                        <div className="col-12">
+
+                            <Link
+                                href={route(
+                                    "talent.connections.show",
+                                    connection.id,
+                                )}
+                                className="btn fc-btn fc-btn-dark w-100 py-2"
+                            >
+                                View connection details
+
+                                <i className="fas fa-arrow-right ms-2" />
+                            </Link>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
-
-            <StatusBadge status={connection.status} />
-
-            {connection.status === "pending" ? (
-                <button
-                    type="button"
-                    className="btn h-btn-accent btn-sm rounded-pill px-3"
-                    onClick={onRespond}
-                >
-                    Respond
-                </button>
-            ) : (
-                <button
-                    type="button"
-                    className="btn h-btn-ghost btn-sm rounded-pill px-3"
-                    onClick={onRespond}
-                >
-                    View
-                </button>
-            )}
         </div>
     );
 }
 
+/* ============================================================
+   REQUEST STATUS
+============================================================ */
+
 function StatusBadge({ status }) {
+    const normalized = String(
+        status || "pending",
+    ).toLowerCase();
+
     const map = {
-        pending: { cls: "h-badge-pending", label: "Pending" },
-        accepted: { cls: "h-badge-accepted", label: "Accepted" },
-        declined: { cls: "h-badge-declined", label: "Declined" },
+        pending: {
+            cls: "fc-badge-pending",
+            icon: "fa-clock",
+            label: "Pending",
+        },
+
+        accepted: {
+            cls: "fc-badge-accepted",
+            icon: "fa-check",
+            label: "Accepted",
+        },
+
+        declined: {
+            cls: "fc-badge-declined",
+            icon: "fa-times",
+            label: "Declined",
+        },
     };
-    const entry = map[status] ?? map.pending;
+
+    const entry =
+        map[normalized] ?? map.pending;
 
     return (
-        <span className={`badge ${entry.cls} px-3 py-2 rounded-pill fw-semibold`}>
+        <span
+            className={`fc-badge ${entry.cls}`}
+        >
+            <i className={`fas ${entry.icon}`} />
             {entry.label}
         </span>
     );
 }
 
+/* ============================================================
+   PAYMENT STATUS
+============================================================ */
+
+function PaymentBadge({ status }) {
+    const normalized = String(
+        status || "pending",
+    ).toLowerCase();
+
+    const paid =
+        PAID_STATUSES.includes(
+            normalized,
+        );
+
+    return (
+        <span
+            className={`fc-badge ${
+                paid
+                    ? "fc-badge-paid"
+                    : "fc-badge-unpaid"
+            }`}
+        >
+            <i
+                className={`fas ${
+                    paid
+                        ? "fa-check-circle"
+                        : "fa-clock"
+                }`}
+            />
+
+            {paid ? "Paid" : "Unpaid"}
+        </span>
+    );
+}
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
 function EmptyState() {
     return (
-        <div className="text-center py-5 text-secondary">
-            <i className="fas fa-inbox fs-1 mb-3 d-block opacity-25"></i>
-            <p className="mb-0">No connection requests found.</p>
+        <div className="fc-empty text-center">
+
+            <div className="fc-empty-icon">
+                <i className="fas fa-handshake" />
+            </div>
+
+            <h5 className="fw-bold mb-2">
+                No connection requests yet
+            </h5>
+
+            <p
+                className="text-secondary small mb-0 mx-auto"
+                style={{
+                    maxWidth: 480,
+                    lineHeight: 1.7,
+                }}
+            >
+                When someone wants to connect with
+                you, their request and payment
+                information will appear here.
+            </p>
+
         </div>
     );
 }
+
+/* ============================================================
+   PAGINATION
+============================================================ */
 
 function Pagination({ links }) {
     return (
-        <div className="h-pagination d-flex flex-wrap gap-1 justify-content-center mt-4">
-            {links.map((link, i) =>
+        <div className="fc-pagination d-flex flex-wrap justify-content-center gap-1">
+
+            {links.map((link, index) =>
                 link.url ? (
                     <Link
-                        key={i}
+                        key={index}
                         href={link.url}
                         preserveScroll
-                        className={link.active ? "active" : ""}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
+                        className={
+                            link.active
+                                ? "active"
+                                : ""
+                        }
+                        dangerouslySetInnerHTML={{
+                            __html: link.label,
+                        }}
                     />
                 ) : (
                     <span
-                        key={i}
+                        key={index}
                         className="disabled"
-                        dangerouslySetInnerHTML={{ __html: link.label }}
+                        dangerouslySetInnerHTML={{
+                            __html: link.label,
+                        }}
                     />
                 ),
             )}
+
         </div>
     );
 }
 
-function RespondModal({ connection, onClose }) {
-    const { data, setData, patch, processing, errors, reset } = useForm({
-        status: "accepted",
-        response: "",
-    });
+/* ============================================================
+   MONEY FORMATTER
+============================================================ */
 
-    if (!connection) return null;
+function money(
+    value,
+    currency = "RWF",
+) {
+    const amount = Number(value || 0);
 
-    const alreadyResponded = connection.status !== "pending";
+    let safeCurrency = currency || "RWF";
 
-    function submit(e) {
-        e.preventDefault();
-        patch(route("talent.connections.respond", connection.id), {
-            preserveScroll: true,
-            onSuccess: () => {
-                reset();
-                onClose();
+    /*
+     * Avoid Intl.NumberFormat crashing if an
+     * unexpected currency value comes from the DB.
+     */
+    try {
+        return new Intl.NumberFormat(
+            "en-RW",
+            {
+                style: "currency",
+                currency: safeCurrency,
+                maximumFractionDigits: 2,
             },
-        });
+        ).format(amount);
+    } catch {
+        return `${safeCurrency} ${amount.toLocaleString(
+            "en-RW",
+            {
+                maximumFractionDigits: 2,
+            },
+        )}`;
     }
-
-    return (
-        <div data-h-scope="talent-connections">
-            <div className="modal fade show d-block" tabIndex="-1" role="dialog" onClick={onClose}>
-                <div
-                    className="modal-dialog modal-dialog-centered modal-lg"
-                    role="document"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <div className="modal-content rounded-4 border-0 shadow">
-                        <div className="modal-header border-0 pb-0">
-                            <h5 className="modal-title fw-bold" style={{ color: "#060f11" }}>
-                                {alreadyResponded ? "Connection Request" : "Respond to Request"}
-                            </h5>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                aria-label="Close"
-                                onClick={onClose}
-                            />
-                        </div>
-                        <div className="modal-body p-4">
-                            <div className="d-flex align-items-center gap-3 mb-3">
-                                <div
-                                    className="rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                                    style={{
-                                        width: 48,
-                                        height: 48,
-                                        background: "rgba(72,213,151,0.14)",
-                                        color: "#2fb87c",
-                                    }}
-                                >
-                                    {(connection.name || "?").slice(0, 2).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div className="fw-semibold">{connection.name}</div>
-                                    <div className="small text-secondary">{connection.email}</div>
-                                </div>
-                            </div>
-
-                            {connection.message && (
-                                <div className="mb-3">
-                                    <label className="small fw-semibold text-uppercase text-secondary d-block mb-1">
-                                        Message
-                                    </label>
-                                    <p className="mb-0">{connection.message}</p>
-                                </div>
-                            )}
-
-                            {alreadyResponded ? (
-                                <div>
-                                    <StatusBadge status={connection.status} />
-                                    {connection.response && (
-                                        <p className="mt-3 mb-0">{connection.response}</p>
-                                    )}
-                                </div>
-                            ) : (
-                                <form onSubmit={submit}>
-                                    <div className="mb-3">
-                                        <label className="form-label small fw-semibold">
-                                            Decision
-                                        </label>
-                                        <div className="d-flex gap-2">
-                                            <button
-                                                type="button"
-                                                className={`btn rounded-pill px-4 flex-fill ${
-                                                    data.status === "accepted"
-                                                        ? "h-btn-accent"
-                                                        : "h-btn-ghost"
-                                                }`}
-                                                onClick={() => setData("status", "accepted")}
-                                            >
-                                                <i className="fas fa-check me-2"></i>
-                                                Accept
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className={`btn rounded-pill px-4 flex-fill ${
-                                                    data.status === "declined"
-                                                        ? "btn-danger text-white"
-                                                        : "h-btn-ghost"
-                                                }`}
-                                                onClick={() => setData("status", "declined")}
-                                            >
-                                                <i className="fas fa-xmark me-2"></i>
-                                                Decline
-                                            </button>
-                                        </div>
-                                        {errors.status && (
-                                            <div className="text-danger small mt-1">
-                                                {errors.status}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <label className="form-label small fw-semibold">
-                                            Reply (optional)
-                                        </label>
-                                        <textarea
-                                            className={`form-control rounded-3 ${
-                                                errors.response ? "is-invalid" : ""
-                                            }`}
-                                            rows={3}
-                                            value={data.response}
-                                            onChange={(e) => setData("response", e.target.value)}
-                                            placeholder="Add a short note back to them..."
-                                        />
-                                        {errors.response && (
-                                            <div className="invalid-feedback">
-                                                {errors.response}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="d-flex justify-content-end gap-2">
-                                        <button
-                                            type="button"
-                                            className="btn h-btn-ghost rounded-pill px-4"
-                                            onClick={onClose}
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="btn h-btn-accent rounded-pill px-4"
-                                            disabled={processing}
-                                        >
-                                            {processing ? (
-                                                <>
-                                                    <span className="spinner-border spinner-border-sm me-2" />
-                                                    Sending...
-                                                </>
-                                            ) : (
-                                                "Send Response"
-                                            )}
-                                        </button>
-                                    </div>
-                                </form>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="modal-backdrop fade show" onClick={onClose}></div>
-        </div>
-    );
 }

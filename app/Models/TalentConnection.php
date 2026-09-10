@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class TalentConnection extends Model
 {
@@ -35,5 +35,21 @@ class TalentConnection extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Payment associated with this connection.
+     *
+     * talent_connections.payment_reference
+     * matches
+     * connection_payments.reference
+     */
+    public function payment()
+    {
+        return $this->hasOne(
+            ConnectionPayment::class,
+            'reference',
+            'payment_reference'
+        );
     }
 }

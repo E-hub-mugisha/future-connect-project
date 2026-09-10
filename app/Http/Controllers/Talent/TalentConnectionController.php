@@ -3,68 +3,458 @@
 namespace App\Http\Controllers\Talent;
 
 use App\Http\Controllers\Controller;
+use App\Models\ConnectionPayment;
 use App\Models\TalentConnection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TalentConnectionController extends Controller
 {
     /**
-     * Display connection requests sent to the logged-in talent.
+     * Display talent connection requests and earnings.
      */
-    public function connectionRequests(Request $request)
+    public function index(Request $request)
     {
-        $talent = Auth::user()->talent;
+        $talent = auth()->user()->talent;
 
-        if (!$talent) {
-            return redirect()->back()->with('error', 'You don\'t have a talent profile.');
+        abort_unless($talent, 403);
+
+        $status = $request->input('status', 'all');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Connection Requests
+        |--------------------------------------------------------------------------
+        |
+        | The connection itself comes from talent_connections.
+        | Payment information is loaded from connection_payments
+        | through the payment() relationship.
+        |
+        */
+
+        $query = TalentConnection::query()
+            ->where('talent_id', $talent->id)
+            ->with('payment')
+            ->latest();
+
+        if (
+            in_array(
+                $status,
+                ['pending', 'accepted', 'declined'],
+                true
+            )
+        ) {
+            $query->where('status', $status);
+        } else {
+            $status = 'all';
         }
 
-        $status = $request->input('status');
-
-        $connections = TalentConnection::where('talent_id', $talent->id)
-            ->when($status && $status !== 'all', fn ($q) => $q->where('status', $status))
-            ->orderByDesc('created_at')
+        $connections = $query
             ->paginate(10)
             ->withQueryString();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Connection Counts
+        |--------------------------------------------------------------------------
+        */
+
+        $baseConnectionQuery = TalentConnection::query()
+            ->where('talent_id', $talent->id);
+
         $counts = [
-            'all' => TalentConnection::where('talent_id', $talent->id)->count(),
-            'pending' => TalentConnection::where('talent_id', $talent->id)->where('status', 'pending')->count(),
-            'accepted' => TalentConnection::where('talent_id', $talent->id)->where('status', 'accepted')->count(),
-            'declined' => TalentConnection::where('talent_id', $talent->id)->where('status', 'declined')->count(),
+            'all' => (clone $baseConnectionQuery)->count(),
+
+            'pending' => (clone $baseConnectionQuery)
+                ->where('status', 'pending')
+                ->count(),
+
+            'accepted' => (clone $baseConnectionQuery)
+                ->where('status', 'accepted')
+                ->count(),
+
+            'declined' => (clone $baseConnectionQuery)
+                ->where('status', 'declined')
+                ->count(),
         ];
 
-        return Inertia::render('Talent/Connections/Index', [
-            'connections' => $connections,
-            'counts' => $counts,
-            'filters' => ['status' => $status ?? 'all'],
-        ]);
+        /*
+        |--------------------------------------------------------------------------
+        | Paid Payment Statuses
+        |--------------------------------------------------------------------------
+        |
+        | These statuses are considered successfully paid.
+        |
+        */
+
+        $paidStatuses = [
+            'paid',
+            'completed',
+            'success',
+            'successful',
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | REAL PAYMENT DATA
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        |
+        | Financial calculations use:
+        |
+        | connection_payments.amount
+        |
+        | NOT:
+        |
+        | talent_connections.amount
+        |
+        */
+
+        $payments = ConnectionPayment::query()
+            ->where('talent_id', $talent->id)
+            ->whereIn('status', $paidStatuses);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Total Payment Amount
+        |--------------------------------------------------------------------------
+        */
+
+        $totalAmount = (float) $payments->sum('amount');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Future Connect Earnings
+        |--------------------------------------------------------------------------
+        |
+        | Future Connect receives 5%.
+        |
+        */
+
+        $futureConnectEarnings = $totalAmount * 0.05;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Talent Earnings
+        |--------------------------------------------------------------------------
+        |
+        | Talent receives 95%.
+        |
+        */
+
+        $talentEarnings = $totalAmount * 0.95;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Number of Paid Connections
+        |--------------------------------------------------------------------------
+        */
+
+        $paidConnections = (clone $payments)->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Pending / Unpaid Payments
+        |--------------------------------------------------------------------------
+        */
+
+        $pendingPayments = ConnectionPayment::query()
+            ->where('talent_id', $talent->id)
+            ->whereNotIn('status', $paidStatuses)
+            ->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Render Page
+        |--------------------------------------------------------------------------
+        */
+
+        return Inertia::render(
+            'Talent/Connections/Index',
+            [
+                'connections' => $connections,
+
+                'counts' => $counts,
+
+                'filters' => [
+                    'status' => $status,
+                ],
+
+                'earnings' => [
+                    'total_amount' => round(
+                        $totalAmount,
+                        2
+                    ),
+
+                    'talent_earnings' => round(
+                        $talentEarnings,
+                        2
+                    ),
+
+                    'future_connect_earnings' => round(
+                        $futureConnectEarnings,
+                        2
+                    ),
+
+                    'paid_connections' =>
+                        $paidConnections,
+
+                    'pending_payments' =>
+                        $pendingPayments,
+
+                    'currency' => 'RWF',
+                ],
+            ]
+        );
     }
 
     /**
-     * Respond to a connection request (accept/decline with an optional message).
+     * Display a single connection request.
      */
-    public function respond(Request $request, $id)
+    public function show(TalentConnection $connection)
     {
-        $talent = Auth::user()->talent;
+        $talent = auth()->user()->talent;
 
-        if (!$talent) {
-            return redirect()->back()->with('error', 'You don\'t have a talent profile.');
-        }
+        abort_unless($talent, 403);
 
-        $connection = TalentConnection::where('id', $id)
-            ->where('talent_id', $talent->id)
-            ->firstOrFail();
+        /*
+        |--------------------------------------------------------------------------
+        | Security
+        |--------------------------------------------------------------------------
+        |
+        | A talent can only view their own connections.
+        |
+        */
+
+        abort_unless(
+            $connection->talent_id === $talent->id,
+            403
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Load Payment
+        |--------------------------------------------------------------------------
+        */
+
+        $connection->load('payment');
+
+        $payment = $connection->payment;
+
+        /*
+        |--------------------------------------------------------------------------
+        | REAL PAYMENT AMOUNT
+        |--------------------------------------------------------------------------
+        |
+        | Use connection_payments.amount.
+        |
+        */
+
+        $amount = (float) (
+            $payment?->amount ?? 0
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Earnings Calculation
+        |--------------------------------------------------------------------------
+        */
+
+        $futureConnectFee =
+            $amount * 0.05;
+
+        $talentEarning =
+            $amount * 0.95;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Connection Data
+        |--------------------------------------------------------------------------
+        */
+
+        return Inertia::render(
+            'Talent/Connections/Show',
+            [
+                'connection' => [
+                    'id' =>
+                        $connection->id,
+
+                    'name' =>
+                        $connection->name,
+
+                    'email' =>
+                        $connection->email,
+
+                    'phone' =>
+                        $connection->phone,
+
+                    'status' =>
+                        $connection->status,
+
+                    'message' =>
+                        $connection->message,
+
+                    'response' =>
+                        $connection->response,
+
+                    'created_at' =>
+                        $connection
+                            ->created_at
+                            ?->format(
+                                'd M Y, H:i'
+                            ),
+
+                    'created_at_human' =>
+                        $connection
+                            ->created_at
+                            ?->diffForHumans(),
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Payment
+                    |--------------------------------------------------------------------------
+                    */
+
+                    'payment' =>
+                        $payment
+                            ? [
+                                'id' =>
+                                    $payment->id,
+
+                                'reference' =>
+                                    $payment->reference,
+
+                                'amount' =>
+                                    (float)
+                                    $payment->amount,
+
+                                'currency' =>
+                                    $payment->currency ??
+                                    'RWF',
+
+                                'status' =>
+                                    $payment->status,
+
+                                'provider' =>
+                                    $payment->provider,
+
+                                'provider_transaction_id' =>
+                                    $payment
+                                        ->provider_transaction_id,
+
+                                'paid_at' =>
+                                    $payment
+                                        ->paid_at
+                                        ?->format(
+                                            'd M Y, H:i'
+                                        ),
+                            ]
+                            : null,
+                ],
+
+                /*
+                |--------------------------------------------------------------------------
+                | Earnings
+                |--------------------------------------------------------------------------
+                */
+
+                'earnings' => [
+                    'amount' =>
+                        round(
+                            $amount,
+                            2
+                        ),
+
+                    'future_connect_fee' =>
+                        round(
+                            $futureConnectFee,
+                            2
+                        ),
+
+                    'talent_earning' =>
+                        round(
+                            $talentEarning,
+                            2
+                        ),
+
+                    'currency' =>
+                        $payment?->currency ??
+                        'RWF',
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Accept or decline a connection request.
+     */
+    public function respond(
+        Request $request,
+        TalentConnection $connection
+    ) {
+        $talent = auth()->user()->talent;
+
+        abort_unless($talent, 403);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Security
+        |--------------------------------------------------------------------------
+        */
+
+        abort_unless(
+            $connection->talent_id === $talent->id,
+            403
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validation
+        |--------------------------------------------------------------------------
+        */
 
         $validated = $request->validate([
-            'status' => ['required', 'in:accepted,declined'],
-            'response' => ['nullable', 'string', 'max:1000'],
+            'status' => [
+                'required',
+                'in:accepted,declined',
+            ],
+
+            'response' => [
+                'nullable',
+                'string',
+                'max:2000',
+            ],
         ]);
 
-        $connection->update($validated);
+        /*
+        |--------------------------------------------------------------------------
+        | Update Connection
+        |--------------------------------------------------------------------------
+        */
 
-        return redirect()->back()->with('success', 'Response sent successfully.');
+        $connection->update([
+            'status' =>
+                $validated['status'],
+
+            'response' =>
+                $validated['response'] ?? null,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Redirect
+        |--------------------------------------------------------------------------
+        */
+
+        return redirect()
+            ->route(
+                'talent.connections.show',
+                $connection
+            )
+            ->with(
+                'success',
+                'Connection response saved successfully.'
+            );
     }
 }

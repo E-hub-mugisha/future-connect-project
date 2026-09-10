@@ -451,8 +451,16 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     // Connection requests received by this talent
     // NOTE: renamed from connections.index / connections.respond — those names
     // collided with the dashboard-side connections routes further down.
-    Route::get('/get/connections', [App\Http\Controllers\Talent\TalentConnectionController::class, 'connectionRequests'])->name('connections.requests.index');
-    Route::patch('/get/connections/{id}/respond', [App\Http\Controllers\Talent\TalentConnectionController::class, 'respond'])->name('connections.requests.respond');
+    Route::get('/get/connections', [App\Http\Controllers\Talent\TalentConnectionController::class, 'index'])->name('connections.requests.index');
+    Route::get('connections/{connection}', [
+            \App\Http\Controllers\Talent\TalentConnectionController::class,
+            'show'
+        ])->name('connections.show');
+
+        Route::patch('connections/{connection}/respond', [
+            \App\Http\Controllers\Talent\TalentConnectionController::class,
+            'respond'
+        ])->name('connections.respond');
 
     // Announcements
     Route::get('/announcements', [TalentDashboardController::class, 'index'])->name('announcements.index');
