@@ -28,6 +28,7 @@ use App\Models\Testimonial;
 use App\Models\TalentFeedback;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -217,7 +218,22 @@ class HomeController extends Controller
     {
         $talent = Talent::with(['skills', 'stories', 'courses'])->findOrFail($id);
         return Inertia::render('UserPage/SkillProfile', [
-            'talent' => $talent
+            'talent' => $talent,
+            'profileUrl' => url()->current(),
+
+            'auth' => [
+                'check' => Auth::check(),
+                'user' => Auth::check()
+                    ? [
+                        'id' => Auth::id(),
+                        'name' => Auth::user()->name,
+                        'email' => Auth::user()->email,
+                        'phone' => Auth::user()->phone ?? '',
+                    ]
+                    : null,
+            ],
+
+            'connectionFee' => 500, // change to your actual connection fee
         ]);
     }
     public function getTalentByCategory($slug)

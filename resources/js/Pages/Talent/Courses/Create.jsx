@@ -1,79 +1,191 @@
 // resources/js/Pages/Talent/Courses/Create.jsx
+
 import { Head, Link, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import AppLayout from "@/Layouts/AppLayout";
 
-// ─── SVG Icon Components ─────────────────────────────────────
-function ArrowLeftIcon({ className = "w-4 h-4" }) {
+// ─────────────────────────────────────────────────────────────
+// ICONS
+// ─────────────────────────────────────────────────────────────
+
+function Icon({ name, className = "w-5 h-5", strokeWidth = 1.8 }) {
+    const paths = {
+        arrowLeft: (
+            <>
+                <path d="M19 12H5" />
+                <path d="M12 19l-7-7 7-7" />
+            </>
+        ),
+        image: (
+            <>
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="M21 15l-5-5L5 21" />
+            </>
+        ),
+        upload: (
+            <>
+                <path d="M12 16V4" />
+                <path d="M7 9l5-5 5 5" />
+                <path d="M5 20h14" />
+            </>
+        ),
+        video: (
+            <>
+                <rect x="3" y="5" width="15" height="14" rx="2" />
+                <path d="M18 10l3-2v8l-3-2" />
+            </>
+        ),
+        check: (
+            <>
+                <path d="M5 12l4 4L19 6" />
+            </>
+        ),
+        checkCircle: (
+            <>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M8 12l2.5 2.5L16 9" />
+            </>
+        ),
+        alert: (
+            <>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v5" />
+                <path d="M12 16h.01" />
+            </>
+        ),
+        save: (
+            <>
+                <path d="M5 4h12l2 2v14H5z" />
+                <path d="M8 4v5h8V4" />
+                <path d="M9 20v-6h6v6" />
+            </>
+        ),
+        book: (
+            <>
+                <path d="M4 5.5A2.5 2.5 0 016.5 3H20v16H6.5A2.5 2.5 0 014 16.5z" />
+                <path d="M4 16.5A2.5 2.5 0 016.5 14H20" />
+            </>
+        ),
+        dollar: (
+            <>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M15 8.5c-.7-.6-1.6-1-3-1-1.7 0-3 1-3 2.3 0 3.2 6 1.6 6 4.6 0 1.3-1.3 2.3-3 2.3-1.4 0-2.5-.4-3.2-1.1" />
+                <path d="M12 6v12" />
+            </>
+        ),
+        layers: (
+            <>
+                <path d="M12 3l9 5-9 5-9-5 9-5z" />
+                <path d="M3 12l9 5 9-5" />
+                <path d="M3 16l9 5 9-5" />
+            </>
+        ),
+        sparkle: (
+            <>
+                <path d="M12 3l1.2 4.8L18 9l-4.8 1.2L12 15l-1.2-4.8L6 9l4.8-1.2L12 3z" />
+                <path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z" />
+            </>
+        ),
+        eye: (
+            <>
+                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" />
+                <circle cx="12" cy="12" r="2.5" />
+            </>
+        ),
+        x: (
+            <>
+                <path d="M6 6l12 12" />
+                <path d="M18 6L6 18" />
+            </>
+        ),
+        plus: (
+            <>
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+            </>
+        ),
+        edit: (
+            <>
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.1 2.1 0 013 3L8 18l-4 1 1-4z" />
+            </>
+        ),
+        clock: (
+            <>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+            </>
+        ),
+        users: (
+            <>
+                <circle cx="9" cy="8" r="3" />
+                <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+                <path d="M16 5.5a3 3 0 010 5.5" />
+                <path d="M18 14c1.7.8 3 2.5 3 4.5" />
+            </>
+        ),
+        shield: (
+            <>
+                <path d="M12 3l7 3v5c0 4.5-2.8 7.8-7 10-4.2-2.2-7-5.5-7-10V6z" />
+                <path d="M9 12l2 2 4-4" />
+            </>
+        ),
+    };
+
     return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        <svg
+            className={className}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            {paths[name]}
         </svg>
     );
 }
 
-function ImageIcon({ className = "w-6 h-6" }) {
+function Spinner({ className = "w-5 h-5" }) {
     return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        <svg
+            className={`${className} animate-spin`}
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="currentColor"
+                strokeWidth="3"
+                opacity=".25"
+            />
+            <path
+                d="M21 12a9 9 0 00-9-9"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+            />
         </svg>
     );
 }
 
-function FileEditIcon({ className = "w-5 h-5" }) {
-    return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-        </svg>
-    );
-}
+// ─────────────────────────────────────────────────────────────
+// MAIN COMPONENT
+// ─────────────────────────────────────────────────────────────
 
-function CheckCircleIcon({ className = "w-5 h-5" }) {
-    return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-    );
-}
-
-function SaveIcon({ className = "w-5 h-5" }) {
-    return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 019.186 0z" />
-        </svg>
-    );
-}
-
-function SpinnerIcon({ className = "w-4 h-4 animate-spin" }) {
-    return (
-        <svg className={className} fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-        </svg>
-    );
-}
-
-function AlertIcon({ className = "w-5 h-5" }) {
-    return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-        </svg>
-    );
-}
-
-function VideoIcon({ className = "w-5 h-5" }) {
-    return (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-        </svg>
-    );
-}
-
-// ─── Main Component ──────────────────────────────────────────
-export default function CourseForm({ course, categories }) {
+export default function CourseForm({ course, categories = [] }) {
     const isEdit = !!course?.id;
+
     const [thumbPreview, setThumbPreview] = useState(
-        course?.thumbnail ? `/${course.thumbnail}` : null,
+        course?.thumbnail
+            ? course.thumbnail.startsWith("/")
+                ? course.thumbnail
+                : `/${course.thumbnail}`
+            : null
     );
 
     const { data, setData, post, processing, errors } = useForm({
@@ -89,14 +201,76 @@ export default function CourseForm({ course, categories }) {
         status: course?.status ?? "draft",
     });
 
+    // ─────────────────────────────────────────────────────────
+    // FORM READINESS
+    // ─────────────────────────────────────────────────────────
+
+    const readiness = useMemo(() => {
+        const checks = [
+            {
+                label: "Course title",
+                complete: data.title.trim().length >= 5,
+            },
+            {
+                label: "Category selected",
+                complete: !!data.category_id,
+            },
+            {
+                label: "Difficulty level",
+                complete: !!data.level,
+            },
+            {
+                label: "Course description",
+                complete: data.description.trim().length >= 50,
+            },
+            {
+                label: "Course thumbnail",
+                complete: !!thumbPreview || !!data.thumbnail,
+            },
+            {
+                label: "Pricing configured",
+                complete:
+                    data.is_free ||
+                    (data.price !== "" &&
+                        Number(data.price) >= 0),
+            },
+        ];
+
+        const completed = checks.filter((item) => item.complete).length;
+
+        return {
+            checks,
+            completed,
+            total: checks.length,
+            percentage: Math.round((completed / checks.length) * 100),
+        };
+    }, [data, thumbPreview]);
+
+    // ─────────────────────────────────────────────────────────
+    // THUMBNAIL
+    // ─────────────────────────────────────────────────────────
+
     function handleThumbnailChange(e) {
-        const file = e.target.files[0];
+        const file = e.target.files?.[0];
+
+        if (!file) return;
+
         setData("thumbnail", file);
-        if (file) setThumbPreview(URL.createObjectURL(file));
+        setThumbPreview(URL.createObjectURL(file));
     }
+
+    function removeThumbnail() {
+        setThumbPreview(null);
+        setData("thumbnail", null);
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // SUBMIT
+    // ─────────────────────────────────────────────────────────
 
     function submit(e) {
         e.preventDefault();
+
         const url = isEdit
             ? route("talent.courses.update", course.id)
             : route("talent.courses.store");
@@ -107,534 +281,1589 @@ export default function CourseForm({ course, categories }) {
         });
     }
 
+    const selectedCategory = categories.find(
+        (category) => String(category.id) === String(data.category_id)
+    );
+
     return (
         <AppLayout>
-            <Head title={isEdit ? "Edit Course" : "Add New Course"} />
+            <Head title={isEdit ? "Edit Course" : "Create Course"} />
 
-            <div data-scope="course-form" className="min-vh-100">
+            <div data-scope="modern-course-form">
                 <style>{`
-                    [data-scope="course-form"] {
-                        --cf-primary: #0f766e;
-                        --cf-primary-light: #14b8a6;
-                        --cf-primary-soft: rgba(20, 184, 166, 0.08);
-                        --cf-surface: #f8fafc;
-                        --cf-card: #F5f5f7;
-                        --cf-text: #0f172a;
-                        --cf-text-secondary: #64748b;
-                        --cf-border: #e2e8f0;
-                        --cf-border-focus: #14b8a6;
-                        --cf-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-                        --cf-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-                        --cf-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-                        --cf-radius: 1rem;
-                        --cf-radius-sm: 0.75rem;
-                        background-color: var(--cf-surface);
+
+                    /* =====================================================
+                       DESIGN TOKENS
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] {
+                        --green: #00a667;
+                        --green-dark: #008f59;
+                        --green-light: #e9f9f2;
+                        --green-soft: #f2fbf7;
+
+                        --black: #111111;
+                        --text: #1a1a1a;
+                        --muted: #6b7280;
+
+                        --white: #ffffff;
+                        --surface: #f7f8f9;
+                        --border: #e5e7eb;
+
+                        --danger: #dc2626;
+                        --danger-bg: #fef2f2;
+
+                        --warning: #d97706;
+                        --warning-bg: #fff7ed;
+
+                        --radius: 18px;
+                        --radius-sm: 12px;
+
+                        --shadow:
+                            0 1px 2px rgba(0,0,0,.03),
+                            0 4px 12px rgba(0,0,0,.04);
+
+                        --shadow-lg:
+                            0 12px 30px rgba(0,0,0,.07);
+
+                        background:
+                            linear-gradient(
+                                180deg,
+                                #fbfcfc 0%,
+                                #f6f8f7 100%
+                            );
+
+                        min-height: 100vh;
+                        color: var(--text);
                     }
 
-                    [data-scope="course-form"] .cf-card {
-                        background: var(--cf-card);
-                        border: 1px solid var(--cf-border);
-                        border-radius: var(--cf-radius);
-                        box-shadow: var(--cf-shadow);
-                        transition: box-shadow 0.2s ease;
-                    }
-                    [data-scope="course-form"] .cf-card:hover {
-                        box-shadow: var(--cf-shadow-md);
+                    /* =====================================================
+                       LAYOUT
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-container {
+                        width: 100%;
+                        max-width: 1450px;
+                        margin: 0 auto;
+                        padding: 28px;
                     }
 
-                    [data-scope="course-form"] .cf-header {
-                        background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
-                        border: 1px solid var(--cf-border);
-                        border-radius: var(--cf-radius);
+                    @media(max-width: 768px) {
+                        [data-scope="modern-course-form"] .mcf-container {
+                            padding: 18px 14px;
+                        }
+                    }
+
+                    /* =====================================================
+                       HEADER
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-header {
+                        background: var(--white);
+                        border: 1px solid var(--border);
+                        border-radius: var(--radius);
+                        padding: 22px 24px;
                         position: relative;
                         overflow: hidden;
+                        box-shadow: var(--shadow);
                     }
-                    [data-scope="course-form"] .cf-header::before {
-                        content: '';
+
+                    [data-scope="modern-course-form"] .mcf-header::before {
+                        content: "";
                         position: absolute;
                         top: 0;
                         left: 0;
                         right: 0;
                         height: 4px;
-                        background: linear-gradient(90deg, var(--cf-primary-light), var(--cf-primary));
+                        background: var(--green);
                     }
 
-                    [data-scope="course-form"] .cf-btn-primary {
-                        background: linear-gradient(135deg, var(--cf-primary) 0%, var(--cf-primary-light) 100%);
+                    [data-scope="modern-course-form"] .mcf-eyebrow {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 7px;
+                        font-size: 11px;
+                        font-weight: 800;
+                        letter-spacing: .1em;
+                        text-transform: uppercase;
+                        color: var(--green-dark);
+                        margin-bottom: 8px;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-title {
+                        font-size: clamp(1.5rem, 3vw, 2rem);
+                        line-height: 1.15;
+                        font-weight: 800;
+                        letter-spacing: -.035em;
+                        color: var(--black);
+                        margin: 0;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-subtitle {
+                        margin: 8px 0 0;
+                        color: var(--muted);
+                        font-size: .92rem;
+                    }
+
+                    /* =====================================================
+                       BUTTONS
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        min-height: 44px;
+                        padding: 10px 17px;
+                        border-radius: 11px;
+                        font-size: .875rem;
+                        font-weight: 700;
+                        text-decoration: none;
+                        border: 1px solid transparent;
+                        transition: .2s ease;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-btn-primary {
+                        background: var(--green);
                         color: white;
-                        border: none;
-                        font-weight: 600;
-                        border-radius: 9999px;
-                        transition: all 0.2s ease;
-                        box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.2);
+                        box-shadow: 0 5px 14px rgba(0,166,103,.2);
                     }
-                    [data-scope="course-form"] .cf-btn-primary:hover {
+
+                    [data-scope="modern-course-form"] .mcf-btn-primary:hover {
+                        background: var(--green-dark);
+                        color: white;
                         transform: translateY(-1px);
-                        box-shadow: 0 8px 12px -2px rgba(15, 118, 110, 0.25);
-                        filter: brightness(1.05);
                     }
-                    [data-scope="course-form"] .cf-btn-primary:active {
-                        transform: translateY(0);
-                    }
-                    [data-scope="course-form"] .cf-btn-primary:disabled {
-                        opacity: 0.7;
+
+                    [data-scope="modern-course-form"] .mcf-btn-primary:disabled {
+                        opacity: .65;
                         cursor: not-allowed;
                         transform: none;
                     }
 
-                    [data-scope="course-form"] .cf-btn-ghost {
-                        background: transparent;
-                        color: var(--cf-text-secondary);
-                        border: 1px solid var(--cf-border);
-                        border-radius: 9999px;
-                        font-weight: 500;
-                        transition: all 0.2s ease;
-                    }
-                    [data-scope="course-form"] .cf-btn-ghost:hover {
-                        background: var(--cf-surface);
-                        color: var(--cf-text);
-                        border-color: var(--cf-text-secondary);
+                    [data-scope="modern-course-form"] .mcf-btn-outline {
+                        background: white;
+                        border-color: var(--border);
+                        color: var(--text);
                     }
 
-                    [data-scope="course-form"] .form-control,
-                    [data-scope="course-form"] .form-select {
-                        border: 1.5px solid var(--cf-border);
-                        border-radius: var(--cf-radius-sm);
-                        padding: 0.625rem 0.875rem;
-                        font-size: 0.9375rem;
-                        background-color: var(--cf-card);
-                        transition: all 0.2s ease;
-                    }
-                    [data-scope="course-form"] .form-control::placeholder,
-                    [data-scope="course-form"] .form-select::placeholder {
-                        color: #94a3b8;
-                    }
-                    [data-scope="course-form"] .form-control:focus,
-                    [data-scope="course-form"] .form-select:focus {
-                        border-color: var(--cf-border-focus);
-                        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
-                        background-color: var(--cf-card);
-                    }
-                    [data-scope="course-form"] .form-control.is-invalid,
-                    [data-scope="course-form"] .form-select.is-invalid {
-                        border-color: #ef4444;
-                    }
-                    [data-scope="course-form"] .form-control.is-invalid:focus,
-                    [data-scope="course-form"] .form-select.is-invalid:focus {
-                        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+                    [data-scope="modern-course-form"] .mcf-btn-outline:hover {
+                        border-color: var(--green);
+                        color: var(--green-dark);
+                        background: var(--green-soft);
                     }
 
-                    [data-scope="course-form"] .cf-section-label {
-                        color: var(--cf-primary);
-                        font-size: 0.75rem;
-                        font-weight: 700;
-                        letter-spacing: 0.08em;
-                        text-transform: uppercase;
+                    /* =====================================================
+                       CARDS
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-card {
+                        background: var(--white);
+                        border: 1px solid var(--border);
+                        border-radius: var(--radius);
+                        box-shadow: var(--shadow);
                     }
 
-                    [data-scope="course-form"] .cf-form-label {
-                        color: var(--cf-text);
-                        font-size: 0.875rem;
-                        font-weight: 600;
-                        margin-bottom: 0.5rem;
+                    [data-scope="modern-course-form"] .mcf-card-header {
+                        padding: 20px 22px 16px;
+                        border-bottom: 1px solid var(--border);
                     }
 
-                    [data-scope="course-form"] .form-check-input:checked {
-                        background-color: var(--cf-primary-light);
-                        border-color: var(--cf-primary-light);
-                    }
-                    [data-scope="course-form"] .form-check-input:focus {
-                        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+                    [data-scope="modern-course-form"] .mcf-card-body {
+                        padding: 22px;
                     }
 
-                    [data-scope="course-form"] .cf-thumb-preview {
-                        border: 2px solid var(--cf-primary-light);
-                        border-radius: var(--cf-radius-sm);
+                    [data-scope="modern-course-form"] .mcf-section-title {
+                        font-size: .98rem;
+                        font-weight: 800;
+                        color: var(--black);
+                        margin: 0;
                     }
 
-                    [data-scope="course-form"] .cf-alert {
-                        background: #fef2f2;
-                        border: 1px solid #fecaca;
-                        color: #991b1b;
-                        border-radius: var(--cf-radius-sm);
+                    [data-scope="modern-course-form"] .mcf-section-description {
+                        color: var(--muted);
+                        font-size: .8rem;
+                        margin: 4px 0 0;
                     }
 
-                    [data-scope="course-form"] .cf-status-card {
-                        border: 2px solid transparent;
-                        border-radius: var(--cf-radius-sm);
-                        cursor: pointer;
-                        transition: all 0.2s ease;
-                        background: var(--cf-surface);
-                    }
-                    [data-scope="course-form"] .cf-status-card:hover {
-                        background: #f1f5f9;
-                    }
-                    [data-scope="course-form"] .cf-status-card.active {
-                        background: var(--cf-primary-soft);
-                        border-color: var(--cf-primary-light);
-                    }
-                    [data-scope="course-form"] .cf-status-card.active-draft {
-                        background: #fffbeb;
-                        border-color: #f59e0b;
-                    }
-                    [data-scope="course-form"] .cf-status-card.active-published {
-                        background: #f0fdfa;
-                        border-color: var(--cf-primary-light);
+                    /* =====================================================
+                       FORM
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-label {
+                        display: block;
+                        font-size: .82rem;
+                        font-weight: 750;
+                        color: var(--text);
+                        margin-bottom: 7px;
                     }
 
-                    [data-scope="course-form"] .cf-upload-zone {
-                        border: 2px dashed #cbd5e1;
-                        border-radius: var(--cf-radius-sm);
-                        transition: all 0.2s ease;
-                    }
-                    [data-scope="course-form"] .cf-upload-zone:hover {
-                        border-color: var(--cf-primary-light);
-                        background: var(--cf-primary-soft);
-                    }
-
-                    [data-scope="course-form"] .cf-video-preview {
-                        border-radius: var(--cf-radius-sm);
-                        box-shadow: var(--cf-shadow);
+                    [data-scope="modern-course-form"] .mcf-control {
+                        width: 100%;
+                        border: 1px solid #dfe3e6;
+                        background: white;
+                        border-radius: 11px;
+                        padding: 11px 13px;
+                        font-size: .9rem;
+                        color: var(--text);
+                        outline: none;
+                        transition: .2s ease;
                     }
 
-                    [data-scope="course-form"] .cf-badge {
+                    [data-scope="modern-course-form"] .mcf-control:hover {
+                        border-color: #cbd1d5;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-control:focus {
+                        border-color: var(--green);
+                        box-shadow: 0 0 0 3px rgba(0,166,103,.1);
+                    }
+
+                    [data-scope="modern-course-form"] textarea.mcf-control {
+                        min-height: 150px;
+                        resize: vertical;
+                        line-height: 1.6;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-invalid {
+                        border-color: var(--danger) !important;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-error {
+                        color: var(--danger);
+                        font-size: .75rem;
+                        margin-top: 5px;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-help {
+                        color: var(--muted);
+                        font-size: .73rem;
+                        margin-top: 6px;
+                    }
+
+                    /* =====================================================
+                       SECTION NUMBER
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-number {
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 10px;
+                        background: var(--green-light);
+                        color: var(--green-dark);
                         display: inline-flex;
                         align-items: center;
-                        padding: 0.25rem 0.75rem;
-                        border-radius: 9999px;
-                        font-size: 0.75rem;
-                        font-weight: 600;
+                        justify-content: center;
+                        font-size: .8rem;
+                        font-weight: 800;
+                        flex-shrink: 0;
                     }
-                    [data-scope="course-form"] .cf-badge-free {
-                        background: #dcfce7;
-                        color: #166534;
+
+                    /* =====================================================
+                       THUMBNAIL
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-upload {
+                        position: relative;
+                        min-height: 205px;
+                        border: 1.5px dashed #cfd6d3;
+                        border-radius: 14px;
+                        background: #fafcfb;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                        cursor: pointer;
+                        transition: .2s ease;
                     }
-                    [data-scope="course-form"] .cf-badge-paid {
-                        background: #dbeafe;
-                        color: #1e40af;
+
+                    [data-scope="modern-course-form"] .mcf-upload:hover {
+                        border-color: var(--green);
+                        background: var(--green-soft);
                     }
+
+                    [data-scope="modern-course-form"] .mcf-upload img {
+                        width: 100%;
+                        height: 205px;
+                        object-fit: cover;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-upload-content {
+                        text-align: center;
+                        padding: 25px;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-upload-icon {
+                        width: 48px;
+                        height: 48px;
+                        margin: 0 auto 10px;
+                        border-radius: 13px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: var(--green-light);
+                        color: var(--green);
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-remove {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        width: 34px;
+                        height: 34px;
+                        border: 0;
+                        border-radius: 50%;
+                        background: rgba(0,0,0,.72);
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        z-index: 2;
+                    }
+
+                    /* =====================================================
+                       PRICE
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-price-box {
+                        border: 1px solid var(--border);
+                        border-radius: 13px;
+                        padding: 15px;
+                        background: #fafafa;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-switch {
+                        position: relative;
+                        width: 46px;
+                        height: 26px;
+                        flex-shrink: 0;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-switch input {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-slider {
+                        position: absolute;
+                        inset: 0;
+                        background: #d1d5db;
+                        border-radius: 30px;
+                        cursor: pointer;
+                        transition: .2s;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-slider::before {
+                        content: "";
+                        position: absolute;
+                        width: 20px;
+                        height: 20px;
+                        left: 3px;
+                        top: 3px;
+                        background: white;
+                        border-radius: 50%;
+                        transition: .2s;
+                        box-shadow: 0 1px 3px rgba(0,0,0,.2);
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-switch input:checked + .mcf-slider {
+                        background: var(--green);
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-switch input:checked + .mcf-slider::before {
+                        transform: translateX(20px);
+                    }
+
+                    /* =====================================================
+                       STATUS
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-status {
+                        border: 1px solid var(--border);
+                        border-radius: 13px;
+                        padding: 14px;
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        cursor: pointer;
+                        transition: .2s ease;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-status:hover {
+                        border-color: #c8d0cc;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-status.active {
+                        border-color: var(--green);
+                        background: var(--green-soft);
+                        box-shadow: 0 0 0 2px rgba(0,166,103,.05);
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-status-icon {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 11px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #f1f3f3;
+                        color: #6b7280;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-status.active .mcf-status-icon {
+                        background: var(--green-light);
+                        color: var(--green-dark);
+                    }
+
+                    /* =====================================================
+                       CHECKLIST
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-check {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        padding: 9px 0;
+                        border-bottom: 1px solid #f0f1f1;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-check:last-child {
+                        border-bottom: 0;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-check-icon {
+                        width: 22px;
+                        height: 22px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #eef0f0;
+                        color: #9ca3af;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-check.complete .mcf-check-icon {
+                        background: var(--green-light);
+                        color: var(--green-dark);
+                    }
+
+                    /* =====================================================
+                       PROGRESS
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-progress {
+                        height: 7px;
+                        background: #edf0ef;
+                        border-radius: 20px;
+                        overflow: hidden;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-progress-bar {
+                        height: 100%;
+                        background: var(--green);
+                        border-radius: inherit;
+                        transition: width .3s ease;
+                    }
+
+                    /* =====================================================
+                       PREVIEW
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-preview {
+                        overflow: hidden;
+                        border-radius: 14px;
+                        border: 1px solid var(--border);
+                        background: white;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-preview-image {
+                        height: 155px;
+                        background:
+                            linear-gradient(
+                                135deg,
+                                #e9f9f2,
+                                #f7faf9
+                            );
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-preview-image img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-preview-body {
+                        padding: 16px;
+                    }
+
+                    [data-scope="modern-course-form"] .mcf-preview-badge {
+                        display: inline-flex;
+                        padding: 5px 9px;
+                        border-radius: 7px;
+                        background: var(--green-light);
+                        color: var(--green-dark);
+                        font-size: .68rem;
+                        font-weight: 800;
+                    }
+
+                    /* =====================================================
+                       ALERT
+                    ===================================================== */
+
+                    [data-scope="modern-course-form"] .mcf-alert {
+                        border: 1px solid #fecaca;
+                        background: var(--danger-bg);
+                        color: #991b1b;
+                        border-radius: 13px;
+                        padding: 15px;
+                    }
+
+                    /* =====================================================
+                       RESPONSIVE
+                    ===================================================== */
+
+                    @media(max-width: 991px) {
+                        [data-scope="modern-course-form"] .mcf-sticky {
+                            position: static !important;
+                        }
+                    }
+
+                    @media(max-width: 575px) {
+                        [data-scope="modern-course-form"] .mcf-header {
+                            padding: 18px;
+                        }
+
+                        [data-scope="modern-course-form"] .mcf-card-body {
+                            padding: 17px;
+                        }
+
+                        [data-scope="modern-course-form"] .mcf-card-header {
+                            padding: 17px;
+                        }
+                    }
+
                 `}</style>
 
-                <div className="container-fluid px-4 py-4" style={{ maxWidth: 1400 }}>
-                    {/* Header */}
-                    <div className="cf-header p-4 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
-                        <div>
-                            <div className="d-flex align-items-center gap-2 mb-1">
-                                <span className={`cf-badge ${data.is_free ? 'cf-badge-free' : 'cf-badge-paid'}`}>
-                                    {data.is_free ? 'Free Course' : 'Paid Course'}
-                                </span>
-                                {isEdit && (
-                                    <span className="cf-badge" style={{ background: '#f1f5f9', color: '#475569' }}>
-                                        Editing
-                                    </span>
-                                )}
+                <div className="mcf-container">
+
+                    {/* =================================================
+                        HEADER
+                    ================================================= */}
+
+                    <div className="mcf-header mb-4">
+                        <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+                            <div>
+                                <div className="mcf-eyebrow">
+                                    <Icon name="book" className="w-3 h-3" />
+                                    Talent Learning
+                                </div>
+
+                                <h1 className="mcf-title">
+                                    {isEdit
+                                        ? "Edit your course"
+                                        : "Create a new course"}
+                                </h1>
+
+                                <p className="mcf-subtitle">
+                                    {isEdit
+                                        ? "Update your course information and improve your learning experience."
+                                        : "Turn your knowledge into a professional learning experience."}
+                                </p>
                             </div>
-                            <h3 className="fw-bold mb-1" style={{ color: 'var(--cf-text)' }}>
-                                {isEdit ? "Edit Course" : "Create New Course"}
-                            </h3>
-                            <p className="mb-0" style={{ color: 'var(--cf-text-secondary)', fontSize: '0.9375rem' }}>
-                                {isEdit
-                                    ? "Update your course details and content"
-                                    : "Design and publish your next learning experience"}
-                            </p>
+
+                            <Link
+                                href={route("talent.courses.index")}
+                                className="mcf-btn mcf-btn-outline"
+                            >
+                                <Icon name="arrowLeft" className="w-4 h-4" />
+                                Back to Courses
+                            </Link>
+
                         </div>
-                        <Link
-                            href={route("talent.courses.index")}
-                            className="btn cf-btn-ghost px-4 py-2 d-inline-flex align-items-center gap-2"
-                        >
-                            <ArrowLeftIcon />
-                            Back to Courses
-                        </Link>
                     </div>
 
+                    {/* =================================================
+                        ERROR ALERT
+                    ================================================= */}
+
                     {Object.keys(errors).length > 0 && (
-                        <div className="cf-alert p-3 mb-4 d-flex align-items-start gap-3">
-                            <AlertIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                            <div>
-                                <strong className="d-block mb-1">Please fix the following errors:</strong>
-                                <ul className="mb-0 ps-3">
-                                    {Object.entries(errors).map(([key, message]) => (
-                                        <li key={key}>{message}</li>
-                                    ))}
-                                </ul>
+                        <div className="mcf-alert mb-4">
+                            <div className="d-flex gap-3">
+                                <Icon
+                                    name="alert"
+                                    className="w-5 h-5 flex-shrink-0"
+                                />
+
+                                <div>
+                                    <div className="fw-bold mb-1">
+                                        Please review the form
+                                    </div>
+
+                                    <ul className="mb-0 ps-3 small">
+                                        {Object.entries(errors).map(
+                                            ([key, message]) => (
+                                                <li key={key}>
+                                                    {message}
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     )}
 
                     <form onSubmit={submit}>
-                        <div className="row g-4">
-                            {/* Left column: main details */}
-                            <div className="col-xl-8 col-lg-7">
-                                <div className="cf-card p-4 mb-4">
-                                    <label className="cf-section-label mb-4 d-block">
-                                        Course Details
-                                    </label>
 
-                                    <div className="row g-4">
-                                        <div className="col-12">
-                                            <label className="cf-form-label">
-                                                Course Title
+                        <div className="row g-4">
+
+                            {/* =================================================
+                                MAIN COLUMN
+                            ================================================= */}
+
+                            <div className="col-xl-8">
+
+                                {/* COURSE INFORMATION */}
+
+                                <div className="mcf-card mb-4">
+
+                                    <div className="mcf-card-header">
+                                        <div className="d-flex align-items-center gap-3">
+
+                                            <div className="mcf-number">
+                                                01
+                                            </div>
+
+                                            <div>
+                                                <h2 className="mcf-section-title">
+                                                    Course information
+                                                </h2>
+
+                                                <p className="mcf-section-description">
+                                                    Tell students what your course is about.
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="mcf-card-body">
+
+                                        <div className="mb-4">
+                                            <label className="mcf-label">
+                                                Course title
                                             </label>
+
                                             <input
                                                 type="text"
-                                                className={`form-control ${errors.title ? "is-invalid" : ""}`}
-                                                placeholder="e.g., Advanced React Patterns and Performance"
                                                 value={data.title}
-                                                onChange={(e) => setData("title", e.target.value)}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "title",
+                                                        e.target.value
+                                                    )
+                                                }
+                                                placeholder="e.g. Advanced React & Laravel Development"
+                                                className={`mcf-control ${
+                                                    errors.title
+                                                        ? "mcf-invalid"
+                                                        : ""
+                                                }`}
                                             />
+
                                             {errors.title && (
-                                                <div className="invalid-feedback">{errors.title}</div>
+                                                <div className="mcf-error">
+                                                    {errors.title}
+                                                </div>
                                             )}
-                                        </div>
 
-                                        <div className="col-md-6">
-                                            <label className="cf-form-label">
-                                                Category
-                                            </label>
-                                            <select
-                                                className={`form-select ${errors.category_id ? "is-invalid" : ""}`}
-                                                value={data.category_id}
-                                                onChange={(e) => setData("category_id", e.target.value)}
-                                            >
-                                                <option value="" disabled>
-                                                    Select a category
-                                                </option>
-                                                {categories.map((cat) => (
-                                                    <option key={cat.id} value={cat.id}>
-                                                        {cat.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {errors.category_id && (
-                                                <div className="invalid-feedback">{errors.category_id}</div>
-                                            )}
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label className="cf-form-label">
-                                                Difficulty Level
-                                            </label>
-                                            <select
-                                                className={`form-select ${errors.level ? "is-invalid" : ""}`}
-                                                value={data.level}
-                                                onChange={(e) => setData("level", e.target.value)}
-                                            >
-                                                <option value="" disabled>
-                                                    Select level
-                                                </option>
-                                                <option value="Beginner">Beginner</option>
-                                                <option value="Intermediate">Intermediate</option>
-                                                <option value="Advanced">Advanced</option>
-                                            </select>
-                                            {errors.level && (
-                                                <div className="invalid-feedback">{errors.level}</div>
-                                            )}
-                                        </div>
-
-                                        <div className="col-12">
-                                            <label className="cf-form-label">
-                                                Description
-                                            </label>
-                                            <textarea
-                                                rows={5}
-                                                className={`form-control ${errors.description ? "is-invalid" : ""}`}
-                                                placeholder="Describe what students will learn, prerequisites, and course outcomes..."
-                                                value={data.description}
-                                                onChange={(e) => setData("description", e.target.value)}
-                                                style={{ resize: 'vertical' }}
-                                            />
-                                            {errors.description && (
-                                                <div className="invalid-feedback">{errors.description}</div>
-                                            )}
-                                            <div className="form-text mt-1" style={{ color: 'var(--cf-text-secondary)', fontSize: '0.8125rem' }}>
-                                Minimum 50 characters recommended for better discoverability.
+                                            <div className="mcf-help">
+                                                Use a clear and specific title that tells learners exactly what they will gain.
                                             </div>
                                         </div>
 
-                                        <div className="col-12">
-                                            <label className="cf-form-label d-flex align-items-center gap-2">
-                                                <VideoIcon className="w-4 h-4" style={{ color: 'var(--cf-primary-light)' }} />
-                                                Intro Video URL
+                                        <div className="row g-3">
+
+                                            <div className="col-md-6">
+                                                <label className="mcf-label">
+                                                    Category
+                                                </label>
+
+                                                <select
+                                                    value={data.category_id}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "category_id",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className={`mcf-control ${
+                                                        errors.category_id
+                                                            ? "mcf-invalid"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    <option value="">
+                                                        Select category
+                                                    </option>
+
+                                                    {categories.map(
+                                                        (category) => (
+                                                            <option
+                                                                key={
+                                                                    category.id
+                                                                }
+                                                                value={
+                                                                    category.id
+                                                                }
+                                                            >
+                                                                {category.name}
+                                                            </option>
+                                                        )
+                                                    )}
+                                                </select>
+
+                                                {errors.category_id && (
+                                                    <div className="mcf-error">
+                                                        {errors.category_id}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label className="mcf-label">
+                                                    Difficulty level
+                                                </label>
+
+                                                <select
+                                                    value={data.level}
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "level",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className={`mcf-control ${
+                                                        errors.level
+                                                            ? "mcf-invalid"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    <option value="">
+                                                        Select level
+                                                    </option>
+
+                                                    <option value="Beginner">
+                                                        Beginner
+                                                    </option>
+
+                                                    <option value="Intermediate">
+                                                        Intermediate
+                                                    </option>
+
+                                                    <option value="Advanced">
+                                                        Advanced
+                                                    </option>
+                                                </select>
+
+                                                {errors.level && (
+                                                    <div className="mcf-error">
+                                                        {errors.level}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </div>
+
+                                        <div className="mt-4">
+
+                                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                                <label className="mcf-label mb-0">
+                                                    Course description
+                                                </label>
+
+                                                <span
+                                                    className="small"
+                                                    style={{
+                                                        color:
+                                                            data.description.length >=
+                                                            50
+                                                                ? "var(--green-dark)"
+                                                                : "var(--muted)",
+                                                    }}
+                                                >
+                                                    {data.description.length}{" "}
+                                                    characters
+                                                </span>
+                                            </div>
+
+                                            <textarea
+                                                value={data.description}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "description",
+                                                        e.target.value
+                                                    )
+                                                }
+                                                placeholder="Explain what learners will learn, who this course is for, prerequisites and expected outcomes..."
+                                                className={`mcf-control ${
+                                                    errors.description
+                                                        ? "mcf-invalid"
+                                                        : ""
+                                                }`}
+                                            />
+
+                                            {errors.description && (
+                                                <div className="mcf-error">
+                                                    {errors.description}
+                                                </div>
+                                            )}
+
+                                            <div className="mcf-help">
+                                                A detailed description improves learner confidence and course discoverability.
+                                            </div>
+
+                                        </div>
+
+                                        <div className="mt-4">
+
+                                            <label className="mcf-label d-flex align-items-center gap-2">
+                                                <Icon
+                                                    name="video"
+                                                    className="w-4 h-4"
+                                                    style={{
+                                                        color: "var(--green)",
+                                                    }}
+                                                />
+                                                Introduction video
                                             </label>
+
                                             <input
                                                 type="url"
-                                                className={`form-control ${errors.video ? "is-invalid" : ""}`}
-                                                placeholder="https://youtube.com/watch?v=... or direct MP4 link"
                                                 value={data.video}
-                                                onChange={(e) => setData("video", e.target.value)}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "video",
+                                                        e.target.value
+                                                    )
+                                                }
+                                                placeholder="https://youtube.com/watch?v=..."
+                                                className={`mcf-control ${
+                                                    errors.video
+                                                        ? "mcf-invalid"
+                                                        : ""
+                                                }`}
                                             />
+
                                             {errors.video && (
-                                                <div className="invalid-feedback">{errors.video}</div>
+                                                <div className="mcf-error">
+                                                    {errors.video}
+                                                </div>
                                             )}
+
+                                            <div className="mcf-help">
+                                                Add a short video that introduces the course to potential learners.
+                                            </div>
 
                                             {data.video && (
                                                 <div className="mt-3">
                                                     <video
-                                                        width="320"
                                                         controls
-                                                        className="cf-video-preview"
-                                                        style={{ maxWidth: '100%' }}
+                                                        style={{
+                                                            width: "100%",
+                                                            maxHeight: 320,
+                                                            borderRadius: 14,
+                                                            background:
+                                                                "#111",
+                                                        }}
                                                     >
-                                                        <source src={data.video} type="video/mp4" />
-                                                        Your browser does not support the video tag.
+                                                        <source
+                                                            src={data.video}
+                                                            type="video/mp4"
+                                                        />
                                                     </video>
                                                 </div>
                                             )}
+
                                         </div>
+
                                     </div>
                                 </div>
+
+                                {/* THUMBNAIL */}
+
+                                <div className="mcf-card mb-4">
+
+                                    <div className="mcf-card-header">
+
+                                        <div className="d-flex align-items-center gap-3">
+
+                                            <div className="mcf-number">
+                                                02
+                                            </div>
+
+                                            <div>
+                                                <h2 className="mcf-section-title">
+                                                    Course thumbnail
+                                                </h2>
+
+                                                <p className="mcf-section-description">
+                                                    Make your course stand out in the talent marketplace.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className="mcf-card-body">
+
+                                        <label
+                                            className="mcf-upload"
+                                            htmlFor="course-thumbnail"
+                                        >
+
+                                            {thumbPreview ? (
+                                                <>
+                                                    <img
+                                                        src={thumbPreview}
+                                                        alt="Course thumbnail preview"
+                                                    />
+
+                                                    <button
+                                                        type="button"
+                                                        className="mcf-remove"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            removeThumbnail();
+                                                        }}
+                                                    >
+                                                        <Icon
+                                                            name="x"
+                                                            className="w-4 h-4"
+                                                        />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <div className="mcf-upload-content">
+
+                                                    <div className="mcf-upload-icon">
+                                                        <Icon
+                                                            name="upload"
+                                                            className="w-5 h-5"
+                                                        />
+                                                    </div>
+
+                                                    <div
+                                                        className="fw-bold"
+                                                        style={{
+                                                            color: "var(--black)",
+                                                        }}
+                                                    >
+                                                        Upload course thumbnail
+                                                    </div>
+
+                                                    <div
+                                                        className="small mt-1"
+                                                        style={{
+                                                            color: "var(--muted)",
+                                                        }}
+                                                    >
+                                                        JPG, PNG or WEBP · 1280×720 recommended
+                                                    </div>
+
+                                                </div>
+                                            )}
+
+                                            <input
+                                                id="course-thumbnail"
+                                                type="file"
+                                                accept="image/*"
+                                                hidden
+                                                onChange={
+                                                    handleThumbnailChange
+                                                }
+                                            />
+
+                                        </label>
+
+                                        {errors.thumbnail && (
+                                            <div className="mcf-error">
+                                                {errors.thumbnail}
+                                            </div>
+                                        )}
+
+                                    </div>
+                                </div>
+
+                                {/* COURSE PREVIEW */}
+
+                                <div className="mcf-card">
+
+                                    <div className="mcf-card-header">
+
+                                        <div className="d-flex align-items-center gap-3">
+
+                                            <div className="mcf-number">
+                                                03
+                                            </div>
+
+                                            <div>
+                                                <h2 className="mcf-section-title">
+                                                    Marketplace preview
+                                                </h2>
+
+                                                <p className="mcf-section-description">
+                                                    Preview how your course may appear to learners.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className="mcf-card-body">
+
+                                        <div
+                                            style={{
+                                                maxWidth: 430,
+                                                margin: "0 auto",
+                                            }}
+                                        >
+
+                                            <div className="mcf-preview">
+
+                                                <div className="mcf-preview-image">
+
+                                                    {thumbPreview ? (
+                                                        <img
+                                                            src={thumbPreview}
+                                                            alt=""
+                                                        />
+                                                    ) : (
+                                                        <Icon
+                                                            name="image"
+                                                            className="w-10 h-10"
+                                                            style={{
+                                                                color: "#8abfa9",
+                                                            }}
+                                                        />
+                                                    )}
+
+                                                </div>
+
+                                                <div className="mcf-preview-body">
+
+                                                    <span className="mcf-preview-badge">
+                                                        {selectedCategory?.name ||
+                                                            "Course"}
+                                                    </span>
+
+                                                    <h3
+                                                        className="fw-bold mt-2 mb-2"
+                                                        style={{
+                                                            fontSize: "1.05rem",
+                                                            color: "var(--black)",
+                                                        }}
+                                                    >
+                                                        {data.title ||
+                                                            "Your course title"}
+                                                    </h3>
+
+                                                    <p
+                                                        className="small mb-3"
+                                                        style={{
+                                                            color: "var(--muted)",
+                                                            lineHeight: 1.55,
+                                                        }}
+                                                    >
+                                                        {data.description ||
+                                                            "Your course description will appear here."}
+                                                    </p>
+
+                                                    <div className="d-flex justify-content-between align-items-center">
+
+                                                        <div className="small fw-semibold">
+                                                            {data.level ||
+                                                                "Level"}
+                                                        </div>
+
+                                                        <div
+                                                            className="fw-bold"
+                                                            style={{
+                                                                color: "var(--green-dark)",
+                                                            }}
+                                                        >
+                                                            {data.is_free
+                                                                ? "Free"
+                                                                : data.price
+                                                                ? `$${Number(
+                                                                      data.price
+                                                                  ).toFixed(2)}`
+                                                                : "$0.00"}
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div>
 
-                            {/* Right column: thumbnail, pricing, status */}
-                            <div className="col-xl-4 col-lg-5">
-                                {/* Thumbnail */}
-                                <div className="cf-card p-4 mb-4">
-                                    <label className="cf-section-label mb-4 d-block">
-                                        Course Thumbnail
-                                    </label>
+                            {/* =================================================
+                                SIDEBAR
+                            ================================================= */}
 
-                                    {thumbPreview ? (
-                                        <div className="position-relative mb-3">
-                                            <img
-                                                src={thumbPreview}
-                                                alt="Thumbnail preview"
-                                                className="w-100 cf-thumb-preview"
-                                                style={{ height: 180, objectFit: "cover" }}
-                                            />
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm position-absolute top-0 end-0 m-2"
-                                                style={{ background: 'rgba(0,0,0,0.5)', color: 'white', borderRadius: '50%', width: 32, height: 32, padding: 0 }}
-                                                onClick={() => {
-                                                    setThumbPreview(null);
-                                                    setData("thumbnail", null);
-                                                }}
-                                                title="Remove image"
-                                            >
-                                                ×
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div
-                                            className="cf-upload-zone w-100 mb-3 d-flex flex-column align-items-center justify-content-center"
-                                            style={{ height: 180 }}
-                                        >
-                                            <ImageIcon className="w-10 h-10 mb-2" style={{ color: 'var(--cf-primary-light)', opacity: 0.6 }} />
-                                            <span className="small fw-medium" style={{ color: 'var(--cf-text-secondary)' }}>
-                                                No image selected
-                                            </span>
-                                        </div>
-                                    )}
+                            <div className="col-xl-4">
 
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className={`form-control ${errors.thumbnail ? "is-invalid" : ""}`}
-                                        onChange={handleThumbnailChange}
-                                        style={{ fontSize: '0.875rem' }}
-                                    />
-                                    {errors.thumbnail && (
-                                        <div className="invalid-feedback">{errors.thumbnail}</div>
-                                    )}
-                                    <div className="form-text mt-1" style={{ color: 'var(--cf-text-secondary)', fontSize: '0.8125rem' }}>
-                                        Recommended: 1280×720px, JPG or PNG
-                                    </div>
-                                </div>
+                                <div
+                                    className="mcf-sticky"
+                                    style={{
+                                        position: "sticky",
+                                        top: 20,
+                                    }}
+                                >
 
-                                {/* Pricing */}
-                                <div className="cf-card p-4 mb-4">
-                                    <label className="cf-section-label mb-4 d-block">
-                                        Pricing
-                                    </label>
+                                    {/* READINESS */}
 
-                                    <div className="d-flex align-items-center justify-content-between mb-4 p-3 rounded-3" style={{ background: 'var(--cf-surface)' }}>
-                                        <div className="d-flex align-items-center gap-2">
-                                            <span className="fw-semibold" style={{ fontSize: '0.9375rem' }}>
-                                                Free Course
-                                            </span>
-                                        </div>
-                                        <div className="form-check form-switch m-0">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                style={{ width: '2.5rem', height: '1.25rem' }}
-                                                checked={data.is_free}
-                                                onChange={(e) => setData("is_free", e.target.checked)}
-                                            />
-                                        </div>
-                                    </div>
+                                    <div className="mcf-card mb-4">
 
-                                    {!data.is_free && (
-                                        <div className="animate-fade-in">
-                                            <label className="cf-form-label">
-                                                Price (USD)
-                                            </label>
-                                            <div className="input-group">
-                                                <span className="input-group-text bg-white border-end-0" style={{ borderColor: 'var(--cf-border)', color: 'var(--cf-text-secondary)' }}>
-                                                    $
-                                                </span>
-                                                <input
-                                                    type="number"
-                                                    step="0.01"
-                                                    min="0"
-                                                    className={`form-control border-start-0 ${errors.price ? "is-invalid" : ""}`}
-                                                    placeholder="29.99"
-                                                    value={data.price}
-                                                    onChange={(e) => setData("price", e.target.value)}
+                                        <div className="mcf-card-body">
+
+                                            <div className="d-flex justify-content-between align-items-center mb-2">
+
+                                                <div>
+                                                    <div
+                                                        className="fw-bold"
+                                                        style={{
+                                                            color: "var(--black)",
+                                                        }}
+                                                    >
+                                                        Course readiness
+                                                    </div>
+
+                                                    <div
+                                                        className="small"
+                                                        style={{
+                                                            color: "var(--muted)",
+                                                        }}
+                                                    >
+                                                        Prepare your course for publishing
+                                                    </div>
+                                                </div>
+
+                                                <strong
+                                                    style={{
+                                                        color:
+                                                            readiness.percentage ===
+                                                            100
+                                                                ? "var(--green-dark)"
+                                                                : "var(--black)",
+                                                    }}
+                                                >
+                                                    {readiness.percentage}%
+                                                </strong>
+
+                                            </div>
+
+                                            <div className="mcf-progress mb-3">
+                                                <div
+                                                    className="mcf-progress-bar"
+                                                    style={{
+                                                        width: `${readiness.percentage}%`,
+                                                    }}
                                                 />
                                             </div>
-                                            {errors.price && (
-                                                <div className="invalid-feedback d-block">{errors.price}</div>
-                                            )}
+
+                                            <div>
+                                                {readiness.checks.map(
+                                                    (check) => (
+                                                        <div
+                                                            key={check.label}
+                                                            className={`mcf-check ${
+                                                                check.complete
+                                                                    ? "complete"
+                                                                    : ""
+                                                            }`}
+                                                        >
+
+                                                            <span className="mcf-check-icon">
+
+                                                                {check.complete ? (
+                                                                    <Icon
+                                                                        name="check"
+                                                                        className="w-3 h-3"
+                                                                    />
+                                                                ) : (
+                                                                    <span
+                                                                        style={{
+                                                                            width: 5,
+                                                                            height: 5,
+                                                                            borderRadius:
+                                                                                "50%",
+                                                                            background:
+                                                                                "#b6bdb9",
+                                                                        }}
+                                                                    />
+                                                                )}
+
+                                                            </span>
+
+                                                            <span
+                                                                className="small"
+                                                                style={{
+                                                                    color: check.complete
+                                                                        ? "var(--text)"
+                                                                        : "var(--muted)",
+                                                                    fontWeight:
+                                                                        check.complete
+                                                                            ? 600
+                                                                            : 500,
+                                                                }}
+                                                            >
+                                                                {check.label}
+                                                            </span>
+
+                                                        </div>
+                                                    )
+                                                )}
+                                            </div>
+
                                         </div>
-                                    )}
-                                </div>
-
-                                {/* Status */}
-                                <div className="cf-card p-4 mb-4">
-                                    <label className="cf-section-label mb-4 d-block">
-                                        Publish Status
-                                    </label>
-
-                                    <div className="d-flex flex-column gap-3">
-                                        <StatusCard
-                                            label="Draft"
-                                            description="Save and continue editing later"
-                                            icon={<FileEditIcon className="w-5 h-5" />}
-                                            active={data.status === "draft"}
-                                            variant="draft"
-                                            onClick={() => setData("status", "draft")}
-                                        />
-                                        <StatusCard
-                                            label="Published"
-                                            description="Make visible to all students"
-                                            icon={<CheckCircleIcon className="w-5 h-5" />}
-                                            active={data.status === "published"}
-                                            variant="published"
-                                            onClick={() => setData("status", "published")}
-                                        />
                                     </div>
-                                </div>
 
-                                <button
-                                    type="submit"
-                                    className="btn cf-btn-primary w-100 py-3 d-inline-flex align-items-center justify-content-center gap-2 fw-bold"
-                                    disabled={processing}
-                                    style={{ fontSize: '1rem' }}
-                                >
-                                    {processing ? (
-                                        <>
-                                            <SpinnerIcon />
-                                            Saving Changes...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <SaveIcon />
-                                            {isEdit ? "Update Course" : "Publish Course"}
-                                        </>
-                                    )}
-                                </button>
+                                    {/* PRICING */}
+
+                                    <div className="mcf-card mb-4">
+
+                                        <div className="mcf-card-header">
+
+                                            <div className="d-flex align-items-center gap-3">
+
+                                                <div
+                                                    className="mcf-number"
+                                                    style={{
+                                                        background:
+                                                            "#f0f9f5",
+                                                    }}
+                                                >
+                                                    <Icon
+                                                        name="dollar"
+                                                        className="w-4 h-4"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <h2 className="mcf-section-title">
+                                                        Pricing
+                                                    </h2>
+
+                                                    <p className="mcf-section-description">
+                                                        Set how learners access your course.
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div className="mcf-card-body">
+
+                                            <div className="mcf-price-box">
+
+                                                <div className="d-flex align-items-center justify-content-between">
+
+                                                    <div>
+                                                        <div className="fw-bold">
+                                                            Free course
+                                                        </div>
+
+                                                        <div
+                                                            className="small"
+                                                            style={{
+                                                                color: "var(--muted)",
+                                                            }}
+                                                        >
+                                                            Anyone can access it
+                                                        </div>
+                                                    </div>
+
+                                                    <label className="mcf-switch">
+
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={
+                                                                data.is_free
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "is_free",
+                                                                    e.target
+                                                                        .checked
+                                                                )
+                                                            }
+                                                        />
+
+                                                        <span className="mcf-slider" />
+
+                                                    </label>
+
+                                                </div>
+
+                                            </div>
+
+                                            {!data.is_free && (
+                                                <div className="mt-3">
+
+                                                    <label className="mcf-label">
+                                                        Course price (USD)
+                                                    </label>
+
+                                                    <div className="input-group">
+
+                                                        <span
+                                                            className="input-group-text"
+                                                            style={{
+                                                                background:
+                                                                    "#fafafa",
+                                                                borderColor:
+                                                                    "#dfe3e6",
+                                                            }}
+                                                        >
+                                                            $
+                                                        </span>
+
+                                                        <input
+                                                            type="number"
+                                                            min="0"
+                                                            step="0.01"
+                                                            value={
+                                                                data.price
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "price",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="29.99"
+                                                            className={`form-control ${
+                                                                errors.price
+                                                                    ? "is-invalid"
+                                                                    : ""
+                                                            }`}
+                                                        />
+
+                                                    </div>
+
+                                                    {errors.price && (
+                                                        <div className="mcf-error">
+                                                            {errors.price}
+                                                        </div>
+                                                    )}
+
+                                                </div>
+                                            )}
+
+                                        </div>
+                                    </div>
+
+                                    {/* PUBLISH STATUS */}
+
+                                    <div className="mcf-card mb-4">
+
+                                        <div className="mcf-card-header">
+
+                                            <div className="d-flex align-items-center gap-3">
+
+                                                <div className="mcf-number">
+                                                    <Icon
+                                                        name="shield"
+                                                        className="w-4 h-4"
+                                                    />
+                                                </div>
+
+                                                <div>
+                                                    <h2 className="mcf-section-title">
+                                                        Publishing
+                                                    </h2>
+
+                                                    <p className="mcf-section-description">
+                                                        Choose who can see your course.
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div className="mcf-card-body">
+
+                                            <div className="d-flex flex-column gap-2">
+
+                                                <StatusCard
+                                                    label="Draft"
+                                                    description="Keep working on your course"
+                                                    active={
+                                                        data.status ===
+                                                        "draft"
+                                                    }
+                                                    icon={
+                                                        <Icon
+                                                            name="edit"
+                                                            className="w-4 h-4"
+                                                        />
+                                                    }
+                                                    onClick={() =>
+                                                        setData(
+                                                            "status",
+                                                            "draft"
+                                                        )
+                                                    }
+                                                />
+
+                                                <StatusCard
+                                                    label="Published"
+                                                    description="Make course visible to learners"
+                                                    active={
+                                                        data.status ===
+                                                        "published"
+                                                    }
+                                                    icon={
+                                                        <Icon
+                                                            name="checkCircle"
+                                                            className="w-4 h-4"
+                                                        />
+                                                    }
+                                                    onClick={() =>
+                                                        setData(
+                                                            "status",
+                                                            "published"
+                                                        )
+                                                    }
+                                                />
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    {/* QUICK STATS */}
+
+                                    <div className="mcf-card mb-4">
+
+                                        <div className="mcf-card-body">
+
+                                            <div className="fw-bold mb-3">
+                                                Course snapshot
+                                            </div>
+
+                                            <div className="row g-2">
+
+                                                <MiniStat
+                                                    icon="layers"
+                                                    label="Level"
+                                                    value={
+                                                        data.level ||
+                                                        "Not set"
+                                                    }
+                                                />
+
+                                                <MiniStat
+                                                    icon="users"
+                                                    label="Audience"
+                                                    value="Learners"
+                                                />
+
+                                                <MiniStat
+                                                    icon="video"
+                                                    label="Intro"
+                                                    value={
+                                                        data.video
+                                                            ? "Added"
+                                                            : "Optional"
+                                                    }
+                                                />
+
+                                                <MiniStat
+                                                    icon="image"
+                                                    label="Thumbnail"
+                                                    value={
+                                                        thumbPreview
+                                                            ? "Ready"
+                                                            : "Missing"
+                                                    }
+                                                />
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    {/* SUBMIT */}
+
+                                    <button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="mcf-btn mcf-btn-primary w-100"
+                                        style={{
+                                            minHeight: 54,
+                                            fontSize: ".95rem",
+                                        }}
+                                    >
+
+                                        {processing ? (
+                                            <>
+                                                <Spinner />
+                                                Saving course...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Icon
+                                                    name="save"
+                                                    className="w-5 h-5"
+                                                />
+
+                                                {isEdit
+                                                    ? "Update Course"
+                                                    : data.status ===
+                                                      "published"
+                                                    ? "Publish Course"
+                                                    : "Save Course"}
+                                            </>
+                                        )}
+
+                                    </button>
+
+                                    <div
+                                        className="text-center mt-2"
+                                        style={{
+                                            color: "var(--muted)",
+                                            fontSize: ".7rem",
+                                        }}
+                                    >
+                                        You can change these settings later.
+                                    </div>
+
+                                </div>
                             </div>
+
                         </div>
                     </form>
                 </div>
@@ -643,43 +1872,122 @@ export default function CourseForm({ course, categories }) {
     );
 }
 
-function StatusCard({ label, description, icon, active, variant, onClick }) {
+// ─────────────────────────────────────────────────────────────
+// STATUS CARD
+// ─────────────────────────────────────────────────────────────
+
+function StatusCard({
+    label,
+    description,
+    icon,
+    active,
+    onClick,
+}) {
     return (
         <div
-            className={`cf-status-card p-3 d-flex align-items-center gap-3 ${active ? `active active-${variant}` : ""}`}
+            className={`mcf-status ${active ? "active" : ""}`}
             onClick={onClick}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && onClick()}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    onClick();
+                }
+            }}
         >
-            <div
-                className="d-flex align-items-center justify-content-center flex-shrink-0"
-                style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
-                    background: active
-                        ? variant === 'published'
-                            ? 'rgba(20, 184, 166, 0.15)'
-                            : 'rgba(245, 158, 11, 0.15)'
-                        : '#f1f5f9',
-                    color: variant === 'published' ? 'var(--cf-primary)' : '#d97706',
-                    transition: 'all 0.2s ease'
-                }}
-            >
+            <div className="mcf-status-icon">
                 {icon}
             </div>
+
             <div className="flex-grow-1">
-                <div className="fw-semibold" style={{ fontSize: '0.9375rem', color: 'var(--cf-text)' }}>
+
+                <div
+                    className="fw-bold"
+                    style={{
+                        fontSize: ".84rem",
+                    }}
+                >
                     {label}
                 </div>
-                <div className="small" style={{ color: 'var(--cf-text-secondary)', fontSize: '0.8125rem' }}>
+
+                <div
+                    style={{
+                        color: "var(--muted)",
+                        fontSize: ".7rem",
+                        marginTop: 2,
+                    }}
+                >
                     {description}
                 </div>
+
             </div>
+
             {active && (
-                <CheckCircleIcon className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--cf-primary-light)' }} />
+                <div
+                    style={{
+                        color: "var(--green)",
+                    }}
+                >
+                    <Icon
+                        name="checkCircle"
+                        className="w-4 h-4"
+                    />
+                </div>
             )}
+        </div>
+    );
+}
+
+// ─────────────────────────────────────────────────────────────
+// MINI STAT
+// ─────────────────────────────────────────────────────────────
+
+function MiniStat({ icon, label, value }) {
+    return (
+        <div
+            className="col-6"
+            style={{
+                background: "#fafafa",
+                border: "1px solid #eef0ef",
+                borderRadius: 11,
+                padding: 10,
+            }}
+        >
+            <div
+                className="d-flex align-items-center gap-2 mb-1"
+                style={{
+                    color: "var(--muted)",
+                }}
+            >
+                <Icon
+                    name={icon}
+                    className="w-3 h-3"
+                />
+
+                <span
+                    style={{
+                        fontSize: ".65rem",
+                    }}
+                >
+                    {label}
+                </span>
+            </div>
+
+            <div
+                className="fw-bold text-truncate"
+                style={{
+                    fontSize: ".75rem",
+                    color:
+                        value === "Missing"
+                            ? "#dc2626"
+                            : value === "Ready"
+                            ? "var(--green-dark)"
+                            : "var(--black)",
+                }}
+                title={value}
+            >
+                {value}
+            </div>
         </div>
     );
 }

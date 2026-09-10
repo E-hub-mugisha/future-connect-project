@@ -1,53 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { Head, useForm } from '@inertiajs/react';
-import GuestLayout from '@/Layouts/GuestLayout';
-
+import React, { useState, useEffect } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import GuestLayout from "@/Layouts/GuestLayout";
 
 const routes = {
-    talentFeedbackStore: '/talent/feedback',
-    supportTalent: '/talent/support',
-    talentConnectionRequest: (id) => `/connection/${id}/request`,
+    talentFeedbackStore: "/talent/feedback",
+    supportTalent: "/talent/support",
+    talentConnectionCheckout: (id) => `/connection/${id}/checkout`,
     storyDetails: (slug) => `/story-details/${slug}`,
     courseDetails: (slug) => `/course/details/${slug}`,
+
+    login: "/login",
 };
 
 function formatRelativeTime(dateString) {
-    if (!dateString) return '';
+    if (!dateString) return "";
     const date = new Date(dateString);
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
     const intervals = [
-        ['year', 31536000],
-        ['month', 2592000],
-        ['day', 86400],
-        ['hour', 3600],
-        ['minute', 60],
+        ["year", 31536000],
+        ["month", 2592000],
+        ["day", 86400],
+        ["hour", 3600],
+        ["minute", 60],
     ];
     for (const [label, secs] of intervals) {
         const count = Math.floor(seconds / secs);
-        if (count >= 1) return `${count} ${label}${count > 1 ? 's' : ''} ago`;
+        if (count >= 1) return `${count} ${label}${count > 1 ? "s" : ""} ago`;
     }
-    return 'just now';
+    return "just now";
 }
 
-function StarDisplay({ value, size = '0.85rem' }) {
+function StarDisplay({ value, size = "0.85rem" }) {
     return (
         <span style={{ fontSize: size }}>
             {Array.from({ length: 5 }).map((_, i) => (
-                <span key={i}>{i < Math.round(value) ? '★' : '☆'}</span>
+                <span key={i}>{i < Math.round(value) ? "★" : "☆"}</span>
             ))}
         </span>
     );
 }
 
 export default function SkillProfile({ talent, profileUrl }) {
-    const [activeTab, setActiveTab] = useState('about');
+    const { auth } = usePage().props;
+
+    const user = auth?.user ?? null;
+    const isAuthenticated = !!user;
+
+    const [activeTab, setActiveTab] = useState("about");
     const [copied, setCopied] = useState(false);
     const [canNativeShare, setCanNativeShare] = useState(false);
-    const [supportOpen, setSupportOpen] = useState(false); 
+    const [supportOpen, setSupportOpen] = useState(false);
     const [connectOpen, setConnectOpen] = useState(false);
+    const [loginOpen, setLoginOpen] = useState(false);
 
     useEffect(() => {
-        if (typeof navigator !== 'undefined' && navigator.share) {
+        if (typeof navigator !== "undefined" && navigator.share) {
             setCanNativeShare(true);
         }
     }, []);
@@ -56,7 +63,7 @@ export default function SkillProfile({ talent, profileUrl }) {
     useEffect(() => {
         if (supportOpen || connectOpen) {
             const previousOverflow = document.body.style.overflow;
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
             return () => {
                 document.body.style.overflow = previousOverflow;
             };
@@ -86,11 +93,11 @@ export default function SkillProfile({ talent, profileUrl }) {
             })
             .catch(() => {
                 // Fallback for older browsers
-                const input = document.getElementById('profileUrl');
+                const input = document.getElementById("profileUrl");
                 if (input) {
                     input.select();
                     input.setSelectionRange(0, 99999);
-                    document.execCommand('copy');
+                    document.execCommand("copy");
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2500);
                 }
@@ -110,10 +117,10 @@ export default function SkillProfile({ talent, profileUrl }) {
     // ── Forms ──
     const reviewForm = useForm({
         talent_id: talent.id,
-        rating: '',
-        name: '',
-        email: '',
-        comment: '',
+        rating: "",
+        name: "",
+        email: "",
+        comment: "",
     });
 
     const submitReview = (e) => {
@@ -126,10 +133,10 @@ export default function SkillProfile({ talent, profileUrl }) {
 
     const supportForm = useForm({
         talent_id: talent.id,
-        name: '',
-        email: '',
-        amount: '',
-        message: '',
+        name: "",
+        email: "",
+        amount: "",
+        message: "",
     });
 
     const submitSupport = (e) => {
@@ -141,25 +148,66 @@ export default function SkillProfile({ talent, profileUrl }) {
     };
 
     const connectForm = useForm({
-        message: '',
-        name: '',
-        email: '',
-        phone: '',
+        message: "",
+        name: "",
+        email: "",
+        phone: "",
     });
 
     const submitConnect = (e) => {
         e.preventDefault();
-        connectForm.post(routes.talentConnectionRequest(talent.id), {
+
+        connectForm.post(routes.talentConnectionCheckout(talent.id), {
             preserveScroll: true,
-            onSuccess: () => connectForm.reset(),
+
+            onStart: () => {
+                // Keep modal open while processing
+            },
+
+            onSuccess: () => {
+                // Laravel should redirect to the payment page.
+                // Do not create the connection here.
+                setConnectOpen(false);
+            },
+
+            onError: () => {
+                // Keep the modal open so the user can correct the form.
+            },
         });
     };
 
+    const loginForm = useForm({
+        email: "",
+        password: "",
+        remember: false,
+        redirect: profileUrl || window.location.href,
+    });
+
+    const openConnect = () => {
+        if (!isAuthenticated) {
+            setLoginOpen(true);
+            return;
+        }
+
+        setConnectOpen(true);
+    };
+
+    useEffect(() => {
+        if (user) {
+            connectForm.setData({
+                name: user.name || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                message: connectForm.data.message || "",
+            });
+        }
+    }, [user?.id]);
+
     const tabs = [
-        { key: 'about', label: 'About Me' },
-        { key: 'stories', label: `Stories (${stories.length})` },
-        { key: 'courses', label: `Courses (${courses.length})` },
-        { key: 'reviews', label: `Reviews (${feedback.length})` },
+        { key: "about", label: "About Me" },
+        { key: "stories", label: `Stories (${stories.length})` },
+        { key: "courses", label: `Courses (${courses.length})` },
+        { key: "reviews", label: `Reviews (${feedback.length})` },
     ];
 
     return (
@@ -734,7 +782,11 @@ export default function SkillProfile({ talent, profileUrl }) {
                                 <div className="col-md-4">
                                     <div className="talent-photo-wrap">
                                         <img
-                                            src={talent.image ? `/${talent.image}` : '/assets/img/user/profile.jpg'}
+                                            src={
+                                                talent.image
+                                                    ? `/${talent.image}`
+                                                    : "/assets/img/user/profile.jpg"
+                                            }
                                             alt={talent.name}
                                         />
                                         <div className="photo-overlay" />
@@ -748,68 +800,104 @@ export default function SkillProfile({ talent, profileUrl }) {
                                         <div>
                                             <div className="talent-skill-tag">
                                                 <i className="ti ti-sparkles" />
-                                                {talent.category?.name ?? 'Talent'}
+                                                {talent.category?.name ??
+                                                    "Talent"}
                                             </div>
                                             <h1 className="talent-name">
                                                 {talent.name}
                                                 <span className="verified-badge">
-                                                    <i className="ti ti-discount-check-filled" /> Verified
+                                                    <i className="ti ti-discount-check-filled" />{" "}
+                                                    Verified
                                                 </span>
                                             </h1>
 
                                             <div className="rating-row mb-3">
                                                 <span className="stars">
-                                                    <StarDisplay value={avgRating} />
+                                                    <StarDisplay
+                                                        value={avgRating}
+                                                    />
                                                 </span>
-                                                <span className="rating-num">{avgRating.toFixed(1)}</span>
-                                                <span className="rating-count">({totalReviews} reviews)</span>
+                                                <span className="rating-num">
+                                                    {avgRating.toFixed(1)}
+                                                </span>
+                                                <span className="rating-count">
+                                                    ({totalReviews} reviews)
+                                                </span>
                                             </div>
 
                                             <div className="about-snippet">
-                                                I'm {talent.name || 'this talent'}, a passionate {talent.skill || 'performer'}{' '}
-                                                blending {talent.category?.name || 'various disciplines'}. I create immersive
-                                                experiences that inspire and uplift communities.
+                                                I'm{" "}
+                                                {talent.name || "this talent"},
+                                                a passionate{" "}
+                                                {talent.skill || "performer"}{" "}
+                                                blending{" "}
+                                                {talent.category?.name ||
+                                                    "various disciplines"}
+                                                . I create immersive experiences
+                                                that inspire and uplift
+                                                communities.
                                             </div>
 
                                             <div className="meta-pills">
                                                 <div className="meta-pill">
                                                     <i className="ti ti-map-pin" />
                                                     <span>
-                                                        <strong>Based in</strong> {talent.address}
+                                                        <strong>
+                                                            Based in
+                                                        </strong>{" "}
+                                                        {talent.address}
                                                     </span>
                                                 </div>
                                                 <div className="meta-pill">
                                                     <i className="ti ti-calendar-event" />
                                                     <span>
-                                                        <strong>Since</strong>{' '}
+                                                        <strong>Since</strong>{" "}
                                                         {talent.created_at &&
-                                                            new Date(talent.created_at).toLocaleDateString('en-US', {
-                                                                month: 'short',
-                                                                year: 'numeric',
-                                                            })}
+                                                            new Date(
+                                                                talent.created_at,
+                                                            ).toLocaleDateString(
+                                                                "en-US",
+                                                                {
+                                                                    month: "short",
+                                                                    year: "numeric",
+                                                                },
+                                                            )}
                                                     </span>
                                                 </div>
                                                 <div className="meta-pill">
                                                     <i className="ti ti-language" />
                                                     <span>
-                                                        <strong>Speaks</strong> {talent.language}
+                                                        <strong>Speaks</strong>{" "}
+                                                        {talent.language}
                                                     </span>
                                                 </div>
                                             </div>
 
                                             <div className="action-row">
-                                                <button className="btn-support" onClick={() => setSupportOpen(true)}>
-                                                    <i className="ti ti-heart" /> Support Talent
+                                                <button
+                                                    className="btn-support"
+                                                    onClick={() =>
+                                                        setSupportOpen(true)
+                                                    }
+                                                >
+                                                    <i className="ti ti-heart" />{" "}
+                                                    Support Talent
                                                 </button>
-                                                <button className="btn-outline" onClick={() => setConnectOpen(true)}>
-                                                    <i className="ti ti-user-plus" /> Connect
+                                                <button
+                                                    className="btn-outline"
+                                                    onClick={openConnect}
+                                                >
+                                                    <i className="ti ti-user-plus" />{" "}
+                                                    Connect
                                                 </button>
                                             </div>
                                         </div>
 
                                         {/* Share Section */}
                                         <div className="share-section">
-                                            <p className="share-label">Share Profile</p>
+                                            <p className="share-label">
+                                                Share Profile
+                                            </p>
                                             <div className="share-row">
                                                 <div className="copy-link-wrap">
                                                     <input
@@ -819,15 +907,28 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                         value={profileUrl}
                                                         readOnly
                                                     />
-                                                    <button className={`btn-copy ${copied ? 'copied' : ''}`} onClick={copyProfileLink}>
-                                                        <i className={`ti ${copied ? 'ti-check' : 'ti-copy'}`} />{' '}
-                                                        {copied ? 'Copied!' : 'Copy'}
+                                                    <button
+                                                        className={`btn-copy ${copied ? "copied" : ""}`}
+                                                        onClick={
+                                                            copyProfileLink
+                                                        }
+                                                    >
+                                                        <i
+                                                            className={`ti ${copied ? "ti-check" : "ti-copy"}`}
+                                                        />{" "}
+                                                        {copied
+                                                            ? "Copied!"
+                                                            : "Copy"}
                                                     </button>
                                                 </div>
 
                                                 {canNativeShare && (
-                                                    <button className="btn-native-share" onClick={nativeShare}>
-                                                        <i className="ti ti-share" /> Share
+                                                    <button
+                                                        className="btn-native-share"
+                                                        onClick={nativeShare}
+                                                    >
+                                                        <i className="ti ti-share" />{" "}
+                                                        Share
                                                     </button>
                                                 )}
 
@@ -842,7 +943,7 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                 </a>
                                                 <a
                                                     href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                                                        profileUrl
+                                                        profileUrl,
                                                     )}&text=${encodeURIComponent(`Check out ${talent.name} on our platform!`)}`}
                                                     target="_blank"
                                                     rel="noreferrer"
@@ -853,7 +954,7 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                 </a>
                                                 <a
                                                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                                                        profileUrl
+                                                        profileUrl,
                                                     )}`}
                                                     target="_blank"
                                                     rel="noreferrer"
@@ -864,7 +965,7 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                 </a>
                                                 <a
                                                     href={`https://wa.me/?text=${encodeURIComponent(
-                                                        `Check out ${talent.name} — ${profileUrl}`
+                                                        `Check out ${talent.name} — ${profileUrl}`,
                                                     )}`}
                                                     target="_blank"
                                                     rel="noreferrer"
@@ -875,9 +976,9 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                 </a>
                                                 <a
                                                     href={`mailto:?subject=${encodeURIComponent(
-                                                        `Talent Profile: ${talent.name}`
+                                                        `Talent Profile: ${talent.name}`,
                                                     )}&body=${encodeURIComponent(
-                                                        `Hey! Check out this talent profile: ${profileUrl}`
+                                                        `Hey! Check out this talent profile: ${profileUrl}`,
                                                     )}`}
                                                     className="social-icon-btn"
                                                     title="Share via Email"
@@ -886,8 +987,15 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                 </a>
                                             </div>
                                             {copied && (
-                                                <p style={{ fontSize: '0.75rem', color: 'var(--accent)', marginTop: 8 }}>
-                                                    <i className="ti ti-check" /> Link copied to clipboard!
+                                                <p
+                                                    style={{
+                                                        fontSize: "0.75rem",
+                                                        color: "var(--accent)",
+                                                        marginTop: 8,
+                                                    }}
+                                                >
+                                                    <i className="ti ti-check" />{" "}
+                                                    Link copied to clipboard!
                                                 </p>
                                             )}
                                         </div>
@@ -902,7 +1010,7 @@ export default function SkillProfile({ talent, profileUrl }) {
                                 {tabs.map((tab) => (
                                     <button
                                         key={tab.key}
-                                        className={`tab-nav-item ${activeTab === tab.key ? 'active' : ''}`}
+                                        className={`tab-nav-item ${activeTab === tab.key ? "active" : ""}`}
                                         onClick={() => setActiveTab(tab.key)}
                                     >
                                         {tab.label}
@@ -912,55 +1020,115 @@ export default function SkillProfile({ talent, profileUrl }) {
 
                             <div className="tab-body">
                                 {/* ABOUT */}
-                                <div className={`tab-pane ${activeTab === 'about' ? 'active' : ''}`}>
+                                <div
+                                    className={`tab-pane ${activeTab === "about" ? "active" : ""}`}
+                                >
                                     <div className="section-head">
                                         <h3>About {talent.name}</h3>
                                     </div>
                                     <div className="about-full">
                                         <p>
-                                            Hello, I'm {talent.name || 'Unnamed Talent'}, a passionate{' '}
-                                            {talent.skill || 'creative'} and performer blending{' '}
-                                            {talent.category?.name || 'various disciplines'}. I create immersive experiences
-                                            that inspire and uplift communities. My journey has been driven by a deep love
-                                            for the art and a commitment to bringing authentic storytelling and performance
-                                            to every audience I meet.
+                                            Hello, I'm{" "}
+                                            {talent.name || "Unnamed Talent"}, a
+                                            passionate{" "}
+                                            {talent.skill || "creative"} and
+                                            performer blending{" "}
+                                            {talent.category?.name ||
+                                                "various disciplines"}
+                                            . I create immersive experiences
+                                            that inspire and uplift communities.
+                                            My journey has been driven by a deep
+                                            love for the art and a commitment to
+                                            bringing authentic storytelling and
+                                            performance to every audience I
+                                            meet.
                                         </p>
-                                        {talent.bio && <p style={{ marginTop: 16 }}>{talent.bio}</p>}
+                                        {talent.bio && (
+                                            <p style={{ marginTop: 16 }}>
+                                                {talent.bio}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
                                 {/* STORIES */}
-                                <div className={`tab-pane ${activeTab === 'stories' ? 'active' : ''}`}>
+                                <div
+                                    className={`tab-pane ${activeTab === "stories" ? "active" : ""}`}
+                                >
                                     <div className="section-head">
                                         <h3>Stories</h3>
-                                        {stories.length > 0 && <span className="count-badge">{stories.length}</span>}
+                                        {stories.length > 0 && (
+                                            <span className="count-badge">
+                                                {stories.length}
+                                            </span>
+                                        )}
                                     </div>
 
                                     {stories.length > 0 ? (
                                         <div className="card-grid">
                                             {stories.map((story) => {
-                                                const storyAvg = story.comments?.length
-                                                    ? story.comments.reduce((a, c) => a + (c.rating || 0), 0) /
-                                                      story.comments.length
+                                                const storyAvg = story.comments
+                                                    ?.length
+                                                    ? story.comments.reduce(
+                                                          (a, c) =>
+                                                              a +
+                                                              (c.rating || 0),
+                                                          0,
+                                                      ) / story.comments.length
                                                     : 0;
                                                 return (
-                                                    <div className="content-card" key={story.id}>
+                                                    <div
+                                                        className="content-card"
+                                                        key={story.id}
+                                                    >
                                                         <div className="content-card-img">
-                                                            <img src="/assets/img/placeholder.jpg" alt={story.title} />
-                                                            <span className="card-cat">{story.category?.name ?? 'Story'}</span>
+                                                            <img
+                                                                src="/assets/img/placeholder.jpg"
+                                                                alt={
+                                                                    story.title
+                                                                }
+                                                            />
+                                                            <span className="card-cat">
+                                                                {story.category
+                                                                    ?.name ??
+                                                                    "Story"}
+                                                            </span>
                                                         </div>
                                                         <div className="content-card-body">
                                                             <h5>
-                                                                <a href={routes.storyDetails(story.slug)}>{story.title}</a>
+                                                                <a
+                                                                    href={routes.storyDetails(
+                                                                        story.slug,
+                                                                    )}
+                                                                >
+                                                                    {
+                                                                        story.title
+                                                                    }
+                                                                </a>
                                                             </h5>
                                                             <div className="card-meta">
                                                                 <span className="stars-sm">
-                                                                    <StarDisplay value={storyAvg} size="0.75rem" />
+                                                                    <StarDisplay
+                                                                        value={
+                                                                            storyAvg
+                                                                        }
+                                                                        size="0.75rem"
+                                                                    />
                                                                 </span>
                                                                 <span>
-                                                                    {storyAvg.toFixed(1)} ({story.comments?.length ?? 0})
+                                                                    {storyAvg.toFixed(
+                                                                        1,
+                                                                    )}{" "}
+                                                                    (
+                                                                    {story
+                                                                        .comments
+                                                                        ?.length ??
+                                                                        0}
+                                                                    )
                                                                 </span>
-                                                                <span>{story.tags}</span>
+                                                                <span>
+                                                                    {story.tags}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -976,42 +1144,91 @@ export default function SkillProfile({ talent, profileUrl }) {
                                 </div>
 
                                 {/* COURSES */}
-                                <div className={`tab-pane ${activeTab === 'courses' ? 'active' : ''}`}>
+                                <div
+                                    className={`tab-pane ${activeTab === "courses" ? "active" : ""}`}
+                                >
                                     <div className="section-head">
                                         <h3>Courses</h3>
-                                        {courses.length > 0 && <span className="count-badge">{courses.length}</span>}
+                                        {courses.length > 0 && (
+                                            <span className="count-badge">
+                                                {courses.length}
+                                            </span>
+                                        )}
                                     </div>
 
                                     {courses.length > 0 ? (
                                         <div className="card-grid">
                                             {courses.map((course) => {
-                                                const courseAvg = course.feedback?.length
-                                                    ? course.feedback.reduce((a, f) => a + (f.rating || 0), 0) /
-                                                      course.feedback.length
+                                                const courseAvg = course
+                                                    .feedback?.length
+                                                    ? course.feedback.reduce(
+                                                          (a, f) =>
+                                                              a +
+                                                              (f.rating || 0),
+                                                          0,
+                                                      ) / course.feedback.length
                                                     : 0;
                                                 return (
-                                                    <div className="content-card" key={course.id}>
+                                                    <div
+                                                        className="content-card"
+                                                        key={course.id}
+                                                    >
                                                         <div className="content-card-img">
-                                                            <a href={routes.courseDetails(course.slug)}>
+                                                            <a
+                                                                href={routes.courseDetails(
+                                                                    course.slug,
+                                                                )}
+                                                            >
                                                                 <img
                                                                     src={`/images/thumbnails/${course.thumbnail}`}
-                                                                    alt={course.title}
+                                                                    alt={
+                                                                        course.title
+                                                                    }
                                                                 />
                                                             </a>
-                                                            <span className="card-cat">{course.category?.name ?? 'Course'}</span>
+                                                            <span className="card-cat">
+                                                                {course.category
+                                                                    ?.name ??
+                                                                    "Course"}
+                                                            </span>
                                                         </div>
                                                         <div className="content-card-body">
                                                             <h5>
-                                                                <a href={routes.courseDetails(course.slug)}>{course.title}</a>
+                                                                <a
+                                                                    href={routes.courseDetails(
+                                                                        course.slug,
+                                                                    )}
+                                                                >
+                                                                    {
+                                                                        course.title
+                                                                    }
+                                                                </a>
                                                             </h5>
                                                             <div className="card-meta">
                                                                 <span className="stars-sm">
-                                                                    <StarDisplay value={courseAvg} size="0.75rem" />
+                                                                    <StarDisplay
+                                                                        value={
+                                                                            courseAvg
+                                                                        }
+                                                                        size="0.75rem"
+                                                                    />
                                                                 </span>
                                                                 <span>
-                                                                    {courseAvg.toFixed(1)} ({course.feedback?.length ?? 0})
+                                                                    {courseAvg.toFixed(
+                                                                        1,
+                                                                    )}{" "}
+                                                                    (
+                                                                    {course
+                                                                        .feedback
+                                                                        ?.length ??
+                                                                        0}
+                                                                    )
                                                                 </span>
-                                                                <span>{course.tags}</span>
+                                                                <span>
+                                                                    {
+                                                                        course.tags
+                                                                    }
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1027,43 +1244,77 @@ export default function SkillProfile({ talent, profileUrl }) {
                                 </div>
 
                                 {/* REVIEWS */}
-                                <div className={`tab-pane ${activeTab === 'reviews' ? 'active' : ''}`}>
+                                <div
+                                    className={`tab-pane ${activeTab === "reviews" ? "active" : ""}`}
+                                >
                                     <div className="review-layout">
                                         {/* Left: ratings + list */}
                                         <div>
                                             <div className="rating-summary">
                                                 <div className="avg-score">
-                                                    <div className="avg-number">{avgRating.toFixed(1)}</div>
-                                                    <div className="avg-stars">
-                                                        <StarDisplay value={avgRating} size="1.1rem" />
+                                                    <div className="avg-number">
+                                                        {avgRating.toFixed(1)}
                                                     </div>
-                                                    <div className="avg-count">{totalReviews} reviews</div>
+                                                    <div className="avg-stars">
+                                                        <StarDisplay
+                                                            value={avgRating}
+                                                            size="1.1rem"
+                                                        />
+                                                    </div>
+                                                    <div className="avg-count">
+                                                        {totalReviews} reviews
+                                                    </div>
                                                 </div>
                                                 <div className="bars-wrap">
-                                                    {starCounts.map(({ stars, count }) => {
-                                                        const pct = totalReviews ? (count / totalReviews) * 100 : 0;
-                                                        return (
-                                                            <div className="bar-row" key={stars}>
-                                                                <span className="bar-label">{stars} star</span>
-                                                                <div className="bar-track">
-                                                                    <div className="bar-fill" style={{ width: `${pct}%` }} />
+                                                    {starCounts.map(
+                                                        ({ stars, count }) => {
+                                                            const pct =
+                                                                totalReviews
+                                                                    ? (count /
+                                                                          totalReviews) *
+                                                                      100
+                                                                    : 0;
+                                                            return (
+                                                                <div
+                                                                    className="bar-row"
+                                                                    key={stars}
+                                                                >
+                                                                    <span className="bar-label">
+                                                                        {stars}{" "}
+                                                                        star
+                                                                    </span>
+                                                                    <div className="bar-track">
+                                                                        <div
+                                                                            className="bar-fill"
+                                                                            style={{
+                                                                                width: `${pct}%`,
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                    <span className="bar-count">
+                                                                        {count}
+                                                                    </span>
                                                                 </div>
-                                                                <span className="bar-count">{count}</span>
-                                                            </div>
-                                                        );
-                                                    })}
+                                                            );
+                                                        },
+                                                    )}
                                                 </div>
                                             </div>
 
                                             <div className="section-head">
                                                 <h3>All Reviews</h3>
-                                                <span className="count-badge">{totalReviews}</span>
+                                                <span className="count-badge">
+                                                    {totalReviews}
+                                                </span>
                                             </div>
 
                                             <div className="review-list">
                                                 {feedback.length > 0 ? (
                                                     feedback.map((fb) => (
-                                                        <div className="review-item" key={fb.id}>
+                                                        <div
+                                                            className="review-item"
+                                                            key={fb.id}
+                                                        >
                                                             <div className="reviewer-head">
                                                                 <img
                                                                     src="/assets/img/user/profile.jpg"
@@ -1071,16 +1322,29 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                                     alt=""
                                                                 />
                                                                 <div>
-                                                                    <div className="reviewer-name">{fb.name}</div>
+                                                                    <div className="reviewer-name">
+                                                                        {
+                                                                            fb.name
+                                                                        }
+                                                                    </div>
                                                                     <div className="reviewer-time">
-                                                                        {formatRelativeTime(fb.created_at)}
+                                                                        {formatRelativeTime(
+                                                                            fb.created_at,
+                                                                        )}
                                                                     </div>
                                                                 </div>
                                                                 <span className="reviewer-stars ms-auto">
-                                                                    <StarDisplay value={fb.rating} size="0.75rem" />
+                                                                    <StarDisplay
+                                                                        value={
+                                                                            fb.rating
+                                                                        }
+                                                                        size="0.75rem"
+                                                                    />
                                                                 </span>
                                                             </div>
-                                                            <p className="review-comment">{fb.comment}</p>
+                                                            <p className="review-comment">
+                                                                {fb.comment}
+                                                            </p>
                                                         </div>
                                                     ))
                                                 ) : (
@@ -1098,73 +1362,164 @@ export default function SkillProfile({ talent, profileUrl }) {
                                                 <h4>Leave a Review</h4>
                                                 <form onSubmit={submitReview}>
                                                     <label className="form-label">
-                                                        Your Rating <span style={{ color: 'var(--accent)' }}>*</span>
+                                                        Your Rating{" "}
+                                                        <span
+                                                            style={{
+                                                                color: "var(--accent)",
+                                                            }}
+                                                        >
+                                                            *
+                                                        </span>
                                                     </label>
                                                     <div className="star-input-wrap">
-                                                        {[5, 4, 3, 2, 1].map((star) => (
-                                                            <React.Fragment key={star}>
-                                                                <input
-                                                                    type="radio"
-                                                                    name="rating"
-                                                                    id={`s${star}`}
-                                                                    value={star}
-                                                                    checked={reviewForm.data.rating === String(star)}
-                                                                    onChange={() => reviewForm.setData('rating', String(star))}
-                                                                    required
-                                                                />
-                                                                <label htmlFor={`s${star}`} title={`${star} star${star > 1 ? 's' : ''}`}>
-                                                                    ★
-                                                                </label>
-                                                            </React.Fragment>
-                                                        ))}
+                                                        {[5, 4, 3, 2, 1].map(
+                                                            (star) => (
+                                                                <React.Fragment
+                                                                    key={star}
+                                                                >
+                                                                    <input
+                                                                        type="radio"
+                                                                        name="rating"
+                                                                        id={`s${star}`}
+                                                                        value={
+                                                                            star
+                                                                        }
+                                                                        checked={
+                                                                            reviewForm
+                                                                                .data
+                                                                                .rating ===
+                                                                            String(
+                                                                                star,
+                                                                            )
+                                                                        }
+                                                                        onChange={() =>
+                                                                            reviewForm.setData(
+                                                                                "rating",
+                                                                                String(
+                                                                                    star,
+                                                                                ),
+                                                                            )
+                                                                        }
+                                                                        required
+                                                                    />
+                                                                    <label
+                                                                        htmlFor={`s${star}`}
+                                                                        title={`${star} star${star > 1 ? "s" : ""}`}
+                                                                    >
+                                                                        ★
+                                                                    </label>
+                                                                </React.Fragment>
+                                                            ),
+                                                        )}
                                                     </div>
 
-                                                    <div className="row g-3" style={{ marginBottom: 0 }}>
+                                                    <div
+                                                        className="row g-3"
+                                                        style={{
+                                                            marginBottom: 0,
+                                                        }}
+                                                    >
                                                         <div className="col-6">
                                                             <label className="form-label">
-                                                                Name <span style={{ color: 'var(--accent)' }}>*</span>
+                                                                Name{" "}
+                                                                <span
+                                                                    style={{
+                                                                        color: "var(--accent)",
+                                                                    }}
+                                                                >
+                                                                    *
+                                                                </span>
                                                             </label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control-dark"
                                                                 placeholder="Your name"
-                                                                value={reviewForm.data.name}
-                                                                onChange={(e) => reviewForm.setData('name', e.target.value)}
+                                                                value={
+                                                                    reviewForm
+                                                                        .data
+                                                                        .name
+                                                                }
+                                                                onChange={(e) =>
+                                                                    reviewForm.setData(
+                                                                        "name",
+                                                                        e.target
+                                                                            .value,
+                                                                    )
+                                                                }
                                                                 required
                                                             />
                                                         </div>
                                                         <div className="col-6">
                                                             <label className="form-label">
-                                                                Email <span style={{ color: 'var(--accent)' }}>*</span>
+                                                                Email{" "}
+                                                                <span
+                                                                    style={{
+                                                                        color: "var(--accent)",
+                                                                    }}
+                                                                >
+                                                                    *
+                                                                </span>
                                                             </label>
                                                             <input
                                                                 type="email"
                                                                 className="form-control-dark"
                                                                 placeholder="you@mail.com"
-                                                                value={reviewForm.data.email}
-                                                                onChange={(e) => reviewForm.setData('email', e.target.value)}
+                                                                value={
+                                                                    reviewForm
+                                                                        .data
+                                                                        .email
+                                                                }
+                                                                onChange={(e) =>
+                                                                    reviewForm.setData(
+                                                                        "email",
+                                                                        e.target
+                                                                            .value,
+                                                                    )
+                                                                }
                                                                 required
                                                             />
                                                         </div>
                                                     </div>
 
-                                                    <label className="form-label" style={{ marginTop: 2 }}>
-                                                        Your Review <span style={{ color: 'var(--accent)' }}>*</span>
+                                                    <label
+                                                        className="form-label"
+                                                        style={{ marginTop: 2 }}
+                                                    >
+                                                        Your Review{" "}
+                                                        <span
+                                                            style={{
+                                                                color: "var(--accent)",
+                                                            }}
+                                                        >
+                                                            *
+                                                        </span>
                                                     </label>
                                                     <textarea
                                                         className="form-control-dark"
                                                         placeholder="Share your experience…"
-                                                        value={reviewForm.data.comment}
-                                                        onChange={(e) => reviewForm.setData('comment', e.target.value)}
+                                                        value={
+                                                            reviewForm.data
+                                                                .comment
+                                                        }
+                                                        onChange={(e) =>
+                                                            reviewForm.setData(
+                                                                "comment",
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                         required
                                                     />
 
                                                     <button
                                                         type="submit"
                                                         className="btn-submit-review"
-                                                        disabled={reviewForm.processing}
+                                                        disabled={
+                                                            reviewForm.processing
+                                                        }
                                                     >
-                                                        {reviewForm.processing ? 'Submitting…' : 'Submit Review'}
+                                                        {reviewForm.processing
+                                                            ? "Submitting…"
+                                                            : "Submit Review"}
                                                     </button>
                                                 </form>
                                             </div>
@@ -1178,65 +1533,293 @@ export default function SkillProfile({ talent, profileUrl }) {
 
                 {/* ═══════════════ SUPPORT MODAL ═══════════════ */}
                 {supportOpen && (
-                    <div className="fc-modal-backdrop" onClick={() => setSupportOpen(false)}>
-                        <div className="modal-dark" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="fc-modal-backdrop"
+                        onClick={() => setSupportOpen(false)}
+                    >
+                        <div
+                            className="modal-dark"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <div className="modal-header">
                                 <div>
-                                    <h5 className="modal-title">Support {talent.name}</h5>
+                                    <h5 className="modal-title">
+                                        Support {talent.name}
+                                    </h5>
                                     <span className="accent-bar" />
                                 </div>
-                                <button className="btn-close" onClick={() => setSupportOpen(false)}>
+                                <button
+                                    className="btn-close"
+                                    onClick={() => setSupportOpen(false)}
+                                >
                                     ✕
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 20 }}>
-                                    Your contribution helps this talent grow and create more incredible work.
+                                <p
+                                    style={{
+                                        color: "var(--text-secondary)",
+                                        fontSize: "0.85rem",
+                                        marginBottom: 20,
+                                    }}
+                                >
+                                    Your contribution helps this talent grow and
+                                    create more incredible work.
                                 </p>
                                 <form onSubmit={submitSupport}>
-                                    <label className="form-label">Your Name</label>
+                                    <label className="form-label">
+                                        Your Name
+                                    </label>
                                     <input
                                         type="text"
                                         className="form-control-dark"
                                         placeholder="John Doe"
                                         value={supportForm.data.name}
-                                        onChange={(e) => supportForm.setData('name', e.target.value)}
+                                        onChange={(e) =>
+                                            supportForm.setData(
+                                                "name",
+                                                e.target.value,
+                                            )
+                                        }
                                         required
                                     />
 
-                                    <label className="form-label">Your Email</label>
+                                    <label className="form-label">
+                                        Your Email
+                                    </label>
                                     <input
                                         type="email"
                                         className="form-control-dark"
                                         placeholder="you@example.com"
                                         value={supportForm.data.email}
-                                        onChange={(e) => supportForm.setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            supportForm.setData(
+                                                "email",
+                                                e.target.value,
+                                            )
+                                        }
                                         required
                                     />
 
-                                    <label className="form-label">Support Amount (RWF)</label>
+                                    <label className="form-label">
+                                        Support Amount (RWF)
+                                    </label>
                                     <input
                                         type="number"
                                         className="form-control-dark"
                                         placeholder="e.g. 5000"
                                         min="1"
                                         value={supportForm.data.amount}
-                                        onChange={(e) => supportForm.setData('amount', e.target.value)}
+                                        onChange={(e) =>
+                                            supportForm.setData(
+                                                "amount",
+                                                e.target.value,
+                                            )
+                                        }
                                         required
                                     />
 
-                                    <label className="form-label">Message (Optional)</label>
+                                    <label className="form-label">
+                                        Message (Optional)
+                                    </label>
                                     <textarea
                                         className="form-control-dark"
                                         rows={3}
                                         placeholder="Write a short note..."
                                         value={supportForm.data.message}
-                                        onChange={(e) => supportForm.setData('message', e.target.value)}
+                                        onChange={(e) =>
+                                            supportForm.setData(
+                                                "message",
+                                                e.target.value,
+                                            )
+                                        }
                                     />
 
-                                    <button type="submit" className="btn-submit-review" disabled={supportForm.processing}>
-                                        <i className="ti ti-heart me-2" />{' '}
-                                        {supportForm.processing ? 'Sending…' : 'Send Support'}
+                                    <button
+                                        type="submit"
+                                        className="btn-submit-review"
+                                        disabled={supportForm.processing}
+                                    >
+                                        <i className="ti ti-heart me-2" />{" "}
+                                        {supportForm.processing
+                                            ? "Sending…"
+                                            : "Send Support"}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* ═══════════════ LOGIN MODAL ═══════════════ */}
+                {loginOpen && (
+                    <div
+                        className="fc-modal-backdrop"
+                        onClick={() => setLoginOpen(false)}
+                    >
+                        <div
+                            className="modal-dark"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="modal-header">
+                                <div>
+                                    <h5 className="modal-title">
+                                        Login to Connect
+                                    </h5>
+
+                                    <span className="accent-bar" />
+                                </div>
+
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setLoginOpen(false)}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div className="modal-body">
+                                <p
+                                    style={{
+                                        color: "var(--text-secondary)",
+                                        fontSize: "0.85rem",
+                                        marginBottom: 20,
+                                    }}
+                                >
+                                    Please login to your account before
+                                    connecting with {talent.name}.
+                                </p>
+
+                                <form
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+
+                                        loginForm.post(routes.login, {
+                                            preserveScroll: true,
+
+                                            onSuccess: () => {
+                                                setLoginOpen(false);
+
+                                                /*
+                                                 * Laravel has authenticated the user.
+                                                 * The page stays where it is.
+                                                 *
+                                                 * A short delay allows Inertia's auth
+                                                 * props to refresh before opening
+                                                 * the Connect modal.
+                                                 */
+                                                setTimeout(() => {
+                                                    setConnectOpen(true);
+                                                }, 150);
+                                            },
+                                        });
+                                    }}
+                                >
+                                    <label className="form-label">Email</label>
+
+                                    <input
+                                        type="email"
+                                        className="form-control-dark"
+                                        placeholder="you@example.com"
+                                        value={loginForm.data.email}
+                                        onChange={(e) =>
+                                            loginForm.setData(
+                                                "email",
+                                                e.target.value,
+                                            )
+                                        }
+                                        autoComplete="email"
+                                        required
+                                    />
+
+                                    {loginForm.errors.email && (
+                                        <div
+                                            style={{
+                                                color: "#dc3545",
+                                                fontSize: "0.75rem",
+                                                marginTop: "-8px",
+                                                marginBottom: 12,
+                                            }}
+                                        >
+                                            {loginForm.errors.email}
+                                        </div>
+                                    )}
+
+                                    <label className="form-label">
+                                        Password
+                                    </label>
+
+                                    <input
+                                        type="password"
+                                        className="form-control-dark"
+                                        placeholder="Enter your password"
+                                        value={loginForm.data.password}
+                                        onChange={(e) =>
+                                            loginForm.setData(
+                                                "password",
+                                                e.target.value,
+                                            )
+                                        }
+                                        autoComplete="current-password"
+                                        required
+                                    />
+
+                                    {loginForm.errors.password && (
+                                        <div
+                                            style={{
+                                                color: "#dc3545",
+                                                fontSize: "0.75rem",
+                                                marginTop: "-8px",
+                                                marginBottom: 12,
+                                            }}
+                                        >
+                                            {loginForm.errors.password}
+                                        </div>
+                                    )}
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 8,
+                                            marginBottom: 20,
+                                        }}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id="loginRemember"
+                                            checked={loginForm.data.remember}
+                                            onChange={(e) =>
+                                                loginForm.setData(
+                                                    "remember",
+                                                    e.target.checked,
+                                                )
+                                            }
+                                        />
+
+                                        <label
+                                            htmlFor="loginRemember"
+                                            style={{
+                                                color: "var(--text-secondary)",
+                                                fontSize: "0.8rem",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            Remember me
+                                        </label>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="btn-submit-review"
+                                        disabled={loginForm.processing}
+                                    >
+                                        <i className="ti ti-login me-2" />
+
+                                        {loginForm.processing
+                                            ? "Signing in…"
+                                            : "Login & Continue"}
                                     </button>
                                 </form>
                             </div>
@@ -1246,63 +1829,143 @@ export default function SkillProfile({ talent, profileUrl }) {
 
                 {/* ═══════════════ CONNECT MODAL ═══════════════ */}
                 {connectOpen && (
-                    <div className="fc-modal-backdrop" onClick={() => setConnectOpen(false)}>
-                        <div className="modal-dark" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="fc-modal-backdrop"
+                        onClick={() => setConnectOpen(false)}
+                    >
+                        <div
+                            className="modal-dark"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <div className="modal-header">
                                 <div>
-                                    <h5 className="modal-title">Connect with {talent.name}</h5>
+                                    <h5 className="modal-title">
+                                        Connect with {talent.name}
+                                    </h5>
                                     <span className="accent-bar" />
                                 </div>
-                                <button className="btn-close" onClick={() => setConnectOpen(false)}>
+                                <button
+                                    className="btn-close"
+                                    onClick={() => setConnectOpen(false)}
+                                >
                                     ✕
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 20 }}>
-                                    Send a connection request and introduce yourself.
+                                <p
+                                    style={{
+                                        color: "var(--text-secondary)",
+                                        fontSize: "0.85rem",
+                                        marginBottom: 20,
+                                    }}
+                                >
+                                    Send a connection request and introduce
+                                    yourself.
                                 </p>
                                 <form onSubmit={submitConnect}>
                                     <div className="mb-3">
-                                        <label className="form-label">Your Name</label>
+                                        <label className="form-label">
+                                            Your Name
+                                        </label>
                                         <input
                                             type="text"
                                             className="form-control-dark"
                                             placeholder="Enter your name"
                                             value={connectForm.data.name}
-                                            onChange={(e) => connectForm.setData('name', e.target.value)}
+                                            onChange={(e) =>
+                                                connectForm.setData(
+                                                    "name",
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label">Your Email</label>
+                                        <label className="form-label">
+                                            Your Email
+                                        </label>
                                         <input
                                             type="email"
                                             className="form-control-dark"
                                             placeholder="Enter your email"
                                             value={connectForm.data.email}
-                                            onChange={(e) => connectForm.setData('email', e.target.value)}
+                                            onChange={(e) =>
+                                                connectForm.setData(
+                                                    "email",
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
                                     <div className="mb-3">
-                                        <label className="form-label">Your Phone</label>
+                                        <label className="form-label">
+                                            Your Phone
+                                        </label>
                                         <input
                                             type="tel"
                                             className="form-control-dark"
                                             placeholder="Enter your phone number"
                                             value={connectForm.data.phone}
-                                            onChange={(e) => connectForm.setData('phone', e.target.value)}
+                                            onChange={(e) =>
+                                                connectForm.setData(
+                                                    "phone",
+                                                    e.target.value,
+                                                )
+                                            }
                                         />
                                     </div>
-                                    <label className="form-label">Your Message</label>
+                                    <label className="form-label">
+                                        Your Message
+                                    </label>
                                     <textarea
                                         className="form-control-dark"
                                         rows={4}
                                         placeholder="Hi! I'd love to connect…"
                                         value={connectForm.data.message}
-                                        onChange={(e) => connectForm.setData('message', e.target.value)}
+                                        onChange={(e) =>
+                                            connectForm.setData(
+                                                "message",
+                                                e.target.value,
+                                            )
+                                        }
                                     />
-                                    <button type="submit" className="btn-submit-review" disabled={connectForm.processing}>
-                                        <i className="ti ti-user-plus me-2" />{' '}
-                                        {connectForm.processing ? 'Sending…' : 'Send Request'}
+
+                                    <div
+                                        style={{
+                                            background: "var(--bg-glass2)",
+                                            border: "1px solid var(--border-accent)",
+                                            borderRadius: 10,
+                                            padding: "12px 14px",
+                                            marginBottom: 18,
+                                            fontSize: "0.78rem",
+                                            color: "var(--text-secondary)",
+                                            lineHeight: 1.6,
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                color: "var(--accent)",
+                                                fontWeight: 700,
+                                                marginBottom: 4,
+                                            }}
+                                        >
+                                            <i className="ti ti-shield-check me-1" />
+                                            Secure connection
+                                        </div>
+                                        Your connection request will only be
+                                        sent after successful payment.
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="btn-submit-review"
+                                        disabled={connectForm.processing}
+                                    >
+                                        <i className="ti ti-credit-card me-2" />
+
+                                        {connectForm.processing
+                                            ? "Preparing Payment…"
+                                            : "Proceed to Connect"}
                                     </button>
                                 </form>
                             </div>
@@ -1314,4 +1977,6 @@ export default function SkillProfile({ talent, profileUrl }) {
     );
 }
 
-SkillProfile.layout = (page) => <GuestLayout children={page} title="Skill Profile" />;
+SkillProfile.layout = (page) => (
+    <GuestLayout children={page} title="Skill Profile" />
+);

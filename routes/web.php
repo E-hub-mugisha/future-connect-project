@@ -179,6 +179,18 @@ Route::post('/connections/{id}/pay-now', [TalentConnectionController::class, 'pa
 Route::post('/connections/{id}/pay-later', [TalentConnectionController::class, 'payLater'])->name('connections.payment.later');
 Route::get('/connection/payment/callback', [TalentConnectionController::class, 'handleCallback'])->name('connection.payment.callback');
 
+Route::post('/connection/{talent}/checkout', [TalentConnectionController::class, 'checkout'])->name('talent.connection.checkout');
+Route::get('/connection/payment/{payment}', [TalentConnectionController::class, 'payment'])->name('connection.payment')->middleware('auth');
+Route::post('/connection/payment/{payment}/pay', [TalentConnectionController::class, 'pay'])->name('connection.payment.pay');
+Route::get(
+        '/connection/payment/callback',
+        [TalentConnectionController::class, 'callback']
+    )->name('connection.payment.callback');
+
+    Route::get(
+        '/connection/payment/{payment}/success',
+        [TalentConnectionController::class, 'success']
+    )->name('connection.payment.success');
 /*
 |--------------------------------------------------------------------------
 | Learning Center / Courses

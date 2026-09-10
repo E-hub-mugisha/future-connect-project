@@ -1,487 +1,1678 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
-import AppLayout from '@/Layouts/AppLayout';
+// resources/js/Pages/Talent/Courses/Index.jsx
 
-export default function CoursesIndex({ courses }) {
-    const [query, setQuery] = useState('');
+import { Head, Link, router } from "@inertiajs/react";
+import { useMemo, useState } from "react";
+import AppLayout from "@/Layouts/AppLayout";
+
+export default function CoursesIndex({ courses = [] }) {
+    const [query, setQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [categoryFilter, setCategoryFilter] = useState("all");
+    const [sortBy, setSortBy] = useState("newest");
+    const [viewMode, setViewMode] = useState("grid");
     const [deleteTarget, setDeleteTarget] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(null);
 
-    const filtered = courses.filter((c) =>
-        c.title.toLowerCase().includes(query.toLowerCase())
-    );
+    const categories = useMemo(() => {
+        const values = courses
+            .map((course) => course.category?.name)
+            .filter(Boolean);
+
+        return [...new Set(values)];
+    }, [courses]);
+
+    const stats = useMemo(() => {
+        const published = courses.filter(
+            (course) => course.status === "published"
+        );
+
+        const drafts = courses.filter(
+            (course) => course.status !== "published"
+        );
+
+        const enrollments = courses.reduce(
+            (total, course) => total + Number(course.enrollments_count ?? 0),
+            0
+        );
+
+        const ratings = courses
+            .map((course) => Number(course.feedback_avg_rating ?? 0))
+            .filter((rating) => rating > 0);
+
+        const averageRating =
+            ratings.length > 0
+                ? ratings.reduce((a, b) => a + b, 0) / ratings.length
+                : 0;
+
+        const revenue = courses.reduce((total, course) => {
+            if (course.is_free) return total;
+
+            return (
+                total +
+                Number(course.price ?? 0) *
+                    Number(course.enrollments_count ?? 0)
+            );
+        }, 0);
+
+        return {
+            total: courses.length,
+            published: published.length,
+            drafts: drafts.length,
+            enrollments,
+            averageRating,
+            revenue,
+        };
+    }, [courses]);
+
+    const filteredCourses = useMemo(() => {
+        let result = courses.filter((course) => {
+            const matchesSearch =
+                course.title
+                    ?.toLowerCase()
+                    .includes(query.toLowerCase()) ||
+                course.category?.name
+                    ?.toLowerCase()
+                    .includes(query.toLowerCase());
+
+            const matchesStatus =
+                statusFilter === "all" ||
+                course.status === statusFilter;
+
+            const matchesCategory =
+                categoryFilter === "all" ||
+                course.category?.name === categoryFilter;
+
+            return matchesSearch && matchesStatus && matchesCategory;
+        });
+
+        result = [...result].sort((a, b) => {
+            switch (sortBy) {
+                case "learners":
+                    return (
+                        Number(b.enrollments_count ?? 0) -
+                        Number(a.enrollments_count ?? 0)
+                    );
+
+                case "rating":
+                    return (
+                        Number(b.feedback_avg_rating ?? 0) -
+                        Number(a.feedback_avg_rating ?? 0)
+                    );
+
+                case "price":
+                    return (
+                        Number(b.price ?? 0) -
+                        Number(a.price ?? 0)
+                    );
+
+                case "title":
+                    return (a.title || "").localeCompare(b.title || "");
+
+                default:
+                    return Number(b.id ?? 0) - Number(a.id ?? 0);
+            }
+        });
+
+        return result;
+    }, [
+        courses,
+        query,
+        statusFilter,
+        categoryFilter,
+        sortBy,
+    ]);
+
+    const topCourse = useMemo(() => {
+        if (!courses.length) return null;
+
+        return [...courses].sort(
+            (a, b) =>
+                Number(b.enrollments_count ?? 0) -
+                Number(a.enrollments_count ?? 0)
+        )[0];
+    }, [courses]);
 
     function confirmDelete() {
-        router.delete(route('talent.courses.destroy', deleteTarget.id), {
-            preserveScroll: true,
-            onSuccess: () => setDeleteTarget(null),
-        });
+        if (!deleteTarget) return;
+
+        router.delete(
+            route("talent.courses.destroy", deleteTarget.id),
+            {
+                preserveScroll: true,
+                onSuccess: () => setDeleteTarget(null),
+            }
+        );
     }
 
     return (
         <AppLayout>
-            <Head title="Courses" />
+            <Head title="Talent Studio — Courses" />
 
-            <div data-h-scope="talent-courses">
+            <div className="talent-studio">
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
-                    [data-h-scope="talent-courses"] {
-                        --h-accent: #48d597;
-                        --h-accent-ink: #0f3d2b;
-                        --h-ink: #000000;
-                        --h-white: #F5f5f7;
-                        --h-bg: #f6f8f7;
-                        --h-line: rgba(0, 0, 0, 0.1);
-                        --h-line-soft: rgba(0, 0, 0, 0.06);
-                        --h-muted: rgba(0, 0, 0, 0.55);
-                        background-color: var(--h-bg);
-                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-courses"] h1,
-                    [data-h-scope="talent-courses"] h2,
-                    [data-h-scope="talent-courses"] h3,
-                    [data-h-scope="talent-courses"] h4,
-                    [data-h-scope="talent-courses"] h5,
-                    [data-h-scope="talent-courses"] h6 {
-                        font-family: 'Space Grotesk', 'Inter', sans-serif;
-                        letter-spacing: -0.01em;
+                    :root {
+                        --talent-green: #00a667;
+                        --talent-green-dark: #008653;
+                        --talent-green-soft: #e9f8f1;
+                        --talent-black: #0b0d0f;
+                        --talent-text: #111827;
+                        --talent-muted: #6b7280;
+                        --talent-border: #e8ecea;
+                        --talent-bg: #f7f9f8;
+                        --talent-white: #ffffff;
                     }
 
-                    /* ---- header: light panel, accent stripe, no dark band ---- */
-                    [data-h-scope="talent-courses"] .h-header-card {
-                        background: var(--h-white);
-                        border: 1px solid var(--h-line-soft);
-                        border-radius: 16px;
+                    .talent-studio {
+                        min-height: 100vh;
+                        background: var(--talent-bg);
+                        color: var(--talent-text);
+                        font-family: "DM Sans", sans-serif;
+                    }
+
+                    .talent-studio h1,
+                    .talent-studio h2,
+                    .talent-studio h3,
+                    .talent-studio h4,
+                    .talent-studio h5,
+                    .talent-studio h6 {
+                        font-family: "Space Grotesk", sans-serif;
+                    }
+
+                    .studio-container {
+                        max-width: 1380px;
+                        margin: auto;
+                        padding: 28px;
+                    }
+
+                    .hero {
                         position: relative;
                         overflow: hidden;
+                        border-radius: 24px;
+                        background: var(--talent-black);
+                        color: white;
+                        padding: 34px;
+                        margin-bottom: 24px;
                     }
-                    [data-h-scope="talent-courses"] .h-header-card::before {
+
+                    .hero::after {
                         content: "";
                         position: absolute;
-                        left: 0;
-                        top: 0;
-                        bottom: 0;
-                        width: 4px;
-                        background: var(--h-accent);
+                        width: 260px;
+                        height: 260px;
+                        border-radius: 50%;
+                        background: rgba(0, 166, 103, .18);
+                        right: -80px;
+                        top: -100px;
                     }
 
-                    [data-h-scope="talent-courses"] .h-card {
-                        background: var(--h-white);
-                        border: 1px solid var(--h-line-soft);
-                        border-radius: 14px;
+                    .hero-content {
+                        position: relative;
+                        z-index: 2;
                     }
 
-                    [data-h-scope="talent-courses"] .h-btn-accent {
-                        background: var(--h-accent);
-                        color: var(--h-accent-ink);
-                        border: 1px solid var(--h-accent);
+                    .eyebrow {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 7px;
+                        padding: 7px 11px;
+                        border-radius: 999px;
+                        background: rgba(255,255,255,.08);
+                        color: #b9f1d8;
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        letter-spacing: .08em;
+                    }
+
+                    .hero-title {
+                        font-size: clamp(28px, 4vw, 44px);
+                        line-height: 1.05;
+                        margin: 15px 0 10px;
+                        max-width: 680px;
+                    }
+
+                    .hero-description {
+                        color: rgba(255,255,255,.66);
+                        max-width: 620px;
+                        margin-bottom: 24px;
+                    }
+
+                    .hero-actions {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                    }
+
+                    .btn-primary-talent {
+                        background: var(--talent-green);
+                        border: 1px solid var(--talent-green);
+                        color: white;
+                        border-radius: 12px;
+                        padding: 11px 17px;
+                        font-weight: 700;
+                        text-decoration: none;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: .2s;
+                    }
+
+                    .btn-primary-talent:hover {
+                        background: #00b873;
+                        color: white;
+                        transform: translateY(-1px);
+                    }
+
+                    .btn-ghost-talent {
+                        background: rgba(255,255,255,.07);
+                        border: 1px solid rgba(255,255,255,.14);
+                        color: white;
+                        border-radius: 12px;
+                        padding: 11px 17px;
                         font-weight: 600;
-                        transition: background .15s ease, border-color .15s ease;
-                    }
-                    [data-h-scope="talent-courses"] .h-btn-accent:hover {
-                        background: #34c084;
-                        border-color: #34c084;
-                        color: var(--h-accent-ink);
+                        text-decoration: none;
                     }
 
-                    /* ---- stat pills: light tinted tiles, not dark glass ---- */
-                    [data-h-scope="talent-courses"] .h-stat {
-                        background: var(--h-bg);
-                        border: 1px solid var(--h-line-soft);
-                    }
-                    [data-h-scope="talent-courses"] .h-stat-icon {
-                        background: var(--h-white);
-                        border: 1px solid var(--h-line-soft);
+                    .stats-grid {
+                        display: grid;
+                        grid-template-columns: repeat(5, 1fr);
+                        gap: 14px;
+                        margin-bottom: 24px;
                     }
 
-                    [data-h-scope="talent-courses"] .h-course-card {
-                        background: var(--h-white);
-                        border: 1px solid var(--h-line-soft);
-                        border-radius: 14px;
-                        transition: border-color .15s ease, transform .15s ease;
+                    .stat-card {
+                        background: white;
+                        border: 1px solid var(--talent-border);
+                        border-radius: 18px;
+                        padding: 18px;
+                        min-height: 125px;
+                        transition: .2s;
                     }
-                    [data-h-scope="talent-courses"] .h-course-card:hover {
-                        border-color: var(--h-line);
+
+                    .stat-card:hover {
                         transform: translateY(-2px);
+                        border-color: #cfd8d4;
                     }
-                    [data-h-scope="talent-courses"] .h-thumb {
-                        height: 96px;
+
+                    .stat-top {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 15px;
+                    }
+
+                    .stat-icon {
+                        width: 38px;
+                        height: 38px;
+                        border-radius: 11px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: var(--talent-green-soft);
+                        color: var(--talent-green);
+                    }
+
+                    .stat-label {
+                        color: var(--talent-muted);
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .stat-value {
+                        font-family: "Space Grotesk";
+                        font-size: 25px;
+                        font-weight: 700;
+                    }
+
+                    .dashboard-grid {
+                        display: grid;
+                        grid-template-columns: 1.7fr 1fr;
+                        gap: 18px;
+                        margin-bottom: 24px;
+                    }
+
+                    .panel {
+                        background: white;
+                        border: 1px solid var(--talent-border);
+                        border-radius: 20px;
+                        padding: 22px;
+                    }
+
+                    .panel-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 15px;
+                        margin-bottom: 18px;
+                    }
+
+                    .panel-title {
+                        margin: 0;
+                        font-size: 17px;
+                        font-weight: 700;
+                    }
+
+                    .panel-subtitle {
+                        color: var(--talent-muted);
+                        font-size: 12px;
+                        margin-top: 3px;
+                    }
+
+                    .featured-course {
+                        display: flex;
+                        align-items: center;
+                        gap: 18px;
+                    }
+
+                    .featured-thumb {
+                        width: 125px;
+                        height: 82px;
+                        border-radius: 13px;
                         object-fit: cover;
-                        background: var(--h-bg);
+                        flex-shrink: 0;
+                        background: var(--talent-bg);
                     }
 
-                    [data-h-scope="talent-courses"] .h-badge-accent {
-                        background: var(--h-accent);
-                        color: var(--h-accent-ink);
-                        font-weight: 600;
-                    }
-                    [data-h-scope="talent-courses"] .h-badge-ink {
-                        background: var(--h-bg);
-                        border: 1px solid var(--h-line-soft);
-                        color: var(--h-ink);
-                        font-weight: 500;
-                    }
-                    [data-h-scope="talent-courses"] .h-badge-warning {
-                        background: #fff8e6;
-                        border: 1px solid #f2d488;
-                        color: #7a5b00;
-                        font-weight: 600;
-                    }
-                    [data-h-scope="talent-courses"] .h-badge-success {
-                        background: rgba(72,213,151,0.15);
-                        border: 1px solid rgba(72,213,151,0.4);
-                        color: var(--h-accent-ink);
-                        font-weight: 600;
+                    .featured-title {
+                        font-size: 17px;
+                        font-weight: 700;
+                        margin-bottom: 7px;
                     }
 
-                    [data-h-scope="talent-courses"] .h-meta-icon {
-                        color: var(--h-ink);
-                        opacity: 0.55;
+                    .featured-meta {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 12px;
+                        color: var(--talent-muted);
+                        font-size: 12px;
                     }
 
-                    [data-h-scope="talent-courses"] .h-search {
-                        border: 1px solid var(--h-line);
-                        background: var(--h-white);
-                    }
-                    [data-h-scope="talent-courses"] .h-search:focus {
-                        border-color: var(--h-accent);
-                        box-shadow: 0 0 0 3px rgba(72,213,151,0.2);
+                    .progress-wrap {
+                        margin-top: 14px;
                     }
 
-                    [data-h-scope="talent-courses"] .h-dropdown-menu {
-                        min-width: 150px;
-                        border: 1px solid var(--h-line-soft);
-                        border-radius: 10px;
-                    }
-                    [data-h-scope="talent-courses"] .h-dropdown-item {
-                        cursor: pointer;
-                    }
-                    [data-h-scope="talent-courses"] .h-dropdown-item:hover {
-                        background: var(--h-bg);
-                    }
-                    [data-h-scope="talent-courses"] .h-dropdown-item.text-danger:hover {
-                        background: #fdecea;
+                    .progress-label {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 11px;
+                        color: var(--talent-muted);
+                        margin-bottom: 6px;
                     }
 
-                    [data-h-scope="talent-courses"] .h-icon-btn {
-                        background: var(--h-bg);
-                        border: 1px solid var(--h-line-soft);
-                        color: var(--h-ink);
-                    }
-                    [data-h-scope="talent-courses"] .h-icon-btn:hover {
-                        background: var(--h-white);
-                        border-color: var(--h-line);
-                    }
-
-                    [data-h-scope="talent-courses"] .h-view-btn {
-                        background: var(--h-bg);
-                        border: 1px solid var(--h-line-soft);
-                        color: var(--h-ink);
-                        font-weight: 600;
-                        transition: background .15s ease, border-color .15s ease;
-                    }
-                    [data-h-scope="talent-courses"] .h-view-btn:hover {
-                        background: rgba(72,213,151,0.14);
-                        border-color: rgba(72,213,151,0.4);
-                        color: var(--h-accent-ink);
-                    }
-
-                    [data-h-scope="talent-courses"] .h-modal-content {
-                        border-radius: 16px;
-                        border: none;
+                    .progress {
+                        height: 7px;
+                        background: #edf1ef;
+                        border-radius: 99px;
                         overflow: hidden;
+                    }
+
+                    .progress-bar {
+                        height: 100%;
+                        background: var(--talent-green);
+                        border-radius: 99px;
+                    }
+
+                    .tips {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 11px;
+                    }
+
+                    .tip {
+                        display: flex;
+                        gap: 11px;
+                        padding: 12px;
+                        border-radius: 13px;
+                        background: #f8faf9;
+                    }
+
+                    .tip-icon {
+                        color: var(--talent-green);
+                        flex-shrink: 0;
+                    }
+
+                    .tip-title {
+                        font-size: 13px;
+                        font-weight: 700;
+                        margin-bottom: 2px;
+                    }
+
+                    .tip-text {
+                        font-size: 11px;
+                        color: var(--talent-muted);
+                        line-height: 1.45;
+                    }
+
+                    .toolbar {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        gap: 12px;
+                        margin-bottom: 18px;
+                    }
+
+                    .search-box {
+                        position: relative;
+                        width: 320px;
+                    }
+
+                    .search-box input {
+                        width: 100%;
+                        height: 43px;
+                        border-radius: 12px;
+                        border: 1px solid var(--talent-border);
+                        padding: 0 14px 0 40px;
+                        background: white;
+                        outline: none;
+                        font-size: 13px;
+                    }
+
+                    .search-box input:focus {
+                        border-color: var(--talent-green);
+                        box-shadow: 0 0 0 3px rgba(0,166,103,.10);
+                    }
+
+                    .search-icon {
+                        position: absolute;
+                        left: 14px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: var(--talent-muted);
+                    }
+
+                    .filters {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 8px;
+                    }
+
+                    .filter-select {
+                        height: 43px;
+                        border: 1px solid var(--talent-border);
+                        border-radius: 12px;
+                        background: white;
+                        padding: 0 12px;
+                        color: #374151;
+                        font-size: 12px;
+                        outline: none;
+                    }
+
+                    .view-switch {
+                        display: flex;
+                        align-items: center;
+                        border: 1px solid var(--talent-border);
+                        background: white;
+                        border-radius: 12px;
+                        overflow: hidden;
+                    }
+
+                    .view-button {
+                        border: 0;
+                        background: transparent;
+                        width: 40px;
+                        height: 41px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: var(--talent-muted);
+                    }
+
+                    .view-button.active {
+                        background: var(--talent-green-soft);
+                        color: var(--talent-green);
+                    }
+
+                    .courses-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: end;
+                        margin-bottom: 15px;
+                    }
+
+                    .courses-title {
+                        font-size: 22px;
+                        margin: 0;
+                    }
+
+                    .courses-count {
+                        color: var(--talent-muted);
+                        font-size: 12px;
+                    }
+
+                    .course-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 16px;
+                    }
+
+                    .course-list {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+
+                    .course-card {
+                        overflow: hidden;
+                        background: white;
+                        border: 1px solid var(--talent-border);
+                        border-radius: 18px;
+                        transition: .2s;
+                    }
+
+                    .course-card:hover {
+                        transform: translateY(-3px);
+                        border-color: #ccd6d1;
+                        box-shadow: 0 12px 30px rgba(0,0,0,.05);
+                    }
+
+                    .course-list .course-card {
+                        display: flex;
+                    }
+
+                    .course-list .course-image-wrap {
+                        width: 220px;
+                        flex-shrink: 0;
+                    }
+
+                    .course-list .course-image {
+                        height: 100%;
+                        min-height: 150px;
+                    }
+
+                    .course-image-wrap {
+                        position: relative;
+                    }
+
+                    .course-image {
+                        width: 100%;
+                        height: 150px;
+                        object-fit: cover;
+                        background: #eef3f0;
+                        display: block;
+                    }
+
+                    .course-placeholder {
+                        height: 150px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: linear-gradient(
+                            135deg,
+                            #edf8f3,
+                            #f6f8f7
+                        );
+                        color: var(--talent-green);
+                    }
+
+                    .status-badge {
+                        position: absolute;
+                        right: 10px;
+                        top: 10px;
+                        padding: 5px 9px;
+                        border-radius: 999px;
+                        font-size: 10px;
+                        font-weight: 700;
+                        background: white;
+                        box-shadow: 0 4px 15px rgba(0,0,0,.08);
+                    }
+
+                    .status-published {
+                        color: var(--talent-green-dark);
+                    }
+
+                    .status-draft {
+                        color: #8a6500;
+                    }
+
+                    .course-body {
+                        padding: 15px;
+                    }
+
+                    .course-category {
+                        display: inline-flex;
+                        padding: 5px 8px;
+                        border-radius: 7px;
+                        background: #f2f5f3;
+                        color: #4b5563;
+                        font-size: 10px;
+                        font-weight: 600;
+                        margin-bottom: 9px;
+                    }
+
+                    .course-title {
+                        font-size: 15px;
+                        line-height: 1.3;
+                        font-weight: 700;
+                        margin: 0 0 10px;
+                    }
+
+                    .course-meta {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        color: var(--talent-muted);
+                        font-size: 10px;
+                        margin-bottom: 12px;
+                    }
+
+                    .course-meta span {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+
+                    .course-footer {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 8px;
+                    }
+
+                    .price {
+                        font-size: 14px;
+                        font-weight: 800;
+                    }
+
+                    .free-badge {
+                        color: var(--talent-green-dark);
+                        background: var(--talent-green-soft);
+                        padding: 5px 8px;
+                        border-radius: 7px;
+                        font-size: 10px;
+                        font-weight: 700;
+                    }
+
+                    .course-actions {
+                        display: flex;
+                        gap: 6px;
+                    }
+
+                    .small-action {
+                        border: 1px solid var(--talent-border);
+                        background: white;
+                        color: #374151;
+                        border-radius: 8px;
+                        padding: 6px 8px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        text-decoration: none;
+                    }
+
+                    .small-action:hover {
+                        color: var(--talent-green);
+                        border-color: #bfe8d5;
+                        background: var(--talent-green-soft);
+                    }
+
+                    .menu-wrapper {
+                        position: relative;
+                    }
+
+                    .menu-button {
+                        border: 1px solid var(--talent-border);
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 8px;
+                        background: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .dropdown {
+                        position: absolute;
+                        right: 0;
+                        top: 35px;
+                        width: 150px;
+                        background: white;
+                        border: 1px solid var(--talent-border);
+                        border-radius: 12px;
+                        padding: 5px;
+                        z-index: 30;
+                        box-shadow: 0 15px 35px rgba(0,0,0,.12);
+                    }
+
+                    .dropdown a,
+                    .dropdown button {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        border: 0;
+                        background: transparent;
+                        padding: 9px 10px;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        color: #374151;
+                        font-size: 12px;
+                        text-align: left;
+                    }
+
+                    .dropdown a:hover,
+                    .dropdown button:hover {
+                        background: #f4f7f5;
+                    }
+
+                    .dropdown .danger {
+                        color: #d33d3d;
+                    }
+
+                    .empty-state {
+                        background: white;
+                        border: 1px dashed #ccd6d1;
+                        border-radius: 20px;
+                        text-align: center;
+                        padding: 65px 20px;
+                    }
+
+                    .empty-icon {
+                        width: 65px;
+                        height: 65px;
+                        border-radius: 18px;
+                        background: var(--talent-green-soft);
+                        color: var(--talent-green);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 auto 15px;
+                    }
+
+                    .modal-overlay {
+                        position: fixed;
+                        inset: 0;
+                        background: rgba(0,0,0,.48);
+                        backdrop-filter: blur(5px);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 1000;
+                        padding: 20px;
+                    }
+
+                    .delete-modal {
+                        width: 100%;
+                        max-width: 430px;
+                        background: white;
+                        border-radius: 22px;
+                        padding: 28px;
+                        box-shadow: 0 25px 70px rgba(0,0,0,.2);
+                        text-align: center;
+                    }
+
+                    .delete-icon {
+                        width: 58px;
+                        height: 58px;
+                        border-radius: 16px;
+                        background: #fff0ef;
+                        color: #d64545;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0 auto 16px;
+                    }
+
+                    .modal-actions {
+                        display: flex;
+                        justify-content: center;
+                        gap: 8px;
+                        margin-top: 22px;
+                    }
+
+                    .modal-btn {
+                        border: 0;
+                        border-radius: 10px;
+                        padding: 10px 18px;
+                        font-weight: 700;
+                    }
+
+                    .modal-cancel {
+                        background: #f1f3f2;
+                    }
+
+                    .modal-delete {
+                        background: #d64545;
+                        color: white;
+                    }
+
+                    @media(max-width: 1200px) {
+                        .stats-grid {
+                            grid-template-columns: repeat(3, 1fr);
+                        }
+
+                        .course-grid {
+                            grid-template-columns: repeat(3, 1fr);
+                        }
+                    }
+
+                    @media(max-width: 900px) {
+                        .dashboard-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .course-grid {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+
+                        .search-box {
+                            width: 100%;
+                        }
+
+                        .toolbar {
+                            align-items: stretch;
+                        }
+                    }
+
+                    @media(max-width: 600px) {
+                        .studio-container {
+                            padding: 15px;
+                        }
+
+                        .hero {
+                            padding: 24px;
+                            border-radius: 18px;
+                        }
+
+                        .stats-grid {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+
+                        .course-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .course-list .course-card {
+                            display: block;
+                        }
+
+                        .course-list .course-image-wrap {
+                            width: 100%;
+                        }
+
+                        .filters {
+                            width: 100%;
+                        }
+
+                        .filter-select {
+                            flex: 1;
+                        }
                     }
                 `}</style>
 
-                <div className="container-fluid px-4 py-4" style={{ maxWidth: 1240, margin: '0 auto' }}>
+                <div className="studio-container">
 
-                    {/* Header */}
-                    <div className="h-header-card mb-4">
-                        <div className="p-4 ps-4">
-                            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
-                                <div>
-                                    <h4 className="fw-bold mb-1">My Courses</h4>
-                                    <p className="mb-0" style={{ color: 'var(--h-muted, rgba(0,0,0,0.55))' }}>
-                                        Manage the courses you've published on the platform
-                                    </p>
-                                </div>
+                    {/* HERO */}
+                    <section className="hero">
+                        <div className="hero-content">
+                            <div className="eyebrow">
+                                <IconSpark />
+                                Talent Studio
+                            </div>
+
+                            <h1 className="hero-title">
+                                Build your knowledge.
+                                <br />
+                                Grow your audience.
+                            </h1>
+
+                            <p className="hero-description">
+                                Create, manage and grow professional learning
+                                experiences for your talent community.
+                            </p>
+
+                            <div className="hero-actions">
                                 <Link
-                                    href={route('talent.courses.create')}
-                                    className="btn h-btn-accent rounded-pill px-4 py-2 d-inline-flex align-items-center"
+                                    href={route("talent.courses.create")}
+                                    className="btn-primary-talent"
                                 >
-                                    <IconPlus className="me-2" />
-                                    Create New Course
+                                    <IconPlus />
+                                    Create a course
+                                </Link>
+
+                                <Link
+                                    href={route("talent.courses.index")}
+                                    className="btn-ghost-talent"
+                                >
+                                    Manage courses
                                 </Link>
                             </div>
-
-                            <div className="row g-3">
-                                <StatPill icon={<IconLayers />} label="Total Courses" value={courses.length} />
-                                <StatPill
-                                    icon={<IconCheckCircle />}
-                                    label="Published"
-                                    value={courses.filter((c) => c.status === 'published').length}
-                                />
-                                <StatPill
-                                    icon={<IconUsers />}
-                                    label="Total Enrollments"
-                                    value={courses.reduce((s, c) => s + (c.enrollments_count ?? 0), 0)}
-                                />
-                            </div>
                         </div>
-                    </div>
+                    </section>
 
-                    {/* Search */}
-                    <div className="d-flex align-items-center mb-4">
-                        <div className="position-relative" style={{ maxWidth: 340, width: '100%' }}>
-                            <span
-                                className="position-absolute d-flex align-items-center"
-                                style={{ left: 14, top: 0, bottom: 0, opacity: 0.45 }}
-                            >
-                                <IconSearch />
-                            </span>
-                            <input
-                                type="text"
-                                className="form-control h-search rounded-pill ps-5"
-                                placeholder="Search courses..."
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                            />
-                        </div>
-                    </div>
+                    {/* STATS */}
+                    <section className="stats-grid">
 
-                    {/* Course grid */}
-                    {filtered.length === 0 ? (
-                        <div className="h-card text-center py-5">
-                            <IconBookOpen className="mb-3" size={40} style={{ opacity: 0.2 }} />
-                            <p className="mb-0" style={{ color: 'var(--h-muted, rgba(0,0,0,0.55))' }}>
-                                No courses found.
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="row g-3">
-                            {filtered.map((course) => (
-                                <div className="col-md-6 col-lg-4 col-xl-3" key={course.id}>
-                                    <CourseCard course={course} onDelete={() => setDeleteTarget(course)} />
+                        <StatCard
+                            icon={<IconBook />}
+                            label="Total courses"
+                            value={stats.total}
+                        />
+
+                        <StatCard
+                            icon={<IconCheck />}
+                            label="Published"
+                            value={stats.published}
+                        />
+
+                        <StatCard
+                            icon={<IconUsers />}
+                            label="Total learners"
+                            value={stats.enrollments}
+                        />
+
+                        <StatCard
+                            icon={<IconStar />}
+                            label="Average rating"
+                            value={
+                                stats.averageRating
+                                    ? stats.averageRating.toFixed(1)
+                                    : "—"
+                            }
+                        />
+
+                        <StatCard
+                            icon={<IconWallet />}
+                            label="Estimated revenue"
+                            value={`$${stats.revenue.toLocaleString(
+                                undefined,
+                                {
+                                    minimumFractionDigits: 0,
+                                }
+                            )}`}
+                        />
+
+                    </section>
+
+                    {/* PERFORMANCE */}
+                    {topCourse && (
+                        <div className="dashboard-grid">
+
+                            <section className="panel">
+                                <div className="panel-header">
+                                    <div>
+                                        <h3 className="panel-title">
+                                            Top performing course
+                                        </h3>
+
+                                        <div className="panel-subtitle">
+                                            Your course with the highest learner
+                                            engagement
+                                        </div>
+                                    </div>
+
+                                    <span className="free-badge">
+                                        TOP PERFORMER
+                                    </span>
                                 </div>
-                            ))}
+
+                                <div className="featured-course">
+
+                                    {topCourse.thumbnail ? (
+                                        <img
+                                            src={`/${topCourse.thumbnail}`}
+                                            alt={topCourse.title}
+                                            className="featured-thumb"
+                                        />
+                                    ) : (
+                                        <div className="featured-thumb d-flex align-items-center justify-content-center">
+                                            <IconBook size={25} />
+                                        </div>
+                                    )}
+
+                                    <div className="flex-grow-1">
+                                        <div className="featured-title">
+                                            {topCourse.title}
+                                        </div>
+
+                                        <div className="featured-meta">
+                                            <span>
+                                                <IconUsers size={13} />
+                                                {topCourse.enrollments_count ??
+                                                    0}{" "}
+                                                learners
+                                            </span>
+
+                                            <span>
+                                                <IconPlay size={13} />
+                                                {topCourse.lessons_count ?? 0}{" "}
+                                                lessons
+                                            </span>
+
+                                            <span>
+                                                <IconStar size={13} />
+                                                {topCourse.feedback_avg_rating
+                                                    ? Number(
+                                                          topCourse.feedback_avg_rating
+                                                      ).toFixed(1)
+                                                    : "N/A"}
+                                            </span>
+                                        </div>
+
+                                        <div className="progress-wrap">
+                                            <div className="progress-label">
+                                                <span>
+                                                    Course performance
+                                                </span>
+                                                <strong>82%</strong>
+                                            </div>
+
+                                            <div className="progress">
+                                                <div
+                                                    className="progress-bar"
+                                                    style={{
+                                                        width: "82%",
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="panel">
+                                <div className="panel-header">
+                                    <div>
+                                        <h3 className="panel-title">
+                                            Creator tips
+                                        </h3>
+
+                                        <div className="panel-subtitle">
+                                            Improve your course performance
+                                        </div>
+                                    </div>
+
+                                    <IconSpark
+                                        size={19}
+                                    />
+                                </div>
+
+                                <div className="tips">
+
+                                    <Tip
+                                        icon={<IconImage />}
+                                        title="Use strong thumbnails"
+                                        text="A clear visual can improve course discovery."
+                                    />
+
+                                    <Tip
+                                        icon={<IconStar />}
+                                        title="Collect learner feedback"
+                                        text="Ratings build trust and improve conversions."
+                                    />
+
+                                    <Tip
+                                        icon={<IconPlay />}
+                                        title="Keep lessons focused"
+                                        text="Short, practical lessons usually feel easier to complete."
+                                    />
+
+                                </div>
+                            </section>
+
                         </div>
                     )}
-                </div>
-            </div>
 
-            <DeleteModal
-                course={deleteTarget}
-                onCancel={() => setDeleteTarget(null)}
-                onConfirm={confirmDelete}
-            />
+                    {/* COURSE MANAGEMENT */}
+                    <section className="panel">
+
+                        <div className="courses-header">
+                            <div>
+                                <h2 className="courses-title">
+                                    Your courses
+                                </h2>
+
+                                <div className="courses-count">
+                                    {filteredCourses.length} of{" "}
+                                    {courses.length} courses
+                                </div>
+                            </div>
+
+                            <Link
+                                href={route("talent.courses.create")}
+                                className="btn-primary-talent"
+                            >
+                                <IconPlus />
+                                New course
+                            </Link>
+                        </div>
+
+                        {/* TOOLBAR */}
+                        <div className="toolbar">
+
+                            <div className="search-box">
+                                <span className="search-icon">
+                                    <IconSearch />
+                                </span>
+
+                                <input
+                                    type="text"
+                                    placeholder="Search courses or categories..."
+                                    value={query}
+                                    onChange={(e) =>
+                                        setQuery(e.target.value)
+                                    }
+                                />
+                            </div>
+
+                            <div className="filters">
+
+                                <select
+                                    className="filter-select"
+                                    value={statusFilter}
+                                    onChange={(e) =>
+                                        setStatusFilter(e.target.value)
+                                    }
+                                >
+                                    <option value="all">
+                                        All statuses
+                                    </option>
+
+                                    <option value="published">
+                                        Published
+                                    </option>
+
+                                    <option value="draft">
+                                        Drafts
+                                    </option>
+                                </select>
+
+                                <select
+                                    className="filter-select"
+                                    value={categoryFilter}
+                                    onChange={(e) =>
+                                        setCategoryFilter(e.target.value)
+                                    }
+                                >
+                                    <option value="all">
+                                        All categories
+                                    </option>
+
+                                    {categories.map((category) => (
+                                        <option
+                                            key={category}
+                                            value={category}
+                                        >
+                                            {category}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <select
+                                    className="filter-select"
+                                    value={sortBy}
+                                    onChange={(e) =>
+                                        setSortBy(e.target.value)
+                                    }
+                                >
+                                    <option value="newest">
+                                        Newest
+                                    </option>
+
+                                    <option value="learners">
+                                        Most learners
+                                    </option>
+
+                                    <option value="rating">
+                                        Highest rated
+                                    </option>
+
+                                    <option value="price">
+                                        Highest price
+                                    </option>
+
+                                    <option value="title">
+                                        Alphabetical
+                                    </option>
+                                </select>
+
+                                <div className="view-switch">
+
+                                    <button
+                                        className={`view-button ${
+                                            viewMode === "grid"
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            setViewMode("grid")
+                                        }
+                                    >
+                                        <IconGrid />
+                                    </button>
+
+                                    <button
+                                        className={`view-button ${
+                                            viewMode === "list"
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            setViewMode("list")
+                                        }
+                                    >
+                                        <IconList />
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* COURSES */}
+                        {filteredCourses.length === 0 ? (
+                            <EmptyState
+                                search={query || statusFilter !== "all"}
+                                onCreate={() =>
+                                    router.visit(
+                                        route(
+                                            "talent.courses.create"
+                                        )
+                                    )
+                                }
+                            />
+                        ) : (
+                            <div
+                                className={
+                                    viewMode === "grid"
+                                        ? "course-grid"
+                                        : "course-list"
+                                }
+                            >
+                                {filteredCourses.map((course) => (
+                                    <CourseCard
+                                        key={course.id}
+                                        course={course}
+                                        menuOpen={menuOpen}
+                                        setMenuOpen={setMenuOpen}
+                                        onDelete={() =>
+                                            setDeleteTarget(course)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </section>
+                </div>
+
+                <DeleteModal
+                    course={deleteTarget}
+                    onCancel={() => setDeleteTarget(null)}
+                    onConfirm={confirmDelete}
+                />
+            </div>
         </AppLayout>
     );
 }
 
-/* ---------- Stat pill (header) ---------- */
+/* =========================================================
+   STAT CARD
+========================================================= */
 
-function StatPill({ icon, label, value }) {
+function StatCard({ icon, label, value }) {
     return (
-        <div className="col-sm-4">
-            <div className="h-stat rounded-4 p-3 d-flex align-items-center gap-3">
-                <div
-                    className="h-stat-icon d-flex align-items-center justify-content-center rounded-3"
-                    style={{ width: 40, height: 40, flexShrink: 0, color: '#48d597' }}
-                >
+        <div className="stat-card">
+            <div className="stat-top">
+                <div className="stat-icon">
                     {icon}
                 </div>
-                <div>
-                    <div className="small" style={{ color: 'rgba(0,0,0,0.55)' }}>{label}</div>
-                    <div className="fw-bold fs-5">{value}</div>
-                </div>
+
+                <IconArrowUp />
+            </div>
+
+            <div className="stat-label">
+                {label}
+            </div>
+
+            <div className="stat-value">
+                {value}
             </div>
         </div>
     );
 }
 
-/* ---------- Course card ---------- */
+/* =========================================================
+   COURSE CARD
+========================================================= */
 
-function CourseCard({ course, onDelete }) {
-    const [menuOpen, setMenuOpen] = useState(false);
+function CourseCard({
+    course,
+    menuOpen,
+    setMenuOpen,
+    onDelete,
+}) {
+    const published = course.status === "published";
 
     return (
-        <div className="h-course-card overflow-hidden position-relative">
-            <div className="position-relative">
+        <div className="course-card">
+
+            <div className="course-image-wrap">
+
                 {course.thumbnail ? (
                     <img
                         src={`/${course.thumbnail}`}
                         alt={course.title}
-                        className="w-100 h-thumb"
+                        className="course-image"
                     />
                 ) : (
-                    <div className="w-100 h-thumb d-flex align-items-center justify-content-center">
-                        <IconImage style={{ opacity: 0.3 }} />
+                    <div className="course-placeholder">
+                        <IconBook size={28} />
                     </div>
                 )}
 
                 <span
-                    className={`badge position-absolute top-0 end-0 m-2 rounded-pill px-2 py-1 ${
-                        course.status === 'published' ? 'h-badge-success' : 'h-badge-warning'
+                    className={`status-badge ${
+                        published
+                            ? "status-published"
+                            : "status-draft"
                     }`}
-                    style={{ fontSize: 10 }}
                 >
-                    {course.status === 'published' ? 'Published' : 'Draft'}
+                    {published ? "Published" : "Draft"}
                 </span>
             </div>
 
-            <div className="p-2">
-                <div className="d-flex justify-content-between align-items-start gap-1 mb-1">
-                    <span className="badge h-badge-ink rounded-pill px-2 py-1" style={{ fontSize: 10 }}>
-                        {course.category?.name ?? 'Uncategorized'}
+            <div className="course-body">
+
+                <div className="d-flex justify-content-between align-items-start gap-2">
+
+                    <span className="course-category">
+                        {course.category?.name ??
+                            "Uncategorized"}
                     </span>
 
-                    <div className="position-relative">
+                    <div className="menu-wrapper">
+
                         <button
-                            type="button"
-                            className="h-icon-btn btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center"
-                            style={{ width: 24, height: 24 }}
-                            onClick={() => setMenuOpen((v) => !v)}
+                            className="menu-button"
+                            onClick={() =>
+                                setMenuOpen(
+                                    menuOpen === course.id
+                                        ? null
+                                        : course.id
+                                )
+                            }
                         >
-                            <IconDots size={13} />
+                            <IconDots />
                         </button>
 
-                        {menuOpen && (
-                            <>
-                                <div
-                                    className="position-fixed top-0 start-0 w-100 h-100"
-                                    style={{ zIndex: 10 }}
-                                    onClick={() => setMenuOpen(false)}
-                                ></div>
-                                <div
-                                    className="h-dropdown-menu bg-white position-absolute end-0 mt-1 py-1"
-                                    style={{ zIndex: 20 }}
+                        {menuOpen === course.id && (
+                            <div className="dropdown">
+
+                                <Link
+                                    href={route(
+                                        "talent.courses.show",
+                                        course.id
+                                    )}
+                                    onClick={() =>
+                                        setMenuOpen(null)
+                                    }
                                 >
-                                    <Link
-                                        href={route('talent.courses.edit', course.id)}
-                                        className="h-dropdown-item d-flex align-items-center px-3 py-2 text-decoration-none text-dark small"
-                                    >
-                                        <IconPencil className="me-2" size={13} />
-                                        Edit
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        className="h-dropdown-item d-flex align-items-center w-100 text-start border-0 bg-transparent px-3 py-2 text-danger small"
-                                        onClick={() => {
-                                            setMenuOpen(false);
-                                            onDelete();
-                                        }}
-                                    >
-                                        <IconTrash className="me-2" size={13} />
-                                        Delete
-                                    </button>
-                                </div>
-                            </>
+                                    <IconEye />
+                                    View course
+                                </Link>
+
+                                <Link
+                                    href={route(
+                                        "talent.courses.edit",
+                                        course.id
+                                    )}
+                                    onClick={() =>
+                                        setMenuOpen(null)
+                                    }
+                                >
+                                    <IconEdit />
+                                    Edit course
+                                </Link>
+
+                                <button
+                                    className="danger"
+                                    onClick={() => {
+                                        setMenuOpen(null);
+                                        onDelete();
+                                    }}
+                                >
+                                    <IconTrash />
+                                    Delete
+                                </button>
+
+                            </div>
                         )}
                     </div>
                 </div>
 
-                <h6 className="fw-bold mb-1" style={{ fontSize: 13.5, lineHeight: 1.3 }}>
-                    {truncate(course.title, 42)}
-                </h6>
+                <h3 className="course-title">
+                    {truncate(course.title, 58)}
+                </h3>
 
-                <div className="d-flex flex-wrap align-items-center gap-3 small mb-2" style={{ fontSize: 11, color: 'rgba(0,0,0,0.55)' }}>
-                    <span className="d-flex align-items-center gap-1">
-                        <IconGraduationCap size={12} className="h-meta-icon" />
-                        {course.lessons_count ?? 0}
+                <div className="course-meta">
+
+                    <span>
+                        <IconPlay size={12} />
+                        {course.lessons_count ?? 0} lessons
                     </span>
-                    <span className="d-flex align-items-center gap-1">
-                        <IconUsers size={12} className="h-meta-icon" />
+
+                    <span>
+                        <IconUsers size={12} />
                         {course.enrollments_count ?? 0}
                     </span>
-                    {course.feedback_avg_rating ? (
-                        <span className="d-flex align-items-center gap-1">
-                            <IconStar size={12} style={{ color: '#f5b301' }} />
-                            {Number(course.feedback_avg_rating).toFixed(1)}
-                        </span>
-                    ) : null}
+
+                    <span>
+                        <IconStar size={12} />
+                        {course.feedback_avg_rating
+                            ? Number(
+                                  course.feedback_avg_rating
+                              ).toFixed(1)
+                            : "—"}
+                    </span>
+
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center mb-2">
+                <div className="course-footer">
+
                     {course.is_free ? (
-                        <span className="badge h-badge-success rounded-pill px-2 py-1" style={{ fontSize: 11 }}>Free</span>
+                        <span className="free-badge">
+                            FREE
+                        </span>
                     ) : (
-                        <span className="fw-bold" style={{ color: '#000000', fontSize: 13 }}>
-                            ${Number(course.price ?? 0).toFixed(2)}
+                        <span className="price">
+                            ${Number(
+                                course.price ?? 0
+                            ).toFixed(2)}
                         </span>
                     )}
-                </div>
 
-                <Link
-                    href={route('talent.courses.show', course.id)}
-                    className="h-view-btn btn rounded-pill w-100 py-1 d-flex align-items-center justify-content-center gap-1"
-                    style={{ fontSize: 12 }}
-                >
-                    <IconEye size={13} />
-                    View Course
-                </Link>
+                    <div className="course-actions">
+
+                        <Link
+                            href={route(
+                                "talent.courses.show",
+                                course.id
+                            )}
+                            className="small-action"
+                            title="View course"
+                        >
+                            <IconEye />
+                        </Link>
+
+                        <Link
+                            href={route(
+                                "talent.courses.edit",
+                                course.id
+                            )}
+                            className="small-action"
+                            title="Edit course"
+                        >
+                            <IconEdit />
+                        </Link>
+
+                    </div>
+
+                </div>
             </div>
         </div>
     );
 }
 
-/* ---------- Delete confirmation modal ---------- */
+/* =========================================================
+   EMPTY STATE
+========================================================= */
 
-function DeleteModal({ course, onCancel, onConfirm }) {
+function EmptyState({ search, onCreate }) {
+    return (
+        <div className="empty-state">
+
+            <div className="empty-icon">
+                <IconBook size={28} />
+            </div>
+
+            <h3>
+                {search
+                    ? "No courses found"
+                    : "Create your first course"}
+            </h3>
+
+            <p
+                style={{
+                    maxWidth: 470,
+                    margin: "8px auto 20px",
+                    color: "#6b7280",
+                    fontSize: 13,
+                }}
+            >
+                {search
+                    ? "Try changing your search or filters."
+                    : "Share your expertise with the talent community and start building your audience."}
+            </p>
+
+            {!search && (
+                <button
+                    className="btn-primary-talent"
+                    onClick={onCreate}
+                >
+                    <IconPlus />
+                    Create your first course
+                </button>
+            )}
+        </div>
+    );
+}
+
+/* =========================================================
+   TIP
+========================================================= */
+
+function Tip({ icon, title, text }) {
+    return (
+        <div className="tip">
+            <div className="tip-icon">
+                {icon}
+            </div>
+
+            <div>
+                <div className="tip-title">
+                    {title}
+                </div>
+
+                <div className="tip-text">
+                    {text}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+function DeleteModal({
+    course,
+    onCancel,
+    onConfirm,
+}) {
     if (!course) return null;
 
     return (
-        <div data-h-scope="talent-courses">
-            <div className="modal fade show d-block" tabIndex="-1" role="dialog" onClick={onCancel}>
-                <div
-                    className="modal-dialog modal-dialog-centered"
-                    role="document"
-                    onClick={(e) => e.stopPropagation()}
+        <div
+            className="modal-overlay"
+            onClick={onCancel}
+        >
+            <div
+                className="delete-modal"
+                onClick={(e) =>
+                    e.stopPropagation()
+                }
+            >
+                <div className="delete-icon">
+                    <IconTrash size={23} />
+                </div>
+
+                <h3
+                    style={{
+                        fontSize: 20,
+                        marginBottom: 8,
+                    }}
                 >
-                    <div className="modal-content h-modal-content">
-                        <div className="modal-body p-4 text-center">
-                            <div
-                                className="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                                style={{ width: 56, height: 56, background: '#fdecea', border: '1px solid #f6c7c1' }}
-                            >
-                                <IconTrash size={20} style={{ color: '#d64545' }} />
-                            </div>
-                            <h6 className="fw-bold mb-2">Delete course</h6>
-                            <p className="mb-4" style={{ color: 'rgba(0,0,0,0.6)' }}>
-                                Are you sure you want to delete <strong>{course.title}</strong>? This action cannot be undone.
-                            </p>
-                            <div className="d-flex justify-content-center gap-2">
-                                <button type="button" className="btn btn-light rounded-pill px-4" onClick={onCancel}>
-                                    Cancel
-                                </button>
-                                <button type="button" className="btn btn-danger rounded-pill px-4" onClick={onConfirm}>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    Delete course?
+                </h3>
+
+                <p
+                    style={{
+                        color: "#6b7280",
+                        fontSize: 13,
+                        lineHeight: 1.6,
+                        margin: 0,
+                    }}
+                >
+                    You are about to delete{" "}
+                    <strong>
+                        {course.title}
+                    </strong>
+                    . This action cannot be undone.
+                </p>
+
+                <div className="modal-actions">
+
+                    <button
+                        className="modal-btn modal-cancel"
+                        onClick={onCancel}
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        className="modal-btn modal-delete"
+                        onClick={onConfirm}
+                    >
+                        Delete course
+                    </button>
+
                 </div>
             </div>
-            <div className="modal-backdrop fade show" onClick={onCancel}></div>
         </div>
     );
 }
 
-/* ---------- inline SVG icon set (lightweight, currentColor / stroke-based) ---------- */
+/* =========================================================
+   ICON SYSTEM
+========================================================= */
 
-function Icon({ children, size = 15, className = '', style = {}, viewBox = '0 0 24 24' }) {
+function Icon({
+    children,
+    size = 16,
+    className = "",
+}) {
     return (
         <svg
             width={size}
             height={size}
-            viewBox={viewBox}
+            viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
             className={className}
-            style={style}
         >
             {children}
         </svg>
@@ -490,7 +1681,7 @@ function Icon({ children, size = 15, className = '', style = {}, viewBox = '0 0 
 
 function IconPlus(props) {
     return (
-        <Icon size={14} {...props}>
+        <Icon {...props}>
             <path d="M12 5v14M5 12h14" />
         </Icon>
     );
@@ -498,28 +1689,18 @@ function IconPlus(props) {
 
 function IconSearch(props) {
     return (
-        <Icon size={14} {...props}>
+        <Icon {...props}>
             <circle cx="11" cy="11" r="7" />
-            <path d="m21 21-4.3-4.3" />
+            <path d="m20 20-4-4" />
         </Icon>
     );
 }
 
-function IconLayers(props) {
+function IconBook(props) {
     return (
-        <Icon size={18} {...props}>
-            <path d="m12 2 9 5-9 5-9-5 9-5Z" />
-            <path d="m3 12 9 5 9-5" />
-            <path d="m3 17 9 5 9-5" />
-        </Icon>
-    );
-}
-
-function IconCheckCircle(props) {
-    return (
-        <Icon size={18} {...props}>
-            <circle cx="12" cy="12" r="9" />
-            <path d="m8.5 12.5 2.3 2.3L15.5 10" />
+        <Icon {...props}>
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
         </Icon>
     );
 }
@@ -527,44 +1708,141 @@ function IconCheckCircle(props) {
 function IconUsers(props) {
     return (
         <Icon {...props}>
-            <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
-            <circle cx="10" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </Icon>
     );
 }
 
-function IconBookOpen(props) {
+function IconStar(props) {
     return (
         <Icon {...props}>
-            <path d="M2 6a2 2 0 0 1 2-2h5a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2Z" />
-            <path d="M22 6a2 2 0 0 0-2-2h-5a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22Z" />
+            <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3-6.2 3.3 1.2-6.9-5-4.9 6.9-1Z" />
+        </Icon>
+    );
+}
+
+function IconWallet(props) {
+    return (
+        <Icon {...props}>
+            <path d="M20 7V6a2 2 0 0 0-2-2H5a3 3 0 0 0 0 6h15v10H5a3 3 0 0 1-3-3V7" />
+            <path d="M16 14h.01" />
+        </Icon>
+    );
+}
+
+function IconCheck(props) {
+    return (
+        <Icon {...props}>
+            <path d="m5 12 4 4L19 6" />
+        </Icon>
+    );
+}
+
+function IconArrowUp(props) {
+    return (
+        <Icon
+            size={13}
+            {...props}
+        >
+            <path d="m18 15-6-6-6 6" />
+        </Icon>
+    );
+}
+
+function IconPlay(props) {
+    return (
+        <Icon {...props}>
+            <polygon points="6 3 20 12 6 21 6 3" />
         </Icon>
     );
 }
 
 function IconImage(props) {
     return (
-        <Icon size={20} {...props}>
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="9" cy="9" r="1.5" />
+        <Icon {...props}>
+            <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="2"
+            />
+            <circle
+                cx="8.5"
+                cy="8.5"
+                r="1.5"
+            />
             <path d="m21 15-5-5L5 21" />
         </Icon>
     );
 }
 
-function IconDots({ size = 15, ...props }) {
+function IconSpark(props) {
     return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...props}>
-            <circle cx="12" cy="5" r="1.6" />
-            <circle cx="12" cy="12" r="1.6" />
-            <circle cx="12" cy="19" r="1.6" />
-        </svg>
+        <Icon {...props}>
+            <path d="m12 3-1.5 5.5L5 10l5.5 1.5L12 17l1.5-5.5L19 10l-5.5-1.5Z" />
+            <path d="m19 16-.7 2.3L16 19l2.3.7L19 22l.7-2.3L22 19l-2.3-.7Z" />
+        </Icon>
     );
 }
 
-function IconPencil(props) {
+function IconGrid(props) {
+    return (
+        <Icon {...props}>
+            <rect
+                x="3"
+                y="3"
+                width="7"
+                height="7"
+            />
+            <rect
+                x="14"
+                y="3"
+                width="7"
+                height="7"
+            />
+            <rect
+                x="3"
+                y="14"
+                width="7"
+                height="7"
+            />
+            <rect
+                x="14"
+                y="14"
+                width="7"
+                height="7"
+            />
+        </Icon>
+    );
+}
+
+function IconList(props) {
+    return (
+        <Icon {...props}>
+            <path d="M8 6h13M8 12h13M8 18h13" />
+            <path d="M3 6h.01M3 12h.01M3 18h.01" />
+        </Icon>
+    );
+}
+
+function IconEye(props) {
+    return (
+        <Icon {...props}>
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+            <circle
+                cx="12"
+                cy="12"
+                r="3"
+            />
+        </Icon>
+    );
+}
+
+function IconEdit(props) {
     return (
         <Icon {...props}>
             <path d="M12 20h9" />
@@ -577,54 +1855,41 @@ function IconTrash(props) {
     return (
         <Icon {...props}>
             <path d="M3 6h18" />
-            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-            <path d="M10 11v6M14 11v6" />
+            <path d="M8 6V4h8v2" />
+            <path d="M19 6v14H5V6" />
+            <path d="M10 11v5M14 11v5" />
         </Icon>
     );
 }
 
-function IconEye(props) {
+function IconDots(props) {
     return (
-        <Icon {...props}>
-            <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" />
-            <circle cx="12" cy="12" r="3" />
-        </Icon>
-    );
-}
-
-function IconGraduationCap(props) {
-    return (
-        <Icon {...props}>
-            <path d="m2 9 10-5 10 5-10 5-10-5Z" />
-            <path d="M6 11v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5" />
-        </Icon>
-    );
-}
-
-function IconStar({ size = 14, style = {}, ...props }) {
-    return (
-        <svg
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            style={style}
+        <Icon
+            size={16}
             {...props}
         >
-            <path d="m12 2 3.1 6.6 7.2.8-5.4 5 1.5 7.1L12 18l-6.4 3.5 1.5-7.1-5.4-5 7.2-.8L12 2Z" />
-        </svg>
+            <circle
+                cx="5"
+                cy="12"
+                r="1"
+            />
+            <circle
+                cx="12"
+                cy="12"
+                r="1"
+            />
+            <circle
+                cx="19"
+                cy="12"
+                r="1"
+            />
+        </Icon>
     );
 }
 
-/* ---------- helpers ---------- */
-
 function truncate(text, length) {
-    if (!text) return '';
-    return text.length > length ? text.slice(0, length) + '…' : text;
-}
-
-function capitalize(value) {
-    if (!value) return '';
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    if (!text) return "";
+    return text.length > length
+        ? text.slice(0, length) + "…"
+        : text;
 }
