@@ -11,6 +11,19 @@ use Inertia\Inertia;
 class TalentConnectionController extends Controller
 {
     /**
+     * Payment statuses that count as an actually settled payment.
+     *
+     * Shared by index() and show() so the two views can never
+     * disagree about whether a connection has been paid for.
+     */
+    private const PAID_STATUSES = [
+        'paid',
+        'completed',
+        'success',
+        'successful',
+    ];
+
+    /**
      * Display talent connection requests and earnings.
      */
     public function index(Request $request)
@@ -22,15 +35,18 @@ class TalentConnectionController extends Controller
         $status = $request->input('status', 'all');
 
         /*
-        |--------------------------------------------------------------------------
-        | Connection Requests
-        |--------------------------------------------------------------------------
-        |
-        | The connection itself comes from talent_connections.
-        | Payment information is loaded from connection_payments
-        | through the payment() relationship.
-        |
-        */
+    |--------------------------------------------------------------------------
+    | Connection Requests
+    |--------------------------------------------------------------------------
+    |
+    | Payment information comes from connection_payments.
+    | The payment is matched through:
+    |
+    | talent_connections.payment_reference
+    |          ↓
+    | connection_payments.reference
+    |
+    */
 
         $query = TalentConnection::query()
             ->where('talent_id', $talent->id)
@@ -54,10 +70,116 @@ class TalentConnectionController extends Controller
             ->withQueryString();
 
         /*
-        |--------------------------------------------------------------------------
-        | Connection Counts
-        |--------------------------------------------------------------------------
-        */
+    |--------------------------------------------------------------------------
+    | Prepare Connection Data For React
+    |--------------------------------------------------------------------------
+    |
+    | IMPORTANT:
+    | Every row gets its financial information from
+    | connection_payments.amount.
+    |
+    | We DO NOT use talent_connections.amount.
+    |
+    */
+
+        $connections->getCollection()->transform(
+            function ($connection) {
+
+                $payment = $connection->payment;
+
+                $amount = $payment
+                    ? (float) $payment->amount
+                    : 0;
+
+                $currency = $payment?->currency ?? 'RWF';
+
+                $paymentStatus = $payment?->status;
+
+                $isPaid = $payment
+                    && in_array(
+                        strtolower((string) $paymentStatus),
+                        self::PAID_STATUSES,
+                        true
+                    );
+
+                /*
+            |--------------------------------------------------------------------------
+            | Earnings
+            |--------------------------------------------------------------------------
+            |
+            | Future Connect = 5%
+            | Talent = 95%
+            |
+            | Only real once the payment has actually settled -
+            | a pending/failed payment record is not an earning yet.
+            |
+            */
+
+                $futureConnectFee = $isPaid
+                    ? $amount * 0.05
+                    : 0;
+
+                $talentEarning = $isPaid
+                    ? $amount * 0.95
+                    : 0;
+
+                return [
+                    'id' => $connection->id,
+                    'name' => $connection->name,
+                    'email' => $connection->email,
+                    'phone' => $connection->phone,
+                    'status' => $connection->status,
+                    'message' => $connection->message,
+                    'response' => $connection->response,
+
+                    'created_at' => $connection->created_at
+                        ?->format('d M Y, H:i'),
+
+                    'created_at_human' => $connection->created_at
+                        ?->diffForHumans(),
+
+                    'payment' => $payment
+                        ? [
+                            'id' => $payment->id,
+                            'reference' => $payment->reference,
+
+                            /*
+                        | IMPORTANT:
+                        | This is connection_payments.amount
+                        */
+                            'amount' => round(
+                                (float) $payment->amount,
+                                2
+                            ),
+
+                            'currency' => $currency,
+                            'status' => $payment->status,
+                            'provider' => $payment->provider,
+
+                            'provider_transaction_id' =>
+                            $payment->provider_transaction_id,
+
+                            'paid_at' => $payment->paid_at
+                                ?->format('d M Y, H:i'),
+                        ]
+                        : null,
+
+                    'earnings' => [
+                        'amount' => round($amount, 2),
+                        'talent' => round($talentEarning, 2),
+                        'future_connect' => round($futureConnectFee, 2),
+                        'currency' => $currency,
+                        'is_paid' => $isPaid,
+                    ],
+                ];
+            }
+        );
+
+        /*
+    |--------------------------------------------------------------------------
+    | Connection Counts
+    |--------------------------------------------------------------------------
+    */
 
         $baseConnectionQuery = TalentConnection::query()
             ->where('talent_id', $talent->id);
@@ -79,102 +201,32 @@ class TalentConnectionController extends Controller
         ];
 
         /*
-        |--------------------------------------------------------------------------
-        | Paid Payment Statuses
-        |--------------------------------------------------------------------------
-        |
-        | These statuses are considered successfully paid.
-        |
-        */
-
-        $paidStatuses = [
-            'paid',
-            'completed',
-            'success',
-            'successful',
-        ];
-
-        /*
-        |--------------------------------------------------------------------------
-        | REAL PAYMENT DATA
-        |--------------------------------------------------------------------------
-        |
-        | IMPORTANT:
-        |
-        | Financial calculations use:
-        |
-        | connection_payments.amount
-        |
-        | NOT:
-        |
-        | talent_connections.amount
-        |
-        */
+    |--------------------------------------------------------------------------
+    | REAL PAYMENT DATA
+    |--------------------------------------------------------------------------
+    |
+    | All financial totals come from connection_payments.amount.
+    |
+    */
 
         $payments = ConnectionPayment::query()
             ->where('talent_id', $talent->id)
-            ->whereIn('status', $paidStatuses);
-
-        /*
-        |--------------------------------------------------------------------------
-        | Total Payment Amount
-        |--------------------------------------------------------------------------
-        */
+            ->whereIn('status', self::PAID_STATUSES);
 
         $totalAmount = (float) $payments->sum('amount');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Future Connect Earnings
-        |--------------------------------------------------------------------------
-        |
-        | Future Connect receives 5%.
-        |
-        */
-
         $futureConnectEarnings = $totalAmount * 0.05;
-
-        /*
-        |--------------------------------------------------------------------------
-        | Talent Earnings
-        |--------------------------------------------------------------------------
-        |
-        | Talent receives 95%.
-        |
-        */
-
         $talentEarnings = $totalAmount * 0.95;
-
-        /*
-        |--------------------------------------------------------------------------
-        | Number of Paid Connections
-        |--------------------------------------------------------------------------
-        */
-
         $paidConnections = (clone $payments)->count();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Pending / Unpaid Payments
-        |--------------------------------------------------------------------------
-        */
 
         $pendingPayments = ConnectionPayment::query()
             ->where('talent_id', $talent->id)
-            ->whereNotIn('status', $paidStatuses)
+            ->whereNotIn('status', self::PAID_STATUSES)
             ->count();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Render Page
-        |--------------------------------------------------------------------------
-        */
 
         return Inertia::render(
             'Talent/Connections/Index',
             [
                 'connections' => $connections,
-
                 'counts' => $counts,
 
                 'filters' => [
@@ -182,27 +234,11 @@ class TalentConnectionController extends Controller
                 ],
 
                 'earnings' => [
-                    'total_amount' => round(
-                        $totalAmount,
-                        2
-                    ),
-
-                    'talent_earnings' => round(
-                        $talentEarnings,
-                        2
-                    ),
-
-                    'future_connect_earnings' => round(
-                        $futureConnectEarnings,
-                        2
-                    ),
-
-                    'paid_connections' =>
-                        $paidConnections,
-
-                    'pending_payments' =>
-                        $pendingPayments,
-
+                    'total_amount' => round($totalAmount, 2),
+                    'talent_earnings' => round($talentEarnings, 2),
+                    'future_connect_earnings' => round($futureConnectEarnings, 2),
+                    'paid_connections' => $paidConnections,
+                    'pending_payments' => $pendingPayments,
                     'currency' => 'RWF',
                 ],
             ]
@@ -232,12 +268,6 @@ class TalentConnectionController extends Controller
             403
         );
 
-        /*
-        |--------------------------------------------------------------------------
-        | Load Payment
-        |--------------------------------------------------------------------------
-        */
-
         $connection->load('payment');
 
         $payment = $connection->payment;
@@ -251,136 +281,73 @@ class TalentConnectionController extends Controller
         |
         */
 
-        $amount = (float) (
-            $payment?->amount ?? 0
-        );
+        $amount = (float) ($payment?->amount ?? 0);
 
         /*
         |--------------------------------------------------------------------------
-        | Earnings Calculation
+        | Is It Actually Paid?
         |--------------------------------------------------------------------------
+        |
+        | BUG FIX: this method previously computed the 95/5 split
+        | off $amount unconditionally, even when the payment was
+        | still pending or had failed. index() already guarded this
+        | with $isPaid - show() didn't, so the two pages disagreed
+        | about whether money had actually been earned.
+        |
         */
 
-        $futureConnectFee =
-            $amount * 0.05;
+        $isPaid = $payment
+            && in_array(
+                strtolower((string) $payment->status),
+                self::PAID_STATUSES,
+                true
+            );
 
-        $talentEarning =
-            $amount * 0.95;
-
-        /*
-        |--------------------------------------------------------------------------
-        | Connection Data
-        |--------------------------------------------------------------------------
-        */
+        $futureConnectFee = $isPaid ? $amount * 0.05 : 0;
+        $talentEarning = $isPaid ? $amount * 0.95 : 0;
 
         return Inertia::render(
             'Talent/Connections/Show',
             [
                 'connection' => [
-                    'id' =>
-                        $connection->id,
+                    'id' => $connection->id,
+                    'name' => $connection->name,
+                    'email' => $connection->email,
+                    'phone' => $connection->phone,
+                    'status' => $connection->status,
+                    'message' => $connection->message,
+                    'response' => $connection->response,
 
-                    'name' =>
-                        $connection->name,
+                    'created_at' => $connection->created_at
+                        ?->format('d M Y, H:i'),
 
-                    'email' =>
-                        $connection->email,
+                    'created_at_human' => $connection->created_at
+                        ?->diffForHumans(),
 
-                    'phone' =>
-                        $connection->phone,
+                    'payment' => $payment
+                        ? [
+                            'id' => $payment->id,
+                            'reference' => $payment->reference,
+                            'amount' => (float) $payment->amount,
+                            'currency' => $payment->currency ?? 'RWF',
+                            'status' => $payment->status,
+                            'provider' => $payment->provider,
 
-                    'status' =>
-                        $connection->status,
+                            'provider_transaction_id' =>
+                            $payment->provider_transaction_id,
 
-                    'message' =>
-                        $connection->message,
-
-                    'response' =>
-                        $connection->response,
-
-                    'created_at' =>
-                        $connection
-                            ->created_at
-                            ?->format(
-                                'd M Y, H:i'
-                            ),
-
-                    'created_at_human' =>
-                        $connection
-                            ->created_at
-                            ?->diffForHumans(),
-
-                    /*
-                    |--------------------------------------------------------------------------
-                    | Payment
-                    |--------------------------------------------------------------------------
-                    */
-
-                    'payment' =>
-                        $payment
-                            ? [
-                                'id' =>
-                                    $payment->id,
-
-                                'reference' =>
-                                    $payment->reference,
-
-                                'amount' =>
-                                    (float)
-                                    $payment->amount,
-
-                                'currency' =>
-                                    $payment->currency ??
-                                    'RWF',
-
-                                'status' =>
-                                    $payment->status,
-
-                                'provider' =>
-                                    $payment->provider,
-
-                                'provider_transaction_id' =>
-                                    $payment
-                                        ->provider_transaction_id,
-
-                                'paid_at' =>
-                                    $payment
-                                        ->paid_at
-                                        ?->format(
-                                            'd M Y, H:i'
-                                        ),
-                            ]
-                            : null,
+                            'paid_at' => $payment->paid_at
+                                ?->format('d M Y, H:i'),
+                        ]
+                        : null,
                 ],
 
-                /*
-                |--------------------------------------------------------------------------
-                | Earnings
-                |--------------------------------------------------------------------------
-                */
-
                 'earnings' => [
-                    'amount' =>
-                        round(
-                            $amount,
-                            2
-                        ),
-
-                    'future_connect_fee' =>
-                        round(
-                            $futureConnectFee,
-                            2
-                        ),
-
-                    'talent_earning' =>
-                        round(
-                            $talentEarning,
-                            2
-                        ),
-
-                    'currency' =>
-                        $payment?->currency ??
-                        'RWF',
+                    'amount' => round($amount, 2),
+                    'future_connect_fee' => round($futureConnectFee, 2),
+                    'talent_earning' => round($talentEarning, 2),
+                    'currency' => $payment?->currency ?? 'RWF',
+                    'is_paid' => $isPaid,
                 ],
             ]
         );
@@ -397,22 +364,10 @@ class TalentConnectionController extends Controller
 
         abort_unless($talent, 403);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Security
-        |--------------------------------------------------------------------------
-        */
-
         abort_unless(
             $connection->talent_id === $talent->id,
             403
         );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validation
-        |--------------------------------------------------------------------------
-        */
 
         $validated = $request->validate([
             'status' => [
@@ -427,25 +382,10 @@ class TalentConnectionController extends Controller
             ],
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Update Connection
-        |--------------------------------------------------------------------------
-        */
-
         $connection->update([
-            'status' =>
-                $validated['status'],
-
-            'response' =>
-                $validated['response'] ?? null,
+            'status' => $validated['status'],
+            'response' => $validated['response'] ?? null,
         ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | Redirect
-        |--------------------------------------------------------------------------
-        */
 
         return redirect()
             ->route(

@@ -1428,24 +1428,7 @@ function TalentNav({
                 active={route().current("talent.courses.index")}
                 icon={icons.course}
             >
-                My Courses
-            </NavItem>
-
-            <NavItem
-                href="/talent/jobs"
-                active={isActive("/talent/jobs")}
-                icon={icons.job}
-                badge="New"
-            >
-                Find Opportunities
-            </NavItem>
-
-            <NavItem
-                href="/talent/projects"
-                active={isActive("/talent/projects")}
-                icon={icons.project}
-            >
-                Projects
+                Courses
             </NavItem>
 
             <NavSection>Professional Network</NavSection>
@@ -1464,35 +1447,9 @@ function TalentNav({
                 Connections
             </NavItem>
 
-            <NavItem
-                href={route("talent.testimonials.index")}
-                active={route().current(
-                    "talent.testimonials*"
-                )}
-                icon={icons.testimonial}
-            >
-                Testimonials
-            </NavItem>
-
-            <NavItem
-                href="/talent/events"
-                active={isActive("/talent/events")}
-                icon={icons.event}
-            >
-                Events
-            </NavItem>
 
             <NavSection>Marketplace</NavSection>
 
-            <Collapsible
-                label="My Products"
-                icon={icons.product}
-                open={openMenus.products}
-                active={isActive("/talent/products")}
-                onToggle={() =>
-                    toggleMenu("products")
-                }
-            >
                 <NavItem
                     href={route("talent.products.index")}
                     active={route().current(
@@ -1516,33 +1473,6 @@ function TalentNav({
                         Become a Seller
                     </NavItem>
                 )}
-            </Collapsible>
-
-            <NavItem
-                href="/talent/orders"
-                active={isActive("/talent/orders")}
-                icon={icons.payment}
-            >
-                Orders
-            </NavItem>
-
-            <NavSection>Account</NavSection>
-
-            <NavItem
-                href="/talent/wallet"
-                active={isActive("/talent/wallet")}
-                icon={icons.wallet}
-            >
-                Wallet
-            </NavItem>
-
-            <NavItem
-                href="/talent/settings"
-                active={isActive("/talent/settings")}
-                icon={icons.settings}
-            >
-                Settings
-            </NavItem>
         </>
     );
 }

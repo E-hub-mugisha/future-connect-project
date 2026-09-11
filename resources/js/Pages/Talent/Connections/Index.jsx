@@ -1,1642 +1,1770 @@
 // resources/js/Pages/Talent/Connections/Index.jsx
 
+import React, { useMemo } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 import AppLayout from "@/Layouts/AppLayout";
 
-const STATUS_TABS = [
-    {
-        key: "all",
-        label: "All",
-        icon: "fa-layer-group",
-    },
-    {
-        key: "pending",
-        label: "Pending",
-        icon: "fa-clock",
-    },
-    {
-        key: "accepted",
-        label: "Accepted",
-        icon: "fa-check-circle",
-    },
-    {
-        key: "declined",
-        label: "Declined",
-        icon: "fa-times-circle",
-    },
-];
+/*
+|--------------------------------------------------------------------------
+| Helpers
+|--------------------------------------------------------------------------
+*/
 
-const PAID_STATUSES = [
-    "paid",
-    "completed",
-    "success",
-    "successful",
-];
+const money = (value, currency = "RWF") => {
+    const amount = Number(value || 0);
+
+    return `${new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+    }).format(amount)} ${currency}`;
+};
+
+const titleCase = (value) => {
+    if (!value) return "";
+
+    return value
+        .toString()
+        .replace(/[_-]/g, " ")
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+};
+
+/*
+|--------------------------------------------------------------------------
+| Status Badge
+|--------------------------------------------------------------------------
+*/
+
+function StatusBadge({ status }) {
+    const normalized = String(status || "").toLowerCase();
+
+    const config = {
+        pending: {
+            label: "Pending",
+            className: "status-pending",
+            icon: "bi-hourglass-split",
+        },
+        accepted: {
+            label: "Accepted",
+            className: "status-accepted",
+            icon: "bi-check-circle",
+        },
+        declined: {
+            label: "Declined",
+            className: "status-declined",
+            icon: "bi-x-circle",
+        },
+    };
+
+    const current = config[normalized] || {
+        label: titleCase(normalized) || "Unknown",
+        className: "status-default",
+        icon: "bi-circle",
+    };
+
+    return (
+        <span className={`fc-status ${current.className}`}>
+            <i className={`bi ${current.icon}`} />
+            {current.label}
+        </span>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Payment Badge
+|--------------------------------------------------------------------------
+*/
+
+function PaymentBadge({ payment, isPaid }) {
+    if (!payment) {
+        return (
+            <span className="fc-payment-badge payment-none">
+                <i className="bi bi-dash-circle me-1" />
+                No payment
+            </span>
+        );
+    }
+
+    if (isPaid) {
+        return (
+            <span className="fc-payment-badge payment-paid">
+                <i className="bi bi-check-circle-fill me-1" />
+                Paid
+            </span>
+        );
+    }
+
+    return (
+        <span className="fc-payment-badge payment-pending">
+            <i className="bi bi-clock me-1" />
+            {titleCase(payment.status || "Pending")}
+        </span>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Empty State
+|--------------------------------------------------------------------------
+*/
+
+function EmptyState({ status }) {
+    const messages = {
+        all: {
+            title: "No connection requests yet",
+            description:
+                "When people request to connect with you, their requests will appear here.",
+            icon: "bi-people",
+        },
+        pending: {
+            title: "No pending requests",
+            description:
+                "You currently have no connection requests waiting for your response.",
+            icon: "bi-hourglass",
+        },
+        accepted: {
+            title: "No accepted connections",
+            description: "Accepted connection requests will appear here.",
+            icon: "bi-check2-circle",
+        },
+        declined: {
+            title: "No declined connections",
+            description: "Declined connection requests will appear here.",
+            icon: "bi-x-circle",
+        },
+    };
+
+    const current = messages[status] || messages.all;
+
+    return (
+        <div className="fc-empty-state">
+            <div className="empty-icon">
+                <i className={`bi ${current.icon}`} />
+            </div>
+
+            <h5>{current.title}</h5>
+
+            <p>{current.description}</p>
+
+            <Link
+                href={route("talent.dashboard")}
+                className="btn btn-fc-primary"
+            >
+                <i className="bi bi-grid me-2" />
+                Go to dashboard
+            </Link>
+        </div>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Pagination
+|--------------------------------------------------------------------------
+*/
+
+function Pagination({ links = [] }) {
+    if (!links || links.length <= 3) {
+        return null;
+    }
+
+    return (
+        <nav className="fc-pagination" aria-label="Connection pagination">
+            <ul className="pagination mb-0">
+                {links.map((link, index) => {
+                    const isPrevious = index === 0;
+
+                    const isNext = index === links.length - 1;
+
+                    return (
+                        <li
+                            key={`${link.label}-${index}`}
+                            className={`page-item ${
+                                link.active ? "active" : ""
+                            } ${!link.url ? "disabled" : ""}`}
+                        >
+                            <Link
+                                href={link.url || "#"}
+                                preserveScroll
+                                className="page-link"
+                            >
+                                {isPrevious ? (
+                                    <i className="bi bi-chevron-left" />
+                                ) : isNext ? (
+                                    <i className="bi bi-chevron-right" />
+                                ) : (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: link.label,
+                                        }}
+                                    />
+                                )}
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
+        </nav>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Summary Card
+|--------------------------------------------------------------------------
+*/
+
+function SummaryCard({ icon, title, value, description, className = "" }) {
+    return (
+        <div className={`fc-summary-card ${className}`}>
+            <div className="summary-card-top">
+                <div className="summary-icon">
+                    <i className={`bi ${icon}`} />
+                </div>
+            </div>
+
+            <div className="summary-content">
+                <span className="summary-title">{title}</span>
+
+                <div className="summary-value">{value}</div>
+
+                {description && (
+                    <span className="summary-description">{description}</span>
+                )}
+            </div>
+        </div>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Desktop Connection Row
+|--------------------------------------------------------------------------
+*/
+
+function ConnectionRow({ connection }) {
+    /*
+    |--------------------------------------------------------------------------
+    | IMPORTANT
+    |--------------------------------------------------------------------------
+    |
+    | Financial information comes from:
+    |
+    | connection_payments.amount
+    |
+    | NOT:
+    |
+    | connection.amount
+    |
+    */
+
+    const payment = connection?.payment ?? null;
+
+    const rowEarnings = connection?.earnings ?? null;
+
+    const amount = Number(rowEarnings?.amount ?? payment?.amount ?? 0);
+
+    const talentEarning = Number(rowEarnings?.talent ?? 0);
+
+    const futureConnectFee = Number(rowEarnings?.future_connect ?? 0);
+
+    const currency = rowEarnings?.currency ?? payment?.currency ?? "RWF";
+
+    const isPaid = rowEarnings?.is_paid === true;
+
+    return (
+        <tr>
+            {/* Contact */}
+            <td>
+                <div className="contact-cell">
+                    <div className="contact-avatar">
+                        {connection?.name?.charAt(0)?.toUpperCase() || "U"}
+                    </div>
+
+                    <div className="contact-details">
+                        <div className="contact-name">
+                            {connection?.name || "Unknown user"}
+                        </div>
+
+                        <div className="contact-email">
+                            {connection?.email || "No email"}
+                        </div>
+
+                        {connection?.phone && (
+                            <div className="contact-phone">
+                                <i className="bi bi-telephone me-1" />
+                                {connection.phone}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </td>
+
+            {/* Status */}
+            <td>
+                <StatusBadge status={connection?.status} />
+            </td>
+
+            {/* Payment */}
+            <td>
+                <div className="payment-cell">
+                    <PaymentBadge payment={payment} isPaid={isPaid} />
+
+                    {payment && (
+                        <div className="payment-amount">
+                            {money(amount, currency)}
+                        </div>
+                    )}
+
+                    {payment?.reference && (
+                        <div
+                            className="payment-reference"
+                            title={payment.reference}
+                        >
+                            {payment.reference}
+                        </div>
+                    )}
+                </div>
+            </td>
+
+            {/* Talent Earnings */}
+            <td>
+                <div className="earnings-cell">
+                    {isPaid ? (
+                        <>
+                            <div className="earning-main">
+                                {money(talentEarning, currency)}
+                            </div>
+
+                            <div className="earning-sub">
+                                <span className="earning-percent">95%</span>
+
+                                <span>your earnings</span>
+                            </div>
+                        </>
+                    ) : (
+                        <span className="not-available">—</span>
+                    )}
+                </div>
+            </td>
+
+            {/* Date */}
+            <td>
+                <div className="date-cell">
+                    <div className="date-main">
+                        {connection?.created_at || "—"}
+                    </div>
+
+                    {connection?.created_at_human && (
+                        <div className="date-human">
+                            {connection.created_at_human}
+                        </div>
+                    )}
+                </div>
+            </td>
+
+            {/* Action */}
+            <td className="text-end">
+                <Link
+                    href={route("talent.connections.show", connection.id)}
+                    className="btn btn-view"
+                >
+                    View
+                    <i className="bi bi-arrow-right ms-2" />
+                </Link>
+            </td>
+        </tr>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mobile Connection Card
+|--------------------------------------------------------------------------
+*/
+
+function ConnectionCard({ connection }) {
+    const payment = connection?.payment ?? null;
+
+    const rowEarnings = connection?.earnings ?? null;
+
+    const amount = Number(rowEarnings?.amount ?? payment?.amount ?? 0);
+
+    const talentEarning = Number(rowEarnings?.talent ?? 0);
+
+    const currency = rowEarnings?.currency ?? payment?.currency ?? "RWF";
+
+    const isPaid = rowEarnings?.is_paid === true;
+
+    return (
+        <div className="mobile-connection-card">
+            {/* Header */}
+            <div className="mobile-card-header">
+                <div className="contact-cell">
+                    <div className="contact-avatar">
+                        {connection?.name?.charAt(0)?.toUpperCase() || "U"}
+                    </div>
+
+                    <div className="contact-details">
+                        <div className="contact-name">
+                            {connection?.name || "Unknown user"}
+                        </div>
+
+                        <div className="contact-email">
+                            {connection?.email || "No email"}
+                        </div>
+                    </div>
+                </div>
+
+                <StatusBadge status={connection?.status} />
+            </div>
+
+            {/* Message */}
+            {connection?.message && (
+                <div className="mobile-message">
+                    <div className="mobile-section-label">Message</div>
+
+                    <p>{connection.message}</p>
+                </div>
+            )}
+
+            {/* Financials */}
+            <div className="mobile-financial-grid">
+                <div className="mobile-financial-item">
+                    <span>Payment</span>
+
+                    <strong>{payment ? money(amount, currency) : "—"}</strong>
+
+                    <PaymentBadge payment={payment} isPaid={isPaid} />
+                </div>
+
+                <div className="mobile-financial-item earning">
+                    <span>Your earnings</span>
+
+                    <strong>
+                        {isPaid ? money(talentEarning, currency) : "—"}
+                    </strong>
+
+                    {isPaid && <small>95% of payment</small>}
+                </div>
+            </div>
+
+            {/* Footer */}
+            <div className="mobile-card-footer">
+                <div className="mobile-date">
+                    <i className="bi bi-calendar3 me-1" />
+
+                    {connection?.created_at || "—"}
+                </div>
+
+                <Link
+                    href={route("talent.connections.show", connection.id)}
+                    className="btn btn-view"
+                >
+                    View details
+                    <i className="bi bi-arrow-right ms-2" />
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Main Page
+|--------------------------------------------------------------------------
+*/
 
 export default function Index({
     connections,
     counts = {},
     filters = {},
     earnings = {},
-    flash,
 }) {
-    function switchTab(status) {
+    const activeStatus = filters?.status || "all";
+
+    const connectionData = connections?.data || [];
+
+    const currency = earnings?.currency || "RWF";
+
+    /*
+    |--------------------------------------------------------------------------
+    | Financial Summary
+    |--------------------------------------------------------------------------
+    */
+
+    const totalAmount = Number(earnings?.total_amount || 0);
+
+    const talentEarnings = Number(earnings?.talent_earnings || 0);
+
+    const futureConnectEarnings = Number(
+        earnings?.future_connect_earnings || 0,
+    );
+
+    const paidConnections = Number(earnings?.paid_connections || 0);
+
+    const pendingPayments = Number(earnings?.pending_payments || 0);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate visible page earnings
+    |--------------------------------------------------------------------------
+    */
+
+    const visibleEarnings = useMemo(() => {
+        return connectionData.reduce((total, connection) => {
+            const isPaid = connection?.earnings?.is_paid === true;
+
+            if (!isPaid) {
+                return total;
+            }
+
+            return total + Number(connection?.earnings?.talent || 0);
+        }, 0);
+    }, [connectionData]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Status Filter
+    |--------------------------------------------------------------------------
+    */
+
+    const handleStatusChange = (status) => {
         router.get(
             route("talent.connections.index"),
-            status === "all"
-                ? {}
-                : {
-                      status,
-                  },
+            {
+                status,
+            },
             {
                 preserveState: true,
                 preserveScroll: true,
                 replace: true,
             },
         );
-    }
+    };
 
-    const activeStatus = filters.status ?? "all";
+    /*
+    |--------------------------------------------------------------------------
+    | Filter Tabs
+    |--------------------------------------------------------------------------
+    */
+
+    const tabs = [
+        {
+            key: "all",
+            label: "All requests",
+            icon: "bi-inbox",
+            count: counts?.all || 0,
+        },
+        {
+            key: "pending",
+            label: "Pending",
+            icon: "bi-hourglass-split",
+            count: counts?.pending || 0,
+        },
+        {
+            key: "accepted",
+            label: "Accepted",
+            icon: "bi-check-circle",
+            count: counts?.accepted || 0,
+        },
+        {
+            key: "declined",
+            label: "Declined",
+            icon: "bi-x-circle",
+            count: counts?.declined || 0,
+        },
+    ];
 
     return (
         <AppLayout>
-            <Head title="Connections & Earnings" />
+            <Head title="Connection Requests" />
+
+            <div className="fc-connections-page">
+                <div className="container-fluid px-3 px-lg-4">
+                    {/* ==================================================
+                        Page Header
+                    ================================================== */}
+
+                    <div className="page-header">
+                        <div>
+                            <div className="page-eyebrow">
+                                <span className="eyebrow-dot" />
+                                Talent workspace
+                            </div>
+
+                            <h1>Connection requests</h1>
+
+                            <p>
+                                Manage people who want to connect with you and
+                                track your earnings.
+                            </p>
+                        </div>
+
+                        <div className="header-action">
+                            <Link
+                                href={route("talent.dashboard")}
+                                className="btn btn-dashboard"
+                            >
+                                <i className="bi bi-grid me-2" />
+                                Dashboard
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* ==================================================
+                        Earnings Summary
+                    ================================================== */}
+
+                    <div className="summary-section">
+                        <div className="summary-grid">
+                            <SummaryCard
+                                icon="bi-wallet2"
+                                title="Total payments"
+                                value={money(totalAmount, currency)}
+                                description={`${paidConnections} paid connection${
+                                    paidConnections === 1 ? "" : "s"
+                                }`}
+                                className="summary-total"
+                            />
+
+                            <SummaryCard
+                                icon="bi-person-check"
+                                title="Your earnings"
+                                value={money(talentEarnings, currency)}
+                                description="95% of successful payments"
+                                className="summary-talent"
+                            />
+
+                            <SummaryCard
+                                icon="bi-building"
+                                title="Future Connect"
+                                value={money(futureConnectEarnings, currency)}
+                                description="5% platform fee"
+                                className="summary-platform"
+                            />
+
+                            <SummaryCard
+                                icon="bi-clock-history"
+                                title="Pending payments"
+                                value={pendingPayments}
+                                description="Awaiting successful payment"
+                                className="summary-pending"
+                            />
+                        </div>
+                    </div>
+
+                    {/* ==================================================
+                        Earnings Explanation
+                    ================================================== */}
+
+                    <div className="earnings-info">
+                        <div className="earnings-info-icon">
+                            <i className="bi bi-shield-check" />
+                        </div>
+
+                        <div className="earnings-info-content">
+                            <strong>Transparent earnings</strong>
+
+                            <span>
+                                For every successful connection payment, you
+                                receive <b>95%</b> while Future Connect retains{" "}
+                                <b>5%</b> as the platform fee.
+                            </span>
+                        </div>
+
+                        <div className="earnings-info-value">
+                            <span>Your current share</span>
+
+                            <strong>95%</strong>
+                        </div>
+                    </div>
 
-            <div data-h-scope="talent-connections">
-                <style>{`
-                    [data-h-scope="talent-connections"] {
-                        --fc-green: #48d597;
-                        --fc-green-dark: #229365;
-                        --fc-green-soft: #eafaf3;
-                        --fc-black: #060f11;
-                        --fc-black-soft: #182326;
-                        --fc-white: #ffffff;
-                        --fc-bg: #f6f9f8;
-                        --fc-muted: #718083;
-                        --fc-border: #e4ebe8;
-                        --fc-warning: #f5a623;
-                        --fc-danger: #df4d52;
+                    {/* ==================================================
+                        Filters
+                    ================================================== */}
 
-                        min-height: 100%;
-                        background:
-                            linear-gradient(
-                                180deg,
-                                #f8fbfa 0%,
-                                #f4f8f6 100%
-                            );
-                        color: var(--fc-black);
-                    }
+                    <div className="connections-panel">
+                        <div className="panel-header">
+                            <div>
+                                <h2>Your connections</h2>
 
-                    [data-h-scope="talent-connections"] .fc-page {
-                        max-width: 1480px;
-                        margin: 0 auto;
-                    }
+                                <p>Review and respond to incoming requests.</p>
+                            </div>
 
-                    /* ==========================================
-                       PAGE HEADER
-                    ========================================== */
+                            <div className="panel-stat">
+                                <span>Page earnings</span>
 
-                    [data-h-scope="talent-connections"] .fc-header {
-                        position: relative;
-                        overflow: hidden;
-                        background: var(--fc-black);
-                        color: white;
-                        border-radius: 24px;
-                        padding: 30px;
-                        box-shadow:
-                            0 18px 45px rgba(6, 15, 17, .12);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-header::after {
-                        content: "";
-                        position: absolute;
-                        width: 300px;
-                        height: 300px;
-                        right: -100px;
-                        top: -150px;
-                        border-radius: 50%;
-                        background: rgba(72, 213, 151, .14);
-                        pointer-events: none;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-header::before {
-                        content: "";
-                        position: absolute;
-                        width: 180px;
-                        height: 180px;
-                        right: 180px;
-                        bottom: -130px;
-                        border-radius: 50%;
-                        background: rgba(72, 213, 151, .07);
-                        pointer-events: none;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-header-content {
-                        position: relative;
-                        z-index: 2;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-header-icon {
-                        width: 48px;
-                        height: 48px;
-                        border-radius: 14px;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        background: rgba(72, 213, 151, .16);
-                        color: var(--fc-green);
-                        font-size: 19px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-eyebrow {
-                        color: var(--fc-green);
-                        font-size: 11px;
-                        font-weight: 800;
-                        letter-spacing: .12em;
-                        text-transform: uppercase;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-header h1 {
-                        font-size: clamp(25px, 3vw, 34px);
-                        line-height: 1.15;
-                        font-weight: 800;
-                        margin: 0;
-                        letter-spacing: -.025em;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-header p {
-                        color: rgba(255,255,255,.68);
-                        max-width: 680px;
-                        margin: 0;
-                        line-height: 1.6;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-fee-box {
-                        position: relative;
-                        z-index: 2;
-                        min-width: 190px;
-                        padding: 18px 20px;
-                        border: 1px solid rgba(255,255,255,.1);
-                        background: rgba(255,255,255,.055);
-                        border-radius: 16px;
-                        backdrop-filter: blur(8px);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-fee-box .fee {
-                        color: var(--fc-green);
-                        font-size: 26px;
-                        font-weight: 800;
-                    }
-
-                    /* ==========================================
-                       FLASH
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-alert {
-                        border: 1px solid rgba(72,213,151,.3);
-                        background: #ecfaf4;
-                        color: #1c7955;
-                    }
-
-                    /* ==========================================
-                       FINANCIAL CARDS
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-stat {
-                        height: 100%;
-                        background: white;
-                        border: 1px solid var(--fc-border);
-                        border-radius: 20px;
-                        padding: 22px;
-                        transition:
-                            transform .2s ease,
-                            box-shadow .2s ease,
-                            border-color .2s ease;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-stat:hover {
-                        transform: translateY(-3px);
-                        border-color: rgba(72,213,151,.45);
-                        box-shadow:
-                            0 15px 35px rgba(6,15,17,.07);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-stat-icon {
-                        width: 46px;
-                        height: 46px;
-                        border-radius: 14px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-shrink: 0;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-stat-label {
-                        color: var(--fc-muted);
-                        font-size: 13px;
-                        font-weight: 600;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-stat-value {
-                        font-size: clamp(19px, 2vw, 25px);
-                        line-height: 1.2;
-                        font-weight: 800;
-                        letter-spacing: -.02em;
-                        color: var(--fc-black);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-stat-description {
-                        color: var(--fc-muted);
-                        font-size: 12px;
-                    }
-
-                    /* ==========================================
-                       SPLIT CARD
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-split-card {
-                        background: white;
-                        border: 1px solid var(--fc-border);
-                        border-radius: 20px;
-                        padding: 20px 22px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-split-track {
-                        height: 9px;
-                        background: #edf2f0;
-                        border-radius: 999px;
-                        overflow: hidden;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-split-talent {
-                        width: 95%;
-                        height: 100%;
-                        background: var(--fc-green);
-                        border-radius: 999px 0 0 999px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-split-platform {
-                        width: 5%;
-                        height: 100%;
-                        background: var(--fc-black);
-                        border-radius: 0 999px 999px 0;
-                    }
-
-                    /* ==========================================
-                       MAIN CARD
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-main-card {
-                        background: white;
-                        border: 1px solid var(--fc-border);
-                        border-radius: 24px;
-                        box-shadow:
-                            0 8px 30px rgba(6,15,17,.035);
-                        overflow: hidden;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-main-header {
-                        padding: 24px 26px 20px;
-                        border-bottom: 1px solid var(--fc-border);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-main-title {
-                        font-size: 18px;
-                        font-weight: 800;
-                        margin-bottom: 4px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-main-subtitle {
-                        color: var(--fc-muted);
-                        font-size: 13px;
-                    }
-
-                    /* ==========================================
-                       TABS
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-tabs {
-                        display: flex;
-                        align-items: center;
-                        gap: 4px;
-                        background: #f1f5f3;
-                        padding: 5px;
-                        border-radius: 13px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-tab {
-                        border: 0;
-                        background: transparent;
-                        color: #6f7c7e;
-                        font-size: 13px;
-                        font-weight: 700;
-                        padding: 9px 13px;
-                        border-radius: 9px;
-                        white-space: nowrap;
-                        transition: all .15s ease;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-tab:hover {
-                        color: var(--fc-black);
-                        background: rgba(255,255,255,.7);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-tab.active {
-                        background: var(--fc-black);
-                        color: white;
-                        box-shadow: 0 3px 9px rgba(6,15,17,.13);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-tab-count {
-                        margin-left: 5px;
-                        opacity: .7;
-                        font-size: 11px;
-                    }
-
-                    /* ==========================================
-                       COLUMN HEADER
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-columns {
-                        display: grid;
-                        grid-template-columns:
-                            minmax(260px, 1.5fr)
-                            140px
-                            200px
-                            160px
-                            120px;
-                        gap: 16px;
-                        padding: 16px 22px 9px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-column-label {
-                        color: #899496;
-                        font-size: 10px;
-                        font-weight: 800;
-                        letter-spacing: .08em;
-                        text-transform: uppercase;
-                    }
-
-                    /* ==========================================
-                       CONNECTION ROW
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-row {
-                        margin: 0 22px;
-                        padding: 17px;
-                        border: 1px solid var(--fc-border);
-                        border-radius: 18px;
-                        background: white;
-                        transition:
-                            border-color .18s ease,
-                            box-shadow .18s ease,
-                            transform .18s ease;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-row:hover {
-                        border-color: rgba(72,213,151,.5);
-                        box-shadow:
-                            0 10px 26px rgba(6,15,17,.055);
-                        transform: translateY(-1px);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-avatar {
-                        width: 48px;
-                        height: 48px;
-                        border-radius: 15px;
-                        background: var(--fc-green-soft);
-                        color: var(--fc-green-dark);
-                        font-size: 14px;
-                        font-weight: 900;
-                        flex-shrink: 0;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-person-name {
-                        font-size: 14px;
-                        font-weight: 800;
-                        color: var(--fc-black);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-person-email {
-                        color: var(--fc-muted);
-                        font-size: 12px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-date {
-                        color: #899496;
-                        font-size: 11px;
-                    }
-
-                    /* ==========================================
-                       PAYMENT
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-payment {
-                        background: #f7faf9;
-                        border: 1px solid #e9efec;
-                        border-radius: 13px;
-                        padding: 11px 13px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-payment-amount {
-                        font-size: 14px;
-                        font-weight: 800;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-reference {
-                        max-width: 165px;
-                        color: #8a9698;
-                        font-size: 10px;
-                    }
-
-                    /* ==========================================
-                       EARNINGS
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-earning {
-                        color: #208d62;
-                        font-size: 14px;
-                        font-weight: 800;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-platform-fee {
-                        color: #9a6b13;
-                        font-size: 11px;
-                    }
-
-                    /* ==========================================
-                       BADGES
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-badge {
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 5px;
-                        width: fit-content;
-                        padding: 6px 9px;
-                        border-radius: 999px;
-                        font-size: 10px;
-                        font-weight: 800;
-                        white-space: nowrap;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-badge-pending {
-                        background: #fff5df;
-                        color: #a66d08;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-badge-accepted {
-                        background: #e8f9f1;
-                        color: #208d62;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-badge-declined {
-                        background: #fcebed;
-                        color: #ce4147;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-badge-paid {
-                        background: #e8f9f1;
-                        color: #208d62;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-badge-unpaid {
-                        background: #fff5df;
-                        color: #a66d08;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-badge-neutral {
-                        background: #eef2f1;
-                        color: #647173;
-                    }
-
-                    /* ==========================================
-                       BUTTON
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-btn {
-                        border-radius: 10px;
-                        font-size: 12px;
-                        font-weight: 800;
-                        padding: 9px 13px;
-                        border: 0;
-                        transition: all .15s ease;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-btn-dark {
-                        color: white;
-                        background: var(--fc-black);
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-btn-dark:hover {
-                        color: white;
-                        background: #1b292c;
-                        transform: translateY(-1px);
-                    }
-
-                    /* ==========================================
-                       EMPTY STATE
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-empty {
-                        margin: 22px;
-                        padding: 65px 20px;
-                        border: 1px dashed #d9e2de;
-                        border-radius: 18px;
-                        background: #fbfdfc;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-empty-icon {
-                        width: 68px;
-                        height: 68px;
-                        border-radius: 20px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        margin: 0 auto 18px;
-                        background: var(--fc-green-soft);
-                        color: var(--fc-green-dark);
-                        font-size: 25px;
-                    }
-
-                    /* ==========================================
-                       PAGINATION
-                    ========================================== */
-
-                    [data-h-scope="talent-connections"] .fc-pagination {
-                        padding: 20px 22px 24px;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-pagination a,
-                    [data-h-scope="talent-connections"] .fc-pagination span {
-                        min-width: 36px;
-                        height: 36px;
-                        padding: 0 10px;
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 10px;
-                        color: var(--fc-black);
-                        font-size: 12px;
-                        font-weight: 700;
-                        text-decoration: none;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-pagination a:hover {
-                        background: #edf2f0;
-                    }
-
-                    [data-h-scope="talent-connections"] .fc-pagination .active span {
-                        color: white;
-                        background: var(--fc-black);
-                    }
-
-                    /* ==========================================
-                       MOBILE
-                    ========================================== */
-
-                    @media (max-width: 1199px) {
-                        [data-h-scope="talent-connections"] .fc-desktop {
-                            display: none !important;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-row {
-                            margin: 0 14px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-empty {
-                            margin: 14px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-columns {
-                            display: none;
-                        }
-                    }
-
-                    @media (min-width: 1200px) {
-                        [data-h-scope="talent-connections"] .fc-mobile {
-                            display: none !important;
-                        }
-                    }
-
-                    @media (max-width: 767px) {
-                        [data-h-scope="talent-connections"] .fc-header {
-                            padding: 22px;
-                            border-radius: 20px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-fee-box {
-                            width: 100%;
-                            min-width: 0;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-main-header {
-                            padding: 20px 16px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-tabs {
-                            width: 100%;
-                            overflow-x: auto;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-tab {
-                            flex: 1;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-row {
-                            padding: 15px;
-                            border-radius: 16px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-avatar {
-                            width: 44px;
-                            height: 44px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-stat {
-                            padding: 17px;
-                        }
-
-                        [data-h-scope="talent-connections"] .fc-stat-icon {
-                            width: 40px;
-                            height: 40px;
-                            border-radius: 12px;
-                        }
-                    }
-                `}</style>
-
-                <div className="container-fluid px-3 px-md-4 py-4">
-                    <div className="fc-page">
-
-                        {/* ==================================================
-                            HEADER
-                        ================================================== */}
-
-                        <div className="fc-header mb-4">
-                            <div className="fc-header-content">
-                                <div className="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-4">
-
-                                    <div>
-                                        <div className="d-flex align-items-center gap-3 mb-3">
-                                            <div className="fc-header-icon">
-                                                <i className="fas fa-handshake" />
-                                            </div>
-
-                                            <span className="fc-eyebrow">
-                                                Talent workspace
-                                            </span>
-                                        </div>
-
-                                        <h1 className="mb-2">
-                                            Connections & Earnings
-                                        </h1>
-
-                                        <p>
-                                            Manage people who want to connect
-                                            with you and monitor the income
-                                            generated through Future Connect.
-                                        </p>
-                                    </div>
-
-                                    <div className="fc-fee-box">
-                                        <div className="small text-white-50 mb-1">
-                                            Platform fee
-                                        </div>
-
-                                        <div className="fee">
-                                            5%
-                                        </div>
-
-                                        <div className="small text-white-50 mt-1">
-                                            You keep 95% of every paid
-                                            connection.
-                                        </div>
-                                    </div>
-
-                                </div>
+                                <strong>
+                                    {money(visibleEarnings, currency)}
+                                </strong>
                             </div>
                         </div>
 
-                        {/* ==================================================
-                            FLASH MESSAGE
-                        ================================================== */}
+                        <div className="filter-tabs">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.key}
+                                    type="button"
+                                    onClick={() => handleStatusChange(tab.key)}
+                                    className={`filter-tab ${
+                                        activeStatus === tab.key ? "active" : ""
+                                    }`}
+                                >
+                                    <i className={`bi ${tab.icon}`} />
 
-                        {flash?.success && (
-                            <div className="fc-alert rounded-4 p-3 mb-4">
-                                <i className="fas fa-circle-check me-2" />
-                                <strong>{flash.success}</strong>
-                            </div>
-                        )}
+                                    <span>{tab.label}</span>
 
-                        {/* ==================================================
-                            FINANCIAL SUMMARY
-                        ================================================== */}
-
-                        <div className="row g-3 mb-3">
-
-                            <MoneyStat
-                                icon="fa-wallet"
-                                label="Total paid"
-                                value={money(
-                                    earnings.total_amount,
-                                    earnings.currency,
-                                )}
-                                description="Total value of paid connections"
-                                iconStyle="green"
-                            />
-
-                            <MoneyStat
-                                icon="fa-arrow-trend-up"
-                                label="Your earnings"
-                                value={money(
-                                    earnings.talent_earnings,
-                                    earnings.currency,
-                                )}
-                                description="95% paid directly to your share"
-                                iconStyle="green"
-                            />
-
-                            <MoneyStat
-                                icon="fa-building"
-                                label="Platform earnings"
-                                value={money(
-                                    earnings.future_connect_earnings,
-                                    earnings.currency,
-                                )}
-                                description="Future Connect's 5% share"
-                                iconStyle="black"
-                            />
-
-                            <MoneyStat
-                                icon="fa-circle-check"
-                                label="Paid connections"
-                                value={
-                                    earnings.paid_connections ?? 0
-                                }
-                                description="Successfully completed payments"
-                                iconStyle="orange"
-                            />
-
+                                    <span className="filter-count">
+                                        {tab.count}
+                                    </span>
+                                </button>
+                            ))}
                         </div>
 
                         {/* ==================================================
-                            REVENUE SPLIT
+                            Desktop Table
                         ================================================== */}
 
-                        <div className="fc-split-card mb-4">
+                        {connectionData.length > 0 ? (
+                            <>
+                                <div className="table-responsive connection-table-wrapper">
+                                    <table className="table connection-table align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Contact</th>
 
-                            <div className="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
+                                                <th>Status</th>
 
-                                <div>
-                                    <div className="fw-bold">
-                                        Connection revenue split
-                                    </div>
+                                                <th>Payment</th>
 
-                                    <div className="small text-secondary">
-                                        Every successful payment is
-                                        automatically divided between you and
-                                        Future Connect.
-                                    </div>
+                                                <th>Your earnings</th>
+
+                                                <th>Requested</th>
+
+                                                <th className="text-end">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {connectionData.map(
+                                                (connection) => (
+                                                    <ConnectionRow
+                                                        key={connection.id}
+                                                        connection={connection}
+                                                    />
+                                                ),
+                                            )}
+                                        </tbody>
+                                    </table>
                                 </div>
 
-                                <div className="d-flex align-items-center gap-3">
+                                {/* ==================================================
+                                    Mobile Cards
+                                ================================================== */}
 
-                                    <div className="d-flex align-items-center gap-2">
-                                        <span
-                                            style={{
-                                                width: 9,
-                                                height: 9,
-                                                borderRadius: "50%",
-                                                background: "#48d597",
-                                            }}
+                                <div className="mobile-connections">
+                                    {connectionData.map((connection) => (
+                                        <ConnectionCard
+                                            key={connection.id}
+                                            connection={connection}
                                         />
-
-                                        <span className="small fw-bold">
-                                            You 95%
-                                        </span>
-                                    </div>
-
-                                    <div className="d-flex align-items-center gap-2">
-                                        <span
-                                            style={{
-                                                width: 9,
-                                                height: 9,
-                                                borderRadius: "50%",
-                                                background: "#060f11",
-                                            }}
-                                        />
-
-                                        <span className="small fw-bold">
-                                            FC 5%
-                                        </span>
-                                    </div>
-
+                                    ))}
                                 </div>
 
-                            </div>
-
-                            <div className="fc-split-track d-flex">
-                                <div className="fc-split-talent" />
-                                <div className="fc-split-platform" />
-                            </div>
-
-                        </div>
-
-                        {/* ==================================================
-                            MAIN CONNECTIONS CARD
-                        ================================================== */}
-
-                        <div className="fc-main-card">
-
-                            <div className="fc-main-header">
-
-                                <div className="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center gap-3">
-
-                                    <div>
-                                        <div className="fc-main-title">
-                                            Connection requests
-                                        </div>
-
-                                        <div className="fc-main-subtitle">
-                                            Review requests, payment activity
-                                            and your earnings.
-                                        </div>
-                                    </div>
-
-                                    <div className="fc-tabs">
-
-                                        {STATUS_TABS.map((tab) => (
-                                            <button
-                                                key={tab.key}
-                                                type="button"
-                                                className={`fc-tab ${
-                                                    activeStatus ===
-                                                    tab.key
-                                                        ? "active"
-                                                        : ""
-                                                }`}
-                                                onClick={() =>
-                                                    switchTab(
-                                                        tab.key,
-                                                    )
-                                                }
-                                            >
-                                                <i
-                                                    className={`fas ${tab.icon} me-1`}
-                                                />
-
-                                                {tab.label}
-
-                                                <span className="fc-tab-count">
-                                                    {tab.key === "all"
-                                                        ? counts.all ?? 0
-                                                        : counts[
-                                                              tab.key
-                                                          ] ?? 0}
-                                                </span>
-                                            </button>
-                                        ))}
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            {/* Desktop column headings */}
-
-                            {connections?.data?.length > 0 && (
-                                <div className="fc-columns fc-desktop">
-
-                                    <div className="fc-column-label">
-                                        Connection
-                                    </div>
-
-                                    <div className="fc-column-label">
-                                        Request
-                                    </div>
-
-                                    <div className="fc-column-label">
-                                        Payment
-                                    </div>
-
-                                    <div className="fc-column-label">
-                                        Earnings
-                                    </div>
-
-                                    <div />
-                                </div>
-                            )}
-
-                            {/* ==================================================
-                                LIST
-                            ================================================== */}
-
-                            {!connections?.data ||
-                            connections.data.length === 0 ? (
-                                <EmptyState />
-                            ) : (
-                                <div className="d-flex flex-column gap-3 py-2">
-
-                                    {connections.data.map(
-                                        (connection) => (
-                                            <ConnectionRow
-                                                key={
-                                                    connection.id
-                                                }
-                                                connection={
-                                                    connection
-                                                }
-                                            />
-                                        ),
-                                    )}
-
-                                </div>
-                            )}
-
-                            {/* ==================================================
-                                PAGINATION
-                            ================================================== */}
-
-                            {connections?.links &&
-                                connections?.data?.length > 0 && (
-                                    <Pagination
-                                        links={
-                                            connections.links
-                                        }
-                                    />
-                                )}
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </AppLayout>
-    );
-}
-
-/* ============================================================
-   FINANCIAL STAT
-============================================================ */
-
-function MoneyStat({
-    icon,
-    label,
-    value,
-    description,
-    iconStyle = "green",
-}) {
-    const styles = {
-        green: {
-            background: "#eafaf3",
-            color: "#229365",
-        },
-
-        black: {
-            background: "#eef1f0",
-            color: "#060f11",
-        },
-
-        orange: {
-            background: "#fff5df",
-            color: "#a66d08",
-        },
-    };
-
-    return (
-        <div className="col-6 col-xl-3">
-
-            <div className="fc-stat">
-
-                <div className="d-flex align-items-center justify-content-between mb-4">
-
-                    <div
-                        className="fc-stat-icon"
-                        style={
-                            styles[iconStyle] ??
-                            styles.green
-                        }
-                    >
-                        <i className={`fas ${icon}`} />
-                    </div>
-
-                </div>
-
-                <div className="fc-stat-label mb-1">
-                    {label}
-                </div>
-
-                <div
-                    className="fc-stat-value text-truncate"
-                    title={String(value)}
-                >
-                    {value}
-                </div>
-
-                <div className="fc-stat-description mt-2">
-                    {description}
-                </div>
-
-            </div>
-
-        </div>
-    );
-}
-
-/* ============================================================
-   CONNECTION ROW
-============================================================ */
-
-function ConnectionRow({ connection }) {
-    const initials = (connection.name || "?")
-        .trim()
-        .split(/\s+/)
-        .map((part) => part[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase();
-
-    /*
-     * ==========================================================
-     * IMPORTANT PAYMENT RULE
-     * ==========================================================
-     *
-     * All financial information MUST come from:
-     *
-     * connection.payment
-     *
-     * which represents:
-     *
-     * connection_payments
-     *
-     * Do NOT use:
-     *
-     * connection.amount
-     * connection.currency
-     * connection.payment_status
-     *
-     */
-
-    const payment = connection.payment ?? null;
-
-    const amount = payment
-        ? Number(payment.amount || 0)
-        : 0;
-
-    const currency =
-        payment?.currency || "RWF";
-
-    const talentEarning =
-        amount * 0.95;
-
-    const futureConnectFee =
-        amount * 0.05;
-
-    const isPaid = payment
-        ? PAID_STATUSES.includes(
-              String(
-                  payment.status || "",
-              ).toLowerCase(),
-          )
-        : false;
-
-    return (
-        <div className="fc-row">
-
-            {/* ==================================================
-                DESKTOP
-            ================================================== */}
-
-            <div
-                className="fc-desktop"
-                style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                        "minmax(260px,1.5fr) 140px 200px 160px 120px",
-                    gap: "16px",
-                    alignItems: "center",
-                }}
-            >
-
-                {/* Connection */}
-
-                <div className="d-flex align-items-center gap-3">
-
-                    <div className="fc-avatar d-flex align-items-center justify-content-center">
-                        {initials}
-                    </div>
-
-                    <div className="min-w-0">
-
-                        <div className="fc-person-name text-truncate">
-                            {connection.name ||
-                                "Unknown user"}
-                        </div>
-
-                        <div className="fc-person-email text-truncate">
-                            {connection.email ||
-                                "No email provided"}
-                        </div>
-
-                        <div className="fc-date mt-1">
-                            <i className="far fa-calendar me-1" />
-
-                            {connection.created_at_human ??
-                                connection.created_at ??
-                                "—"}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {/* Request status */}
-
-                <div>
-                    <div className="small text-secondary mb-1">
-                        Status
-                    </div>
-
-                    <StatusBadge
-                        status={
-                            connection.status
-                        }
-                    />
-                </div>
-
-                {/* Payment */}
-
-                <div className="fc-payment">
-
-                    {payment ? (
-                        <>
-                            <div className="d-flex align-items-center justify-content-between gap-2">
-
-                                <div className="min-w-0">
-
-                                    <div className="small text-secondary">
-                                        Paid amount
-                                    </div>
-
-                                    <div className="fc-payment-amount text-truncate">
-                                        {money(
-                                            amount,
-                                            currency,
+                                {/* ==================================================
+                                    Pagination
+                                ================================================== */}
+
+                                <div className="pagination-wrapper">
+                                    <div className="pagination-info">
+                                        {connections?.from &&
+                                        connections?.to &&
+                                        connections?.total ? (
+                                            <>
+                                                Showing{" "}
+                                                <strong>
+                                                    {connections.from}
+                                                </strong>{" "}
+                                                to{" "}
+                                                <strong>
+                                                    {connections.to}
+                                                </strong>{" "}
+                                                of{" "}
+                                                <strong>
+                                                    {connections.total}
+                                                </strong>{" "}
+                                                connections
+                                            </>
+                                        ) : (
+                                            `${connectionData.length} connection${
+                                                connectionData.length === 1
+                                                    ? ""
+                                                    : "s"
+                                            }`
                                         )}
                                     </div>
 
+                                    <Pagination links={connections?.links} />
                                 </div>
-
-                                <PaymentBadge
-                                    status={
-                                        payment.status
-                                    }
-                                />
-
-                            </div>
-
-                            {payment.reference && (
-                                <div
-                                    className="fc-reference text-truncate mt-1"
-                                    title={
-                                        payment.reference
-                                    }
-                                >
-                                    Ref:{" "}
-                                    {
-                                        payment.reference
-                                    }
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <div className="small text-secondary">
-                            <i className="fas fa-receipt me-1" />
-                            No payment record
-                        </div>
-                    )}
-
-                </div>
-
-                {/* Earnings */}
-
-                <div>
-
-                    <div className="small text-secondary">
-                        Your 95%
-                    </div>
-
-                    <div className="fc-earning">
-                        {payment
-                            ? money(
-                                  talentEarning,
-                                  currency,
-                              )
-                            : "—"}
-                    </div>
-
-                    {payment && (
-                        <div className="fc-platform-fee mt-1">
-                            FC 5%:{" "}
-                            {money(
-                                futureConnectFee,
-                                currency,
-                            )}
-                        </div>
-                    )}
-
-                </div>
-
-                {/* Action */}
-
-                <div className="text-end">
-
-                    <Link
-                        href={route(
-                            "talent.connections.show",
-                            connection.id,
+                            </>
+                        ) : (
+                            <EmptyState status={activeStatus} />
                         )}
-                        className="btn fc-btn fc-btn-dark"
-                    >
-                        Details
-                        <i className="fas fa-arrow-right ms-2" />
-                    </Link>
-
+                    </div>
                 </div>
-
             </div>
 
-            {/* ==================================================
-                MOBILE / TABLET
-            ================================================== */}
+            {/* ==========================================================
+                Page Styles
+            ========================================================== */}
 
-            <div className="fc-mobile">
+            <style>{`
+                .fc-connections-page {
+                    min-height: calc(100vh - 70px);
+                    background: #f7faf9;
+                    padding: 32px 0 60px;
+                    color: #060f11;
+                }
 
-                {/* User header */}
+                .page-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 24px;
+                    margin-bottom: 30px;
+                }
 
-                <div className="d-flex align-items-center gap-3">
+                .page-eyebrow {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    color: #48d597;
+                    font-size: 12px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.09em;
+                    margin-bottom: 10px;
+                }
 
-                    <div className="fc-avatar d-flex align-items-center justify-content-center">
-                        {initials}
-                    </div>
+                .eyebrow-dot {
+                    width: 7px;
+                    height: 7px;
+                    background: #48d597;
+                    border-radius: 50%;
+                    box-shadow: 0 0 0 5px rgba(72, 213, 151, 0.12);
+                }
 
-                    <div className="min-w-0 flex-grow-1">
+                .page-header h1 {
+                    margin: 0;
+                    font-size: clamp(28px, 3vw, 38px);
+                    line-height: 1.15;
+                    font-weight: 800;
+                    letter-spacing: -0.04em;
+                    color: #060f11;
+                }
 
-                        <div className="fc-person-name text-truncate">
-                            {connection.name ||
-                                "Unknown user"}
-                        </div>
+                .page-header p {
+                    margin: 9px 0 0;
+                    color: #687574;
+                    font-size: 15px;
+                    max-width: 600px;
+                }
 
-                        <div className="fc-person-email text-truncate">
-                            {connection.email ||
-                                "No email provided"}
-                        </div>
+                .btn-dashboard {
+                    border: 1px solid #e0e9e5;
+                    background: #ffffff;
+                    color: #060f11;
+                    font-weight: 700;
+                    padding: 11px 17px;
+                    border-radius: 10px;
+                    transition: all .2s ease;
+                }
 
-                        <div className="fc-date mt-1">
-                            <i className="far fa-calendar me-1" />
+                .btn-dashboard:hover {
+                    border-color: #48d597;
+                    color: #060f11;
+                    background: #f5fffa;
+                    transform: translateY(-1px);
+                }
 
-                            {connection.created_at_human ??
-                                connection.created_at ??
-                                "—"}
-                        </div>
+                /* Summary */
 
-                    </div>
+                .summary-section {
+                    margin-bottom: 20px;
+                }
 
-                    <StatusBadge
-                        status={
-                            connection.status
-                        }
-                    />
+                .summary-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 16px;
+                }
 
-                </div>
+                .fc-summary-card {
+                    position: relative;
+                    overflow: hidden;
+                    background: #ffffff;
+                    border: 1px solid #e6eeeb;
+                    border-radius: 16px;
+                    padding: 20px;
+                    min-height: 155px;
+                    box-shadow: 0 3px 14px rgba(6, 15, 17, 0.035);
+                    transition: transform .2s ease,
+                                box-shadow .2s ease;
+                }
 
-                {/* Financial information */}
+                .fc-summary-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 28px rgba(6, 15, 17, 0.07);
+                }
 
-                <div className="border-top mt-3 pt-3">
+                .fc-summary-card::after {
+                    content: "";
+                    position: absolute;
+                    width: 90px;
+                    height: 90px;
+                    right: -35px;
+                    bottom: -40px;
+                    border-radius: 50%;
+                    background: rgba(72, 213, 151, 0.08);
+                }
 
-                    <div className="row g-3">
+                .summary-card-top {
+                    margin-bottom: 16px;
+                }
 
-                        {/* Amount */}
+                .summary-icon {
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 11px;
+                    background: #effcf6;
+                    color: #159a68;
+                    font-size: 18px;
+                }
 
-                        <div className="col-6">
+                .summary-content {
+                    display: flex;
+                    flex-direction: column;
+                }
 
-                            <div className="small text-secondary mb-1">
-                                Paid amount
-                            </div>
+                .summary-title {
+                    color: #75827f;
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: .055em;
+                    margin-bottom: 5px;
+                }
 
-                            <div className="fw-bold">
-                                {payment
-                                    ? money(
-                                          amount,
-                                          currency,
-                                      )
-                                    : "—"}
-                            </div>
+                .summary-value {
+                    font-size: 25px;
+                    font-weight: 800;
+                    line-height: 1.15;
+                    letter-spacing: -.025em;
+                    color: #060f11;
+                }
 
-                        </div>
+                .summary-description {
+                    color: #899390;
+                    font-size: 12px;
+                    margin-top: 6px;
+                }
 
-                        {/* Payment status */}
+                .summary-talent {
+                    border-color: rgba(72, 213, 151, 0.35);
+                }
 
-                        <div className="col-6">
+                .summary-talent .summary-icon {
+                    background: #48d597;
+                    color: #060f11;
+                }
 
-                            <div className="small text-secondary mb-1">
-                                Payment
-                            </div>
+                /* Earnings Info */
 
-                            {payment ? (
-                                <PaymentBadge
-                                    status={
-                                        payment.status
-                                    }
-                                />
-                            ) : (
-                                <span className="fc-badge fc-badge-unpaid">
-                                    <i className="fas fa-clock" />
-                                    No payment
-                                </span>
-                            )}
+                .earnings-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    background: #060f11;
+                    color: #ffffff;
+                    border-radius: 15px;
+                    padding: 17px 20px;
+                    margin-bottom: 22px;
+                }
 
-                        </div>
+                .earnings-info-icon {
+                    width: 42px;
+                    height: 42px;
+                    flex: 0 0 42px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgba(72, 213, 151, .13);
+                    color: #48d597;
+                    font-size: 18px;
+                }
 
-                        {/* Talent earning */}
+                .earnings-info-content {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                    flex: 1;
+                }
 
-                        <div className="col-6">
+                .earnings-info-content strong {
+                    font-size: 13px;
+                    font-weight: 800;
+                }
 
-                            <div className="small text-secondary mb-1">
-                                Your 95%
-                            </div>
+                .earnings-info-content span {
+                    color: #aab7b3;
+                    font-size: 12px;
+                }
 
-                            <div className="fc-earning">
-                                {payment
-                                    ? money(
-                                          talentEarning,
-                                          currency,
-                                      )
-                                    : "—"}
-                            </div>
+                .earnings-info-content b {
+                    color: #48d597;
+                }
 
-                        </div>
+                .earnings-info-value {
+                    text-align: right;
+                    padding-left: 20px;
+                    border-left: 1px solid rgba(255,255,255,.1);
+                }
 
-                        {/* Platform earning */}
+                .earnings-info-value span {
+                    display: block;
+                    color: #82918c;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    letter-spacing: .06em;
+                    font-weight: 700;
+                }
 
-                        <div className="col-6">
+                .earnings-info-value strong {
+                    display: block;
+                    color: #48d597;
+                    font-size: 24px;
+                    line-height: 1;
+                    margin-top: 5px;
+                }
 
-                            <div className="small text-secondary mb-1">
-                                Future Connect 5%
-                            </div>
+                /* Main Panel */
 
-                            <div className="fc-platform-fee fw-bold">
-                                {payment
-                                    ? money(
-                                          futureConnectFee,
-                                          currency,
-                                      )
-                                    : "—"}
-                            </div>
+                .connections-panel {
+                    background: #ffffff;
+                    border: 1px solid #e4ece8;
+                    border-radius: 18px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 20px rgba(6, 15, 17, 0.035);
+                }
 
-                        </div>
+                .panel-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 20px;
+                    padding: 23px 24px 20px;
+                }
 
-                        {/* Reference */}
+                .panel-header h2 {
+                    margin: 0;
+                    font-size: 18px;
+                    font-weight: 800;
+                    letter-spacing: -.02em;
+                }
 
-                        {payment?.reference && (
-                            <div className="col-12">
+                .panel-header p {
+                    margin: 5px 0 0;
+                    color: #8a9592;
+                    font-size: 12px;
+                }
 
-                                <div className="small text-secondary mb-1">
-                                    Payment reference
-                                </div>
+                .panel-stat {
+                    text-align: right;
+                }
 
-                                <div
-                                    className="small fw-bold text-truncate"
-                                    title={
-                                        payment.reference
-                                    }
-                                >
-                                    {payment.reference}
-                                </div>
+                .panel-stat span {
+                    display: block;
+                    color: #8a9592;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    letter-spacing: .06em;
+                    font-weight: 700;
+                }
 
-                            </div>
-                        )}
+                .panel-stat strong {
+                    display: block;
+                    color: #159a68;
+                    font-size: 16px;
+                    margin-top: 3px;
+                }
 
-                        {/* Payment provider */}
+                /* Filters */
 
-                        {payment?.provider && (
-                            <div className="col-12">
+                .filter-tabs {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    padding: 0 24px;
+                    border-bottom: 1px solid #edf2f0;
+                    overflow-x: auto;
+                }
 
-                                <div className="small text-secondary mb-1">
-                                    Payment provider
-                                </div>
+                .filter-tab {
+                    appearance: none;
+                    border: 0;
+                    background: transparent;
+                    color: #76827f;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 13px 13px 14px;
+                    white-space: nowrap;
+                    font-size: 12px;
+                    font-weight: 700;
+                    position: relative;
+                    cursor: pointer;
+                }
 
-                                <div className="small fw-semibold text-capitalize">
-                                    {payment.provider}
-                                </div>
+                .filter-tab::after {
+                    content: "";
+                    position: absolute;
+                    left: 10px;
+                    right: 10px;
+                    bottom: -1px;
+                    height: 2px;
+                    background: transparent;
+                    border-radius: 2px 2px 0 0;
+                }
 
-                            </div>
-                        )}
+                .filter-tab:hover {
+                    color: #060f11;
+                }
 
-                        {/* Action */}
+                .filter-tab.active {
+                    color: #060f11;
+                }
 
-                        <div className="col-12">
+                .filter-tab.active::after {
+                    background: #48d597;
+                }
 
-                            <Link
-                                href={route(
-                                    "talent.connections.show",
-                                    connection.id,
-                                )}
-                                className="btn fc-btn fc-btn-dark w-100 py-2"
-                            >
-                                View connection details
+                .filter-count {
+                    min-width: 22px;
+                    height: 21px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 7px;
+                    background: #f0f4f2;
+                    color: #6e7b77;
+                    font-size: 10px;
+                    font-weight: 800;
+                }
 
-                                <i className="fas fa-arrow-right ms-2" />
-                            </Link>
+                .filter-tab.active .filter-count {
+                    background: #e4faef;
+                    color: #159a68;
+                }
 
-                        </div>
+                /* Table */
 
-                    </div>
+                .connection-table-wrapper {
+                    width: 100%;
+                }
 
-                </div>
+                .connection-table {
+                    min-width: 1000px;
+                }
 
-            </div>
-        </div>
+                .connection-table thead th {
+                    background: #fafcfb;
+                    color: #7d8985;
+                    border-bottom: 1px solid #e8efec;
+                    padding: 13px 18px;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    letter-spacing: .065em;
+                    font-weight: 800;
+                    white-space: nowrap;
+                }
+
+                .connection-table tbody td {
+                    padding: 17px 18px;
+                    border-bottom: 1px solid #edf2f0;
+                    vertical-align: middle;
+                }
+
+                .connection-table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
+
+                .connection-table tbody tr {
+                    transition: background .15s ease;
+                }
+
+                .connection-table tbody tr:hover {
+                    background: #fbfdfc;
+                }
+
+                /* Contact */
+
+                .contact-cell {
+                    display: flex;
+                    align-items: center;
+                    gap: 11px;
+                    min-width: 200px;
+                }
+
+                .contact-avatar {
+                    width: 40px;
+                    height: 40px;
+                    flex: 0 0 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 12px;
+                    background: #eafaf3;
+                    color: #159a68;
+                    font-size: 14px;
+                    font-weight: 800;
+                }
+
+                .contact-details {
+                    min-width: 0;
+                }
+
+                .contact-name {
+                    color: #060f11;
+                    font-size: 13px;
+                    font-weight: 800;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 180px;
+                }
+
+                .contact-email {
+                    color: #899491;
+                    font-size: 11px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 190px;
+                    margin-top: 2px;
+                }
+
+                .contact-phone {
+                    color: #9aa5a2;
+                    font-size: 10px;
+                    margin-top: 2px;
+                }
+
+                /* Status */
+
+                .fc-status {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 5px;
+                    padding: 5px 8px;
+                    border-radius: 7px;
+                    font-size: 10px;
+                    font-weight: 800;
+                    white-space: nowrap;
+                }
+
+                .fc-status i {
+                    font-size: 9px;
+                }
+
+                .status-pending {
+                    background: #fff7e6;
+                    color: #a66c00;
+                }
+
+                .status-accepted {
+                    background: #eafaf3;
+                    color: #12885c;
+                }
+
+                .status-declined {
+                    background: #fff0f0;
+                    color: #c44c4c;
+                }
+
+                .status-default {
+                    background: #f1f4f3;
+                    color: #697571;
+                }
+
+                /* Payment */
+
+                .payment-cell {
+                    min-width: 135px;
+                }
+
+                .fc-payment-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 4px 7px;
+                    border-radius: 6px;
+                    font-size: 9px;
+                    font-weight: 800;
+                }
+
+                .payment-paid {
+                    background: #eafaf3;
+                    color: #12885c;
+                }
+
+                .payment-pending {
+                    background: #fff7e6;
+                    color: #a66c00;
+                }
+
+                .payment-none {
+                    background: #f2f4f3;
+                    color: #8b9692;
+                }
+
+                .payment-amount {
+                    margin-top: 5px;
+                    color: #060f11;
+                    font-size: 12px;
+                    font-weight: 800;
+                }
+
+                .payment-reference {
+                    margin-top: 2px;
+                    color: #a1aaa7;
+                    font-size: 9px;
+                    max-width: 125px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+
+                /* Earnings */
+
+                .earnings-cell {
+                    min-width: 120px;
+                }
+
+                .earning-main {
+                    color: #12885c;
+                    font-size: 13px;
+                    font-weight: 800;
+                }
+
+                .earning-sub {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-top: 3px;
+                    color: #9aa5a2;
+                    font-size: 9px;
+                }
+
+                .earning-percent {
+                    color: #159a68;
+                    font-weight: 800;
+                }
+
+                .not-available {
+                    color: #aeb7b4;
+                    font-size: 17px;
+                }
+
+                /* Date */
+
+                .date-cell {
+                    min-width: 120px;
+                }
+
+                .date-main {
+                    color: #4f5d59;
+                    font-size: 11px;
+                    font-weight: 700;
+                }
+
+                .date-human {
+                    color: #a0aaa7;
+                    font-size: 9px;
+                    margin-top: 3px;
+                }
+
+                /* Action */
+
+                .btn-view {
+                    border: 1px solid #dfe9e5;
+                    background: #ffffff;
+                    color: #060f11;
+                    border-radius: 8px;
+                    padding: 7px 10px;
+                    font-size: 10px;
+                    font-weight: 800;
+                    white-space: nowrap;
+                    transition: all .2s ease;
+                }
+
+                .btn-view:hover {
+                    border-color: #48d597;
+                    background: #effcf6;
+                    color: #08764d;
+                }
+
+                .btn-view i {
+                    font-size: 9px;
+                }
+
+                /* Pagination */
+
+                .pagination-wrapper {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 20px;
+                    padding: 17px 24px;
+                    border-top: 1px solid #edf2f0;
+                }
+
+                .pagination-info {
+                    color: #8b9692;
+                    font-size: 11px;
+                }
+
+                .pagination-info strong {
+                    color: #4d5a57;
+                }
+
+                .fc-pagination .pagination {
+                    gap: 4px;
+                }
+
+                .fc-pagination .page-item .page-link {
+                    border: 1px solid #e2eae7;
+                    border-radius: 7px !important;
+                    min-width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #596763;
+                    background: #ffffff;
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 0 8px;
+                }
+
+                .fc-pagination .page-item.active .page-link {
+                    background: #48d597;
+                    border-color: #48d597;
+                    color: #060f11;
+                }
+
+                .fc-pagination .page-item.disabled .page-link {
+                    color: #c2cac7;
+                    background: #fafcfb;
+                }
+
+                /* Empty State */
+
+                .fc-empty-state {
+                    text-align: center;
+                    padding: 70px 25px;
+                }
+
+                .empty-icon {
+                    width: 68px;
+                    height: 68px;
+                    margin: 0 auto 18px;
+                    border-radius: 20px;
+                    background: #effcf6;
+                    color: #48d597;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 27px;
+                }
+
+                .fc-empty-state h5 {
+                    margin: 0;
+                    font-size: 17px;
+                    font-weight: 800;
+                }
+
+                .fc-empty-state p {
+                    color: #899491;
+                    max-width: 420px;
+                    margin: 8px auto 20px;
+                    font-size: 12px;
+                    line-height: 1.7;
+                }
+
+                .btn-fc-primary {
+                    background: #48d597;
+                    border: 1px solid #48d597;
+                    color: #060f11;
+                    border-radius: 9px;
+                    font-size: 11px;
+                    font-weight: 800;
+                    padding: 9px 14px;
+                }
+
+                .btn-fc-primary:hover {
+                    background: #36c486;
+                    border-color: #36c486;
+                    color: #060f11;
+                }
+
+                /* Mobile */
+
+                .mobile-connections {
+                    display: none;
+                    padding: 14px;
+                    background: #f8faf9;
+                }
+
+                .mobile-connection-card {
+                    background: #ffffff;
+                    border: 1px solid #e3ebe7;
+                    border-radius: 14px;
+                    margin-bottom: 10px;
+                    overflow: hidden;
+                }
+
+                .mobile-connection-card:last-child {
+                    margin-bottom: 0;
+                }
+
+                .mobile-card-header {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 10px;
+                    padding: 15px;
+                }
+
+                .mobile-message {
+                    padding: 0 15px 14px;
+                    border-bottom: 1px solid #edf2f0;
+                }
+
+                .mobile-section-label {
+                    color: #8a9692;
+                    text-transform: uppercase;
+                    letter-spacing: .06em;
+                    font-size: 9px;
+                    font-weight: 800;
+                    margin-bottom: 5px;
+                }
+
+                .mobile-message p {
+                    color: #52615d;
+                    font-size: 11px;
+                    line-height: 1.6;
+                    margin: 0;
+                }
+
+                .mobile-financial-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    border-bottom: 1px solid #edf2f0;
+                }
+
+                .mobile-financial-item {
+                    padding: 14px 15px;
+                }
+
+                .mobile-financial-item + .mobile-financial-item {
+                    border-left: 1px solid #edf2f0;
+                }
+
+                .mobile-financial-item > span {
+                    display: block;
+                    color: #8b9692;
+                    font-size: 9px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: .05em;
+                    margin-bottom: 5px;
+                }
+
+                .mobile-financial-item strong {
+                    display: block;
+                    color: #060f11;
+                    font-size: 13px;
+                    font-weight: 800;
+                    margin-bottom: 5px;
+                }
+
+                .mobile-financial-item.earning strong {
+                    color: #12885c;
+                }
+
+                .mobile-financial-item small {
+                    color: #9aa5a2;
+                    font-size: 9px;
+                }
+
+                .mobile-card-footer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 10px;
+                    padding: 12px 15px;
+                }
+
+                .mobile-date {
+                    color: #8b9692;
+                    font-size: 9px;
+                }
+
+                /* Responsive */
+
+                @media (max-width: 1199px) {
+                    .summary-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 767px) {
+                    .fc-connections-page {
+                        padding-top: 22px;
+                    }
+
+                    .page-header {
+                        margin-bottom: 22px;
+                    }
+
+                    .page-header h1 {
+                        font-size: 28px;
+                    }
+
+                    .page-header p {
+                        font-size: 13px;
+                    }
+
+                    .header-action {
+                        display: none;
+                    }
+
+                    .summary-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 10px;
+                    }
+
+                    .fc-summary-card {
+                        min-height: 135px;
+                        padding: 15px;
+                        border-radius: 13px;
+                    }
+
+                    .summary-icon {
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 9px;
+                        font-size: 15px;
+                    }
+
+                    .summary-card-top {
+                        margin-bottom: 12px;
+                    }
+
+                    .summary-value {
+                        font-size: 17px;
+                    }
+
+                    .summary-title {
+                        font-size: 9px;
+                    }
+
+                    .summary-description {
+                        font-size: 9px;
+                    }
+
+                    .earnings-info {
+                        align-items: flex-start;
+                        padding: 15px;
+                    }
+
+                    .earnings-info-content span {
+                        line-height: 1.5;
+                    }
+
+                    .earnings-info-value {
+                        display: none;
+                    }
+
+                    .panel-header {
+                        padding: 18px 15px;
+                    }
+
+                    .panel-stat {
+                        display: none;
+                    }
+
+                    .filter-tabs {
+                        padding: 0 10px;
+                    }
+
+                    .filter-tab {
+                        padding-left: 9px;
+                        padding-right: 9px;
+                    }
+
+                    .connection-table-wrapper {
+                        display: none;
+                    }
+
+                    .mobile-connections {
+                        display: block;
+                    }
+
+                    .pagination-wrapper {
+                        flex-direction: column;
+                        align-items: center;
+                        padding: 15px;
+                    }
+
+                    .pagination-info {
+                        text-align: center;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .summary-grid {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .fc-summary-card {
+                        min-height: auto;
+                    }
+
+                    .mobile-card-header {
+                        flex-direction: column;
+                    }
+
+                    .mobile-card-header .fc-status {
+                        align-self: flex-start;
+                    }
+
+                    .mobile-card-footer {
+                        align-items: flex-end;
+                    }
+
+                    .mobile-date {
+                        max-width: 120px;
+                        line-height: 1.4;
+                    }
+                }
+            `}</style>
+        </AppLayout>
     );
-}
-
-/* ============================================================
-   REQUEST STATUS
-============================================================ */
-
-function StatusBadge({ status }) {
-    const normalized = String(
-        status || "pending",
-    ).toLowerCase();
-
-    const map = {
-        pending: {
-            cls: "fc-badge-pending",
-            icon: "fa-clock",
-            label: "Pending",
-        },
-
-        accepted: {
-            cls: "fc-badge-accepted",
-            icon: "fa-check",
-            label: "Accepted",
-        },
-
-        declined: {
-            cls: "fc-badge-declined",
-            icon: "fa-times",
-            label: "Declined",
-        },
-    };
-
-    const entry =
-        map[normalized] ?? map.pending;
-
-    return (
-        <span
-            className={`fc-badge ${entry.cls}`}
-        >
-            <i className={`fas ${entry.icon}`} />
-            {entry.label}
-        </span>
-    );
-}
-
-/* ============================================================
-   PAYMENT STATUS
-============================================================ */
-
-function PaymentBadge({ status }) {
-    const normalized = String(
-        status || "pending",
-    ).toLowerCase();
-
-    const paid =
-        PAID_STATUSES.includes(
-            normalized,
-        );
-
-    return (
-        <span
-            className={`fc-badge ${
-                paid
-                    ? "fc-badge-paid"
-                    : "fc-badge-unpaid"
-            }`}
-        >
-            <i
-                className={`fas ${
-                    paid
-                        ? "fa-check-circle"
-                        : "fa-clock"
-                }`}
-            />
-
-            {paid ? "Paid" : "Unpaid"}
-        </span>
-    );
-}
-
-/* ============================================================
-   EMPTY STATE
-============================================================ */
-
-function EmptyState() {
-    return (
-        <div className="fc-empty text-center">
-
-            <div className="fc-empty-icon">
-                <i className="fas fa-handshake" />
-            </div>
-
-            <h5 className="fw-bold mb-2">
-                No connection requests yet
-            </h5>
-
-            <p
-                className="text-secondary small mb-0 mx-auto"
-                style={{
-                    maxWidth: 480,
-                    lineHeight: 1.7,
-                }}
-            >
-                When someone wants to connect with
-                you, their request and payment
-                information will appear here.
-            </p>
-
-        </div>
-    );
-}
-
-/* ============================================================
-   PAGINATION
-============================================================ */
-
-function Pagination({ links }) {
-    return (
-        <div className="fc-pagination d-flex flex-wrap justify-content-center gap-1">
-
-            {links.map((link, index) =>
-                link.url ? (
-                    <Link
-                        key={index}
-                        href={link.url}
-                        preserveScroll
-                        className={
-                            link.active
-                                ? "active"
-                                : ""
-                        }
-                        dangerouslySetInnerHTML={{
-                            __html: link.label,
-                        }}
-                    />
-                ) : (
-                    <span
-                        key={index}
-                        className="disabled"
-                        dangerouslySetInnerHTML={{
-                            __html: link.label,
-                        }}
-                    />
-                ),
-            )}
-
-        </div>
-    );
-}
-
-/* ============================================================
-   MONEY FORMATTER
-============================================================ */
-
-function money(
-    value,
-    currency = "RWF",
-) {
-    const amount = Number(value || 0);
-
-    let safeCurrency = currency || "RWF";
-
-    /*
-     * Avoid Intl.NumberFormat crashing if an
-     * unexpected currency value comes from the DB.
-     */
-    try {
-        return new Intl.NumberFormat(
-            "en-RW",
-            {
-                style: "currency",
-                currency: safeCurrency,
-                maximumFractionDigits: 2,
-            },
-        ).format(amount);
-    } catch {
-        return `${safeCurrency} ${amount.toLocaleString(
-            "en-RW",
-            {
-                maximumFractionDigits: 2,
-            },
-        )}`;
-    }
 }
