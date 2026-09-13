@@ -449,18 +449,24 @@ Route::middleware(['auth', 'role:talent'])->prefix('talent')->name('talent.')->g
     )->name('talent.password.update');
 
     // Connection requests received by this talent
-    // NOTE: renamed from connections.index / connections.respond — those names
-    // collided with the dashboard-side connections routes further down.
+    // FIXED: this route's ->name('show') previously collided with
+    // 'connections.show' further down (dashboard-side connections), since
+    // both live under the same ->name('talent.') group prefix and both
+    // resolved to talent.connections.show. Renamed to keep it distinct and
+    // consistent with its sibling 'connections.requests.index' above it.
+    // If any Blade/React/Ziggy code called route('talent.connections.show')
+    // expecting the "incoming request" view (TalentConnectionController@show),
+    // update it to route('talent.connections.requests.show').
     Route::get('/get/connections', [App\Http\Controllers\Talent\TalentConnectionController::class, 'index'])->name('connections.requests.index');
     Route::get('connections/{connection}', [
             \App\Http\Controllers\Talent\TalentConnectionController::class,
             'show'
-        ])->name('connections.show');
+        ])->name('connections.requests.show');
 
         Route::patch('connections/{connection}/respond', [
             \App\Http\Controllers\Talent\TalentConnectionController::class,
             'respond'
-        ])->name('connections.respond');
+        ])->name('connections.requests.respond');
 
     // Announcements
     Route::get('/announcements', [TalentDashboardController::class, 'index'])->name('announcements.index');
