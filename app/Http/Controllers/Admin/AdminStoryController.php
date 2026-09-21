@@ -9,19 +9,20 @@ use App\Models\Category;
 use App\Models\StoryComment;
 use App\Models\Talent;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class AdminStoryController extends Controller
 {
     public function index()
     {
-        return view('admin-pages.stories.index', [
-            'stories' => Story::all(),
+        return Inertia::render('AdminPage/Stories/Index', [
+            'stories' => Story::all()->load(['talent', 'category'])
         ]);
     }
 
     public function show($id)
     {
-        return view('admin-pages.stories.show', [
+        return Inertia::render('AdminPage/Stories/Show', [
             'story' => Story::with(['talent', 'category'])->findOrFail($id),
         ]);
     }
@@ -31,7 +32,7 @@ class AdminStoryController extends Controller
         $categories = Category::all();
         $talents = Talent::all();
 
-        return view('admin-pages.stories.create', [
+        return Inertia::render('AdminPage/Stories/Create', [
             'categories' => $categories,
             'talents' => $talents,
         ]);
@@ -70,7 +71,7 @@ class AdminStoryController extends Controller
         $talents = Talent::all();
         $categories = Category::all();
 
-        return view('admin-pages.stories.edit', [
+        return Inertia::render('AdminPage/Stories/Edit', [
             'story' => $story,
             'talents' => $talents,
             'categories' => $categories,

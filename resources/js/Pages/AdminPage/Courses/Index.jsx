@@ -2,6 +2,12 @@ import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
+/*
+|--------------------------------------------------------------------------
+| COURSE INDEX
+|--------------------------------------------------------------------------
+*/
+
 export default function Index({
     courses,
     categories = [],
@@ -17,8 +23,12 @@ export default function Index({
 
     const courseData = courses?.data ?? [];
 
-    function handleFilter(e) {
-        e.preventDefault();
+    const hasFilters = Boolean(
+        search || status || level || categoryId
+    );
+
+    function handleFilter(event) {
+        event.preventDefault();
 
         router.get(
             route('admin.courses.index'),
@@ -67,166 +77,142 @@ export default function Index({
         );
     }
 
-    const hasFilters =
-        search ||
-        status ||
-        level ||
-        categoryId;
-
     return (
         <AppLayout>
             <Head title="Course Library" />
 
             <style>{styles}</style>
 
-            <div className="talent-courses-page">
+            <div className="courses-page">
+
                 {/* =====================================================
-                    HERO
+                    PAGE HEADER
                 ===================================================== */}
-                <section className="courses-hero">
-                    <div className="hero-content">
-                        <div className="hero-eyebrow">
-                            <span className="eyebrow-dot" />
-                            Talent learning hub
+
+                <section className="courses-header">
+                    <div className="header-left">
+                        <div className="breadcrumb">
+                            <span>Admin</span>
+                            <ChevronRightIcon />
+                            <strong>Courses</strong>
                         </div>
 
-                        <h1>
-                            Course
-                            <span> Library</span>
-                        </h1>
-
-                        <p>
-                            Build, manage and monitor learning
-                            experiences that help talent grow their
-                            skills and unlock new opportunities.
-                        </p>
-
-                        <div className="hero-meta">
-                            <div className="hero-meta-item">
-                                <span className="hero-meta-number">
-                                    {stats.total ?? 0}
-                                </span>
-                                <span>Courses available</span>
+                        <div className="title-row">
+                            <div className="title-icon">
+                                <BookOpenIcon size={25} />
                             </div>
 
-                            <div className="hero-meta-divider" />
-
-                            <div className="hero-meta-item">
-                                <span className="hero-meta-number">
-                                    {stats.enrollments ?? 0}
-                                </span>
-                                <span>Total enrollments</span>
+                            <div>
+                                <h1>Course Library</h1>
+                                <p>
+                                    Create, manage and monitor your
+                                    learning content.
+                                </p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="hero-action">
-                        <Link
-                            href={route('admin.courses.create')}
-                            className="create-course-button"
-                        >
-                            <PlusIcon />
-                            Create course
-                        </Link>
-                    </div>
-
-                    <div className="hero-decoration">
-                        <span />
-                        <span />
-                        <span />
-                    </div>
+                    <Link
+                        href={route('admin.courses.create')}
+                        className="primary-button"
+                    >
+                        <PlusIcon size={18} />
+                        Create course
+                    </Link>
                 </section>
 
                 {/* =====================================================
-                    PERFORMANCE OVERVIEW
+                    STATISTICS
                 ===================================================== */}
-                <section className="performance-section">
-                    <div className="section-heading">
-                        <div>
-                            <span className="section-kicker">
-                                Platform overview
-                            </span>
 
-                            <h2>
-                                Learning performance
-                            </h2>
-                        </div>
+                <section className="stats-grid">
 
-                        <span className="updated-label">
-                            Course library
-                        </span>
-                    </div>
+                    <StatCard
+                        icon={<BookOpenIcon />}
+                        label="Total courses"
+                        value={stats.total ?? 0}
+                        description="All courses"
+                        type="blue"
+                    />
 
-                    <div className="performance-grid">
-                        <OverviewCard
-                            icon={<BookIcon />}
-                            label="Total courses"
-                            value={stats.total ?? 0}
-                            description="Across all categories"
-                            type="blue"
-                        />
+                    <StatCard
+                        icon={<CheckCircleIcon />}
+                        label="Published"
+                        value={stats.published ?? 0}
+                        description="Available to learners"
+                        type="green"
+                    />
 
-                        <OverviewCard
-                            icon={<CheckCircleIcon />}
-                            label="Published"
-                            value={stats.published ?? 0}
-                            description="Currently visible to talent"
-                            type="green"
-                        />
+                    <StatCard
+                        icon={<EditIcon />}
+                        label="Drafts"
+                        value={stats.draft ?? 0}
+                        description="Still being prepared"
+                        type="orange"
+                    />
 
-                        <OverviewCard
-                            icon={<EditIcon />}
-                            label="Draft courses"
-                            value={stats.draft ?? 0}
-                            description="Still being prepared"
-                            type="orange"
-                        />
+                    <StatCard
+                        icon={<UsersIcon />}
+                        label="Enrollments"
+                        value={stats.enrollments ?? 0}
+                        description="Total learners"
+                        type="purple"
+                    />
 
-                        <OverviewCard
-                            icon={<UsersIcon />}
-                            label="Enrollments"
-                            value={stats.enrollments ?? 0}
-                            description="Talent learning activity"
-                            type="dark"
-                        />
-                    </div>
                 </section>
 
                 {/* =====================================================
-                    FILTER / SEARCH
+                    MAIN CONTENT
                 ===================================================== */}
-                <section className="library-toolbar">
-                    <div className="toolbar-heading">
-                        <div className="library-icon">
-                            <GridIcon />
-                        </div>
 
+                <section className="library-card">
+
+                    {/* Library heading */}
+
+                    <div className="library-header">
                         <div>
-                            <h2>Course library</h2>
-                            <span>
+                            <div className="library-title">
+                                <GridIcon size={18} />
+                                <h2>All courses</h2>
+                            </div>
+
+                            <p>
                                 {courseData.length} course
                                 {courseData.length !== 1
                                     ? 's'
                                     : ''}{' '}
-                                on this page
-                            </span>
+                                displayed
+                            </p>
                         </div>
+
+                        {hasFilters && (
+                            <button
+                                type="button"
+                                className="clear-all-button"
+                                onClick={resetFilters}
+                            >
+                                <CloseIcon size={14} />
+                                Clear filters
+                            </button>
+                        )}
                     </div>
+
+                    {/* =================================================
+                        FILTER BAR
+                    ================================================= */}
 
                     <form
                         onSubmit={handleFilter}
-                        className="filter-form"
+                        className="filters"
                     >
-                        <div className="search-input">
-                            <SearchIcon />
+                        <div className="search-box">
+                            <SearchIcon size={18} />
 
                             <input
                                 type="search"
                                 value={search}
-                                onChange={(e) =>
-                                    setSearch(
-                                        e.target.value
-                                    )
+                                onChange={(event) =>
+                                    setSearch(event.target.value)
                                 }
                                 placeholder="Search courses..."
                             />
@@ -234,139 +220,108 @@ export default function Index({
                             {search && (
                                 <button
                                     type="button"
-                                    className="clear-search"
+                                    className="search-clear"
                                     onClick={() =>
                                         setSearch('')
                                     }
                                 >
-                                    <CloseIcon />
+                                    <CloseIcon size={13} />
                                 </button>
                             )}
                         </div>
 
-                        <div className="select-wrapper">
-                            <select
-                                value={status}
-                                onChange={(e) =>
-                                    setStatus(
-                                        e.target.value
-                                    )
-                                }
-                            >
-                                <option value="">
-                                    All status
-                                </option>
-                                <option value="published">
-                                    Published
-                                </option>
-                                <option value="draft">
-                                    Draft
-                                </option>
-                            </select>
+                        <FilterSelect
+                            value={status}
+                            onChange={setStatus}
+                            options={[
+                                {
+                                    value: '',
+                                    label: 'All status',
+                                },
+                                {
+                                    value: 'published',
+                                    label: 'Published',
+                                },
+                                {
+                                    value: 'draft',
+                                    label: 'Draft',
+                                },
+                            ]}
+                        />
 
-                            <ChevronDownIcon />
-                        </div>
+                        <FilterSelect
+                            value={level}
+                            onChange={setLevel}
+                            options={[
+                                {
+                                    value: '',
+                                    label: 'All levels',
+                                },
+                                {
+                                    value: 'Beginner',
+                                    label: 'Beginner',
+                                },
+                                {
+                                    value: 'Intermediate',
+                                    label: 'Intermediate',
+                                },
+                                {
+                                    value: 'Advanced',
+                                    label: 'Advanced',
+                                },
+                            ]}
+                        />
 
-                        <div className="select-wrapper">
-                            <select
-                                value={level}
-                                onChange={(e) =>
-                                    setLevel(
-                                        e.target.value
-                                    )
-                                }
-                            >
-                                <option value="">
-                                    All levels
-                                </option>
-                                <option value="Beginner">
-                                    Beginner
-                                </option>
-                                <option value="Intermediate">
-                                    Intermediate
-                                </option>
-                                <option value="Advanced">
-                                    Advanced
-                                </option>
-                            </select>
-
-                            <ChevronDownIcon />
-                        </div>
-
-                        <div className="select-wrapper category-select">
-                            <select
-                                value={categoryId}
-                                onChange={(e) =>
-                                    setCategoryId(
-                                        e.target.value
-                                    )
-                                }
-                            >
-                                <option value="">
-                                    All categories
-                                </option>
-
-                                {categories.map(
-                                    (category) => (
-                                        <option
-                                            key={
-                                                category.id
-                                            }
-                                            value={
-                                                category.id
-                                            }
-                                        >
-                                            {category.name}
-                                        </option>
-                                    )
-                                )}
-                            </select>
-
-                            <ChevronDownIcon />
-                        </div>
+                        <FilterSelect
+                            value={categoryId}
+                            onChange={setCategoryId}
+                            options={[
+                                {
+                                    value: '',
+                                    label: 'All categories',
+                                },
+                                ...categories.map(
+                                    (category) => ({
+                                        value: category.id,
+                                        label: category.name,
+                                    })
+                                ),
+                            ]}
+                        />
 
                         <button
                             type="submit"
                             className="filter-button"
                         >
-                            <FilterIcon />
+                            <FilterIcon size={16} />
                             Apply
                         </button>
-
-                        {hasFilters && (
-                            <button
-                                type="button"
-                                className="reset-filter"
-                                onClick={resetFilters}
-                            >
-                                Reset
-                            </button>
-                        )}
                     </form>
-                </section>
 
-                {/* =====================================================
-                    COURSE LIST
-                ===================================================== */}
-                <section className="course-library">
+                    {/* =================================================
+                        COURSE CONTENT
+                    ================================================= */}
+
                     {courseData.length > 0 ? (
                         <>
-                            {/* Desktop */}
-                            <div className="desktop-course-table">
-                                <div className="course-table-head">
-                                    <span className="course-col-main">
+                            <div className="desktop-table">
+
+                                <div className="table-header">
+                                    <div className="course-column">
                                         Course
-                                    </span>
-                                    <span>Creator</span>
-                                    <span>Category</span>
-                                    <span>Level</span>
-                                    <span>Pricing</span>
-                                    <span>Reach</span>
-                                    <span>Status</span>
-                                    <span />
+                                    </div>
+
+                                    <div>Creator</div>
+                                    <div>Category</div>
+                                    <div>Level</div>
+                                    <div>Price</div>
+                                    <div>Students</div>
+                                    <div>Status</div>
+                                    <div>Actions</div>
                                 </div>
 
-                                <div className="course-table-body">
+                                <div className="table-body">
+
                                     {courseData.map(
                                         (course, index) => (
                                             <CourseRow
@@ -381,11 +336,14 @@ export default function Index({
                                             />
                                         )
                                     )}
+
                                 </div>
                             </div>
 
-                            {/* Mobile */}
-                            <div className="mobile-course-list">
+                            {/* MOBILE */}
+
+                            <div className="mobile-list">
+
                                 {courseData.map(
                                     (course, index) => (
                                         <MobileCourseCard
@@ -400,24 +358,21 @@ export default function Index({
                                         />
                                     )
                                 )}
+
                             </div>
 
-                            {/* Pagination */}
+                            {/* PAGINATION */}
+
                             {courses?.links &&
-                                courses.links.length >
-                                    3 && (
+                                courses.links.length > 3 && (
                                     <Pagination
-                                        links={
-                                            courses.links
-                                        }
+                                        links={courses.links}
                                     />
                                 )}
                         </>
                     ) : (
                         <EmptyCourses
-                            filtered={Boolean(
-                                hasFilters
-                            )}
+                            filtered={hasFilters}
                             onReset={resetFilters}
                             onCreate={() =>
                                 router.visit(
@@ -428,17 +383,21 @@ export default function Index({
                             }
                         />
                     )}
+
                 </section>
             </div>
         </AppLayout>
     );
 }
 
-/* ========================================================================
-   OVERVIEW CARD
-======================================================================== */
 
-function OverviewCard({
+/*
+|--------------------------------------------------------------------------
+| STAT CARD
+|--------------------------------------------------------------------------
+*/
+
+function StatCard({
     icon,
     label,
     value,
@@ -446,35 +405,75 @@ function OverviewCard({
     type,
 }) {
     return (
-        <div className={`overview-card ${type}`}>
-            <div className="overview-top">
-                <div className="overview-icon">
+        <div className={`stat-card stat-${type}`}>
+
+            <div className="stat-top">
+                <div className="stat-icon">
                     {icon}
                 </div>
 
-                <span className="overview-arrow">
-                    <ArrowUpIcon />
+                <span className="stat-arrow">
+                    <ArrowUpIcon size={14} />
                 </span>
             </div>
 
-            <div className="overview-value">
+            <div className="stat-value">
                 {Number(value ?? 0).toLocaleString()}
             </div>
 
-            <div className="overview-label">
+            <div className="stat-label">
                 {label}
             </div>
 
-            <div className="overview-description">
+            <div className="stat-description">
                 {description}
             </div>
         </div>
     );
 }
 
-/* ========================================================================
-   DESKTOP COURSE ROW
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| FILTER SELECT
+|--------------------------------------------------------------------------
+*/
+
+function FilterSelect({
+    value,
+    onChange,
+    options,
+}) {
+    return (
+        <div className="filter-select">
+
+            <select
+                value={value}
+                onChange={(event) =>
+                    onChange(event.target.value)
+                }
+            >
+                {options.map((option) => (
+                    <option
+                        key={String(option.value)}
+                        value={option.value}
+                    >
+                        {option.label}
+                    </option>
+                ))}
+            </select>
+
+            <ChevronDownIcon size={15} />
+        </div>
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| COURSE ROW
+|--------------------------------------------------------------------------
+*/
 
 function CourseRow({
     course,
@@ -485,96 +484,132 @@ function CourseRow({
         ? `/images/thumbnails/${course.thumbnail}`
         : '/images/placeholder-course.png';
 
-    const enrollments =
-        Number(course.enrollments_count ?? 0);
+    const enrollments = Number(
+        course.enrollments_count ?? 0
+    );
 
     return (
         <div className="course-row">
-            <div className="course-information">
-                <div className="course-number">
+
+            {/* COURSE */}
+
+            <div className="course-column course-main">
+
+                <span className="course-number">
                     {String(index + 1).padStart(2, '0')}
-                </div>
+                </span>
 
                 <img
                     src={image}
                     alt={course.title}
                     className="course-image"
-                    onError={(e) => {
-                        e.currentTarget.src =
+                    onError={(event) => {
+                        event.currentTarget.src =
                             '/images/placeholder-course.png';
                     }}
                 />
 
-                <div className="course-info-copy">
+                <div className="course-info">
+
                     <Link
                         href={route(
                             'admin.courses.show',
                             course.slug
                         )}
-                        className="course-name"
+                        className="course-title"
                     >
                         {course.title}
                     </Link>
 
-                    <span className="course-description">
+                    <p>
                         {truncate(
                             course.description,
-                            70
+                            65
                         )}
-                    </span>
+                    </p>
+
                 </div>
             </div>
 
-            <div className="creator-cell">
-                <div className="creator-avatar">
+
+            {/* CREATOR */}
+
+            <div className="creator">
+
+                <div className="avatar">
                     {getInitials(
                         course.talent?.name
                     )}
                 </div>
 
                 <span>
-                    {course.talent?.name ?? 'Unassigned'}
+                    {course.talent?.name ??
+                        'Unassigned'}
                 </span>
+
             </div>
 
-            <div className="category-cell">
-                <span className="category-pill">
-                    <span />
+
+            {/* CATEGORY */}
+
+            <div>
+                <span className="category-badge">
+                    <span className="category-dot" />
+
                     {course.category?.name ??
                         'Uncategorized'}
                 </span>
             </div>
 
-            <div>
-                <LevelBadge level={course.level} />
-            </div>
+
+            {/* LEVEL */}
 
             <div>
+                <LevelBadge
+                    level={course.level}
+                />
+            </div>
+
+
+            {/* PRICE */}
+
+            <div className="price">
+
                 {course.is_free ? (
-                    <span className="price-free">
+                    <span className="free-price">
                         Free
                     </span>
                 ) : (
-                    <div className="price-cell">
+                    <>
                         <strong>
                             {Number(
                                 course.price ?? 0
                             ).toLocaleString()}
                         </strong>
-                        <span>RWF</span>
-                    </div>
+
+                        <small>RWF</small>
+                    </>
                 )}
+
             </div>
 
-            <div className="reach-cell">
-                <div className="reach-number">
+
+            {/* STUDENTS */}
+
+            <div className="students">
+
+                <div className="student-count">
                     {enrollments.toLocaleString()}
                 </div>
 
-                <div className="reach-label">
+                <span>
                     learners
-                </div>
+                </span>
+
             </div>
+
+
+            {/* STATUS */}
 
             <div>
                 <StatusBadge
@@ -582,17 +617,24 @@ function CourseRow({
                 />
             </div>
 
+
+            {/* ACTIONS */}
+
             <CourseActions
                 course={course}
                 onDelete={onDelete}
             />
+
         </div>
     );
 }
 
-/* ========================================================================
-   MOBILE COURSE CARD
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE COURSE CARD
+|--------------------------------------------------------------------------
+*/
 
 function MobileCourseCard({
     course,
@@ -603,36 +645,45 @@ function MobileCourseCard({
         ? `/images/thumbnails/${course.thumbnail}`
         : '/images/placeholder-course.png';
 
+    const enrollments = Number(
+        course.enrollments_count ?? 0
+    );
+
     return (
         <article className="mobile-course-card">
-            <div className="mobile-course-top">
-                <span className="mobile-index">
-                    {String(index + 1).padStart(2, '0')}
+
+            <div className="mobile-card-top">
+
+                <span className="mobile-number">
+                    #{String(index + 1).padStart(2, '0')}
                 </span>
 
                 <StatusBadge
                     status={course.status}
                 />
+
             </div>
 
             <div className="mobile-course-main">
+
                 <img
                     src={image}
                     alt={course.title}
-                    className="mobile-course-image"
-                    onError={(e) => {
-                        e.currentTarget.src =
+                    className="mobile-image"
+                    onError={(event) => {
+                        event.currentTarget.src =
                             '/images/placeholder-course.png';
                     }}
                 />
 
-                <div>
+                <div className="mobile-course-info">
+
                     <Link
                         href={route(
                             'admin.courses.show',
                             course.slug
                         )}
-                        className="mobile-course-title"
+                        className="mobile-title"
                     >
                         {course.title}
                     </Link>
@@ -643,10 +694,13 @@ function MobileCourseCard({
                             100
                         )}
                     </p>
+
                 </div>
+
             </div>
 
-            <div className="mobile-course-meta">
+            <div className="mobile-meta">
+
                 <div>
                     <span>Creator</span>
                     <strong>
@@ -671,19 +725,18 @@ function MobileCourseCard({
                 </div>
 
                 <div>
-                    <span>Enrollment</span>
+                    <span>Students</span>
                     <strong>
-                        {Number(
-                            course.enrollments_count ??
-                                0
-                        ).toLocaleString()}
+                        {enrollments.toLocaleString()}
                     </strong>
                 </div>
+
             </div>
 
-            <div className="mobile-course-footer">
+            <div className="mobile-card-footer">
+
                 {course.is_free ? (
-                    <span className="mobile-price">
+                    <span className="free-price">
                         Free course
                     </span>
                 ) : (
@@ -699,14 +752,19 @@ function MobileCourseCard({
                     course={course}
                     onDelete={onDelete}
                 />
+
             </div>
+
         </article>
     );
 }
 
-/* ========================================================================
-   COURSE ACTIONS
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| COURSE ACTIONS
+|--------------------------------------------------------------------------
+*/
 
 function CourseActions({
     course,
@@ -714,6 +772,7 @@ function CourseActions({
 }) {
     return (
         <div className="course-actions">
+
             <Link
                 href={route(
                     'admin.courses.show',
@@ -722,7 +781,7 @@ function CourseActions({
                 className="action-button"
                 title="View course"
             >
-                <EyeIcon />
+                <EyeIcon size={16} />
             </Link>
 
             <Link
@@ -733,39 +792,60 @@ function CourseActions({
                 className="action-button"
                 title="Edit course"
             >
-                <EditIcon />
+                <EditIcon size={16} />
             </Link>
 
             <button
                 type="button"
-                className="action-button delete-action"
+                className="action-button delete-button"
                 title="Delete course"
                 onClick={onDelete}
             >
-                <TrashIcon />
+                <TrashIcon size={16} />
             </button>
+
         </div>
     );
 }
 
-/* ========================================================================
-   BADGES
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| STATUS BADGE
+|--------------------------------------------------------------------------
+*/
 
 function StatusBadge({ status }) {
-    const published = status === 'published';
+    const normalized = String(
+        status ?? ''
+    ).toLowerCase();
+
+    const published =
+        normalized === 'published';
 
     return (
         <span
             className={`status-badge ${
-                published ? 'published' : 'draft'
+                published
+                    ? 'status-published'
+                    : 'status-draft'
             }`}
         >
             <span className="status-dot" />
-            {published ? 'Published' : 'Draft'}
+
+            {published
+                ? 'Published'
+                : 'Draft'}
         </span>
     );
 }
+
+
+/*
+|--------------------------------------------------------------------------
+| LEVEL BADGE
+|--------------------------------------------------------------------------
+*/
 
 function LevelBadge({ level }) {
     const normalized = String(
@@ -787,15 +867,20 @@ function LevelBadge({ level }) {
     }
 
     return (
-        <span className={`level-badge ${className}`}>
+        <span
+            className={`level-badge ${className}`}
+        >
             {level ?? '—'}
         </span>
     );
 }
 
-/* ========================================================================
-   EMPTY
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| EMPTY STATE
+|--------------------------------------------------------------------------
+*/
 
 function EmptyCourses({
     filtered,
@@ -803,37 +888,38 @@ function EmptyCourses({
     onCreate,
 }) {
     return (
-        <div className="empty-courses">
+        <div className="empty-state">
+
             <div className="empty-icon">
                 {filtered ? (
-                    <SearchIcon size={28} />
+                    <SearchIcon size={30} />
                 ) : (
-                    <BookIcon size={28} />
+                    <BookOpenIcon size={30} />
                 )}
             </div>
 
-            <span className="empty-kicker">
+            <span className="empty-label">
                 {filtered
-                    ? 'No matches'
+                    ? 'No results'
                     : 'Course library'}
             </span>
 
             <h2>
                 {filtered
-                    ? 'No courses match your filters'
-                    : 'Your learning library is empty'}
+                    ? 'No courses found'
+                    : 'Your course library is empty'}
             </h2>
 
             <p>
                 {filtered
-                    ? 'Try adjusting your search or filters to find what you are looking for.'
+                    ? 'Try changing your search or filters to find another course.'
                     : 'Create your first course and start building learning opportunities for your talent community.'}
             </p>
 
             {filtered ? (
                 <button
                     type="button"
-                    className="empty-button"
+                    className="secondary-button"
                     onClick={onReset}
                 >
                     Clear filters
@@ -841,25 +927,31 @@ function EmptyCourses({
             ) : (
                 <button
                     type="button"
-                    className="empty-button"
+                    className="primary-button"
                     onClick={onCreate}
                 >
-                    <PlusIcon />
+                    <PlusIcon size={17} />
                     Create first course
                 </button>
             )}
+
         </div>
     );
 }
 
-/* ========================================================================
-   PAGINATION
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| PAGINATION
+|--------------------------------------------------------------------------
+*/
 
 function Pagination({ links }) {
     return (
         <div className="pagination">
+
             {links.map((link, index) => {
+
                 if (!link.url) {
                     return (
                         <span
@@ -889,16 +981,22 @@ function Pagination({ links }) {
                     />
                 );
             })}
+
         </div>
     );
 }
 
-/* ========================================================================
-   HELPERS
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| HELPERS
+|--------------------------------------------------------------------------
+*/
 
 function truncate(value, length) {
-    if (!value) return 'No description available.';
+    if (!value) {
+        return 'No description available.';
+    }
 
     const string = String(value);
 
@@ -906,6 +1004,7 @@ function truncate(value, length) {
         ? `${string.slice(0, length).trim()}…`
         : string;
 }
+
 
 function getInitials(name) {
     if (!name) return '?';
@@ -916,7 +1015,9 @@ function getInitials(name) {
         .filter(Boolean);
 
     if (parts.length === 1) {
-        return parts[0].slice(0, 2).toUpperCase();
+        return parts[0]
+            .slice(0, 2)
+            .toUpperCase();
     }
 
     return (
@@ -925,9 +1026,12 @@ function getInitials(name) {
     ).toUpperCase();
 }
 
-/* ========================================================================
-   ICONS
-======================================================================== */
+
+/*
+|--------------------------------------------------------------------------
+| ICONS
+|--------------------------------------------------------------------------
+*/
 
 function PlusIcon({ size = 16 }) {
     return (
@@ -946,7 +1050,8 @@ function PlusIcon({ size = 16 }) {
     );
 }
 
-function BookIcon({ size = 18 }) {
+
+function BookOpenIcon({ size = 18 }) {
     return (
         <svg
             width={size}
@@ -958,13 +1063,14 @@ function BookIcon({ size = 18 }) {
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
-            <path d="M8 6h8" />
-            <path d="M8 10h7" />
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
+            <path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20" />
+            <path d="M8 7h7" />
+            <path d="M8 10h5" />
         </svg>
     );
 }
+
 
 function CheckCircleIcon() {
     return (
@@ -984,11 +1090,12 @@ function CheckCircleIcon() {
     );
 }
 
-function EditIcon() {
+
+function EditIcon({ size = 17 }) {
     return (
         <svg
-            width="16"
-            height="16"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1001,6 +1108,7 @@ function EditIcon() {
         </svg>
     );
 }
+
 
 function UsersIcon() {
     return (
@@ -1022,11 +1130,12 @@ function UsersIcon() {
     );
 }
 
-function GridIcon() {
+
+function GridIcon({ size = 18 }) {
     return (
         <svg
-            width="18"
-            height="18"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1034,13 +1143,38 @@ function GridIcon() {
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
+            <rect
+                x="3"
+                y="3"
+                width="7"
+                height="7"
+                rx="1"
+            />
+            <rect
+                x="14"
+                y="3"
+                width="7"
+                height="7"
+                rx="1"
+            />
+            <rect
+                x="3"
+                y="14"
+                width="7"
+                height="7"
+                rx="1"
+            />
+            <rect
+                x="14"
+                y="14"
+                width="7"
+                height="7"
+                rx="1"
+            />
         </svg>
     );
 }
+
 
 function SearchIcon({ size = 17 }) {
     return (
@@ -1053,17 +1187,22 @@ function SearchIcon({ size = 17 }) {
             strokeWidth="1.8"
             strokeLinecap="round"
         >
-            <circle cx="11" cy="11" r="7" />
+            <circle
+                cx="11"
+                cy="11"
+                r="7"
+            />
             <path d="m20 20-4-4" />
         </svg>
     );
 }
 
-function FilterIcon() {
+
+function FilterIcon({ size = 15 }) {
     return (
         <svg
-            width="15"
-            height="15"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1077,11 +1216,12 @@ function FilterIcon() {
     );
 }
 
-function ChevronDownIcon() {
+
+function ChevronDownIcon({ size = 14 }) {
     return (
         <svg
-            width="14"
-            height="14"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1094,11 +1234,30 @@ function ChevronDownIcon() {
     );
 }
 
-function CloseIcon() {
+
+function ChevronRightIcon() {
     return (
         <svg
-            width="14"
-            height="14"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m9 18 6-6-6-6" />
+        </svg>
+    );
+}
+
+
+function CloseIcon({ size = 14 }) {
+    return (
+        <svg
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1111,11 +1270,12 @@ function CloseIcon() {
     );
 }
 
-function ArrowUpIcon() {
+
+function ArrowUpIcon({ size = 14 }) {
     return (
         <svg
-            width="14"
-            height="14"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1129,29 +1289,12 @@ function ArrowUpIcon() {
     );
 }
 
-function ArrowRightIcon() {
-    return (
-        <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M5 12h14" />
-            <path d="m13 6 6 6-6 6" />
-        </svg>
-    );
-}
 
-function EyeIcon() {
+function EyeIcon({ size = 15 }) {
     return (
         <svg
-            width="15"
-            height="15"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1160,16 +1303,21 @@ function EyeIcon() {
             strokeLinejoin="round"
         >
             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
-            <circle cx="12" cy="12" r="3" />
+            <circle
+                cx="12"
+                cy="12"
+                r="3"
+            />
         </svg>
     );
 }
 
-function TrashIcon() {
+
+function TrashIcon({ size = 15 }) {
     return (
         <svg
-            width="15"
-            height="15"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -1186,127 +1334,539 @@ function TrashIcon() {
     );
 }
 
-<style>{`
+
+/*
+|--------------------------------------------------------------------------
+| PAGE STYLES
+|--------------------------------------------------------------------------
+|
+| IMPORTANT:
+| This is now a valid JavaScript variable.
+| It is rendered inside the React component with:
+|
+| <style>{styles}</style>
+|
+|--------------------------------------------------------------------------
+*/
+
+const styles = `
+    :root {
+        --course-primary: #2563eb;
+        --course-primary-dark: #1d4ed8;
+        --course-text: #172033;
+        --course-muted: #64748b;
+        --course-light: #f8fafc;
+        --course-border: #e5eaf1;
+        --course-white: #ffffff;
+        --course-green: #16a34a;
+        --course-orange: #ea8a0b;
+        --course-purple: #7c3aed;
+        --course-danger: #dc2626;
+        --course-radius: 16px;
+    }
+
+    .courses-page {
+        width: 100%;
+        min-height: 100vh;
+        padding: 28px;
+        background:
+            linear-gradient(
+                180deg,
+                #f7f9fc 0%,
+                #f8fafc 100%
+            );
+        color: var(--course-text);
+        box-sizing: border-box;
+    }
+
+    .courses-page *,
+    .courses-page *::before,
+    .courses-page *::after {
+        box-sizing: border-box;
+    }
+
     /* =========================================================
-       RESPONSIVE COURSE TABLE
-       ========================================================= */
+       HEADER
+    ========================================================= */
 
-    .course-table-wrap {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border-top: 1px solid var(--line);
+    .courses-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        max-width: 1500px;
+        margin: 0 auto 24px;
     }
 
-    .course-table {
-        width: 100%;
-        min-width: 1050px;
-        border-collapse: separate;
-        border-spacing: 0;
-        table-layout: fixed;
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 12px;
+        color: #94a3b8;
+        font-size: 12px;
+        font-weight: 600;
     }
 
-    .course-table th {
-        padding: 13px 18px;
-        background: #f8fafc;
-        border-bottom: 1px solid var(--line);
-        color: #718096;
-        font-size: 11px;
+    .breadcrumb strong {
+        color: #475569;
+    }
+
+    .breadcrumb svg {
+        color: #cbd5e1;
+    }
+
+    .title-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .title-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 14px;
+        background: #eff6ff;
+        color: var(--course-primary);
+        border: 1px solid #dbeafe;
+    }
+
+    .title-row h1 {
+        margin: 0;
+        color: #111827;
+        font-size: 27px;
+        line-height: 1.15;
         font-weight: 800;
-        letter-spacing: .06em;
-        text-transform: uppercase;
-        text-align: left;
-        white-space: nowrap;
+        letter-spacing: -0.025em;
     }
 
-    .course-table td {
-        padding: 16px 18px;
-        border-bottom: 1px solid #edf1f5;
-        vertical-align: middle;
-        background: #fff;
+    .title-row p {
+        margin: 5px 0 0;
+        color: var(--course-muted);
+        font-size: 13px;
     }
 
-    .course-table tbody tr {
+    .primary-button {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 17px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--course-primary);
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow:
+            0 5px 15px rgba(37, 99, 235, .18);
         transition:
+            transform .18s ease,
             background .18s ease,
             box-shadow .18s ease;
     }
 
-    .course-table tbody tr:hover td {
-        background: #fbfcfe;
+    .primary-button:hover {
+        background: var(--course-primary-dark);
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow:
+            0 8px 20px rgba(37, 99, 235, .22);
     }
 
-    .course-table tbody tr:last-child td {
+    /* =========================================================
+       STATISTICS
+    ========================================================= */
+
+    .stats-grid {
+        width: 100%;
+        max-width: 1500px;
+        margin: 0 auto 24px;
+        display: grid;
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .stat-card {
+        position: relative;
+        min-height: 165px;
+        overflow: hidden;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid var(--course-border);
+        border-radius: var(--course-radius);
+        box-shadow:
+            0 2px 7px rgba(15, 23, 42, .025);
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        right: -35px;
+        bottom: -35px;
+        border-radius: 50%;
+        opacity: .5;
+    }
+
+    .stat-blue::after {
+        background: #dbeafe;
+    }
+
+    .stat-green::after {
+        background: #dcfce7;
+    }
+
+    .stat-orange::after {
+        background: #ffedd5;
+    }
+
+    .stat-purple::after {
+        background: #ede9fe;
+    }
+
+    .stat-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .stat-icon {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+    }
+
+    .stat-blue .stat-icon {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .stat-green .stat-icon {
+        background: #f0fdf4;
+        color: #16a34a;
+    }
+
+    .stat-orange .stat-icon {
+        background: #fff7ed;
+        color: #ea8a0b;
+    }
+
+    .stat-purple .stat-icon {
+        background: #f5f3ff;
+        color: #7c3aed;
+    }
+
+    .stat-arrow {
+        width: 27px;
+        height: 27px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f8fafc;
+        color: #94a3b8;
+    }
+
+    .stat-value {
+        position: relative;
+        z-index: 1;
+        color: #111827;
+        font-size: 28px;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -.03em;
+    }
+
+    .stat-label {
+        margin-top: 8px;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .stat-description {
+        margin-top: 4px;
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    /* =========================================================
+       LIBRARY CARD
+    ========================================================= */
+
+    .library-card {
+        width: 100%;
+        max-width: 1500px;
+        margin: 0 auto;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid var(--course-border);
+        border-radius: 18px;
+        box-shadow:
+            0 4px 20px rgba(15, 23, 42, .035);
+    }
+
+    .library-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 22px 24px 18px;
+    }
+
+    .library-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .library-title svg {
+        color: var(--course-primary);
+    }
+
+    .library-title h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .library-header p {
+        margin: 5px 0 0 27px;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .clear-all-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 0;
+        background: transparent;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .clear-all-button:hover {
+        color: var(--course-primary);
+    }
+
+    /* =========================================================
+       FILTERS
+    ========================================================= */
+
+    .filters {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 0 24px 20px;
+        border-bottom: 1px solid var(--course-border);
+    }
+
+    .search-box {
+        min-width: 260px;
+        height: 40px;
+        flex: 1;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 0 12px;
+        background: #f8fafc;
+        border: 1px solid #e6ebf2;
+        border-radius: 9px;
+        color: #94a3b8;
+        transition:
+            border-color .18s ease,
+            background .18s ease;
+    }
+
+    .search-box:focus-within {
+        background: #fff;
+        border-color: #93c5fd;
+        box-shadow:
+            0 0 0 3px rgba(59, 130, 246, .08);
+    }
+
+    .search-box input {
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+        padding: 0;
+        outline: none;
+        border: 0;
+        background: transparent;
+        color: #1e293b;
+        font-size: 12px;
+    }
+
+    .search-box input::placeholder {
+        color: #a3afbf;
+    }
+
+    .search-clear {
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: 0;
+        border-radius: 50%;
+        background: #e2e8f0;
+        color: #64748b;
+        cursor: pointer;
+    }
+
+    .filter-select {
+        position: relative;
+        min-width: 135px;
+        height: 40px;
+    }
+
+    .filter-select select {
+        width: 100%;
+        height: 100%;
+        appearance: none;
+        outline: none;
+        padding: 0 34px 0 12px;
+        border: 1px solid #e6ebf2;
+        border-radius: 9px;
+        background: #fff;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .filter-select svg {
+        position: absolute;
+        top: 50%;
+        right: 11px;
+        pointer-events: none;
+        transform: translateY(-50%);
+        color: #94a3b8;
+    }
+
+    .filter-button {
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 0 15px;
+        border: 0;
+        border-radius: 9px;
+        background: #172033;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background .18s ease;
+    }
+
+    .filter-button:hover {
+        background: #0f172a;
+    }
+
+    /* =========================================================
+       DESKTOP TABLE
+    ========================================================= */
+
+    .desktop-table {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .table-header,
+    .course-row {
+        display: grid;
+        grid-template-columns:
+            minmax(300px, 2.5fr)
+            minmax(130px, 1fr)
+            minmax(125px, 1fr)
+            105px
+            105px
+            90px
+            110px
+            125px;
+        min-width: 1100px;
+    }
+
+    .table-header {
+        padding: 0 24px;
+        min-height: 46px;
+        align-items: center;
+        background: #f8fafc;
+        border-top: 1px solid #eef2f6;
+        border-bottom: 1px solid var(--course-border);
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+    }
+
+    .course-row {
+        min-height: 88px;
+        padding: 12px 24px;
+        align-items: center;
+        border-bottom: 1px solid #eef2f6;
+        transition:
+            background .18s ease;
+    }
+
+    .course-row:last-child {
         border-bottom: 0;
     }
 
-    /* Column widths */
-
-    .course-table th:nth-child(1),
-    .course-table td:nth-child(1) {
-        width: 31%;
+    .course-row:hover {
+        background: #fbfdff;
     }
 
-    .course-table th:nth-child(2),
-    .course-table td:nth-child(2) {
-        width: 15%;
-    }
-
-    .course-table th:nth-child(3),
-    .course-table td:nth-child(3) {
-        width: 13%;
-    }
-
-    .course-table th:nth-child(4),
-    .course-table td:nth-child(4) {
-        width: 10%;
-    }
-
-    .course-table th:nth-child(5),
-    .course-table td:nth-child(5) {
-        width: 11%;
-    }
-
-    .course-table th:nth-child(6),
-    .course-table td:nth-child(6) {
-        width: 9%;
-    }
-
-    .course-table th:nth-child(7),
-    .course-table td:nth-child(7) {
-        width: 7%;
-    }
-
-    .course-table th:nth-child(8),
-    .course-table td:nth-child(8) {
-        width: 4%;
-        min-width: 105px;
-    }
-
-    /* Course information */
-
-    .course-cell {
-        display: flex;
-        align-items: center;
-        gap: 13px;
+    .course-main {
         min-width: 0;
     }
 
-    .course-cover {
-        width: 58px;
-        height: 46px;
-        min-width: 58px;
-        border-radius: 9px;
-        overflow: hidden;
-        background: #eef3f9;
-        border: 1px solid #e2e8f0;
+    .course-column {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
     }
 
-    .course-cover img {
-        width: 100%;
-        height: 100%;
-        display: block;
+    .course-number {
+        width: 23px;
+        flex-shrink: 0;
+        color: #cbd5e1;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .course-image {
+        width: 64px;
+        height: 48px;
+        flex-shrink: 0;
         object-fit: cover;
+        border-radius: 9px;
+        background: #eef2f7;
+        border: 1px solid #e8edf3;
     }
 
     .course-info {
@@ -1317,147 +1877,187 @@ function TrashIcon() {
         display: block;
         max-width: 100%;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-
-        color: #172033;
-        font-size: 14px;
-        font-weight: 750;
+        color: #1e293b;
+        font-size: 13px;
         line-height: 1.35;
-    }
-
-    .course-description {
-        margin-top: 4px;
-        max-width: 330px;
-        overflow: hidden;
+        font-weight: 750;
+        text-decoration: none;
         text-overflow: ellipsis;
         white-space: nowrap;
-
-        color: #8995a7;
-        font-size: 12px;
-        line-height: 1.4;
     }
 
-    .course-type {
-        display: inline-flex;
-        align-items: center;
-        margin-top: 6px;
-        padding: 3px 7px;
-        border-radius: 5px;
+    .course-title:hover {
+        color: var(--course-primary);
+    }
 
-        background: #f1f5f9;
-        color: #64748b;
-
+    .course-info p {
+        max-width: 300px;
+        margin: 4px 0 0;
+        overflow: hidden;
+        color: #94a3b8;
         font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .04em;
+        line-height: 1.4;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    /* Talent */
+    /* =========================================================
+       CREATOR
+    ========================================================= */
 
-    .talent-cell {
+    .creator {
+        min-width: 0;
         display: flex;
         align-items: center;
-        gap: 9px;
-        min-width: 0;
+        gap: 8px;
     }
 
-    .talent-avatar {
-        width: 32px;
-        height: 32px;
-        min-width: 32px;
+    .creator > span:last-child {
+        min-width: 0;
+        overflow: hidden;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
+    .avatar {
+        width: 29px;
+        height: 29px;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-
         border-radius: 50%;
-        background: #eaf1fa;
-        color: #426fae;
-
-        font-size: 11px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 9px;
         font-weight: 800;
+        border: 1px solid #dbeafe;
     }
 
-    .talent-name {
+    /* =========================================================
+       CATEGORY
+    ========================================================= */
+
+    .category-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        max-width: 115px;
         overflow: hidden;
+        padding: 5px 8px;
+        border-radius: 6px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 650;
         text-overflow: ellipsis;
         white-space: nowrap;
-
-        color: #374151;
-        font-size: 12px;
-        font-weight: 650;
-    }
-
-    /* Category */
-
-    .category-cell {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        min-width: 0;
     }
 
     .category-dot {
-        width: 7px;
-        height: 7px;
-        min-width: 7px;
+        width: 5px;
+        height: 5px;
+        flex-shrink: 0;
         border-radius: 50%;
-        background: var(--primary, #5D89C8);
+        background: #60a5fa;
     }
 
-    .category-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-
-        color: #526071;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    /* Level */
+    /* =========================================================
+       LEVEL
+    ========================================================= */
 
     .level-badge {
         display: inline-flex;
         align-items: center;
         padding: 5px 8px;
         border-radius: 6px;
-
-        background: #f6f8fb;
-        border: 1px solid #e8edf3;
-
-        color: #536173;
-        font-size: 11px;
-        font-weight: 700;
+        font-size: 9px;
+        font-weight: 800;
         white-space: nowrap;
     }
 
-    /* Price */
+    .level-beginner {
+        background: #ecfdf5;
+        color: #15803d;
+    }
 
-    .course-price {
+    .level-intermediate {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+    .level-advanced {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .level-default {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    /* =========================================================
+       PRICE
+    ========================================================= */
+
+    .price {
+        display: flex;
+        align-items: baseline;
+        gap: 3px;
+    }
+
+    .price strong {
         color: #1e293b;
+        font-size: 11px;
+    }
+
+    .price small {
+        color: #94a3b8;
+        font-size: 8px;
+        font-weight: 700;
+    }
+
+    .free-price {
+        color: #15803d;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    /* =========================================================
+       STUDENTS
+    ========================================================= */
+
+    .students {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .student-count {
+        color: #334155;
         font-size: 12px;
-        font-weight: 750;
-        white-space: nowrap;
+        font-weight: 800;
     }
 
-    .course-price.free {
-        color: #23815a;
+    .students span {
+        margin-top: 2px;
+        color: #94a3b8;
+        font-size: 8px;
     }
 
-    /* Status */
+    /* =========================================================
+       STATUS
+    ========================================================= */
 
     .status-badge {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-
         padding: 5px 8px;
         border-radius: 999px;
-
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 800;
         white-space: nowrap;
     }
@@ -1465,51 +2065,30 @@ function TrashIcon() {
     .status-dot {
         width: 6px;
         height: 6px;
-        min-width: 6px;
         border-radius: 50%;
     }
 
     .status-published {
-        background: #ecf8f2;
-        color: #18794e;
+        background: #ecfdf3;
+        color: #15803d;
     }
 
     .status-published .status-dot {
-        background: #26a269;
+        background: #22c55e;
     }
 
     .status-draft {
-        background: #fff7e8;
-        color: #a66a08;
+        background: #fff7ed;
+        color: #c2410c;
     }
 
     .status-draft .status-dot {
-        background: #d99419;
+        background: #f59e0b;
     }
 
-    .status-default {
-        background: #f1f4f7;
-        color: #64748b;
-    }
-
-    .status-default .status-dot {
-        background: #94a3b8;
-    }
-
-    /* Enrollment */
-
-    .enrollment-cell {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-
-        color: #526071;
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
-    }
-
-    /* Actions */
+    /* =========================================================
+       ACTIONS
+    ========================================================= */
 
     .course-actions {
         display: flex;
@@ -1518,425 +2097,418 @@ function TrashIcon() {
         gap: 5px;
     }
 
-    .course-action {
+    .action-button {
         width: 32px;
         height: 32px;
-
         display: inline-flex;
         align-items: center;
         justify-content: center;
-
-        border: 1px solid #e4eaf1;
-        border-radius: 7px;
+        border: 1px solid #e5eaf1;
+        border-radius: 8px;
         background: #fff;
-
         color: #64748b;
+        text-decoration: none;
         cursor: pointer;
-
         transition:
             background .18s ease,
-            color .18s ease,
             border-color .18s ease,
+            color .18s ease,
             transform .18s ease;
     }
 
-    .course-action:hover {
-        background: #f4f7fb;
-        border-color: #d5dfeb;
-        color: #426fae;
+    .action-button:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: var(--course-primary);
         transform: translateY(-1px);
     }
 
-    .course-action.danger:hover {
-        background: #fff3f2;
-        border-color: #f3d1cd;
-        color: #c0392b;
+    .delete-button:hover {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: var(--course-danger);
     }
-
-    .course-action svg {
-        width: 15px;
-        height: 15px;
-    }
-
 
     /* =========================================================
-       TABLET
-       ========================================================= */
+       MOBILE LIST
+    ========================================================= */
+
+    .mobile-list {
+        display: none;
+    }
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        padding: 70px 25px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+        border-radius: 18px;
+        background: #eff6ff;
+        color: var(--course-primary);
+    }
+
+    .empty-label {
+        color: #2563eb;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .empty-state h2 {
+        margin: 8px 0 7px;
+        color: #172033;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .empty-state p {
+        max-width: 450px;
+        margin: 0 auto 20px;
+        color: #94a3b8;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .secondary-button {
+        min-height: 40px;
+        padding: 0 15px;
+        border: 1px solid #dbe2ea;
+        border-radius: 9px;
+        background: #fff;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .secondary-button:hover {
+        border-color: #bfdbfe;
+        color: var(--course-primary);
+    }
+
+    /* =========================================================
+       PAGINATION
+    ========================================================= */
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 18px 24px;
+        border-top: 1px solid #eef2f6;
+    }
+
+    .page-button {
+        min-width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 8px;
+        border: 1px solid #e5eaf1;
+        border-radius: 8px;
+        background: #fff;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .page-button:hover {
+        border-color: #bfdbfe;
+        color: var(--course-primary);
+    }
+
+    .page-button.active {
+        border-color: var(--course-primary);
+        background: var(--course-primary);
+        color: #fff;
+    }
+
+    .page-button.disabled {
+        opacity: .45;
+        cursor: default;
+    }
+
+    /* =========================================================
+       MOBILE CARD
+    ========================================================= */
+
+    .mobile-course-card {
+        margin: 12px;
+        padding: 15px;
+        border: 1px solid #e5eaf1;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow:
+            0 2px 8px rgba(15, 23, 42, .03);
+    }
+
+    .mobile-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 13px;
+    }
+
+    .mobile-number {
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .mobile-course-main {
+        display: flex;
+        gap: 12px;
+    }
+
+    .mobile-image {
+        width: 76px;
+        height: 58px;
+        flex-shrink: 0;
+        object-fit: cover;
+        border-radius: 9px;
+        background: #f1f5f9;
+    }
+
+    .mobile-course-info {
+        min-width: 0;
+    }
+
+    .mobile-title {
+        display: block;
+        color: #1e293b;
+        font-size: 13px;
+        line-height: 1.35;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .mobile-title:hover {
+        color: var(--course-primary);
+    }
+
+    .mobile-course-info p {
+        margin: 5px 0 0;
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .mobile-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px solid #eef2f6;
+    }
+
+    .mobile-meta > div {
+        min-width: 0;
+    }
+
+    .mobile-meta span:first-child {
+        display: block;
+        margin-bottom: 4px;
+        color: #94a3b8;
+        font-size: 9px;
+        font-weight: 600;
+    }
+
+    .mobile-meta strong {
+        display: block;
+        overflow: hidden;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 750;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mobile-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 15px;
+        padding-top: 13px;
+        border-top: 1px solid #eef2f6;
+    }
+
+    .mobile-price {
+        color: #334155;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
 
     @media (max-width: 1200px) {
-
-        .course-table {
-            min-width: 960px;
+        .stats-grid {
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
         }
 
-        .course-table th,
-        .course-table td {
-            padding-left: 13px;
-            padding-right: 13px;
+        .filters {
+            flex-wrap: wrap;
         }
 
-        .course-cover {
-            width: 52px;
-            height: 42px;
-            min-width: 52px;
-        }
-
-        .course-title {
-            font-size: 13px;
-        }
-
-        .course-description {
-            max-width: 230px;
+        .search-box {
+            max-width: none;
+            flex-basis: 100%;
         }
     }
 
-
-    /* =========================================================
-       SMALL TABLET
-       ========================================================= */
-
-    @media (max-width: 1000px) {
-
-        .course-table {
-            min-width: 850px;
+    @media (max-width: 850px) {
+        .courses-page {
+            padding: 18px;
         }
 
-        /* Hide lower-priority columns */
-        .course-table th:nth-child(3),
-        .course-table td:nth-child(3) {
-            display: none;
+        .courses-header {
+            align-items: flex-start;
+            flex-direction: column;
         }
 
-        .course-table th:nth-child(4),
-        .course-table td:nth-child(4) {
-            display: none;
-        }
-
-        .course-table th:nth-child(5),
-        .course-table td:nth-child(5) {
-            width: 13%;
-        }
-
-        .course-table th:nth-child(6),
-        .course-table td:nth-child(6) {
-            width: 12%;
-        }
-
-        .course-table th:nth-child(7),
-        .course-table td:nth-child(7) {
-            width: 10%;
-        }
-
-        .course-table th:nth-child(8),
-        .course-table td:nth-child(8) {
-            width: 110px;
-        }
-    }
-
-
-    /* =========================================================
-       MOBILE
-       ========================================================= */
-
-    @media (max-width: 760px) {
-
-        /*
-         * Don't squeeze the table.
-         * Turn each row into a clean mobile block.
-         */
-
-        .course-table-wrap {
-            overflow: visible;
-            border-top: 0;
-        }
-
-        .course-table {
-            display: block;
-            min-width: 0;
+        .courses-header .primary-button {
             width: 100%;
         }
 
-        .course-table thead {
+        .stats-grid {
+            gap: 10px;
+        }
+
+        .stat-card {
+            min-height: 145px;
+            padding: 16px;
+        }
+
+        .library-header {
+            padding: 18px;
+        }
+
+        .filters {
+            padding: 0 18px 18px;
+        }
+    }
+
+    @media (max-width: 680px) {
+        .courses-page {
+            padding: 12px;
+        }
+
+        .title-row h1 {
+            font-size: 23px;
+        }
+
+        .title-row p {
+            font-size: 11px;
+        }
+
+        .title-icon {
+            width: 44px;
+            height: 44px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .stat-value {
+            font-size: 23px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+        }
+
+        .stat-description {
+            font-size: 9px;
+        }
+
+        .desktop-table {
             display: none;
         }
 
-        .course-table tbody {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 12px;
-            background: #f7f9fc;
-        }
-
-        .course-table tbody tr {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            grid-template-areas:
-                "course actions"
-                "meta meta"
-                "details details";
-
-            gap: 12px;
-
-            padding: 14px;
-
-            background: #fff;
-            border: 1px solid #e4eaf1;
-            border-radius: 12px;
-
-            box-shadow: 0 2px 7px rgba(20, 35, 55, .035);
-        }
-
-        .course-table tbody tr:hover td {
-            background: transparent;
-        }
-
-        .course-table td {
+        .mobile-list {
             display: block;
-            width: auto !important;
-            min-width: 0;
-
-            padding: 0;
-            border: 0;
-            background: transparent;
+            background: #f8fafc;
+            padding: 1px 0;
         }
 
-        /* Course */
-
-        .course-table td:nth-child(1) {
-            grid-area: course;
-        }
-
-        .course-table td:nth-child(1) .course-cell {
+        .library-header {
             align-items: flex-start;
         }
 
-        .course-cover {
-            width: 62px;
-            height: 52px;
-            min-width: 62px;
-            border-radius: 9px;
+        .clear-all-button {
+            padding-top: 4px;
         }
 
-        .course-title {
-            white-space: normal;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
 
-        .course-description {
-            max-width: none;
-            white-space: normal;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+        .search-box {
+            grid-column: 1 / -1;
+            min-width: 0;
         }
 
-        /* Actions */
-
-        .course-table td:nth-child(8) {
-            grid-area: actions;
-            align-self: start;
+        .filter-select {
+            width: 100%;
+            min-width: 0;
         }
 
-        .course-actions {
-            justify-content: flex-end;
+        .filter-button {
+            width: 100%;
         }
 
-        .course-action {
-            width: 31px;
-            height: 31px;
-        }
-
-        /*
-         * Put talent/category into a metadata row
-         */
-
-        .course-table td:nth-child(2) {
-            grid-area: meta;
-            padding-top: 2px;
-            padding-bottom: 2px;
-
-            border-top: 1px solid #edf1f5;
-            border-bottom: 1px solid #edf1f5;
-        }
-
-        .talent-cell {
-            min-height: 32px;
-        }
-
-        /* Hide category on mobile */
-
-        .course-table td:nth-child(3),
-        .course-table th:nth-child(3) {
-            display: none;
-        }
-
-        /* Details row */
-
-        .course-table td:nth-child(4),
-        .course-table td:nth-child(5),
-        .course-table td:nth-child(6),
-        .course-table td:nth-child(7) {
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .course-table td:nth-child(4) {
-            grid-area: details;
-        }
-
-        /*
-         * Create a flexible details row.
-         */
-
-        .course-table tbody tr {
-            position: relative;
-        }
-
-        .course-table td:nth-child(4),
-        .course-table td:nth-child(5),
-        .course-table td:nth-child(6),
-        .course-table td:nth-child(7) {
-            margin-right: 14px;
-        }
-
-        .course-table td:nth-child(4)::before {
-            content: "Level";
-            margin-right: 5px;
-            color: #98a2b3;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .course-table td:nth-child(5)::before {
-            content: "Price";
-            margin-right: 5px;
-            color: #98a2b3;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .course-table td:nth-child(6)::before {
-            content: "";
-        }
-
-        .course-table td:nth-child(7)::before {
-            content: "Learners";
-            margin-right: 5px;
-            color: #98a2b3;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .course-table td:nth-child(6) {
-            /*
-             * Move status into the details area visually.
-             */
-            display: inline-flex;
-        }
-
-        .course-table td:nth-child(7) {
-            display: inline-flex;
+        .pagination {
+            padding: 15px 10px;
+            overflow-x: auto;
+            justify-content: flex-start;
         }
     }
 
+    @media (max-width: 430px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
 
-    /* =========================================================
-       VERY SMALL PHONES
-       ========================================================= */
+        .title-row {
+            align-items: flex-start;
+        }
 
-    @media (max-width: 480px) {
+        .filters {
+            grid-template-columns: 1fr;
+        }
 
-        .course-table tbody {
-            padding: 9px;
+        .search-box {
+            grid-column: auto;
+        }
+
+        .mobile-meta {
             gap: 8px;
         }
 
-        .course-table tbody tr {
-            padding: 12px;
-            border-radius: 10px;
-
-            grid-template-columns: minmax(0, 1fr) auto;
-            gap: 10px;
-        }
-
-        .course-cover {
-            width: 54px;
-            height: 46px;
-            min-width: 54px;
-        }
-
-        .course-cell {
-            gap: 9px;
-        }
-
-        .course-title {
-            font-size: 12.5px;
-        }
-
-        .course-description {
-            font-size: 11px;
-        }
-
-        .course-type {
-            font-size: 9px;
-            padding: 3px 6px;
-        }
-
-        .course-action {
-            width: 29px;
-            height: 29px;
-        }
-
-        .course-action svg {
-            width: 13px;
-            height: 13px;
-        }
-
-        /*
-         * Make the details area wrap naturally.
-         */
-
-        .course-table td:nth-child(4),
-        .course-table td:nth-child(5),
-        .course-table td:nth-child(6),
-        .course-table td:nth-child(7) {
-            margin-right: 8px;
-            margin-bottom: 3px;
-        }
-
-        .level-badge {
-            font-size: 10px;
-            padding: 4px 6px;
-        }
-
-        .course-price,
-        .enrollment-cell {
-            font-size: 11px;
-        }
-
-        .status-badge {
-            font-size: 9px;
-            padding: 4px 6px;
+        .mobile-course-card {
+            margin: 10px;
+            padding: 13px;
         }
     }
-
-
-    /* =========================================================
-       TABLET LANDSCAPE / TOUCH DEVICES
-       ========================================================= */
-
-    @media (hover: none) and (pointer: coarse) {
-
-        .course-action {
-            min-width: 34px;
-            min-height: 34px;
-        }
-
-        .course-table tbody tr:hover td {
-            background: #fff;
-        }
-    }
-`}</style>
+`;
