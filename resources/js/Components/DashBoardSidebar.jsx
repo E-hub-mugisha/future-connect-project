@@ -1305,14 +1305,6 @@ function AdminNav({ isActive }) {
             </NavItem>
 
             <NavItem
-                href="/admin/events"
-                active={isActive("/admin/events")}
-                icon={icons.event}
-            >
-                Events
-            </NavItem>
-
-            <NavItem
                 href="/admin/connections"
                 active={isActive("/admin/connections")}
                 icon={icons.connection}

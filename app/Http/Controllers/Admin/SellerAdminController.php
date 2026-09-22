@@ -21,6 +21,22 @@ class SellerAdminController extends Controller
         return Inertia::render('AdminPage/Sellers/Index', compact('sellers'));
     }
 
+    // Store a new seller (optional, if you want to allow admin to create sellers)
+    public function store(Request $request)
+    {
+        $request->validate([
+            'company_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:sellers,email',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        $seller = Seller::create($request->only(['company_name', 'email', 'phone', 'address', 'description']));
+
+        return redirect()->back()->with('success', 'Seller created successfully!');
+    }
+
     // Show single seller details (optional for modal)
     public function show(Seller $seller)
     {

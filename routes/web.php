@@ -653,6 +653,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Sellers
     Route::get('/sellers', [SellerAdminController::class, 'index'])->name('sellers.index');
+    Route::post('/sellers', [SellerAdminController::class, 'store'])
+    ->name('sellers.store');
     Route::get('/sellers/{seller}', [SellerAdminController::class, 'show'])->name('sellers.show');
     Route::patch('/sellers/{seller}', [SellerAdminController::class, 'update'])->name('sellers.update');
     Route::delete('/sellers/{seller}', [SellerAdminController::class, 'destroy'])->name('sellers.destroy');
