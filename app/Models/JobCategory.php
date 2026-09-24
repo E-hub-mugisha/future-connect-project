@@ -7,15 +7,24 @@ use Illuminate\Support\Str;
 
 class JobCategory extends Model
 {
-    //
-    protected $fillable = ['name', 'slug', 'parent_id'];
+    protected $fillable = [
+        'name',
+        'slug',
+        'parent_id',
+    ];
 
-    // slug from name
     protected static function boot()
     {
         parent::boot();
+
         static::creating(function ($model) {
             $model->slug = Str::slug($model->name);
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->name);
+            }
         });
     }
 

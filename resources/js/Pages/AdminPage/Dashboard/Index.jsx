@@ -167,25 +167,54 @@ const Icon = {
 /* ── Scoped theme tokens, layered on top of Bootstrap's utility classes ── */
 const ThemeStyles = () => (
     <style>{`
+        /* ============================================================
+           FUTURE CONNECT — LIGHT THEME ONLY
+           ============================================================ */
+
         .fc-dash {
-            --bg: #f4f7f7;
-            --panel: #F5f5f7;
-            --panel-border: rgba(14,22,24,0.08);
-            --panel-border-hover: rgba(14,22,24,0.14);
-            --text: #10201f;
-            --muted: #5c7274;
-            --muted-dim: #93a5a6;
+            --bg: #ffffff;
+            --panel: #ffffff;
+            --panel-soft: #f8fafb;
+            --panel-border: #e6eaec;
+            --panel-border-hover: #d7dddf;
+
+            --text: #17201f;
+            --text-secondary: #405052;
+            --muted: #667678;
+            --muted-dim: #8a999b;
+
             --green: #00a667;
             --gold: #b9862a;
             --clay: #c9683f;
             --blue: #3f8fc9;
             --violet: #8b6fc9;
-            background: var(--bg);
-            color: var(--text);
+
+            background: #ffffff !important;
+            color: var(--text) !important;
+
             font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
+
+            /* Prevent browser dark-mode transformations */
+            color-scheme: light;
         }
-        .fc-dash .display-font { font-family: 'Syne', sans-serif; }
+
+        /* Force everything inside the dashboard to remain light */
+        .fc-dash,
+        .fc-dash *,
+        .fc-dash *::before,
+        .fc-dash *::after {
+            color-scheme: light;
+        }
+
+        .fc-dash .display-font {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* ------------------------------------------------------------
+           HEADER
+           ------------------------------------------------------------ */
+
         .fc-dash .fc-eyebrow {
             font-size: 0.72rem;
             font-weight: 600;
@@ -193,27 +222,74 @@ const ThemeStyles = () => (
             text-transform: uppercase;
             color: var(--green);
         }
-        .fc-dash .fc-triangle-strip { height: 6px; width: 100%; display: flex; overflow: hidden; }
-        .fc-dash .fc-triangle-strip span { flex: 1; height: 100%; }
-        .fc-dash .fc-triangle-strip span:nth-child(odd) { clip-path: polygon(0 0, 100% 0, 50% 100%); }
-        .fc-dash .fc-triangle-strip span:nth-child(even) { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+
+        .fc-dash .fc-triangle-strip {
+            height: 6px;
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .fc-dash .fc-triangle-strip span {
+            flex: 1;
+            height: 100%;
+        }
+
+        .fc-dash .fc-triangle-strip span:nth-child(odd) {
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        .fc-dash .fc-triangle-strip span:nth-child(even) {
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        }
+
+        /* ------------------------------------------------------------
+           CARDS
+           ------------------------------------------------------------ */
 
         .fc-card {
-            background: var(--panel);
-            border: 1px solid var(--panel-border);
-            border-radius: 0.75rem;
-            box-shadow: 0 1px 2px rgba(14,22,24,0.04);
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-        .fc-card:hover { border-color: var(--panel-border-hover); box-shadow: 0 4px 14px rgba(14,22,24,0.06); }
+            background: #ffffff !important;
+            border: 1px solid var(--panel-border) !important;
+            border-radius: 14px;
+            box-shadow:
+                0 1px 2px rgba(20, 30, 32, 0.03),
+                0 4px 16px rgba(20, 30, 32, 0.035);
 
-        .fc-stat-card { position: relative; overflow: hidden; padding: 1.1rem 1.25rem; }
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .fc-card:hover {
+            background: #ffffff !important;
+            border-color: var(--panel-border-hover) !important;
+            box-shadow:
+                0 2px 4px rgba(20, 30, 32, 0.04),
+                0 8px 24px rgba(20, 30, 32, 0.06);
+        }
+
+        /* ------------------------------------------------------------
+           KPI CARDS
+           ------------------------------------------------------------ */
+
+        .fc-stat-card {
+            position: relative;
+            overflow: hidden;
+            padding: 1.1rem 1.25rem;
+        }
+
         .fc-stat-card::before {
             content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: var(--accent, #2a3a3c);
-            opacity: 0.75;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent, var(--green));
+            opacity: 1;
         }
+
         .fc-stat-label {
             font-size: 0.68rem;
             font-weight: 600;
@@ -221,63 +297,306 @@ const ThemeStyles = () => (
             text-transform: uppercase;
             color: var(--muted);
         }
+
         .fc-stat-value {
             font-size: 1.9rem;
             font-weight: 700;
             letter-spacing: -0.01em;
-            color: var(--accent, var(--text));
+            color: var(--accent, var(--text)) !important;
         }
+
         .fc-icon-chip {
-            width: 2.4rem; height: 2.4rem;
-            border-radius: 0.6rem;
-            display: flex; align-items: center; justify-content: center;
-            background: color-mix(in srgb, var(--accent, var(--muted)) 14%, transparent);
-            color: var(--accent, var(--muted));
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: color-mix(
+                in srgb,
+                var(--accent, var(--muted)) 10%,
+                #ffffff
+            );
+
+            color: var(--accent, var(--muted)) !important;
+
+            border: 1px solid color-mix(
+                in srgb,
+                var(--accent, var(--muted)) 15%,
+                #ffffff
+            );
+
             flex-shrink: 0;
         }
 
-        .fc-card-head { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 1rem; }
-        .fc-card-marker { width: 8px; height: 8px; flex-shrink: 0; transform: rotate(45deg); background: var(--accent, var(--green)); }
-        .fc-card-title { font-size: 0.9rem; font-weight: 700; margin: 0; color: var(--text); }
-        .fc-card-subtitle { font-size: 0.75rem; color: var(--muted); margin: 0; }
+        /* ------------------------------------------------------------
+           CARD HEADERS
+           ------------------------------------------------------------ */
 
-        .fc-chart-body { height: 17rem; width: 100%; }
-        .fc-empty-state { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--muted-dim); }
-        .fc-empty-state span { font-size: 0.75rem; font-weight: 500; }
+        .fc-card-head {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 1rem;
+        }
 
-        .fc-tooltip { background: var(--panel); border: 1px solid rgba(14,22,24,0.1); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.75rem; box-shadow: 0 8px 24px rgba(14,22,24,0.12); }
-        .fc-tooltip .fc-tooltip-label { color: var(--text); font-weight: 500; margin-bottom: 0.15rem; }
+        .fc-card-marker {
+            width: 8px;
+            height: 8px;
+            flex-shrink: 0;
+            transform: rotate(45deg);
+            background: var(--accent, var(--green));
+        }
+
+        .fc-card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text) !important;
+        }
+
+        .fc-card-subtitle {
+            font-size: 0.75rem;
+            color: var(--muted) !important;
+            margin: 0;
+        }
+
+        /* ------------------------------------------------------------
+           CHARTS
+           ------------------------------------------------------------ */
+
+        .fc-chart-body {
+            height: 17rem;
+            width: 100%;
+        }
+
+        .fc-empty-state {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--muted-dim);
+        }
+
+        .fc-empty-state span {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* ------------------------------------------------------------
+           RECHARTS TOOLTIP
+           ------------------------------------------------------------ */
+
+        .fc-tooltip {
+            background: #ffffff !important;
+            color: var(--text) !important;
+
+            border: 1px solid #dfe5e6 !important;
+            border-radius: 10px;
+
+            padding: 0.6rem 0.8rem;
+            font-size: 0.75rem;
+
+            box-shadow:
+                0 8px 30px rgba(20, 30, 32, 0.12);
+        }
+
+        .fc-tooltip .fc-tooltip-label {
+            color: var(--text) !important;
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+        /* ------------------------------------------------------------
+           RANKING
+           ------------------------------------------------------------ */
 
         .fc-rank-badge {
-            width: 1.9rem; height: 1.9rem; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.72rem;
-            border: 1px solid rgba(92,114,116,0.2);
-            background: rgba(92,114,116,0.08);
+            width: 1.9rem;
+            height: 1.9rem;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+
+            border: 1px solid #dfe5e6;
+            background: #f7f9f9;
             color: var(--muted);
         }
-        .fc-rank-1 { background: rgba(185,134,42,0.12); color: var(--gold); border-color: rgba(185,134,42,0.3); }
-        .fc-rank-2 { background: rgba(92,114,116,0.12); color: #64797b; border-color: rgba(92,114,116,0.3); }
-        .fc-rank-3 { background: rgba(201,104,63,0.12); color: var(--clay); border-color: rgba(201,104,63,0.3); }
+
+        .fc-rank-1 {
+            background: #fff8e8;
+            color: var(--gold);
+            border-color: #ead9ad;
+        }
+
+        .fc-rank-2 {
+            background: #f3f6f7;
+            color: #64797b;
+            border-color: #d7e0e1;
+        }
+
+        .fc-rank-3 {
+            background: #fff3ee;
+            color: var(--clay);
+            border-color: #eccfc1;
+        }
+
+        /* ------------------------------------------------------------
+           AVATARS
+           ------------------------------------------------------------ */
 
         .fc-avatar {
-            width: 2.4rem; height: 2.4rem; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.72rem;
-            background: rgba(14,22,24,0.03); border: 1px solid rgba(14,22,24,0.08);
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+
+            background: #f4f7f7;
+            border: 1px solid #e0e6e7;
             color: var(--text);
         }
 
-        .fc-progress-track { height: 5px; border-radius: 999px; background: rgba(14,22,24,0.07); overflow: hidden; }
-        .fc-progress-fill { height: 100%; border-radius: 999px; background: var(--green); }
+        /* ------------------------------------------------------------
+           PROGRESS
+           ------------------------------------------------------------ */
 
-        .fc-table-row { border-color: rgba(14,22,24,0.06) !important; }
-        .fc-table-row td { vertical-align: middle; padding: 0.85rem 0.5rem; }
+        .fc-progress-track {
+            height: 5px;
+            border-radius: 999px;
+            background: #e9eeee;
+            overflow: hidden;
+        }
 
-        .fc-dash .table > :not(caption) > * > * { background: transparent; color: var(--text); box-shadow: none; }
+        .fc-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: var(--green);
+        }
+
+        /* ------------------------------------------------------------
+           TABLE
+           ------------------------------------------------------------ */
+
+        .fc-table-row {
+            border-color: #edf0f1 !important;
+            background: #ffffff !important;
+        }
+
+        .fc-table-row:hover {
+            background: #fafcfc !important;
+        }
+
+        .fc-table-row td {
+            vertical-align: middle;
+            padding: 0.85rem 0.5rem;
+            background: transparent !important;
+            color: var(--text) !important;
+        }
+
+        .fc-dash .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--text);
+            color: var(--text) !important;
+            background: transparent !important;
+        }
+
+        .fc-dash .table > :not(caption) > * > * {
+            background: transparent !important;
+            color: var(--text) !important;
+            box-shadow: none;
+        }
+
+        /* ------------------------------------------------------------
+           BOOTSTRAP LIGHT OVERRIDES
+           ------------------------------------------------------------ */
+
+        .fc-dash .bg-dark {
+            background-color: #ffffff !important;
+        }
+
+        .fc-dash .text-white {
+            color: var(--text) !important;
+        }
+
+        .fc-dash .text-light {
+            color: var(--text-secondary) !important;
+        }
+
+        .fc-dash .border-dark {
+            border-color: var(--panel-border) !important;
+        }
+
+        /* ------------------------------------------------------------
+           MOBILE
+           ------------------------------------------------------------ */
 
         @media (max-width: 575.98px) {
-            .fc-stat-value { font-size: 1.5rem; }
+            .fc-stat-value {
+                font-size: 1.5rem;
+            }
+
+            .fc-card {
+                border-radius: 12px;
+            }
+        }
+
+        /* ------------------------------------------------------------
+           HARD LIGHT-MODE OVERRIDE
+           Even if the user's browser/OS is in dark mode.
+           ------------------------------------------------------------ */
+
+        @media (prefers-color-scheme: dark) {
+            .fc-dash {
+                background: #ffffff !important;
+                color: #17201f !important;
+            }
+
+            .fc-dash .fc-card,
+            .fc-dash .fc-stat-card,
+            .fc-dash .fc-tooltip {
+                background: #ffffff !important;
+                color: #17201f !important;
+            }
+
+            .fc-dash .fc-card-title,
+            .fc-dash .fc-stat-value,
+            .fc-dash .fc-tooltip-label,
+            .fc-dash .table td {
+                color: #17201f !important;
+            }
+
+            .fc-dash .fc-card-subtitle,
+            .fc-dash .fc-stat-label,
+            .fc-dash .fc-empty-state {
+                color: #667678 !important;
+            }
+
+            .fc-dash .fc-avatar {
+                background: #f4f7f7 !important;
+                color: #17201f !important;
+            }
+
+            .fc-dash .fc-rank-badge {
+                background: #f7f9f9 !important;
+                color: #667678 !important;
+            }
         }
     `}</style>
 );

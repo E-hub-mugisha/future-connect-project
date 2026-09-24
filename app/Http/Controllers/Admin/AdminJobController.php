@@ -84,6 +84,12 @@ class AdminJobController extends Controller
     public function show($id)
     {
         $job = JobSection::findOrFail($id);
+        $job->load([
+            'company',
+            'applications' => function ($query) {
+                $query->latest();
+            },
+        ]);
         return Inertia::render('AdminPage/Jobs/Show', compact('job'));
     }
 
@@ -114,7 +120,12 @@ class AdminJobController extends Controller
     public function jobCategories()
     {
         //
-        $categories = JobCategory::orderBy('name')->get();
+        $categories = JobCategory::with([
+            'parent:id,name'
+        ])
+            ->withCount('jobSections')
+            ->orderBy('name')
+            ->get();
         return Inertia::render('AdminPage/Jobs/Categories', compact('categories'));
     }
 
@@ -131,7 +142,7 @@ class AdminJobController extends Controller
         ]);
 
         return redirect()->back()
-                ->with('success', 'Category created successfully!');
+            ->with('success', 'Category created successfully!');
     }
 
     public function updateJobCategory(Request $request, $id)

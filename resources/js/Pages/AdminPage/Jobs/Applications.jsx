@@ -1,282 +1,1005 @@
-import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
+import React from "react";
+import { Head, Link, router } from "@inertiajs/react";
+import AppLayout from "@/Layouts/AppLayout";
 
 function initials(name) {
-    if (!name) return '—';
+    if (!name) return "—";
+
     return name
-        .split(' ')
+        .split(" ")
         .filter(Boolean)
         .slice(0, 2)
         .map((w) => w[0]?.toUpperCase())
-        .join('');
+        .join("");
 }
 
 function StatusBadge({ status }) {
-    const s = (status ?? 'pending').toLowerCase();
+    const s = (status ?? "pending").toLowerCase();
+
     const map = {
-        pending: { cls: 'badge-warn', label: 'Pending' },
-        accepted: { cls: 'badge-success', label: 'Accepted' },
-        rejected: { cls: 'badge-danger', label: 'Rejected' },
+        pending: {
+            cls: "status-pending",
+            label: "Pending",
+        },
+        accepted: {
+            cls: "status-accepted",
+            label: "Accepted",
+        },
+        rejected: {
+            cls: "status-rejected",
+            label: "Rejected",
+        },
     };
-    const meta = map[s] ?? { cls: 'badge-muted', label: status ?? 'Pending' };
-    return <span className={`badge ${meta.cls}`}>{meta.label}</span>;
+
+    const meta = map[s] ?? {
+        cls: "status-default",
+        label: status ?? "Pending",
+    };
+
+    return (
+        <span className={`status-badge ${meta.cls}`}>
+            <span className="status-dot"></span>
+            {meta.label}
+        </span>
+    );
 }
 
 export default function Applications({ job, applications }) {
+    const rows = applications ?? [];
+
     function handleStatusChange(application, status) {
-        router.patch(route('admin.jobs.updateApplicationStatus', application.id), { status });
+        router.patch(
+            route(
+                "admin.jobs.updateApplicationStatus",
+                application.id
+            ),
+            { status },
+            {
+                preserveScroll: true,
+            }
+        );
     }
 
-    const rows = applications ?? [];
+    const pendingCount = rows.filter(
+        (item) => (item.status ?? "pending").toLowerCase() === "pending"
+    ).length;
+
+    const acceptedCount = rows.filter(
+        (item) => (item.status ?? "").toLowerCase() === "accepted"
+    ).length;
+
+    const rejectedCount = rows.filter(
+        (item) => (item.status ?? "").toLowerCase() === "rejected"
+    ).length;
 
     return (
         <AppLayout>
-            <Head title={`Applications for: ${job.title}`} />
-
-            <link
-                href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-                rel="stylesheet"
-            />
+            <Head title={`Applications · ${job.title}`} />
 
             <style>{`
                 :root {
-                    --bg-deep:    #f6faf8;
-                    --bg-card:    #F5f5f7;
-                    --bg-glass:   rgba(0,100,60,0.035);
-                    --bg-glass2:  rgba(0,166,103,0.08);
-                    --accent:     #00a667;
-                    --accent-dim: #00854f;
-                    --accent-glow:rgba(0,166,103,0.2);
-                    --text-primary:   #10201b;
-                    --text-secondary: #4c6b62;
-                    --text-muted:     #7f958d;
-                    --border:     rgba(0,100,60,0.1);
-                    --border-accent: rgba(0,166,103,0.3);
-                    --radius-lg:  16px;
-                    --radius-pill:50px;
-                    --font-head:  'Syne', sans-serif;
-                    --font-body:  'DM Sans', sans-serif;
-                    --warn:       #b3820f;
-                    --danger:     #c94a3f;
+                    --apps-bg: #f5f5f7;
+                    --apps-card: #ffffff;
+                    --apps-text: #1d1d1f;
+                    --apps-secondary: #6e6e73;
+                    --apps-muted: #86868b;
+                    --apps-border: #e5e5e7;
+                    --apps-border-soft: #ededee;
+
+                    --apps-green: #167c52;
+                    --apps-green-light: #edf8f2;
+
+                    --apps-blue: #2878c8;
+                    --apps-blue-light: #eef6ff;
+
+                    --apps-orange: #a86d00;
+                    --apps-orange-light: #fff7e6;
+
+                    --apps-red: #c43d3d;
+                    --apps-red-light: #fff0f0;
+
+                    --apps-radius: 14px;
+
+                    --apps-font:
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "SF Pro Display",
+                        "SF Pro Text",
+                        "Inter",
+                        "Helvetica Neue",
+                        Arial,
+                        sans-serif;
                 }
 
-                .fc-apps-page, .fc-apps-page * { box-sizing: border-box; }
-                .fc-apps-page {
-                    background: var(--bg-deep);
-                    color: var(--text-primary);
-                    font-family: var(--font-body);
-                    padding: 32px;
-                    min-height: 100%;
+                .fc-apps-page,
+                .fc-apps-page * {
+                    box-sizing: border-box;
                 }
-                @media(max-width: 768px) { .fc-apps-page { padding: 20px 16px; } }
+
+                .fc-apps-page {
+                    min-height: 100%;
+                    padding: 28px 30px 50px;
+                    background: var(--apps-bg);
+                    color: var(--apps-text);
+                    font-family: var(--apps-font);
+                    font-size: 13px;
+                    -webkit-font-smoothing: antialiased;
+                }
+
+                .apps-container {
+                    max-width: 1320px;
+                    margin: 0 auto;
+                }
+
+                /* HEADER */
 
                 .apps-header {
-                    display: flex; align-items: flex-start; justify-content: space-between;
-                    gap: 20px; flex-wrap: wrap;
-                    margin-bottom: 24px;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 20px;
+                    margin-bottom: 22px;
                 }
-                .apps-header h2 {
-                    font-family: var(--font-head);
-                    font-size: 1.4rem;
-                    font-weight: 800;
-                    margin: 0 0 4px;
-                }
-                .apps-header p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
 
-                .btn-pill {
-                    display: inline-flex; align-items: center; gap: 8px;
-                    border-radius: var(--radius-pill);
-                    padding: 11px 22px;
-                    font-family: var(--font-head);
-                    font-size: 0.85rem;
-                    font-weight: 700;
-                    cursor: pointer;
-                    text-decoration: none;
-                    transition: border-color 0.2s, color 0.2s, background 0.2s;
-                    white-space: nowrap;
-                    border: 1px solid var(--border);
-                    background: transparent;
-                    color: var(--text-secondary);
+                .apps-heading {
+                    min-width: 0;
                 }
-                .btn-pill:hover { border-color: var(--border-accent); color: var(--accent); background: var(--bg-glass2); }
+
+                .apps-eyebrow {
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+                    margin-bottom: 7px;
+                    color: var(--apps-green);
+                    font-size: 10px;
+                    font-weight: 600;
+                    letter-spacing: .06em;
+                    text-transform: uppercase;
+                }
+
+                .apps-eyebrow-dot {
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: var(--apps-green);
+                }
+
+                .apps-heading h1 {
+                    margin: 0;
+                    color: var(--apps-text);
+                    font-size: 21px;
+                    line-height: 1.25;
+                    font-weight: 600;
+                    letter-spacing: -.025em;
+                }
+
+                .apps-heading p {
+                    margin: 5px 0 0;
+                    color: var(--apps-secondary);
+                    font-size: 12px;
+                    line-height: 1.5;
+                }
+
+                .back-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 7px;
+                    min-height: 36px;
+                    padding: 0 14px;
+
+                    border: 1px solid #d9d9dc;
+                    border-radius: 9px;
+
+                    background: #fff;
+                    color: #424245;
+
+                    font-family: inherit;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-decoration: none;
+                    white-space: nowrap;
+
+                    transition:
+                        background .18s ease,
+                        border-color .18s ease,
+                        color .18s ease;
+                }
+
+                .back-btn:hover {
+                    background: #f8f8f8;
+                    border-color: #c7c7ca;
+                    color: var(--apps-text);
+                }
+
+                /* SUMMARY */
+
+                .apps-summary {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 12px;
+                    margin-bottom: 18px;
+                }
+
+                .summary-card {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+
+                    padding: 15px 16px;
+
+                    background: var(--apps-card);
+                    border: 1px solid var(--apps-border);
+                    border-radius: 12px;
+
+                    box-shadow:
+                        0 1px 2px rgba(0, 0, 0, .015);
+                }
+
+                .summary-icon {
+                    width: 36px;
+                    height: 36px;
+                    flex: 0 0 36px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 9px;
+
+                    font-size: 13px;
+                }
+
+                .summary-icon.total {
+                    background: #f1f1f3;
+                    color: #555;
+                }
+
+                .summary-icon.pending {
+                    background: var(--apps-orange-light);
+                    color: var(--apps-orange);
+                }
+
+                .summary-icon.accepted {
+                    background: var(--apps-green-light);
+                    color: var(--apps-green);
+                }
+
+                .summary-content {
+                    min-width: 0;
+                }
+
+                .summary-value {
+                    margin: 0;
+                    color: var(--apps-text);
+                    font-size: 17px;
+                    line-height: 1.2;
+                    font-weight: 600;
+                    letter-spacing: -.02em;
+                }
+
+                .summary-label {
+                    margin: 3px 0 0;
+                    color: var(--apps-muted);
+                    font-size: 10.5px;
+                    font-weight: 500;
+                }
+
+                /* TABLE CARD */
 
                 .table-card {
-                    background: var(--bg-card);
-                    border: 1px solid var(--border);
-                    border-radius: var(--radius-lg);
                     overflow: hidden;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+
+                    background: var(--apps-card);
+                    border: 1px solid var(--apps-border);
+                    border-radius: var(--apps-radius);
+
+                    box-shadow:
+                        0 1px 2px rgba(0, 0, 0, .02),
+                        0 5px 20px rgba(0, 0, 0, .025);
                 }
 
-                .fc-apps-page table.apps-table {
+                .table-toolbar {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 15px;
+
+                    padding: 16px 20px;
+
+                    border-bottom: 1px solid var(--apps-border-soft);
+                }
+
+                .table-title {
+                    margin: 0;
+                    color: var(--apps-text);
+                    font-size: 13px;
+                    font-weight: 600;
+                }
+
+                .table-count {
+                    margin-left: 7px;
+                    color: var(--apps-muted);
+                    font-size: 11px;
+                    font-weight: 500;
+                }
+
+                .table-caption {
+                    margin: 3px 0 0;
+                    color: var(--apps-muted);
+                    font-size: 10.5px;
+                }
+
+                .apps-table-wrap {
                     width: 100%;
+                    overflow-x: auto;
+                }
+
+                .apps-table {
+                    width: 100%;
+                    min-width: 850px;
                     border-collapse: collapse;
                 }
-                .fc-apps-page table.apps-table thead th {
+
+                .apps-table thead th {
+                    height: 43px;
+
+                    padding: 0 20px;
+
                     text-align: left;
-                    font-size: 0.72rem;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                    color: var(--text-muted);
+
+                    background: #fafafa;
+                    border-bottom: 1px solid var(--apps-border-soft);
+
+                    color: var(--apps-muted);
+
+                    font-size: 9.5px;
                     font-weight: 600;
-                    padding: 14px 22px;
-                    border-bottom: 1px solid var(--border);
+
+                    letter-spacing: .055em;
+                    text-transform: uppercase;
+
                     white-space: nowrap;
-                    background: transparent;
                 }
-                .fc-apps-page table.apps-table tbody tr td {
-                    background-color: var(--bg-card) !important;
-                    padding: 16px 22px;
-                    border-bottom: 1px solid var(--border);
-                    font-size: 0.85rem;
-                    color: var(--text-secondary);
+
+                .apps-table tbody td {
+                    height: 69px;
+
+                    padding: 10px 20px;
+
+                    border-bottom: 1px solid #f0f0f2;
+
+                    color: var(--apps-secondary);
+                    font-size: 11.5px;
+
                     vertical-align: middle;
                 }
-                .fc-apps-page table.apps-table tbody tr:last-child td { border-bottom: none; }
-                .fc-apps-page table.apps-table tbody tr:hover td { background-color: var(--bg-glass) !important; }
 
-                .cell-applicant { display: flex; align-items: center; gap: 12px; }
-                .applicant-avatar {
-                    width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
-                    background: var(--bg-glass2);
-                    border: 1px solid var(--border-accent);
-                    color: var(--accent);
-                    display: flex; align-items: center; justify-content: center;
-                    font-family: var(--font-head);
-                    font-weight: 700;
-                    font-size: 0.78rem;
+                .apps-table tbody tr:last-child td {
+                    border-bottom: 0;
                 }
-                .cell-applicant h6 { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin: 0; }
 
-                .badge {
-                    display: inline-flex; align-items: center; gap: 5px;
-                    border-radius: var(--radius-pill);
-                    padding: 4px 12px;
-                    font-size: 0.72rem;
+                .apps-table tbody tr {
+                    transition: background .15s ease;
+                }
+
+                .apps-table tbody tr:hover {
+                    background: #fafafa;
+                }
+
+                .row-number {
+                    color: #99999e;
+                    font-size: 10.5px;
+                    font-weight: 500;
+                }
+
+                /* APPLICANT */
+
+                .applicant {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    min-width: 190px;
+                }
+
+                .applicant-avatar {
+                    width: 36px;
+                    height: 36px;
+                    flex: 0 0 36px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 10px;
+
+                    background: var(--apps-green-light);
+                    border: 1px solid #d7eee2;
+
+                    color: var(--apps-green);
+
+                    font-size: 10.5px;
                     font-weight: 700;
+                }
+
+                .applicant-info {
+                    min-width: 0;
+                }
+
+                .applicant-name {
+                    margin: 0;
+
+                    color: var(--apps-text);
+
+                    font-size: 11.5px;
+                    line-height: 1.35;
+                    font-weight: 600;
+
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     white-space: nowrap;
                 }
-                .badge-success { background: rgba(0,166,103,0.12); color: var(--accent); }
-                .badge-danger { background: rgba(201,74,63,0.12); color: var(--danger); }
-                .badge-warn { background: rgba(179,130,15,0.12); color: var(--warn); }
-                .badge-muted { background: rgba(127,149,141,0.14); color: var(--text-muted); }
 
-                .btn-cv {
-                    display: inline-flex; align-items: center; gap: 6px;
-                    border: 1px solid var(--border);
-                    background: transparent;
-                    color: var(--text-secondary);
-                    border-radius: var(--radius-pill);
-                    padding: 6px 14px;
-                    font-size: 0.78rem;
-                    font-weight: 600;
-                    text-decoration: none;
-                    transition: border-color 0.2s, color 0.2s, background 0.2s;
+                .applicant-label {
+                    margin: 3px 0 0;
+
+                    color: var(--apps-muted);
+
+                    font-size: 9.5px;
                 }
-                .btn-cv:hover { border-color: var(--border-accent); color: var(--accent); background: var(--bg-glass2); }
-                .cv-none { color: var(--text-muted); font-size: 0.82rem; }
+
+                /* EMAIL */
+
+                .email-cell {
+                    max-width: 230px;
+                    overflow: hidden;
+
+                    color: var(--apps-secondary);
+                    font-size: 11px;
+
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                /* STATUS */
+
+                .status-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+
+                    min-height: 23px;
+                    padding: 0 8px;
+
+                    border-radius: 7px;
+
+                    font-size: 9.5px;
+                    font-weight: 600;
+
+                    white-space: nowrap;
+                }
+
+                .status-dot {
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                }
+
+                .status-pending {
+                    background: var(--apps-orange-light);
+                    color: var(--apps-orange);
+                }
+
+                .status-pending .status-dot {
+                    background: var(--apps-orange);
+                }
+
+                .status-accepted {
+                    background: var(--apps-green-light);
+                    color: var(--apps-green);
+                }
+
+                .status-accepted .status-dot {
+                    background: var(--apps-green);
+                }
+
+                .status-rejected {
+                    background: var(--apps-red-light);
+                    color: var(--apps-red);
+                }
+
+                .status-rejected .status-dot {
+                    background: var(--apps-red);
+                }
+
+                .status-default {
+                    background: #f1f1f3;
+                    color: var(--apps-muted);
+                }
+
+                .status-default .status-dot {
+                    background: var(--apps-muted);
+                }
+
+                /* RESUME */
+
+                .resume-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+
+                    min-height: 29px;
+                    padding: 0 10px;
+
+                    border: 1px solid var(--apps-border);
+                    border-radius: 7px;
+
+                    background: #fff;
+                    color: #4b4b4f;
+
+                    font-family: inherit;
+                    font-size: 10px;
+                    font-weight: 500;
+
+                    text-decoration: none;
+
+                    transition:
+                        background .15s ease,
+                        border-color .15s ease,
+                        color .15s ease;
+                }
+
+                .resume-btn:hover {
+                    background: var(--apps-green-light);
+                    border-color: #cde6d8;
+                    color: var(--apps-green);
+                }
+
+                .no-resume {
+                    color: var(--apps-muted);
+                    font-size: 10.5px;
+                }
+
+                /* STATUS SELECT */
 
                 .status-select {
-                    background: rgba(0,0,0,0.02);
-                    border: 1px solid var(--border);
-                    border-radius: var(--radius-pill);
-                    color: var(--text-primary);
-                    padding: 7px 14px;
-                    font-family: var(--font-body);
-                    font-size: 0.82rem;
+                    min-width: 115px;
+                    height: 31px;
+
+                    padding: 0 28px 0 10px;
+
+                    border: 1px solid var(--apps-border);
+                    border-radius: 7px;
+
+                    background-color: #fff;
+                    color: var(--apps-text);
+
+                    font-family: inherit;
+                    font-size: 10.5px;
+                    font-weight: 500;
+
                     outline: none;
                     cursor: pointer;
-                    transition: border-color 0.2s;
+
+                    transition:
+                        border-color .15s ease,
+                        box-shadow .15s ease;
                 }
-                .status-select:focus { border-color: var(--border-accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
-                .empty-state { text-align: center; padding: 64px 24px; color: var(--text-muted); font-size: 0.9rem; }
-                .empty-state i { font-size: 2.2rem; margin-bottom: 12px; display: block; color: var(--text-muted); }
+                .status-select:hover {
+                    border-color: #cfcfd2;
+                }
 
-                @media(max-width: 768px) {
-                    .apps-table-wrap { overflow-x: auto; }
-                    .fc-apps-page table.apps-table { white-space: nowrap; }
+                .status-select:focus {
+                    border-color: var(--apps-green);
+                    box-shadow: 0 0 0 3px rgba(22,124,82,.08);
+                }
+
+                /* EMPTY */
+
+                .empty-state {
+                    padding: 70px 25px;
+                    text-align: center;
+                }
+
+                .empty-icon {
+                    width: 46px;
+                    height: 46px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    margin: 0 auto 12px;
+
+                    border-radius: 12px;
+
+                    background: #f3f3f5;
+                    color: #8a8a8f;
+
+                    font-size: 17px;
+                }
+
+                .empty-title {
+                    margin: 0;
+
+                    color: var(--apps-text);
+
+                    font-size: 12px;
+                    font-weight: 600;
+                }
+
+                .empty-text {
+                    max-width: 330px;
+                    margin: 5px auto 0;
+
+                    color: var(--apps-muted);
+
+                    font-size: 10.5px;
+                    line-height: 1.5;
+                }
+
+                /* FOOTER */
+
+                .table-footer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    padding: 12px 20px;
+
+                    background: #fafafa;
+                    border-top: 1px solid var(--apps-border-soft);
+
+                    color: var(--apps-muted);
+                    font-size: 10px;
+                }
+
+                .footer-stat {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                }
+
+                .footer-dot {
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    background: var(--apps-green);
+                }
+
+                @media (max-width: 800px) {
+                    .fc-apps-page {
+                        padding: 20px 15px 40px;
+                    }
+
+                    .apps-header {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+
+                    .back-btn {
+                        width: 100%;
+                    }
+
+                    .apps-summary {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .summary-card {
+                        padding: 13px 14px;
+                    }
                 }
             `}</style>
 
             <div className="fc-apps-page">
-                <div className="apps-header">
-                    <div>
-                        <h2>Applications for: {job.title}</h2>
-                        <p>Review applicants and update their status for this listing.</p>
-                    </div>
-                    <Link href={route('admin.jobs.show', job.id)} className="btn-pill">
-                        <i className="bi bi-arrow-left"></i> Back to Job
-                    </Link>
-                </div>
+                <div className="apps-container">
 
-                <div className="table-card">
-                    <div className="apps-table-wrap">
-                        <table className="apps-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Applicant</th>
-                                    <th>Email</th>
-                                    <th>CV</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rows.length > 0 ? rows.map((application, index) => (
-                                    <tr key={application.id}>
-                                        <td>{index + 1}</td>
-                                        <td>
-                                            <div className="cell-applicant">
-                                                <div className="applicant-avatar">{initials(application.name)}</div>
-                                                <h6>{application.name ?? 'N/A'}</h6>
-                                            </div>
-                                        </td>
-                                        <td>{application.email ?? '—'}</td>
-                                        <td>
-                                            {application.resume ? (
-                                                <a
-                                                    href={`/storage/${application.resume}`}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="btn-cv"
-                                                >
-                                                    <i className="bi bi-download"></i> Download
-                                                </a>
-                                            ) : (
-                                                <span className="cv-none">N/A</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <StatusBadge status={application.status} />
-                                        </td>
-                                        <td>
-                                            <select
-                                                value={application.status}
-                                                onChange={(e) => handleStatusChange(application, e.target.value)}
-                                                className="status-select"
-                                            >
-                                                <option value="pending">Pending</option>
-                                                <option value="accepted">Accepted</option>
-                                                <option value="rejected">Rejected</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                )) : (
-                                    <tr>
-                                        <td colSpan="6">
-                                            <div className="empty-state">
-                                                <i className="bi bi-inbox"></i>
-                                                No applications submitted for this job yet.
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+                    {/* HEADER */}
+                    <div className="apps-header">
+                        <div className="apps-heading">
+
+                            <div className="apps-eyebrow">
+                                <span className="apps-eyebrow-dot"></span>
+                                Recruitment
+                            </div>
+
+                            <h1>
+                                Job Applications
+                            </h1>
+
+                            <p>
+                                Review applicants and manage their
+                                application status for{" "}
+                                <strong>{job.title}</strong>.
+                            </p>
+
+                        </div>
+
+                        <Link
+                            href={route(
+                                "admin.jobs.show",
+                                job.id
+                            )}
+                            className="back-btn"
+                        >
+                            <i className="bi bi-arrow-left"></i>
+                            Back to Job
+                        </Link>
                     </div>
+
+                    {/* SUMMARY */}
+                    <div className="apps-summary">
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon total">
+                                <i className="bi bi-people"></i>
+                            </div>
+
+                            <div className="summary-content">
+                                <p className="summary-value">
+                                    {rows.length}
+                                </p>
+
+                                <p className="summary-label">
+                                    Total Applications
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon pending">
+                                <i className="bi bi-clock"></i>
+                            </div>
+
+                            <div className="summary-content">
+                                <p className="summary-value">
+                                    {pendingCount}
+                                </p>
+
+                                <p className="summary-label">
+                                    Pending Review
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div className="summary-card">
+
+                            <div className="summary-icon accepted">
+                                <i className="bi bi-check2"></i>
+                            </div>
+
+                            <div className="summary-content">
+                                <p className="summary-value">
+                                    {acceptedCount}
+                                </p>
+
+                                <p className="summary-label">
+                                    Accepted
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {/* APPLICATIONS TABLE */}
+                    <div className="table-card">
+
+                        <div className="table-toolbar">
+
+                            <div>
+                                <h2 className="table-title">
+                                    Applicants
+                                    <span className="table-count">
+                                        {rows.length}{" "}
+                                        {rows.length === 1
+                                            ? "application"
+                                            : "applications"}
+                                    </span>
+                                </h2>
+
+                                <p className="table-caption">
+                                    Manage submitted applications
+                                    and candidate status.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div className="apps-table-wrap">
+
+                            <table className="apps-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Applicant</th>
+                                        <th>Email</th>
+                                        <th>Resume</th>
+                                        <th>Status</th>
+                                        <th>Update Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {rows.length > 0 ? (
+                                        rows.map(
+                                            (
+                                                application,
+                                                index
+                                            ) => (
+                                                <tr
+                                                    key={
+                                                        application.id
+                                                    }
+                                                >
+
+                                                    <td>
+                                                        <span className="row-number">
+                                                            {String(
+                                                                index +
+                                                                    1
+                                                            ).padStart(
+                                                                2,
+                                                                "0"
+                                                            )}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <div className="applicant">
+
+                                                            <div className="applicant-avatar">
+                                                                {initials(
+                                                                    application.name
+                                                                )}
+                                                            </div>
+
+                                                            <div className="applicant-info">
+
+                                                                <p className="applicant-name">
+                                                                    {application.name ||
+                                                                        "Unnamed Applicant"}
+                                                                </p>
+
+                                                                <p className="applicant-label">
+                                                                    Job Applicant
+                                                                </p>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div className="email-cell">
+                                                            {application.email ||
+                                                                "—"}
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        {application.resume ? (
+                                                            <a
+                                                                href={`/storage/${application.resume}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="resume-btn"
+                                                            >
+                                                                <i className="bi bi-file-earmark-pdf"></i>
+                                                                View Resume
+                                                            </a>
+                                                        ) : (
+                                                            <span className="no-resume">
+                                                                No resume
+                                                            </span>
+                                                        )}
+                                                    </td>
+
+                                                    <td>
+                                                        <StatusBadge
+                                                            status={
+                                                                application.status
+                                                            }
+                                                        />
+                                                    </td>
+
+                                                    <td>
+                                                        <select
+                                                            value={
+                                                                application.status ??
+                                                                "pending"
+                                                            }
+                                                            onChange={(
+                                                                e
+                                                            ) =>
+                                                                handleStatusChange(
+                                                                    application,
+                                                                    e
+                                                                        .target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            className="status-select"
+                                                        >
+                                                            <option value="pending">
+                                                                Pending
+                                                            </option>
+
+                                                            <option value="accepted">
+                                                                Accepted
+                                                            </option>
+
+                                                            <option value="rejected">
+                                                                Rejected
+                                                            </option>
+                                                        </select>
+                                                    </td>
+
+                                                </tr>
+                                            )
+                                        )
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="6">
+
+                                                <div className="empty-state">
+
+                                                    <div className="empty-icon">
+                                                        <i className="bi bi-inbox"></i>
+                                                    </div>
+
+                                                    <p className="empty-title">
+                                                        No applications yet
+                                                    </p>
+
+                                                    <p className="empty-text">
+                                                        Applications submitted
+                                                        for this job will
+                                                        appear here.
+                                                    </p>
+
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    )}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        {/* FOOTER */}
+                        {rows.length > 0 && (
+                            <div className="table-footer">
+
+                                <div className="footer-stat">
+                                    <span className="footer-dot"></span>
+
+                                    {rows.length}{" "}
+                                    {rows.length === 1
+                                        ? "application"
+                                        : "applications"}{" "}
+                                    received
+                                </div>
+
+                                <span>
+                                    {rejectedCount} rejected
+                                </span>
+
+                            </div>
+                        )}
+
+                    </div>
+
                 </div>
             </div>
         </AppLayout>

@@ -19,8 +19,12 @@ class JobSection extends Model
 
     public function applications()
     {
-        return $this->hasMany(JobSectionApplication::class);
+        return $this->hasMany(
+            JobSectionApplication::class,
+            'job_section_id'
+        );
     }
+
 
     public function getSkillsListAttribute()
     {
