@@ -1,10 +1,451 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Head, useForm, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
-export default function Testimonials({ testimonials, talents }) {
+/* -------------------------------------------------------------------------- */
+/* ICONS                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function Icon({ name, size = 17, strokeWidth = 1.8 }) {
+    const common = {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': true,
+    };
+
+    const icons = {
+        plus: (
+            <>
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+            </>
+        ),
+
+        edit: (
+            <>
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            </>
+        ),
+
+        trash: (
+            <>
+                <path d="M3 6h18" />
+                <path d="M8 6V4h8v2" />
+                <path d="M19 6l-1 14H6L5 6" />
+                <path d="M10 11v5" />
+                <path d="M14 11v5" />
+            </>
+        ),
+
+        close: (
+            <>
+                <path d="M6 6l12 12" />
+                <path d="M18 6 6 18" />
+            </>
+        ),
+
+        quote: (
+            <>
+                <path d="M9 10H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2Z" />
+                <path d="M5 10c0-4 1.5-6 4-7" />
+                <path d="M19 10h-4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2Z" />
+                <path d="M15 10c0-4 1.5-6 4-7" />
+            </>
+        ),
+
+        user: (
+            <>
+                <circle cx="12" cy="8" r="3.5" />
+                <path d="M5 20a7 7 0 0 1 14 0" />
+            </>
+        ),
+
+        star: (
+            <path d="m12 3 2.78 5.63 6.22.9-4.5 4.38 1.06 6.2L12 17.18l-5.56 2.93 1.06-6.2L3 9.53l6.22-.9L12 3Z" />
+        ),
+
+        calendar: (
+            <>
+                <rect x="3" y="5" width="18" height="16" rx="2" />
+                <path d="M16 3v4M8 3v4M3 10h18" />
+            </>
+        ),
+
+        search: (
+            <>
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m16 16 5 5" />
+            </>
+        ),
+
+        users: (
+            <>
+                <circle cx="9" cy="8" r="3" />
+                <path d="M3 20a6 6 0 0 1 12 0" />
+                <path d="M16 5.5a3 3 0 0 1 0 5.8" />
+                <path d="M18 14a5 5 0 0 1 3 4.5" />
+            </>
+        ),
+
+        chevronDown: (
+            <path d="m6 9 6 6 6-6" />
+        ),
+
+        check: (
+            <path d="m5 12 4 4L19 6" />
+        ),
+    };
+
+    return <svg {...common}>{icons[name]}</svg>;
+}
+
+/* -------------------------------------------------------------------------- */
+/* HELPERS                                                                    */
+/* -------------------------------------------------------------------------- */
+
+function formatDate(dateStr) {
+    if (!dateStr) return '—';
+
+    const date = new Date(dateStr);
+
+    if (Number.isNaN(date.getTime())) {
+        return '—';
+    }
+
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
+
+/* -------------------------------------------------------------------------- */
+/* STARS                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function Stars({ rating = 0, large = false }) {
+    const value = Number(rating) || 0;
+
+    return (
+        <div
+            className={`stars ${large ? 'stars-large' : ''}`}
+            aria-label={`${value} out of 5 stars`}
+        >
+            {[1, 2, 3, 4, 5].map((n) => (
+                <svg
+                    key={n}
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                    className={n <= value ? 'star-filled' : 'star-empty'}
+                >
+                    <path d="M10 1.8 12.5 7l5.7.8-4.1 4 .97 5.65L10 14.8l-5.07 2.65.97-5.65-4.1-4L7.5 7 10 1.8Z" />
+                </svg>
+            ))}
+        </div>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/* FIELD                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function Field({ label, error, required = false, children }) {
+    return (
+        <div className="form-field">
+            <label className="form-label">
+                {label}
+                {required && <span className="required-mark">*</span>}
+            </label>
+
+            {children}
+
+            {error && (
+                <div className="form-error">
+                    {error}
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/* RATING PICKER                                                              */
+/* -------------------------------------------------------------------------- */
+
+function RatingPicker({ value, onChange }) {
+    return (
+        <div className="rating-picker">
+            {[1, 2, 3, 4, 5].map((n) => {
+                const active = String(n) === String(value);
+
+                return (
+                    <button
+                        key={n}
+                        type="button"
+                        className={`rating-option ${active ? 'active' : ''}`}
+                        onClick={() => onChange(String(n))}
+                        aria-label={`Give ${n} star${n > 1 ? 's' : ''}`}
+                    >
+                        <Icon name="star" size={15} />
+                        <span>{n}</span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/* MODAL                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function TestimonialModal({
+    mode,
+    form,
+    talents,
+    onClose,
+    onSubmit,
+}) {
+    const isEdit = mode === 'edit';
+
+    useEffect(() => {
+        const previousOverflow = document.body.style.overflow;
+
+        document.body.style.overflow = 'hidden';
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape' && !form.processing) {
+                onClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose, form.processing]);
+
+    if (typeof document === 'undefined') {
+        return null;
+    }
+
+    return createPortal(
+        <div
+            className="testimonial-modal-backdrop"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="testimonial-modal-title"
+            onMouseDown={(event) => {
+                if (
+                    event.target === event.currentTarget &&
+                    !form.processing
+                ) {
+                    onClose();
+                }
+            }}
+        >
+            <div
+                className="testimonial-modal"
+                onMouseDown={(event) => event.stopPropagation()}
+            >
+                <form onSubmit={onSubmit}>
+                    {/* Modal header */}
+                    <div className="testimonial-modal-header">
+                        <div className="modal-heading">
+                            <div className="modal-icon">
+                                <Icon name="quote" size={19} />
+                            </div>
+
+                            <div>
+                                <h2 id="testimonial-modal-title">
+                                    {isEdit
+                                        ? 'Edit testimonial'
+                                        : 'Add testimonial'}
+                                </h2>
+
+                                <p>
+                                    {isEdit
+                                        ? 'Update the testimonial details below.'
+                                        : 'Add feedback from a talent or client.'}
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="modal-close"
+                            onClick={onClose}
+                            disabled={form.processing}
+                            aria-label="Close modal"
+                        >
+                            <Icon name="close" size={17} />
+                        </button>
+                    </div>
+
+                    {/* Modal body */}
+                    <div className="testimonial-modal-body">
+                        <Field
+                            label="Testimonial title"
+                            required
+                            error={form.errors.title}
+                        >
+                            <input
+                                type="text"
+                                className="form-input"
+                                placeholder="e.g. Exceptional creative work"
+                                value={form.data.title}
+                                onChange={(event) =>
+                                    form.setData(
+                                        'title',
+                                        event.target.value
+                                    )
+                                }
+                                autoFocus
+                                required
+                            />
+                        </Field>
+
+                        <Field
+                            label="Talent"
+                            required
+                            error={form.errors.talent_id}
+                        >
+                            <div className="select-wrapper">
+                                <select
+                                    className="form-input"
+                                    value={form.data.talent_id}
+                                    onChange={(event) =>
+                                        form.setData(
+                                            'talent_id',
+                                            event.target.value
+                                        )
+                                    }
+                                    required
+                                >
+                                    <option value="">
+                                        Select a talent
+                                    </option>
+
+                                    {talents.map((talent) => (
+                                        <option
+                                            key={talent.id}
+                                            value={talent.id}
+                                        >
+                                            {talent.name}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <span className="select-icon">
+                                    <Icon
+                                        name="chevronDown"
+                                        size={15}
+                                    />
+                                </span>
+                            </div>
+                        </Field>
+
+                        <Field
+                            label="Testimonial"
+                            required
+                            error={form.errors.content}
+                        >
+                            <textarea
+                                className="form-input form-textarea"
+                                rows={5}
+                                placeholder="Write the testimonial content..."
+                                value={form.data.content}
+                                onChange={(event) =>
+                                    form.setData(
+                                        'content',
+                                        event.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                            <div className="character-hint">
+                                {form.data.content?.length || 0} characters
+                            </div>
+                        </Field>
+
+                        <Field
+                            label="Rating"
+                            required
+                            error={form.errors.rating}
+                        >
+                            <RatingPicker
+                                value={form.data.rating}
+                                onChange={(value) =>
+                                    form.setData('rating', value)
+                                }
+                            />
+                        </Field>
+                    </div>
+
+                    {/* Modal footer */}
+                    <div className="testimonial-modal-footer">
+                        <button
+                            type="button"
+                            className="platform-btn platform-btn-secondary"
+                            onClick={onClose}
+                            disabled={form.processing}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="platform-btn platform-btn-primary"
+                            disabled={form.processing}
+                        >
+                            {form.processing ? (
+                                <>
+                                    <span className="button-spinner" />
+                                    Saving...
+                                </>
+                            ) : (
+                                <>
+                                    <Icon
+                                        name={isEdit ? 'check' : 'plus'}
+                                        size={15}
+                                    />
+
+                                    {isEdit
+                                        ? 'Save changes'
+                                        : 'Add testimonial'}
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>,
+        document.body
+    );
+}
+
+/* -------------------------------------------------------------------------- */
+/* MAIN PAGE                                                                  */
+/* -------------------------------------------------------------------------- */
+
+export default function Testimonials({
+    testimonials,
+    talents = [],
+}) {
     const [addOpen, setAddOpen] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [search, setSearch] = useState('');
 
     const addForm = useForm({
         title: '',
@@ -20,569 +461,1457 @@ export default function Testimonials({ testimonials, talents }) {
         rating: '5',
     });
 
-    const openEdit = (t) => {
-        editForm.setData({
-            title: t.title ?? '',
-            talent_id: t.talent_id ?? '',
-            content: t.content ?? '',
-            rating: t.rating ? String(t.rating) : '5',
-        });
-        setEditingId(t.id);
-    };
+    const testimonialList = Array.isArray(testimonials)
+        ? testimonials
+        : testimonials?.data ?? [];
 
-    const closeEdit = () => {
-        setEditingId(null);
-        editForm.clearErrors();
-        editForm.reset();
+    const filteredTestimonials = testimonialList.filter((testimonial) => {
+        const searchValue = search.trim().toLowerCase();
+
+        if (!searchValue) {
+            return true;
+        }
+
+        return [
+            testimonial.title,
+            testimonial.content,
+            testimonial.talent?.name,
+        ]
+            .filter(Boolean)
+            .some((value) =>
+                String(value)
+                    .toLowerCase()
+                    .includes(searchValue)
+            );
+    });
+
+    const averageRating =
+        testimonialList.length > 0
+            ? testimonialList.reduce(
+                  (total, item) =>
+                      total + Number(item.rating || 0),
+                  0
+              ) / testimonialList.length
+            : 0;
+
+    const openAdd = () => {
+        addForm.clearErrors();
+        addForm.reset();
+        addForm.setData('rating', '5');
+        setAddOpen(true);
     };
 
     const closeAdd = () => {
+        if (addForm.processing) return;
+
         setAddOpen(false);
         addForm.clearErrors();
         addForm.reset();
+        addForm.setData('rating', '5');
     };
 
-    const submitAdd = (e) => {
-        e.preventDefault();
-        addForm.post(route('admin.testimonials.store'), {
-            preserveScroll: true,
-            onSuccess: () => closeAdd(),
+    const openEdit = (testimonial) => {
+        editForm.clearErrors();
+
+        editForm.setData({
+            title: testimonial.title ?? '',
+            talent_id: testimonial.talent_id ?? '',
+            content: testimonial.content ?? '',
+            rating: testimonial.rating
+                ? String(testimonial.rating)
+                : '5',
         });
+
+        setEditingId(testimonial.id);
     };
 
-    const submitEdit = (e, id) => {
-        e.preventDefault();
-        editForm.put(route('admin.testimonials.update', id), {
-            preserveScroll: true,
-            onSuccess: () => closeEdit(),
-        });
+    const closeEdit = () => {
+        if (editForm.processing) return;
+
+        setEditingId(null);
+        editForm.clearErrors();
+        editForm.reset();
+        editForm.setData('rating', '5');
+    };
+
+    const submitAdd = (event) => {
+        event.preventDefault();
+
+        addForm.post(
+            route('admin.testimonials.store'),
+            {
+                preserveScroll: true,
+
+                onSuccess: () => {
+                    closeAdd();
+                },
+            }
+        );
+    };
+
+    const submitEdit = (event) => {
+        event.preventDefault();
+
+        editForm.put(
+            route(
+                'admin.testimonials.update',
+                editingId
+            ),
+            {
+                preserveScroll: true,
+
+                onSuccess: () => {
+                    closeEdit();
+                },
+            }
+        );
     };
 
     const destroy = (id) => {
-        if (!confirm('Delete this testimonial?')) return;
-        router.delete(route('admin.testimonials.destroy', id), { preserveScroll: true });
+        if (!window.confirm('Delete this testimonial?')) {
+            return;
+        }
+
+        router.delete(
+            route('admin.testimonials.destroy', id),
+            {
+                preserveScroll: true,
+            }
+        );
     };
-
-    const formatDate = (dateStr) =>
-        new Date(dateStr).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-
-    const Stars = ({ rating }) => (
-        <span className="star-row" aria-label={`${rating ?? 0} out of 5 stars`}>
-            {[1, 2, 3, 4, 5].map((n) => (
-                <svg
-                    key={n}
-                    width="14"
-                    height="14"
-                    viewBox="0 0 20 20"
-                    fill={n <= (rating ?? 0) ? '#f5a623' : '#e2e5ea'}
-                >
-                    <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L10 14.9l-5.2 2.62.99-5.8-4.21-4.1 5.82-.85L10 1.5z" />
-                </svg>
-            ))}
-        </span>
-    );
 
     return (
         <AppLayout>
             <Head title="Testimonials" />
 
-            <div className="testi-page">
-                <div className="testi-header">
-                    <div>
-                        <h1 className="testi-title">Testimonials</h1>
-                        <p className="testi-subtitle">Manage client feedback shown across the platform</p>
-                    </div>
-                    <button type="button" className="btn btn-primary" onClick={() => setAddOpen(true)}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M12 5v14M5 12h14" strokeLinecap="round" />
-                        </svg>
-                        Add Testimonial
-                    </button>
-                </div>
+            <div className="talent-testimonials-page">
 
-                <div className="testi-card">
-                    {testimonials.data && testimonials.data.length === 0 ? (
-                        <div className="testi-empty">
-                            <p>No testimonials yet.</p>
-                            <button type="button" className="btn btn-primary" onClick={() => setAddOpen(true)}>
-                                Add your first testimonial
-                            </button>
+                {/* ---------------------------------------------------------- */}
+                {/* PAGE HEADER                                                 */}
+                {/* ---------------------------------------------------------- */}
+
+                <header className="platform-header">
+                    <div className="header-copy">
+                        <div className="eyebrow">
+                            <span className="eyebrow-line" />
+                            Talent platform
+                        </div>
+
+                        <h1>Testimonials</h1>
+
+                        <p>
+                            Manage the experiences and feedback
+                            that showcase your talent community.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="platform-btn platform-btn-primary add-btn"
+                        onClick={openAdd}
+                    >
+                        <Icon name="plus" size={16} />
+                        Add testimonial
+                    </button>
+                </header>
+
+                {/* ---------------------------------------------------------- */}
+                {/* OVERVIEW                                                     */}
+                {/* ---------------------------------------------------------- */}
+
+                <section className="overview-cards">
+
+                    <div className="overview-card">
+                        <div className="overview-icon">
+                            <Icon name="quote" size={18} />
+                        </div>
+
+                        <div>
+                            <span className="overview-label">
+                                Total testimonials
+                            </span>
+
+                            <strong>
+                                {testimonialList.length}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div className="overview-card">
+                        <div className="overview-icon">
+                            <Icon name="star" size={18} />
+                        </div>
+
+                        <div>
+                            <span className="overview-label">
+                                Average rating
+                            </span>
+
+                            <strong>
+                                {averageRating.toFixed(1)}
+                            </strong>
+                        </div>
+
+                        <Stars rating={Math.round(averageRating)} />
+                    </div>
+
+                    <div className="overview-card">
+                        <div className="overview-icon">
+                            <Icon name="users" size={18} />
+                        </div>
+
+                        <div>
+                            <span className="overview-label">
+                                Talents
+                            </span>
+
+                            <strong>
+                                {talents.length}
+                            </strong>
+                        </div>
+                    </div>
+
+                </section>
+
+                {/* ---------------------------------------------------------- */}
+                {/* CONTENT                                                      */}
+                {/* ---------------------------------------------------------- */}
+
+                <section className="testimonial-section">
+
+                    <div className="section-toolbar">
+                        <div>
+                            <h2>All testimonials</h2>
+                            <p>
+                                Feedback currently available
+                                across your platform.
+                            </p>
+                        </div>
+
+                        <div className="search-box">
+                            <Icon name="search" size={16} />
+
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(event) =>
+                                    setSearch(event.target.value)
+                                }
+                                placeholder="Search testimonials..."
+                            />
+                        </div>
+                    </div>
+
+                    {filteredTestimonials.length === 0 ? (
+                        <div className="empty-state">
+                            <div className="empty-icon">
+                                <Icon name="quote" size={23} />
+                            </div>
+
+                            <h3>
+                                {search
+                                    ? 'No testimonials found'
+                                    : 'No testimonials yet'}
+                            </h3>
+
+                            <p>
+                                {search
+                                    ? 'Try a different search term.'
+                                    : 'Start building your social proof by adding the first testimonial.'}
+                            </p>
+
+                            {!search && (
+                                <button
+                                    type="button"
+                                    className="platform-btn platform-btn-primary"
+                                    onClick={openAdd}
+                                >
+                                    <Icon name="plus" size={15} />
+                                    Add testimonial
+                                </button>
+                            )}
                         </div>
                     ) : (
-                        <div className="testi-table-wrap">
-                            <table className="testi-table">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Talent</th>
-                                        <th>Rating</th>
-                                        <th>Date</th>
-                                        <th className="text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {(testimonials.data ?? testimonials).map((t) => (
-                                        <tr key={t.id}>
-                                            <td>
-                                                <div className="testi-title-cell">{t.title}</div>
-                                                <div className="testi-content-preview">{t.content}</div>
-                                            </td>
-                                            <td>{t.talent?.name ?? <span className="muted">N/A</span>}</td>
-                                            <td>
-                                                <Stars rating={t.rating} />
-                                            </td>
-                                            <td className="muted">{formatDate(t.created_at)}</td>
-                                            <td className="text-right">
-                                                <div className="testi-actions">
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline btn-sm"
-                                                        onClick={() => openEdit(t)}
-                                                    >
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-danger-ghost btn-sm"
-                                                        onClick={() => destroy(t.id)}
-                                                    >
-                                                        Delete
-                                                    </button>
+                        <div className="testimonial-list">
+
+                            {filteredTestimonials.map(
+                                (testimonial) => (
+                                    <article
+                                        className="testimonial-item"
+                                        key={testimonial.id}
+                                    >
+
+                                        <div className="testimonial-main">
+
+                                            <div className="quote-mark">
+                                                <Icon
+                                                    name="quote"
+                                                    size={18}
+                                                />
+                                            </div>
+
+                                            <div className="testimonial-content">
+
+                                                <div className="testimonial-heading">
+                                                    <h3>
+                                                        {testimonial.title ||
+                                                            'Untitled testimonial'}
+                                                    </h3>
+
+                                                    <Stars
+                                                        rating={
+                                                            testimonial.rating
+                                                        }
+                                                    />
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+
+                                                <p>
+                                                    {testimonial.content ||
+                                                        'No testimonial content provided.'}
+                                                </p>
+
+                                                <div className="testimonial-meta">
+
+                                                    <div className="talent-person">
+
+                                                        <span className="talent-avatar">
+                                                            {(
+                                                                testimonial
+                                                                    .talent
+                                                                    ?.name ||
+                                                                'T'
+                                                            )
+                                                                .charAt(0)
+                                                                .toUpperCase()}
+                                                        </span>
+
+                                                        <div>
+                                                            <strong>
+                                                                {testimonial
+                                                                    .talent
+                                                                    ?.name ||
+                                                                    'Unknown talent'}
+                                                            </strong>
+
+                                                            <span>
+                                                                Talent
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <span className="meta-separator" />
+
+                                                    <span className="date-meta">
+                                                        <Icon
+                                                            name="calendar"
+                                                            size={13}
+                                                        />
+
+                                                        {formatDate(
+                                                            testimonial.created_at
+                                                        )}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div className="testimonial-actions">
+
+                                            <button
+                                                type="button"
+                                                className="icon-action"
+                                                onClick={() =>
+                                                    openEdit(
+                                                        testimonial
+                                                    )
+                                                }
+                                                title="Edit testimonial"
+                                                aria-label="Edit testimonial"
+                                            >
+                                                <Icon
+                                                    name="edit"
+                                                    size={15}
+                                                />
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className="icon-action icon-action-danger"
+                                                onClick={() =>
+                                                    destroy(
+                                                        testimonial.id
+                                                    )
+                                                }
+                                                title="Delete testimonial"
+                                                aria-label="Delete testimonial"
+                                            >
+                                                <Icon
+                                                    name="trash"
+                                                    size={15}
+                                                />
+                                            </button>
+
+                                        </div>
+
+                                    </article>
+                                )
+                            )}
+
                         </div>
                     )}
-                </div>
+
+                </section>
+
             </div>
 
-            {/* Add Modal */}
+            {/* -------------------------------------------------------------- */}
+            {/* ADD MODAL                                                       */}
+            {/* -------------------------------------------------------------- */}
+
             {addOpen && (
-                <div className="modal-backdrop" onClick={closeAdd}>
-                    <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
-                        <form onSubmit={submitAdd}>
-                            <div className="modal-header">
-                                <h2>Add Testimonial</h2>
-                                <button type="button" className="modal-close" onClick={closeAdd} aria-label="Close">
-                                    &times;
-                                </button>
-                            </div>
-
-                            <div className="modal-body">
-                                <Field label="Title" error={addForm.errors.title}>
-                                    <input
-                                        className="form-input"
-                                        value={addForm.data.title}
-                                        onChange={(e) => addForm.setData('title', e.target.value)}
-                                        required
-                                    />
-                                </Field>
-
-                                <Field label="Talent" error={addForm.errors.talent_id}>
-                                    <select
-                                        className="form-input"
-                                        value={addForm.data.talent_id}
-                                        onChange={(e) => addForm.setData('talent_id', e.target.value)}
-                                        required
-                                    >
-                                        <option value="">Select Talent</option>
-                                        {talents.map((talent) => (
-                                            <option key={talent.id} value={talent.id}>
-                                                {talent.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </Field>
-
-                                <Field label="Content" error={addForm.errors.content}>
-                                    <textarea
-                                        className="form-input"
-                                        rows={4}
-                                        value={addForm.data.content}
-                                        onChange={(e) => addForm.setData('content', e.target.value)}
-                                        placeholder="Your testimonial content here"
-                                        required
-                                    />
-                                </Field>
-
-                                <Field label="Rating" error={addForm.errors.rating}>
-                                    <RatingPicker
-                                        value={addForm.data.rating}
-                                        onChange={(v) => addForm.setData('rating', v)}
-                                    />
-                                </Field>
-                            </div>
-
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={closeAdd}>
-                                    Cancel
-                                </button>
-                                <button type="submit" className="btn btn-primary" disabled={addForm.processing}>
-                                    {addForm.processing ? 'Saving…' : 'Save'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <TestimonialModal
+                    mode="add"
+                    form={addForm}
+                    talents={talents}
+                    onClose={closeAdd}
+                    onSubmit={submitAdd}
+                />
             )}
 
-            {/* Edit Modal */}
-            {editingId && (
-                <div className="modal-backdrop" onClick={closeEdit}>
-                    <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
-                        <form onSubmit={(e) => submitEdit(e, editingId)}>
-                            <div className="modal-header">
-                                <h2>Edit Testimonial</h2>
-                                <button type="button" className="modal-close" onClick={closeEdit} aria-label="Close">
-                                    &times;
-                                </button>
-                            </div>
+            {/* -------------------------------------------------------------- */}
+            {/* EDIT MODAL                                                      */}
+            {/* -------------------------------------------------------------- */}
 
-                            <div className="modal-body">
-                                <Field label="Title" error={editForm.errors.title}>
-                                    <input
-                                        className="form-input"
-                                        value={editForm.data.title}
-                                        onChange={(e) => editForm.setData('title', e.target.value)}
-                                        required
-                                    />
-                                </Field>
-
-                                <Field label="Talent" error={editForm.errors.talent_id}>
-                                    <select
-                                        className="form-input"
-                                        value={editForm.data.talent_id}
-                                        onChange={(e) => editForm.setData('talent_id', e.target.value)}
-                                        required
-                                    >
-                                        <option value="">Select Talent</option>
-                                        {talents.map((talent) => (
-                                            <option key={talent.id} value={talent.id}>
-                                                {talent.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </Field>
-
-                                <Field label="Content" error={editForm.errors.content}>
-                                    <textarea
-                                        className="form-input"
-                                        rows={4}
-                                        value={editForm.data.content}
-                                        onChange={(e) => editForm.setData('content', e.target.value)}
-                                        required
-                                    />
-                                </Field>
-
-                                <Field label="Rating" error={editForm.errors.rating}>
-                                    <RatingPicker
-                                        value={editForm.data.rating}
-                                        onChange={(v) => editForm.setData('rating', v)}
-                                    />
-                                </Field>
-                            </div>
-
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={closeEdit}>
-                                    Cancel
-                                </button>
-                                <button type="submit" className="btn btn-primary" disabled={editForm.processing}>
-                                    {editForm.processing ? 'Saving…' : 'Save'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            {editingId !== null && (
+                <TestimonialModal
+                    mode="edit"
+                    form={editForm}
+                    talents={talents}
+                    onClose={closeEdit}
+                    onSubmit={submitEdit}
+                />
             )}
+
+            {/* -------------------------------------------------------------- */}
+            {/* STYLES                                                           */}
+            {/* -------------------------------------------------------------- */}
 
             <style>{`
-                :root {
-                    --testi-primary: #4f46e5;
-                    --testi-primary-hover: #4338ca;
-                    --testi-danger: #e11d48;
-                    --testi-text: #1f2430;
-                    --testi-muted: #7c8397;
-                    --testi-border: #e6e8ef;
-                    --testi-bg-card: #F5f5f7;
-                    --testi-bg-page: #f6f7fb;
-                    --testi-radius: 12px;
+
+                /* ==========================================================
+                   DESIGN TOKENS
+                ========================================================== */
+
+                .talent-testimonials-page {
+                    --tp-text: #1d1d1f;
+                    --tp-secondary: #6e6e73;
+                    --tp-tertiary: #86868b;
+                    --tp-border: #e5e5e7;
+                    --tp-border-light: #eeeeef;
+                    --tp-background: #f5f5f7;
+                    --tp-card: #ffffff;
+                    --tp-black: #1d1d1f;
+                    --tp-blue: #0071e3;
+                    --tp-blue-hover: #0077ed;
+                    --tp-green: #34c759;
+                    --tp-orange: #ff9f0a;
+                    --tp-red: #ff3b30;
+
+                    min-height: 100vh;
+                    padding: 38px clamp(20px, 4vw, 56px) 70px;
+
+                    background: var(--tp-background);
+                    color: var(--tp-text);
+
+                    font-family:
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "SF Pro Display",
+                        "SF Pro Text",
+                        "Helvetica Neue",
+                        Arial,
+                        sans-serif;
+
+                    -webkit-font-smoothing: antialiased;
+                    text-rendering: optimizeLegibility;
                 }
 
-                .testi-page {
-                    padding: 28px;
-                    background: var(--testi-bg-page);
-                    min-height: 100%;
-                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                    color: var(--testi-text);
+                .talent-testimonials-page *,
+                .talent-testimonials-page *::before,
+                .talent-testimonials-page *::after {
+                    box-sizing: border-box;
                 }
 
-                .testi-header {
+                /* ==========================================================
+                   HEADER
+                ========================================================== */
+
+                .platform-header {
+                    max-width: 1180px;
+                    margin: 0 auto 28px;
+
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    gap: 24px;
+                }
+
+                .header-copy {
+                    min-width: 0;
+                }
+
+                .eyebrow {
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 24px;
-                    flex-wrap: wrap;
+                    gap: 8px;
+
+                    margin-bottom: 9px;
+
+                    color: var(--tp-tertiary);
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: .08em;
+                    text-transform: uppercase;
+                }
+
+                .eyebrow-line {
+                    width: 20px;
+                    height: 1px;
+                    background: var(--tp-secondary);
+                }
+
+                .platform-header h1 {
+                    margin: 0;
+
+                    font-size: clamp(27px, 3vw, 36px);
+                    line-height: 1.1;
+                    letter-spacing: -.035em;
+                    font-weight: 700;
+                }
+
+                .platform-header p {
+                    max-width: 540px;
+                    margin: 9px 0 0;
+
+                    color: var(--tp-secondary);
+                    font-size: 13px;
+                    line-height: 1.55;
+                    letter-spacing: -.005em;
+                }
+
+                /* ==========================================================
+                   BUTTONS
+                ========================================================== */
+
+                .platform-btn {
+                    height: 38px;
+                    padding: 0 15px;
+
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 7px;
+
+                    border: 0;
+                    border-radius: 8px;
+
+                    font-family: inherit;
+                    font-size: 12px;
+                    font-weight: 600;
+
+                    cursor: pointer;
+                    white-space: nowrap;
+
+                    transition:
+                        background .16s ease,
+                        transform .12s ease,
+                        opacity .16s ease;
+                }
+
+                .platform-btn:active {
+                    transform: scale(.98);
+                }
+
+                .platform-btn:disabled {
+                    opacity: .55;
+                    cursor: not-allowed;
+                }
+
+                .platform-btn-primary {
+                    background: var(--tp-black);
+                    color: #fff;
+                }
+
+                .platform-btn-primary:hover {
+                    background: #000;
+                }
+
+                .platform-btn-secondary {
+                    background: #f5f5f7;
+                    color: var(--tp-text);
+                    border: 1px solid var(--tp-border);
+                }
+
+                .platform-btn-secondary:hover {
+                    background: #ebebed;
+                }
+
+                .add-btn {
+                    min-width: 150px;
+                }
+
+                /* ==========================================================
+                   OVERVIEW
+                ========================================================== */
+
+                .overview-cards {
+                    max-width: 1180px;
+                    margin: 0 auto 22px;
+
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
                     gap: 12px;
                 }
 
-                .testi-title {
-                    font-size: 24px;
-                    font-weight: 700;
-                    margin: 0;
-                }
+                .overview-card {
+                    min-height: 88px;
+                    padding: 17px 18px;
 
-                .testi-subtitle {
-                    margin: 4px 0 0;
-                    color: var(--testi-muted);
-                    font-size: 14px;
-                }
-
-                .btn {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    border: none;
-                    border-radius: 8px;
-                    padding: 10px 16px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: background 0.15s ease, transform 0.05s ease;
-                }
-                .btn:active { transform: translateY(1px); }
-                .btn-sm { padding: 6px 12px; font-size: 13px; }
-
-                .btn-primary { background: var(--testi-primary); color: #fff; }
-                .btn-primary:hover { background: var(--testi-primary-hover); }
-                .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-                .btn-secondary { background: #eef0f5; color: var(--testi-text); }
-                .btn-secondary:hover { background: #e3e6ee; }
-
-                .btn-outline {
-                    background: #fff;
-                    color: var(--testi-primary);
-                    border: 1px solid var(--testi-border);
-                }
-                .btn-outline:hover { background: #f1f1fd; }
-
-                .btn-danger-ghost {
-                    background: transparent;
-                    color: var(--testi-danger);
-                }
-                .btn-danger-ghost:hover { background: #fdeaee; }
-
-                .testi-card {
-                    background: var(--testi-bg-card);
-                    border: 1px solid var(--testi-border);
-                    border-radius: var(--testi-radius);
-                    overflow: hidden;
-                    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-                }
-
-                .testi-table-wrap { overflow-x: auto; }
-
-                .testi-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    min-width: 720px;
-                }
-
-                .testi-table thead th {
-                    text-align: left;
-                    font-size: 12px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.04em;
-                    color: var(--testi-muted);
-                    padding: 14px 20px;
-                    border-bottom: 1px solid var(--testi-border);
-                    background: #fafbfd;
-                }
-
-                .testi-table tbody td {
-                    padding: 16px 20px;
-                    border-bottom: 1px solid var(--testi-border);
-                    font-size: 14px;
-                    vertical-align: top;
-                }
-
-                .testi-table tbody tr:last-child td { border-bottom: none; }
-                .testi-table tbody tr:hover { background: #fafbff; }
-
-                .testi-title-cell { font-weight: 600; margin-bottom: 4px; }
-
-                .testi-content-preview {
-                    color: var(--testi-muted);
-                    font-size: 13px;
-                    max-width: 320px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                }
-
-                .muted { color: var(--testi-muted); }
-                .text-right { text-align: right; }
-
-                .testi-actions {
                     display: flex;
-                    gap: 8px;
-                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 12px;
+
+                    background: var(--tp-card);
+                    border: 1px solid var(--tp-border);
+                    border-radius: 11px;
                 }
 
-                .star-row { display: inline-flex; gap: 2px; align-items: center; }
+                .overview-icon {
+                    width: 36px;
+                    height: 36px;
 
-                .testi-empty {
-                    padding: 60px 20px;
-                    text-align: center;
-                    color: var(--testi-muted);
-                }
-                .testi-empty p { margin-bottom: 16px; }
+                    flex: 0 0 auto;
 
-                /* Modal */
-                .modal-backdrop {
-                    position: fixed;
-                    inset: 0;
-                    background: rgba(15, 18, 30, 0.5);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    z-index: 1000;
-                    padding: 16px;
+
+                    border-radius: 9px;
+                    background: #f5f5f7;
+                    color: var(--tp-text);
                 }
 
-                .modal-panel {
-                    background: #fff;
-                    border-radius: var(--testi-radius);
-                    width: 100%;
-                    max-width: 480px;
-                    max-height: 90vh;
-                    overflow-y: auto;
-                    box-shadow: 0 20px 40px rgba(16, 24, 40, 0.2);
-                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                .overview-card > div:nth-child(2) {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
                 }
 
-                .modal-header {
+                .overview-label {
+                    color: var(--tp-tertiary);
+                    font-size: 10.5px;
+                    font-weight: 500;
+                }
+
+                .overview-card strong {
+                    font-size: 20px;
+                    line-height: 1;
+                    letter-spacing: -.02em;
+                }
+
+                .overview-card .stars {
+                    margin-left: auto;
+                }
+
+                /* ==========================================================
+                   SECTION
+                ========================================================== */
+
+                .testimonial-section {
+                    max-width: 1180px;
+                    margin: 0 auto;
+
+                    background: var(--tp-card);
+                    border: 1px solid var(--tp-border);
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
+
+                .section-toolbar {
+                    min-height: 76px;
+                    padding: 15px 18px;
+
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    padding: 20px 24px;
-                    border-bottom: 1px solid var(--testi-border);
+                    gap: 20px;
+
+                    border-bottom: 1px solid var(--tp-border-light);
                 }
 
-                .modal-header h2 {
-                    font-size: 17px;
+                .section-toolbar h2 {
                     margin: 0;
+
+                    font-size: 14px;
+                    font-weight: 650;
+                    letter-spacing: -.01em;
+                }
+
+                .section-toolbar p {
+                    margin: 4px 0 0;
+
+                    color: var(--tp-tertiary);
+                    font-size: 11px;
+                }
+
+                .search-box {
+                    width: 245px;
+                    height: 34px;
+
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+
+                    padding: 0 10px;
+
+                    background: #f5f5f7;
+                    border: 1px solid transparent;
+                    border-radius: 7px;
+
+                    color: var(--tp-tertiary);
+
+                    transition:
+                        border-color .15s ease,
+                        background .15s ease;
+                }
+
+                .search-box:focus-within {
+                    background: #fff;
+                    border-color: var(--tp-border);
+                }
+
+                .search-box input {
+                    width: 100%;
+                    min-width: 0;
+
+                    border: 0;
+                    outline: 0;
+                    background: transparent;
+
+                    color: var(--tp-text);
+                    font-family: inherit;
+                    font-size: 11.5px;
+                }
+
+                .search-box input::placeholder {
+                    color: #a1a1a6;
+                }
+
+                /* ==========================================================
+                   TESTIMONIAL LIST
+                ========================================================== */
+
+                .testimonial-list {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .testimonial-item {
+                    padding: 21px 20px;
+
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 20px;
+
+                    border-bottom: 1px solid var(--tp-border-light);
+
+                    transition: background .15s ease;
+                }
+
+                .testimonial-item:last-child {
+                    border-bottom: 0;
+                }
+
+                .testimonial-item:hover {
+                    background: #fafafa;
+                }
+
+                .testimonial-main {
+                    min-width: 0;
+                    flex: 1;
+
+                    display: flex;
+                    gap: 14px;
+                }
+
+                .quote-mark {
+                    width: 34px;
+                    height: 34px;
+
+                    flex: 0 0 auto;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 8px;
+
+                    background: #f5f5f7;
+                    color: #6e6e73;
+                }
+
+                .testimonial-content {
+                    min-width: 0;
+                    flex: 1;
+                }
+
+                .testimonial-heading {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+
+                .testimonial-heading h3 {
+                    margin: 0;
+
+                    font-size: 14px;
+                    line-height: 1.3;
+                    font-weight: 650;
+                    letter-spacing: -.012em;
+                }
+
+                .testimonial-content > p {
+                    max-width: 800px;
+                    margin: 8px 0 14px;
+
+                    color: var(--tp-secondary);
+                    font-size: 12.5px;
+                    line-height: 1.65;
+                }
+
+                .testimonial-meta {
+                    display: flex;
+                    align-items: center;
+                    gap: 11px;
+                }
+
+                .talent-person {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .talent-avatar {
+                    width: 25px;
+                    height: 25px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 50%;
+
+                    background: #e8e8ed;
+                    color: #3a3a3c;
+
+                    font-size: 10px;
                     font-weight: 700;
                 }
 
+                .talent-person div {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1px;
+                }
+
+                .talent-person strong {
+                    font-size: 10.5px;
+                    font-weight: 600;
+                }
+
+                .talent-person span {
+                    color: var(--tp-tertiary);
+                    font-size: 9px;
+                }
+
+                .meta-separator {
+                    width: 3px;
+                    height: 3px;
+                    border-radius: 50%;
+                    background: #c7c7cc;
+                }
+
+                .date-meta {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+
+                    color: var(--tp-tertiary);
+                    font-size: 9.5px;
+                }
+
+                /* ==========================================================
+                   STARS
+                ========================================================== */
+
+                .stars {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 2px;
+                    flex-shrink: 0;
+                }
+
+                .stars svg {
+                    width: 12px;
+                    height: 12px;
+                }
+
+                .stars-large svg {
+                    width: 14px;
+                    height: 14px;
+                }
+
+                .star-filled {
+                    fill: #ffb340;
+                    color: #ffb340;
+                }
+
+                .star-empty {
+                    fill: #e5e5e7;
+                    color: #e5e5e7;
+                }
+
+                /* ==========================================================
+                   ACTIONS
+                ========================================================== */
+
+                .testimonial-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    flex-shrink: 0;
+                }
+
+                .icon-action {
+                    width: 31px;
+                    height: 31px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border: 1px solid transparent;
+                    border-radius: 7px;
+
+                    background: transparent;
+                    color: var(--tp-secondary);
+
+                    cursor: pointer;
+
+                    transition:
+                        background .15s ease,
+                        color .15s ease,
+                        border-color .15s ease;
+                }
+
+                .icon-action:hover {
+                    background: #f5f5f7;
+                    border-color: var(--tp-border);
+                    color: var(--tp-text);
+                }
+
+                .icon-action-danger:hover {
+                    background: #fff2f1;
+                    border-color: #ffd9d6;
+                    color: var(--tp-red);
+                }
+
+                /* ==========================================================
+                   EMPTY STATE
+                ========================================================== */
+
+                .empty-state {
+                    min-height: 330px;
+                    padding: 50px 20px;
+
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    text-align: center;
+                }
+
+                .empty-icon {
+                    width: 48px;
+                    height: 48px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    margin-bottom: 14px;
+
+                    border-radius: 12px;
+
+                    background: #f5f5f7;
+                    color: var(--tp-secondary);
+                }
+
+                .empty-state h3 {
+                    margin: 0 0 6px;
+
+                    font-size: 15px;
+                    font-weight: 650;
+                }
+
+                .empty-state p {
+                    max-width: 380px;
+                    margin: 0 0 17px;
+
+                    color: var(--tp-tertiary);
+                    font-size: 11.5px;
+                    line-height: 1.6;
+                }
+
+                /* ==========================================================
+                   MODAL
+                ========================================================== */
+
+                .testimonial-modal-backdrop {
+                    position: fixed;
+                    inset: 0;
+
+                    z-index: 99999;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    padding: 20px;
+
+                    background: rgba(0, 0, 0, .42);
+
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+
+                    animation: modalBackdropIn .16s ease-out;
+                }
+
+                .testimonial-modal {
+                    width: min(510px, 100%);
+                    max-height: calc(100vh - 40px);
+
+                    overflow: hidden;
+
+                    background: #fff;
+
+                    border: 1px solid rgba(0, 0, 0, .08);
+                    border-radius: 14px;
+
+                    box-shadow:
+                        0 30px 80px rgba(0, 0, 0, .18),
+                        0 8px 24px rgba(0, 0, 0, .08);
+
+                    animation: modalIn .18s ease-out;
+                }
+
+                .testimonial-modal form {
+                    max-height: calc(100vh - 40px);
+
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .testimonial-modal-header {
+                    min-height: 70px;
+
+                    padding: 15px 17px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 15px;
+
+                    border-bottom: 1px solid var(--tp-border);
+                }
+
+                .modal-heading {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    min-width: 0;
+                }
+
+                .modal-icon {
+                    width: 35px;
+                    height: 35px;
+
+                    flex: 0 0 auto;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 9px;
+
+                    background: #f5f5f7;
+                    color: var(--tp-text);
+                }
+
+                .modal-heading h2 {
+                    margin: 0;
+
+                    font-size: 14px;
+                    font-weight: 650;
+                    letter-spacing: -.01em;
+                }
+
+                .modal-heading p {
+                    margin: 3px 0 0;
+
+                    color: var(--tp-tertiary);
+                    font-size: 10px;
+                    line-height: 1.4;
+                }
+
                 .modal-close {
-                    background: none;
-                    border: none;
-                    font-size: 22px;
-                    line-height: 1;
-                    color: var(--testi-muted);
+                    width: 30px;
+                    height: 30px;
+
+                    flex: 0 0 auto;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border: 0;
+                    border-radius: 7px;
+
+                    background: transparent;
+                    color: var(--tp-secondary);
+
                     cursor: pointer;
                 }
-                .modal-close:hover { color: var(--testi-text); }
 
-                .modal-body { padding: 20px 24px; }
-                .modal-footer {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 10px;
-                    padding: 16px 24px;
-                    border-top: 1px solid var(--testi-border);
+                .modal-close:hover {
+                    background: #f5f5f7;
+                    color: var(--tp-text);
                 }
 
-                .form-field { margin-bottom: 16px; }
-                .form-field:last-child { margin-bottom: 0; }
+                .modal-close:disabled {
+                    opacity: .5;
+                    cursor: not-allowed;
+                }
+
+                .testimonial-modal-body {
+                    padding: 20px;
+
+                    overflow-y: auto;
+                }
+
+                .testimonial-modal-footer {
+                    padding: 13px 17px;
+
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 8px;
+
+                    border-top: 1px solid var(--tp-border);
+
+                    background: #fff;
+                }
+
+                /* ==========================================================
+                   FORM
+                ========================================================== */
+
+                .form-field {
+                    margin-bottom: 17px;
+                }
+
+                .form-field:last-child {
+                    margin-bottom: 0;
+                }
 
                 .form-label {
                     display: block;
-                    font-size: 13px;
-                    font-weight: 600;
+
                     margin-bottom: 6px;
-                    color: var(--testi-text);
+
+                    color: var(--tp-text);
+                    font-size: 11px;
+                    font-weight: 600;
+                }
+
+                .required-mark {
+                    margin-left: 3px;
+                    color: var(--tp-red);
                 }
 
                 .form-input {
                     width: 100%;
-                    padding: 10px 12px;
-                    font-size: 14px;
-                    border: 1px solid var(--testi-border);
-                    border-radius: 8px;
-                    background: #fff;
-                    color: var(--testi-text);
-                    font-family: inherit;
-                }
-                .form-input:focus {
+                    min-height: 37px;
+
+                    padding: 8px 10px;
+
+                    border: 1px solid var(--tp-border);
+                    border-radius: 7px;
+
                     outline: none;
-                    border-color: var(--testi-primary);
-                    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+
+                    background: #fff;
+                    color: var(--tp-text);
+
+                    font-family: inherit;
+                    font-size: 12px;
+
+                    transition:
+                        border-color .15s ease,
+                        box-shadow .15s ease;
                 }
 
-                textarea.form-input { resize: vertical; }
+                .form-input::placeholder {
+                    color: #a1a1a6;
+                }
+
+                .form-input:hover {
+                    border-color: #d1d1d6;
+                }
+
+                .form-input:focus {
+                    border-color: #8f8f94;
+                    box-shadow: 0 0 0 3px rgba(0, 0, 0, .055);
+                }
+
+                .form-textarea {
+                    min-height: 112px;
+                    resize: vertical;
+                    line-height: 1.55;
+                }
+
+                .select-wrapper {
+                    position: relative;
+                }
+
+                .select-wrapper select {
+                    appearance: none;
+                    -webkit-appearance: none;
+
+                    padding-right: 35px;
+                }
+
+                .select-icon {
+                    position: absolute;
+                    top: 50%;
+                    right: 10px;
+
+                    transform: translateY(-50%);
+
+                    pointer-events: none;
+                    color: var(--tp-secondary);
+                }
+
+                .character-hint {
+                    margin-top: 4px;
+
+                    color: #a1a1a6;
+                    font-size: 9px;
+                    text-align: right;
+                }
 
                 .form-error {
-                    color: var(--testi-danger);
-                    font-size: 12px;
-                    margin-top: 4px;
+                    margin-top: 5px;
+
+                    color: var(--tp-red);
+                    font-size: 10px;
                 }
 
-                .rating-picker { display: flex; gap: 6px; }
-                .rating-btn {
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 8px;
-                    border: 1px solid var(--testi-border);
-                    background: #fff;
-                    cursor: pointer;
-                    font-weight: 600;
-                    color: var(--testi-muted);
-                    transition: all 0.15s ease;
+                /* ==========================================================
+                   RATING PICKER
+                ========================================================== */
+
+                .rating-picker {
+                    display: flex;
+                    gap: 6px;
                 }
-                .rating-btn.active {
-                    background: var(--testi-primary);
-                    border-color: var(--testi-primary);
+
+                .rating-option {
+                    min-width: 44px;
+                    height: 34px;
+
+                    padding: 0 9px;
+
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+
+                    border: 1px solid var(--tp-border);
+                    border-radius: 7px;
+
+                    background: #fff;
+                    color: var(--tp-secondary);
+
+                    font-family: inherit;
+                    font-size: 10px;
+                    font-weight: 600;
+
+                    cursor: pointer;
+
+                    transition:
+                        background .15s ease,
+                        border-color .15s ease,
+                        color .15s ease;
+                }
+
+                .rating-option:hover {
+                    border-color: #c7c7cc;
+                    background: #f8f8f8;
+                }
+
+                .rating-option.active {
+                    border-color: var(--tp-text);
+                    background: var(--tp-text);
                     color: #fff;
                 }
+
+                .rating-option.active svg {
+                    fill: #ffb340;
+                    stroke: #ffb340;
+                }
+
+                /* ==========================================================
+                   LOADING
+                ========================================================== */
+
+                .button-spinner {
+                    width: 13px;
+                    height: 13px;
+
+                    border: 1.5px solid rgba(255,255,255,.4);
+                    border-top-color: #fff;
+                    border-radius: 50%;
+
+                    animation: spinner .7s linear infinite;
+                }
+
+                /* ==========================================================
+                   ANIMATIONS
+                ========================================================== */
+
+                @keyframes modalBackdropIn {
+                    from {
+                        opacity: 0;
+                    }
+
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes modalIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(8px) scale(.985);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+
+                @keyframes spinner {
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                /* ==========================================================
+                   RESPONSIVE
+                ========================================================== */
+
+                @media (max-width: 760px) {
+
+                    .talent-testimonials-page {
+                        padding: 25px 16px 50px;
+                    }
+
+                    .platform-header {
+                        align-items: flex-start;
+                        flex-direction: column;
+                    }
+
+                    .add-btn {
+                        width: 100%;
+                    }
+
+                    .overview-cards {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .section-toolbar {
+                        align-items: flex-start;
+                        flex-direction: column;
+                    }
+
+                    .search-box {
+                        width: 100%;
+                    }
+
+                    .testimonial-item {
+                        flex-direction: column;
+                    }
+
+                    .testimonial-actions {
+                        width: 100%;
+                        justify-content: flex-end;
+                    }
+                }
+
+                @media (max-width: 500px) {
+
+                    .testimonial-modal-backdrop {
+                        padding: 10px;
+                        align-items: flex-end;
+                    }
+
+                    .testimonial-modal {
+                        max-height: calc(100vh - 20px);
+                        border-radius: 14px 14px 10px 10px;
+                    }
+
+                    .testimonial-modal form {
+                        max-height: calc(100vh - 20px);
+                    }
+
+                    .testimonial-meta {
+                        align-items: flex-start;
+                        flex-direction: column;
+                        gap: 7px;
+                    }
+
+                    .meta-separator {
+                        display: none;
+                    }
+
+                    .rating-picker {
+                        width: 100%;
+                    }
+
+                    .rating-option {
+                        flex: 1;
+                    }
+                }
+
             `}</style>
         </AppLayout>
-    );
-}
-
-function Field({ label, error, children }) {
-    return (
-        <div className="form-field">
-            <label className="form-label">{label}</label>
-            {children}
-            {error && <div className="form-error">{error}</div>}
-        </div>
-    );
-}
-
-function RatingPicker({ value, onChange }) {
-    return (
-        <div className="rating-picker">
-            {[1, 2, 3, 4, 5].map((n) => (
-                <button
-                    key={n}
-                    type="button"
-                    className={`rating-btn ${String(n) === String(value) ? 'active' : ''}`}
-                    onClick={() => onChange(String(n))}
-                >
-                    {n}
-                </button>
-            ))}
-        </div>
     );
 }

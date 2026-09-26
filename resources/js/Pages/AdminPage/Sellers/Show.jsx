@@ -1,152 +1,113 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
-/* ------------------------------------------------------------------ */
-/* Icons                                                               */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   LIGHT / APPLE STYLE
+================================================================ */
+
+const FONT_STACK =
+    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+
+/* ================================================================
+   ICONS
+================================================================ */
 
 const Icon = {
     ArrowLeft: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
-            <path
-                d="M19 12H5M11 6l-6 6 6 6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
+            <path d="M19 12H5M11 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Pencil: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
-            <path
-                d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19 3 20l1-4L16.5 3.5Z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="15" height="15" {...p}>
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19 3 20l1-4L16.5 3.5Z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Refresh: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
-            <path
-                d="M3.5 12a8.5 8.5 0 0 1 14.6-5.9M20.5 12a8.5 8.5 0 0 1-14.6 5.9M4 4v5h5M20 20v-5h-5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="15" height="15" {...p}>
+            <path d="M3.5 12a8.5 8.5 0 0 1 14.6-5.9M20.5 12a8.5 8.5 0 0 1-14.6 5.9M4 4v5h5M20 20v-5h-5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Trash: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
-            <path
-                d="M4 7h16M9 7V4.8c0-.44.36-.8.8-.8h4.4c.44 0 .8.36.8.8V7M6 7l.9 12.2a2 2 0 0 0 2 1.8h6.2a2 2 0 0 0 2-1.8L18 7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="15" height="15" {...p}>
+            <path d="M4 7h16M9 7V4.8c0-.44.36-.8.8-.8h4.4c.44 0 .8.36.8.8V7M6 7l.9 12.2a2 2 0 0 0 2 1.8h6.2a2 2 0 0 0 2-1.8L18 7" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Mail: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
             <rect x="3" y="5" width="18" height="14" rx="2" />
-            <path
-                d="m3.5 6 8.5 6 8.5-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+            <path d="m3.5 6 8.5 6 8.5-6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Phone: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
-            <path
-                d="M4.5 4h3.2l1.5 4.2-2 1.8a12.5 12.5 0 0 0 5.8 5.8l1.8-2 4.2 1.5V18a2 2 0 0 1-2.2 2A16 16 0 0 1 2.5 6.2 2 2 0 0 1 4.5 4Z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
+            <path d="M4.5 4h3.2l1.5 4.2-2 1.8a12.5 12.5 0 0 0 5.8 5.8l1.8-2 4.2 1.5V18a2 2 0 0 1-2.2 2A16 16 0 0 1 2.5 6.2 2 2 0 0 1 4.5 4Z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Pin: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
-            <path
-                d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
+            <path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" strokeLinecap="round" strokeLinejoin="round" />
             <circle cx="12" cy="9.5" r="2.3" />
         </svg>
     ),
 
     Box: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
-            <path
-                d="M21 8 12 3 3 8l9 5 9-5Z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M3 8v8l9 5 9-5V8M12 13v8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
+            <path d="M21 8 12 3 3 8l9 5 9-5Z" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M3 8v8l9 5 9-5V8M12 13v8" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Calendar: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
             <rect x="3.5" y="5" width="17" height="16" rx="2" />
-            <path
-                d="M8 3v4M16 3v4M3.5 10h17"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+            <path d="M8 3v4M16 3v4M3.5 10h17" strokeLinecap="round" />
         </svg>
     ),
 
     Store: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="18" height="18" {...p}>
-            <path
-                d="M4 10v9.5h16V10M3 10l1.5-6h15L21 10"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-            <path
-                d="M3 10c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
+            <path d="M4 10v9.5h16V10M3 10l1.5-6h15L21 10" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M3 10c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     X: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...p}>
             <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
         </svg>
     ),
 
     Check: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16" {...p}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15" {...p}>
             <path d="m5 12 4 4L19 6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 
     Alert: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="18" height="18" {...p}>
-            <path
-                d="M12 3 2.8 19a1.4 1.4 0 0 0 1.2 2h16a1.4 1.4 0 0 0 1.2-2L12 3Z"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...p}>
+            <path d="M12 3 2.8 19a1.4 1.4 0 0 0 1.2 2h16a1.4 1.4 0 0 0 1.2-2L12 3Z" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M12 9v4M12 17h.01" strokeLinecap="round" />
+        </svg>
+    ),
+
+    ChevronRight: (p) => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="15" height="15" {...p}>
+            <path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     ),
 };
 
-/* ------------------------------------------------------------------ */
-/* Helpers                                                             */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   HELPERS
+================================================================ */
 
 const AVATAR_PALETTES = [
     ['#e8f7ef', '#16845c'],
@@ -178,74 +139,6 @@ function initialsFor(name = '') {
     ).toUpperCase();
 }
 
-function Avatar({ name, size = 76 }) {
-    const [bg, fg] = paletteFor(name);
-
-    return (
-        <div
-            className="d-flex align-items-center justify-content-center rounded-4 fw-semibold flex-shrink-0"
-            style={{
-                width: size,
-                height: size,
-                backgroundColor: bg,
-                color: fg,
-                fontSize: size * 0.34,
-                letterSpacing: '-0.03em',
-            }}
-        >
-            {initialsFor(name)}
-        </div>
-    );
-}
-
-const STATUS_META = {
-    approved: {
-        label: 'Approved',
-        bg: '#e8f7ef',
-        fg: '#16845c',
-        dot: '#16a66f',
-    },
-    rejected: {
-        label: 'Rejected',
-        bg: '#ffeded',
-        fg: '#c43832',
-        dot: '#e45750',
-    },
-    pending: {
-        label: 'Pending',
-        bg: '#fff6df',
-        fg: '#a96a00',
-        dot: '#e5a600',
-    },
-};
-
-function StatusBadge({ status, size = 'md' }) {
-    const meta = STATUS_META[status] ?? STATUS_META.pending;
-
-    return (
-        <span
-            className="d-inline-flex align-items-center gap-2 rounded-pill fw-semibold"
-            style={{
-                backgroundColor: meta.bg,
-                color: meta.fg,
-                padding: size === 'sm' ? '5px 10px' : '7px 12px',
-                fontSize: size === 'sm' ? 11.5 : 12,
-                lineHeight: 1,
-            }}
-        >
-            <span
-                className="rounded-circle"
-                style={{
-                    width: 6,
-                    height: 6,
-                    backgroundColor: meta.dot,
-                }}
-            />
-            {meta.label}
-        </span>
-    );
-}
-
 function formatDate(value) {
     if (!value) return '—';
 
@@ -274,9 +167,86 @@ function formatPrice(value) {
     return value;
 }
 
-/* ------------------------------------------------------------------ */
-/* Modal Shell                                                         */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   AVATAR
+================================================================ */
+
+function Avatar({ name, size = 72 }) {
+    const [bg, fg] = paletteFor(name);
+
+    return (
+        <div
+            className="d-flex align-items-center justify-content-center flex-shrink-0 rounded-4 fw-semibold"
+            style={{
+                width: size,
+                height: size,
+                backgroundColor: bg,
+                color: fg,
+                fontSize: size * 0.31,
+                letterSpacing: '-0.04em',
+            }}
+        >
+            {initialsFor(name)}
+        </div>
+    );
+}
+
+/* ================================================================
+   STATUS
+================================================================ */
+
+const STATUS_META = {
+    approved: {
+        label: 'Approved',
+        bg: '#e8f7ef',
+        fg: '#16845c',
+        dot: '#16a66f',
+    },
+    rejected: {
+        label: 'Rejected',
+        bg: '#ffeded',
+        fg: '#c43832',
+        dot: '#e45750',
+    },
+    pending: {
+        label: 'Pending',
+        bg: '#fff6df',
+        fg: '#a96a00',
+        dot: '#e5a600',
+    },
+};
+
+function StatusBadge({ status, small = false }) {
+    const meta = STATUS_META[status] ?? STATUS_META.pending;
+
+    return (
+        <span
+            className="d-inline-flex align-items-center gap-2 rounded-pill fw-semibold"
+            style={{
+                backgroundColor: meta.bg,
+                color: meta.fg,
+                padding: small ? '5px 9px' : '6px 10px',
+                fontSize: small ? 10.5 : 11.5,
+                lineHeight: 1,
+            }}
+        >
+            <span
+                className="rounded-circle"
+                style={{
+                    width: 5,
+                    height: 5,
+                    backgroundColor: meta.dot,
+                }}
+            />
+
+            {meta.label}
+        </span>
+    );
+}
+
+/* ================================================================
+   MODAL
+================================================================ */
 
 function ModalShell({
     open,
@@ -293,38 +263,43 @@ function ModalShell({
             className="modal fade show d-block"
             tabIndex="-1"
             style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.68)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                fontFamily:
-                    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+                backgroundColor: 'rgba(245,245,247,.82)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                fontFamily: FONT_STACK,
+                colorScheme: 'light',
+                zIndex: 1055,
             }}
             onMouseDown={(e) => {
-                if (e.target === e.currentTarget) onClose();
+                if (e.target === e.currentTarget) {
+                    onClose();
+                }
             }}
         >
             <div className={`modal-dialog modal-dialog-centered ${size}`}>
                 <div
                     className="modal-content border-0 overflow-hidden"
                     style={{
-                        borderRadius: 22,
+                        borderRadius: 20,
+                        backgroundColor: '#fff',
+                        color: '#1d1d1f',
                         boxShadow:
-                            '0 24px 70px rgba(0, 0, 0, 0.14), 0 4px 16px rgba(0, 0, 0, 0.06)',
-                        border: '1px solid #e5e5ea',
+                            '0 24px 70px rgba(0,0,0,.14), 0 4px 16px rgba(0,0,0,.05)',
+                        border: '1px solid #e4e4e7',
                     }}
                 >
                     <div
                         className="modal-header border-0 px-4 pt-4 pb-3"
-                        style={{ backgroundColor: '#ffffff' }}
+                        style={{ backgroundColor: '#fff' }}
                     >
                         <div>
                             {eyebrow && (
                                 <div
                                     className="text-uppercase fw-semibold mb-1"
                                     style={{
-                                        color: '#86868b',
+                                        color: '#8e8e93',
                                         letterSpacing: '.07em',
-                                        fontSize: 10.5,
+                                        fontSize: 9.5,
                                     }}
                                 >
                                     {eyebrow}
@@ -332,10 +307,11 @@ function ModalShell({
                             )}
 
                             <h5
-                                className="modal-title fw-semibold mb-0"
+                                className="mb-0 fw-semibold"
                                 style={{
                                     color: '#1d1d1f',
-                                    letterSpacing: '-0.02em',
+                                    fontSize: 17,
+                                    letterSpacing: '-.025em',
                                 }}
                             >
                                 {title}
@@ -344,11 +320,11 @@ function ModalShell({
 
                         <button
                             type="button"
-                            className="border-0 d-flex align-items-center justify-content-center rounded-circle"
                             onClick={onClose}
+                            className="border-0 rounded-circle d-flex align-items-center justify-content-center"
                             style={{
-                                width: 34,
-                                height: 34,
+                                width: 32,
+                                height: 32,
                                 backgroundColor: '#f5f5f7',
                                 color: '#6e6e73',
                             }}
@@ -364,14 +340,20 @@ function ModalShell({
     );
 }
 
-/* ------------------------------------------------------------------ */
-/* Status Modal                                                        */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   STATUS MODAL
+================================================================ */
 
 function StatusModal({ seller, open, onClose }) {
     const { data, setData, patch, processing, reset } = useForm({
         status: seller?.status ?? 'pending',
     });
+
+    useEffect(() => {
+        if (seller) {
+            setData('status', seller.status ?? 'pending');
+        }
+    }, [seller?.id]);
 
     if (!seller) return null;
 
@@ -399,12 +381,12 @@ function StatusModal({ seller, open, onClose }) {
         {
             value: 'approved',
             label: 'Approved',
-            hint: 'Creates a user account and emails login credentials.',
+            hint: 'Seller can operate on the marketplace.',
         },
         {
             value: 'rejected',
             label: 'Rejected',
-            hint: 'Seller remains hidden from buyers.',
+            hint: 'Seller remains unavailable to buyers.',
         },
     ];
 
@@ -416,11 +398,12 @@ function StatusModal({ seller, open, onClose }) {
             title="Update seller status"
         >
             <form onSubmit={submit}>
-                <div className="modal-body px-4 pt-0 pb-4">
+                <div className="modal-body px-4 pt-1 pb-4">
                     <div className="d-flex flex-column gap-2">
                         {options.map((option) => {
                             const meta = STATUS_META[option.value];
-                            const active = data.status === option.value;
+                            const active =
+                                data.status === option.value;
 
                             return (
                                 <label
@@ -428,7 +411,7 @@ function StatusModal({ seller, open, onClose }) {
                                     className="d-flex align-items-start gap-3 p-3"
                                     style={{
                                         cursor: 'pointer',
-                                        borderRadius: 15,
+                                        borderRadius: 14,
                                         border: `1px solid ${
                                             active
                                                 ? meta.fg
@@ -436,14 +419,12 @@ function StatusModal({ seller, open, onClose }) {
                                         }`,
                                         backgroundColor: active
                                             ? meta.bg
-                                            : '#ffffff',
-                                        transition:
-                                            'all .15s ease',
+                                            : '#fff',
                                     }}
                                 >
                                     <input
                                         type="radio"
-                                        name="status"
+                                        name="seller_status"
                                         className="form-check-input mt-1"
                                         checked={active}
                                         onChange={() =>
@@ -458,16 +439,17 @@ function StatusModal({ seller, open, onClose }) {
                                         <div
                                             className="fw-semibold"
                                             style={{
+                                                fontSize: 13,
                                                 color: '#1d1d1f',
-                                                fontSize: 14,
                                             }}
                                         >
                                             {option.label}
                                         </div>
 
                                         <div
-                                            className="small mt-1"
+                                            className="mt-1"
                                             style={{
+                                                fontSize: 12,
                                                 color: '#6e6e73',
                                                 lineHeight: 1.45,
                                             }}
@@ -484,21 +466,19 @@ function StatusModal({ seller, open, onClose }) {
                         <div
                             className="d-flex align-items-start gap-2 mt-3 p-3 rounded-3"
                             style={{
-                                backgroundColor: '#f5f9ff',
+                                backgroundColor: '#f2f7ff',
                                 color: '#315dcc',
                                 border: '1px solid #dce8ff',
+                                fontSize: 12,
                             }}
                         >
                             <Icon.Alert />
 
-                            <div
-                                className="small"
-                                style={{ lineHeight: 1.5 }}
-                            >
+                            <span style={{ lineHeight: 1.5 }}>
                                 Approving this seller may create their
                                 marketplace account and send login
                                 credentials by email.
-                            </div>
+                            </span>
                         </div>
                     )}
                 </div>
@@ -506,17 +486,19 @@ function StatusModal({ seller, open, onClose }) {
                 <div
                     className="modal-footer border-0 px-4 py-3"
                     style={{
-                        backgroundColor: '#f8f8fa',
-                        borderTop: '1px solid #ededf0',
+                        backgroundColor: '#fafafa',
+                        borderTop: '1px solid #eeeeF0',
                     }}
                 >
                     <button
                         type="button"
-                        className="btn btn-light rounded-3 px-3"
+                        className="btn rounded-3 px-3"
                         onClick={onClose}
                         style={{
+                            backgroundColor: '#fff',
                             border: '1px solid #dedee3',
                             color: '#1d1d1f',
+                            fontSize: 12,
                         }}
                     >
                         Cancel
@@ -531,15 +513,14 @@ function StatusModal({ seller, open, onClose }) {
                         }
                         style={{
                             backgroundColor: '#0071e3',
-                            color: '#ffffff',
+                            color: '#fff',
                             border: 0,
+                            fontSize: 12,
+                            fontWeight: 600,
                         }}
                     >
                         {processing && (
-                            <span
-                                className="spinner-border spinner-border-sm"
-                                role="status"
-                            />
+                            <span className="spinner-border spinner-border-sm" />
                         )}
 
                         {processing
@@ -552,9 +533,9 @@ function StatusModal({ seller, open, onClose }) {
     );
 }
 
-/* ------------------------------------------------------------------ */
-/* Edit Modal                                                          */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   EDIT MODAL
+================================================================ */
 
 function ManageModal({ seller, open, onClose }) {
     const {
@@ -572,7 +553,29 @@ function ManageModal({ seller, open, onClose }) {
         description: seller?.description ?? '',
     });
 
+    useEffect(() => {
+        if (seller) {
+            setData({
+                company_name: seller.company_name ?? '',
+                email: seller.email ?? '',
+                phone: seller.phone ?? '',
+                address: seller.address ?? '',
+                description: seller.description ?? '',
+            });
+        }
+    }, [seller?.id]);
+
     if (!seller) return null;
+
+    const inputStyle = {
+        borderRadius: 11,
+        padding: '10px 12px',
+        border: '1px solid #dcdce1',
+        backgroundColor: '#fff',
+        color: '#1d1d1f',
+        fontSize: 13,
+        boxShadow: 'none',
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -598,10 +601,10 @@ function ManageModal({ seller, open, onClose }) {
             size="modal-lg"
         >
             <form onSubmit={submit}>
-                <div className="modal-body px-4 pt-0 pb-4">
+                <div className="modal-body px-4 pt-1 pb-4">
                     <div className="row g-3">
                         <div className="col-md-6">
-                            <label className="form-label">
+                            <label className="form-label small fw-semibold">
                                 Company name
                             </label>
 
@@ -619,11 +622,7 @@ function ManageModal({ seller, open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                style={{
-                                    borderRadius: 12,
-                                    padding: '11px 13px',
-                                    borderColor: '#d8d8dd',
-                                }}
+                                style={inputStyle}
                             />
 
                             {errors.company_name && (
@@ -634,7 +633,7 @@ function ManageModal({ seller, open, onClose }) {
                         </div>
 
                         <div className="col-md-6">
-                            <label className="form-label">
+                            <label className="form-label small fw-semibold">
                                 Email
                             </label>
 
@@ -652,11 +651,7 @@ function ManageModal({ seller, open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                style={{
-                                    borderRadius: 12,
-                                    padding: '11px 13px',
-                                    borderColor: '#d8d8dd',
-                                }}
+                                style={inputStyle}
                             />
 
                             {errors.email && (
@@ -667,7 +662,7 @@ function ManageModal({ seller, open, onClose }) {
                         </div>
 
                         <div className="col-md-6">
-                            <label className="form-label">
+                            <label className="form-label small fw-semibold">
                                 Phone
                             </label>
 
@@ -681,16 +676,12 @@ function ManageModal({ seller, open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                style={{
-                                    borderRadius: 12,
-                                    padding: '11px 13px',
-                                    borderColor: '#d8d8dd',
-                                }}
+                                style={inputStyle}
                             />
                         </div>
 
                         <div className="col-md-6">
-                            <label className="form-label">
+                            <label className="form-label small fw-semibold">
                                 Address
                             </label>
 
@@ -704,16 +695,12 @@ function ManageModal({ seller, open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                style={{
-                                    borderRadius: 12,
-                                    padding: '11px 13px',
-                                    borderColor: '#d8d8dd',
-                                }}
+                                style={inputStyle}
                             />
                         </div>
 
                         <div className="col-12">
-                            <label className="form-label">
+                            <label className="form-label small fw-semibold">
                                 Description
                             </label>
 
@@ -728,9 +715,7 @@ function ManageModal({ seller, open, onClose }) {
                                     )
                                 }
                                 style={{
-                                    borderRadius: 12,
-                                    padding: '11px 13px',
-                                    borderColor: '#d8d8dd',
+                                    ...inputStyle,
                                     resize: 'vertical',
                                 }}
                             />
@@ -741,16 +726,19 @@ function ManageModal({ seller, open, onClose }) {
                 <div
                     className="modal-footer border-0 px-4 py-3"
                     style={{
-                        backgroundColor: '#f8f8fa',
-                        borderTop: '1px solid #ededf0',
+                        backgroundColor: '#fafafa',
+                        borderTop: '1px solid #eeeeF0',
                     }}
                 >
                     <button
                         type="button"
-                        className="btn btn-light rounded-3 px-3"
+                        className="btn rounded-3 px-3"
                         onClick={onClose}
                         style={{
+                            backgroundColor: '#fff',
                             border: '1px solid #dedee3',
+                            color: '#1d1d1f',
+                            fontSize: 12,
                         }}
                     >
                         Cancel
@@ -762,13 +750,13 @@ function ManageModal({ seller, open, onClose }) {
                         disabled={processing}
                         style={{
                             backgroundColor: '#0071e3',
-                            color: '#ffffff',
+                            color: '#fff',
                             border: 0,
+                            fontSize: 12,
+                            fontWeight: 600,
                         }}
                     >
-                        {processing
-                            ? 'Saving…'
-                            : 'Save changes'}
+                        {processing ? 'Saving…' : 'Save changes'}
                     </button>
                 </div>
             </form>
@@ -776,14 +764,14 @@ function ManageModal({ seller, open, onClose }) {
     );
 }
 
-/* ------------------------------------------------------------------ */
-/* Delete Modal                                                        */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   DELETE MODAL
+================================================================ */
 
 function DeleteModal({ seller, open, onClose }) {
-    if (!seller) return null;
-
     const [deleting, setDeleting] = useState(false);
+
+    if (!seller) return null;
 
     const confirmDelete = () => {
         setDeleting(true);
@@ -811,23 +799,26 @@ function DeleteModal({ seller, open, onClose }) {
             eyebrow="Permanent action"
             title="Delete seller"
         >
-            <div className="modal-body px-4 pt-0 pb-4">
+            <div className="modal-body px-4 pt-2 pb-4">
                 <div
                     className="d-flex align-items-center justify-content-center mx-auto mb-3 rounded-circle"
                     style={{
-                        width: 58,
-                        height: 58,
+                        width: 54,
+                        height: 54,
                         backgroundColor: '#fff0ef',
                         color: '#d6453d',
                     }}
                 >
-                    <Icon.Trash width={21} height={21} />
+                    <Icon.Trash width={20} height={20} />
                 </div>
 
                 <div className="text-center">
                     <h6
                         className="fw-semibold mb-2"
-                        style={{ color: '#1d1d1f' }}
+                        style={{
+                            color: '#1d1d1f',
+                            fontSize: 15,
+                        }}
                     >
                         Remove this seller?
                     </h6>
@@ -836,10 +827,11 @@ function DeleteModal({ seller, open, onClose }) {
                         className="mb-0"
                         style={{
                             color: '#6e6e73',
+                            fontSize: 13,
                             lineHeight: 1.55,
                         }}
                     >
-                        You are about to permanently delete{' '}
+                        This will permanently delete{' '}
                         <strong style={{ color: '#1d1d1f' }}>
                             {seller.company_name}
                         </strong>{' '}
@@ -851,17 +843,20 @@ function DeleteModal({ seller, open, onClose }) {
             <div
                 className="modal-footer border-0 px-4 py-3"
                 style={{
-                    backgroundColor: '#f8f8fa',
-                    borderTop: '1px solid #ededf0',
+                    backgroundColor: '#fafafa',
+                    borderTop: '1px solid #eeeeF0',
                 }}
             >
                 <button
                     type="button"
-                    className="btn btn-light rounded-3 px-3"
+                    className="btn rounded-3 px-3"
                     onClick={onClose}
                     disabled={deleting}
                     style={{
+                        backgroundColor: '#fff',
                         border: '1px solid #dedee3',
+                        color: '#1d1d1f',
+                        fontSize: 12,
                     }}
                 >
                     Cancel
@@ -874,15 +869,14 @@ function DeleteModal({ seller, open, onClose }) {
                     disabled={deleting}
                     style={{
                         backgroundColor: '#d6453d',
-                        color: '#ffffff',
+                        color: '#fff',
                         border: 0,
+                        fontSize: 12,
+                        fontWeight: 600,
                     }}
                 >
                     {deleting && (
-                        <span
-                            className="spinner-border spinner-border-sm"
-                            role="status"
-                        />
+                        <span className="spinner-border spinner-border-sm" />
                     )}
 
                     {deleting
@@ -894,16 +888,66 @@ function DeleteModal({ seller, open, onClose }) {
     );
 }
 
-/* ------------------------------------------------------------------ */
-/* Info Item                                                           */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   INFO ITEM
+================================================================ */
 
 function InfoItem({ icon, label, value }) {
     return (
         <div
-            className="d-flex align-items-start gap-3 py-3"
+            className="d-flex align-items-center gap-3 py-3"
             style={{
-                borderBottom: '1px solid #eeeeF0',
+                borderBottom: '1px solid #f0f0f2',
+            }}
+        >
+            <div
+                className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                style={{
+                    width: 36,
+                    height: 36,
+                    backgroundColor: '#f5f5f7',
+                    color: '#6e6e73',
+                }}
+            >
+                {icon}
+            </div>
+
+            <div className="min-w-0">
+                <div
+                    className="mb-1"
+                    style={{
+                        color: '#8e8e93',
+                        fontSize: 10.5,
+                        fontWeight: 600,
+                    }}
+                >
+                    {label}
+                </div>
+
+                <div
+                    className="text-break"
+                    style={{
+                        color: '#1d1d1f',
+                        fontSize: 13,
+                    }}
+                >
+                    {value || 'Not provided'}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ================================================================
+   STAT
+================================================================ */
+
+function MiniStat({ icon, label, value }) {
+    return (
+        <div
+            className="d-flex align-items-center gap-3"
+            style={{
+                minHeight: 64,
             }}
         >
             <div
@@ -918,61 +962,13 @@ function InfoItem({ icon, label, value }) {
                 {icon}
             </div>
 
-            <div className="min-w-0">
-                <div
-                    className="small fw-semibold mb-1"
-                    style={{ color: '#86868b' }}
-                >
-                    {label}
-                </div>
-
-                <div
-                    className="text-break"
-                    style={{
-                        color: '#1d1d1f',
-                        fontSize: 14,
-                    }}
-                >
-                    {value || 'Not provided'}
-                </div>
-            </div>
-        </div>
-    );
-}
-
-/* ------------------------------------------------------------------ */
-/* Stat Card                                                           */
-/* ------------------------------------------------------------------ */
-
-function MiniStat({ icon, label, value }) {
-    return (
-        <div
-            className="d-flex align-items-center gap-3 p-3 h-100"
-            style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e8e8eb',
-                borderRadius: 16,
-            }}
-        >
-            <div
-                className="d-flex align-items-center justify-content-center rounded-3"
-                style={{
-                    width: 40,
-                    height: 40,
-                    backgroundColor: '#f5f5f7',
-                    color: '#6e6e73',
-                }}
-            >
-                {icon}
-            </div>
-
             <div>
                 <div
                     className="fw-semibold"
                     style={{
                         color: '#1d1d1f',
-                        fontSize: 18,
-                        letterSpacing: '-0.02em',
+                        fontSize: 16,
+                        letterSpacing: '-.02em',
                     }}
                 >
                     {value}
@@ -980,8 +976,8 @@ function MiniStat({ icon, label, value }) {
 
                 <div
                     style={{
-                        color: '#86868b',
-                        fontSize: 12,
+                        color: '#8e8e93',
+                        fontSize: 10.5,
                     }}
                 >
                     {label}
@@ -991,25 +987,22 @@ function MiniStat({ icon, label, value }) {
     );
 }
 
-/* ------------------------------------------------------------------ */
-/* Product Row                                                         */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   PRODUCT ROW
+================================================================ */
 
 function ProductRow({ product }) {
     return (
         <tr>
-            <td
-                className="py-3"
-                style={{ minWidth: 230 }}
-            >
+            <td className="px-4 py-3">
                 <div className="d-flex align-items-center gap-3">
                     <div
                         className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                         style={{
-                            width: 42,
-                            height: 42,
+                            width: 40,
+                            height: 40,
                             backgroundColor: '#f5f5f7',
-                            color: '#86868b',
+                            color: '#6e6e73',
                         }}
                     >
                         <Icon.Box />
@@ -1020,7 +1013,8 @@ function ProductRow({ product }) {
                             className="fw-semibold text-truncate"
                             style={{
                                 color: '#1d1d1f',
-                                maxWidth: 280,
+                                fontSize: 13,
+                                maxWidth: 300,
                             }}
                         >
                             {product.name}
@@ -1028,8 +1022,11 @@ function ProductRow({ product }) {
 
                         {product.category?.name && (
                             <div
-                                className="small mt-1"
-                                style={{ color: '#86868b' }}
+                                className="mt-1"
+                                style={{
+                                    color: '#8e8e93',
+                                    fontSize: 11,
+                                }}
                             >
                                 {product.category.name}
                             </div>
@@ -1041,26 +1038,27 @@ function ProductRow({ product }) {
             <td
                 className="py-3"
                 style={{
-                    color: '#6e6e73',
+                    color: '#424245',
+                    fontSize: 12,
                     whiteSpace: 'nowrap',
                 }}
             >
                 {formatPrice(product.price)}
             </td>
 
-            <td className="py-3">
+            <td className="pe-4 py-3">
                 <StatusBadge
                     status={product.status ?? 'pending'}
-                    size="sm"
+                    small
                 />
             </td>
         </tr>
     );
 }
 
-/* ------------------------------------------------------------------ */
-/* Page                                                                */
-/* ------------------------------------------------------------------ */
+/* ================================================================
+   PAGE
+================================================================ */
 
 export default function Show({ seller, flash }) {
     const [statusOpen, setStatusOpen] = useState(false);
@@ -1072,9 +1070,7 @@ export default function Show({ seller, flash }) {
         : [];
 
     const productsCount =
-        seller.products_count ??
-        products.length ??
-        0;
+        seller.products_count ?? products.length;
 
     const approvedProducts = products.filter(
         (product) => product.status === 'approved'
@@ -1085,57 +1081,141 @@ export default function Show({ seller, flash }) {
             <Head title={`${seller.company_name} · Seller`} />
 
             <div
-                className="min-vh-100"
+                className="seller-show-page min-vh-100"
                 style={{
                     backgroundColor: '#f5f5f7',
-                    fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
                     color: '#1d1d1f',
+                    fontFamily: FONT_STACK,
+                    colorScheme: 'light',
                 }}
             >
+                <style>{`
+                    .seller-show-page,
+                    .seller-show-page * {
+                        color-scheme: light !important;
+                    }
+
+                    .seller-show-page .form-control,
+                    .seller-show-page .form-select {
+                        background-color: #ffffff !important;
+                        color: #1d1d1f !important;
+                    }
+
+                    .seller-show-page .form-control::placeholder {
+                        color: #8e8e93 !important;
+                        opacity: 1;
+                    }
+
+                    .seller-show-page .table {
+                        --bs-table-bg: #ffffff;
+                        --bs-table-color: #1d1d1f;
+                        --bs-table-border-color: #eeeeF0;
+                    }
+
+                    .seller-show-page .table > :not(caption) > * > * {
+                        background-color: transparent;
+                    }
+
+                    .seller-show-page button {
+                        font-family: inherit;
+                    }
+
+                    .seller-show-page .btn:focus,
+                    .seller-show-page .form-control:focus {
+                        box-shadow: 0 0 0 3px rgba(0,113,227,.10) !important;
+                    }
+
+                    .seller-show-page .seller-action {
+                        transition: all .16s ease;
+                    }
+
+                    .seller-show-page .seller-action:hover {
+                        transform: translateY(-1px);
+                    }
+
+                    .seller-show-page .seller-card {
+                        transition: box-shadow .18s ease, border-color .18s ease;
+                    }
+
+                    @media (prefers-color-scheme: dark) {
+                        .seller-show-page {
+                            background-color: #f5f5f7 !important;
+                            color: #1d1d1f !important;
+                        }
+
+                        .seller-show-page .form-control,
+                        .seller-show-page .form-select,
+                        .seller-show-page .modal-content {
+                            background-color: #ffffff !important;
+                            color: #1d1d1f !important;
+                        }
+                    }
+                `}</style>
+
                 <div
                     className="container-fluid px-3 px-md-4 py-4"
-                    style={{ maxWidth: 1180 }}
+                    style={{
+                        maxWidth: 1160,
+                    }}
                 >
-                    {/* Back navigation */}
-                    <Link
-                        href={route('admin.sellers.index')}
-                        className="d-inline-flex align-items-center gap-2 text-decoration-none mb-4"
-                        style={{
-                            color: '#6e6e73',
-                            fontSize: 13,
-                            fontWeight: 600,
-                        }}
-                    >
-                        <Icon.ArrowLeft />
-                        Sellers
-                    </Link>
+                    {/* =====================================================
+                        HEADER
+                    ====================================================== */}
 
-                    {/* Flash message */}
+                    <div className="d-flex align-items-center justify-content-between mb-4">
+                        <Link
+                            href={route('admin.sellers.index')}
+                            className="d-inline-flex align-items-center gap-2 text-decoration-none"
+                            style={{
+                                color: '#6e6e73',
+                                fontSize: 12,
+                                fontWeight: 600,
+                            }}
+                        >
+                            <Icon.ArrowLeft />
+                            Back to sellers
+                        </Link>
+
+                        <span
+                            style={{
+                                color: '#8e8e93',
+                                fontSize: 11,
+                            }}
+                        >
+                            Seller #{seller.id}
+                        </span>
+                    </div>
+
+                    {/* =====================================================
+                        FLASH
+                    ====================================================== */}
+
                     {flash?.success && (
                         <div
-                            className="d-flex align-items-center gap-2 mb-4 px-3 py-3 rounded-4"
+                            className="d-flex align-items-center gap-2 mb-4 px-3 py-2 rounded-3"
                             style={{
                                 backgroundColor: '#eaf8f0',
                                 color: '#16845c',
                                 border: '1px solid #d1f0df',
-                                fontSize: 13,
+                                fontSize: 12,
                             }}
                         >
                             <Icon.Check />
-                            <span>{flash.success}</span>
+                            {flash.success}
                         </div>
                     )}
 
-                    {/* Hero */}
+                    {/* =====================================================
+                        PROFILE HEADER
+                    ====================================================== */}
+
                     <section
-                        className="mb-4 overflow-hidden"
+                        className="seller-card mb-4"
                         style={{
-                            backgroundColor: '#ffffff',
-                            border: '1px solid #e6e6e9',
-                            borderRadius: 22,
-                            boxShadow:
-                                '0 8px 28px rgba(0,0,0,.045)',
+                            backgroundColor: '#fff',
+                            border: '1px solid #e5e5e9',
+                            borderRadius: 20,
+                            boxShadow: '0 5px 20px rgba(0,0,0,.035)',
                         }}
                     >
                         <div className="p-4 p-md-5">
@@ -1143,40 +1223,35 @@ export default function Show({ seller, flash }) {
                                 <div className="d-flex align-items-center gap-3">
                                     <Avatar
                                         name={seller.company_name}
-                                        size={82}
+                                        size={74}
                                     />
 
                                     <div>
-                                        <div className="d-flex align-items-center gap-2 flex-wrap mb-2">
+                                        <div className="d-flex align-items-center gap-2 flex-wrap">
                                             <h1
                                                 className="mb-0 fw-semibold"
                                                 style={{
-                                                    fontSize: 'clamp(23px, 3vw, 32px)',
-                                                    letterSpacing:
-                                                        '-0.035em',
-                                                    color: '#1d1d1f',
+                                                    fontSize: 'clamp(21px, 3vw, 29px)',
+                                                    letterSpacing: '-.04em',
                                                 }}
                                             >
                                                 {seller.company_name}
                                             </h1>
 
                                             <StatusBadge
-                                                status={
-                                                    seller.status
-                                                }
+                                                status={seller.status}
                                             />
                                         </div>
 
                                         <div
-                                            className="d-flex align-items-center gap-2 flex-wrap"
+                                            className="d-flex align-items-center gap-2 mt-2 flex-wrap"
                                             style={{
-                                                color: '#86868b',
-                                                fontSize: 13,
+                                                color: '#8e8e93',
+                                                fontSize: 11.5,
                                             }}
                                         >
                                             <span>
-                                                Seller #
-                                                {seller.id}
+                                                Seller #{seller.id}
                                             </span>
 
                                             <span>•</span>
@@ -1194,20 +1269,16 @@ export default function Show({ seller, flash }) {
                                 <div className="d-flex flex-wrap gap-2">
                                     <button
                                         type="button"
-                                        className="btn rounded-3 d-flex align-items-center gap-2"
+                                        className="seller-action btn rounded-3 d-flex align-items-center gap-2"
                                         onClick={() =>
-                                            setStatusOpen(
-                                                true
-                                            )
+                                            setStatusOpen(true)
                                         }
                                         style={{
-                                            backgroundColor:
-                                                '#f5f5f7',
+                                            backgroundColor: '#fff',
                                             color: '#1d1d1f',
                                             border: '1px solid #dedee3',
-                                            padding:
-                                                '10px 14px',
-                                            fontSize: 13,
+                                            padding: '9px 12px',
+                                            fontSize: 11.5,
                                             fontWeight: 600,
                                         }}
                                     >
@@ -1217,41 +1288,35 @@ export default function Show({ seller, flash }) {
 
                                     <button
                                         type="button"
-                                        className="btn rounded-3 d-flex align-items-center gap-2"
+                                        className="seller-action btn rounded-3 d-flex align-items-center gap-2"
                                         onClick={() =>
                                             setEditOpen(true)
                                         }
                                         style={{
-                                            backgroundColor:
-                                                '#0071e3',
-                                            color: '#ffffff',
+                                            backgroundColor: '#0071e3',
+                                            color: '#fff',
                                             border: 0,
-                                            padding:
-                                                '10px 15px',
-                                            fontSize: 13,
+                                            padding: '9px 13px',
+                                            fontSize: 11.5,
                                             fontWeight: 600,
                                         }}
                                     >
                                         <Icon.Pencil />
-                                        Edit profile
+                                        Edit
                                     </button>
 
                                     <button
                                         type="button"
-                                        className="btn rounded-3 d-flex align-items-center gap-2"
+                                        className="seller-action btn rounded-3 d-flex align-items-center gap-2"
                                         onClick={() =>
-                                            setDeleteOpen(
-                                                true
-                                            )
+                                            setDeleteOpen(true)
                                         }
                                         style={{
-                                            backgroundColor:
-                                                '#fff4f3',
+                                            backgroundColor: '#fff',
                                             color: '#d6453d',
-                                            border: '1px solid #f5d5d2',
-                                            padding:
-                                                '10px 14px',
-                                            fontSize: 13,
+                                            border: '1px solid #f0d5d2',
+                                            padding: '9px 12px',
+                                            fontSize: 11.5,
                                             fontWeight: 600,
                                         }}
                                     >
@@ -1262,20 +1327,19 @@ export default function Show({ seller, flash }) {
                             </div>
                         </div>
 
-                        {/* Quick stats */}
+                        {/* Stats */}
                         <div
                             className="px-4 px-md-5 py-3"
                             style={{
                                 backgroundColor: '#fafafa',
-                                borderTop:
-                                    '1px solid #eeeeF0',
+                                borderTop: '1px solid #eeeeF0',
                             }}
                         >
-                            <div className="row g-3">
+                            <div className="row g-0">
                                 <div className="col-12 col-sm-4">
                                     <MiniStat
                                         icon={<Icon.Box />}
-                                        label="Products listed"
+                                        label="Products"
                                         value={productsCount}
                                     />
                                 </div>
@@ -1284,9 +1348,7 @@ export default function Show({ seller, flash }) {
                                     <MiniStat
                                         icon={<Icon.Check />}
                                         label="Approved products"
-                                        value={
-                                            approvedProducts
-                                        }
+                                        value={approvedProducts}
                                     />
                                 </div>
 
@@ -1307,28 +1369,33 @@ export default function Show({ seller, flash }) {
                         </div>
                     </section>
 
-                    {/* Main content */}
+                    {/* =====================================================
+                        CONTENT
+                    ====================================================== */}
+
                     <div className="row g-4">
-                        {/* Company information */}
+                        {/* =================================================
+                            LEFT
+                        ================================================== */}
+
                         <div className="col-lg-4">
                             <div
-                                className="h-100 p-4"
+                                className="seller-card h-100 p-4"
                                 style={{
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid #e6e6e9',
-                                    borderRadius: 20,
+                                    backgroundColor: '#fff',
+                                    border: '1px solid #e5e5e9',
+                                    borderRadius: 18,
                                     boxShadow:
-                                        '0 6px 24px rgba(0,0,0,.035)',
+                                        '0 5px 20px rgba(0,0,0,.03)',
                                 }}
                             >
-                                <div className="d-flex align-items-center gap-2 mb-2">
+                                <div className="d-flex align-items-center gap-2 mb-1">
                                     <div
                                         className="d-flex align-items-center justify-content-center rounded-3"
                                         style={{
-                                            width: 34,
-                                            height: 34,
-                                            backgroundColor:
-                                                '#eef5ff',
+                                            width: 32,
+                                            height: 32,
+                                            backgroundColor: '#eef5ff',
                                             color: '#0071e3',
                                         }}
                                     >
@@ -1338,24 +1405,23 @@ export default function Show({ seller, flash }) {
                                     <h5
                                         className="mb-0 fw-semibold"
                                         style={{
-                                            fontSize: 16,
-                                            letterSpacing:
-                                                '-0.02em',
+                                            fontSize: 14,
+                                            letterSpacing: '-.02em',
                                         }}
                                     >
-                                        Company details
+                                        Seller information
                                     </h5>
                                 </div>
 
-                                <p
-                                    className="small mb-2"
+                                <div
+                                    className="mb-2"
                                     style={{
-                                        color: '#86868b',
+                                        color: '#8e8e93',
+                                        fontSize: 11,
                                     }}
                                 >
-                                    Contact and account
-                                    information
-                                </p>
+                                    Contact and account details
+                                </div>
 
                                 <InfoItem
                                     icon={<Icon.Mail />}
@@ -1381,14 +1447,13 @@ export default function Show({ seller, flash }) {
                                     value={productsCount}
                                 />
 
-                                <div className="d-flex align-items-start gap-3 pt-3">
+                                <div className="d-flex align-items-center gap-3 pt-3">
                                     <div
                                         className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                                         style={{
-                                            width: 38,
-                                            height: 38,
-                                            backgroundColor:
-                                                '#f5f5f7',
+                                            width: 36,
+                                            height: 36,
+                                            backgroundColor: '#f5f5f7',
                                             color: '#6e6e73',
                                         }}
                                     >
@@ -1397,9 +1462,11 @@ export default function Show({ seller, flash }) {
 
                                     <div>
                                         <div
-                                            className="small fw-semibold mb-1"
+                                            className="mb-1"
                                             style={{
-                                                color: '#86868b',
+                                                color: '#8e8e93',
+                                                fontSize: 10.5,
+                                                fontWeight: 600,
                                             }}
                                         >
                                             Joined
@@ -1408,7 +1475,7 @@ export default function Show({ seller, flash }) {
                                         <div
                                             style={{
                                                 color: '#1d1d1f',
-                                                fontSize: 14,
+                                                fontSize: 13,
                                             }}
                                         >
                                             {formatDate(
@@ -1420,90 +1487,91 @@ export default function Show({ seller, flash }) {
                             </div>
                         </div>
 
-                        {/* Company content */}
+                        {/* =================================================
+                            RIGHT
+                        ================================================== */}
+
                         <div className="col-lg-8">
                             {/* About */}
-                            <div
-                                className="p-4 mb-4"
+                            <section
+                                className="seller-card p-4 mb-4"
                                 style={{
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid #e6e6e9',
-                                    borderRadius: 20,
+                                    backgroundColor: '#fff',
+                                    border: '1px solid #e5e5e9',
+                                    borderRadius: 18,
                                     boxShadow:
-                                        '0 6px 24px rgba(0,0,0,.035)',
+                                        '0 5px 20px rgba(0,0,0,.03)',
                                 }}
                             >
                                 <div className="d-flex align-items-center justify-content-between mb-3">
                                     <div>
                                         <h5
-                                            className="fw-semibold mb-1"
+                                            className="mb-1 fw-semibold"
                                             style={{
-                                                fontSize: 16,
-                                                letterSpacing:
-                                                    '-0.02em',
+                                                fontSize: 14,
+                                                letterSpacing: '-.02em',
                                             }}
                                         >
-                                            About the company
+                                            About the seller
                                         </h5>
 
                                         <div
-                                            className="small"
                                             style={{
-                                                color: '#86868b',
+                                                color: '#8e8e93',
+                                                fontSize: 11,
                                             }}
                                         >
-                                            Seller description
+                                            Company description
                                         </div>
                                     </div>
                                 </div>
 
                                 <div
-                                    className="p-3 rounded-4"
+                                    className="rounded-3 p-3"
                                     style={{
-                                        backgroundColor:
-                                            '#f8f8fa',
+                                        backgroundColor: '#f8f8fa',
                                         color: '#424245',
-                                        fontSize: 14,
+                                        fontSize: 12.5,
                                         lineHeight: 1.7,
+                                        border: '1px solid #f0f0f2',
                                     }}
                                 >
                                     {seller.description ||
                                         'No description has been provided for this seller.'}
                                 </div>
-                            </div>
+                            </section>
 
                             {/* Products */}
-                            <div
-                                className="overflow-hidden"
+                            <section
+                                className="seller-card overflow-hidden"
                                 style={{
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid #e6e6e9',
-                                    borderRadius: 20,
+                                    backgroundColor: '#fff',
+                                    border: '1px solid #e5e5e9',
+                                    borderRadius: 18,
                                     boxShadow:
-                                        '0 6px 24px rgba(0,0,0,.035)',
+                                        '0 5px 20px rgba(0,0,0,.03)',
                                 }}
                             >
                                 <div className="p-4">
                                     <div className="d-flex align-items-center justify-content-between gap-3">
                                         <div>
                                             <h5
-                                                className="fw-semibold mb-1"
+                                                className="mb-1 fw-semibold"
                                                 style={{
-                                                    fontSize: 16,
-                                                    letterSpacing:
-                                                        '-0.02em',
+                                                    fontSize: 14,
+                                                    letterSpacing: '-.02em',
                                                 }}
                                             >
                                                 Products
                                             </h5>
 
                                             <div
-                                                className="small"
                                                 style={{
-                                                    color: '#86868b',
+                                                    color: '#8e8e93',
+                                                    fontSize: 11,
                                                 }}
                                             >
-                                                Items listed by this
+                                                Products listed by this
                                                 seller
                                             </div>
                                         </div>
@@ -1511,10 +1579,9 @@ export default function Show({ seller, flash }) {
                                         <span
                                             className="rounded-pill px-3 py-2 fw-semibold"
                                             style={{
-                                                backgroundColor:
-                                                    '#f5f5f7',
+                                                backgroundColor: '#f5f5f7',
                                                 color: '#6e6e73',
-                                                fontSize: 12,
+                                                fontSize: 10.5,
                                             }}
                                         >
                                             {productsCount} total
@@ -1533,11 +1600,10 @@ export default function Show({ seller, flash }) {
                                         <div
                                             className="d-flex align-items-center justify-content-center mx-auto mb-3 rounded-circle"
                                             style={{
-                                                width: 54,
-                                                height: 54,
-                                                backgroundColor:
-                                                    '#f5f5f7',
-                                                color: '#86868b',
+                                                width: 48,
+                                                height: 48,
+                                                backgroundColor: '#f5f5f7',
+                                                color: '#8e8e93',
                                             }}
                                         >
                                             <Icon.Box />
@@ -1547,19 +1613,20 @@ export default function Show({ seller, flash }) {
                                             className="fw-semibold mb-1"
                                             style={{
                                                 color: '#1d1d1f',
+                                                fontSize: 13,
                                             }}
                                         >
                                             No products yet
                                         </div>
 
                                         <div
-                                            className="small"
                                             style={{
-                                                color: '#86868b',
+                                                color: '#8e8e93',
+                                                fontSize: 11.5,
                                             }}
                                         >
-                                            This seller has not
-                                            listed any products.
+                                            This seller has not listed
+                                            any products.
                                         </div>
                                     </div>
                                 ) : (
@@ -1567,7 +1634,7 @@ export default function Show({ seller, flash }) {
                                         <table
                                             className="table align-middle mb-0"
                                             style={{
-                                                fontSize: 13,
+                                                fontSize: 12,
                                             }}
                                         >
                                             <thead>
@@ -1584,12 +1651,13 @@ export default function Show({ seller, flash }) {
                                                     <th
                                                         className="px-4 py-3"
                                                         style={{
-                                                            color: '#86868b',
-                                                            fontSize: 10.5,
+                                                            color: '#8e8e93',
+                                                            fontSize: 9.5,
                                                             letterSpacing:
-                                                                '.06em',
+                                                                '.07em',
                                                             textTransform:
                                                                 'uppercase',
+                                                            fontWeight: 600,
                                                         }}
                                                     >
                                                         Product
@@ -1598,12 +1666,13 @@ export default function Show({ seller, flash }) {
                                                     <th
                                                         className="py-3"
                                                         style={{
-                                                            color: '#86868b',
-                                                            fontSize: 10.5,
+                                                            color: '#8e8e93',
+                                                            fontSize: 9.5,
                                                             letterSpacing:
-                                                                '.06em',
+                                                                '.07em',
                                                             textTransform:
                                                                 'uppercase',
+                                                            fontWeight: 600,
                                                         }}
                                                     >
                                                         Price
@@ -1612,12 +1681,13 @@ export default function Show({ seller, flash }) {
                                                     <th
                                                         className="pe-4 py-3"
                                                         style={{
-                                                            color: '#86868b',
-                                                            fontSize: 10.5,
+                                                            color: '#8e8e93',
+                                                            fontSize: 9.5,
                                                             letterSpacing:
-                                                                '.06em',
+                                                                '.07em',
                                                             textTransform:
                                                                 'uppercase',
+                                                            fontWeight: 600,
                                                         }}
                                                     >
                                                         Status
@@ -1642,47 +1712,32 @@ export default function Show({ seller, flash }) {
                                         </table>
                                     </div>
                                 )}
-                            </div>
+                            </section>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Modals */}
+            {/* ============================================================
+                MODALS
+            ============================================================= */}
+
             <StatusModal
-                seller={
-                    statusOpen
-                        ? seller
-                        : null
-                }
+                seller={statusOpen ? seller : null}
                 open={statusOpen}
-                onClose={() =>
-                    setStatusOpen(false)
-                }
+                onClose={() => setStatusOpen(false)}
             />
 
             <ManageModal
-                seller={
-                    editOpen
-                        ? seller
-                        : null
-                }
+                seller={editOpen ? seller : null}
                 open={editOpen}
-                onClose={() =>
-                    setEditOpen(false)
-                }
+                onClose={() => setEditOpen(false)}
             />
 
             <DeleteModal
-                seller={
-                    deleteOpen
-                        ? seller
-                        : null
-                }
+                seller={deleteOpen ? seller : null}
                 open={deleteOpen}
-                onClose={() =>
-                    setDeleteOpen(false)
-                }
+                onClose={() => setDeleteOpen(false)}
             />
         </AppLayout>
     );

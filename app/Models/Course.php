@@ -18,10 +18,17 @@ class Course extends Model
         'category_id',
         'is_free',
         'price',
+        'preview_duration',
         'level',
         'thumbnail',
         'status',
-        'video', // intro video
+        'video',
+    ];
+
+    protected $casts = [
+        'is_free' => 'boolean',
+        'price' => 'decimal:2',
+        'preview_duration' => 'integer',
     ];
 
     // 🔹 Relationships

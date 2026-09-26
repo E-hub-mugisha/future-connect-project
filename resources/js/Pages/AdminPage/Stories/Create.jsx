@@ -2,6 +2,69 @@ import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
+/*
+|--------------------------------------------------------------------------
+| Inline SVG Icon
+|--------------------------------------------------------------------------
+*/
+function Icon({ name, size = 18, strokeWidth = 1.8 }) {
+    const common = {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': 'true',
+    };
+
+    const icons = {
+        arrowLeft: (
+            <>
+                <path d="M19 12H5" />
+                <path d="m11 18-6-6 6-6" />
+            </>
+        ),
+        image: (
+            <>
+                <rect x="3" y="4" width="18" height="16" rx="2" />
+                <circle cx="8.5" cy="9.5" r="1.5" />
+                <path d="m21 15-5-5-4 4-3-3-5 5" />
+            </>
+        ),
+        tag: (
+            <>
+                <path d="M20.5 13.5 13.5 20.5a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 11.9V5a2 2 0 0 1 2-2h6.9a2 2 0 0 1 1.4.6l7.2 7.1a2 2 0 0 1 0 2.8Z" />
+                <circle cx="7.5" cy="7.5" r="1" />
+            </>
+        ),
+        upload: (
+            <>
+                <path d="M12 15V3" />
+                <path d="m7 8 5-5 5 5" />
+                <path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+            </>
+        ),
+        close: (
+            <>
+                <path d="m6 6 12 12" />
+                <path d="m18 6-12 12" />
+            </>
+        ),
+    };
+
+    return <svg {...common}>{icons[name] || icons.image}</svg>;
+}
+
+const STATUS_OPTIONS = [
+    { key: 'pending', label: 'Pending', hint: 'Awaiting review' },
+    { key: 'approved', label: 'Approved', hint: 'Cleared to publish' },
+    { key: 'published', label: 'Published', hint: 'Visible to users' },
+    { key: 'rejected', label: 'Rejected', hint: 'Not approved' },
+];
+
 export default function Create({ talents = [], categories = [] }) {
     const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
@@ -18,10 +81,7 @@ export default function Create({ talents = [], categories = [] }) {
 
     const handleThumbnailChange = (e) => {
         const file = e.target.files && e.target.files[0];
-
-        if (!file) {
-            return;
-        }
+        if (!file) return;
 
         if (file.size > 5 * 1024 * 1024) {
             alert('The thumbnail must not be larger than 5MB.');
@@ -32,17 +92,12 @@ export default function Create({ talents = [], categories = [] }) {
         setData('thumbnail', file);
 
         const reader = new FileReader();
-
-        reader.onload = (event) => {
-            setThumbnailPreview(event.target.result);
-        };
-
+        reader.onload = (event) => setThumbnailPreview(event.target.result);
         reader.readAsDataURL(file);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         post(route('admin.stories.store'), {
             forceFormData: true,
             preserveScroll: true,
@@ -57,705 +112,428 @@ export default function Create({ talents = [], categories = [] }) {
         (category) => String(category.id) === String(data.category_id)
     );
 
+    const wordCount = data.content.trim()
+        ? data.content.trim().split(/\s+/).length
+        : 0;
+
     return (
         <AppLayout>
             <Head title="Create Story" />
 
-            <div className="create-story-page">
+            <div data-h-scope="story-create" className="story-create">
 
-                <div className="page-container">
+                <form onSubmit={handleSubmit}>
 
-                    {/* Header */}
-                    <div className="page-header">
+                    {/* =====================================================
+                        HEADER
+                    ===================================================== */}
 
+                    <header className="page-header">
                         <div>
-                            <div className="eyebrow">
-                                Story Management
-                            </div>
+                            <Link
+                                href={route('admin.stories.index')}
+                                className="back-link"
+                            >
+                                <Icon name="arrowLeft" size={14} />
+                                All stories
+                            </Link>
 
-                            <h1>Create New Story</h1>
+                            <h1>Write a new story</h1>
 
-                            <p>
-                                Create and publish a new story for your talent
-                                community.
+                            <p className="dek">
+                                Tell your talent community what happened. It goes
+                                through review before anyone else sees it.
                             </p>
                         </div>
+                    </header>
 
-                        <Link
-                            href={route('admin.stories.index')}
-                            className="back-button"
-                        >
-                            ← Back to Stories
-                        </Link>
+                    <div className="content-grid">
+
+                        {/* =================================================
+                            MAIN COLUMN
+                        ================================================= */}
+
+                        <div className="main-column">
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Details</h2>
+                                    <p>Who this story is about, and what it's filed under.</p>
+                                </div>
+
+                                <div className="panel-body">
+
+                                    <div className="field">
+                                        <label htmlFor="title">
+                                            Title <span>required</span>
+                                        </label>
+                                        <input
+                                            id="title"
+                                            type="text"
+                                            value={data.title}
+                                            onChange={(e) => setData('title', e.target.value)}
+                                            placeholder="e.g. From apprentice to lead designer"
+                                            className={errors.title ? 'input has-error' : 'input'}
+                                        />
+                                        {errors.title && (
+                                            <div className="error-text">{errors.title}</div>
+                                        )}
+                                    </div>
+
+                                    <div className="field-row">
+
+                                        <div className="field">
+                                            <label htmlFor="talent_id">
+                                                Talent <span>required</span>
+                                            </label>
+                                            <select
+                                                id="talent_id"
+                                                value={data.talent_id}
+                                                onChange={(e) => setData('talent_id', e.target.value)}
+                                                className={errors.talent_id ? 'input has-error' : 'input'}
+                                            >
+                                                <option value="">Select talent</option>
+                                                {talents.map((talent) => (
+                                                    <option key={talent.id} value={talent.id}>
+                                                        {talent.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {errors.talent_id && (
+                                                <div className="error-text">{errors.talent_id}</div>
+                                            )}
+                                        </div>
+
+                                        <div className="field">
+                                            <label htmlFor="category_id">
+                                                Category <span>required</span>
+                                            </label>
+                                            <select
+                                                id="category_id"
+                                                value={data.category_id}
+                                                onChange={(e) => setData('category_id', e.target.value)}
+                                                className={errors.category_id ? 'input has-error' : 'input'}
+                                            >
+                                                <option value="">Select category</option>
+                                                {categories.map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {errors.category_id && (
+                                                <div className="error-text">{errors.category_id}</div>
+                                            )}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </section>
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <div className="panel-head-row">
+                                        <div>
+                                            <h2>Story</h2>
+                                            <p>Write the full story, in the talent's voice.</p>
+                                        </div>
+                                        <span className="word-count">{wordCount} words</span>
+                                    </div>
+                                </div>
+
+                                <div className="panel-body">
+                                    <div className="field">
+                                        <label htmlFor="content">
+                                            Content <span>required</span>
+                                        </label>
+                                        <textarea
+                                            id="content"
+                                            value={data.content}
+                                            onChange={(e) => setData('content', e.target.value)}
+                                            placeholder="Start writing..."
+                                            className={errors.content ? 'textarea has-error' : 'textarea'}
+                                        />
+                                        {errors.content && (
+                                            <div className="error-text">{errors.content}</div>
+                                        )}
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Media</h2>
+                                    <p>A thumbnail and an optional link to a video.</p>
+                                </div>
+
+                                <div className="panel-body">
+
+                                    <div className="field">
+                                        <label htmlFor="thumbnail">Thumbnail</label>
+
+                                        <label className="upload-box" htmlFor="thumbnail">
+                                            {thumbnailPreview ? (
+                                                <img
+                                                    src={thumbnailPreview}
+                                                    alt="Thumbnail preview"
+                                                    className="upload-preview"
+                                                />
+                                            ) : (
+                                                <>
+                                                    <Icon name="upload" size={20} />
+                                                    <span>Choose an image</span>
+                                                    <small>PNG, JPG or WEBP, up to 5MB</small>
+                                                </>
+                                            )}
+                                            <input
+                                                id="thumbnail"
+                                                type="file"
+                                                accept="image/png,image/jpeg,image/webp"
+                                                onChange={handleThumbnailChange}
+                                            />
+                                        </label>
+
+                                        {errors.thumbnail && (
+                                            <div className="error-text">{errors.thumbnail}</div>
+                                        )}
+                                    </div>
+
+                                    <div className="field">
+                                        <label htmlFor="media">Video URL</label>
+                                        <input
+                                            id="media"
+                                            type="url"
+                                            value={data.media}
+                                            onChange={(e) => setData('media', e.target.value)}
+                                            placeholder="https://youtube.com/…"
+                                            className={errors.media ? 'input has-error' : 'input'}
+                                        />
+                                        {errors.media && (
+                                            <div className="error-text">{errors.media}</div>
+                                        )}
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+                        {/* =================================================
+                            SIDEBAR
+                        ================================================= */}
+
+                        <div className="sidebar">
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Preview</h2>
+                                    <p>How this appears in the story index.</p>
+                                </div>
+
+                                <div className="panel-body">
+                                    <div className="preview-card">
+                                        <div className="preview-thumb">
+                                            {thumbnailPreview ? (
+                                                <img src={thumbnailPreview} alt="" />
+                                            ) : (
+                                                <Icon name="image" size={22} />
+                                            )}
+                                        </div>
+
+                                        <div className="preview-top">
+                                            <span className="preview-title">
+                                                {data.title || 'Your story title'}
+                                            </span>
+                                            <span className={'status-pill ' + data.status}>
+                                                <span className="status-dot" />
+                                                {STATUS_OPTIONS.find((s) => s.key === data.status)?.label}
+                                            </span>
+                                        </div>
+
+                                        <p className="preview-excerpt">
+                                            {data.content || 'Story content will appear here as you write it.'}
+                                        </p>
+
+                                        <div className="preview-meta">
+                                            <span className="byline">
+                                                <span className="byline-avatar">
+                                                    {selectedTalent ? selectedTalent.name.charAt(0).toUpperCase() : 'T'}
+                                                </span>
+                                                By {selectedTalent ? selectedTalent.name : 'Talent'}
+                                            </span>
+                                            <span className="preview-category">
+                                                <Icon name="tag" size={12} />
+                                                {selectedCategory ? selectedCategory.name : 'Uncategorized'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Publishing</h2>
+                                    <p>Tags and review status.</p>
+                                </div>
+
+                                <div className="panel-body">
+
+                                    <div className="field">
+                                        <label htmlFor="tags">Tags</label>
+                                        <input
+                                            id="tags"
+                                            type="text"
+                                            value={data.tags}
+                                            onChange={(e) => setData('tags', e.target.value)}
+                                            placeholder="success, talent, innovation"
+                                            className="input"
+                                        />
+                                        <small className="hint">Separate tags with commas.</small>
+                                    </div>
+
+                                    <div className="field">
+                                        <label>Status</label>
+                                        <div className="status-grid">
+                                            {STATUS_OPTIONS.map((option) => (
+                                                <button
+                                                    key={option.key}
+                                                    type="button"
+                                                    className={
+                                                        'status-option ' + option.key +
+                                                        (data.status === option.key ? ' is-active' : '')
+                                                    }
+                                                    onClick={() => setData('status', option.key)}
+                                                >
+                                                    <span className="status-dot" />
+                                                    <span>
+                                                        <strong>{option.label}</strong>
+                                                        <small>{option.hint}</small>
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
+                            <section className="panel actions-panel">
+
+                                <Link href={route('admin.stories.index')} className="btn btn-secondary">
+                                    Cancel
+                                </Link>
+
+                                <button type="submit" className="btn btn-primary" disabled={processing}>
+                                    {processing ? 'Creating…' : 'Create story'}
+                                </button>
+
+                                {progress && (
+                                    <div className="progress">
+                                        <div className="progress-info">
+                                            <span>Uploading</span>
+                                            <span>{progress.percentage}%</span>
+                                        </div>
+                                        <div className="progress-track">
+                                            <div
+                                                className="progress-bar"
+                                                style={{ width: progress.percentage + '%' }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                            </section>
+
+                        </div>
 
                     </div>
 
-                    <form onSubmit={handleSubmit}>
-
-                        <div className="content-grid">
-
-                            {/* LEFT */}
-                            <div className="main-column">
-
-                                {/* Basic Information */}
-                                <div className="card">
-
-                                    <div className="card-header">
-                                        <div>
-                                            <h2>Story Details</h2>
-                                            <p>
-                                                Add the basic information for
-                                                your story.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card-body">
-
-                                        <div className="form-group full">
-                                            <label htmlFor="title">
-                                                Story Title
-                                                <span>*</span>
-                                            </label>
-
-                                            <input
-                                                id="title"
-                                                type="text"
-                                                value={data.title}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'title',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                placeholder="Enter story title"
-                                                className={
-                                                    errors.title
-                                                        ? 'input error'
-                                                        : 'input'
-                                                }
-                                            />
-
-                                            {errors.title && (
-                                                <div className="error-text">
-                                                    {errors.title}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="two-columns">
-
-                                            <div className="form-group">
-                                                <label htmlFor="talent_id">
-                                                    Talent
-                                                    <span>*</span>
-                                                </label>
-
-                                                <select
-                                                    id="talent_id"
-                                                    value={data.talent_id}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            'talent_id',
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className={
-                                                        errors.talent_id
-                                                            ? 'input error'
-                                                            : 'input'
-                                                    }
-                                                >
-                                                    <option value="">
-                                                        Select talent
-                                                    </option>
-
-                                                    {talents.map((talent) => (
-                                                        <option
-                                                            key={talent.id}
-                                                            value={talent.id}
-                                                        >
-                                                            {talent.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-
-                                                {errors.talent_id && (
-                                                    <div className="error-text">
-                                                        {errors.talent_id}
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="category_id">
-                                                    Category
-                                                    <span>*</span>
-                                                </label>
-
-                                                <select
-                                                    id="category_id"
-                                                    value={data.category_id}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            'category_id',
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className={
-                                                        errors.category_id
-                                                            ? 'input error'
-                                                            : 'input'
-                                                    }
-                                                >
-                                                    <option value="">
-                                                        Select category
-                                                    </option>
-
-                                                    {categories.map(
-                                                        (category) => (
-                                                            <option
-                                                                key={
-                                                                    category.id
-                                                                }
-                                                                value={
-                                                                    category.id
-                                                                }
-                                                            >
-                                                                {
-                                                                    category.name
-                                                                }
-                                                            </option>
-                                                        )
-                                                    )}
-                                                </select>
-
-                                                {errors.category_id && (
-                                                    <div className="error-text">
-                                                        {
-                                                            errors.category_id
-                                                        }
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                {/* Content */}
-                                <div className="card">
-
-                                    <div className="card-header">
-                                        <div>
-                                            <h2>Story Content</h2>
-                                            <p>
-                                                Write the full story content.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card-body">
-
-                                        <div className="form-group">
-                                            <label htmlFor="content">
-                                                Content
-                                                <span>*</span>
-                                            </label>
-
-                                            <textarea
-                                                id="content"
-                                                value={data.content}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'content',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                placeholder="Write your story here..."
-                                                className={
-                                                    errors.content
-                                                        ? 'textarea error'
-                                                        : 'textarea'
-                                                }
-                                            />
-
-                                            {errors.content && (
-                                                <div className="error-text">
-                                                    {errors.content}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                {/* Media */}
-                                <div className="card">
-
-                                    <div className="card-header">
-                                        <div>
-                                            <h2>Media</h2>
-                                            <p>
-                                                Add a thumbnail and optional
-                                                media URL.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card-body">
-
-                                        <div className="form-group">
-                                            <label htmlFor="thumbnail">
-                                                Story Thumbnail
-                                            </label>
-
-                                            {thumbnailPreview && (
-                                                <div className="image-preview">
-                                                    <img
-                                                        src={
-                                                            thumbnailPreview
-                                                        }
-                                                        alt="Thumbnail preview"
-                                                    />
-                                                </div>
-                                            )}
-
-                                            <div className="upload-box">
-
-                                                <input
-                                                    id="thumbnail"
-                                                    type="file"
-                                                    accept="image/png,image/jpeg,image/webp"
-                                                    onChange={
-                                                        handleThumbnailChange
-                                                    }
-                                                />
-
-                                                <p>
-                                                    Choose story thumbnail
-                                                </p>
-
-                                                <small>
-                                                    PNG, JPG or WEBP · Maximum
-                                                    5MB
-                                                </small>
-
-                                            </div>
-
-                                            {errors.thumbnail && (
-                                                <div className="error-text">
-                                                    {errors.thumbnail}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label htmlFor="media">
-                                                Media / Video URL
-                                            </label>
-
-                                            <input
-                                                id="media"
-                                                type="url"
-                                                value={data.media}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'media',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                placeholder="https://youtube.com/..."
-                                                className={
-                                                    errors.media
-                                                        ? 'input error'
-                                                        : 'input'
-                                                }
-                                            />
-
-                                            {errors.media && (
-                                                <div className="error-text">
-                                                    {errors.media}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            {/* RIGHT */}
-                            <div className="sidebar">
-
-                                {/* Preview */}
-                                <div className="card">
-
-                                    <div className="card-header">
-                                        <div>
-                                            <h2>Live Preview</h2>
-                                            <p>
-                                                Preview your story.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card-body">
-
-                                        <div className="preview-card">
-
-                                            <div className="preview-image">
-
-                                                {thumbnailPreview ? (
-                                                    <img
-                                                        src={
-                                                            thumbnailPreview
-                                                        }
-                                                        alt="Preview"
-                                                    />
-                                                ) : (
-                                                    <div className="placeholder">
-                                                        📷
-                                                    </div>
-                                                )}
-
-                                            </div>
-
-                                            <div className="preview-body">
-
-                                                <div className="category-badge">
-                                                    {selectedCategory
-                                                        ? selectedCategory.name
-                                                        : 'STORY'}
-                                                </div>
-
-                                                <h3>
-                                                    {data.title ||
-                                                        'Your story title'}
-                                                </h3>
-
-                                                <p>
-                                                    {data.content ||
-                                                        'Your story content will appear here.'}
-                                                </p>
-
-                                                <div className="author">
-
-                                                    <div className="avatar">
-                                                        {selectedTalent
-                                                            ? selectedTalent.name
-                                                                  .charAt(0)
-                                                                  .toUpperCase()
-                                                            : 'T'}
-                                                    </div>
-
-                                                    <div>
-                                                        <strong>
-                                                            {selectedTalent
-                                                                ? selectedTalent.name
-                                                                : 'Talent'}
-                                                        </strong>
-
-                                                        <small>
-                                                            Story author
-                                                        </small>
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                {/* Publishing */}
-                                <div className="card">
-
-                                    <div className="card-header">
-                                        <div>
-                                            <h2>Publishing</h2>
-                                            <p>
-                                                Configure story visibility.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="card-body">
-
-                                        <div className="form-group">
-                                            <label htmlFor="tags">
-                                                Tags
-                                            </label>
-
-                                            <input
-                                                id="tags"
-                                                type="text"
-                                                value={data.tags}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'tags',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                placeholder="success, talent, innovation"
-                                                className="input"
-                                            />
-
-                                            <small className="hint">
-                                                Separate tags with commas.
-                                            </small>
-                                        </div>
-
-                                        <div className="form-group">
-                                            <label>
-                                                Status
-                                            </label>
-
-                                            <div className="status-list">
-
-                                                <label className="status-option">
-                                                    <input
-                                                        type="radio"
-                                                        name="status"
-                                                        value="pending"
-                                                        checked={
-                                                            data.status ===
-                                                            'pending'
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                'status',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <div>
-                                                        <strong>
-                                                            Pending
-                                                        </strong>
-                                                        <small>
-                                                            Awaiting review
-                                                        </small>
-                                                    </div>
-                                                </label>
-
-                                                <label className="status-option">
-                                                    <input
-                                                        type="radio"
-                                                        name="status"
-                                                        value="approved"
-                                                        checked={
-                                                            data.status ===
-                                                            'approved'
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                'status',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <div>
-                                                        <strong>
-                                                            Approved
-                                                        </strong>
-                                                        <small>
-                                                            Approved for
-                                                            publication
-                                                        </small>
-                                                    </div>
-                                                </label>
-
-                                                <label className="status-option">
-                                                    <input
-                                                        type="radio"
-                                                        name="status"
-                                                        value="published"
-                                                        checked={
-                                                            data.status ===
-                                                            'published'
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                'status',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <div>
-                                                        <strong>
-                                                            Published
-                                                        </strong>
-                                                        <small>
-                                                            Visible to users
-                                                        </small>
-                                                    </div>
-                                                </label>
-
-                                                <label className="status-option">
-                                                    <input
-                                                        type="radio"
-                                                        name="status"
-                                                        value="rejected"
-                                                        checked={
-                                                            data.status ===
-                                                            'rejected'
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                'status',
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-
-                                                    <div>
-                                                        <strong>
-                                                            Rejected
-                                                        </strong>
-                                                        <small>
-                                                            Not approved
-                                                        </small>
-                                                    </div>
-                                                </label>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                {/* Actions */}
-                                <div className="card actions-card">
-
-                                    <Link
-                                        href={route(
-                                            'admin.stories.index'
-                                        )}
-                                        className="cancel-button"
-                                    >
-                                        Cancel
-                                    </Link>
-
-                                    <button
-                                        type="submit"
-                                        className="submit-button"
-                                        disabled={processing}
-                                    >
-                                        {processing
-                                            ? 'Creating...'
-                                            : 'Create Story'}
-                                    </button>
-
-                                    {progress && (
-                                        <div className="progress-container">
-
-                                            <div className="progress-info">
-                                                <span>
-                                                    Uploading...
-                                                </span>
-
-                                                <span>
-                                                    {progress.percentage}%
-                                                </span>
-                                            </div>
-
-                                            <div className="progress-track">
-                                                <div
-                                                    className="progress-bar"
-                                                    style={{
-                                                        width:
-                                                            progress.percentage +
-                                                            '%',
-                                                    }}
-                                                />
-                                            </div>
-
-                                        </div>
-                                    )}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
                 <style>{`
-                    .create-story-page {
-                        min-height: 100vh;
-                        background: #f8fafc;
-                        color: #0f172a;
-                        padding: 30px;
+
+                    [data-h-scope="story-create"] {
+                        --ink: #1d1d1f;
+                        --ink-soft: #6e6e73;
+                        --ink-faint: #a1a1a6;
+                        --paper: #ffffff;
+                        --surface: #ffffff;
+                        --line: #e5e5e7;
+                        --brand: #48d597;
+                        --brand-ink: #157a4e;
+                        --brand-wash: #eaf9f1;
+                        --amber: #b8790f;
+                        --amber-wash: #fbf1de;
+                        --clay: #b5433a;
+                        --clay-wash: #faeae8;
+
+                        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+                        color: var(--ink);
                     }
 
-                    .page-container {
-                        max-width: 1400px;
-                        margin: auto;
+                    [data-h-scope="story-create"] * {
+                        box-sizing: border-box;
                     }
+
+                    .story-create {
+                        background: var(--paper);
+                        min-height: 100vh;
+                        padding: 32px clamp(18px, 4vw, 48px) 64px;
+                    }
+
+                    .story-create form {
+                        max-width: 1080px;
+                        margin: 0 auto;
+                    }
+
+                    /* -------------------------------------------------------
+                       HEADER
+                    ------------------------------------------------------- */
 
                     .page-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        gap: 20px;
-                        margin-bottom: 28px;
+                        border-bottom: 2px solid var(--ink);
+                        padding-bottom: 20px;
+                        margin-bottom: 24px;
                     }
 
-                    .eyebrow {
-                        color: #059669;
+                    .back-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
                         font-size: 12px;
-                        font-weight: 800;
-                        text-transform: uppercase;
-                        letter-spacing: .08em;
-                        margin-bottom: 5px;
+                        font-weight: 600;
+                        color: var(--ink-soft);
+                        text-decoration: none;
+                        margin-bottom: 10px;
+                    }
+
+                    .back-link:hover {
+                        color: var(--brand-ink);
                     }
 
                     .page-header h1 {
                         margin: 0;
-                        font-size: 30px;
-                        font-weight: 800;
-                        letter-spacing: -.03em;
-                    }
-
-                    .page-header p {
-                        margin: 7px 0 0;
-                        color: #64748b;
-                        font-size: 14px;
-                    }
-
-                    .back-button {
-                        display: inline-flex;
-                        align-items: center;
-                        height: 42px;
-                        padding: 0 15px;
-                        border: 1px solid #e2e8f0;
-                        border-radius: 10px;
-                        background: white;
-                        color: #334155;
-                        text-decoration: none;
-                        font-size: 13px;
                         font-weight: 700;
+                        font-size: clamp(20px, 2.4vw, 26px);
+                        letter-spacing: -0.01em;
                     }
+
+                    .dek {
+                        margin: 6px 0 0;
+                        font-size: 12.5px;
+                        color: var(--ink-soft);
+                        max-width: 52ch;
+                    }
+
+                    /* -------------------------------------------------------
+                       GRID
+                    ------------------------------------------------------- */
 
                     .content-grid {
                         display: grid;
-                        grid-template-columns: minmax(0, 1fr) 360px;
-                        gap: 24px;
+                        grid-template-columns: minmax(0, 1fr) 320px;
+                        gap: 18px;
                         align-items: start;
                     }
 
@@ -763,360 +541,457 @@ export default function Create({ talents = [], categories = [] }) {
                     .sidebar {
                         display: flex;
                         flex-direction: column;
-                        gap: 20px;
+                        gap: 14px;
                     }
 
-                    .card {
-                        background: white;
-                        border: 1px solid #e2e8f0;
-                        border-radius: 16px;
-                        overflow: hidden;
-                        box-shadow: 0 2px 8px rgba(15, 23, 42, .035);
+                    /* -------------------------------------------------------
+                       PANEL
+                    ------------------------------------------------------- */
+
+                    .panel {
+                        border: 1px solid var(--line);
+                        border-radius: 10px;
+                        background: var(--surface);
                     }
 
-                    .card-header {
-                        padding: 20px 22px;
-                        border-bottom: 1px solid #e2e8f0;
+                    .panel-head {
+                        padding: 14px 16px;
+                        border-bottom: 1px solid var(--line);
                     }
 
-                    .card-header h2 {
+                    .panel-head-row {
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                        gap: 10px;
+                    }
+
+                    .panel-head h2 {
                         margin: 0;
-                        font-size: 16px;
-                        font-weight: 800;
+                        font-size: 13px;
+                        font-weight: 600;
                     }
 
-                    .card-header p {
-                        margin: 4px 0 0;
-                        color: #64748b;
-                        font-size: 12px;
+                    .panel-head p {
+                        margin: 3px 0 0;
+                        font-size: 11.5px;
+                        color: var(--ink-soft);
                     }
 
-                    .card-body {
-                        padding: 22px;
+                    .word-count {
+                        flex-shrink: 0;
+                        font-size: 11px;
+                        color: var(--ink-faint);
+                        white-space: nowrap;
+                        margin-top: 1px;
                     }
 
-                    .two-columns {
+                    .panel-body {
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 14px;
+                    }
+
+                    /* -------------------------------------------------------
+                       FIELDS
+                    ------------------------------------------------------- */
+
+                    .field-row {
                         display: grid;
                         grid-template-columns: 1fr 1fr;
-                        gap: 18px;
+                        gap: 12px;
                     }
 
-                    .form-group {
-                        margin-bottom: 20px;
-                    }
-
-                    .form-group:last-child {
-                        margin-bottom: 0;
-                    }
-
-                    .form-group.full {
-                        width: 100%;
-                    }
-
-                    label {
+                    .field label {
                         display: block;
-                        margin-bottom: 8px;
-                        color: #334155;
-                        font-size: 13px;
-                        font-weight: 700;
+                        margin-bottom: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--ink);
                     }
 
-                    label span {
-                        color: #dc2626;
-                        margin-left: 3px;
+                    .field label span {
+                        color: var(--ink-faint);
+                        font-weight: 500;
+                        font-size: 10.5px;
+                        margin-left: 4px;
                     }
 
                     .input,
                     .textarea {
                         width: 100%;
-                        box-sizing: border-box;
-                        border: 1px solid #e2e8f0;
-                        border-radius: 10px;
-                        background: white;
-                        color: #0f172a;
+                        border: 1px solid var(--line);
+                        border-radius: 8px;
+                        background: var(--surface);
+                        color: var(--ink);
                         font-family: inherit;
-                        font-size: 14px;
+                        font-size: 13px;
                         outline: none;
-                        transition: .2s;
+                        transition: border-color 0.12s ease, box-shadow 0.12s ease;
                     }
 
                     .input {
-                        height: 44px;
-                        padding: 0 13px;
+                        height: 36px;
+                        padding: 0 11px;
                     }
 
                     .textarea {
-                        min-height: 300px;
-                        padding: 13px;
+                        min-height: 220px;
+                        padding: 11px;
                         resize: vertical;
-                        line-height: 1.7;
+                        line-height: 1.6;
                     }
 
                     .input:focus,
                     .textarea:focus {
-                        border-color: #059669;
-                        box-shadow: 0 0 0 3px rgba(5, 150, 105, .08);
+                        border-color: var(--brand);
+                        box-shadow: 0 0 0 3px var(--brand-wash);
                     }
 
-                    .input.error,
-                    .textarea.error {
-                        border-color: #ef4444;
+                    .input.has-error,
+                    .textarea.has-error {
+                        border-color: var(--clay);
                     }
 
                     .error-text {
-                        color: #dc2626;
-                        font-size: 12px;
-                        margin-top: 6px;
+                        color: var(--clay);
+                        font-size: 11px;
+                        margin-top: 5px;
                     }
 
                     .hint {
                         display: block;
-                        margin-top: 6px;
-                        color: #64748b;
-                        font-size: 11px;
+                        margin-top: 5px;
+                        color: var(--ink-faint);
+                        font-size: 10.5px;
                     }
+
+                    /* -------------------------------------------------------
+                       UPLOAD
+                    ------------------------------------------------------- */
 
                     .upload-box {
-                        border: 1.5px dashed #cbd5e1;
-                        border-radius: 12px;
-                        padding: 30px 20px;
-                        text-align: center;
-                        background: #f8fafc;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 4px;
+                        min-height: 120px;
+                        border: 1.5px dashed var(--line);
+                        border-radius: 9px;
+                        color: var(--ink-soft);
+                        font-size: 12px;
+                        cursor: pointer;
+                        overflow: hidden;
+                        position: relative;
                     }
 
-                    .upload-box input {
-                        width: 100%;
-                        margin-bottom: 12px;
-                    }
-
-                    .upload-box p {
-                        margin: 0;
-                        font-size: 13px;
-                        font-weight: 700;
-                        color: #334155;
+                    .upload-box:hover {
+                        border-color: var(--brand);
+                        color: var(--brand-ink);
                     }
 
                     .upload-box small {
-                        display: block;
-                        margin-top: 5px;
-                        color: #64748b;
+                        color: var(--ink-faint);
+                        font-size: 10.5px;
                     }
 
-                    .image-preview {
-                        width: 100%;
-                        height: 220px;
-                        border-radius: 12px;
-                        overflow: hidden;
-                        margin-bottom: 12px;
-                        background: #f1f5f9;
+                    .upload-box input {
+                        position: absolute;
+                        inset: 0;
+                        opacity: 0;
+                        cursor: pointer;
                     }
 
-                    .image-preview img {
+                    .upload-preview {
+                        position: absolute;
+                        inset: 0;
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
                     }
 
+                    /* -------------------------------------------------------
+                       PREVIEW CARD (mirrors the story index card)
+                    ------------------------------------------------------- */
+
                     .preview-card {
-                        border: 1px solid #e2e8f0;
-                        border-radius: 12px;
+                        border: 1px solid var(--line);
+                        border-radius: 10px;
                         overflow: hidden;
                     }
 
-                    .preview-image {
-                        height: 180px;
-                        background: #ecfdf5;
+                    .preview-thumb {
+                        height: 100px;
+                        background: var(--brand-wash);
+                        color: var(--brand-ink);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         overflow: hidden;
                     }
 
-                    .preview-image img {
+                    .preview-thumb img {
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
                     }
 
-                    .placeholder {
-                        font-size: 40px;
-                        opacity: .4;
+                    .preview-top {
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                        gap: 8px;
+                        padding: 12px 14px 0;
                     }
 
-                    .preview-body {
-                        padding: 16px;
-                    }
-
-                    .category-badge {
-                        display: inline-block;
-                        padding: 5px 8px;
-                        border-radius: 6px;
-                        background: #ecfdf5;
-                        color: #047857;
-                        font-size: 10px;
-                        font-weight: 800;
-                        text-transform: uppercase;
-                    }
-
-                    .preview-body h3 {
-                        margin: 10px 0 7px;
-                        font-size: 17px;
+                    .preview-title {
+                        font-size: 13px;
+                        font-weight: 600;
                         line-height: 1.35;
                     }
 
-                    .preview-body p {
-                        color: #64748b;
-                        font-size: 12px;
-                        line-height: 1.6;
-                        margin: 0;
+                    .preview-excerpt {
+                        margin: 5px 14px 10px;
+                        font-size: 11.5px;
+                        color: var(--ink-soft);
+                        line-height: 1.5;
                         display: -webkit-box;
-                        -webkit-line-clamp: 5;
+                        -webkit-line-clamp: 3;
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                     }
 
-                    .author {
+                    .preview-meta {
                         display: flex;
                         align-items: center;
-                        gap: 9px;
-                        margin-top: 15px;
-                        padding-top: 13px;
-                        border-top: 1px solid #f1f5f9;
+                        justify-content: space-between;
+                        gap: 8px;
+                        padding: 10px 14px;
+                        border-top: 1px solid var(--line);
                     }
 
-                    .avatar {
-                        width: 32px;
-                        height: 32px;
+                    .byline {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: var(--ink-soft);
+                    }
+
+                    .byline-avatar {
+                        width: 18px;
+                        height: 18px;
                         border-radius: 50%;
-                        background: #ecfdf5;
-                        color: #047857;
-                        display: flex;
+                        background: var(--brand-wash);
+                        color: var(--brand-ink);
+                        font-size: 9px;
+                        font-weight: 800;
+                        display: inline-flex;
                         align-items: center;
                         justify-content: center;
-                        font-size: 12px;
-                        font-weight: 800;
                     }
 
-                    .author strong {
-                        display: block;
-                        font-size: 12px;
+                    .preview-category {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 10.5px;
+                        color: var(--ink-faint);
                     }
 
-                    .author small {
-                        display: block;
-                        color: #64748b;
-                        font-size: 10px;
-                        margin-top: 2px;
+                    /* -------------------------------------------------------
+                       STATUS PILL (shared look with the index)
+                    ------------------------------------------------------- */
+
+                    .status-pill {
+                        flex-shrink: 0;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        padding: 3px 8px;
+                        border-radius: 999px;
+                        font-size: 9.5px;
+                        font-weight: 700;
+                        white-space: nowrap;
                     }
 
-                    .status-list {
+                    .status-dot {
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                    }
+
+                    .status-pill.approved,
+                    .status-pill.published {
+                        color: var(--brand-ink);
+                        background: var(--brand-wash);
+                    }
+
+                    .status-pill.approved .status-dot,
+                    .status-pill.published .status-dot {
+                        background: var(--brand);
+                    }
+
+                    .status-pill.pending {
+                        color: var(--amber);
+                        background: var(--amber-wash);
+                    }
+
+                    .status-pill.pending .status-dot {
+                        background: var(--amber);
+                    }
+
+                    .status-pill.rejected {
+                        color: var(--clay);
+                        background: var(--clay-wash);
+                    }
+
+                    .status-pill.rejected .status-dot {
+                        background: var(--clay);
+                    }
+
+                    /* -------------------------------------------------------
+                       STATUS SELECTOR
+                    ------------------------------------------------------- */
+
+                    .status-grid {
                         display: flex;
                         flex-direction: column;
-                        gap: 8px;
+                        gap: 6px;
                     }
 
                     .status-option {
                         display: flex;
                         align-items: center;
-                        gap: 10px;
-                        padding: 11px;
-                        border: 1px solid #e2e8f0;
-                        border-radius: 10px;
+                        gap: 9px;
+                        padding: 9px 10px;
+                        border: 1px solid var(--line);
+                        border-radius: 8px;
+                        background: var(--surface);
+                        font-family: inherit;
+                        text-align: left;
                         cursor: pointer;
-                        margin: 0;
                     }
 
                     .status-option:hover {
-                        background: #f8fafc;
-                    }
-
-                    .status-option input {
-                        accent-color: #059669;
+                        border-color: var(--ink-faint);
                     }
 
                     .status-option strong {
                         display: block;
                         font-size: 12px;
+                        font-weight: 600;
+                        color: var(--ink);
                     }
 
                     .status-option small {
                         display: block;
-                        color: #64748b;
-                        font-size: 10px;
-                        margin-top: 2px;
+                        font-size: 10.5px;
+                        color: var(--ink-soft);
+                        margin-top: 1px;
                     }
 
-                    .actions-card {
-                        padding: 18px;
+                    .status-option .status-dot {
+                        width: 7px;
+                        height: 7px;
+                        background: var(--ink-faint);
+                        flex-shrink: 0;
+                    }
+
+                    .status-option.is-active {
+                        border-color: var(--ink);
+                        background: var(--paper);
+                    }
+
+                    .status-option.pending.is-active .status-dot { background: var(--amber); }
+                    .status-option.approved.is-active .status-dot,
+                    .status-option.published.is-active .status-dot { background: var(--brand); }
+                    .status-option.rejected.is-active .status-dot { background: var(--clay); }
+
+                    /* -------------------------------------------------------
+                       ACTIONS
+                    ------------------------------------------------------- */
+
+                    .actions-panel {
+                        padding: 14px;
                         display: flex;
-                        gap: 10px;
+                        flex-direction: column;
+                        gap: 8px;
                     }
 
-                    .cancel-button,
-                    .submit-button {
-                        height: 43px;
-                        border-radius: 10px;
+                    .btn {
+                        height: 36px;
+                        border-radius: 7px;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         font-family: inherit;
-                        font-size: 13px;
-                        font-weight: 700;
+                        font-size: 12.5px;
+                        font-weight: 600;
                         cursor: pointer;
-                    }
-
-                    .cancel-button {
-                        flex: 1;
-                        border: 1px solid #e2e8f0;
-                        background: white;
-                        color: #475569;
                         text-decoration: none;
+                        border: 1.5px solid transparent;
                     }
 
-                    .submit-button {
-                        flex: 1.3;
-                        border: 0;
-                        background: #059669;
-                        color: white;
+                    .btn-secondary {
+                        border-color: var(--line);
+                        background: var(--surface);
+                        color: var(--ink);
                     }
 
-                    .submit-button:hover {
-                        background: #047857;
+                    .btn-secondary:hover {
+                        border-color: var(--ink-faint);
                     }
 
-                    .submit-button:disabled {
-                        opacity: .6;
+                    .btn-primary {
+                        background: var(--ink);
+                        color: #fff;
+                        border-color: var(--ink);
+                    }
+
+                    .btn-primary:hover {
+                        background: var(--brand-ink);
+                        border-color: var(--brand-ink);
+                    }
+
+                    .btn-primary:disabled {
+                        opacity: 0.55;
                         cursor: not-allowed;
                     }
 
-                    .progress-container {
-                        position: absolute;
-                        margin-top: 60px;
-                        left: 18px;
-                        right: 18px;
+                    .progress {
+                        margin-top: 2px;
                     }
 
                     .progress-info {
                         display: flex;
                         justify-content: space-between;
-                        color: #64748b;
-                        font-size: 11px;
-                        margin-bottom: 5px;
+                        font-size: 10.5px;
+                        color: var(--ink-soft);
+                        margin-bottom: 4px;
                     }
 
                     .progress-track {
-                        height: 5px;
-                        background: #e2e8f0;
+                        height: 4px;
+                        background: var(--line);
                         border-radius: 99px;
                         overflow: hidden;
                     }
 
                     .progress-bar {
                         height: 100%;
-                        background: #059669;
+                        background: var(--brand);
                     }
 
-                    @media (max-width: 1000px) {
+                    /* -------------------------------------------------------
+                       RESPONSIVE
+                    ------------------------------------------------------- */
+
+                    @media (max-width: 900px) {
+
                         .content-grid {
                             grid-template-columns: 1fr;
                         }
@@ -1127,26 +1002,23 @@ export default function Create({ talents = [], categories = [] }) {
                             align-items: start;
                         }
 
-                        .actions-card {
+                        .actions-panel {
                             grid-column: 1 / -1;
+                            flex-direction: row;
+                        }
+
+                        .actions-panel .btn {
+                            flex: 1;
                         }
                     }
 
-                    @media (max-width: 700px) {
-                        .create-story-page {
-                            padding: 18px 14px;
+                    @media (max-width: 620px) {
+
+                        .story-create {
+                            padding: 22px 14px 48px;
                         }
 
-                        .page-header {
-                            flex-direction: column;
-                        }
-
-                        .back-button {
-                            width: 100%;
-                            justify-content: center;
-                        }
-
-                        .two-columns {
+                        .field-row {
                             grid-template-columns: 1fr;
                         }
 
@@ -1154,20 +1026,13 @@ export default function Create({ talents = [], categories = [] }) {
                             display: flex;
                         }
 
-                        .page-header h1 {
-                            font-size: 25px;
-                        }
-
-                        .card-body,
-                        .card-header {
-                            padding: 17px;
-                        }
-
-                        .actions-card {
+                        .actions-panel {
                             flex-direction: column;
                         }
                     }
+
                 `}</style>
+
             </div>
         </AppLayout>
     );

@@ -35,14 +35,26 @@ class CourseController extends Controller
     public function show($slug)
     {
         $course = Course::with(['category', 'feedback', 'talent', 'lessons'])->where('slug', $slug)->firstOrFail();
-        // Get related courses (same category, not the current one)
+
+        $isEnrolled = false;
+
+        if (Auth::check()) {
+            $isEnrolled = $course->enrollments()
+                ->where('user_id', Auth::id())
+                ->whereIn('status', [
+                    'active',
+                    'completed',
+                ])
+                ->exists();
+        }
+
         $relatedCourses = Course::where('category_id', $course->category_id)
             ->where('id', '!=', $course->id)
             ->latest()
             ->take(6)
             ->with(['talent', 'category', 'feedback'])
             ->get();
-        return Inertia::render('UserPage/CourseShow', compact('course', 'relatedCourses'));
+        return Inertia::render('UserPage/CourseShow', compact('course', 'relatedCourses', 'isEnrolled'));
     }
 
     public function AllCourses()

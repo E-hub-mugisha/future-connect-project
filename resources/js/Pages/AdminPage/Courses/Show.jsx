@@ -1,1814 +1,2203 @@
-import React from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
+import React, {
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 
-export default function Show({ course }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        course_id: course.id,
-        title: '',
-        content: '',
-        video_url: '',
-        order: (course.lessons?.length ?? 0) + 1,
-    });
+import {
+    Head,
+    Link,
+    router,
+    useForm,
+} from "@inertiajs/react";
 
-    const sortedLessons = [...(course.lessons ?? [])].sort(
-        (a, b) => Number(a.order) - Number(b.order)
+import AppLayout from "@/Layouts/AppLayout";
+
+/* ==========================================================================
+   HELPERS
+=========================================================================== */
+
+function getYoutubeVideoId(url) {
+    if (!url) return null;
+
+    try {
+        const value = String(url).trim();
+
+        const normalMatch = value.match(
+            /(?:youtube\.com\/watch\?v=)([^&?/]+)/i
+        );
+
+        if (normalMatch?.[1]) {
+            return normalMatch[1];
+        }
+
+        const shortMatch = value.match(
+            /youtu\.be\/([^?&/]+)/i
+        );
+
+        if (shortMatch?.[1]) {
+            return shortMatch[1];
+        }
+
+        const embedMatch = value.match(
+            /youtube\.com\/embed\/([^?&/]+)/i
+        );
+
+        if (embedMatch?.[1]) {
+            return embedMatch[1];
+        }
+
+        const shortsMatch = value.match(
+            /youtube\.com\/shorts\/([^?&/]+)/i
+        );
+
+        if (shortsMatch?.[1]) {
+            return shortsMatch[1];
+        }
+
+        return null;
+    } catch {
+        return null;
+    }
+}
+
+function formatDuration(seconds) {
+    const total = Math.max(
+        0,
+        Math.floor(Number(seconds) || 0)
     );
 
-    const avgRating =
-        course.feedback_avg_rating != null
-            ? Number(course.feedback_avg_rating)
-            : course.feedback?.length
-                ? course.feedback.reduce(
-                    (sum, feedback) => sum + Number(feedback.rating || 0),
-                    0
-                ) / course.feedback.length
-                : 0;
+    const hours = Math.floor(total / 3600);
+    const minutes = Math.floor((total % 3600) / 60);
+    const secs = total % 60;
 
-    const enrolledCount =
-        course.enrollments_count ?? course.enrollments?.length ?? 0;
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(
+            2,
+            "0"
+        )}:${String(secs).padStart(2, "0")}`;
+    }
 
-    const reviewsCount =
-        course.feedback_count ?? course.feedback?.length ?? 0;
+    return `${minutes}:${String(secs).padStart(
+        2,
+        "0"
+    )}`;
+}
 
-    const completedLessons = sortedLessons.length;
+function getInitials(name) {
+    if (!name) return "C";
 
-    function handleAddLesson(e) {
-        e.preventDefault();
+    return String(name)
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((word) => word[0]?.toUpperCase())
+        .join("");
+}
+
+function limit(text, length = 160) {
+    if (!text) return "";
+
+    const value = String(text);
+
+    if (value.length <= length) {
+        return value;
+    }
+
+    return `${value.substring(0, length)}...`;
+}
+
+/* ==========================================================================
+   ICONS
+=========================================================================== */
+
+const Icon = {
+    Play: ({ size = 18 }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+        >
+            <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l10-6.86a1 1 0 0 0 0-1.72l-10-6.86A1 1 0 0 0 8 5.14Z" />
+        </svg>
+    ),
+
+    Lock: ({ size = 18 }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <rect
+                x="4"
+                y="10"
+                width="16"
+                height="10"
+                rx="2"
+            />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+    ),
+
+    Check: ({ size = 18 }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m5 12 4 4L19 6" />
+        </svg>
+    ),
+
+    Book: ({ size = 18 }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 0 4 22Z" />
+            <path d="M4 5.5V22" />
+        </svg>
+    ),
+
+    Users: ({ size = 18 }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+    ),
+
+    Star: ({ size = 17, filled = false }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill={filled ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z" />
+        </svg>
+    ),
+
+    ChevronDown: ({ size = 17 }) => (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="m6 9 6 6 6-6" />
+        </svg>
+    ),
+};
+
+/* ==========================================================================
+   MAIN COMPONENT
+=========================================================================== */
+
+export default function Show({
+    course,
+    isEnrolled = false,
+    auth,
+}) {
+    /* ----------------------------------------------------------------------
+       STATES
+    ---------------------------------------------------------------------- */
+
+    const [previewOpen, setPreviewOpen] =
+        useState(false);
+
+    const [youtubeReady, setYoutubeReady] =
+        useState(false);
+
+    const [previewCurrentTime, setPreviewCurrentTime] =
+        useState(0);
+
+    const [previewEnded, setPreviewEnded] =
+        useState(false);
+
+    const [enrollPromptOpen, setEnrollPromptOpen] =
+        useState(false);
+
+    const [userIsEnrolled, setUserIsEnrolled] =
+        useState(Boolean(isEnrolled));
+
+    const [enrolling, setEnrolling] =
+        useState(false);
+
+    /* ----------------------------------------------------------------------
+       REFS
+    ---------------------------------------------------------------------- */
+
+    const playerContainerRef = useRef(null);
+
+    const playerRef = useRef(null);
+
+    /* ----------------------------------------------------------------------
+       COURSE DATA
+    ---------------------------------------------------------------------- */
+
+    const youtubeVideoId = useMemo(
+        () => getYoutubeVideoId(course?.video),
+        [course?.video]
+    );
+
+    const previewDurationSeconds = useMemo(
+        () =>
+            Math.max(
+                0,
+                Number(course?.preview_duration || 0)
+            ),
+        [course?.preview_duration]
+    );
+
+    const lessons = useMemo(() => {
+        return [...(course?.lessons || [])].sort(
+            (a, b) =>
+                Number(a.order || 0) -
+                Number(b.order || 0)
+        );
+    }, [course?.lessons]);
+
+    const reviews = course?.reviews || [];
+
+    const avgRating = useMemo(() => {
+        if (!reviews.length) return 0;
+
+        const total = reviews.reduce(
+            (sum, review) =>
+                sum + Number(review.rating || 0),
+            0
+        );
+
+        return total / reviews.length;
+    }, [reviews]);
+
+    const enrolledCount = Number(
+        course?.enrollments_count || 0
+    );
+
+    const previewPercentage = useMemo(() => {
+        if (
+            course?.is_free ||
+            previewDurationSeconds <= 0
+        ) {
+            return 0;
+        }
+
+        return Math.min(
+            100,
+            Math.round(
+                (previewCurrentTime /
+                    previewDurationSeconds) *
+                    100
+            )
+        );
+    }, [
+        course?.is_free,
+        previewDurationSeconds,
+        previewCurrentTime,
+    ]);
+
+    /* ----------------------------------------------------------------------
+       ADD LESSON FORM
+    ---------------------------------------------------------------------- */
+
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+    } = useForm({
+        course_id: course.id,
+        title: "",
+        content: "",
+        video_url: "",
+        order: lessons.length + 1,
+    });
+
+    /* ----------------------------------------------------------------------
+       KEEP PROP + LOCAL ENROLLMENT STATE IN SYNC
+    ---------------------------------------------------------------------- */
+
+    useEffect(() => {
+        setUserIsEnrolled(Boolean(isEnrolled));
+    }, [isEnrolled]);
+
+    /* ----------------------------------------------------------------------
+       LOAD YOUTUBE IFRAME API
+    ---------------------------------------------------------------------- */
+
+    useEffect(() => {
+        if (!previewOpen || !youtubeVideoId) {
+            return;
+        }
+
+        if (window.YT?.Player) {
+            setYoutubeReady(true);
+            return;
+        }
+
+        const existingScript = document.querySelector(
+            'script[src="https://www.youtube.com/iframe_api"]'
+        );
+
+        if (!existingScript) {
+            const script =
+                document.createElement("script");
+
+            script.src =
+                "https://www.youtube.com/iframe_api";
+
+            script.async = true;
+
+            document.body.appendChild(script);
+        }
+
+        const previousCallback =
+            window.onYouTubeIframeAPIReady;
+
+        window.onYouTubeIframeAPIReady = () => {
+            if (previousCallback) {
+                previousCallback();
+            }
+
+            setYoutubeReady(true);
+        };
+
+        return () => {
+            window.onYouTubeIframeAPIReady =
+                previousCallback;
+        };
+    }, [previewOpen, youtubeVideoId]);
+
+    /* ----------------------------------------------------------------------
+       CREATE YOUTUBE PLAYER
+    ---------------------------------------------------------------------- */
+
+    useEffect(() => {
+        if (
+            !previewOpen ||
+            !youtubeReady ||
+            !youtubeVideoId ||
+            !playerContainerRef.current
+        ) {
+            return;
+        }
+
+        if (playerRef.current) {
+            try {
+                playerRef.current.destroy();
+            } catch {}
+
+            playerRef.current = null;
+        }
+
+        setPreviewCurrentTime(0);
+        setPreviewEnded(false);
+
+        playerContainerRef.current.innerHTML = "";
+
+        const playerElement =
+            document.createElement("div");
+
+        playerContainerRef.current.appendChild(
+            playerElement
+        );
+
+        playerRef.current =
+            new window.YT.Player(playerElement, {
+                videoId: youtubeVideoId,
+
+                playerVars: {
+                    autoplay: 1,
+                    controls: 1,
+                    rel: 0,
+                    modestbranding: 1,
+                    playsinline: 1,
+                },
+
+                events: {
+                    onReady: (event) => {
+                        try {
+                            event.target.playVideo();
+                        } catch {}
+                    },
+                },
+            });
+
+        return () => {
+            if (playerRef.current) {
+                try {
+                    playerRef.current.destroy();
+                } catch {}
+
+                playerRef.current = null;
+            }
+        };
+    }, [
+        previewOpen,
+        youtubeReady,
+        youtubeVideoId,
+    ]);
+
+    /* ----------------------------------------------------------------------
+       PREVIEW TIMER
+    ---------------------------------------------------------------------- */
+
+    useEffect(() => {
+        if (
+            !previewOpen ||
+            !playerRef.current ||
+            !youtubeVideoId
+        ) {
+            return;
+        }
+
+        const timer = setInterval(() => {
+            try {
+                if (
+                    !playerRef.current ||
+                    typeof playerRef.current
+                        .getCurrentTime !==
+                        "function"
+                ) {
+                    return;
+                }
+
+                const current =
+                    Number(
+                        playerRef.current.getCurrentTime()
+                    ) || 0;
+
+                setPreviewCurrentTime(current);
+
+                /*
+                |--------------------------------------------------------------------------
+                | FREE COURSE
+                |--------------------------------------------------------------------------
+                */
+
+                if (course?.is_free) {
+                    return;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | ENROLLED USER
+                |--------------------------------------------------------------------------
+                */
+
+                if (userIsEnrolled) {
+                    return;
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | PAID COURSE PREVIEW
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    previewDurationSeconds > 0 &&
+                    current >=
+                        previewDurationSeconds
+                ) {
+                    playerRef.current.pauseVideo();
+
+                    playerRef.current.seekTo(
+                        previewDurationSeconds,
+                        true
+                    );
+
+                    setPreviewCurrentTime(
+                        previewDurationSeconds
+                    );
+
+                    setPreviewEnded(true);
+
+                    setEnrollPromptOpen(true);
+                }
+            } catch {
+                // Ignore player timing errors.
+            }
+        }, 250);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [
+        previewOpen,
+        youtubeVideoId,
+        course?.is_free,
+        userIsEnrolled,
+        previewDurationSeconds,
+    ]);
+
+    /* ----------------------------------------------------------------------
+       OPEN PREVIEW
+    ---------------------------------------------------------------------- */
+
+    const openPreview = () => {
+        if (!youtubeVideoId) {
+            return;
+        }
+
+        setPreviewCurrentTime(0);
+        setPreviewEnded(false);
+        setEnrollPromptOpen(false);
+        setPreviewOpen(true);
+    };
+
+    /* ----------------------------------------------------------------------
+       CLOSE PREVIEW
+    ---------------------------------------------------------------------- */
+
+    const closePreview = () => {
+        setPreviewOpen(false);
+        setEnrollPromptOpen(false);
+
+        if (playerRef.current) {
+            try {
+                playerRef.current.stopVideo();
+                playerRef.current.destroy();
+            } catch {}
+
+            playerRef.current = null;
+        }
+    };
+
+    /* ----------------------------------------------------------------------
+       ENROLL
+    ---------------------------------------------------------------------- */
+
+    const enrollInCourse = () => {
+        if (enrolling) {
+            return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN CHECK
+        |--------------------------------------------------------------------------
+        */
+
+        if (!auth?.user) {
+            router.visit(
+                route("login"),
+                {
+                    preserveScroll: true,
+                }
+            );
+
+            return;
+        }
+
+        setEnrolling(true);
+
+        router.post(
+            route("courses.enroll", course.id),
+            {},
+            {
+                preserveScroll: true,
+
+                onSuccess: () => {
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Unlock immediately
+                    |--------------------------------------------------------------------------
+                    */
+
+                    setUserIsEnrolled(true);
+                    setEnrollPromptOpen(false);
+                    setPreviewEnded(false);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Continue playing from current position
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if (playerRef.current) {
+                        try {
+                            playerRef.current.seekTo(
+                                previewCurrentTime,
+                                true
+                            );
+
+                            playerRef.current.playVideo();
+                        } catch {}
+                    }
+                },
+
+                onFinish: () => {
+                    setEnrolling(false);
+                },
+            }
+        );
+    };
+
+    /* ----------------------------------------------------------------------
+       ADD LESSON
+    ---------------------------------------------------------------------- */
+
+    const submitLesson = (event) => {
+        event.preventDefault();
 
         post(
-            route('admin.courses.lessons.store', {
-                course: course.id,
-            }),
+            route(
+                "admin.courses.lessons.store",
+                {
+                    course: course.id,
+                }
+            ),
             {
+                preserveScroll: true,
+
                 onSuccess: () => {
                     reset();
 
                     const modalEl =
-                        document.getElementById('addLessonModal');
+                        document.getElementById(
+                            "addLessonModal"
+                        );
 
-                    const modal =
-                        window.bootstrap?.Modal.getInstance(modalEl);
+                    if (
+                        modalEl &&
+                        window.bootstrap?.Modal
+                    ) {
+                        const modal =
+                            window.bootstrap.Modal.getInstance(
+                                modalEl
+                            );
 
-                    modal?.hide();
+                        modal?.hide();
+                    }
                 },
             }
         );
-    }
+    };
 
-    function handleDeleteLesson(lesson) {
-        if (confirm(`Delete "${lesson.title}"?`)) {
-            router.delete(
-                route('admin.courses.lessons.destroy', {
+    /* ----------------------------------------------------------------------
+       DELETE LESSON
+    ---------------------------------------------------------------------- */
+
+    const deleteLesson = (lesson) => {
+        if (
+            !window.confirm(
+                `Delete "${lesson.title}"?`
+            )
+        ) {
+            return;
+        }
+
+        router.delete(
+            route(
+                "admin.courses.lessons.destroy",
+                {
                     course: course.id,
                     lesson: lesson.id,
-                })
-            );
-        }
-    }
+                }
+            ),
+            {
+                preserveScroll: true,
+            }
+        );
+    };
 
-    function limit(text, length) {
-        if (!text) return '';
-
-        return text.length > length
-            ? `${text.slice(0, length)}…`
-            : text;
-    }
-
-    function formatDate(date) {
-        if (!date) return '—';
-
-        return new Date(date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-        });
-    }
-
-    function getInitials(name) {
-        if (!name) return 'U';
-
-        return name
-            .split(' ')
-            .map(word => word.charAt(0))
-            .join('')
-            .slice(0, 2)
-            .toUpperCase();
-    }
+    /* ----------------------------------------------------------------------
+       RENDER
+    ---------------------------------------------------------------------- */
 
     return (
         <AppLayout>
-            <Head title={`${course.title} - Course`} />
-
-            <style>{`
-                :root {
-                    --course-bg: #f6f7fb;
-                    --course-surface: #ffffff;
-                    --course-border: #e7eaf0;
-                    --course-text: #171a21;
-                    --course-muted: #737b8c;
-                    --course-primary: #4f46e5;
-                    --course-primary-dark: #4338ca;
-                    --course-primary-soft: #eef0ff;
-                    --course-success: #16a34a;
-                    --course-success-soft: #eaf8ef;
-                    --course-warning: #d97706;
-                    --course-warning-soft: #fff5e8;
-                    --course-danger: #dc2626;
-                    --course-danger-soft: #fff0f0;
-                    --course-radius: 18px;
-                    --course-shadow: 0 8px 30px rgba(15, 23, 42, .05);
-                }
-
-                .course-page {
-                    min-height: 100vh;
-                    background: var(--course-bg);
-                    padding: 28px;
-                }
-
-                .course-container {
-                    max-width: 1500px;
-                    margin: 0 auto;
-                }
-
-                /* HEADER */
-
-                .course-header {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 20px;
-                    margin-bottom: 24px;
-                }
-
-                .course-breadcrumb {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-bottom: 8px;
-                    color: var(--course-muted);
-                    font-size: 13px;
-                }
-
-                .course-breadcrumb a {
-                    color: var(--course-muted);
-                    text-decoration: none;
-                }
-
-                .course-breadcrumb a:hover {
-                    color: var(--course-primary);
-                }
-
-                .course-page-title {
-                    margin: 0;
-                    color: var(--course-text);
-                    font-size: 28px;
-                    font-weight: 800;
-                    letter-spacing: -.5px;
-                }
-
-                .course-page-subtitle {
-                    margin: 6px 0 0;
-                    color: var(--course-muted);
-                    font-size: 14px;
-                }
-
-                .header-actions {
-                    display: flex;
-                    gap: 10px;
-                    flex-wrap: wrap;
-                }
-
-                .course-btn {
-                    min-height: 42px;
-                    padding: 0 16px;
-                    border-radius: 11px;
-                    border: 1px solid transparent;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    font-size: 13px;
-                    font-weight: 700;
-                    text-decoration: none;
-                    transition: .2s ease;
-                    cursor: pointer;
-                }
-
-                .course-btn-primary {
-                    color: white;
-                    background: var(--course-primary);
-                    border-color: var(--course-primary);
-                }
-
-                .course-btn-primary:hover {
-                    background: var(--course-primary-dark);
-                    border-color: var(--course-primary-dark);
-                    color: white;
-                    transform: translateY(-1px);
-                }
-
-                .course-btn-light {
-                    color: var(--course-text);
-                    background: white;
-                    border-color: var(--course-border);
-                }
-
-                .course-btn-light:hover {
-                    background: #f9fafb;
-                    color: var(--course-primary);
-                    border-color: #d9dcf5;
-                }
-
-                /* HERO */
-
-                .course-hero {
-                    position: relative;
-                    overflow: hidden;
-                    display: grid;
-                    grid-template-columns: minmax(280px, 420px) 1fr;
-                    min-height: 330px;
-                    background: var(--course-surface);
-                    border: 1px solid var(--course-border);
-                    border-radius: var(--course-radius);
-                    box-shadow: var(--course-shadow);
-                    margin-bottom: 20px;
-                }
-
-                .course-hero-image {
-                    position: relative;
-                    min-height: 330px;
-                    background: #e9ebf1;
-                }
-
-                .course-hero-image img {
-                    width: 100%;
-                    height: 100%;
-                    min-height: 330px;
-                    display: block;
-                    object-fit: cover;
-                }
-
-                .course-image-overlay {
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(
-                        180deg,
-                        rgba(0,0,0,.02),
-                        rgba(0,0,0,.3)
-                    );
-                    pointer-events: none;
-                }
-
-                .course-hero-content {
-                    padding: 36px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                .course-tags {
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                    margin-bottom: 18px;
-                }
-
-                .course-tag {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                    border-radius: 999px;
-                    padding: 6px 11px;
-                    font-size: 11px;
-                    font-weight: 800;
-                    text-transform: uppercase;
-                    letter-spacing: .03em;
-                }
-
-                .tag-published {
-                    color: var(--course-success);
-                    background: var(--course-success-soft);
-                }
-
-                .tag-draft {
-                    color: var(--course-warning);
-                    background: var(--course-warning-soft);
-                }
-
-                .tag-free {
-                    color: var(--course-primary);
-                    background: var(--course-primary-soft);
-                }
-
-                .tag-neutral {
-                    color: #596273;
-                    background: #f1f3f6;
-                }
-
-                .course-hero-title {
-                    margin: 0 0 12px;
-                    max-width: 760px;
-                    color: var(--course-text);
-                    font-size: 32px;
-                    line-height: 1.18;
-                    font-weight: 850;
-                    letter-spacing: -.8px;
-                }
-
-                .course-description {
-                    max-width: 780px;
-                    margin: 0;
-                    color: var(--course-muted);
-                    font-size: 15px;
-                    line-height: 1.75;
-                }
-
-                .course-hero-footer {
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 18px;
-                    margin-top: 25px;
-                    padding-top: 20px;
-                    border-top: 1px solid var(--course-border);
-                }
-
-                .instructor-mini {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                }
-
-                .avatar {
-                    width: 38px;
-                    height: 38px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-                    font-size: 12px;
-                    font-weight: 800;
-                }
-
-                .instructor-label {
-                    color: var(--course-muted);
-                    font-size: 11px;
-                    margin-bottom: 2px;
-                }
-
-                .instructor-name {
-                    color: var(--course-text);
-                    font-size: 13px;
-                    font-weight: 700;
-                }
-
-                .preview-link {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    color: var(--course-primary);
-                    font-size: 13px;
-                    font-weight: 700;
-                    text-decoration: none;
-                }
-
-                .preview-link:hover {
-                    color: var(--course-primary-dark);
-                }
-
-                /* STATS */
-
-                .course-stats {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 14px;
-                    margin-bottom: 20px;
-                }
-
-                .stat-card {
-                    display: flex;
-                    align-items: center;
-                    gap: 14px;
-                    padding: 18px;
-                    background: var(--course-surface);
-                    border: 1px solid var(--course-border);
-                    border-radius: 15px;
-                    box-shadow: var(--course-shadow);
-                }
-
-                .stat-icon {
-                    width: 44px;
-                    height: 44px;
-                    flex-shrink: 0;
-                    border-radius: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: var(--course-primary-soft);
-                    color: var(--course-primary);
-                    font-size: 18px;
-                }
-
-                .stat-number {
-                    display: block;
-                    color: var(--course-text);
-                    font-size: 21px;
-                    line-height: 1.2;
-                    font-weight: 800;
-                }
-
-                .stat-label {
-                    display: block;
-                    margin-top: 3px;
-                    color: var(--course-muted);
-                    font-size: 12px;
-                }
-
-                /* CONTENT */
-
-                .content-grid {
-                    display: grid;
-                    grid-template-columns: minmax(0, 1.55fr) minmax(300px, .85fr);
-                    gap: 20px;
-                }
-
-                .content-card {
-                    background: var(--course-surface);
-                    border: 1px solid var(--course-border);
-                    border-radius: var(--course-radius);
-                    box-shadow: var(--course-shadow);
-                    overflow: hidden;
-                }
-
-                .card-header {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 15px;
-                    padding: 20px 22px;
-                    border-bottom: 1px solid var(--course-border);
-                }
-
-                .card-title-wrap {
-                    display: flex;
-                    align-items: center;
-                    gap: 11px;
-                }
-
-                .card-title-icon {
-                    width: 36px;
-                    height: 36px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 10px;
-                    color: var(--course-primary);
-                    background: var(--course-primary-soft);
-                }
-
-                .card-title {
-                    margin: 0;
-                    color: var(--course-text);
-                    font-size: 15px;
-                    font-weight: 800;
-                }
-
-                .card-subtitle {
-                    margin: 2px 0 0;
-                    color: var(--course-muted);
-                    font-size: 11px;
-                }
-
-                .card-body {
-                    padding: 20px 22px;
-                }
-
-                /* LESSONS */
-
-                .lesson-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                }
-
-                .lesson-row {
-                    display: grid;
-                    grid-template-columns: 42px minmax(0, 1fr) auto;
-                    align-items: center;
-                    gap: 13px;
-                    padding: 13px;
-                    border: 1px solid var(--course-border);
-                    border-radius: 13px;
-                    transition: .18s ease;
-                }
-
-                .lesson-row:hover {
-                    border-color: #d8dbef;
-                    background: #fbfbff;
-                    transform: translateY(-1px);
-                }
-
-                .lesson-number {
-                    width: 40px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 11px;
-                    color: var(--course-primary);
-                    background: var(--course-primary-soft);
-                    font-size: 12px;
-                    font-weight: 800;
-                }
-
-                .lesson-name {
-                    color: var(--course-text);
-                    font-size: 14px;
-                    font-weight: 750;
-                    margin-bottom: 3px;
-                }
-
-                .lesson-description {
-                    color: var(--course-muted);
-                    font-size: 12px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                .lesson-actions {
-                    display: flex;
-                    gap: 6px;
-                }
-
-                .lesson-action {
-                    width: 34px;
-                    height: 34px;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 9px;
-                    border: 1px solid var(--course-border);
-                    color: var(--course-muted);
-                    background: white;
-                    text-decoration: none;
-                    cursor: pointer;
-                    transition: .18s ease;
-                }
-
-                .lesson-action:hover {
-                    color: var(--course-primary);
-                    border-color: #d8dbef;
-                    background: var(--course-primary-soft);
-                }
-
-                .lesson-action.delete:hover {
-                    color: var(--course-danger);
-                    border-color: #ffd5d5;
-                    background: var(--course-danger-soft);
-                }
-
-                .empty-state {
-                    text-align: center;
-                    padding: 50px 20px;
-                    color: var(--course-muted);
-                }
-
-                .empty-icon {
-                    width: 55px;
-                    height: 55px;
-                    margin: 0 auto 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 15px;
-                    background: #f3f4f7;
-                    color: #9aa1ae;
-                    font-size: 22px;
-                }
-
-                .empty-state strong {
-                    display: block;
-                    color: var(--course-text);
-                    margin-bottom: 4px;
-                }
-
-                .empty-state span {
-                    font-size: 12px;
-                }
-
-                /* OVERVIEW */
-
-                .meta-list {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .meta-item {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 20px;
-                    padding: 14px 0;
-                    border-bottom: 1px solid var(--course-border);
-                }
-
-                .meta-item:first-child {
-                    padding-top: 0;
-                }
-
-                .meta-item:last-child {
-                    padding-bottom: 0;
-                    border-bottom: none;
-                }
-
-                .meta-label {
-                    color: var(--course-muted);
-                    font-size: 12px;
-                }
-
-                .meta-value {
-                    max-width: 60%;
-                    color: var(--course-text);
-                    font-size: 13px;
-                    font-weight: 700;
-                    text-align: right;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-
-                /* FEEDBACK */
-
-                .rating-summary {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                    padding: 15px;
-                    margin-bottom: 18px;
-                    border-radius: 13px;
-                    background: #fffbf3;
-                    border: 1px solid #f7ead0;
-                }
-
-                .rating-number {
-                    color: var(--course-text);
-                    font-size: 30px;
-                    font-weight: 850;
-                    line-height: 1;
-                }
-
-                .rating-stars {
-                    display: flex;
-                    gap: 2px;
-                    color: #f59e0b;
-                    font-size: 14px;
-                }
-
-                .rating-label {
-                    color: var(--course-muted);
-                    font-size: 11px;
-                    margin-top: 4px;
-                }
-
-                .feedback-list {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .feedback-item {
-                    padding: 15px 0;
-                    border-bottom: 1px solid var(--course-border);
-                }
-
-                .feedback-item:first-child {
-                    padding-top: 0;
-                }
-
-                .feedback-item:last-child {
-                    padding-bottom: 0;
-                    border-bottom: none;
-                }
-
-                .feedback-user {
-                    display: flex;
-                    align-items: center;
-                    gap: 9px;
-                }
-
-                .feedback-avatar {
-                    width: 32px;
-                    height: 32px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 50%;
-                    background: #eef0ff;
-                    color: var(--course-primary);
-                    font-size: 10px;
-                    font-weight: 800;
-                }
-
-                .feedback-name {
-                    color: var(--course-text);
-                    font-size: 12px;
-                    font-weight: 750;
-                }
-
-                .feedback-date {
-                    color: var(--course-muted);
-                    font-size: 10px;
-                }
-
-                .feedback-stars {
-                    margin-left: auto;
-                    color: #f59e0b;
-                    font-size: 11px;
-                }
-
-                .feedback-comment {
-                    margin: 10px 0 0 41px;
-                    color: var(--course-muted);
-                    font-size: 12px;
-                    line-height: 1.6;
-                }
-
-                /* MODAL */
-
-                .lesson-modal .modal-content {
-                    border: 0;
-                    border-radius: 18px;
-                    overflow: hidden;
-                    box-shadow: 0 25px 80px rgba(15, 23, 42, .2);
-                }
-
-                .lesson-modal .modal-header {
-                    padding: 20px 22px;
-                    border-bottom: 1px solid var(--course-border);
-                }
-
-                .lesson-modal .modal-body {
-                    padding: 22px;
-                }
-
-                .lesson-modal .modal-footer {
-                    padding: 16px 22px;
-                    border-top: 1px solid var(--course-border);
-                    background: #fafbfc;
-                }
-
-                .form-label-modern {
-                    display: block;
-                    margin-bottom: 7px;
-                    color: var(--course-text);
-                    font-size: 12px;
-                    font-weight: 750;
-                }
-
-                .form-control-modern {
-                    width: 100%;
-                    min-height: 44px;
-                    padding: 10px 12px;
-                    color: var(--course-text);
-                    background: white;
-                    border: 1px solid var(--course-border);
-                    border-radius: 10px;
-                    outline: none;
-                    font-size: 13px;
-                    transition: .18s ease;
-                }
-
-                textarea.form-control-modern {
-                    min-height: 110px;
-                    resize: vertical;
-                }
-
-                .form-control-modern:focus {
-                    border-color: var(--course-primary);
-                    box-shadow: 0 0 0 3px rgba(79, 70, 229, .1);
-                }
-
-                .field-error {
-                    margin-top: 5px;
-                    color: var(--course-danger);
-                    font-size: 11px;
-                }
-
-                .modal-btn {
-                    min-height: 40px;
-                    padding: 0 15px;
-                    border-radius: 9px;
-                    font-size: 12px;
-                    font-weight: 700;
-                    border: 1px solid var(--course-border);
-                    cursor: pointer;
-                }
-
-                .modal-btn-cancel {
-                    color: var(--course-muted);
-                    background: white;
-                }
-
-                .modal-btn-save {
-                    color: white;
-                    background: var(--course-primary);
-                    border-color: var(--course-primary);
-                }
-
-                .modal-btn-save:hover {
-                    background: var(--course-primary-dark);
-                }
-
-                /* RESPONSIVE */
-
-                @media (max-width: 1100px) {
-                    .course-hero {
-                        grid-template-columns: 1fr;
-                    }
-
-                    .course-hero-image {
-                        min-height: 260px;
-                    }
-
-                    .course-hero-image img {
-                        min-height: 260px;
-                    }
-
-                    .content-grid {
-                        grid-template-columns: 1fr;
-                    }
-                }
-
-                @media (max-width: 800px) {
+            <Head
+                title={`${course?.title || "Course"} · Course`}
+            />
+
+            <div className="course-page">
+                <style>{`
                     .course-page {
-                        padding: 18px;
+                        min-height: 100vh;
+                        background: #f7f8fa;
+                        color: #1d1d1f;
+                        font-family:
+                            -apple-system,
+                            BlinkMacSystemFont,
+                            "SF Pro Display",
+                            "SF Pro Text",
+                            "Inter",
+                            "Segoe UI",
+                            sans-serif;
+                        font-size: 13px;
                     }
 
-                    .course-header {
-                        align-items: flex-start;
-                        flex-direction: column;
+                    .course-shell {
+                        max-width: 1380px;
+                        margin: 0 auto;
+                        padding: 28px 24px 60px;
                     }
 
-                    .course-page-title {
-                        font-size: 23px;
+                    .course-breadcrumb {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        color: #86868b;
+                        font-size: 12px;
+                        margin-bottom: 18px;
                     }
 
-                    .header-actions {
+                    .course-breadcrumb a {
+                        color: #6e6e73;
+                        text-decoration: none;
+                    }
+
+                    .course-breadcrumb a:hover {
+                        color: #111;
+                    }
+
+                    .course-hero {
+                        background: #fff;
+                        border: 1px solid #e7e7e9;
+                        border-radius: 20px;
+                        padding: 30px;
+                        box-shadow:
+                            0 8px 30px rgba(
+                                0,
+                                0,
+                                0,
+                                .04
+                            );
+                    }
+
+                    .course-label {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 7px;
+                        padding: 6px 10px;
+                        border-radius: 999px;
+                        background: #f2f2f7;
+                        color: #555;
+                        font-size: 11px;
+                        font-weight: 600;
+                        letter-spacing: .01em;
+                    }
+
+                    .course-title {
+                        font-size: clamp(
+                            28px,
+                            4vw,
+                            44px
+                        );
+                        line-height: 1.08;
+                        letter-spacing: -.035em;
+                        font-weight: 700;
+                        margin: 15px 0 12px;
+                        max-width: 850px;
+                    }
+
+                    .course-description {
+                        max-width: 800px;
+                        color: #6e6e73;
+                        font-size: 14px;
+                        line-height: 1.7;
+                        margin-bottom: 22px;
+                    }
+
+                    .course-meta {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        gap: 12px 20px;
+                        color: #6e6e73;
+                        font-size: 12px;
+                    }
+
+                    .course-meta-item {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+
+                    .course-rating {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        color: #1d1d1f;
+                        font-weight: 600;
+                    }
+
+                    .course-rating-stars {
+                        display: inline-flex;
+                        color: #f5a623;
+                    }
+
+                    .course-layout {
+                        display: grid;
+                        grid-template-columns:
+                            minmax(0, 1fr)
+                            350px;
+                        gap: 24px;
+                        margin-top: 24px;
+                        align-items: start;
+                    }
+
+                    .course-card {
+                        background: #fff;
+                        border: 1px solid #e7e7e9;
+                        border-radius: 18px;
+                        overflow: hidden;
+                    }
+
+                    .course-card-body {
+                        padding: 22px;
+                    }
+
+                    .video-preview {
+                        position: relative;
+                        background: #000;
+                        aspect-ratio: 16 / 9;
+                        overflow: hidden;
+                    }
+
+                    .video-preview iframe,
+                    .video-preview > div {
                         width: 100%;
+                        height: 100%;
                     }
 
-                    .header-actions .course-btn {
+                    .preview-placeholder {
+                        aspect-ratio: 16 / 9;
+                        background:
+                            linear-gradient(
+                                135deg,
+                                #171717,
+                                #292929
+                            );
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #fff;
+                        position: relative;
+                    }
+
+                    .preview-placeholder-content {
+                        text-align: center;
+                        max-width: 420px;
+                        padding: 30px;
+                    }
+
+                    .preview-play {
+                        width: 64px;
+                        height: 64px;
+                        border: 0;
+                        border-radius: 50%;
+                        background: #fff;
+                        color: #111;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 16px;
+                        box-shadow:
+                            0 10px 30px
+                            rgba(0,0,0,.2);
+                        transition:
+                            transform .2s ease;
+                    }
+
+                    .preview-play:hover {
+                        transform: scale(1.04);
+                    }
+
+                    .preview-placeholder h3 {
+                        font-size: 18px;
+                        margin: 0 0 7px;
+                        font-weight: 650;
+                    }
+
+                    .preview-placeholder p {
+                        color: #b8b8b8;
+                        font-size: 12px;
+                        margin: 0;
+                        line-height: 1.6;
+                    }
+
+                    .preview-bar {
+                        padding: 12px 16px;
+                        background: #fff;
+                        border-top: 1px solid #e7e7e9;
+                    }
+
+                    .preview-progress {
+                        height: 4px;
+                        background: #ededed;
+                        border-radius: 99px;
+                        overflow: hidden;
+                    }
+
+                    .preview-progress-fill {
+                        height: 100%;
+                        background: #111;
+                        transition: width .15s linear;
+                    }
+
+                    .preview-progress-meta {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 10px;
+                        margin-top: 7px;
+                        font-size: 11px;
+                        color: #86868b;
+                    }
+
+                    .section-heading {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 15px;
+                        padding: 20px 22px;
+                        border-bottom: 1px solid #ededed;
+                    }
+
+                    .section-heading h2 {
+                        margin: 0;
+                        font-size: 16px;
+                        letter-spacing: -.015em;
+                        font-weight: 650;
+                    }
+
+                    .section-heading span {
+                        font-size: 11px;
+                        color: #86868b;
+                    }
+
+                    .lesson-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 14px;
+                        padding: 15px 22px;
+                        border-bottom: 1px solid #f0f0f2;
+                    }
+
+                    .lesson-item:last-child {
+                        border-bottom: 0;
+                    }
+
+                    .lesson-number {
+                        width: 32px;
+                        height: 32px;
+                        flex: 0 0 32px;
+                        border-radius: 9px;
+                        background: #f2f2f7;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: #555;
+                    }
+
+                    .lesson-content {
+                        min-width: 0;
                         flex: 1;
                     }
 
-                    .course-stats {
-                        grid-template-columns: repeat(2, 1fr);
+                    .lesson-title {
+                        font-size: 13px;
+                        font-weight: 600;
+                        margin-bottom: 4px;
                     }
 
-                    .course-hero-content {
-                        padding: 24px;
-                    }
-
-                    .course-hero-title {
-                        font-size: 25px;
-                    }
-                }
-
-                @media (max-width: 560px) {
-                    .course-page {
-                        padding: 12px;
-                    }
-
-                    .course-stats {
-                        grid-template-columns: 1fr 1fr;
-                        gap: 8px;
-                    }
-
-                    .stat-card {
-                        padding: 13px;
-                    }
-
-                    .stat-icon {
-                        width: 38px;
-                        height: 38px;
-                    }
-
-                    .stat-number {
-                        font-size: 18px;
-                    }
-
-                    .lesson-row {
-                        grid-template-columns: 38px minmax(0, 1fr);
+                    .lesson-description {
+                        font-size: 11px;
+                        color: #86868b;
+                        line-height: 1.5;
                     }
 
                     .lesson-actions {
-                        grid-column: 2;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
                     }
 
-                    .meta-item {
+                    .course-sidebar {
+                        position: sticky;
+                        top: 20px;
+                    }
+
+                    .price-card {
+                        padding: 24px;
+                    }
+
+                    .price-label {
+                        color: #86868b;
+                        font-size: 11px;
+                        margin-bottom: 5px;
+                    }
+
+                    .price {
+                        font-size: 30px;
+                        line-height: 1;
+                        letter-spacing: -.03em;
+                        font-weight: 700;
+                        margin-bottom: 18px;
+                    }
+
+                    .price.free {
+                        color: #16803c;
+                    }
+
+                    .primary-button {
+                        width: 100%;
+                        border: 0;
+                        border-radius: 11px;
+                        padding: 12px 16px;
+                        background: #111;
+                        color: #fff;
+                        font-size: 12px;
+                        font-weight: 600;
+                        transition:
+                            opacity .2s ease,
+                            transform .2s ease;
+                    }
+
+                    .primary-button:hover {
+                        opacity: .9;
+                        transform: translateY(-1px);
+                    }
+
+                    .secondary-button {
+                        width: 100%;
+                        border: 1px solid #dedee2;
+                        border-radius: 11px;
+                        padding: 11px 16px;
+                        background: #fff;
+                        color: #1d1d1f;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+
+                    .feature-list {
+                        margin-top: 22px;
+                        padding-top: 20px;
+                        border-top: 1px solid #ededed;
+                    }
+
+                    .feature-item {
+                        display: flex;
                         align-items: flex-start;
+                        gap: 10px;
+                        padding: 7px 0;
+                        color: #555;
+                        font-size: 12px;
+                        line-height: 1.5;
                     }
 
-                    .meta-value {
-                        max-width: 55%;
+                    .feature-item svg {
+                        color: #16803c;
+                        flex: 0 0 auto;
+                        margin-top: 1px;
                     }
-                }
-            `}</style>
 
-            <div className="course-page">
-                <div className="course-container">
+                    .instructor-card {
+                        padding: 20px;
+                    }
 
-                    {/* HEADER */}
-                    <div className="course-header">
-                        <div>
-                            <div className="course-breadcrumb">
-                                <Link href={route('admin.courses.index')}>
-                                    Courses
-                                </Link>
+                    .instructor {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                    }
 
-                                <i className="bi bi-chevron-right"></i>
+                    .avatar {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        background: #f2f2f7;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 650;
+                        font-size: 12px;
+                    }
 
-                                <span>Course Details</span>
-                            </div>
+                    .instructor-name {
+                        font-size: 13px;
+                        font-weight: 600;
+                    }
 
-                            <h1 className="course-page-title">
-                                {course.title}
-                            </h1>
+                    .instructor-role {
+                        color: #86868b;
+                        font-size: 11px;
+                        margin-top: 3px;
+                    }
 
-                            <p className="course-page-subtitle">
-                                Manage course content, lessons and student feedback
-                            </p>
-                        </div>
+                    .modal-backdrop-custom {
+                        position: fixed;
+                        inset: 0;
+                        background:
+                            rgba(0,0,0,.55);
+                        z-index: 1080;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 20px;
+                    }
 
-                        <div className="header-actions">
-                            <Link
-                                href={route('admin.courses.edit', course.id)}
-                                className="course-btn course-btn-primary"
-                            >
-                                <i className="bi bi-pencil"></i>
-                                Edit Course
-                            </Link>
+                    .preview-modal {
+                        width: min(
+                            100%,
+                            1000px
+                        );
+                        background: #fff;
+                        border-radius: 18px;
+                        overflow: hidden;
+                        box-shadow:
+                            0 30px 80px
+                            rgba(0,0,0,.25);
+                    }
 
-                            <Link
-                                href={route('admin.courses.index')}
-                                className="course-btn course-btn-light"
-                            >
-                                <i className="bi bi-arrow-left"></i>
-                                Back
-                            </Link>
-                        </div>
+                    .preview-modal-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 15px 18px;
+                        border-bottom: 1px solid #ededed;
+                    }
+
+                    .preview-modal-title {
+                        font-size: 13px;
+                        font-weight: 650;
+                    }
+
+                    .preview-close {
+                        border: 0;
+                        background: #f2f2f7;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        font-size: 18px;
+                        line-height: 1;
+                    }
+
+                    .enroll-overlay {
+                        position: absolute;
+                        inset: 0;
+                        background:
+                            rgba(0,0,0,.7);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 25px;
+                        z-index: 5;
+                    }
+
+                    .enroll-box {
+                        width: min(
+                            100%,
+                            410px
+                        );
+                        background: #fff;
+                        border-radius: 16px;
+                        padding: 28px;
+                        text-align: center;
+                        box-shadow:
+                            0 20px 60px
+                            rgba(0,0,0,.25);
+                    }
+
+                    .enroll-icon {
+                        width: 46px;
+                        height: 46px;
+                        border-radius: 13px;
+                        background: #f2f2f7;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 14px;
+                    }
+
+                    .enroll-box h3 {
+                        margin: 0 0 8px;
+                        font-size: 19px;
+                        letter-spacing: -.02em;
+                    }
+
+                    .enroll-box p {
+                        margin: 0 0 18px;
+                        color: #6e6e73;
+                        font-size: 12px;
+                        line-height: 1.65;
+                    }
+
+                    .enroll-actions {
+                        display: flex;
+                        gap: 8px;
+                    }
+
+                    .enroll-actions button {
+                        flex: 1;
+                    }
+
+                    @media (max-width: 991px) {
+                        .course-layout {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .course-sidebar {
+                            position: static;
+                        }
+                    }
+
+                    @media (max-width: 576px) {
+                        .course-shell {
+                            padding: 18px 14px 40px;
+                        }
+
+                        .course-hero {
+                            padding: 20px;
+                            border-radius: 15px;
+                        }
+
+                        .course-title {
+                            font-size: 29px;
+                        }
+
+                        .course-layout {
+                            margin-top: 16px;
+                        }
+
+                        .course-card {
+                            border-radius: 15px;
+                        }
+
+                        .enroll-actions {
+                            flex-direction: column;
+                        }
+                    }
+                `}</style>
+
+                <div className="course-shell">
+
+                    {/* ======================================================
+                       BREADCRUMB
+                    ====================================================== */}
+
+                    <div className="course-breadcrumb">
+                        <Link href={route("admin.courses.index")}>
+                            Courses
+                        </Link>
+
+                        <span>/</span>
+
+                        <span>{course.title}</span>
                     </div>
 
-                    {/* HERO */}
-                    <div className="course-hero">
+                    {/* ======================================================
+                       HERO
+                    ====================================================== */}
 
-                        <div className="course-hero-image">
-                            <img
-                                src={
-                                    course.thumbnail
-                                        ? `/images/thumbnails/${course.thumbnail}`
-                                        : '/images/placeholder-course.png'
-                                }
-                                alt={course.title}
-                            />
+                    <section className="course-hero">
+                        <div className="course-label">
+                            <Icon.Book size={13} />
 
-                            <div className="course-image-overlay"></div>
+                            {course.category?.name ||
+                                "Course"}
                         </div>
 
-                        <div className="course-hero-content">
+                        <h1 className="course-title">
+                            {course.title}
+                        </h1>
 
-                            <div className="course-tags">
+                        <p className="course-description">
+                            {limit(
+                                course.description,
+                                400
+                            )}
+                        </p>
 
-                                <span
-                                    className={`course-tag ${
-                                        course.status === 'published'
-                                            ? 'tag-published'
-                                            : 'tag-draft'
-                                    }`}
-                                >
-                                    <i
-                                        className={`bi ${
-                                            course.status === 'published'
-                                                ? 'bi-check-circle-fill'
-                                                : 'bi-pencil-square'
-                                        }`}
-                                    ></i>
+                        <div className="course-meta">
 
-                                    {course.status === 'published'
-                                        ? 'Published'
-                                        : 'Draft'}
-                                </span>
+                            <div className="course-meta-item">
+                                <Icon.Users size={15} />
 
-                                <span
-                                    className={`course-tag ${
-                                        course.is_free
-                                            ? 'tag-free'
-                                            : 'tag-neutral'
-                                    }`}
-                                >
-                                    <i
-                                        className={`bi ${
-                                            course.is_free
-                                                ? 'bi-unlock'
-                                                : 'bi-cash-stack'
-                                        }`}
-                                    ></i>
-
-                                    {course.is_free
-                                        ? 'Free Course'
-                                        : `${Number(
-                                            course.price || 0
-                                        ).toLocaleString()} RWF`}
-                                </span>
-
-                                <span className="course-tag tag-neutral">
-                                    <i className="bi bi-bar-chart"></i>
-                                    {course.level}
-                                </span>
-
+                                {enrolledCount} enrolled
                             </div>
 
-                            <h2 className="course-hero-title">
-                                {course.title}
-                            </h2>
+                            <div className="course-meta-item">
+                                <Icon.Book size={15} />
 
-                            <p className="course-description">
-                                {course.description ||
-                                    'No description has been provided for this course yet.'}
-                            </p>
+                                {lessons.length} lessons
+                            </div>
 
-                            <div className="course-hero-footer">
+                            <div className="course-rating">
+                                <span className="course-rating-stars">
+                                    <Icon.Star
+                                        size={15}
+                                        filled
+                                    />
+                                </span>
 
-                                <div className="instructor-mini">
-                                    <div className="avatar">
-                                        {getInitials(course.talent?.name)}
-                                    </div>
+                                {avgRating
+                                    ? avgRating.toFixed(
+                                          1
+                                      )
+                                    : "New"}
 
-                                    <div>
-                                        <div className="instructor-label">
-                                            Instructor
-                                        </div>
-
-                                        <div className="instructor-name">
-                                            {course.talent?.name || 'Not assigned'}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {course.video && (
-                                    <a
-                                        href={course.video}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="preview-link"
-                                    >
-                                        <i className="bi bi-play-circle-fill"></i>
-                                        Watch course preview
-                                    </a>
+                                {reviews.length > 0 && (
+                                    <span>
+                                        (
+                                        {
+                                            reviews.length
+                                        }
+                                        )
+                                    </span>
                                 )}
-
                             </div>
+
+                            {course.is_free ? (
+                                <span className="badge text-bg-success">
+                                    Free
+                                </span>
+                            ) : (
+                                <strong>
+                                    {Number(
+                                        course.price || 0
+                                    ).toLocaleString()}{" "}
+                                    RWF
+                                </strong>
+                            )}
                         </div>
-                    </div>
+                    </section>
 
-                    {/* STATS */}
-                    <div className="course-stats">
+                    {/* ======================================================
+                       MAIN CONTENT
+                    ====================================================== */}
 
-                        <div className="stat-card">
-                            <div className="stat-icon">
-                                <i className="bi bi-star-fill"></i>
-                            </div>
+                    <div className="course-layout">
 
-                            <div>
-                                <span className="stat-number">
-                                    {avgRating.toFixed(1)}
-                                </span>
+                        {/* ==================================================
+                           LEFT
+                        ================================================== */}
 
-                                <span className="stat-label">
-                                    Average rating
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="stat-card">
-                            <div className="stat-icon">
-                                <i className="bi bi-chat-left-text"></i>
-                            </div>
-
-                            <div>
-                                <span className="stat-number">
-                                    {reviewsCount}
-                                </span>
-
-                                <span className="stat-label">
-                                    Student reviews
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="stat-card">
-                            <div className="stat-icon">
-                                <i className="bi bi-people"></i>
-                            </div>
-
-                            <div>
-                                <span className="stat-number">
-                                    {enrolledCount}
-                                </span>
-
-                                <span className="stat-label">
-                                    Enrolled students
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="stat-card">
-                            <div className="stat-icon">
-                                <i className="bi bi-collection-play"></i>
-                            </div>
-
-                            <div>
-                                <span className="stat-number">
-                                    {completedLessons}
-                                </span>
-
-                                <span className="stat-label">
-                                    Course lessons
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    {/* MAIN CONTENT */}
-                    <div className="content-grid">
-
-                        {/* LEFT */}
                         <div>
 
-                            {/* LESSONS */}
-                            <div className="content-card mb-4">
+                            {/* ==================================================
+                               VIDEO
+                            ================================================== */}
 
-                                <div className="card-header">
+                            <div className="course-card mb-4">
 
-                                    <div className="card-title-wrap">
-                                        <div className="card-title-icon">
-                                            <i className="bi bi-collection-play"></i>
-                                        </div>
+                                {!previewOpen ? (
+                                    <div className="preview-placeholder">
 
-                                        <div>
-                                            <h3 className="card-title">
-                                                Course Lessons
+                                        <div className="preview-placeholder-content">
+
+                                            <button
+                                                type="button"
+                                                className="preview-play"
+                                                onClick={
+                                                    openPreview
+                                                }
+                                                disabled={
+                                                    !youtubeVideoId
+                                                }
+                                            >
+                                                <Icon.Play
+                                                    size={
+                                                        25
+                                                    }
+                                                />
+                                            </button>
+
+                                            <h3>
+                                                Watch course
+                                                preview
                                             </h3>
 
-                                            <p className="card-subtitle">
-                                                Manage the learning content
+                                            <p>
+                                                {course.is_free
+                                                    ? "Preview the course video."
+                                                    : previewDurationSeconds >
+                                                        0
+                                                      ? `Watch the first ${formatDuration(
+                                                            previewDurationSeconds
+                                                        )} free. Enroll to continue watching.`
+                                                      : "Enroll to access the course video."}
                                             </p>
+
                                         </div>
+
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div
+                                            className="video-preview"
+                                            style={{
+                                                position:
+                                                    "relative",
+                                            }}
+                                        >
+                                            <div
+                                                ref={
+                                                    playerContainerRef
+                                                }
+                                            />
+
+                                            {previewEnded &&
+                                                !userIsEnrolled && (
+                                                    <div className="enroll-overlay">
+
+                                                        <div className="enroll-box">
+
+                                                            <div className="enroll-icon">
+                                                                <Icon.Lock
+                                                                    size={
+                                                                        21
+                                                                    }
+                                                                />
+                                                            </div>
+
+                                                            <h3>
+                                                                Preview
+                                                                finished
+                                                            </h3>
+
+                                                            <p>
+                                                                You have
+                                                                watched
+                                                                the free
+                                                                preview.
+                                                                Enroll in
+                                                                this course
+                                                                to continue
+                                                                watching the
+                                                                complete
+                                                                video.
+                                                            </p>
+
+                                                            <div className="enroll-actions">
+
+                                                                <button
+                                                                    type="button"
+                                                                    className="secondary-button"
+                                                                    onClick={() =>
+                                                                        setEnrollPromptOpen(
+                                                                            false
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Continue
+                                                                    browsing
+                                                                </button>
+
+                                                                <button
+                                                                    type="button"
+                                                                    className="primary-button"
+                                                                    onClick={
+                                                                        enrollInCourse
+                                                                    }
+                                                                    disabled={
+                                                                        enrolling
+                                                                    }
+                                                                >
+                                                                    {enrolling
+                                                                        ? "Enrolling..."
+                                                                        : "Enroll now"}
+                                                                </button>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                )}
+                                        </div>
+
+                                        {!course.is_free &&
+                                            !userIsEnrolled &&
+                                            previewDurationSeconds >
+                                                0 && (
+                                                <div className="preview-bar">
+
+                                                    <div className="preview-progress">
+                                                        <div
+                                                            className="preview-progress-fill"
+                                                            style={{
+                                                                width: `${previewPercentage}%`,
+                                                            }}
+                                                        />
+                                                    </div>
+
+                                                    <div className="preview-progress-meta">
+                                                        <span>
+                                                            Preview
+                                                        </span>
+
+                                                        <span>
+                                                            {
+                                                                formatDuration(
+                                                                    previewCurrentTime
+                                                                )
+                                                            }{" "}
+                                                            /{" "}
+                                                            {
+                                                                formatDuration(
+                                                                    previewDurationSeconds
+                                                                )
+                                                            }
+                                                        </span>
+                                                    </div>
+
+                                                </div>
+                                            )}
+                                    </>
+                                )}
+
+                                {previewOpen && (
+                                    <div className="course-card-body">
+
+                                        <div className="d-flex justify-content-between align-items-center">
+
+                                            <div>
+                                                <div
+                                                    className="fw-semibold"
+                                                    style={{
+                                                        fontSize:
+                                                            "13px",
+                                                    }}
+                                                >
+                                                    Course preview
+                                                </div>
+
+                                                <div
+                                                    className="text-muted"
+                                                    style={{
+                                                        fontSize:
+                                                            "11px",
+                                                    }}
+                                                >
+                                                    {userIsEnrolled
+                                                        ? "Full course access unlocked"
+                                                        : course.is_free
+                                                          ? "Free course"
+                                                          : "Free preview"}
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-light border"
+                                                onClick={
+                                                    closePreview
+                                                }
+                                            >
+                                                Close
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* ==================================================
+                               LESSONS
+                            ================================================== */}
+
+                            <div className="course-card mb-4">
+
+                                <div className="section-heading">
+
+                                    <div>
+                                        <h2>
+                                            Course content
+                                        </h2>
+
+                                        <span>
+                                            Structured learning
+                                            materials
+                                        </span>
                                     </div>
 
                                     <button
                                         type="button"
-                                        className="course-btn course-btn-primary"
+                                        className="btn btn-sm btn-dark"
                                         data-bs-toggle="modal"
                                         data-bs-target="#addLessonModal"
                                     >
-                                        <i className="bi bi-plus-lg"></i>
-                                        Add Lesson
+                                        Add lesson
                                     </button>
 
                                 </div>
 
-                                <div className="card-body">
+                                {lessons.length > 0 ? (
+                                    lessons.map(
+                                        (
+                                            lesson,
+                                            index
+                                        ) => (
+                                            <div
+                                                className="lesson-item"
+                                                key={
+                                                    lesson.id
+                                                }
+                                            >
 
-                                    {sortedLessons.length > 0 ? (
-                                        <div className="lesson-list">
+                                                <div className="lesson-number">
+                                                    {index +
+                                                        1}
+                                                </div>
 
-                                            {sortedLessons.map(
-                                                (lesson, index) => (
-                                                    <div
-                                                        className="lesson-row"
-                                                        key={lesson.id}
-                                                    >
+                                                <div className="lesson-content">
 
-                                                        <div className="lesson-number">
-                                                            {String(
-                                                                index + 1
-                                                            ).padStart(2, '0')}
-                                                        </div>
-
-                                                        <div>
-                                                            <div className="lesson-name">
-                                                                {lesson.title}
-                                                            </div>
-
-                                                            <div className="lesson-description">
-                                                                {limit(
-                                                                    lesson.content,
-                                                                    100
-                                                                ) ||
-                                                                    'No lesson description'}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="lesson-actions">
-
-                                                            <Link
-                                                                href={route(
-                                                                    'admin.courses.lessons.edit',
-                                                                    {
-                                                                        course:
-                                                                            course.id,
-                                                                        lesson:
-                                                                            lesson.id,
-                                                                    }
-                                                                )}
-                                                                className="lesson-action"
-                                                                title="Edit lesson"
-                                                            >
-                                                                <i className="bi bi-pencil"></i>
-                                                            </Link>
-
-                                                            <button
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    handleDeleteLesson(
-                                                                        lesson
-                                                                    )
-                                                                }
-                                                                className="lesson-action delete"
-                                                                title="Delete lesson"
-                                                            >
-                                                                <i className="bi bi-trash"></i>
-                                                            </button>
-
-                                                        </div>
+                                                    <div className="lesson-title">
+                                                        {
+                                                            lesson.title
+                                                        }
                                                     </div>
-                                                )
-                                            )}
 
-                                        </div>
-                                    ) : (
-                                        <div className="empty-state">
+                                                    {lesson.content && (
+                                                        <div className="lesson-description">
+                                                            {limit(
+                                                                lesson.content,
+                                                                130
+                                                            )}
+                                                        </div>
+                                                    )}
 
-                                            <div className="empty-icon">
-                                                <i className="bi bi-journal-x"></i>
-                                            </div>
+                                                </div>
 
-                                            <strong>
-                                                No lessons yet
-                                            </strong>
+                                                <div className="lesson-actions">
 
-                                            <span>
-                                                Start building this course by
-                                                adding your first lesson.
-                                            </span>
+                                                    {lesson.video_url && (
+                                                        <a
+                                                            href={
+                                                                lesson.video_url
+                                                            }
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="btn btn-sm btn-light"
+                                                        >
+                                                            <Icon.Play
+                                                                size={
+                                                                    13
+                                                                }
+                                                            />
+                                                        </a>
+                                                    )}
 
-                                        </div>
-                                    )}
-
-                                </div>
-                            </div>
-
-                            {/* FEEDBACK */}
-                            <div className="content-card">
-
-                                <div className="card-header">
-
-                                    <div className="card-title-wrap">
-                                        <div className="card-title-icon">
-                                            <i className="bi bi-chat-square-text"></i>
-                                        </div>
-
-                                        <div>
-                                            <h3 className="card-title">
-                                                Student Feedback
-                                            </h3>
-
-                                            <p className="card-subtitle">
-                                                What students are saying
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="card-body">
-
-                                    <div className="rating-summary">
-
-                                        <div className="rating-number">
-                                            {avgRating.toFixed(1)}
-                                        </div>
-
-                                        <div>
-                                            <div className="rating-stars">
-                                                {[1, 2, 3, 4, 5].map(
-                                                    star => (
-                                                        <i
-                                                            key={star}
-                                                            className={`bi ${
-                                                                star <=
-                                                                Math.round(
-                                                                    avgRating
-                                                                )
-                                                                    ? 'bi-star-fill'
-                                                                    : 'bi-star'
-                                                            }`}
-                                                        ></i>
-                                                    )
-                                                )}
-                                            </div>
-
-                                            <div className="rating-label">
-                                                Based on {reviewsCount}{' '}
-                                                {reviewsCount === 1
-                                                    ? 'review'
-                                                    : 'reviews'}
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    {course.feedback?.length > 0 ? (
-                                        <div className="feedback-list">
-
-                                            {course.feedback.map(
-                                                (feedback, index) => (
-                                                    <div
-                                                        className="feedback-item"
-                                                        key={
-                                                            feedback.id ??
-                                                            index
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-sm btn-outline-danger"
+                                                        onClick={() =>
+                                                            deleteLesson(
+                                                                lesson
+                                                            )
                                                         }
                                                     >
+                                                        Delete
+                                                    </button>
 
-                                                        <div className="d-flex align-items-center">
+                                                </div>
 
-                                                            <div className="feedback-user">
-
-                                                                <div className="feedback-avatar">
-                                                                    {getInitials(
-                                                                        feedback
-                                                                            .user
-                                                                            ?.name
-                                                                    )}
-                                                                </div>
-
-                                                                <div>
-                                                                    <div className="feedback-name">
-                                                                        {feedback
-                                                                            .user
-                                                                            ?.name ||
-                                                                            'Anonymous'}
-                                                                    </div>
-
-                                                                    {feedback.created_at && (
-                                                                        <div className="feedback-date">
-                                                                            {formatDate(
-                                                                                feedback.created_at
-                                                                            )}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-
-                                                            </div>
-
-                                                            <div className="feedback-stars">
-
-                                                                {[1, 2, 3, 4, 5].map(
-                                                                    star => (
-                                                                        <i
-                                                                            key={
-                                                                                star
-                                                                            }
-                                                                            className={`bi ${
-                                                                                star <=
-                                                                                Number(
-                                                                                    feedback.rating
-                                                                                )
-                                                                                    ? 'bi-star-fill'
-                                                                                    : 'bi-star'
-                                                                            }`}
-                                                                        ></i>
-                                                                    )
-                                                                )}
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        {feedback.comment && (
-                                                            <p className="feedback-comment">
-                                                                {feedback.comment}
-                                                            </p>
-                                                        )}
-
-                                                    </div>
-                                                )
-                                            )}
-
-                                        </div>
-                                    ) : (
-                                        <div className="empty-state">
-
-                                            <div className="empty-icon">
-                                                <i className="bi bi-chat-left"></i>
                                             </div>
+                                        )
+                                    )
+                                ) : (
+                                    <div className="p-5 text-center text-muted">
+                                        No lessons have been
+                                        added yet.
+                                    </div>
+                                )}
 
-                                            <strong>
-                                                No feedback yet
-                                            </strong>
+                            </div>
 
-                                            <span>
-                                                Student reviews will appear
-                                                here once submitted.
-                                            </span>
+                            {/* ==================================================
+                               DESCRIPTION
+                            ================================================== */}
 
-                                        </div>
-                                    )}
+                            <div className="course-card">
+
+                                <div className="section-heading">
+                                    <h2>
+                                        About this course
+                                    </h2>
+                                </div>
+
+                                <div className="course-card-body">
+
+                                    <div
+                                        style={{
+                                            fontSize:
+                                                "13px",
+                                            lineHeight:
+                                                "1.8",
+                                            color:
+                                                "#555",
+                                            whiteSpace:
+                                                "pre-line",
+                                        }}
+                                    >
+                                        {
+                                            course.description
+                                        }
+                                    </div>
 
                                 </div>
+
                             </div>
 
                         </div>
 
-                        {/* RIGHT SIDEBAR */}
-                        <div>
+                        {/* ==================================================
+                           SIDEBAR
+                        ================================================== */}
 
-                            {/* OVERVIEW */}
-                            <div className="content-card mb-4">
+                        <aside className="course-sidebar">
 
-                                <div className="card-header">
+                            {/* PRICE */}
+                            <div className="course-card mb-3">
 
-                                    <div className="card-title-wrap">
-                                        <div className="card-title-icon">
-                                            <i className="bi bi-info-circle"></i>
-                                        </div>
+                                <div className="price-card">
 
-                                        <div>
-                                            <h3 className="card-title">
-                                                Course Overview
-                                            </h3>
-
-                                            <p className="card-subtitle">
-                                                Course information
-                                            </p>
-                                        </div>
+                                    <div className="price-label">
+                                        Course access
                                     </div>
 
-                                </div>
-
-                                <div className="card-body">
-
-                                    <div className="meta-list">
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Instructor
-                                            </span>
-
-                                            <span className="meta-value">
-                                                {course.talent?.name || '—'}
-                                            </span>
+                                    {course.is_free ? (
+                                        <div className="price free">
+                                            Free
                                         </div>
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Category
-                                            </span>
-
-                                            <span className="meta-value">
-                                                {course.category?.name || '—'}
-                                            </span>
+                                    ) : (
+                                        <div className="price">
+                                            {Number(
+                                                course.price ||
+                                                    0
+                                            ).toLocaleString()}{" "}
+                                            RWF
                                         </div>
+                                    )}
 
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Level
-                                            </span>
+                                    {!userIsEnrolled && (
+                                        <>
+                                            {!course.is_free && (
+                                                <button
+                                                    type="button"
+                                                    className="primary-button mb-2"
+                                                    onClick={
+                                                        enrollInCourse
+                                                    }
+                                                    disabled={
+                                                        enrolling
+                                                    }
+                                                >
+                                                    {enrolling
+                                                        ? "Enrolling..."
+                                                        : "Enroll in course"}
+                                                </button>
+                                            )}
 
-                                            <span className="meta-value">
-                                                {course.level || '—'}
-                                            </span>
-                                        </div>
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Price
-                                            </span>
-
-                                            <span className="meta-value">
-                                                {course.is_free
-                                                    ? 'Free'
-                                                    : `${Number(
-                                                        course.price || 0
-                                                    ).toLocaleString()} RWF`}
-                                            </span>
-                                        </div>
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Status
-                                            </span>
-
-                                            <span className="meta-value">
-                                                {course.status === 'published'
-                                                    ? 'Published'
-                                                    : 'Draft'}
-                                            </span>
-                                        </div>
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Created
-                                            </span>
-
-                                            <span className="meta-value">
-                                                {formatDate(
-                                                    course.created_at
-                                                )}
-                                            </span>
-                                        </div>
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Updated
-                                            </span>
-
-                                            <span className="meta-value">
-                                                {formatDate(
-                                                    course.updated_at
-                                                )}
-                                            </span>
-                                        </div>
-
-                                        <div className="meta-item">
-                                            <span className="meta-label">
-                                                Slug
-                                            </span>
-
-                                            <span
-                                                className="meta-value"
-                                                title={course.slug}
+                                            <button
+                                                type="button"
+                                                className="secondary-button"
+                                                onClick={
+                                                    openPreview
+                                                }
+                                                disabled={
+                                                    !youtubeVideoId
+                                                }
                                             >
-                                                {course.slug || '—'}
-                                            </span>
+                                                <Icon.Play
+                                                    size={14}
+                                                />{" "}
+                                                Watch preview
+                                            </button>
+                                        </>
+                                    )}
+
+                                    {userIsEnrolled && (
+                                        <div className="alert alert-success mb-0 py-2">
+                                            <div className="d-flex align-items-center gap-2">
+                                                <Icon.Check
+                                                    size={
+                                                        16
+                                                    }
+                                                />
+
+                                                <span
+                                                    style={{
+                                                        fontSize:
+                                                            "12px",
+                                                    }}
+                                                >
+                                                    You are enrolled
+                                                    in this course.
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="feature-list">
+
+                                        <div className="feature-item">
+                                            <Icon.Check
+                                                size={
+                                                    15
+                                                }
+                                            />
+
+                                            Full course video
+                                            access
+                                        </div>
+
+                                        <div className="feature-item">
+                                            <Icon.Check
+                                                size={
+                                                    15
+                                                }
+                                            />
+
+                                            {lessons.length} structured
+                                            lessons
+                                        </div>
+
+                                        <div className="feature-item">
+                                            <Icon.Check
+                                                size={
+                                                    15
+                                                }
+                                            />
+
+                                            Track your course
+                                            progress
+                                        </div>
+
+                                        <div className="feature-item">
+                                            <Icon.Check
+                                                size={
+                                                    15
+                                                }
+                                            />
+
+                                            Access from your
+                                            account
                                         </div>
 
                                     </div>
 
                                 </div>
+
                             </div>
 
-                            {/* COURSE ACTIONS */}
-                            <div className="content-card">
+                            {/* INSTRUCTOR */}
+                            <div className="course-card">
 
-                                <div className="card-header">
+                                <div className="instructor-card">
 
-                                    <div className="card-title-wrap">
-                                        <div className="card-title-icon">
-                                            <i className="bi bi-lightning-charge"></i>
+                                    <div
+                                        className="text-muted mb-3"
+                                        style={{
+                                            fontSize:
+                                                "11px",
+                                        }}
+                                    >
+                                        Instructor
+                                    </div>
+
+                                    <div className="instructor">
+
+                                        <div className="avatar">
+                                            {getInitials(
+                                                course
+                                                    ?.instructor
+                                                    ?.name
+                                            )}
                                         </div>
 
                                         <div>
-                                            <h3 className="card-title">
-                                                Quick Actions
-                                            </h3>
+                                            <div className="instructor-name">
+                                                {
+                                                    course
+                                                        ?.instructor
+                                                        ?.name
+                                                }
+                                            </div>
 
-                                            <p className="card-subtitle">
-                                                Manage this course
-                                            </p>
+                                            <div className="instructor-role">
+                                                Course instructor
+                                            </div>
                                         </div>
+
                                     </div>
 
                                 </div>
 
-                                <div className="card-body">
+                            </div>
 
-                                    <div className="d-grid gap-2">
+                        </aside>
 
-                                        <Link
-                                            href={route(
-                                                'admin.courses.edit',
-                                                course.id
-                                            )}
-                                            className="course-btn course-btn-primary"
-                                        >
-                                            <i className="bi bi-pencil"></i>
-                                            Edit Course
-                                        </Link>
+                    </div>
+                </div>
 
-                                        <button
-                                            type="button"
-                                            className="course-btn course-btn-light"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#addLessonModal"
-                                        >
-                                            <i className="bi bi-plus-circle"></i>
-                                            Add New Lesson
-                                        </button>
+                {/* ==========================================================
+                   ADD LESSON MODAL
+                =========================================================== */}
 
-                                        {course.video && (
-                                            <a
-                                                href={course.video}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="course-btn course-btn-light"
-                                            >
-                                                <i className="bi bi-play-circle"></i>
-                                                Watch Preview
-                                            </a>
+                <div
+                    className="modal fade"
+                    id="addLessonModal"
+                    tabIndex="-1"
+                    aria-hidden="true"
+                >
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content border-0 shadow-lg">
+
+                            <form
+                                onSubmit={
+                                    submitLesson
+                                }
+                            >
+
+                                <div className="modal-header">
+                                    <h5
+                                        className="modal-title"
+                                        style={{
+                                            fontSize:
+                                                "15px",
+                                            fontWeight:
+                                                650,
+                                        }}
+                                    >
+                                        Add lesson
+                                    </h5>
+
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        data-bs-dismiss="modal"
+                                    />
+                                </div>
+
+                                <div className="modal-body">
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label small fw-semibold">
+                                            Lesson title
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            className={`form-control ${
+                                                errors.title
+                                                    ? "is-invalid"
+                                                    : ""
+                                            }`}
+                                            value={
+                                                data.title
+                                            }
+                                            onChange={(e) =>
+                                                setData(
+                                                    "title",
+                                                    e
+                                                        .target
+                                                        .value
+                                                )
+                                            }
+                                            placeholder="Enter lesson title"
+                                        />
+
+                                        {errors.title && (
+                                            <div className="invalid-feedback">
+                                                {
+                                                    errors.title
+                                                }
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label small fw-semibold">
+                                            Content
+                                        </label>
+
+                                        <textarea
+                                            className={`form-control ${
+                                                errors.content
+                                                    ? "is-invalid"
+                                                    : ""
+                                            }`}
+                                            rows="4"
+                                            value={
+                                                data.content
+                                            }
+                                            onChange={(e) =>
+                                                setData(
+                                                    "content",
+                                                    e
+                                                        .target
+                                                        .value
+                                                )
+                                            }
+                                            placeholder="Describe this lesson..."
+                                        />
+
+                                        {errors.content && (
+                                            <div className="invalid-feedback">
+                                                {
+                                                    errors.content
+                                                }
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label small fw-semibold">
+                                            Video URL
+                                        </label>
+
+                                        <input
+                                            type="url"
+                                            className={`form-control ${
+                                                errors.video_url
+                                                    ? "is-invalid"
+                                                    : ""
+                                            }`}
+                                            value={
+                                                data.video_url
+                                            }
+                                            onChange={(e) =>
+                                                setData(
+                                                    "video_url",
+                                                    e
+                                                        .target
+                                                        .value
+                                                )
+                                            }
+                                            placeholder="https://youtube.com/..."
+                                        />
+
+                                        {errors.video_url && (
+                                            <div className="invalid-feedback">
+                                                {
+                                                    errors.video_url
+                                                }
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    <div>
+
+                                        <label className="form-label small fw-semibold">
+                                            Lesson order
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            className={`form-control ${
+                                                errors.order
+                                                    ? "is-invalid"
+                                                    : ""
+                                            }`}
+                                            value={
+                                                data.order
+                                            }
+                                            onChange={(e) =>
+                                                setData(
+                                                    "order",
+                                                    Number(
+                                                        e
+                                                            .target
+                                                            .value
+                                                    )
+                                                )
+                                            }
+                                        />
+
+                                        {errors.order && (
+                                            <div className="invalid-feedback">
+                                                {
+                                                    errors.order
+                                                }
+                                            </div>
                                         )}
 
                                     </div>
 
                                 </div>
 
-                            </div>
+                                <div className="modal-footer">
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-light"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        className="btn btn-dark"
+                                        disabled={
+                                            processing
+                                        }
+                                    >
+                                        {processing
+                                            ? "Saving..."
+                                            : "Add lesson"}
+                                    </button>
+
+                                </div>
+
+                            </form>
 
                         </div>
-
-                    </div>
-                </div>
-            </div>
-
-            {/* ADD LESSON MODAL */}
-            <div
-                className="modal fade lesson-modal"
-                id="addLessonModal"
-                tabIndex="-1"
-                aria-labelledby="addLessonModalLabel"
-                aria-hidden="true"
-            >
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-
-                        <form onSubmit={handleAddLesson}>
-
-                            <div className="modal-header">
-
-                                <div>
-                                    <h5
-                                        className="modal-title fw-bold mb-1"
-                                        id="addLessonModalLabel"
-                                    >
-                                        Add New Lesson
-                                    </h5>
-
-                                    <small className="text-muted">
-                                        Add a lesson to {course.title}
-                                    </small>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-
-                            </div>
-
-                            <div className="modal-body">
-
-                                <div className="mb-3">
-                                    <label className="form-label-modern">
-                                        Lesson Title
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        value={data.title}
-                                        onChange={e =>
-                                            setData(
-                                                'title',
-                                                e.target.value
-                                            )
-                                        }
-                                        className="form-control-modern"
-                                        placeholder="e.g. Introduction to the course"
-                                        required
-                                    />
-
-                                    {errors.title && (
-                                        <div className="field-error">
-                                            {errors.title}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label-modern">
-                                        Lesson Content
-                                    </label>
-
-                                    <textarea
-                                        value={data.content}
-                                        onChange={e =>
-                                            setData(
-                                                'content',
-                                                e.target.value
-                                            )
-                                        }
-                                        className="form-control-modern"
-                                        placeholder="Describe what students will learn in this lesson..."
-                                        rows="4"
-                                    />
-
-                                    {errors.content && (
-                                        <div className="field-error">
-                                            {errors.content}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label-modern">
-                                        Video URL
-                                    </label>
-
-                                    <input
-                                        type="url"
-                                        value={data.video_url}
-                                        onChange={e =>
-                                            setData(
-                                                'video_url',
-                                                e.target.value
-                                            )
-                                        }
-                                        className="form-control-modern"
-                                        placeholder="https://youtube.com/..."
-                                        required
-                                    />
-
-                                    {errors.video_url && (
-                                        <div className="field-error">
-                                            {errors.video_url}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="mb-0">
-                                    <label className="form-label-modern">
-                                        Lesson Order
-                                    </label>
-
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        value={data.order}
-                                        onChange={e =>
-                                            setData(
-                                                'order',
-                                                e.target.value
-                                            )
-                                        }
-                                        className="form-control-modern"
-                                    />
-                                </div>
-
-                            </div>
-
-                            <div className="modal-footer">
-
-                                <button
-                                    type="button"
-                                    className="modal-btn modal-btn-cancel"
-                                    data-bs-dismiss="modal"
-                                >
-                                    Cancel
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    className="modal-btn modal-btn-save"
-                                    disabled={processing}
-                                >
-                                    {processing ? (
-                                        <>
-                                            <span
-                                                className="spinner-border spinner-border-sm me-2"
-                                                role="status"
-                                            ></span>
-                                            Saving...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <i className="bi bi-check-lg me-1"></i>
-                                            Save Lesson
-                                        </>
-                                    )}
-                                </button>
-
-                            </div>
-
-                        </form>
-
                     </div>
                 </div>
             </div>

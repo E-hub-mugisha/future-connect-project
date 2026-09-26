@@ -16,7 +16,10 @@ class CourseEnrollment extends Model
         'status',
     ];
 
-    // 🔹 Relationships
+    protected $casts = [
+        'progress' => 'integer',
+    ];
+
     public function course()
     {
         return $this->belongsTo(Course::class);

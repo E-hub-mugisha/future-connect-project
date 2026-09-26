@@ -62,6 +62,7 @@ use App\Models\Wallet;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\DemoRequestController as AdminDemoRequestController;
+use App\Http\Controllers\CourseEnrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -210,6 +211,12 @@ Route::post('/courses/{course}/pay', [CourseController::class, 'pay'])->name('us
 Route::get('/courses/{course}/success', [CourseController::class, 'paymentSuccess'])->name('user.courses.success');
 Route::get('/course/payment/callback', [CourseController::class, 'handleCallback'])->name('course.payment.callback');
 
+Route::post(
+    '/courses/{course}/enroll',
+    [CourseEnrollmentController::class, 'store']
+)
+    ->middleware('auth')
+    ->name('courses.enroll');
 /*
 |--------------------------------------------------------------------------
 | Products & Checkout

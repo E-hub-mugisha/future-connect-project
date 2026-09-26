@@ -15,11 +15,111 @@ const routes = {
 };
 
 /* =========================================================
-   Apple / Professional Theme
+   LIGHT APPLE THEME
 ========================================================= */
 
 const FONT_STACK =
     '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+
+const COLORS = {
+    page: '#f5f5f7',
+    white: '#ffffff',
+    surface: '#fbfbfc',
+    surfaceSoft: '#f8f8fa',
+    border: '#e5e5ea',
+    borderSoft: '#f0f0f2',
+    text: '#1d1d1f',
+    textSecondary: '#48484a',
+    muted: '#6e6e73',
+    subtle: '#8e8e93',
+    primary: '#0071e3',
+    primaryDark: '#0066cc',
+    primarySoft: '#eef6ff',
+    success: '#16845b',
+    successSoft: '#e9f8f0',
+    warning: '#9b6200',
+    warningSoft: '#fff6df',
+    danger: '#d93025',
+    dangerSoft: '#fdeeee',
+};
+
+/* =========================================================
+   GLOBAL LIGHT THEME
+========================================================= */
+
+const lightThemeStyle = `
+    :root {
+        color-scheme: light !important;
+    }
+
+    html,
+    body {
+        color-scheme: light !important;
+        background: #f5f5f7 !important;
+        color: #1d1d1f !important;
+        font-family: ${FONT_STACK};
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+        font-family: inherit;
+    }
+
+    input,
+    textarea,
+    select {
+        color-scheme: light !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #a1a1a6 !important;
+        opacity: 1;
+    }
+
+    .form-control,
+    .form-select {
+        color: #1d1d1f !important;
+        background-color: #fbfbfc !important;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        color: #1d1d1f !important;
+        background-color: #ffffff !important;
+        border-color: #9fc8ef !important;
+        box-shadow: 0 0 0 3px rgba(0, 113, 227, .08) !important;
+    }
+
+    .table {
+        --bs-table-bg: transparent !important;
+        --bs-table-color: #1d1d1f !important;
+    }
+
+    .btn:focus-visible,
+    button:focus-visible {
+        outline: 3px solid rgba(0, 113, 227, .15) !important;
+        outline-offset: 2px;
+    }
+
+    @media (max-width: 767.98px) {
+        .seller-page-title {
+            font-size: 25px !important;
+        }
+
+        .seller-table-card {
+            border-radius: 14px !important;
+        }
+    }
+`;
 
 /* =========================================================
    Icons
@@ -138,15 +238,16 @@ const Icon = {
         </svg>
     ),
 
-    User: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...p}>
-            <circle cx="12" cy="8" r="3.5" />
-            <path d="M5 20c.8-3.6 3.1-5.5 7-5.5s6.2 1.9 7 5.5" strokeLinecap="round" />
-        </svg>
-    ),
-
     Check: (p) => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...p}
+        >
             <path d="m5 12 4 4L19 6" />
         </svg>
     ),
@@ -175,9 +276,7 @@ function paletteFor(seed = '') {
     let hash = 0;
 
     for (let i = 0; i < seed.length; i++) {
-        hash =
-            seed.charCodeAt(i) +
-            ((hash << 5) - hash);
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
     }
 
     return AVATAR_PALETTES[Math.abs(hash) % AVATAR_PALETTES.length];
@@ -222,22 +321,22 @@ function Avatar({ name, size = 44 }) {
 const STATUS_META = {
     approved: {
         label: 'Approved',
-        bg: '#e9f8f0',
-        fg: '#16845b',
+        bg: COLORS.successSoft,
+        fg: COLORS.success,
         dot: '#20a568',
     },
 
     rejected: {
         label: 'Rejected',
-        bg: '#fdeeee',
-        fg: '#c9362d',
+        bg: COLORS.dangerSoft,
+        fg: COLORS.danger,
         dot: '#e5483f',
     },
 
     pending: {
         label: 'Pending',
-        bg: '#fff6df',
-        fg: '#9b6200',
+        bg: COLORS.warningSoft,
+        fg: COLORS.warning,
         dot: '#e7a900',
     },
 };
@@ -253,9 +352,7 @@ function StatusBadge({ status, small = false }) {
             style={{
                 background: meta.bg,
                 color: meta.fg,
-                padding: small
-                    ? '5px 9px'
-                    : '6px 11px',
+                padding: small ? '5px 9px' : '6px 11px',
                 fontSize: small ? '10px' : '11px',
                 whiteSpace: 'nowrap',
             }}
@@ -292,11 +389,14 @@ function ModalShell({
         <div
             className="modal fade show d-block"
             tabIndex="-1"
+            role="dialog"
             style={{
-                background: 'rgba(0,0,0,.28)',
-                backdropFilter: 'blur(8px)',
+                background: 'rgba(29,29,31,.28)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
                 zIndex: 1055,
                 fontFamily: FONT_STACK,
+                colorScheme: 'light',
             }}
             onMouseDown={(e) => {
                 if (e.target === e.currentTarget) {
@@ -310,13 +410,18 @@ function ModalShell({
                 <div
                     className="modal-content border-0 overflow-hidden"
                     style={{
-                        borderRadius: '22px',
+                        borderRadius: '20px',
+                        background: '#ffffff',
+                        color: '#1d1d1f',
                         boxShadow:
                             '0 25px 70px rgba(0,0,0,.16)',
                     }}
                 >
                     <div
                         className="modal-header border-0 px-4 px-md-5 pt-4 pb-3"
+                        style={{
+                            background: '#ffffff',
+                        }}
                     >
                         <div>
                             {eyebrow && (
@@ -354,6 +459,7 @@ function ModalShell({
                                 width: 34,
                                 height: 34,
                                 borderRadius: '10px',
+                                border: 'none',
                                 background: '#f2f2f7',
                                 color: '#6e6e73',
                             }}
@@ -502,9 +608,9 @@ function CreateSellerModal({
                                 lineHeight: 1.5,
                             }}
                         >
-                            Enter the company information below. You
-                            can update the seller profile and status
-                            later.
+                            Enter the company information below.
+                            You can update the seller profile and
+                            status later.
                         </div>
                     </div>
 
@@ -629,9 +735,7 @@ function CreateSellerModal({
                                 label="Initial status"
                                 error={errors.status}
                             >
-                                <div
-                                    className="d-flex gap-2"
-                                >
+                                <div className="d-flex gap-2">
                                     {[
                                         {
                                             value: 'pending',
@@ -649,32 +753,27 @@ function CreateSellerModal({
                                         return (
                                             <button
                                                 type="button"
-                                                key={
-                                                    option.value
-                                                }
+                                                key={option.value}
                                                 onClick={() =>
                                                     setData(
                                                         'status',
                                                         option.value
                                                     )
                                                 }
-                                                className="btn flex-fill"
+                                                className="btn flex-fill d-flex align-items-center justify-content-center"
                                                 style={{
                                                     height: '43px',
-                                                    borderRadius:
-                                                        '11px',
+                                                    borderRadius: '11px',
                                                     border: active
                                                         ? '1px solid #0071e3'
                                                         : '1px solid #dedee3',
-                                                    background:
-                                                        active
-                                                            ? '#eef6ff'
-                                                            : '#fff',
+                                                    background: active
+                                                        ? '#eef6ff'
+                                                        : '#ffffff',
                                                     color: active
                                                         ? '#0066cc'
                                                         : '#6e6e73',
-                                                    fontSize:
-                                                        '12px',
+                                                    fontSize: '12px',
                                                     fontWeight: 600,
                                                 }}
                                             >
@@ -686,9 +785,7 @@ function CreateSellerModal({
                                                     />
                                                 )}
 
-                                                {
-                                                    option.label
-                                                }
+                                                {option.label}
                                             </button>
                                         );
                                     })}
@@ -702,8 +799,7 @@ function CreateSellerModal({
                     className="modal-footer border-0 px-4 px-md-5 py-3"
                     style={{
                         background: '#fafafa',
-                        borderTop:
-                            '1px solid #f0f0f2 !important',
+                        borderTop: '1px solid #f0f0f2',
                     }}
                 >
                     <button
@@ -715,7 +811,7 @@ function CreateSellerModal({
                             borderRadius: '10px',
                             padding: '0 18px',
                             border: '1px solid #d2d2d7',
-                            background: '#fff',
+                            background: '#ffffff',
                             color: '#1d1d1f',
                             fontSize: '12px',
                             fontWeight: 600,
@@ -734,18 +830,13 @@ function CreateSellerModal({
                             padding: '0 20px',
                             border: 'none',
                             background: '#0071e3',
-                            color: '#fff',
+                            color: '#ffffff',
                             fontSize: '12px',
                             fontWeight: 650,
-                            opacity: processing
-                                ? 0.65
-                                : 1,
+                            opacity: processing ? 0.65 : 1,
                         }}
                     >
-                        <Icon.Plus
-                            width={15}
-                            height={15}
-                        />
+                        <Icon.Plus width={15} height={15} />
 
                         {processing
                             ? 'Creating…'
@@ -778,7 +869,7 @@ function ActionsMenu({
                     height: 36,
                     borderRadius: '10px',
                     border: '1px solid #e5e5ea',
-                    background: '#fff',
+                    background: '#ffffff',
                     color: '#6e6e73',
                 }}
                 onClick={() =>
@@ -800,13 +891,14 @@ function ActionsMenu({
                     />
 
                     <div
-                        className="position-absolute bg-white"
+                        className="position-absolute"
                         style={{
                             right: 0,
                             top: '42px',
                             width: '190px',
                             borderRadius: '13px',
                             border: '1px solid #e5e5ea',
+                            background: '#ffffff',
                             boxShadow:
                                 '0 15px 35px rgba(0,0,0,.10)',
                             zIndex: 11,
@@ -827,10 +919,7 @@ function ActionsMenu({
                                 fontSize: '12px',
                             }}
                         >
-                            <Icon.Pencil
-                                width={15}
-                                height={15}
-                            />
+                            <Icon.Pencil width={15} height={15} />
                             Edit seller
                         </button>
 
@@ -848,10 +937,7 @@ function ActionsMenu({
                                 fontSize: '12px',
                             }}
                         >
-                            <Icon.Refresh
-                                width={15}
-                                height={15}
-                            />
+                            <Icon.Refresh width={15} height={15} />
                             Update status
                         </button>
 
@@ -877,10 +963,7 @@ function ActionsMenu({
                                 fontSize: '12px',
                             }}
                         >
-                            <Icon.Trash
-                                width={15}
-                                height={15}
-                            />
+                            <Icon.Trash width={15} height={15} />
                             Delete seller
                         </button>
                     </div>
@@ -922,6 +1005,7 @@ function ProfileModal({
                     style={{
                         background: '#f7f8fa',
                         borderRadius: '15px',
+                        border: '1px solid #eeeeef',
                     }}
                 >
                     <Avatar
@@ -994,6 +1078,7 @@ function ProfileModal({
                                 style={{
                                     border: '1px solid #e5e5ea',
                                     borderRadius: '13px',
+                                    background: '#ffffff',
                                 }}
                             >
                                 <div
@@ -1057,6 +1142,7 @@ function ProfileModal({
                 className="modal-footer border-0 px-4 px-md-5 py-3"
                 style={{
                     background: '#fafafa',
+                    borderTop: '1px solid #f0f0f2',
                 }}
             >
                 <button
@@ -1067,7 +1153,7 @@ function ProfileModal({
                         height: '40px',
                         borderRadius: '10px',
                         border: '1px solid #d2d2d7',
-                        background: '#fff',
+                        background: '#ffffff',
                         fontSize: '12px',
                         fontWeight: 600,
                     }}
@@ -1084,16 +1170,13 @@ function ProfileModal({
                             height: '40px',
                             borderRadius: '10px',
                             border: '1px solid #d2d2d7',
-                            background: '#fff',
+                            background: '#ffffff',
                             color: '#1d1d1f',
                             fontSize: '12px',
                             fontWeight: 600,
                         }}
                     >
-                        <Icon.Refresh
-                            width={14}
-                            height={14}
-                        />
+                        <Icon.Refresh width={14} height={14} />
                         Status
                     </button>
 
@@ -1106,15 +1189,12 @@ function ProfileModal({
                             borderRadius: '10px',
                             border: 'none',
                             background: '#0071e3',
-                            color: '#fff',
+                            color: '#ffffff',
                             fontSize: '12px',
                             fontWeight: 600,
                         }}
                     >
-                        <Icon.Pencil
-                            width={14}
-                            height={14}
-                        />
+                        <Icon.Pencil width={14} height={14} />
                         Edit profile
                     </button>
                 </div>
@@ -1139,15 +1219,12 @@ function ManageModal({
         processing,
         errors,
     } = useForm({
-        company_name:
-            seller?.company_name ?? '',
+        company_name: seller?.company_name ?? '',
         email: seller?.email ?? '',
         phone: seller?.phone ?? '',
         address: seller?.address ?? '',
-        description:
-            seller?.description ?? '',
-        status:
-            seller?.status ?? 'pending',
+        description: seller?.description ?? '',
+        status: seller?.status ?? 'pending',
     });
 
     if (!seller) return null;
@@ -1155,13 +1232,10 @@ function ManageModal({
     const submit = (e) => {
         e.preventDefault();
 
-        patch(
-            route(routes.update, seller.id),
-            {
-                preserveScroll: true,
-                onSuccess: onClose,
-            }
-        );
+        patch(route(routes.update, seller.id), {
+            preserveScroll: true,
+            onSuccess: onClose,
+        });
     };
 
     const inputStyle = {
@@ -1170,6 +1244,7 @@ function ManageModal({
         border: '1px solid #dedee3',
         background: '#fbfbfc',
         fontSize: '12px',
+        color: '#1d1d1f',
         boxShadow: 'none',
     };
 
@@ -1187,15 +1262,11 @@ function ManageModal({
                             <FormField
                                 label="Company name"
                                 required
-                                error={
-                                    errors.company_name
-                                }
+                                error={errors.company_name}
                             >
                                 <input
                                     className="form-control"
-                                    value={
-                                        data.company_name
-                                    }
+                                    value={data.company_name}
                                     onChange={(e) =>
                                         setData(
                                             'company_name',
@@ -1265,9 +1336,7 @@ function ManageModal({
                                 <textarea
                                     rows="4"
                                     className="form-control"
-                                    value={
-                                        data.description
-                                    }
+                                    value={data.description}
                                     onChange={(e) =>
                                         setData(
                                             'description',
@@ -1277,6 +1346,7 @@ function ManageModal({
                                     style={{
                                         ...inputStyle,
                                         height: 'auto',
+                                        minHeight: '110px',
                                         padding: '11px',
                                         lineHeight: 1.55,
                                         resize: 'vertical',
@@ -1301,9 +1371,11 @@ function ManageModal({
                                     <option value="pending">
                                         Pending
                                     </option>
+
                                     <option value="approved">
                                         Approved
                                     </option>
+
                                     <option value="rejected">
                                         Rejected
                                     </option>
@@ -1317,6 +1389,7 @@ function ManageModal({
                     className="modal-footer border-0 px-4 px-md-5 py-3"
                     style={{
                         background: '#fafafa',
+                        borderTop: '1px solid #f0f0f2',
                     }}
                 >
                     <button
@@ -1327,7 +1400,7 @@ function ManageModal({
                             height: '40px',
                             borderRadius: '10px',
                             border: '1px solid #d2d2d7',
-                            background: '#fff',
+                            background: '#ffffff',
                             fontSize: '12px',
                             fontWeight: 600,
                         }}
@@ -1345,12 +1418,10 @@ function ManageModal({
                             padding: '0 18px',
                             border: 'none',
                             background: '#0071e3',
-                            color: '#fff',
+                            color: '#ffffff',
                             fontSize: '12px',
                             fontWeight: 650,
-                            opacity: processing
-                                ? 0.65
-                                : 1,
+                            opacity: processing ? 0.65 : 1,
                         }}
                     >
                         {processing
@@ -1378,8 +1449,7 @@ function StatusModal({
         patch,
         processing,
     } = useForm({
-        status:
-            seller?.status ?? 'pending',
+        status: seller?.status ?? 'pending',
     });
 
     if (!seller) return null;
@@ -1388,10 +1458,7 @@ function StatusModal({
         e.preventDefault();
 
         patch(
-            route(
-                routes.updateStatus,
-                seller.id
-            ),
+            route(routes.updateStatus, seller.id),
             {
                 preserveScroll: true,
                 onSuccess: onClose,
@@ -1435,6 +1502,7 @@ function StatusModal({
                             border: '1px solid #dedee3',
                             background: '#fbfbfc',
                             fontSize: '13px',
+                            color: '#1d1d1f',
                             boxShadow: 'none',
                         }}
                     >
@@ -1451,8 +1519,7 @@ function StatusModal({
                         </option>
                     </select>
 
-                    {data.status ===
-                        'approved' && (
+                    {data.status === 'approved' && (
                         <div
                             className="mt-3 p-3"
                             style={{
@@ -1461,6 +1528,7 @@ function StatusModal({
                                 color: '#805500',
                                 fontSize: '11px',
                                 lineHeight: 1.5,
+                                border: '1px solid #f7e7bb',
                             }}
                         >
                             Approving this seller creates
@@ -1474,6 +1542,7 @@ function StatusModal({
                     className="modal-footer border-0 px-4 px-md-5 py-3"
                     style={{
                         background: '#fafafa',
+                        borderTop: '1px solid #f0f0f2',
                     }}
                 >
                     <button
@@ -1484,7 +1553,7 @@ function StatusModal({
                             height: '40px',
                             borderRadius: '10px',
                             border: '1px solid #d2d2d7',
-                            background: '#fff',
+                            background: '#ffffff',
                             fontSize: '12px',
                             fontWeight: 600,
                         }}
@@ -1501,10 +1570,11 @@ function StatusModal({
                             borderRadius: '10px',
                             padding: '0 18px',
                             background: '#0071e3',
-                            color: '#fff',
+                            color: '#ffffff',
                             border: 'none',
                             fontSize: '12px',
                             fontWeight: 650,
+                            opacity: processing ? 0.65 : 1,
                         }}
                     >
                         {processing
@@ -1552,6 +1622,7 @@ function DeleteModal({
                     style={{
                         borderRadius: '13px',
                         background: '#f7f8fa',
+                        border: '1px solid #eeeeef',
                     }}
                 >
                     <Avatar
@@ -1599,6 +1670,7 @@ function DeleteModal({
                 className="modal-footer border-0 px-4 px-md-5 py-3"
                 style={{
                     background: '#fafafa',
+                    borderTop: '1px solid #f0f0f2',
                 }}
             >
                 <button
@@ -1609,7 +1681,7 @@ function DeleteModal({
                         height: '40px',
                         borderRadius: '10px',
                         border: '1px solid #d2d2d7',
-                        background: '#fff',
+                        background: '#ffffff',
                         fontSize: '12px',
                         fontWeight: 600,
                     }}
@@ -1626,16 +1698,12 @@ function DeleteModal({
                         borderRadius: '10px',
                         border: 'none',
                         background: '#d93025',
-                        color: '#fff',
+                        color: '#ffffff',
                         fontSize: '12px',
                         fontWeight: 650,
                     }}
                 >
-                    <Icon.Trash
-                        width={14}
-                        height={14}
-                    />
-
+                    <Icon.Trash width={14} height={14} />
                     Delete seller
                 </button>
             </div>
@@ -1658,7 +1726,7 @@ function StatCard({
             <div
                 className="h-100"
                 style={{
-                    background: '#fff',
+                    background: '#ffffff',
                     border: '1px solid #e5e5ea',
                     borderRadius: '16px',
                     padding: '17px',
@@ -1674,10 +1742,8 @@ function StatCard({
                                 fontWeight: 650,
                                 color: '#8e8e93',
                                 marginBottom: '7px',
-                                textTransform:
-                                    'uppercase',
-                                letterSpacing:
-                                    '.04em',
+                                textTransform: 'uppercase',
+                                letterSpacing: '.04em',
                             }}
                         >
                             {label}
@@ -1688,8 +1754,7 @@ function StatCard({
                                 fontSize: '25px',
                                 lineHeight: 1,
                                 fontWeight: 700,
-                                letterSpacing:
-                                    '-.04em',
+                                letterSpacing: '-.04em',
                                 color: '#1d1d1f',
                             }}
                         >
@@ -1773,8 +1838,7 @@ export default function Index({
         return sellerList.filter((seller) => {
             const matchesStatus =
                 statusFilter === 'all' ||
-                seller.status ===
-                    statusFilter;
+                seller.status === statusFilter;
 
             const matchesQuery =
                 !q ||
@@ -1808,7 +1872,7 @@ export default function Index({
             : '1px solid #e5e5ea',
         background: active
             ? '#eef6ff'
-            : '#fff',
+            : '#ffffff',
         color: active
             ? '#0066cc'
             : '#6e6e73',
@@ -1820,12 +1884,16 @@ export default function Index({
         <AppLayout>
             <Head title="Sellers" />
 
+            <style>{lightThemeStyle}</style>
+
             <div
+                className="seller-page"
                 style={{
                     minHeight: '100vh',
                     background: '#f5f5f7',
                     fontFamily: FONT_STACK,
                     color: '#1d1d1f',
+                    colorScheme: 'light',
                 }}
             >
                 <div className="container-fluid px-3 px-md-4 py-4 py-lg-5">
@@ -1835,23 +1903,18 @@ export default function Index({
                             maxWidth: '1400px',
                         }}
                     >
-                        {/* =================================================
-                            HEADER
-                        ================================================= */}
+                        {/* HEADER */}
                         <div className="mb-4">
                             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
                                 <div>
                                     <div
                                         className="d-inline-flex align-items-center gap-2 mb-2 px-2 py-1 rounded-pill"
                                         style={{
-                                            background:
-                                                '#eaf2ff',
+                                            background: '#eaf2ff',
                                             color: '#0066cc',
-                                            fontSize:
-                                                '10px',
+                                            fontSize: '10px',
                                             fontWeight: 700,
-                                            letterSpacing:
-                                                '.06em',
+                                            letterSpacing: '.06em',
                                         }}
                                     >
                                         <Icon.Building
@@ -1859,20 +1922,17 @@ export default function Index({
                                             height={12}
                                         />
 
-                                        MARKETPLACE
-                                        MANAGEMENT
+                                        MARKETPLACE MANAGEMENT
                                     </div>
 
                                     <h1
-                                        className="mb-1"
+                                        className="seller-page-title mb-1"
                                         style={{
-                                            fontSize:
-                                                '29px',
-                                            lineHeight:
-                                                1.1,
+                                            fontSize: '29px',
+                                            lineHeight: 1.1,
                                             fontWeight: 700,
-                                            letterSpacing:
-                                                '-.04em',
+                                            letterSpacing: '-.04em',
+                                            color: '#1d1d1f',
                                         }}
                                     >
                                         Seller companies
@@ -1882,13 +1942,11 @@ export default function Index({
                                         className="mb-0"
                                         style={{
                                             color: '#6e6e73',
-                                            fontSize:
-                                                '13px',
+                                            fontSize: '13px',
                                         }}
                                     >
-                                        Manage companies,
-                                        seller accounts
-                                        and marketplace
+                                        Manage companies, seller
+                                        accounts and marketplace
                                         activity.
                                     </p>
                                 </div>
@@ -1896,25 +1954,18 @@ export default function Index({
                                 <button
                                     type="button"
                                     onClick={() =>
-                                        setCreateOpen(
-                                            true
-                                        )
+                                        setCreateOpen(true)
                                     }
                                     className="btn d-inline-flex align-items-center justify-content-center gap-2"
                                     style={{
                                         height: '43px',
-                                        borderRadius:
-                                            '11px',
-                                        padding:
-                                            '0 17px',
+                                        borderRadius: '11px',
+                                        padding: '0 17px',
                                         border: 'none',
-                                        background:
-                                            '#0071e3',
-                                        color: '#fff',
-                                        fontSize:
-                                            '12px',
-                                        fontWeight:
-                                            650,
+                                        background: '#0071e3',
+                                        color: '#ffffff',
+                                        fontSize: '12px',
+                                        fontWeight: 650,
                                         boxShadow:
                                             '0 5px 15px rgba(0,113,227,.18)',
                                     }}
@@ -1929,25 +1980,18 @@ export default function Index({
                             </div>
                         </div>
 
-                        {/* =================================================
-                            FLASH
-                        ================================================= */}
+                        {/* FLASH */}
                         {flash?.success && (
                             <div
                                 className="d-flex align-items-center gap-2 mb-4"
                                 style={{
-                                    padding:
-                                        '11px 14px',
-                                    borderRadius:
-                                        '12px',
-                                    background:
-                                        '#eaf8f1',
+                                    padding: '11px 14px',
+                                    borderRadius: '12px',
+                                    background: '#eaf8f1',
                                     border: '1px solid #d3f0e2',
                                     color: '#16845b',
-                                    fontSize:
-                                        '12px',
-                                    fontWeight:
-                                        600,
+                                    fontSize: '12px',
+                                    fontWeight: 600,
                                 }}
                             >
                                 <Icon.Check
@@ -1959,9 +2003,7 @@ export default function Index({
                             </div>
                         )}
 
-                        {/* =================================================
-                            STATS
-                        ================================================= */}
+                        {/* STATS */}
                         <div className="row g-3 mb-4">
                             <StatCard
                                 label="Total sellers"
@@ -1977,9 +2019,7 @@ export default function Index({
 
                             <StatCard
                                 label="Approved"
-                                value={
-                                    counts.approved
-                                }
+                                value={counts.approved}
                                 accent="#16845b"
                                 icon={
                                     <Icon.Check
@@ -1991,9 +2031,7 @@ export default function Index({
 
                             <StatCard
                                 label="Pending"
-                                value={
-                                    counts.pending
-                                }
+                                value={counts.pending}
                                 accent="#b77900"
                                 icon={
                                     <Icon.Refresh
@@ -2005,9 +2043,7 @@ export default function Index({
 
                             <StatCard
                                 label="Rejected"
-                                value={
-                                    counts.rejected
-                                }
+                                value={counts.rejected}
                                 accent="#d93025"
                                 icon={
                                     <Icon.Close
@@ -2018,12 +2054,11 @@ export default function Index({
                             />
                         </div>
 
-                        {/* =================================================
-                            TABLE CARD
-                        ================================================= */}
+                        {/* TABLE CARD */}
                         <div
+                            className="seller-table-card"
                             style={{
-                                background: '#fff',
+                                background: '#ffffff',
                                 border: '1px solid #e5e5ea',
                                 borderRadius: '18px',
                                 overflow: 'hidden',
@@ -2031,20 +2066,20 @@ export default function Index({
                                     '0 8px 30px rgba(0,0,0,.03)',
                             }}
                         >
-                            {/* Toolbar */}
+                            {/* TOOLBAR */}
                             <div
                                 className="p-3 p-md-4"
                                 style={{
                                     borderBottom:
                                         '1px solid #f0f0f2',
+                                    background: '#ffffff',
                                 }}
                             >
                                 <div className="d-flex flex-column flex-lg-row gap-3 justify-content-between">
                                     <div
                                         className="position-relative"
                                         style={{
-                                            maxWidth:
-                                                '380px',
+                                            maxWidth: '380px',
                                             width: '100%',
                                         }}
                                     >
@@ -2057,12 +2092,8 @@ export default function Index({
                                             }}
                                         >
                                             <Icon.Search
-                                                width={
-                                                    16
-                                                }
-                                                height={
-                                                    16
-                                                }
+                                                width={16}
+                                                height={16}
                                             />
                                         </span>
 
@@ -2070,31 +2101,22 @@ export default function Index({
                                             type="text"
                                             className="form-control"
                                             placeholder="Search sellers..."
-                                            value={
-                                                query
-                                            }
-                                            onChange={(
-                                                e
-                                            ) =>
+                                            value={query}
+                                            onChange={(e) =>
                                                 setQuery(
-                                                    e
-                                                        .target
-                                                        .value
+                                                    e.target.value
                                                 )
                                             }
                                             style={{
                                                 height: '38px',
-                                                borderRadius:
-                                                    '10px',
-                                                border: '1px solid #e5e5ea',
-                                                background:
-                                                    '#f8f8fa',
-                                                paddingLeft:
-                                                    '39px',
-                                                fontSize:
-                                                    '12px',
-                                                boxShadow:
-                                                    'none',
+                                                borderRadius: '10px',
+                                                border:
+                                                    '1px solid #e5e5ea',
+                                                background: '#f8f8fa',
+                                                paddingLeft: '39px',
+                                                fontSize: '12px',
+                                                color: '#1d1d1f',
+                                                boxShadow: 'none',
                                             }}
                                         />
                                     </div>
@@ -2105,57 +2127,50 @@ export default function Index({
                                             'pending',
                                             'approved',
                                             'rejected',
-                                        ].map(
-                                            (
-                                                status
-                                            ) => (
-                                                <button
-                                                    key={
+                                        ].map((status) => (
+                                            <button
+                                                key={status}
+                                                type="button"
+                                                onClick={() =>
+                                                    setStatusFilter(
                                                         status
-                                                    }
-                                                    type="button"
-                                                    onClick={() =>
-                                                        setStatusFilter(
-                                                            status
-                                                        )
-                                                    }
-                                                    style={filterButtonStyle(
-                                                        statusFilter ===
-                                                            status
-                                                    )}
-                                                >
-                                                    {status ===
-                                                    'all'
-                                                        ? 'All sellers'
-                                                        : status
-                                                              .charAt(
-                                                                  0
-                                                              )
-                                                              .toUpperCase() +
-                                                          status.slice(
-                                                              1
-                                                          )}
-                                                </button>
-                                            )
-                                        )}
+                                                    )
+                                                }
+                                                style={filterButtonStyle(
+                                                    statusFilter ===
+                                                        status
+                                                )}
+                                            >
+                                                {status ===
+                                                'all'
+                                                    ? 'All sellers'
+                                                    : status
+                                                          .charAt(
+                                                              0
+                                                          )
+                                                          .toUpperCase() +
+                                                      status.slice(
+                                                          1
+                                                      )}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Table */}
+                            {/* TABLE */}
                             <div className="table-responsive">
                                 <table
                                     className="table align-middle mb-0"
                                     style={{
-                                        minWidth:
-                                            '900px',
+                                        minWidth: '900px',
+                                        background: '#ffffff',
                                     }}
                                 >
                                     <thead>
                                         <tr
                                             style={{
-                                                background:
-                                                    '#fafafa',
+                                                background: '#fafafa',
                                                 borderBottom:
                                                     '1px solid #f0f0f2',
                                             }}
@@ -2172,12 +2187,9 @@ export default function Index({
                                                     index
                                                 ) => (
                                                     <th
-                                                        key={
-                                                            heading
-                                                        }
+                                                        key={heading}
                                                         className={
-                                                            index ===
-                                                            4
+                                                            index === 4
                                                                 ? 'text-end'
                                                                 : ''
                                                         }
@@ -2188,18 +2200,19 @@ export default function Index({
                                                                 '10px',
                                                             fontWeight:
                                                                 700,
-                                                            color: '#8e8e93',
+                                                            color:
+                                                                '#8e8e93',
                                                             textTransform:
                                                                 'uppercase',
                                                             letterSpacing:
                                                                 '.05em',
                                                             border:
                                                                 'none',
+                                                            background:
+                                                                '#fafafa',
                                                         }}
                                                     >
-                                                        {
-                                                            heading
-                                                        }
+                                                        {heading}
                                                     </th>
                                                 )
                                             )}
@@ -2207,19 +2220,17 @@ export default function Index({
                                     </thead>
 
                                     <tbody>
-                                        {filtered.length ===
-                                            0 && (
+                                        {filtered.length === 0 && (
                                             <tr>
                                                 <td
-                                                    colSpan={
-                                                        5
-                                                    }
+                                                    colSpan={5}
                                                     className="text-center"
                                                     style={{
                                                         padding:
                                                             '65px 20px',
-                                                        border:
-                                                            'none',
+                                                        border: 'none',
+                                                        background:
+                                                            '#ffffff',
                                                     }}
                                                 >
                                                     <div
@@ -2231,16 +2242,13 @@ export default function Index({
                                                                 '15px',
                                                             background:
                                                                 '#f2f2f7',
-                                                            color: '#8e8e93',
+                                                            color:
+                                                                '#8e8e93',
                                                         }}
                                                     >
                                                         <Icon.Building
-                                                            width={
-                                                                23
-                                                            }
-                                                            height={
-                                                                23
-                                                            }
+                                                            width={23}
+                                                            height={23}
                                                         />
                                                     </div>
 
@@ -2250,11 +2258,11 @@ export default function Index({
                                                                 '13px',
                                                             fontWeight:
                                                                 650,
-                                                            color: '#1d1d1f',
+                                                            color:
+                                                                '#1d1d1f',
                                                         }}
                                                     >
-                                                        No sellers
-                                                        found
+                                                        No sellers found
                                                     </div>
 
                                                     <div
@@ -2262,270 +2270,259 @@ export default function Index({
                                                         style={{
                                                             fontSize:
                                                                 '11px',
-                                                            color: '#8e8e93',
+                                                            color:
+                                                                '#8e8e93',
                                                         }}
                                                     >
-                                                        Try changing
-                                                        your search
-                                                        or filters.
+                                                        Try changing your
+                                                        search or filters.
                                                     </div>
                                                 </td>
                                             </tr>
                                         )}
 
-                                        {filtered.map(
-                                            (
-                                                seller
-                                            ) => (
-                                                <tr
-                                                    key={
-                                                        seller.id
-                                                    }
-                                                    onClick={() =>
-                                                        setProfileTarget(
-                                                            seller
-                                                        )
-                                                    }
+                                        {filtered.map((seller) => (
+                                            <tr
+                                                key={seller.id}
+                                                onClick={() =>
+                                                    setProfileTarget(
+                                                        seller
+                                                    )
+                                                }
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    borderBottom:
+                                                        '1px solid #f3f3f5',
+                                                    background:
+                                                        '#ffffff',
+                                                }}
+                                            >
+                                                {/* COMPANY */}
+                                                <td
                                                     style={{
-                                                        cursor:
-                                                            'pointer',
-                                                        borderBottom:
-                                                            '1px solid #f3f3f5',
+                                                        padding:
+                                                            '15px 18px',
+                                                        border: 'none',
+                                                        background:
+                                                            '#ffffff',
                                                     }}
                                                 >
-                                                    {/* Company */}
-                                                    <td
-                                                        style={{
-                                                            padding:
-                                                                '15px 18px',
-                                                            border:
-                                                                'none',
-                                                        }}
-                                                    >
-                                                        <div className="d-flex align-items-center gap-3">
-                                                            <Avatar
-                                                                name={
-                                                                    seller.company_name
-                                                                }
-                                                                size={
-                                                                    42
-                                                                }
-                                                            />
-
-                                                            <div>
-                                                                <div
-                                                                    style={{
-                                                                        fontSize:
-                                                                            '12px',
-                                                                        fontWeight:
-                                                                            650,
-                                                                        color: '#1d1d1f',
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        seller.company_name
-                                                                    }
-                                                                </div>
-
-                                                                <div
-                                                                    className="mt-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            '10px',
-                                                                        color: '#8e8e93',
-                                                                    }}
-                                                                >
-                                                                    #
-                                                                    {
-                                                                        seller.id
-                                                                    }
-                                                                    {' · '}
-                                                                    {seller.address ||
-                                                                        'No address'}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-                                                    {/* Contact */}
-                                                    <td
-                                                        style={{
-                                                            padding:
-                                                                '15px 18px',
-                                                            border:
-                                                                'none',
-                                                        }}
-                                                    >
-                                                        <div
-                                                            className="d-flex align-items-center gap-2"
-                                                            style={{
-                                                                fontSize:
-                                                                    '11px',
-                                                                color: '#48484a',
-                                                            }}
-                                                        >
-                                                            <Icon.Mail
-                                                                width={
-                                                                    14
-                                                                }
-                                                                height={
-                                                                    14
-                                                                }
-                                                                style={{
-                                                                    color: '#8e8e93',
-                                                                }}
-                                                            />
-
-                                                            {
-                                                                seller.email
+                                                    <div className="d-flex align-items-center gap-3">
+                                                        <Avatar
+                                                            name={
+                                                                seller.company_name
                                                             }
-                                                        </div>
-
-                                                        <div
-                                                            className="d-flex align-items-center gap-2 mt-1"
-                                                            style={{
-                                                                fontSize:
-                                                                    '10px',
-                                                                color: '#8e8e93',
-                                                            }}
-                                                        >
-                                                            <Icon.Phone
-                                                                width={
-                                                                    14
-                                                                }
-                                                                height={
-                                                                    14
-                                                                }
-                                                            />
-
-                                                            {seller.phone ||
-                                                                'No phone'}
-                                                        </div>
-                                                    </td>
-
-                                                    {/* Description */}
-                                                    <td
-                                                        style={{
-                                                            padding:
-                                                                '15px 18px',
-                                                            border:
-                                                                'none',
-                                                        }}
-                                                    >
-                                                        <span
-                                                            className="d-inline-block text-truncate"
-                                                            style={{
-                                                                maxWidth:
-                                                                    '240px',
-                                                                fontSize:
-                                                                    '11px',
-                                                                color: '#6e6e73',
-                                                            }}
-                                                            title={
-                                                                seller.description ||
-                                                                ''
-                                                            }
-                                                        >
-                                                            {seller.description ||
-                                                                'No description'}
-                                                        </span>
-                                                    </td>
-
-                                                    {/* Status */}
-                                                    <td
-                                                        style={{
-                                                            padding:
-                                                                '15px 18px',
-                                                            border:
-                                                                'none',
-                                                        }}
-                                                    >
-                                                        <StatusBadge
-                                                            status={
-                                                                seller.status
-                                                            }
+                                                            size={42}
                                                         />
-                                                    </td>
 
-                                                    {/* Actions */}
-                                                    <td
-                                                        className="text-end"
-                                                        style={{
-                                                            padding:
-                                                                '15px 18px',
-                                                            border:
-                                                                'none',
-                                                        }}
-                                                        onClick={(
-                                                            e
-                                                        ) =>
-                                                            e.stopPropagation()
-                                                        }
-                                                    >
-                                                        <div className="d-flex justify-content-end align-items-center gap-2">
-                                                            <a
-                                                                href={route(
-                                                                    routes.show,
-                                                                    seller.id
-                                                                )}
-                                                                className="btn d-flex align-items-center gap-2"
+                                                        <div>
+                                                            <div
                                                                 style={{
-                                                                    height: '35px',
-                                                                    borderRadius:
-                                                                        '9px',
-                                                                    border: '1px solid #d9e8f8',
-                                                                    background:
-                                                                        '#f4f9ff',
-                                                                    color: '#0066cc',
                                                                     fontSize:
-                                                                        '10px',
+                                                                        '12px',
                                                                     fontWeight:
                                                                         650,
-                                                                    padding:
-                                                                        '0 11px',
-                                                                    textDecoration:
-                                                                        'none',
+                                                                    color:
+                                                                        '#1d1d1f',
                                                                 }}
                                                             >
-                                                                <Icon.Eye
-                                                                    width={
-                                                                        14
-                                                                    }
-                                                                    height={
-                                                                        14
-                                                                    }
-                                                                />
+                                                                {
+                                                                    seller.company_name
+                                                                }
+                                                            </div>
 
-                                                                View
-                                                            </a>
-
-                                                            <ActionsMenu
-                                                                onEdit={() => {
-                                                                    setManageTarget(
-                                                                        seller
-                                                                    );
+                                                            <div
+                                                                className="mt-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        '10px',
+                                                                    color:
+                                                                        '#8e8e93',
                                                                 }}
-                                                                onStatus={() => {
-                                                                    setStatusTarget(
-                                                                        seller
-                                                                    );
-                                                                }}
-                                                                onDelete={() => {
-                                                                    setDeleteTarget(
-                                                                        seller
-                                                                    );
-                                                                }}
-                                                            />
+                                                            >
+                                                                #
+                                                                {seller.id}
+                                                                {' · '}
+                                                                {seller.address ||
+                                                                    'No address'}
+                                                            </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        )}
+                                                    </div>
+                                                </td>
+
+                                                {/* CONTACT */}
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            '15px 18px',
+                                                        border: 'none',
+                                                        background:
+                                                            '#ffffff',
+                                                    }}
+                                                >
+                                                    <div
+                                                        className="d-flex align-items-center gap-2"
+                                                        style={{
+                                                            fontSize:
+                                                                '11px',
+                                                            color:
+                                                                '#48484a',
+                                                        }}
+                                                    >
+                                                        <Icon.Mail
+                                                            width={14}
+                                                            height={14}
+                                                            style={{
+                                                                color:
+                                                                    '#8e8e93',
+                                                            }}
+                                                        />
+
+                                                        {seller.email}
+                                                    </div>
+
+                                                    <div
+                                                        className="d-flex align-items-center gap-2 mt-1"
+                                                        style={{
+                                                            fontSize:
+                                                                '10px',
+                                                            color:
+                                                                '#8e8e93',
+                                                        }}
+                                                    >
+                                                        <Icon.Phone
+                                                            width={14}
+                                                            height={14}
+                                                        />
+
+                                                        {seller.phone ||
+                                                            'No phone'}
+                                                    </div>
+                                                </td>
+
+                                                {/* DESCRIPTION */}
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            '15px 18px',
+                                                        border: 'none',
+                                                        background:
+                                                            '#ffffff',
+                                                    }}
+                                                >
+                                                    <span
+                                                        className="d-inline-block text-truncate"
+                                                        style={{
+                                                            maxWidth:
+                                                                '240px',
+                                                            fontSize:
+                                                                '11px',
+                                                            color:
+                                                                '#6e6e73',
+                                                        }}
+                                                        title={
+                                                            seller.description ||
+                                                            ''
+                                                        }
+                                                    >
+                                                        {seller.description ||
+                                                            'No description'}
+                                                    </span>
+                                                </td>
+
+                                                {/* STATUS */}
+                                                <td
+                                                    style={{
+                                                        padding:
+                                                            '15px 18px',
+                                                        border: 'none',
+                                                        background:
+                                                            '#ffffff',
+                                                    }}
+                                                >
+                                                    <StatusBadge
+                                                        status={
+                                                            seller.status
+                                                        }
+                                                    />
+                                                </td>
+
+                                                {/* ACTIONS */}
+                                                <td
+                                                    className="text-end"
+                                                    style={{
+                                                        padding:
+                                                            '15px 18px',
+                                                        border: 'none',
+                                                        background:
+                                                            '#ffffff',
+                                                    }}
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                >
+                                                    <div className="d-flex justify-content-end align-items-center gap-2">
+                                                        <a
+                                                            href={route(
+                                                                routes.show,
+                                                                seller.id
+                                                            )}
+                                                            className="btn d-flex align-items-center gap-2"
+                                                            style={{
+                                                                height:
+                                                                    '35px',
+                                                                borderRadius:
+                                                                    '9px',
+                                                                border:
+                                                                    '1px solid #d9e8f8',
+                                                                background:
+                                                                    '#f4f9ff',
+                                                                color:
+                                                                    '#0066cc',
+                                                                fontSize:
+                                                                    '10px',
+                                                                fontWeight:
+                                                                    650,
+                                                                padding:
+                                                                    '0 11px',
+                                                                textDecoration:
+                                                                    'none',
+                                                            }}
+                                                        >
+                                                            <Icon.Eye
+                                                                width={14}
+                                                                height={14}
+                                                            />
+
+                                                            View
+                                                        </a>
+
+                                                        <ActionsMenu
+                                                            onEdit={() =>
+                                                                setManageTarget(
+                                                                    seller
+                                                                )
+                                                            }
+                                                            onStatus={() =>
+                                                                setStatusTarget(
+                                                                    seller
+                                                                )
+                                                            }
+                                                            onDelete={() =>
+                                                                setDeleteTarget(
+                                                                    seller
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
 
-                            {/* Footer */}
+                            {/* FOOTER */}
                             <div
                                 className="px-3 px-md-4 py-3"
                                 style={{
@@ -2533,8 +2530,7 @@ export default function Index({
                                         '1px solid #f0f0f2',
                                     color: '#8e8e93',
                                     fontSize: '10px',
-                                    background:
-                                        '#fafafa',
+                                    background: '#fafafa',
                                 }}
                             >
                                 Showing{' '}
@@ -2554,8 +2550,7 @@ export default function Index({
                                     {sellerList.length}
                                 </strong>{' '}
                                 seller
-                                {sellerList.length ===
-                                1
+                                {sellerList.length === 1
                                     ? ''
                                     : 's'}
                             </div>
@@ -2564,21 +2559,13 @@ export default function Index({
                 </div>
             </div>
 
-            {/* =====================================================
-                CREATE SELLER
-            ===================================================== */}
-
+            {/* CREATE */}
             <CreateSellerModal
                 open={createOpen}
-                onClose={() =>
-                    setCreateOpen(false)
-                }
+                onClose={() => setCreateOpen(false)}
             />
 
-            {/* =====================================================
-                PROFILE
-            ===================================================== */}
-
+            {/* PROFILE */}
             <ProfileModal
                 seller={profileTarget}
                 open={!!profileTarget}
@@ -2586,29 +2573,20 @@ export default function Index({
                     setProfileTarget(null)
                 }
                 onEdit={() => {
-                    setManageTarget(
-                        profileTarget
-                    );
+                    setManageTarget(profileTarget);
                     setProfileTarget(null);
                 }}
                 onStatus={() => {
-                    setStatusTarget(
-                        profileTarget
-                    );
+                    setStatusTarget(profileTarget);
                     setProfileTarget(null);
                 }}
                 onDelete={() => {
-                    setDeleteTarget(
-                        profileTarget
-                    );
+                    setDeleteTarget(profileTarget);
                     setProfileTarget(null);
                 }}
             />
 
-            {/* =====================================================
-                EDIT
-            ===================================================== */}
-
+            {/* EDIT */}
             <ManageModal
                 seller={manageTarget}
                 open={!!manageTarget}
@@ -2617,10 +2595,7 @@ export default function Index({
                 }
             />
 
-            {/* =====================================================
-                STATUS
-            ===================================================== */}
-
+            {/* STATUS */}
             <StatusModal
                 seller={statusTarget}
                 open={!!statusTarget}
@@ -2629,10 +2604,7 @@ export default function Index({
                 }
             />
 
-            {/* =====================================================
-                DELETE
-            ===================================================== */}
-
+            {/* DELETE */}
             <DeleteModal
                 seller={deleteTarget}
                 open={!!deleteTarget}

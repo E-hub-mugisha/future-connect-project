@@ -23,6 +23,7 @@ class ConnectionPayment extends Model
     protected $casts = [
         'meta' => 'array',
         'paid_at' => 'datetime',
+        'amount' => 'decimal:2',
     ];
 
     public function user(): BelongsTo

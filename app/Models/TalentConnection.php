@@ -37,13 +37,6 @@ class TalentConnection extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Payment associated with this connection.
-     *
-     * talent_connections.payment_reference
-     * matches
-     * connection_payments.reference
-     */
     public function payment()
     {
         return $this->hasOne(

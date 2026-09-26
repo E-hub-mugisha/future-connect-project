@@ -1,6 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import AppLayout from "@/Layouts/AppLayout";
+
+/* ================================================================
+   APPLE / SF FONT STACK
+================================================================ */
+
+const APPLE_FONT =
+    '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif';
 
 /* ================================================================
    ICONS
@@ -243,7 +251,10 @@ function getInitials(name) {
         return "NA";
     }
 
-    const parts = String(name).trim().split(/\s+/).filter(Boolean);
+    const parts = String(name)
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
 
     if (parts.length === 0) {
         return "NA";
@@ -253,7 +264,9 @@ function getInitials(name) {
         return parts[0].substring(0, 2).toUpperCase();
     }
 
-    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    return (
+        parts[0].charAt(0) + parts[1].charAt(0)
+    ).toUpperCase();
 }
 
 function avatarColor(name) {
@@ -291,9 +304,11 @@ function StatusBadge({ status }) {
                 color: meta.fg,
                 borderRadius: "999px",
                 padding: "5px 10px",
-                fontSize: "11px",
+                fontSize: 11,
                 fontWeight: 600,
                 letterSpacing: "-0.1px",
+                whiteSpace: "nowrap",
+                colorScheme: "light",
             }}
         >
             <span
@@ -362,6 +377,7 @@ function StatCard({ label, value, icon, tone }) {
                     border: "1px solid #e8e8ed",
                     borderRadius: 18,
                     padding: "18px 19px",
+                    colorScheme: "light",
                 }}
             >
                 <div className="d-flex align-items-start justify-content-between">
@@ -409,22 +425,54 @@ function StatCard({ label, value, icon, tone }) {
 }
 
 /* ================================================================
-   MODAL
+   MODAL SHELL
 ================================================================ */
 
-function ModalShell({ open, onClose, title, eyebrow, children, width = 650 }) {
+function ModalShell({
+    open,
+    onClose,
+    title,
+    eyebrow,
+    children,
+    width = 650,
+}) {
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                onClose();
+            }
+        };
+
+        document.addEventListener("keydown", handleEscape);
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.removeEventListener("keydown", handleEscape);
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [open, onClose]);
+
     if (!open) {
         return null;
     }
 
-    return (
+    return createPortal(
         <div
-            className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+            className="products-page-light-modal position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
             style={{
                 zIndex: 1080,
-                background: "rgba(0, 0, 0, 0.28)",
+                background: "rgba(20, 20, 22, 0.25)",
                 backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
                 padding: 20,
+                fontFamily: APPLE_FONT,
+                colorScheme: "light",
             }}
             onMouseDown={(event) => {
                 if (event.target === event.currentTarget) {
@@ -436,9 +484,15 @@ function ModalShell({ open, onClose, title, eyebrow, children, width = 650 }) {
                 className="w-100"
                 style={{
                     maxWidth: width,
+                    maxHeight: "calc(100vh - 40px)",
+                    overflowY: "auto",
                     background: "#ffffff",
+                    color: "#1d1d1f",
+                    colorScheme: "light",
+                    border: "1px solid #e5e5ea",
                     borderRadius: 22,
-                    boxShadow: "0 25px 80px rgba(0,0,0,.18)",
+                    boxShadow:
+                        "0 25px 80px rgba(0,0,0,.16)",
                     overflow: "hidden",
                 }}
             >
@@ -480,6 +534,7 @@ function ModalShell({ open, onClose, title, eyebrow, children, width = 650 }) {
 
                     <button
                         type="button"
+                        aria-label="Close"
                         className="border-0 d-flex align-items-center justify-content-center"
                         onClick={onClose}
                         style={{
@@ -496,7 +551,8 @@ function ModalShell({ open, onClose, title, eyebrow, children, width = 650 }) {
 
                 {children}
             </div>
-        </div>
+        </div>,
+        document.body,
     );
 }
 
@@ -509,7 +565,9 @@ function ViewModal({ product, open, onClose }) {
         return null;
     }
 
-    const imageSrc = product.image ? "/storage/" + product.image : null;
+    const imageSrc = product.image
+        ? "/storage/" + product.image
+        : null;
 
     return (
         <ModalShell
@@ -540,7 +598,12 @@ function ViewModal({ product, open, onClose }) {
                                     }}
                                 />
                             ) : (
-                                <div className="w-100 h-100 d-flex align-items-center justify-content-center text-secondary">
+                                <div
+                                    className="w-100 h-100 d-flex align-items-center justify-content-center"
+                                    style={{
+                                        color: "#8e8e93",
+                                    }}
+                                >
                                     <Icon.Box />
                                 </div>
                             )}
@@ -558,7 +621,8 @@ function ViewModal({ product, open, onClose }) {
                                 lineHeight: 1.65,
                             }}
                         >
-                            {product.description || "No description provided."}
+                            {product.description ||
+                                "No description provided."}
                         </p>
 
                         <div
@@ -569,7 +633,13 @@ function ViewModal({ product, open, onClose }) {
                             }}
                         >
                             <div className="col-6">
-                                <div className="small text-secondary mb-1">
+                                <div
+                                    className="small mb-1"
+                                    style={{
+                                        color: "#86868b",
+                                        fontSize: 11,
+                                    }}
+                                >
                                     Price
                                 </div>
 
@@ -577,6 +647,7 @@ function ViewModal({ product, open, onClose }) {
                                     style={{
                                         fontSize: 15,
                                         fontWeight: 600,
+                                        color: "#1d1d1f",
                                     }}
                                 >
                                     {formatPrice(product.price)}
@@ -584,7 +655,13 @@ function ViewModal({ product, open, onClose }) {
                             </div>
 
                             <div className="col-6">
-                                <div className="small text-secondary mb-1">
+                                <div
+                                    className="small mb-1"
+                                    style={{
+                                        color: "#86868b",
+                                        fontSize: 11,
+                                    }}
+                                >
                                     Category
                                 </div>
 
@@ -592,16 +669,22 @@ function ViewModal({ product, open, onClose }) {
                                     style={{
                                         fontSize: 13,
                                         fontWeight: 500,
+                                        color: "#1d1d1f",
                                     }}
                                 >
-                                    {product.category && product.category.name
-                                        ? product.category.name
-                                        : "Uncategorized"}
+                                    {product.category?.name ||
+                                        "Uncategorized"}
                                 </div>
                             </div>
 
                             <div className="col-12">
-                                <div className="small text-secondary mb-1">
+                                <div
+                                    className="small mb-1"
+                                    style={{
+                                        color: "#86868b",
+                                        fontSize: 11,
+                                    }}
+                                >
                                     Seller
                                 </div>
 
@@ -609,21 +692,21 @@ function ViewModal({ product, open, onClose }) {
                                     style={{
                                         fontSize: 13,
                                         fontWeight: 600,
+                                        color: "#1d1d1f",
                                     }}
                                 >
-                                    {product.seller &&
-                                    product.seller.company_name
-                                        ? product.seller.company_name
-                                        : "N/A"}
+                                    {product.seller?.company_name ||
+                                        "N/A"}
                                 </div>
 
                                 <div
-                                    className="small text-secondary"
-                                    style={{ marginTop: 2 }}
+                                    style={{
+                                        marginTop: 2,
+                                        color: "#86868b",
+                                        fontSize: 11,
+                                    }}
                                 >
-                                    {product.seller && product.seller.address
-                                        ? product.seller.address
-                                        : ""}
+                                    {product.seller?.address || ""}
                                 </div>
                             </div>
                         </div>
@@ -635,23 +718,38 @@ function ViewModal({ product, open, onClose }) {
                 className="d-flex justify-content-end gap-2"
                 style={{
                     padding: "15px 24px",
-                    background: "#f8f8fa",
+                    background: "#fafafa",
                     borderTop: "1px solid #f0f0f2",
                 }}
             >
                 <button
                     type="button"
-                    className="btn btn-light rounded-pill px-4"
+                    className="btn rounded-pill px-4"
                     onClick={onClose}
-                    style={{ fontSize: 12 }}
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#1d1d1f",
+                        background: "#f2f2f7",
+                        border: "1px solid #e5e5ea",
+                    }}
                 >
                     Close
                 </button>
 
                 <Link
-                    href={route("admin.products.view", product.id)}
-                    className="btn btn-dark rounded-pill px-4"
-                    style={{ fontSize: 12 }}
+                    href={route(
+                        "admin.products.view",
+                        product.id,
+                    )}
+                    className="btn rounded-pill px-4"
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#ffffff",
+                        background: "#0071e3",
+                        border: "1px solid #0071e3",
+                    }}
                 >
                     Full view
                 </Link>
@@ -666,8 +764,14 @@ function ViewModal({ product, open, onClose }) {
 
 function StatusModal({ product, open, onClose }) {
     const { data, setData, patch, processing } = useForm({
-        status: product && product.status ? product.status : "pending",
+        status: product?.status || "pending",
     });
+
+    useEffect(() => {
+        if (product) {
+            setData("status", product.status || "pending");
+        }
+    }, [product]);
 
     if (!product) {
         return null;
@@ -694,10 +798,16 @@ function StatusModal({ product, open, onClose }) {
     const submit = (event) => {
         event.preventDefault();
 
-        patch(route("admin.products.updateStatus", product.id), {
-            preserveScroll: true,
-            onSuccess: onClose,
-        });
+        patch(
+            route(
+                "admin.products.updateStatus",
+                product.id,
+            ),
+            {
+                preserveScroll: true,
+                onSuccess: onClose,
+            },
+        );
     };
 
     return (
@@ -712,9 +822,11 @@ function StatusModal({ product, open, onClose }) {
                 <div style={{ padding: 24 }}>
                     <div className="d-flex flex-column gap-2">
                         {options.map((option) => {
-                            const selected = data.status === option.value;
+                            const selected =
+                                data.status === option.value;
 
-                            const meta = STATUS_META[option.value];
+                            const meta =
+                                STATUS_META[option.value];
 
                             return (
                                 <label
@@ -726,10 +838,13 @@ function StatusModal({ product, open, onClose }) {
                                         borderRadius: 14,
                                         border:
                                             "1px solid " +
-                                            (selected ? meta.fg : "#e8e8ed"),
+                                            (selected
+                                                ? meta.fg
+                                                : "#e8e8ed"),
                                         background: selected
                                             ? meta.bg
                                             : "#ffffff",
+                                        colorScheme: "light",
                                     }}
                                 >
                                     <input
@@ -737,9 +852,15 @@ function StatusModal({ product, open, onClose }) {
                                         name="status"
                                         checked={selected}
                                         onChange={() =>
-                                            setData("status", option.value)
+                                            setData(
+                                                "status",
+                                                option.value,
+                                            )
                                         }
                                         className="form-check-input m-0"
+                                        style={{
+                                            colorScheme: "light",
+                                        }}
                                     />
 
                                     <div>
@@ -773,26 +894,52 @@ function StatusModal({ product, open, onClose }) {
                     className="d-flex justify-content-end gap-2"
                     style={{
                         padding: "15px 24px",
-                        background: "#f8f8fa",
+                        background: "#fafafa",
                         borderTop: "1px solid #f0f0f2",
                     }}
                 >
                     <button
                         type="button"
-                        className="btn btn-light rounded-pill px-4"
+                        className="btn rounded-pill px-4"
                         onClick={onClose}
-                        style={{ fontSize: 12 }}
+                        style={{
+                            fontSize: 12,
+                            fontWeight: 600,
+                            color: "#1d1d1f",
+                            background: "#f2f2f7",
+                            border: "1px solid #e5e5ea",
+                        }}
                     >
                         Cancel
                     </button>
 
                     <button
                         type="submit"
-                        className="btn btn-dark rounded-pill px-4"
-                        disabled={processing || data.status === product.status}
-                        style={{ fontSize: 12 }}
+                        className="btn rounded-pill px-4"
+                        disabled={
+                            processing ||
+                            data.status === product.status
+                        }
+                        style={{
+                            fontSize: 12,
+                            fontWeight: 600,
+                            background:
+                                processing ||
+                                data.status === product.status
+                                    ? "#c7c7cc"
+                                    : "#0071e3",
+                            color: "#ffffff",
+                            border:
+                                "1px solid " +
+                                (processing ||
+                                data.status === product.status
+                                    ? "#c7c7cc"
+                                    : "#0071e3"),
+                        }}
                     >
-                        {processing ? "Updating…" : "Update status"}
+                        {processing
+                            ? "Updating…"
+                            : "Update status"}
                     </button>
                 </div>
             </form>
@@ -810,10 +957,16 @@ function DeleteModal({ product, open, onClose }) {
     }
 
     const confirmDelete = () => {
-        router.delete(route("admin.products.destroy", product.id), {
-            preserveScroll: true,
-            onSuccess: onClose,
-        });
+        router.delete(
+            route(
+                "admin.products.destroy",
+                product.id,
+            ),
+            {
+                preserveScroll: true,
+                onSuccess: onClose,
+            },
+        );
     };
 
     return (
@@ -831,6 +984,7 @@ function DeleteModal({ product, open, onClose }) {
                         background: "#fff4f3",
                         borderRadius: 14,
                         padding: 14,
+                        border: "1px solid #fde1df",
                     }}
                 >
                     <div
@@ -870,24 +1024,36 @@ function DeleteModal({ product, open, onClose }) {
                 className="d-flex justify-content-end gap-2"
                 style={{
                     padding: "15px 24px",
-                    background: "#f8f8fa",
+                    background: "#fafafa",
                     borderTop: "1px solid #f0f0f2",
                 }}
             >
                 <button
                     type="button"
-                    className="btn btn-light rounded-pill px-4"
+                    className="btn rounded-pill px-4"
                     onClick={onClose}
-                    style={{ fontSize: 12 }}
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#1d1d1f",
+                        background: "#f2f2f7",
+                        border: "1px solid #e5e5ea",
+                    }}
                 >
                     Cancel
                 </button>
 
                 <button
                     type="button"
-                    className="btn btn-danger rounded-pill px-4 d-flex align-items-center gap-2"
+                    className="btn rounded-pill px-4 d-flex align-items-center gap-2"
                     onClick={confirmDelete}
-                    style={{ fontSize: 12 }}
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "#ffffff",
+                        background: "#d92d20",
+                        border: "1px solid #d92d20",
+                    }}
                 >
                     <Icon.Trash />
                     Delete
@@ -904,74 +1070,316 @@ function DeleteModal({ product, open, onClose }) {
 function ActionsMenu({ onStatus, onDelete }) {
     const [open, setOpen] = useState(false);
 
+    const buttonRef = useRef(null);
+    const menuRef = useRef(null);
+
+    const [position, setPosition] = useState({
+        top: 0,
+        left: 0,
+    });
+
+    const MENU_WIDTH = 190;
+    const MENU_HEIGHT = 100;
+    const GAP = 7;
+    const PADDING = 10;
+
+    const updatePosition = () => {
+        if (!buttonRef.current) {
+            return;
+        }
+
+        const rect =
+            buttonRef.current.getBoundingClientRect();
+
+        let left = rect.right - MENU_WIDTH;
+        let top = rect.bottom + GAP;
+
+        if (
+            left + MENU_WIDTH >
+            window.innerWidth - PADDING
+        ) {
+            left =
+                window.innerWidth -
+                MENU_WIDTH -
+                PADDING;
+        }
+
+        if (left < PADDING) {
+            left = PADDING;
+        }
+
+        const spaceBelow =
+            window.innerHeight - rect.bottom;
+
+        const spaceAbove = rect.top;
+
+        if (
+            spaceBelow < MENU_HEIGHT + GAP &&
+            spaceAbove > MENU_HEIGHT + GAP
+        ) {
+            top = rect.top - MENU_HEIGHT - GAP;
+        }
+
+        if (top < PADDING) {
+            top = PADDING;
+        }
+
+        if (
+            top + MENU_HEIGHT >
+            window.innerHeight - PADDING
+        ) {
+            top =
+                window.innerHeight -
+                MENU_HEIGHT -
+                PADDING;
+        }
+
+        setPosition({
+            top,
+            left,
+        });
+    };
+
+    const toggleMenu = () => {
+        if (!open) {
+            updatePosition();
+        }
+
+        setOpen((value) => !value);
+    };
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        updatePosition();
+
+        const handleOutsideClick = (event) => {
+            if (
+                buttonRef.current &&
+                buttonRef.current.contains(event.target)
+            ) {
+                return;
+            }
+
+            if (
+                menuRef.current &&
+                menuRef.current.contains(event.target)
+            ) {
+                return;
+            }
+
+            setOpen(false);
+        };
+
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                setOpen(false);
+            }
+        };
+
+        const handlePositionUpdate = () => {
+            updatePosition();
+        };
+
+        document.addEventListener(
+            "mousedown",
+            handleOutsideClick,
+        );
+
+        document.addEventListener(
+            "keydown",
+            handleEscape,
+        );
+
+        window.addEventListener(
+            "resize",
+            handlePositionUpdate,
+        );
+
+        window.addEventListener(
+            "scroll",
+            handlePositionUpdate,
+            true,
+        );
+
+        return () => {
+            document.removeEventListener(
+                "mousedown",
+                handleOutsideClick,
+            );
+
+            document.removeEventListener(
+                "keydown",
+                handleEscape,
+            );
+
+            window.removeEventListener(
+                "resize",
+                handlePositionUpdate,
+            );
+
+            window.removeEventListener(
+                "scroll",
+                handlePositionUpdate,
+                true,
+            );
+        };
+    }, [open]);
+
+    const menu = open
+        ? createPortal(
+              <div
+                  ref={menuRef}
+                  role="menu"
+                  className="products-page-light-modal"
+                  style={{
+                      position: "fixed",
+                      top: position.top,
+                      left: position.left,
+                      width: MENU_WIDTH,
+                      zIndex: 99999,
+                      padding: 5,
+                      background: "#ffffff",
+                      color: "#1d1d1f",
+                      colorScheme: "light",
+                      border: "1px solid #e5e5ea",
+                      borderRadius: 14,
+                      boxShadow:
+                          "0 18px 45px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.05)",
+                      fontFamily: APPLE_FONT,
+                  }}
+              >
+                  <button
+                      type="button"
+                      role="menuitem"
+                      className="w-100 border-0 text-start d-flex align-items-center gap-2"
+                      onClick={() => {
+                          setOpen(false);
+                          onStatus();
+                      }}
+                      style={{
+                          minHeight: 39,
+                          padding: "7px 9px",
+                          borderRadius: 10,
+                          background: "#ffffff",
+                          color: "#1d1d1f",
+                          fontSize: 12,
+                          fontWeight: 500,
+                          transition:
+                              "background-color .15s ease",
+                      }}
+                      onMouseEnter={(event) => {
+                          event.currentTarget.style.background =
+                              "#f5f5f7";
+                      }}
+                      onMouseLeave={(event) => {
+                          event.currentTarget.style.background =
+                              "#ffffff";
+                      }}
+                  >
+                      <span
+                          className="d-flex align-items-center justify-content-center flex-shrink-0"
+                          style={{
+                              width: 27,
+                              height: 27,
+                              borderRadius: 8,
+                              background: "#f5f5f7",
+                              color: "#6e6e73",
+                          }}
+                      >
+                          <Icon.Refresh />
+                      </span>
+
+                      <span>Update status</span>
+                  </button>
+
+                  <button
+                      type="button"
+                      role="menuitem"
+                      className="w-100 border-0 text-start d-flex align-items-center gap-2"
+                      onClick={() => {
+                          setOpen(false);
+                          onDelete();
+                      }}
+                      style={{
+                          minHeight: 39,
+                          padding: "7px 9px",
+                          borderRadius: 10,
+                          background: "#ffffff",
+                          color: "#b42318",
+                          fontSize: 12,
+                          fontWeight: 500,
+                          transition:
+                              "background-color .15s ease",
+                      }}
+                      onMouseEnter={(event) => {
+                          event.currentTarget.style.background =
+                              "#fff5f4";
+                      }}
+                      onMouseLeave={(event) => {
+                          event.currentTarget.style.background =
+                              "#ffffff";
+                      }}
+                  >
+                      <span
+                          className="d-flex align-items-center justify-content-center flex-shrink-0"
+                          style={{
+                              width: 27,
+                              height: 27,
+                              borderRadius: 8,
+                              background: "#fff0ef",
+                              color: "#b42318",
+                          }}
+                      >
+                          <Icon.Trash />
+                      </span>
+
+                      <span>Delete product</span>
+                  </button>
+              </div>,
+              document.body,
+          )
+        : null;
+
     return (
-        <div className="position-relative" onMouseLeave={() => setOpen(false)}>
+        <>
             <button
+                ref={buttonRef}
                 type="button"
+                aria-label="Product actions"
+                aria-expanded={open}
                 className="border-0 d-flex align-items-center justify-content-center"
-                onClick={() => setOpen((value) => !value)}
+                onClick={toggleMenu}
                 style={{
                     width: 34,
                     height: 34,
                     borderRadius: 10,
-                    background: "#f5f5f7",
+                    background: open
+                        ? "#e8e8ed"
+                        : "#f5f5f7",
                     color: "#6e6e73",
+                    colorScheme: "light",
+                    transition:
+                        "background-color .15s ease",
+                }}
+                onMouseEnter={(event) => {
+                    event.currentTarget.style.background =
+                        "#e8e8ed";
+                }}
+                onMouseLeave={(event) => {
+                    if (!open) {
+                        event.currentTarget.style.background =
+                            "#f5f5f7";
+                    }
                 }}
             >
                 <Icon.More />
             </button>
 
-            {open && (
-                <div
-                    className="position-absolute end-0 bg-white"
-                    style={{
-                        zIndex: 50,
-                        top: 39,
-                        width: 175,
-                        borderRadius: 13,
-                        padding: 5,
-                        border: "1px solid #e8e8ed",
-                        boxShadow: "0 10px 35px rgba(0,0,0,.12)",
-                    }}
-                >
-                    <button
-                        type="button"
-                        className="w-100 border-0 bg-transparent text-start d-flex align-items-center gap-2"
-                        onClick={() => {
-                            setOpen(false);
-                            onStatus();
-                        }}
-                        style={{
-                            padding: "9px 10px",
-                            borderRadius: 9,
-                            fontSize: 12,
-                            color: "#1d1d1f",
-                        }}
-                    >
-                        <Icon.Refresh />
-                        Update status
-                    </button>
-
-                    <button
-                        type="button"
-                        className="w-100 border-0 bg-transparent text-start d-flex align-items-center gap-2"
-                        onClick={() => {
-                            setOpen(false);
-                            onDelete();
-                        }}
-                        style={{
-                            padding: "9px 10px",
-                            borderRadius: 9,
-                            fontSize: 12,
-                            color: "#c62828",
-                        }}
-                    >
-                        <Icon.Trash />
-                        Delete product
-                    </button>
-                </div>
-            )}
-        </div>
+            {menu}
+        </>
     );
 }
 
@@ -979,16 +1387,23 @@ function ActionsMenu({ onStatus, onDelete }) {
    MAIN PAGE
 ================================================================ */
 
-export default function Index({ products, counts, filters, flash }) {
+export default function Index({
+    products = [],
+    counts,
+    filters,
+    flash,
+}) {
     const [viewTarget, setViewTarget] = useState(null);
-
     const [statusTarget, setStatusTarget] = useState(null);
-
     const [deleteTarget, setDeleteTarget] = useState(null);
-
     const [query, setQuery] = useState("");
 
-    const activeStatus = filters && filters.status ? filters.status : "all";
+    const activeStatus =
+        filters?.status || "all";
+
+    /* ============================================================
+       STATS
+    ============================================================ */
 
     const stats = useMemo(() => {
         if (counts) {
@@ -999,17 +1414,25 @@ export default function Index({ products, counts, filters, flash }) {
             total: products.length,
 
             approved: products.filter(
-                (product) => product.status === "approved",
+                (product) =>
+                    product.status === "approved",
             ).length,
 
-            pending: products.filter((product) => product.status === "pending")
-                .length,
+            pending: products.filter(
+                (product) =>
+                    product.status === "pending",
+            ).length,
 
             rejected: products.filter(
-                (product) => product.status === "rejected",
+                (product) =>
+                    product.status === "rejected",
             ).length,
         };
     }, [products, counts]);
+
+    /* ============================================================
+       SEARCH
+    ============================================================ */
 
     const filtered = useMemo(() => {
         const search = query.trim().toLowerCase();
@@ -1019,17 +1442,15 @@ export default function Index({ products, counts, filters, flash }) {
         }
 
         return products.filter((product) => {
-            const name = product.name || "";
+            const name = String(product.name || "");
 
-            const seller =
-                product.seller && product.seller.company_name
-                    ? product.seller.company_name
-                    : "";
+            const seller = String(
+                product.seller?.company_name || "",
+            );
 
-            const category =
-                product.category && product.category.name
-                    ? product.category.name
-                    : "";
+            const category = String(
+                product.category?.name || "",
+            );
 
             return (
                 name.toLowerCase().includes(search) ||
@@ -1039,10 +1460,18 @@ export default function Index({ products, counts, filters, flash }) {
         });
     }, [products, query]);
 
+    /* ============================================================
+       STATUS FILTER
+    ============================================================ */
+
     const changeStatusFilter = (status) => {
         router.get(
             route("admin.products.index"),
-            status === "all" ? {} : { status: status },
+            status === "all"
+                ? {}
+                : {
+                      status,
+                  },
             {
                 preserveState: true,
                 preserveScroll: true,
@@ -1055,19 +1484,186 @@ export default function Index({ products, counts, filters, flash }) {
         <AppLayout>
             <Head title="Products" />
 
-            <div
-                className="container-fluid"
-                style={{
-                    paddingTop: 25,
-                    paddingBottom: 40,
-                    paddingLeft: 40,
-                    paddingRight: 40,
-                    fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                    color: "#1d1d1f",
-                    letterSpacing: "-0.15px",
-                }}
-            >
+            <div className="products-page-light">
+                <style>{`
+                    .products-page-light,
+                    .products-page-light *,
+                    .products-page-light-modal,
+                    .products-page-light-modal * {
+                        color-scheme: light !important;
+                    }
+
+                    .products-page-light {
+                        min-height: 100vh;
+                        padding: 25px 40px 40px;
+                        font-family: ${APPLE_FONT};
+                        font-synthesis: none;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        color: #1d1d1f !important;
+                        background: #ffffff !important;
+                        letter-spacing: -0.15px;
+                    }
+
+                    .products-page-light input,
+                    .products-page-light textarea,
+                    .products-page-light select,
+                    .products-page-light .form-control,
+                    .products-page-light .form-select {
+                        color-scheme: light !important;
+                        background-color: #ffffff !important;
+                        color: #1d1d1f !important;
+                        border-color: #dedee3 !important;
+                    }
+
+                    .products-page-light input::placeholder,
+                    .products-page-light textarea::placeholder {
+                        color: #8e8e93 !important;
+                        opacity: 1 !important;
+                    }
+
+                    .products-page-light input:focus,
+                    .products-page-light textarea:focus,
+                    .products-page-light select:focus,
+                    .products-page-light .form-control:focus,
+                    .products-page-light .form-select:focus {
+                        color: #1d1d1f !important;
+                        background-color: #ffffff !important;
+                        border-color: #b8b8be !important;
+                        box-shadow: 0 0 0 0.2rem rgba(0, 113, 227, 0.10) !important;
+                    }
+
+                    .products-page-light option {
+                        color: #1d1d1f !important;
+                        background: #ffffff !important;
+                    }
+
+                    .products-page-light button,
+                    .products-page-light .btn,
+                    .products-page-light a {
+                        color-scheme: light !important;
+                    }
+
+                    .products-page-light .table {
+                        --bs-table-bg: #ffffff !important;
+                        --bs-table-color: #1d1d1f !important;
+                        --bs-table-border-color: #ededf0 !important;
+                        color: #1d1d1f !important;
+                        background-color: #ffffff !important;
+                    }
+
+                    .products-page-light .table > :not(caption) > * > * {
+                        background-color: transparent !important;
+                        color: inherit !important;
+                    }
+
+                    .products-page-light .table thead,
+                    .products-page-light .table tbody,
+                    .products-page-light .table tr,
+                    .products-page-light .table td,
+                    .products-page-light .table th {
+                        color-scheme: light !important;
+                    }
+
+                    .products-page-light-modal {
+                        color-scheme: light !important;
+                    }
+
+                    .products-page-light-modal input,
+                    .products-page-light-modal textarea,
+                    .products-page-light-modal select,
+                    .products-page-light-modal .form-control,
+                    .products-page-light-modal .form-select {
+                        background-color: #ffffff !important;
+                        color: #1d1d1f !important;
+                    }
+
+                    .products-page-light-modal button {
+                        color-scheme: light !important;
+                    }
+
+                    @media (prefers-color-scheme: dark) {
+                        .products-page-light {
+                            background: #ffffff !important;
+                            color: #1d1d1f !important;
+                        }
+
+                        .products-page-light input,
+                        .products-page-light textarea,
+                        .products-page-light select,
+                        .products-page-light .form-control,
+                        .products-page-light .form-select {
+                            background-color: #ffffff !important;
+                            color: #1d1d1f !important;
+                            border-color: #dedee3 !important;
+                        }
+
+                        .products-page-light .table {
+                            background-color: #ffffff !important;
+                            color: #1d1d1f !important;
+                        }
+
+                        .products-page-light-modal {
+                            color: #1d1d1f !important;
+                        }
+
+                        .products-page-light-modal > div {
+                            background-color: #ffffff !important;
+                            color: #1d1d1f !important;
+                        }
+                    }
+
+                    .products-page-light ::selection {
+                        background: #dbeafe !important;
+                        color: #1d1d1f !important;
+                    }
+
+                    .products-page-light .product-filter-btn {
+                        transition:
+                            background-color .15s ease,
+                            color .15s ease;
+                    }
+
+                    .products-page-light .product-filter-btn:hover {
+                        background: #f5f5f7 !important;
+                        color: #1d1d1f !important;
+                    }
+
+                    .products-page-light .product-view-btn {
+                        transition:
+                            background-color .15s ease,
+                            transform .15s ease;
+                    }
+
+                    .products-page-light .product-view-btn:hover {
+                        background: #e8e8ed !important;
+                    }
+
+                    .products-page-light .product-primary-btn {
+                        transition:
+                            background-color .15s ease,
+                            border-color .15s ease;
+                    }
+
+                    .products-page-light .product-primary-btn:hover {
+                        background: #0077ed !important;
+                        border-color: #0077ed !important;
+                    }
+
+                    @media (max-width: 991.98px) {
+                        .products-page-light {
+                            padding-left: 20px;
+                            padding-right: 20px;
+                        }
+                    }
+
+                    @media (max-width: 575.98px) {
+                        .products-page-light {
+                            padding: 18px 14px 30px;
+                        }
+                    }
+                `}</style>
+
                 {/* =================================================
                     HEADER
                 ================================================= */}
@@ -1083,7 +1679,6 @@ export default function Index({ products, counts, filters, flash }) {
                             }}
                         >
                             <span>Admin</span>
-
                             <span>/</span>
 
                             <span
@@ -1102,6 +1697,7 @@ export default function Index({ products, counts, filters, flash }) {
                                 lineHeight: 1.15,
                                 fontWeight: 650,
                                 letterSpacing: "-0.9px",
+                                color: "#1d1d1f",
                             }}
                         >
                             Products
@@ -1114,14 +1710,12 @@ export default function Index({ products, counts, filters, flash }) {
                                 fontSize: 12.5,
                             }}
                         >
-                            Manage your marketplace products, categories and
-                            listings.
+                            Manage your marketplace products,
+                            categories and listings.
                         </p>
                     </div>
 
                     <div className="d-flex align-items-center gap-2 flex-wrap">
-                        {/* Product Categories */}
-
                         <Link
                             href="/admin/product-categories"
                             className="d-flex align-items-center gap-2 text-decoration-none"
@@ -1141,17 +1735,18 @@ export default function Index({ products, counts, filters, flash }) {
                             <Icon.Arrow />
                         </Link>
 
-                        {/* Add Product */}
-
                         <Link
-                            href={route("admin.products.create")}
-                            className="d-flex align-items-center gap-2 text-decoration-none"
+                            href={route(
+                                "admin.products.create",
+                            )}
+                            className="product-primary-btn d-flex align-items-center gap-2 text-decoration-none"
                             style={{
                                 height: 38,
                                 padding: "0 16px",
                                 borderRadius: 999,
-                                background: "#1d1d1f",
+                                background: "#0071e3",
                                 color: "#ffffff",
+                                border: "1px solid #0071e3",
                                 fontSize: 12,
                                 fontWeight: 600,
                             }}
@@ -1166,7 +1761,7 @@ export default function Index({ products, counts, filters, flash }) {
                     FLASH
                 ================================================= */}
 
-                {flash && flash.success && (
+                {flash?.success && (
                     <div
                         className="mb-4"
                         style={{
@@ -1259,66 +1854,83 @@ export default function Index({ products, counts, filters, flash }) {
                 <div
                     style={{
                         background: "#ffffff",
+                        color: "#1d1d1f",
+                        colorScheme: "light",
                         border: "1px solid #e8e8ed",
                         borderRadius: 20,
-                        overflow: "hidden",
+                        overflow: "visible",
                     }}
                 >
-                    {/* Toolbar */}
+                    {/* TOOLBAR */}
 
                     <div
                         className="d-flex justify-content-between align-items-center flex-wrap gap-3"
                         style={{
                             padding: "17px 19px",
-                            borderBottom: "1px solid #ededf0",
+                            borderBottom:
+                                "1px solid #ededf0",
+                            borderRadius:
+                                "20px 20px 0 0",
                         }}
                     >
                         <div className="d-flex align-items-center gap-1 flex-wrap">
-                            {["all", "pending", "approved", "rejected"].map(
-                                (status) => {
-                                    const active = activeStatus === status;
+                            {[
+                                "all",
+                                "pending",
+                                "approved",
+                                "rejected",
+                            ].map((status) => {
+                                const active =
+                                    activeStatus === status;
 
-                                    return (
-                                        <button
-                                            key={status}
-                                            type="button"
-                                            onClick={() =>
-                                                changeStatusFilter(status)
-                                            }
-                                            style={{
-                                                border: "none",
-                                                background: active
-                                                    ? "#1d1d1f"
-                                                    : "transparent",
-                                                color: active
-                                                    ? "#ffffff"
-                                                    : "#6e6e73",
-                                                borderRadius: 999,
-                                                padding: "7px 12px",
-                                                fontSize: 11,
-                                                fontWeight: 600,
-                                                textTransform: "capitalize",
-                                            }}
-                                        >
-                                            {status === "all" ? "All" : status}
-                                        </button>
-                                    );
-                                },
-                            )}
+                                return (
+                                    <button
+                                        key={status}
+                                        type="button"
+                                        className="product-filter-btn"
+                                        onClick={() =>
+                                            changeStatusFilter(
+                                                status,
+                                            )
+                                        }
+                                        style={{
+                                            border: "none",
+                                            background: active
+                                                ? "#f2f2f7"
+                                                : "transparent",
+                                            color: active
+                                                ? "#1d1d1f"
+                                                : "#6e6e73",
+                                            borderRadius: 999,
+                                            padding: "7px 12px",
+                                            fontSize: 11,
+                                            fontWeight: 600,
+                                            textTransform:
+                                                "capitalize",
+                                        }}
+                                    >
+                                        {status === "all"
+                                            ? "All"
+                                            : status}
+                                    </button>
+                                );
+                            })}
                         </div>
 
                         <div
                             className="position-relative"
                             style={{
                                 width: 270,
+                                maxWidth: "100%",
                             }}
                         >
                             <span
                                 className="position-absolute"
                                 style={{
                                     left: 12,
-                                    top: 9,
+                                    top: 8,
                                     color: "#8e8e93",
+                                    zIndex: 2,
                                 }}
                             >
                                 <Icon.Search />
@@ -1328,30 +1940,42 @@ export default function Index({ products, counts, filters, flash }) {
                                 type="text"
                                 value={query}
                                 onChange={(event) =>
-                                    setQuery(event.target.value)
+                                    setQuery(
+                                        event.target.value,
+                                    )
                                 }
                                 placeholder="Search products..."
                                 className="form-control"
                                 style={{
                                     height: 34,
                                     borderRadius: 999,
-                                    border: "1px solid #e0e0e5",
+                                    border:
+                                        "1px solid #e0e0e5",
                                     background: "#f8f8fa",
                                     paddingLeft: 38,
                                     fontSize: 11.5,
                                     boxShadow: "none",
+                                    color: "#1d1d1f",
                                 }}
                             />
                         </div>
                     </div>
 
-                    {/* Table */}
+                    {/* TABLE */}
 
-                    <div className="table-responsive">
+                    <div
+                        className="table-responsive"
+                        style={{
+                            overflowX: "auto",
+                            overflowY: "visible",
+                        }}
+                    >
                         <table
                             className="table align-middle mb-0"
                             style={{
                                 minWidth: 850,
+                                background: "#ffffff",
+                                color: "#1d1d1f",
                             }}
                         >
                             <thead>
@@ -1360,75 +1984,33 @@ export default function Index({ products, counts, filters, flash }) {
                                         background: "#fafafa",
                                     }}
                                 >
-                                    <th
-                                        className="px-4 py-3"
-                                        style={{
-                                            color: "#86868b",
-                                            fontSize: 10,
-                                            fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: ".04em",
-                                            borderBottom: "1px solid #ededf0",
-                                        }}
-                                    >
-                                        Product
-                                    </th>
-
-                                    <th
-                                        className="px-3 py-3"
-                                        style={{
-                                            color: "#86868b",
-                                            fontSize: 10,
-                                            fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: ".04em",
-                                            borderBottom: "1px solid #ededf0",
-                                        }}
-                                    >
-                                        Seller
-                                    </th>
-
-                                    <th
-                                        className="px-3 py-3"
-                                        style={{
-                                            color: "#86868b",
-                                            fontSize: 10,
-                                            fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: ".04em",
-                                            borderBottom: "1px solid #ededf0",
-                                        }}
-                                    >
-                                        Price
-                                    </th>
-
-                                    <th
-                                        className="px-3 py-3"
-                                        style={{
-                                            color: "#86868b",
-                                            fontSize: 10,
-                                            fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: ".04em",
-                                            borderBottom: "1px solid #ededf0",
-                                        }}
-                                    >
-                                        Status
-                                    </th>
-
-                                    <th
-                                        className="px-3 py-3"
-                                        style={{
-                                            color: "#86868b",
-                                            fontSize: 10,
-                                            fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: ".04em",
-                                            borderBottom: "1px solid #ededf0",
-                                        }}
-                                    >
-                                        Created
-                                    </th>
+                                    {[
+                                        "Product",
+                                        "Seller",
+                                        "Price",
+                                        "Status",
+                                        "Created",
+                                    ].map((heading) => (
+                                        <th
+                                            key={heading}
+                                            className="px-3 py-3"
+                                            style={{
+                                                color: "#86868b",
+                                                fontSize: 10,
+                                                fontWeight: 600,
+                                                textTransform:
+                                                    "uppercase",
+                                                letterSpacing:
+                                                    ".04em",
+                                                borderBottom:
+                                                    "1px solid #ededf0",
+                                                background:
+                                                    "#fafafa",
+                                            }}
+                                        >
+                                            {heading}
+                                        </th>
+                                    ))}
 
                                     <th
                                         className="px-4 py-3 text-end"
@@ -1436,9 +2018,14 @@ export default function Index({ products, counts, filters, flash }) {
                                             color: "#86868b",
                                             fontSize: 10,
                                             fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: ".04em",
-                                            borderBottom: "1px solid #ededf0",
+                                            textTransform:
+                                                "uppercase",
+                                            letterSpacing:
+                                                ".04em",
+                                            borderBottom:
+                                                "1px solid #ededf0",
+                                            background:
+                                                "#fafafa",
                                         }}
                                     >
                                         Action
@@ -1453,7 +2040,10 @@ export default function Index({ products, counts, filters, flash }) {
                                             colSpan="6"
                                             className="text-center"
                                             style={{
-                                                padding: "70px 20px",
+                                                padding:
+                                                    "70px 20px",
+                                                background:
+                                                    "#ffffff",
                                             }}
                                         >
                                             <div
@@ -1462,7 +2052,8 @@ export default function Index({ products, counts, filters, flash }) {
                                                     width: 52,
                                                     height: 52,
                                                     borderRadius: 16,
-                                                    background: "#f5f5f7",
+                                                    background:
+                                                        "#f5f5f7",
                                                     color: "#8e8e93",
                                                 }}
                                             >
@@ -1486,30 +2077,31 @@ export default function Index({ products, counts, filters, flash }) {
                                                     marginTop: 4,
                                                 }}
                                             >
-                                                Try another search or filter.
+                                                Try another search or
+                                                filter.
                                             </div>
                                         </td>
                                     </tr>
                                 )}
 
                                 {filtered.map((product) => {
-                                    const image = product.image
-                                        ? "/storage/" + product.image
-                                        : null;
+                                    const image =
+                                        product.image
+                                            ? "/storage/" +
+                                              product.image
+                                            : null;
 
                                     const seller =
-                                        product.seller &&
-                                        product.seller.company_name
-                                            ? product.seller.company_name
-                                            : "N/A";
+                                        product.seller
+                                            ?.company_name ||
+                                        "N/A";
 
                                     const category =
-                                        product.category &&
-                                        product.category.name
-                                            ? product.category.name
-                                            : "Uncategorized";
+                                        product.category?.name ||
+                                        "Uncategorized";
 
-                                    const sellerColors = avatarColor(seller);
+                                    const sellerColors =
+                                        avatarColor(seller);
 
                                     return (
                                         <tr
@@ -1517,15 +2109,19 @@ export default function Index({ products, counts, filters, flash }) {
                                             style={{
                                                 borderBottom:
                                                     "1px solid #f1f1f3",
+                                                background:
+                                                    "#ffffff",
                                             }}
                                         >
-                                            {/* Product */}
+                                            {/* PRODUCT */}
 
                                             <td className="px-4 py-3">
                                                 <div className="d-flex align-items-center gap-3">
                                                     <ProductThumb
                                                         src={image}
-                                                        name={product.name}
+                                                        name={
+                                                            product.name
+                                                        }
                                                     />
 
                                                     <div
@@ -1548,7 +2144,9 @@ export default function Index({ products, counts, filters, flash }) {
                                                                 maxWidth: 260,
                                                             }}
                                                         >
-                                                            {product.name}
+                                                            {
+                                                                product.name
+                                                            }
                                                         </div>
 
                                                         <div
@@ -1557,13 +2155,15 @@ export default function Index({ products, counts, filters, flash }) {
                                                                 color: "#86868b",
                                                             }}
                                                         >
-                                                            {category}
+                                                            {
+                                                                category
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
 
-                                            {/* Seller */}
+                                            {/* SELLER */}
 
                                             <td className="px-3 py-3">
                                                 <div className="d-flex align-items-center gap-2">
@@ -1575,12 +2175,15 @@ export default function Index({ products, counts, filters, flash }) {
                                                             borderRadius: 10,
                                                             background:
                                                                 sellerColors[0],
-                                                            color: sellerColors[1],
+                                                            color:
+                                                                sellerColors[1],
                                                             fontSize: 10,
                                                             fontWeight: 700,
                                                         }}
                                                     >
-                                                        {getInitials(seller)}
+                                                        {getInitials(
+                                                            seller,
+                                                        )}
                                                     </div>
 
                                                     <div>
@@ -1591,7 +2194,9 @@ export default function Index({ products, counts, filters, flash }) {
                                                                 color: "#1d1d1f",
                                                             }}
                                                         >
-                                                            {seller}
+                                                            {
+                                                                seller
+                                                            }
                                                         </div>
 
                                                         <div
@@ -1600,18 +2205,16 @@ export default function Index({ products, counts, filters, flash }) {
                                                                 color: "#86868b",
                                                             }}
                                                         >
-                                                            {product.seller &&
-                                                            product.seller
-                                                                .address
-                                                                ? product.seller
-                                                                      .address
-                                                                : ""}
+                                                            {product
+                                                                .seller
+                                                                ?.address ||
+                                                                ""}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
 
-                                            {/* Price */}
+                                            {/* PRICE */}
 
                                             <td className="px-3 py-3">
                                                 <span
@@ -1621,19 +2224,23 @@ export default function Index({ products, counts, filters, flash }) {
                                                         color: "#1d1d1f",
                                                     }}
                                                 >
-                                                    {formatPrice(product.price)}
+                                                    {formatPrice(
+                                                        product.price,
+                                                    )}
                                                 </span>
                                             </td>
 
-                                            {/* Status */}
+                                            {/* STATUS */}
 
                                             <td className="px-3 py-3">
                                                 <StatusBadge
-                                                    status={product.status}
+                                                    status={
+                                                        product.status
+                                                    }
                                                 />
                                             </td>
 
-                                            {/* Date */}
+                                            {/* DATE */}
 
                                             <td className="px-3 py-3">
                                                 <span
@@ -1648,9 +2255,15 @@ export default function Index({ products, counts, filters, flash }) {
                                                 </span>
                                             </td>
 
-                                            {/* Actions */}
+                                            {/* ACTION */}
 
-                                            <td className="px-4 py-3">
+                                            <td
+                                                className="px-4 py-3"
+                                                style={{
+                                                    position:
+                                                        "relative",
+                                                }}
+                                            >
                                                 <div className="d-flex align-items-center justify-content-end gap-2">
                                                     <button
                                                         type="button"
@@ -1659,10 +2272,11 @@ export default function Index({ products, counts, filters, flash }) {
                                                                 product,
                                                             )
                                                         }
-                                                        className="border-0 d-flex align-items-center gap-1"
+                                                        className="product-view-btn border-0 d-flex align-items-center gap-1"
                                                         style={{
                                                             height: 32,
-                                                            padding: "0 11px",
+                                                            padding:
+                                                                "0 11px",
                                                             borderRadius: 999,
                                                             background:
                                                                 "#f5f5f7",
@@ -1696,7 +2310,7 @@ export default function Index({ products, counts, filters, flash }) {
                         </table>
                     </div>
 
-                    {/* Footer */}
+                    {/* FOOTER */}
 
                     <div
                         className="d-flex justify-content-between align-items-center flex-wrap gap-2"
@@ -1704,6 +2318,8 @@ export default function Index({ products, counts, filters, flash }) {
                             padding: "13px 19px",
                             background: "#fafafa",
                             borderTop: "1px solid #ededf0",
+                            borderRadius:
+                                "0 0 20px 20px",
                         }}
                     >
                         <span
@@ -1735,7 +2351,7 @@ export default function Index({ products, counts, filters, flash }) {
                             href="/admin/product-categories"
                             className="text-decoration-none d-flex align-items-center gap-1"
                             style={{
-                                color: "#3567d6",
+                                color: "#0071e3",
                                 fontSize: 10.5,
                                 fontWeight: 600,
                             }}
@@ -1747,7 +2363,9 @@ export default function Index({ products, counts, filters, flash }) {
                 </div>
             </div>
 
-            {/* MODALS */}
+            {/* ========================================================
+                MODALS
+            ======================================================== */}
 
             <ViewModal
                 product={viewTarget}

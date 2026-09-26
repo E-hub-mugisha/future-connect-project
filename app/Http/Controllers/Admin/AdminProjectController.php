@@ -3,32 +3,37 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\JobSectionApplication;
 use App\Models\Project;
 use App\Models\ProjectApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+
 class AdminProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::with('user')->latest()->paginate(10);
+        $projects = Project::with('user', 'category')->latest()->paginate(10);
         return Inertia::render('AdminPage/Projects/Index', compact('projects'));
     }
 
     // create project
     public function create()
     {
-        return Inertia::render('AdminPage/Projects/Create');
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+        return Inertia::render('AdminPage/Projects/Create', compact('categories'));
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:100',
-            'budget_amount' => 'nullable|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'budget_amount' => 'nullable|numeric|min:0',
+            'budget_currency' => 'nullable|string|in:RWF,USD',
             'location' => 'nullable|string|max:255',
             'status' => 'required|string|max:50',
             'verified' => 'boolean',
@@ -42,8 +47,10 @@ class AdminProjectController extends Controller
     // edit project
     public function edit($id)
     {
-        $project = Project::with('user')->findOrFail($id);
-        return Inertia::render('AdminPage/Projects/Edit', compact('project'));
+        $project = Project::with('user', 'category')->findOrFail($id);
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+
+        return Inertia::render('AdminPage/Projects/Edit', compact('project', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -51,8 +58,9 @@ class AdminProjectController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:100',
-            'budget_amount' => 'nullable|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'budget_amount' => 'nullable|numeric|min:0',
+            'budget_currency' => 'nullable|string|in:RWF,USD',
             'location' => 'nullable|string|max:255',
             'status' => 'required|string|max:50',
             'verified' => 'boolean',
@@ -66,13 +74,13 @@ class AdminProjectController extends Controller
 
     public function show($id)
     {
-        $project = Project::with('user', 'applications')->findOrFail($id);
+        $project = Project::with('user', 'applications', 'category')->findOrFail($id);
         return Inertia::render('AdminPage/Projects/Show', compact('project'));
     }
 
     public function verify($id)
     {
-        $project = Project::with('user')->findOrFail($id);
+        $project = Project::with('user', 'category')->findOrFail($id);
         $project->verified = true;
         $project->save();
 
@@ -81,11 +89,12 @@ class AdminProjectController extends Controller
 
     public function destroy($id)
     {
-        $project = Project::with('user')->findOrFail($id);
+        $project = Project::with('user', 'category')->findOrFail($id);
         $project->delete();
 
         return redirect()->back()->with('success', 'Project deleted successfully!');
     }
+
     public function accept($id)
     {
         $application = ProjectApplication::with('project')->findOrFail($id);

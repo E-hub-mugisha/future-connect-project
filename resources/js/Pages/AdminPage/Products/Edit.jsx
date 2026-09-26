@@ -98,6 +98,15 @@ const Icon = {
             <path d="m21 15-5-5L5 21" />
         </svg>
     ),
+
+    Refresh: (p) => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+            <path d="M20 11a8.1 8.1 0 0 0-14.8-3L3 11" />
+            <path d="M3 5v6h6" />
+            <path d="M4 13a8.1 8.1 0 0 0 14.8 3L21 13" />
+            <path d="M21 19v-6h-6" />
+        </svg>
+    ),
 };
 
 /* =========================================================
@@ -228,6 +237,88 @@ function SectionHeader({ icon, title, description }) {
     );
 }
 
+/* =========================================================
+   Error
+========================================================= */
+function FieldError({ children }) {
+    if (!children) return null;
+
+    return (
+        <div
+            className="mt-2"
+            style={{
+                color: '#d93025',
+                fontSize: '11px',
+                fontWeight: 500,
+            }}
+        >
+            {children}
+        </div>
+    );
+}
+
+/* =========================================================
+   Select
+========================================================= */
+function Select({ icon, children, ...props }) {
+    return (
+        <div className="position-relative">
+            {icon && (
+                <span
+                    className="position-absolute d-flex align-items-center justify-content-center"
+                    style={{
+                        left: '14px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '17px',
+                        height: '17px',
+                        color: '#8e8e93',
+                        pointerEvents: 'none',
+                        zIndex: 2,
+                    }}
+                >
+                    {icon}
+                </span>
+            )}
+
+            <select
+                {...props}
+                className="form-select"
+                style={{
+                    height: '48px',
+                    borderRadius: '12px',
+                    border: '1px solid #dedee3',
+                    backgroundColor: '#fbfbfc',
+                    paddingLeft: icon ? '42px' : '14px',
+                    paddingRight: '40px',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    color: '#1d1d1f',
+                    boxShadow: 'none',
+                }}
+            >
+                {children}
+            </select>
+
+            <span
+                className="position-absolute"
+                style={{
+                    right: '14px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none',
+                    color: '#8e8e93',
+                }}
+            >
+                <Icon.ChevronDown width={14} height={14} />
+            </span>
+        </div>
+    );
+}
+
+/* =========================================================
+   Edit Product
+========================================================= */
 export default function Edit({ product, categories = [] }) {
     const fileRef = useRef(null);
 
@@ -266,6 +357,10 @@ export default function Edit({ product, categories = [] }) {
     const handleFile = (file) => {
         if (!file) return;
 
+        if (!file.type?.startsWith('image/')) {
+            return;
+        }
+
         setData('image', file);
         setImageCleared(false);
 
@@ -280,7 +375,6 @@ export default function Edit({ product, categories = [] }) {
 
     const onDrop = (e) => {
         e.preventDefault();
-
         setDragActive(false);
 
         handleFile(e.dataTransfer.files?.[0]);
@@ -328,9 +422,9 @@ export default function Edit({ product, categories = [] }) {
                         }}
                     >
                         {/* =================================================
-                            Header
+                            PAGE HEADER
                         ================================================= */}
-                        <div className="mb-4 mb-lg-5">
+                        <div className="mb-4">
                             <button
                                 type="button"
                                 onClick={() => window.history.back()}
@@ -341,15 +435,12 @@ export default function Edit({ product, categories = [] }) {
                                     fontWeight: 600,
                                 }}
                             >
-                                <Icon.ArrowLeft
-                                    width={15}
-                                    height={15}
-                                />
+                                <Icon.ArrowLeft width={15} height={15} />
 
                                 Back to products
                             </button>
 
-                            <div className="row align-items-end g-3">
+                            <div className="row align-items-center g-3">
                                 <div className="col">
                                     <div
                                         className="d-inline-flex align-items-center gap-2 mb-2 px-2 py-1 rounded-pill"
@@ -361,12 +452,8 @@ export default function Edit({ product, categories = [] }) {
                                             letterSpacing: '0.06em',
                                         }}
                                     >
-                                        <Icon.Edit
-                                            width={12}
-                                            height={12}
-                                        />
-
-                                        PRODUCT MANAGEMENT
+                                        <Icon.Edit width={12} height={12} />
+                                        EDITING LISTING
                                     </div>
 
                                     <h1
@@ -389,15 +476,14 @@ export default function Edit({ product, categories = [] }) {
                                             lineHeight: 1.5,
                                         }}
                                     >
-                                        Keep your marketplace listing accurate,
-                                        clear and up to date.
+                                        Update your product details, pricing,
+                                        inventory and media.
                                     </p>
                                 </div>
 
-                                {/* Status badge */}
                                 <div className="col-auto">
                                     <div
-                                        className="d-inline-flex align-items-center gap-2 px-3 py-2"
+                                        className="d-flex align-items-center gap-2 px-3 py-2"
                                         style={{
                                             borderRadius: '999px',
                                             background:
@@ -432,10 +518,13 @@ export default function Edit({ product, categories = [] }) {
                             </div>
                         </div>
 
+                        {/* =================================================
+                            FORM
+                        ================================================= */}
                         <form onSubmit={submit}>
                             <div className="row g-4">
                                 {/* =================================================
-                                    MAIN FORM
+                                    MAIN CONTENT
                                 ================================================= */}
                                 <div className="col-12 col-lg-8">
                                     <div
@@ -448,7 +537,9 @@ export default function Edit({ product, categories = [] }) {
                                             overflow: 'hidden',
                                         }}
                                     >
-                                        {/* PRODUCT INFORMATION */}
+                                        {/* =================================================
+                                            BASIC INFORMATION
+                                        ================================================= */}
                                         <section className="p-4 p-md-5">
                                             <SectionHeader
                                                 icon={
@@ -458,7 +549,7 @@ export default function Edit({ product, categories = [] }) {
                                                     />
                                                 }
                                                 title="Product information"
-                                                description="Define the core information customers will see."
+                                                description="Update the core information customers will see."
                                             />
 
                                             <div className="row g-4">
@@ -486,17 +577,9 @@ export default function Edit({ product, categories = [] }) {
                                                         icon
                                                     />
 
-                                                    {errors.name && (
-                                                        <div
-                                                            className="mt-2"
-                                                            style={{
-                                                                color: '#d93025',
-                                                                fontSize: '11px',
-                                                            }}
-                                                        >
-                                                            {errors.name}
-                                                        </div>
-                                                    )}
+                                                    <FieldError>
+                                                        {errors.name}
+                                                    </FieldError>
                                                 </Field>
 
                                                 <Field
@@ -509,8 +592,7 @@ export default function Edit({ product, categories = [] }) {
                                                         />
                                                     }
                                                 >
-                                                    <select
-                                                        className="form-select"
+                                                    <Select
                                                         value={
                                                             data.product_category_id
                                                         }
@@ -521,19 +603,12 @@ export default function Edit({ product, categories = [] }) {
                                                             )
                                                         }
                                                         required
-                                                        style={{
-                                                            height: '48px',
-                                                            borderRadius: '12px',
-                                                            border: '1px solid #dedee3',
-                                                            backgroundColor:
-                                                                '#fbfbfc',
-                                                            paddingLeft: '42px',
-                                                            paddingRight: '40px',
-                                                            fontSize: '13px',
-                                                            fontWeight: 500,
-                                                            color: '#1d1d1f',
-                                                            boxShadow: 'none',
-                                                        }}
+                                                        icon={
+                                                            <Icon.Tag
+                                                                width={16}
+                                                                height={16}
+                                                            />
+                                                        }
                                                     >
                                                         <option value="">
                                                             Select a category
@@ -555,39 +630,13 @@ export default function Edit({ product, categories = [] }) {
                                                                 </option>
                                                             )
                                                         )}
-                                                    </select>
+                                                    </Select>
 
-                                                    <span
-                                                        className="position-absolute"
-                                                        style={{
-                                                            right: '14px',
-                                                            top: '50%',
-                                                            transform:
-                                                                'translateY(-50%)',
-                                                            pointerEvents:
-                                                                'none',
-                                                            color: '#8e8e93',
-                                                        }}
-                                                    >
-                                                        <Icon.ChevronDown
-                                                            width={14}
-                                                            height={14}
-                                                        />
-                                                    </span>
-
-                                                    {errors.product_category_id && (
-                                                        <div
-                                                            className="mt-2"
-                                                            style={{
-                                                                color: '#d93025',
-                                                                fontSize: '11px',
-                                                            }}
-                                                        >
-                                                            {
-                                                                errors.product_category_id
-                                                            }
-                                                        </div>
-                                                    )}
+                                                    <FieldError>
+                                                        {
+                                                            errors.product_category_id
+                                                        }
+                                                    </FieldError>
                                                 </Field>
                                             </div>
                                         </section>
@@ -600,7 +649,7 @@ export default function Edit({ product, categories = [] }) {
                                         />
 
                                         {/* =================================================
-                                            PRICING
+                                            PRICING & INVENTORY
                                         ================================================= */}
                                         <section className="p-4 p-md-5">
                                             <SectionHeader
@@ -611,19 +660,13 @@ export default function Edit({ product, categories = [] }) {
                                                     />
                                                 }
                                                 title="Pricing & inventory"
-                                                description="Control the commercial details and current availability."
+                                                description="Keep your price and available stock accurate."
                                             />
 
                                             <div className="row g-4">
                                                 <Field
                                                     label="Price"
                                                     hint="Rwandan Francs"
-                                                    icon={
-                                                        <Icon.Cash
-                                                            width={16}
-                                                            height={16}
-                                                        />
-                                                    }
                                                 >
                                                     <Input
                                                         type="number"
@@ -638,31 +681,16 @@ export default function Edit({ product, categories = [] }) {
                                                             )
                                                         }
                                                         required
-                                                        icon
                                                     />
 
-                                                    {errors.price && (
-                                                        <div
-                                                            className="mt-2"
-                                                            style={{
-                                                                color: '#d93025',
-                                                                fontSize: '11px',
-                                                            }}
-                                                        >
-                                                            {errors.price}
-                                                        </div>
-                                                    )}
+                                                    <FieldError>
+                                                        {errors.price}
+                                                    </FieldError>
                                                 </Field>
 
                                                 <Field
                                                     label="Stock quantity"
                                                     hint="Units available"
-                                                    icon={
-                                                        <Icon.Stack
-                                                            width={16}
-                                                            height={16}
-                                                        />
-                                                    }
                                                 >
                                                     <Input
                                                         type="number"
@@ -676,20 +704,11 @@ export default function Edit({ product, categories = [] }) {
                                                             )
                                                         }
                                                         required
-                                                        icon
                                                     />
 
-                                                    {errors.stock && (
-                                                        <div
-                                                            className="mt-2"
-                                                            style={{
-                                                                color: '#d93025',
-                                                                fontSize: '11px',
-                                                            }}
-                                                        >
-                                                            {errors.stock}
-                                                        </div>
-                                                    )}
+                                                    <FieldError>
+                                                        {errors.stock}
+                                                    </FieldError>
                                                 </Field>
 
                                                 <div className="col-12">
@@ -709,7 +728,6 @@ export default function Edit({ product, categories = [] }) {
                                                         style={{
                                                             background: '#f2f2f7',
                                                             borderRadius: '12px',
-                                                            width: '100%',
                                                         }}
                                                     >
                                                         {[
@@ -843,13 +861,13 @@ export default function Edit({ product, categories = [] }) {
                                                     />
                                                 }
                                                 title="Product description"
-                                                description="Give customers enough information to understand the product."
+                                                description="Update the information customers need before purchasing."
                                             />
 
                                             <textarea
                                                 className="form-control"
                                                 rows={7}
-                                                placeholder="Describe the product, its features, materials, dimensions, benefits and other useful information..."
+                                                placeholder="Describe the product, features, materials, dimensions, benefits and other useful information..."
                                                 value={data.description}
                                                 onChange={(e) =>
                                                     setData(
@@ -871,17 +889,9 @@ export default function Edit({ product, categories = [] }) {
                                                 }}
                                             />
 
-                                            {errors.description && (
-                                                <div
-                                                    className="mt-2"
-                                                    style={{
-                                                        color: '#d93025',
-                                                        fontSize: '11px',
-                                                    }}
-                                                >
-                                                    {errors.description}
-                                                </div>
-                                            )}
+                                            <FieldError>
+                                                {errors.description}
+                                            </FieldError>
                                         </section>
 
                                         <div
@@ -903,13 +913,13 @@ export default function Edit({ product, categories = [] }) {
                                                     />
                                                 }
                                                 title="Product media"
-                                                description="Use a clear, high-quality image to represent your listing."
+                                                description="Replace or remove the current product image."
                                             />
 
                                             <input
                                                 ref={fileRef}
                                                 type="file"
-                                                accept="image/*"
+                                                accept="image/png,image/jpeg,image/jpg,image/webp"
                                                 style={{ display: 'none' }}
                                                 onChange={(e) =>
                                                     handleFile(
@@ -941,9 +951,9 @@ export default function Edit({ product, categories = [] }) {
                                                             : '#fafafa',
                                                         padding: '42px 20px',
                                                         cursor: 'pointer',
+                                                        textAlign: 'center',
                                                         transition:
                                                             'all .2s ease',
-                                                        textAlign: 'center',
                                                     }}
                                                 >
                                                     <div
@@ -991,7 +1001,7 @@ export default function Edit({ product, categories = [] }) {
                                                             color: '#8e8e93',
                                                         }}
                                                     >
-                                                        PNG, JPG or JPEG ·
+                                                        PNG, JPG, JPEG or WEBP ·
                                                         Maximum 5MB
                                                     </div>
                                                 </div>
@@ -1007,7 +1017,10 @@ export default function Edit({ product, categories = [] }) {
                                                     <div className="d-flex align-items-center gap-3">
                                                         <img
                                                             src={preview}
-                                                            alt="Product preview"
+                                                            alt={
+                                                                data.name ||
+                                                                'Product preview'
+                                                            }
                                                             style={{
                                                                 width: '88px',
                                                                 height: '88px',
@@ -1037,10 +1050,9 @@ export default function Edit({ product, categories = [] }) {
                                                                     color: '#1d1d1f',
                                                                 }}
                                                             >
-                                                                {data.image
-                                                                    ?.name ??
+                                                                {data.image?.name ||
                                                                     (imageCleared
-                                                                        ? ''
+                                                                        ? 'No image selected'
                                                                         : 'Current product image')}
                                                             </div>
 
@@ -1069,7 +1081,7 @@ export default function Edit({ product, categories = [] }) {
                                                                 onClick={() =>
                                                                     fileRef.current?.click()
                                                                 }
-                                                                className="btn btn-link p-0 mt-2 text-decoration-none"
+                                                                className="btn btn-link p-0 mt-2 text-decoration-none d-inline-flex align-items-center gap-1"
                                                                 style={{
                                                                     color: '#0071e3',
                                                                     fontSize:
@@ -1078,6 +1090,10 @@ export default function Edit({ product, categories = [] }) {
                                                                         600,
                                                                 }}
                                                             >
+                                                                <Icon.Refresh
+                                                                    width={12}
+                                                                    height={12}
+                                                                />
                                                                 Replace image
                                                             </button>
                                                         </div>
@@ -1109,21 +1125,13 @@ export default function Edit({ product, categories = [] }) {
                                                 </div>
                                             )}
 
-                                            {errors.image && (
-                                                <div
-                                                    className="mt-2"
-                                                    style={{
-                                                        color: '#d93025',
-                                                        fontSize: '11px',
-                                                    }}
-                                                >
-                                                    {errors.image}
-                                                </div>
-                                            )}
+                                            <FieldError>
+                                                {errors.image}
+                                            </FieldError>
                                         </section>
 
                                         {/* =================================================
-                                            ACTION BAR
+                                            SAVE BAR
                                         ================================================= */}
                                         <div
                                             className="p-4 p-md-5"
@@ -1142,8 +1150,8 @@ export default function Edit({ product, categories = [] }) {
                                                             color: '#6e6e73',
                                                         }}
                                                     >
-                                                        Changes are saved to
-                                                        your listing
+                                                        Ready to update this
+                                                        listing?
                                                     </div>
 
                                                     <div
@@ -1153,8 +1161,8 @@ export default function Edit({ product, categories = [] }) {
                                                             color: '#8e8e93',
                                                         }}
                                                     >
-                                                        Review your information
-                                                        before saving.
+                                                        Your changes will be
+                                                        applied when you save.
                                                     </div>
                                                 </div>
 
@@ -1216,7 +1224,7 @@ export default function Edit({ product, categories = [] }) {
                                 </div>
 
                                 {/* =================================================
-                                    LIVE PREVIEW / SIDE PANEL
+                                    SIDEBAR
                                 ================================================= */}
                                 <div className="col-12 col-lg-4">
                                     <div
@@ -1225,6 +1233,7 @@ export default function Edit({ product, categories = [] }) {
                                             top: '24px',
                                         }}
                                     >
+                                        {/* Preview */}
                                         <div
                                             className="bg-white"
                                             style={{
@@ -1258,8 +1267,8 @@ export default function Edit({ product, categories = [] }) {
                                                                 color: '#8e8e93',
                                                             }}
                                                         >
-                                                            Customer-facing
-                                                            appearance
+                                                            Live customer
+                                                            preview
                                                         </div>
                                                     </div>
 
@@ -1290,7 +1299,7 @@ export default function Edit({ product, categories = [] }) {
                                                     </span>
                                                 </div>
 
-                                                {/* Preview image */}
+                                                {/* Image */}
                                                 <div
                                                     className="d-flex align-items-center justify-content-center"
                                                     style={{
@@ -1341,7 +1350,7 @@ export default function Edit({ product, categories = [] }) {
                                                     )}
                                                 </div>
 
-                                                {/* Preview details */}
+                                                {/* Details */}
                                                 <div className="pt-4">
                                                     <div
                                                         style={{
@@ -1391,6 +1400,7 @@ export default function Edit({ product, categories = [] }) {
                                                     </div>
                                                 </div>
 
+                                                {/* Meta */}
                                                 <div
                                                     className="mt-4 pt-3"
                                                     style={{
@@ -1449,7 +1459,7 @@ export default function Edit({ product, categories = [] }) {
                                             </div>
                                         </div>
 
-                                        {/* Quick tips */}
+                                        {/* Tips */}
                                         <div
                                             className="mt-3 p-4"
                                             style={{
@@ -1465,7 +1475,7 @@ export default function Edit({ product, categories = [] }) {
                                                     color: '#0066cc',
                                                 }}
                                             >
-                                                Listing quality
+                                                Keep your listing fresh
                                             </div>
 
                                             <div
@@ -1476,10 +1486,11 @@ export default function Edit({ product, categories = [] }) {
                                                     color: '#4d6680',
                                                 }}
                                             >
-                                                Use a clear product name,
-                                                accurate pricing, sufficient
-                                                stock information and a
-                                                high-quality product image.
+                                                Update your price and stock
+                                                whenever they change. A clear
+                                                product image and accurate
+                                                description also help customers
+                                                understand your listing.
                                             </div>
                                         </div>
                                     </div>

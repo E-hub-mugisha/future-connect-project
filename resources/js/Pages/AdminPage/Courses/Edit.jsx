@@ -9,6 +9,11 @@ export default function Form({
 }) {
     const isEdit = !!course;
 
+    const initialPreviewDuration =
+        Number(course?.preview_duration) > 0
+            ? Number(course.preview_duration)
+            : 300;
+
     const { data, setData, post, put, processing, errors } = useForm({
         title: course?.title ?? '',
         description: course?.description ?? '',
@@ -17,8 +22,15 @@ export default function Form({
         level: course?.level ?? 'Beginner',
         status: course?.status ?? 'draft',
         video: course?.video ?? '',
-        is_free: course?.is_free ?? false,
-        price: course?.price ?? 0,
+        is_free: Boolean(course?.is_free ?? false),
+        price: course?.is_free ? 0 : course?.price ?? 0,
+
+        // Stored in seconds in the database.
+        // 300 = 5 minutes.
+        preview_duration: course?.is_free
+            ? 0
+            : initialPreviewDuration,
+
         thumbnail: null,
     });
 
@@ -29,12 +41,69 @@ export default function Form({
     );
 
     function handleThumbChange(e) {
-        const file = e.target.files[0];
+        const file = e.target.files?.[0];
 
         if (!file) return;
 
         setData('thumbnail', file);
-        setThumbPreview(URL.createObjectURL(file));
+
+        const previewUrl = URL.createObjectURL(file);
+        setThumbPreview(previewUrl);
+    }
+
+    function handleFreeCourseChange(e) {
+        const isFree = e.target.checked;
+
+        if (isFree) {
+            setData({
+                ...data,
+                is_free: true,
+                price: 0,
+                preview_duration: 0,
+            });
+
+            return;
+        }
+
+        setData({
+            ...data,
+            is_free: false,
+            price: data.price > 0 ? data.price : 0,
+            preview_duration:
+                Number(data.preview_duration) > 0
+                    ? Number(data.preview_duration)
+                    : 300,
+        });
+    }
+
+    function handlePreviewDurationChange(e) {
+        let minutes = Number(e.target.value);
+
+        if (!Number.isFinite(minutes)) {
+            minutes = 1;
+        }
+
+        if (minutes < 1) {
+            minutes = 1;
+        }
+
+        if (minutes > 120) {
+            minutes = 120;
+        }
+
+        setData(
+            'preview_duration',
+            Math.round(minutes * 60)
+        );
+    }
+
+    function getPreviewMinutes() {
+        const seconds = Number(data.preview_duration || 300);
+
+        return Math.max(
+            1,
+            Math.floor(seconds / 60)
+        );
     }
 
     function handleSubmit(e) {
@@ -43,25 +112,37 @@ export default function Form({
         if (isEdit) {
             put(route('admin.courses.update', course.id), {
                 forceFormData: true,
+                preserveScroll: true,
             });
         } else {
             post(route('admin.courses.store'), {
                 forceFormData: true,
+                preserveScroll: true,
             });
         }
     }
 
     const selectedTalent = talents.find(
-        talent => String(talent.id) === String(data.talent_id)
+        talent =>
+            String(talent.id) ===
+            String(data.talent_id)
     );
 
     const selectedCategory = categories.find(
-        category => String(category.id) === String(data.category_id)
+        category =>
+            String(category.id) ===
+            String(data.category_id)
     );
 
     return (
         <AppLayout>
-            <Head title={isEdit ? 'Edit Course' : 'Create Course'} />
+            <Head
+                title={
+                    isEdit
+                        ? 'Edit Course'
+                        : 'Create Course'
+                }
+            />
 
             <style>{`
                 :root {
@@ -92,8 +173,6 @@ export default function Form({
                     margin: 0 auto;
                     padding: 0 25px;
                 }
-
-                /* HEADER */
 
                 .ce-header {
                     display: flex;
@@ -157,8 +236,6 @@ export default function Form({
                     background: var(--ce-primary-soft);
                 }
 
-                /* PROGRESS */
-
                 .ce-progress {
                     display: flex;
                     align-items: center;
@@ -216,8 +293,6 @@ export default function Form({
                     font-weight: 750;
                 }
 
-                /* LAYOUT */
-
                 .ce-layout {
                     display: grid;
                     grid-template-columns: minmax(0, 1fr) 370px;
@@ -225,15 +300,10 @@ export default function Form({
                     align-items: start;
                 }
 
-                .ce-main {
-                    min-width: 0;
-                }
-
+                .ce-main,
                 .ce-sidebar {
                     min-width: 0;
                 }
-
-                /* CARD */
 
                 .ce-card {
                     background: var(--ce-card);
@@ -281,8 +351,6 @@ export default function Form({
                 .ce-card-body {
                     padding: 23px;
                 }
-
-                /* FORM */
 
                 .ce-field {
                     margin-bottom: 20px;
@@ -367,8 +435,6 @@ export default function Form({
                     gap: 18px;
                 }
 
-                /* INPUT WITH ICON */
-
                 .ce-input-wrapper {
                     position: relative;
                 }
@@ -381,13 +447,12 @@ export default function Form({
                     color: #94a3b8;
                     font-size: 14px;
                     pointer-events: none;
+                    z-index: 2;
                 }
 
                 .ce-input-with-icon {
                     padding-left: 40px;
                 }
-
-                /* STATUS */
 
                 .ce-status-grid {
                     display: grid;
@@ -440,8 +505,6 @@ export default function Form({
                 .ce-status-dot.published {
                     background: var(--ce-success);
                 }
-
-                /* THUMBNAIL */
 
                 .ce-thumbnail {
                     position: relative;
@@ -525,8 +588,6 @@ export default function Form({
                     font-size: 9px;
                 }
 
-                /* PRICING */
-
                 .ce-free-box {
                     display: flex;
                     align-items: center;
@@ -551,8 +612,6 @@ export default function Form({
                     color: #9ca3af;
                     font-size: 9px;
                 }
-
-                /* CUSTOM SWITCH */
 
                 .ce-switch {
                     position: relative;
@@ -601,7 +660,27 @@ export default function Form({
                     opacity: .45;
                 }
 
-                /* PREVIEW */
+                .ce-preview-info {
+                    margin-top: 8px;
+                    padding: 10px 12px;
+                    border: 1px solid #dbeafe;
+                    border-radius: 10px;
+                    background: #eff6ff;
+                    color: #64748b;
+                    font-size: 10px;
+                    line-height: 1.55;
+                }
+
+                .ce-free-info {
+                    margin-top: 18px;
+                    padding: 12px 14px;
+                    border-radius: 11px;
+                    background: #f0fdf4;
+                    border: 1px solid #bbf7d0;
+                    color: #166534;
+                    font-size: 10px;
+                    line-height: 1.55;
+                }
 
                 .ce-course-preview {
                     overflow: hidden;
@@ -682,7 +761,23 @@ export default function Form({
                     white-space: nowrap;
                 }
 
-                /* SAVE */
+                .ce-preview-access {
+                    margin-top: 10px;
+                    padding: 8px 10px;
+                    border-radius: 8px;
+                    font-size: 9px;
+                    font-weight: 650;
+                }
+
+                .ce-preview-access.free {
+                    background: #f0fdf4;
+                    color: #15803d;
+                }
+
+                .ce-preview-access.paid {
+                    background: #eff6ff;
+                    color: #1d4ed8;
+                }
 
                 .ce-actions {
                     display: flex;
@@ -733,8 +828,6 @@ export default function Form({
                     color: #334155;
                 }
 
-                /* TIPS */
-
                 .ce-tip {
                     padding: 15px;
                     border-radius: 13px;
@@ -762,8 +855,6 @@ export default function Form({
                     font-size: 9px;
                     line-height: 1.55;
                 }
-
-                /* MOBILE */
 
                 @media (max-width: 1050px) {
                     .ce-layout {
@@ -835,13 +926,15 @@ export default function Form({
             <div className="course-editor-page">
                 <div className="course-editor-container">
 
-                    {/* =========================================
-                        HEADER
-                    ========================================== */}
+                    {/* HEADER */}
                     <div className="ce-header">
                         <div>
                             <div className="ce-breadcrumb">
-                                <Link href={route('admin.courses.index')}>
+                                <Link
+                                    href={route(
+                                        'admin.courses.index'
+                                    )}
+                                >
                                     Courses
                                 </Link>
 
@@ -868,7 +961,9 @@ export default function Form({
                         </div>
 
                         <Link
-                            href={route('admin.courses.index')}
+                            href={route(
+                                'admin.courses.index'
+                            )}
                             className="ce-back-btn"
                         >
                             <i className="bi bi-arrow-left"></i>
@@ -876,9 +971,7 @@ export default function Form({
                         </Link>
                     </div>
 
-                    {/* =========================================
-                        PROGRESS
-                    ========================================== */}
+                    {/* PROGRESS */}
                     <div className="ce-progress">
                         <div className="ce-progress-icon">
                             <i className="bi bi-check2-circle"></i>
@@ -905,14 +998,11 @@ export default function Form({
                     >
                         <div className="ce-layout">
 
-                            {/* =====================================
-                                MAIN FORM
-                            ====================================== */}
+                            {/* MAIN */}
                             <main className="ce-main">
 
                                 {/* BASIC INFORMATION */}
                                 <section className="ce-card">
-
                                     <div className="ce-card-header">
                                         <div className="ce-card-icon">
                                             <i className="bi bi-journal-text"></i>
@@ -972,6 +1062,7 @@ export default function Form({
                                         <div className="ce-field">
                                             <label className="ce-label">
                                                 Description
+
                                                 <span className="ce-label-hint">
                                                     Explain what students will learn
                                                 </span>
@@ -1083,8 +1174,12 @@ export default function Form({
 
                                                     {talents.map(talent => (
                                                         <option
-                                                            key={talent.id}
-                                                            value={talent.id}
+                                                            key={
+                                                                talent.id
+                                                            }
+                                                            value={
+                                                                talent.id
+                                                            }
                                                         >
                                                             {talent.name}
                                                         </option>
@@ -1240,12 +1335,14 @@ export default function Form({
                                         <div className="ce-field">
                                             <label className="ce-label">
                                                 Course Video
+
                                                 <span className="ce-label-hint">
                                                     YouTube, Vimeo or hosted video
                                                 </span>
                                             </label>
 
                                             <div className="ce-input-wrapper">
+
                                                 <i className="bi bi-play-circle ce-input-icon"></i>
 
                                                 <input
@@ -1264,6 +1361,7 @@ export default function Form({
                                                     }`}
                                                     placeholder="https://..."
                                                 />
+
                                             </div>
 
                                             {errors.video && (
@@ -1286,7 +1384,7 @@ export default function Form({
 
                                         <div>
                                             <h2 className="ce-card-title">
-                                                Pricing
+                                                Pricing & Preview
                                             </h2>
 
                                             <p className="ce-card-description">
@@ -1297,6 +1395,7 @@ export default function Form({
 
                                     <div className="ce-card-body">
 
+                                        {/* FREE COURSE */}
                                         <div className="ce-free-box">
 
                                             <div>
@@ -1305,19 +1404,18 @@ export default function Form({
                                                 </p>
 
                                                 <p className="ce-free-description">
-                                                    Allow learners to access this course for free.
+                                                    Allow learners to access the entire course for free.
                                                 </p>
                                             </div>
 
                                             <label className="ce-switch">
                                                 <input
                                                     type="checkbox"
-                                                    checked={data.is_free}
-                                                    onChange={e =>
-                                                        setData(
-                                                            'is_free',
-                                                            e.target.checked
-                                                        )
+                                                    checked={Boolean(
+                                                        data.is_free
+                                                    )}
+                                                    onChange={
+                                                        handleFreeCourseChange
                                                     }
                                                 />
 
@@ -1326,6 +1424,7 @@ export default function Form({
 
                                         </div>
 
+                                        {/* PRICE */}
                                         <div
                                             className={
                                                 data.is_free
@@ -1333,14 +1432,27 @@ export default function Form({
                                                     : ''
                                             }
                                         >
+
                                             <label className="ce-label">
-                                                Course Price
+
+                                                <span>
+                                                    Course Price
+
+                                                    {!data.is_free && (
+                                                        <span className="ce-required">
+                                                            {' '}*
+                                                        </span>
+                                                    )}
+                                                </span>
+
                                                 <span className="ce-label-hint">
                                                     RWF
                                                 </span>
+
                                             </label>
 
                                             <div className="ce-input-wrapper">
+
                                                 <span
                                                     className="ce-input-icon"
                                                     style={{
@@ -1353,9 +1465,13 @@ export default function Form({
 
                                                 <input
                                                     type="number"
-                                                    step="0.01"
+                                                    step="1"
                                                     min="0"
-                                                    value={data.price}
+                                                    value={
+                                                        data.is_free
+                                                            ? 0
+                                                            : data.price
+                                                    }
                                                     onChange={e =>
                                                         setData(
                                                             'price',
@@ -1367,9 +1483,12 @@ export default function Form({
                                                             ? 'ce-invalid'
                                                             : ''
                                                     }`}
-                                                    placeholder="0.00"
-                                                    disabled={data.is_free}
+                                                    placeholder="0"
+                                                    disabled={
+                                                        data.is_free
+                                                    }
                                                 />
+
                                             </div>
 
                                             {errors.price && (
@@ -1377,16 +1496,113 @@ export default function Form({
                                                     {errors.price}
                                                 </div>
                                             )}
+
                                         </div>
+
+                                        {/* PREVIEW DURATION */}
+                                        {!data.is_free && (
+                                            <div
+                                                className="ce-field"
+                                                style={{
+                                                    marginTop: 20,
+                                                }}
+                                            >
+
+                                                <label className="ce-label">
+
+                                                    <span>
+                                                        Free Preview Duration
+
+                                                        <span className="ce-required">
+                                                            {' '}*
+                                                        </span>
+                                                    </span>
+
+                                                    <span className="ce-label-hint">
+                                                        Minutes
+                                                    </span>
+
+                                                </label>
+
+                                                <div className="ce-input-wrapper">
+
+                                                    <i className="bi bi-clock ce-input-icon"></i>
+
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max="120"
+                                                        value={
+                                                            getPreviewMinutes()
+                                                        }
+                                                        onChange={
+                                                            handlePreviewDurationChange
+                                                        }
+                                                        className={`ce-input ce-input-with-icon ${
+                                                            errors.preview_duration
+                                                                ? 'ce-invalid'
+                                                                : ''
+                                                        }`}
+                                                        placeholder="5"
+                                                    />
+
+                                                </div>
+
+                                                <div className="ce-preview-info">
+
+                                                    <i className="bi bi-info-circle me-1"></i>
+
+                                                    Learners can watch the first{' '}
+
+                                                    <strong>
+                                                        {
+                                                            getPreviewMinutes()
+                                                        }{' '}
+                                                        minute
+                                                        {
+                                                            getPreviewMinutes() !==
+                                                            1
+                                                                ? 's'
+                                                                : ''
+                                                        }
+                                                    </strong>{' '}
+
+                                                    for free. After the preview
+                                                    ends, they must purchase or
+                                                    enroll to continue.
+
+                                                </div>
+
+                                                {errors.preview_duration && (
+                                                    <div className="ce-error">
+                                                        {
+                                                            errors.preview_duration
+                                                        }
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        )}
+
+                                        {/* FREE COURSE MESSAGE */}
+                                        {data.is_free && (
+                                            <div className="ce-free-info">
+
+                                                <i className="bi bi-check-circle me-1"></i>
+
+                                                This is a free course.
+                                                Learners will have full access
+                                                without a preview restriction.
+
+                                            </div>
+                                        )}
 
                                     </div>
                                 </section>
 
                             </main>
 
-                            {/* =====================================
-                                SIDEBAR
-                            ====================================== */}
+                            {/* SIDEBAR */}
                             <aside className="ce-sidebar">
 
                                 {/* THUMBNAIL */}
@@ -1411,6 +1627,7 @@ export default function Form({
                                     <div className="ce-card-body">
 
                                         <div className="ce-thumbnail">
+
                                             <img
                                                 src={thumbPreview}
                                                 alt="Course thumbnail preview"
@@ -1421,6 +1638,7 @@ export default function Form({
                                             <span className="ce-preview-tag">
                                                 Preview
                                             </span>
+
                                         </div>
 
                                         <label className="ce-upload">
@@ -1439,9 +1657,11 @@ export default function Form({
 
                                             <input
                                                 type="file"
-                                                accept="image/*"
+                                                accept="image/jpeg,image/png,image/jpg,image/webp"
                                                 className="d-none"
-                                                onChange={handleThumbChange}
+                                                onChange={
+                                                    handleThumbChange
+                                                }
                                             />
 
                                         </label>
@@ -1504,24 +1724,45 @@ export default function Form({
                                                 <div className="ce-course-preview-meta">
 
                                                     <div className="ce-preview-instructor">
+
                                                         <i className="bi bi-person-circle"></i>
 
                                                         <span>
                                                             {selectedTalent?.name ||
                                                                 'Instructor'}
                                                         </span>
+
                                                     </div>
 
                                                     <div className="ce-preview-price">
+
                                                         {data.is_free
                                                             ? 'FREE'
                                                             : `${Number(
                                                                   data.price ||
                                                                       0
                                                               ).toLocaleString()} RWF`}
+
                                                     </div>
 
                                                 </div>
+
+                                                {/* ACCESS PREVIEW */}
+                                                {data.is_free ? (
+                                                    <div className="ce-preview-access free">
+                                                        <i className="bi bi-unlock me-1"></i>
+                                                        Full access · Free course
+                                                    </div>
+                                                ) : (
+                                                    <div className="ce-preview-access paid">
+                                                        <i className="bi bi-play-circle me-1"></i>
+                                                        {getPreviewMinutes()} minute
+                                                        {getPreviewMinutes() !== 1
+                                                            ? 's'
+                                                            : ''}{' '}
+                                                        free preview
+                                                    </div>
+                                                )}
 
                                             </div>
                                         </div>
@@ -1531,6 +1772,7 @@ export default function Form({
 
                                 {/* QUICK TIP */}
                                 <div className="ce-card">
+
                                     <div className="ce-card-body">
 
                                         <div className="ce-tip">
@@ -1545,6 +1787,9 @@ export default function Form({
                                                 attractive thumbnail and concise
                                                 description to help learners
                                                 understand what they will gain.
+                                                For paid courses, give learners
+                                                enough preview time to understand
+                                                the value of your content.
                                             </p>
 
                                         </div>

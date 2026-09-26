@@ -2,673 +2,51 @@ import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
-const styles = `
-    :root {
-        --edit-bg: #f6f8fb;
-        --edit-card: #ffffff;
-        --edit-border: #e5eaf0;
-        --edit-text: #17202a;
-        --edit-muted: #718096;
-        --edit-primary: #059669;
-        --edit-primary-dark: #047857;
-        --edit-primary-soft: #ecfdf5;
-        --edit-warning: #d97706;
-        --edit-warning-soft: #fffbeb;
-        --edit-danger: #dc2626;
-        --edit-input: #ffffff;
-        --edit-radius: 18px;
-        --edit-shadow: 0 8px 30px rgba(15, 23, 42, .06);
-    }
+/*
+|--------------------------------------------------------------------------
+| Inline SVG Icon
+|--------------------------------------------------------------------------
+*/
+function Icon({ name, size = 18, strokeWidth = 1.8 }) {
+    const common = {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': 'true',
+    };
 
-    .story-edit-page {
-        min-height: 100vh;
-        background: var(--edit-bg);
-        padding: 30px;
-        color: var(--edit-text);
-    }
-
-    .story-edit-container {
-        max-width: 1250px;
-        margin: 0 auto;
-    }
-
-    .edit-page-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 26px;
-    }
-
-    .edit-breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #94a3b8;
-        font-size: 12px;
-        margin-bottom: 10px;
-    }
-
-    .edit-breadcrumb a {
-        color: #64748b;
-        text-decoration: none;
-    }
-
-    .edit-breadcrumb a:hover {
-        color: var(--edit-primary);
-    }
-
-    .edit-mode-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 6px 10px;
-        background: var(--edit-warning-soft);
-        border: 1px solid #fde68a;
-        color: var(--edit-warning);
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .05em;
-        margin-bottom: 10px;
-    }
-
-    .edit-page-title {
-        margin: 0;
-        color: var(--edit-text);
-        font-size: 28px;
-        line-height: 1.2;
-        font-weight: 800;
-        letter-spacing: -.03em;
-    }
-
-    .edit-page-subtitle {
-        margin: 7px 0 0;
-        color: var(--edit-muted);
-        font-size: 14px;
-    }
-
-    .edit-back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        min-height: 42px;
-        padding: 0 15px;
-        border: 1px solid var(--edit-border);
-        border-radius: 10px;
-        background: #fff;
-        color: #475569;
-        font-size: 13px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: all .18s ease;
-    }
-
-    .edit-back-btn:hover {
-        color: var(--edit-text);
-        border-color: #cbd5e1;
-        transform: translateY(-1px);
-        box-shadow: 0 5px 14px rgba(15,23,42,.05);
-    }
-
-    .edit-card {
-        background: var(--edit-card);
-        border: 1px solid var(--edit-border);
-        border-radius: 20px;
-        box-shadow: var(--edit-shadow);
-        overflow: hidden;
-    }
-
-    .edit-card-header {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        padding: 20px 24px;
-        border-bottom: 1px solid var(--edit-border);
-        background: linear-gradient(135deg, #fffbeb 0%, #ffffff 70%);
-    }
-
-    .edit-card-icon {
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-        background: var(--edit-warning-soft);
-        color: var(--edit-warning);
-        border: 1px solid #fde68a;
-        flex-shrink: 0;
-    }
-
-    .edit-card-title {
-        margin: 0;
-        color: var(--edit-text);
-        font-size: 15px;
-        font-weight: 800;
-    }
-
-    .edit-card-subtitle {
-        margin: 4px 0 0;
-        color: #94a3b8;
-        font-size: 12px;
-    }
-
-    .edit-card-body {
-        padding: 28px;
-    }
-
-    .edit-section {
-        margin-bottom: 30px;
-        padding-bottom: 30px;
-        border-bottom: 1px solid #edf1f5;
-    }
-
-    .edit-section:last-child {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
-    }
-
-    .section-heading {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .section-number {
-        width: 29px;
-        height: 29px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 9px;
-        background: var(--edit-primary-soft);
-        color: var(--edit-primary-dark);
-        font-size: 11px;
-        font-weight: 900;
-        flex-shrink: 0;
-    }
-
-    .section-heading-text h3 {
-        margin: 0;
-        color: var(--edit-text);
-        font-size: 14px;
-        font-weight: 800;
-    }
-
-    .section-heading-text p {
-        margin: 3px 0 0;
-        color: #94a3b8;
-        font-size: 11px;
-    }
-
-    .edit-field {
-        margin-bottom: 18px;
-    }
-
-    .edit-field:last-child {
-        margin-bottom: 0;
-    }
-
-    .edit-field-row {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-    }
-
-    .edit-label {
-        display: block;
-        margin-bottom: 7px;
-        color: #475569;
-        font-size: 12px;
-        font-weight: 800;
-    }
-
-    .required {
-        color: var(--edit-danger);
-    }
-
-    .edit-input,
-    .edit-select,
-    .edit-textarea {
-        width: 100%;
-        box-sizing: border-box;
-        border: 1px solid #dce2e8;
-        background: var(--edit-input);
-        border-radius: 11px;
-        padding: 11px 13px;
-        color: #1e293b;
-        font-family: inherit;
-        font-size: 13px;
-        outline: none;
-        transition: all .18s ease;
-    }
-
-    .edit-input::placeholder,
-    .edit-textarea::placeholder {
-        color: #a0aec0;
-    }
-
-    .edit-input:focus,
-    .edit-select:focus,
-    .edit-textarea:focus {
-        border-color: #6ee7b7;
-        box-shadow: 0 0 0 3px rgba(5,150,105,.08);
-    }
-
-    .edit-select {
-        cursor: pointer;
-    }
-
-    .edit-textarea {
-        min-height: 190px;
-        resize: vertical;
-        line-height: 1.7;
-    }
-
-    .field-help {
-        margin-top: 6px;
-        color: #94a3b8;
-        font-size: 11px;
-    }
-
-    .field-error {
-        margin-top: 6px;
-        color: var(--edit-danger);
-        font-size: 11px;
-        font-weight: 600;
-    }
-
-    .thumbnail-box {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        border-radius: 14px;
-        border: 1px solid var(--edit-border);
-        background: #f8fafc;
-        margin-bottom: 12px;
-    }
-
-    .thumbnail-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .thumbnail-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            to top,
-            rgba(15,23,42,.4),
-            transparent 55%
-        );
-        pointer-events: none;
-    }
-
-    .current-thumbnail-label {
-        position: absolute;
-        left: 12px;
-        bottom: 12px;
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 9px;
-        border-radius: 999px;
-        background: rgba(255,255,255,.93);
-        color: #475569;
-        font-size: 10px;
-        font-weight: 800;
-    }
-
-    .thumbnail-placeholder {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        color: #94a3b8;
-        font-size: 12px;
-    }
-
-    .file-upload {
-        position: relative;
-        min-height: 90px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 5px;
-        padding: 15px;
-        border: 1.5px dashed #cbd5e1;
-        border-radius: 13px;
-        background: #fafbfc;
-        color: #64748b;
-        text-align: center;
-        cursor: pointer;
-        transition: all .18s ease;
-        box-sizing: border-box;
-    }
-
-    .file-upload:hover {
-        border-color: #6ee7b7;
-        background: var(--edit-primary-soft);
-        color: var(--edit-primary-dark);
-    }
-
-    .file-upload.has-file {
-        border-color: #86efac;
-        background: var(--edit-primary-soft);
-        color: var(--edit-primary-dark);
-    }
-
-    .file-upload strong {
-        font-size: 12px;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .file-upload span {
-        font-size: 10px;
-        color: #94a3b8;
-    }
-
-    .file-upload input {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        cursor: pointer;
-        width: 100%;
-        height: 100%;
-    }
-
-    .status-options {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-    }
-
-    .status-option {
-        position: relative;
-    }
-
-    .status-option input {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .status-label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 44px;
-        padding: 8px 10px;
-        border: 1px solid #dce2e8;
-        border-radius: 10px;
-        background: #fff;
-        color: #64748b;
-        font-size: 11px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all .18s ease;
-    }
-
-    .status-label:hover {
-        border-color: #cbd5e1;
-    }
-
-    .status-option input:checked + .status-label {
-        border-color: #6ee7b7;
-        background: var(--edit-primary-soft);
-        color: var(--edit-primary-dark);
-        box-shadow: 0 0 0 2px rgba(5,150,105,.05);
-    }
-
-    .story-preview {
-        margin-top: 20px;
-        padding: 16px;
-        border: 1px solid #e5eaf0;
-        border-radius: 14px;
-        background: #fafbfc;
-    }
-
-    .preview-label {
-        margin-bottom: 10px;
-        color: #94a3b8;
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: .08em;
-    }
-
-    .preview-card {
-        display: flex;
-        gap: 14px;
-        padding: 13px;
-        border: 1px solid #e5eaf0;
-        border-radius: 12px;
-        background: #fff;
-    }
-
-    .preview-image {
-        width: 115px;
-        height: 75px;
-        flex-shrink: 0;
-        border-radius: 9px;
-        overflow: hidden;
-        background: #f1f5f9;
-    }
-
-    .preview-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .preview-info {
-        min-width: 0;
-    }
-
-    .preview-category {
-        color: var(--edit-primary);
-        font-size: 9px;
-        font-weight: 800;
-        text-transform: uppercase;
-        margin-bottom: 4px;
-    }
-
-    .preview-title {
-        margin: 0 0 5px;
-        color: #1e293b;
-        font-size: 13px;
-        font-weight: 800;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .preview-text {
-        margin: 0;
-        color: #94a3b8;
-        font-size: 10px;
-        line-height: 1.5;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .edit-form-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        padding-top: 24px;
-        border-top: 1px solid #edf1f5;
-    }
-
-    .footer-info {
-        color: #94a3b8;
-        font-size: 11px;
-    }
-
-    .footer-actions {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-    }
-
-    .cancel-btn,
-    .update-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-height: 43px;
-        padding: 0 17px;
-        border-radius: 10px;
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 800;
-        text-decoration: none;
-        cursor: pointer;
-        transition: all .18s ease;
-    }
-
-    .cancel-btn {
-        background: #fff;
-        border: 1px solid #dce2e8;
-        color: #64748b;
-    }
-
-    .cancel-btn:hover {
-        color: #1e293b;
-        border-color: #cbd5e1;
-    }
-
-    .update-btn {
-        background: var(--edit-primary);
-        border: 1px solid var(--edit-primary);
-        color: #fff;
-        box-shadow: 0 5px 15px rgba(5,150,105,.16);
-    }
-
-    .update-btn:hover {
-        background: var(--edit-primary-dark);
-        border-color: var(--edit-primary-dark);
-        transform: translateY(-1px);
-    }
-
-    .update-btn:disabled {
-        opacity: .65;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    @media (max-width: 800px) {
-        .story-edit-page {
-            padding: 20px 14px;
-        }
-
-        .edit-page-header {
-            flex-direction: column;
-        }
-
-        .edit-back-btn {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .edit-field-row {
-            grid-template-columns: 1fr;
-        }
-
-        .status-options {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .edit-card-body {
-            padding: 20px;
-        }
-
-        .edit-form-footer {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .footer-actions {
-            width: 100%;
-        }
-
-        .cancel-btn,
-        .update-btn {
-            flex: 1;
-        }
-    }
-
-    @media (max-width: 500px) {
-        .edit-page-title {
-            font-size: 23px;
-        }
-
-        .preview-card {
-            flex-direction: column;
-        }
-
-        .preview-image {
-            width: 100%;
-            height: 130px;
-        }
-    }
-`;
-
-const Icon = ({ name, size = 18, stroke = 1.8 }) => {
     const icons = {
         arrowLeft: (
             <>
                 <path d="M19 12H5" />
-                <path d="M12 19l-7-7 7-7" />
+                <path d="m11 18-6-6 6-6" />
             </>
         ),
-
-        pencil: (
-            <>
-                <path d="M12 20h9" />
-                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-            </>
-        ),
-
-        writing: (
-            <>
-                <path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3Z" />
-                <path d="m13.5 6.5 4 4" />
-            </>
-        ),
-
         image: (
             <>
                 <rect x="3" y="4" width="18" height="16" rx="2" />
-                <circle cx="8.5" cy="9" r="1.5" />
-                <path d="m21 15-5-5L5 20" />
+                <circle cx="8.5" cy="9.5" r="1.5" />
+                <path d="m21 15-5-5-4 4-3-3-5 5" />
             </>
         ),
-
+        tag: (
+            <>
+                <path d="M20.5 13.5 13.5 20.5a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 11.9V5a2 2 0 0 1 2-2h6.9a2 2 0 0 1 1.4.6l7.2 7.1a2 2 0 0 1 0 2.8Z" />
+                <circle cx="7.5" cy="7.5" r="1" />
+            </>
+        ),
         upload: (
             <>
-                <path d="M12 16V4" />
-                <path d="m7 9 5-5 5 5" />
-                <path d="M5 20h14" />
+                <path d="M12 15V3" />
+                <path d="m7 8 5-5 5 5" />
+                <path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
             </>
         ),
-
         save: (
             <>
                 <path d="M5 3h12l3 3v15H4V3Z" />
@@ -678,61 +56,30 @@ const Icon = ({ name, size = 18, stroke = 1.8 }) => {
         ),
     };
 
-    return (
-        <svg
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={stroke}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-        >
-            {icons[name]}
-        </svg>
-    );
-};
+    return <svg {...common}>{icons[name] || icons.image}</svg>;
+}
+
+const STATUS_OPTIONS = [
+    { key: 'pending', label: 'Pending', hint: 'Awaiting review' },
+    { key: 'approved', label: 'Approved', hint: 'Cleared to publish' },
+    { key: 'published', label: 'Published', hint: 'Visible to users' },
+    { key: 'rejected', label: 'Rejected', hint: 'Not approved' },
+];
 
 function assetUrl(value) {
-    if (!value) {
-        return '';
-    }
-
+    if (!value) return '';
     const stringValue = String(value);
-
-    if (/^https?:\/\//i.test(stringValue)) {
-        return stringValue;
-    }
-
-    if (stringValue.charAt(0) === '/') {
-        return stringValue;
-    }
-
+    if (/^https?:\/\//i.test(stringValue)) return stringValue;
+    if (stringValue.charAt(0) === '/') return stringValue;
     return '/' + stringValue;
 }
 
-export default function Edit({
-    story,
-    talents = [],
-    categories = [],
-}) {
+export default function Edit({ story, talents = [], categories = [] }) {
     const initialThumbnail = assetUrl(story?.thumbnail);
-
-    const [thumbnailPreview, setThumbnailPreview] = useState(
-        initialThumbnail || null
-    );
-
+    const [thumbnailPreview, setThumbnailPreview] = useState(initialThumbnail || null);
     const [selectedFileName, setSelectedFileName] = useState('');
 
-    const {
-        data,
-        setData,
-        put,
-        processing,
-        errors,
-    } = useForm({
+    const { data, setData, put, processing, errors } = useForm({
         title: story?.title ?? '',
         talent_id: story?.talent_id ?? '',
         category_id: story?.category_id ?? '',
@@ -743,754 +90,996 @@ export default function Edit({
         status: story?.status ?? 'pending',
     });
 
-    function handleThumbnailChange(event) {
+    const handleThumbnailChange = (event) => {
         const file = event.target.files?.[0];
-
-        if (!file) {
-            return;
-        }
-
-        // Optional client-side validation
-        if (!file.type.startsWith('image/')) {
-            return;
-        }
+        if (!file) return;
+        if (!file.type.startsWith('image/')) return;
 
         setData('thumbnail', file);
         setSelectedFileName(file.name);
 
         const reader = new FileReader();
-
-        reader.onload = function (e) {
-            setThumbnailPreview(e.target?.result || null);
-        };
-
+        reader.onload = (e) => setThumbnailPreview(e.target?.result || null);
         reader.readAsDataURL(file);
-    }
+    };
 
-    function handleSubmit(event) {
+    const handleSubmit = (event) => {
         event.preventDefault();
-
         put(route('admin.stories.update', story.id), {
             forceFormData: true,
             preserveScroll: true,
         });
-    }
+    };
 
-    const selectedCategory = categories.find(
-        (category) =>
-            String(category.id) === String(data.category_id)
+    const selectedTalent = talents.find(
+        (talent) => String(talent.id) === String(data.talent_id)
     );
 
-    const statuses = [
-        'pending',
-        'approved',
-        'rejected',
-        'published',
-    ];
+    const selectedCategory = categories.find(
+        (category) => String(category.id) === String(data.category_id)
+    );
 
-    const formattedStatus = function (status) {
-        return status.charAt(0).toUpperCase() + status.slice(1);
-    };
+    const wordCount = data.content.trim()
+        ? data.content.trim().split(/\s+/).length
+        : 0;
 
     return (
         <AppLayout>
-            <Head
-                title={
-                    'Edit Story - ' +
-                    (story?.title || '')
-                }
-            />
+            <Head title={'Edit Story - ' + (story?.title || '')} />
 
-            <style>{styles}</style>
+            <div data-h-scope="story-edit" className="story-edit">
 
-            <div className="story-edit-page">
-                <div className="story-edit-container">
+                <form onSubmit={handleSubmit}>
 
-                    {/* Header */}
-                    <div className="edit-page-header">
+                    {/* =====================================================
+                        HEADER
+                    ===================================================== */}
+
+                    <header className="page-header">
                         <div>
-                            <div className="edit-breadcrumb">
-                                <Link
-                                    href={route(
-                                        'admin.stories.index'
-                                    )}
-                                >
-                                    Stories
-                                </Link>
+                            <Link href={route('admin.stories.index')} className="back-link">
+                                <Icon name="arrowLeft" size={14} />
+                                All stories
+                            </Link>
 
-                                <span>/</span>
-
-                                <span>Edit</span>
+                            <div className="title-row">
+                                <h1>{story?.title || 'Edit story'}</h1>
+                                <span className="editing-tag">Editing</span>
                             </div>
 
-                            <div className="edit-mode-badge">
-                                <Icon
-                                    name="pencil"
-                                    size={13}
-                                />
-
-                                Edit Mode
-                            </div>
-
-                            <h1 className="edit-page-title">
-                                Edit Story
-                            </h1>
-
-                            <p className="edit-page-subtitle">
-                                Update the details below to modify
-                                this story.
+                            <p className="dek">
+                                Story #{story?.id} — update the details below and save
+                                when you're ready.
                             </p>
                         </div>
+                    </header>
 
-                        <Link
-                            href={route(
-                                'admin.stories.index'
-                            )}
-                            className="edit-back-btn"
-                        >
-                            <Icon
-                                name="arrowLeft"
-                                size={16}
-                            />
+                    <div className="content-grid">
 
-                            Back to Stories
-                        </Link>
-                    </div>
+                        {/* =================================================
+                            MAIN COLUMN
+                        ================================================= */}
 
-                    {/* Main Card */}
-                    <div className="edit-card">
+                        <div className="main-column">
 
-                        {/* Card Header */}
-                        <div className="edit-card-header">
-                            <div className="edit-card-icon">
-                                <Icon
-                                    name="pencil"
-                                    size={19}
-                                />
-                            </div>
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Details</h2>
+                                    <p>Who this story is about, and what it's filed under.</p>
+                                </div>
 
-                            <div>
-                                <h2 className="edit-card-title">
-                                    {story?.title ||
-                                        'Untitled Story'}
-                                </h2>
+                                <div className="panel-body">
 
-                                <p className="edit-card-subtitle">
-                                    Editing story #
-                                    {story?.id}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="edit-card-body">
-
-                            <form
-                                onSubmit={handleSubmit}
-                            >
-
-                                {/* Basic Information */}
-                                <div className="edit-section">
-
-                                    <div className="section-heading">
-                                        <div className="section-number">
-                                            01
-                                        </div>
-
-                                        <div className="section-heading-text">
-                                            <h3>
-                                                Basic Information
-                                            </h3>
-
-                                            <p>
-                                                Set the story
-                                                title, talent
-                                                and category.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="edit-field">
-                                        <label className="edit-label">
-                                            Story Title{' '}
-                                            <span className="required">
-                                                *
-                                            </span>
+                                    <div className="field">
+                                        <label htmlFor="title">
+                                            Title <span>required</span>
                                         </label>
-
                                         <input
+                                            id="title"
                                             type="text"
-                                            className="edit-input"
                                             value={data.title}
-                                            onChange={(e) =>
-                                                setData(
-                                                    'title',
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setData('title', e.target.value)}
                                             placeholder="Enter story title"
-                                            required
+                                            className={errors.title ? 'input has-error' : 'input'}
                                         />
-
                                         {errors.title && (
-                                            <div className="field-error">
-                                                {errors.title}
-                                            </div>
+                                            <div className="error-text">{errors.title}</div>
                                         )}
                                     </div>
 
-                                    <div className="edit-field-row">
+                                    <div className="field-row">
 
-                                        {/* Talent */}
-                                        <div className="edit-field">
-                                            <label className="edit-label">
-                                                Talent{' '}
-                                                <span className="required">
-                                                    *
-                                                </span>
+                                        <div className="field">
+                                            <label htmlFor="talent_id">
+                                                Talent <span>required</span>
                                             </label>
-
                                             <select
-                                                className="edit-select"
-                                                value={
-                                                    data.talent_id
-                                                }
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'talent_id',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                required
+                                                id="talent_id"
+                                                value={data.talent_id}
+                                                onChange={(e) => setData('talent_id', e.target.value)}
+                                                className={errors.talent_id ? 'input has-error' : 'input'}
                                             >
-                                                <option value="">
-                                                    Select Talent
-                                                </option>
-
-                                                {talents.map(
-                                                    (talent) => (
-                                                        <option
-                                                            key={
-                                                                talent.id
-                                                            }
-                                                            value={
-                                                                talent.id
-                                                            }
-                                                        >
-                                                            {
-                                                                talent.name
-                                                            }
-                                                        </option>
-                                                    )
-                                                )}
+                                                <option value="">Select talent</option>
+                                                {talents.map((talent) => (
+                                                    <option key={talent.id} value={talent.id}>
+                                                        {talent.name}
+                                                    </option>
+                                                ))}
                                             </select>
-
                                             {errors.talent_id && (
-                                                <div className="field-error">
-                                                    {
-                                                        errors.talent_id
-                                                    }
-                                                </div>
+                                                <div className="error-text">{errors.talent_id}</div>
                                             )}
                                         </div>
 
-                                        {/* Category */}
-                                        <div className="edit-field">
-                                            <label className="edit-label">
-                                                Category{' '}
-                                                <span className="required">
-                                                    *
-                                                </span>
+                                        <div className="field">
+                                            <label htmlFor="category_id">
+                                                Category <span>required</span>
                                             </label>
-
                                             <select
-                                                className="edit-select"
-                                                value={
-                                                    data.category_id
-                                                }
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'category_id',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                required
+                                                id="category_id"
+                                                value={data.category_id}
+                                                onChange={(e) => setData('category_id', e.target.value)}
+                                                className={errors.category_id ? 'input has-error' : 'input'}
                                             >
-                                                <option value="">
-                                                    Select Category
-                                                </option>
-
-                                                {categories.map(
-                                                    (
-                                                        category
-                                                    ) => (
-                                                        <option
-                                                            key={
-                                                                category.id
-                                                            }
-                                                            value={
-                                                                category.id
-                                                            }
-                                                        >
-                                                            {
-                                                                category.name
-                                                            }
-                                                        </option>
-                                                    )
-                                                )}
+                                                <option value="">Select category</option>
+                                                {categories.map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
                                             </select>
-
                                             {errors.category_id && (
-                                                <div className="field-error">
-                                                    {
-                                                        errors.category_id
-                                                    }
-                                                </div>
+                                                <div className="error-text">{errors.category_id}</div>
                                             )}
                                         </div>
 
                                     </div>
+
+                                </div>
+                            </section>
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <div className="panel-head-row">
+                                        <div>
+                                            <h2>Story</h2>
+                                            <p>Keep it clear, engaging and easy to read.</p>
+                                        </div>
+                                        <span className="word-count">{wordCount} words</span>
+                                    </div>
                                 </div>
 
-                                {/* Content */}
-                                <div className="edit-section">
-
-                                    <div className="section-heading">
-                                        <div className="section-number">
-                                            02
-                                        </div>
-
-                                        <div className="section-heading-text">
-                                            <h3>
-                                                Story Content
-                                            </h3>
-
-                                            <p>
-                                                Write or update
-                                                the full story.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="edit-field">
-                                        <label className="edit-label">
-                                            Story Content{' '}
-                                            <span className="required">
-                                                *
-                                            </span>
+                                <div className="panel-body">
+                                    <div className="field">
+                                        <label htmlFor="content">
+                                            Content <span>required</span>
                                         </label>
-
                                         <textarea
-                                            className="edit-textarea"
-                                            value={
-                                                data.content
-                                            }
-                                            onChange={(e) =>
-                                                setData(
-                                                    'content',
-                                                    e.target.value
-                                                )
-                                            }
+                                            id="content"
+                                            value={data.content}
+                                            onChange={(e) => setData('content', e.target.value)}
                                             placeholder="Write the full story content..."
-                                            required
+                                            className={errors.content ? 'textarea has-error' : 'textarea'}
                                         />
-
                                         {errors.content && (
-                                            <div className="field-error">
-                                                {
-                                                    errors.content
-                                                }
-                                            </div>
-                                        )}
-
-                                        <div className="field-help">
-                                            Keep the story clear,
-                                            engaging and easy
-                                            to read.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Media */}
-                                <div className="edit-section">
-
-                                    <div className="section-heading">
-                                        <div className="section-number">
-                                            03
-                                        </div>
-
-                                        <div className="section-heading-text">
-                                            <h3>
-                                                Media
-                                            </h3>
-
-                                            <p>
-                                                Manage the story
-                                                image and
-                                                external media.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="edit-field-row">
-
-                                        {/* Thumbnail */}
-                                        <div className="edit-field">
-                                            <label className="edit-label">
-                                                Thumbnail
-                                            </label>
-
-                                            <div className="thumbnail-box">
-                                                {thumbnailPreview ? (
-                                                    <>
-                                                        <img
-                                                            src={
-                                                                thumbnailPreview
-                                                            }
-                                                            alt="Story thumbnail preview"
-                                                        />
-
-                                                        <div className="thumbnail-overlay" />
-
-                                                        <span className="current-thumbnail-label">
-                                                            {selectedFileName
-                                                                ? 'New thumbnail'
-                                                                : 'Current thumbnail'}
-                                                        </span>
-                                                    </>
-                                                ) : (
-                                                    <div className="thumbnail-placeholder">
-                                                        <Icon
-                                                            name="image"
-                                                            size={30}
-                                                        />
-
-                                                        <span>
-                                                            No thumbnail
-                                                            available
-                                                        </span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <label
-                                                className={
-                                                    'file-upload ' +
-                                                    (
-                                                        selectedFileName
-                                                            ? 'has-file'
-                                                            : ''
-                                                    )
-                                                }
-                                            >
-                                                <Icon
-                                                    name="upload"
-                                                    size={20}
-                                                />
-
-                                                <strong>
-                                                    {selectedFileName ||
-                                                        'Replace thumbnail'}
-                                                </strong>
-
-                                                <span>
-                                                    PNG, JPG or
-                                                    WEBP
-                                                </span>
-
-                                                <input
-                                                    type="file"
-                                                    accept="image/png,image/jpeg,image/webp"
-                                                    onChange={
-                                                        handleThumbnailChange
-                                                    }
-                                                />
-                                            </label>
-
-                                            {errors.thumbnail && (
-                                                <div className="field-error">
-                                                    {
-                                                        errors.thumbnail
-                                                    }
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Media URL */}
-                                        <div className="edit-field">
-                                            <label className="edit-label">
-                                                Media URL
-                                            </label>
-
-                                            <input
-                                                type="url"
-                                                className="edit-input"
-                                                value={
-                                                    data.media
-                                                }
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'media',
-                                                        e.target.value
-                                                    )
-                                                }
-                                                placeholder="https://youtube.com/watch?v=..."
-                                            />
-
-                                            <div className="field-help">
-                                                Optional YouTube
-                                                or external video
-                                                link.
-                                            </div>
-
-                                            {errors.media && (
-                                                <div className="field-error">
-                                                    {
-                                                        errors.media
-                                                    }
-                                                </div>
-                                            )}
-
-                                            {/* Preview */}
-                                            <div className="story-preview">
-                                                <div className="preview-label">
-                                                    Story Preview
-                                                </div>
-
-                                                <div className="preview-card">
-
-                                                    <div className="preview-image">
-                                                        {thumbnailPreview ? (
-                                                            <img
-                                                                src={
-                                                                    thumbnailPreview
-                                                                }
-                                                                alt=""
-                                                            />
-                                                        ) : (
-                                                            <div
-                                                                style={{
-                                                                    width:
-                                                                        '100%',
-                                                                    height:
-                                                                        '100%',
-                                                                    display:
-                                                                        'flex',
-                                                                    alignItems:
-                                                                        'center',
-                                                                    justifyContent:
-                                                                        'center',
-                                                                    color:
-                                                                        '#94a3b8',
-                                                                }}
-                                                            >
-                                                                <Icon
-                                                                    name="image"
-                                                                    size={24}
-                                                                />
-                                                            </div>
-                                                        )}
-                                                    </div>
-
-                                                    <div className="preview-info">
-
-                                                        <div className="preview-category">
-                                                            {
-                                                                selectedCategory?.name ||
-                                                                'Story'
-                                                            }
-                                                        </div>
-
-                                                        <h4 className="preview-title">
-                                                            {data.title ||
-                                                                'Story title'}
-                                                        </h4>
-
-                                                        <p className="preview-text">
-                                                            {data.content ||
-                                                                'Your story preview will appear here.'}
-                                                        </p>
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                {/* Tags & Status */}
-                                <div className="edit-section">
-
-                                    <div className="section-heading">
-                                        <div className="section-number">
-                                            04
-                                        </div>
-
-                                        <div className="section-heading-text">
-                                            <h3>
-                                                Tags & Status
-                                            </h3>
-
-                                            <p>
-                                                Organize and
-                                                control the
-                                                publication state.
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Tags */}
-                                    <div className="edit-field">
-                                        <label className="edit-label">
-                                            Tags
-                                        </label>
-
-                                        <input
-                                            type="text"
-                                            className="edit-input"
-                                            value={data.tags}
-                                            onChange={(e) =>
-                                                setData(
-                                                    'tags',
-                                                    e.target.value
-                                                )
-                                            }
-                                            placeholder="motivation, art, music..."
-                                        />
-
-                                        <div className="field-help">
-                                            Separate multiple
-                                            tags with commas.
-                                        </div>
-
-                                        {errors.tags && (
-                                            <div className="field-error">
-                                                {errors.tags}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Status */}
-                                    <div className="edit-field">
-                                        <label className="edit-label">
-                                            Status
-                                        </label>
-
-                                        <div className="status-options">
-
-                                            {statuses.map(
-                                                (status) => (
-                                                    <div
-                                                        className="status-option"
-                                                        key={
-                                                            status
-                                                        }
-                                                    >
-                                                        <input
-                                                            type="radio"
-                                                            id={
-                                                                'status-' +
-                                                                status
-                                                            }
-                                                            name="status"
-                                                            value={
-                                                                status
-                                                            }
-                                                            checked={
-                                                                data.status ===
-                                                                status
-                                                            }
-                                                            onChange={(
-                                                                e
-                                                            ) =>
-                                                                setData(
-                                                                    'status',
-                                                                    e
-                                                                        .target
-                                                                        .value
-                                                                )
-                                                            }
-                                                        />
-
-                                                        <label
-                                                            htmlFor={
-                                                                'status-' +
-                                                                status
-                                                            }
-                                                            className="status-label"
-                                                        >
-                                                            {
-                                                                formattedStatus(
-                                                                    status
-                                                                )
-                                                            }
-                                                        </label>
-                                                    </div>
-                                                )
-                                            )}
-
-                                        </div>
-
-                                        {errors.status && (
-                                            <div className="field-error">
-                                                {
-                                                    errors.status
-                                                }
-                                            </div>
+                                            <div className="error-text">{errors.content}</div>
                                         )}
                                     </div>
                                 </div>
+                            </section>
 
-                                {/* Footer */}
-                                <div className="edit-form-footer">
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Media</h2>
+                                    <p>The story thumbnail and an optional video link.</p>
+                                </div>
 
-                                    <div className="footer-info">
-                                        Changes will be saved
-                                        to story #
-                                        {story?.id}.
-                                    </div>
+                                <div className="panel-body">
 
-                                    <div className="footer-actions">
+                                    <div className="field">
+                                        <label>Thumbnail</label>
 
-                                        <Link
-                                            href={route(
-                                                'admin.stories.index'
-                                            )}
-                                            className="cancel-btn"
-                                        >
-                                            Cancel
-                                        </Link>
-
-                                        <button
-                                            type="submit"
-                                            className="update-btn"
-                                            disabled={
-                                                processing
-                                            }
-                                        >
-                                            {processing ? (
-                                                'Saving...'
-                                            ) : (
+                                        <div className="thumb-preview">
+                                            {thumbnailPreview ? (
                                                 <>
-                                                    <Icon
-                                                        name="save"
-                                                        size={16}
-                                                    />
-
-                                                    Update Story
+                                                    <img src={thumbnailPreview} alt="Story thumbnail" />
+                                                    <span className="thumb-tag">
+                                                        {selectedFileName ? 'New thumbnail' : 'Current thumbnail'}
+                                                    </span>
                                                 </>
+                                            ) : (
+                                                <div className="thumb-empty">
+                                                    <Icon name="image" size={22} />
+                                                    <span>No thumbnail yet</span>
+                                                </div>
                                             )}
-                                        </button>
+                                        </div>
 
+                                        <label className="upload-box">
+                                            <Icon name="upload" size={16} />
+                                            <span>
+                                                {selectedFileName || 'Replace thumbnail'}
+                                            </span>
+                                            <input
+                                                type="file"
+                                                accept="image/png,image/jpeg,image/webp"
+                                                onChange={handleThumbnailChange}
+                                            />
+                                        </label>
+
+                                        {errors.thumbnail && (
+                                            <div className="error-text">{errors.thumbnail}</div>
+                                        )}
                                     </div>
-                                </div>
 
-                            </form>
+                                    <div className="field">
+                                        <label htmlFor="media">Video URL</label>
+                                        <input
+                                            id="media"
+                                            type="url"
+                                            value={data.media}
+                                            onChange={(e) => setData('media', e.target.value)}
+                                            placeholder="https://youtube.com/…"
+                                            className={errors.media ? 'input has-error' : 'input'}
+                                        />
+                                        <small className="hint">Optional YouTube or external video link.</small>
+                                        {errors.media && (
+                                            <div className="error-text">{errors.media}</div>
+                                        )}
+                                    </div>
+
+                                </div>
+                            </section>
 
                         </div>
+
+                        {/* =================================================
+                            SIDEBAR
+                        ================================================= */}
+
+                        <div className="sidebar">
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Preview</h2>
+                                    <p>How this appears in the story index.</p>
+                                </div>
+
+                                <div className="panel-body">
+                                    <div className="preview-card">
+                                        <div className="preview-thumb">
+                                            {thumbnailPreview ? (
+                                                <img src={thumbnailPreview} alt="" />
+                                            ) : (
+                                                <Icon name="image" size={22} />
+                                            )}
+                                        </div>
+
+                                        <div className="preview-top">
+                                            <span className="preview-title">
+                                                {data.title || 'Story title'}
+                                            </span>
+                                            <span className={'status-pill ' + data.status}>
+                                                <span className="status-dot" />
+                                                {STATUS_OPTIONS.find((s) => s.key === data.status)?.label}
+                                            </span>
+                                        </div>
+
+                                        <p className="preview-excerpt">
+                                            {data.content || 'Story content will appear here.'}
+                                        </p>
+
+                                        <div className="preview-meta">
+                                            <span className="byline">
+                                                <span className="byline-avatar">
+                                                    {selectedTalent ? selectedTalent.name.charAt(0).toUpperCase() : 'T'}
+                                                </span>
+                                                By {selectedTalent ? selectedTalent.name : 'Talent'}
+                                            </span>
+                                            <span className="preview-category">
+                                                <Icon name="tag" size={12} />
+                                                {selectedCategory ? selectedCategory.name : 'Uncategorized'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="panel">
+                                <div className="panel-head">
+                                    <h2>Publishing</h2>
+                                    <p>Tags and review status.</p>
+                                </div>
+
+                                <div className="panel-body">
+
+                                    <div className="field">
+                                        <label htmlFor="tags">Tags</label>
+                                        <input
+                                            id="tags"
+                                            type="text"
+                                            value={data.tags}
+                                            onChange={(e) => setData('tags', e.target.value)}
+                                            placeholder="motivation, art, music"
+                                            className="input"
+                                        />
+                                        <small className="hint">Separate tags with commas.</small>
+                                        {errors.tags && (
+                                            <div className="error-text">{errors.tags}</div>
+                                        )}
+                                    </div>
+
+                                    <div className="field">
+                                        <label>Status</label>
+                                        <div className="status-grid">
+                                            {STATUS_OPTIONS.map((option) => (
+                                                <button
+                                                    key={option.key}
+                                                    type="button"
+                                                    className={
+                                                        'status-option ' + option.key +
+                                                        (data.status === option.key ? ' is-active' : '')
+                                                    }
+                                                    onClick={() => setData('status', option.key)}
+                                                >
+                                                    <span className="status-dot" />
+                                                    <span>
+                                                        <strong>{option.label}</strong>
+                                                        <small>{option.hint}</small>
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {errors.status && (
+                                            <div className="error-text">{errors.status}</div>
+                                        )}
+                                    </div>
+
+                                </div>
+                            </section>
+
+                            <section className="panel actions-panel">
+
+                                <p className="footer-note">Changes save to story #{story?.id}.</p>
+
+                                <div className="actions-row">
+                                    <Link href={route('admin.stories.index')} className="btn btn-secondary">
+                                        Cancel
+                                    </Link>
+
+                                    <button type="submit" className="btn btn-primary" disabled={processing}>
+                                        {processing ? (
+                                            'Saving…'
+                                        ) : (
+                                            <>
+                                                <Icon name="save" size={14} />
+                                                Update story
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+
+                            </section>
+
+                        </div>
+
                     </div>
-                </div>
+
+                </form>
+
+                <style>{`
+
+                    [data-h-scope="story-edit"] {
+                        --ink: #1d1d1f;
+                        --ink-soft: #6e6e73;
+                        --ink-faint: #a1a1a6;
+                        --paper: #ffffff;
+                        --surface: #ffffff;
+                        --line: #e5e5e7;
+                        --brand: #48d597;
+                        --brand-ink: #157a4e;
+                        --brand-wash: #eaf9f1;
+                        --amber: #b8790f;
+                        --amber-wash: #fbf1de;
+                        --clay: #b5433a;
+                        --clay-wash: #faeae8;
+
+                        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+                        color: var(--ink);
+                    }
+
+                    [data-h-scope="story-edit"] * {
+                        box-sizing: border-box;
+                    }
+
+                    .story-edit {
+                        background: var(--paper);
+                        min-height: 100vh;
+                        padding: 32px clamp(18px, 4vw, 48px) 64px;
+                    }
+
+                    .story-edit form {
+                        max-width: 1080px;
+                        margin: 0 auto;
+                    }
+
+                    /* -------------------------------------------------------
+                       HEADER
+                    ------------------------------------------------------- */
+
+                    .page-header {
+                        border-bottom: 2px solid var(--ink);
+                        padding-bottom: 20px;
+                        margin-bottom: 24px;
+                    }
+
+                    .back-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--ink-soft);
+                        text-decoration: none;
+                        margin-bottom: 10px;
+                    }
+
+                    .back-link:hover {
+                        color: var(--brand-ink);
+                    }
+
+                    .title-row {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        flex-wrap: wrap;
+                    }
+
+                    .page-header h1 {
+                        margin: 0;
+                        font-weight: 700;
+                        font-size: clamp(20px, 2.4vw, 26px);
+                        letter-spacing: -0.01em;
+                    }
+
+                    .editing-tag {
+                        flex-shrink: 0;
+                        font-size: 10.5px;
+                        font-weight: 600;
+                        color: var(--amber);
+                        background: var(--amber-wash);
+                        padding: 3px 9px;
+                        border-radius: 999px;
+                    }
+
+                    .dek {
+                        margin: 6px 0 0;
+                        font-size: 12.5px;
+                        color: var(--ink-soft);
+                        max-width: 52ch;
+                    }
+
+                    /* -------------------------------------------------------
+                       GRID
+                    ------------------------------------------------------- */
+
+                    .content-grid {
+                        display: grid;
+                        grid-template-columns: minmax(0, 1fr) 320px;
+                        gap: 18px;
+                        align-items: start;
+                    }
+
+                    .main-column,
+                    .sidebar {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 14px;
+                    }
+
+                    /* -------------------------------------------------------
+                       PANEL
+                    ------------------------------------------------------- */
+
+                    .panel {
+                        border: 1px solid var(--line);
+                        border-radius: 10px;
+                        background: var(--surface);
+                    }
+
+                    .panel-head {
+                        padding: 14px 16px;
+                        border-bottom: 1px solid var(--line);
+                    }
+
+                    .panel-head-row {
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                        gap: 10px;
+                    }
+
+                    .panel-head h2 {
+                        margin: 0;
+                        font-size: 13px;
+                        font-weight: 600;
+                    }
+
+                    .panel-head p {
+                        margin: 3px 0 0;
+                        font-size: 11.5px;
+                        color: var(--ink-soft);
+                    }
+
+                    .word-count {
+                        flex-shrink: 0;
+                        font-size: 11px;
+                        color: var(--ink-faint);
+                        white-space: nowrap;
+                        margin-top: 1px;
+                    }
+
+                    .panel-body {
+                        padding: 16px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 14px;
+                    }
+
+                    /* -------------------------------------------------------
+                       FIELDS
+                    ------------------------------------------------------- */
+
+                    .field-row {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 12px;
+                    }
+
+                    .field label {
+                        display: block;
+                        margin-bottom: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--ink);
+                    }
+
+                    .field label span {
+                        color: var(--ink-faint);
+                        font-weight: 500;
+                        font-size: 10.5px;
+                        margin-left: 4px;
+                    }
+
+                    .input,
+                    .textarea {
+                        width: 100%;
+                        border: 1px solid var(--line);
+                        border-radius: 8px;
+                        background: var(--surface);
+                        color: var(--ink);
+                        font-family: inherit;
+                        font-size: 13px;
+                        outline: none;
+                        transition: border-color 0.12s ease, box-shadow 0.12s ease;
+                    }
+
+                    .input {
+                        height: 36px;
+                        padding: 0 11px;
+                    }
+
+                    .textarea {
+                        min-height: 220px;
+                        padding: 11px;
+                        resize: vertical;
+                        line-height: 1.6;
+                    }
+
+                    .input:focus,
+                    .textarea:focus {
+                        border-color: var(--brand);
+                        box-shadow: 0 0 0 3px var(--brand-wash);
+                    }
+
+                    .input.has-error,
+                    .textarea.has-error {
+                        border-color: var(--clay);
+                    }
+
+                    .error-text {
+                        color: var(--clay);
+                        font-size: 11px;
+                        margin-top: 5px;
+                    }
+
+                    .hint {
+                        display: block;
+                        margin-top: 5px;
+                        color: var(--ink-faint);
+                        font-size: 10.5px;
+                    }
+
+                    /* -------------------------------------------------------
+                       THUMBNAIL
+                    ------------------------------------------------------- */
+
+                    .thumb-preview {
+                        position: relative;
+                        width: 100%;
+                        aspect-ratio: 16 / 9;
+                        border-radius: 9px;
+                        border: 1px solid var(--line);
+                        overflow: hidden;
+                        background: var(--brand-wash);
+                        margin-bottom: 8px;
+                    }
+
+                    .thumb-preview img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                    }
+
+                    .thumb-tag {
+                        position: absolute;
+                        left: 10px;
+                        bottom: 10px;
+                        padding: 4px 9px;
+                        border-radius: 999px;
+                        background: rgba(255, 255, 255, 0.94);
+                        color: var(--ink-soft);
+                        font-size: 10px;
+                        font-weight: 600;
+                    }
+
+                    .thumb-empty {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 6px;
+                        color: var(--ink-faint);
+                        font-size: 12px;
+                    }
+
+                    .upload-box {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        height: 38px;
+                        border: 1.5px dashed var(--line);
+                        border-radius: 8px;
+                        color: var(--ink-soft);
+                        font-size: 12px;
+                        cursor: pointer;
+                        position: relative;
+                    }
+
+                    .upload-box:hover {
+                        border-color: var(--brand);
+                        color: var(--brand-ink);
+                    }
+
+                    .upload-box span {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        max-width: 220px;
+                    }
+
+                    .upload-box input {
+                        position: absolute;
+                        inset: 0;
+                        opacity: 0;
+                        cursor: pointer;
+                    }
+
+                    /* -------------------------------------------------------
+                       PREVIEW CARD (mirrors the story index card)
+                    ------------------------------------------------------- */
+
+                    .preview-card {
+                        border: 1px solid var(--line);
+                        border-radius: 10px;
+                        overflow: hidden;
+                    }
+
+                    .preview-thumb {
+                        height: 100px;
+                        background: var(--brand-wash);
+                        color: var(--brand-ink);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    .preview-thumb img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .preview-top {
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                        gap: 8px;
+                        padding: 12px 14px 0;
+                    }
+
+                    .preview-title {
+                        font-size: 13px;
+                        font-weight: 600;
+                        line-height: 1.35;
+                    }
+
+                    .preview-excerpt {
+                        margin: 5px 14px 10px;
+                        font-size: 11.5px;
+                        color: var(--ink-soft);
+                        line-height: 1.5;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 3;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                    }
+
+                    .preview-meta {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 8px;
+                        padding: 10px 14px;
+                        border-top: 1px solid var(--line);
+                    }
+
+                    .byline {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: var(--ink-soft);
+                    }
+
+                    .byline-avatar {
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        background: var(--brand-wash);
+                        color: var(--brand-ink);
+                        font-size: 9px;
+                        font-weight: 800;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .preview-category {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 10.5px;
+                        color: var(--ink-faint);
+                    }
+
+                    /* -------------------------------------------------------
+                       STATUS PILL
+                    ------------------------------------------------------- */
+
+                    .status-pill {
+                        flex-shrink: 0;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        padding: 3px 8px;
+                        border-radius: 999px;
+                        font-size: 9.5px;
+                        font-weight: 700;
+                        white-space: nowrap;
+                    }
+
+                    .status-dot {
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                    }
+
+                    .status-pill.approved,
+                    .status-pill.published {
+                        color: var(--brand-ink);
+                        background: var(--brand-wash);
+                    }
+
+                    .status-pill.approved .status-dot,
+                    .status-pill.published .status-dot {
+                        background: var(--brand);
+                    }
+
+                    .status-pill.pending {
+                        color: var(--amber);
+                        background: var(--amber-wash);
+                    }
+
+                    .status-pill.pending .status-dot {
+                        background: var(--amber);
+                    }
+
+                    .status-pill.rejected {
+                        color: var(--clay);
+                        background: var(--clay-wash);
+                    }
+
+                    .status-pill.rejected .status-dot {
+                        background: var(--clay);
+                    }
+
+                    /* -------------------------------------------------------
+                       STATUS SELECTOR
+                    ------------------------------------------------------- */
+
+                    .status-grid {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                    }
+
+                    .status-option {
+                        display: flex;
+                        align-items: center;
+                        gap: 9px;
+                        padding: 9px 10px;
+                        border: 1px solid var(--line);
+                        border-radius: 8px;
+                        background: var(--surface);
+                        font-family: inherit;
+                        text-align: left;
+                        cursor: pointer;
+                    }
+
+                    .status-option:hover {
+                        border-color: var(--ink-faint);
+                    }
+
+                    .status-option strong {
+                        display: block;
+                        font-size: 12px;
+                        font-weight: 600;
+                        color: var(--ink);
+                    }
+
+                    .status-option small {
+                        display: block;
+                        font-size: 10.5px;
+                        color: var(--ink-soft);
+                        margin-top: 1px;
+                    }
+
+                    .status-option .status-dot {
+                        width: 7px;
+                        height: 7px;
+                        background: var(--ink-faint);
+                        flex-shrink: 0;
+                    }
+
+                    .status-option.is-active {
+                        border-color: var(--ink);
+                        background: var(--paper);
+                    }
+
+                    .status-option.pending.is-active .status-dot { background: var(--amber); }
+                    .status-option.approved.is-active .status-dot,
+                    .status-option.published.is-active .status-dot { background: var(--brand); }
+                    .status-option.rejected.is-active .status-dot { background: var(--clay); }
+
+                    /* -------------------------------------------------------
+                       ACTIONS
+                    ------------------------------------------------------- */
+
+                    .actions-panel {
+                        padding: 14px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+
+                    .footer-note {
+                        margin: 0;
+                        font-size: 11px;
+                        color: var(--ink-faint);
+                    }
+
+                    .actions-row {
+                        display: flex;
+                        gap: 8px;
+                    }
+
+                    .btn {
+                        height: 36px;
+                        border-radius: 7px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 6px;
+                        font-family: inherit;
+                        font-size: 12.5px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        text-decoration: none;
+                        border: 1.5px solid transparent;
+                        flex: 1;
+                    }
+
+                    .btn-secondary {
+                        border-color: var(--line);
+                        background: var(--surface);
+                        color: var(--ink);
+                    }
+
+                    .btn-secondary:hover {
+                        border-color: var(--ink-faint);
+                    }
+
+                    .btn-primary {
+                        background: var(--ink);
+                        color: #fff;
+                        border-color: var(--ink);
+                        flex: 1.3;
+                    }
+
+                    .btn-primary:hover {
+                        background: var(--brand-ink);
+                        border-color: var(--brand-ink);
+                    }
+
+                    .btn-primary:disabled {
+                        opacity: 0.55;
+                        cursor: not-allowed;
+                    }
+
+                    /* -------------------------------------------------------
+                       RESPONSIVE
+                    ------------------------------------------------------- */
+
+                    @media (max-width: 900px) {
+
+                        .content-grid {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .sidebar {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            align-items: start;
+                        }
+
+                        .actions-panel {
+                            grid-column: 1 / -1;
+                        }
+                    }
+
+                    @media (max-width: 620px) {
+
+                        .story-edit {
+                            padding: 22px 14px 48px;
+                        }
+
+                        .field-row {
+                            grid-template-columns: 1fr;
+                        }
+
+                        .sidebar {
+                            display: flex;
+                        }
+                    }
+
+                `}</style>
+
             </div>
         </AppLayout>
     );

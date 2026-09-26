@@ -3,6 +3,27 @@ import { Head, Link, useForm, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
 /* =========================================================
+   FONT / DESIGN SYSTEM
+========================================================= */
+
+const FONT_STACK =
+    '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+
+const COLORS = {
+    page: '#f7f7f8',
+    white: '#ffffff',
+    text: '#1d1d1f',
+    secondary: '#6e6e73',
+    muted: '#86868b',
+    border: '#e5e5ea',
+    soft: '#f2f2f7',
+    dark: '#1d1d1f',
+    danger: '#e5483f',
+    warning: '#e6a400',
+    success: '#16a66b',
+};
+
+/* =========================================================
    ICONS
 ========================================================= */
 
@@ -170,24 +191,6 @@ const Icon = {
         </svg>
     ),
 
-    ChevronLeft: ({ size = 17, ...props }) => (
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            width={size}
-            height={size}
-            {...props}
-        >
-            <path
-                d="m15 18-6-6 6-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        </svg>
-    ),
-
     Close: ({ size = 18, ...props }) => (
         <svg
             viewBox="0 0 24 24"
@@ -255,8 +258,8 @@ const Icon = {
 const STATUS_META = {
     approved: {
         label: 'Approved',
-        bg: '#e8f8ef',
-        fg: '#0b8155',
+        bg: '#e9f8f0',
+        fg: '#087a50',
         dot: '#16a66b',
     },
 
@@ -270,34 +273,34 @@ const STATUS_META = {
     pending: {
         label: 'Pending',
         bg: '#fff7e5',
-        fg: '#9a6500',
+        fg: '#936000',
         dot: '#e6a400',
     },
 };
 
 function StatusBadge({ status }) {
     const meta =
-        STATUS_META[status] ||
-        STATUS_META.pending;
+        STATUS_META[status] || STATUS_META.pending;
 
     return (
         <span
             className="d-inline-flex align-items-center gap-2"
             style={{
-                backgroundColor: meta.bg,
+                background: meta.bg,
                 color: meta.fg,
-                padding: '6px 11px',
+                padding: '6px 10px',
                 borderRadius: '999px',
-                fontSize: '12px',
-                fontWeight: 650,
+                fontSize: '11px',
+                fontWeight: 700,
+                whiteSpace: 'nowrap',
             }}
         >
             <span
                 style={{
-                    width: '6px',
-                    height: '6px',
+                    width: 6,
+                    height: 6,
                     borderRadius: '50%',
-                    backgroundColor: meta.dot,
+                    background: meta.dot,
                 }}
             />
 
@@ -319,16 +322,14 @@ function formatPrice(value) {
 }
 
 function formatDate(value) {
-    if (!value) {
-        return '—';
-    }
+    if (!value) return '—';
 
     try {
         return new Date(value).toLocaleDateString(
             undefined,
             {
                 year: 'numeric',
-                month: 'long',
+                month: 'short',
                 day: 'numeric',
             }
         );
@@ -343,9 +344,7 @@ function initialsFor(name = '') {
         .split(/\s+/)
         .filter(Boolean);
 
-    if (!parts.length) {
-        return '?';
-    }
+    if (!parts.length) return '?';
 
     return (
         parts[0][0] +
@@ -359,20 +358,18 @@ function initialsFor(name = '') {
 
 function StarRating({
     rating = 0,
-    size = 15,
+    size = 14,
     showValue = false,
 }) {
-    const numericRating =
-        Number(rating) || 0;
+    const numericRating = Number(rating) || 0;
 
-    const percentage =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                (numericRating / 5) * 100
-            )
-        );
+    const percentage = Math.max(
+        0,
+        Math.min(
+            100,
+            (numericRating / 5) * 100
+        )
+    );
 
     const stars = Array.from({
         length: 5,
@@ -380,12 +377,9 @@ function StarRating({
 
     return (
         <span className="d-inline-flex align-items-center gap-2">
-
             <span
                 className="position-relative d-inline-flex"
-                style={{
-                    lineHeight: 0,
-                }}
+                style={{ lineHeight: 0 }}
             >
                 <span
                     className="d-inline-flex"
@@ -422,8 +416,8 @@ function StarRating({
             {showValue && (
                 <span
                     style={{
-                        fontSize: '12px',
-                        color: '#6e6e73',
+                        color: COLORS.secondary,
+                        fontSize: 11,
                         fontWeight: 600,
                     }}
                 >
@@ -435,7 +429,7 @@ function StarRating({
 }
 
 /* =========================================================
-   MODAL SHELL
+   MODAL
 ========================================================= */
 
 function ModalShell({
@@ -444,22 +438,18 @@ function ModalShell({
     title,
     eyebrow,
     children,
-    width = 470,
+    width = 460,
 }) {
-    if (!open) {
-        return null;
-    }
+    if (!open) return null;
 
     return (
         <div
             className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
             style={{
                 zIndex: 1055,
-                background:
-                    'rgba(0,0,0,.42)',
-                backdropFilter:
-                    'blur(5px)',
-                padding: '20px',
+                background: 'rgba(0,0,0,.38)',
+                backdropFilter: 'blur(7px)',
+                padding: 20,
             }}
             onMouseDown={(event) => {
                 if (
@@ -473,20 +463,19 @@ function ModalShell({
             <div
                 className="bg-white w-100"
                 style={{
-                    maxWidth: `${width}px`,
-                    borderRadius: '20px',
+                    maxWidth: width,
+                    borderRadius: 18,
                     overflow: 'hidden',
                     boxShadow:
-                        '0 25px 70px rgba(0,0,0,.20)',
+                        '0 25px 80px rgba(0,0,0,.18)',
                 }}
             >
                 <div
                     className="d-flex align-items-start justify-content-between"
                     style={{
-                        padding:
-                            '20px 22px 16px',
+                        padding: '20px 22px',
                         borderBottom:
-                            '1px solid #e5e5ea',
+                            `1px solid ${COLORS.border}`,
                     }}
                 >
                     <div>
@@ -494,11 +483,12 @@ function ModalShell({
                             <div
                                 className="text-uppercase mb-1"
                                 style={{
-                                    color: '#86868b',
-                                    fontSize: '10px',
+                                    color:
+                                        COLORS.muted,
+                                    fontSize: 10,
                                     fontWeight: 700,
                                     letterSpacing:
-                                        '0.7px',
+                                        '.7px',
                                 }}
                             >
                                 {eyebrow}
@@ -508,11 +498,11 @@ function ModalShell({
                         <h5
                             className="mb-0"
                             style={{
-                                color: '#1d1d1f',
-                                fontSize: '18px',
+                                color: COLORS.text,
+                                fontSize: 18,
                                 fontWeight: 700,
                                 letterSpacing:
-                                    '-0.25px',
+                                    '-.3px',
                             }}
                         >
                             {title}
@@ -524,19 +514,18 @@ function ModalShell({
                         className="btn d-flex align-items-center justify-content-center"
                         onClick={onClose}
                         style={{
-                            width: '34px',
-                            height: '34px',
+                            width: 34,
+                            height: 34,
                             padding: 0,
-                            borderRadius:
-                                '9px',
+                            borderRadius: 9,
                             border:
-                                '1px solid #e5e5ea',
+                                `1px solid ${COLORS.border}`,
                             background:
-                                '#f5f5f7',
-                            color: '#1d1d1f',
+                                COLORS.soft,
+                            color: COLORS.text,
                         }}
                     >
-                        <Icon.Close size={17} />
+                        <Icon.Close size={16} />
                     </button>
                 </div>
 
@@ -563,13 +552,10 @@ function StatusModal({
         reset,
     } = useForm({
         status:
-            product?.status ||
-            'pending',
+            product?.status || 'pending',
     });
 
-    if (!product) {
-        return null;
-    }
+    if (!product) return null;
 
     const submit = (event) => {
         event.preventDefault();
@@ -594,22 +580,17 @@ function StatusModal({
         {
             value: 'pending',
             label: 'Pending',
-            hint:
-                'Awaiting review. The product remains hidden from buyers.',
+            hint: 'Waiting for review before publishing.',
         },
-
         {
             value: 'approved',
             label: 'Approved',
-            hint:
-                'The product becomes visible to buyers.',
+            hint: 'The product can be displayed to buyers.',
         },
-
         {
             value: 'rejected',
             label: 'Rejected',
-            hint:
-                'The listing stays hidden and the seller can be notified.',
+            hint: 'The listing remains hidden from buyers.',
         },
     ];
 
@@ -622,112 +603,106 @@ function StatusModal({
         >
             <form onSubmit={submit}>
                 <div
+                    className="p-3 p-md-4"
                     style={{
-                        padding:
-                            '20px 22px',
+                        background: '#fff',
                     }}
                 >
                     <div className="d-flex flex-column gap-2">
+                        {options.map((option) => {
+                            const meta =
+                                STATUS_META[
+                                    option.value
+                                ];
 
-                        {options.map(
-                            (option) => {
-                                const meta =
-                                    STATUS_META[
+                            const selected =
+                                data.status ===
+                                option.value;
+
+                            return (
+                                <label
+                                    key={
                                         option.value
-                                    ];
-
-                                const selected =
-                                    data.status ===
-                                    option.value;
-
-                                return (
-                                    <label
-                                        key={
-                                            option.value
+                                    }
+                                    className="d-flex align-items-start gap-3"
+                                    style={{
+                                        cursor:
+                                            'pointer',
+                                        padding:
+                                            '14px',
+                                        borderRadius:
+                                            12,
+                                        border: selected
+                                            ? `1px solid ${meta.fg}`
+                                            : `1px solid ${COLORS.border}`,
+                                        background:
+                                            selected
+                                                ? meta.bg
+                                                : '#fff',
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        className="form-check-input mt-1"
+                                        checked={
+                                            selected
                                         }
-                                        className="d-flex align-items-start gap-3"
-                                        style={{
-                                            cursor:
-                                                'pointer',
-                                            padding:
-                                                '13px',
-                                            borderRadius:
-                                                '12px',
-                                            border:
-                                                selected
-                                                    ? `1px solid ${meta.fg}`
-                                                    : '1px solid #e5e5ea',
-                                            background:
-                                                selected
-                                                    ? meta.bg
-                                                    : '#fff',
-                                        }}
-                                    >
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            className="form-check-input mt-1"
-                                            checked={
-                                                selected
-                                            }
-                                            onChange={() =>
-                                                setData(
-                                                    'status',
-                                                    option.value
-                                                )
-                                            }
-                                        />
+                                        onChange={() =>
+                                            setData(
+                                                'status',
+                                                option.value
+                                            )
+                                        }
+                                    />
 
-                                        <div>
-                                            <div
-                                                style={{
-                                                    fontSize:
-                                                        '13px',
-                                                    fontWeight:
-                                                        650,
-                                                    color:
-                                                        '#1d1d1f',
-                                                }}
-                                            >
-                                                {
-                                                    option.label
-                                                }
-                                            </div>
-
-                                            <div
-                                                style={{
-                                                    fontSize:
-                                                        '12px',
-                                                    color:
-                                                        '#6e6e73',
-                                                    lineHeight:
-                                                        1.45,
-                                                    marginTop:
-                                                        '2px',
-                                                }}
-                                            >
-                                                {
-                                                    option.hint
-                                                }
-                                            </div>
+                                    <div>
+                                        <div
+                                            style={{
+                                                fontSize:
+                                                    13,
+                                                fontWeight:
+                                                    650,
+                                                color:
+                                                    COLORS.text,
+                                            }}
+                                        >
+                                            {
+                                                option.label
+                                            }
                                         </div>
-                                    </label>
-                                );
-                            }
-                        )}
 
+                                        <div
+                                            style={{
+                                                fontSize:
+                                                    11,
+                                                color:
+                                                    COLORS.secondary,
+                                                lineHeight:
+                                                    1.5,
+                                                marginTop: 3,
+                                            }}
+                                        >
+                                            {
+                                                option.hint
+                                            }
+                                        </div>
+                                    </div>
+                                </label>
+                            );
+                        })}
                     </div>
                 </div>
 
                 <div
-                    className="d-flex align-items-center justify-content-between"
+                    className="d-flex justify-content-between align-items-center"
                     style={{
                         padding:
-                            '15px 22px',
+                            '14px 22px',
                         background:
                             '#f7f7f8',
                         borderTop:
-                            '1px solid #e5e5ea',
+                            `1px solid ${COLORS.border}`,
                     }}
                 >
                     <button
@@ -735,18 +710,14 @@ function StatusModal({
                         className="btn"
                         onClick={onClose}
                         style={{
-                            height: '40px',
-                            padding:
-                                '0 15px',
-                            borderRadius:
-                                '10px',
+                            height: 40,
+                            padding: '0 15px',
+                            borderRadius: 10,
                             border:
                                 '1px solid #d2d2d7',
                             background: '#fff',
-                            color:
-                                '#1d1d1f',
-                            fontSize:
-                                '13px',
+                            color: COLORS.text,
+                            fontSize: 12,
                             fontWeight: 600,
                         }}
                     >
@@ -762,24 +733,21 @@ function StatusModal({
                                 product.status
                         }
                         style={{
-                            height: '40px',
-                            padding:
-                                '0 16px',
-                            borderRadius:
-                                '10px',
+                            height: 40,
+                            padding: '0 16px',
+                            borderRadius: 10,
                             border:
-                                '1px solid #1d1d1f',
+                                `1px solid ${COLORS.dark}`,
                             background:
-                                '#1d1d1f',
+                                COLORS.dark,
                             color: '#fff',
-                            fontSize:
-                                '13px',
+                            fontSize: 12,
                             fontWeight: 600,
                             opacity:
                                 processing ||
                                 data.status ===
                                     product.status
-                                    ? 0.55
+                                    ? 0.5
                                     : 1,
                         }}
                     >
@@ -802,9 +770,7 @@ function DeleteModal({
     open,
     onClose,
 }) {
-    if (!product) {
-        return null;
-    }
+    if (!product) return null;
 
     const confirmDelete = () => {
         router.delete(
@@ -834,74 +800,60 @@ function DeleteModal({
             title="Delete product"
         >
             <div
+                className="text-center"
                 style={{
-                    padding:
-                        '24px 22px',
+                    padding: '28px 22px',
                 }}
             >
-                <div className="text-center">
-
-                    <div
-                        className="d-flex align-items-center justify-content-center mx-auto mb-3"
-                        style={{
-                            width: '54px',
-                            height: '54px',
-                            borderRadius:
-                                '16px',
-                            background:
-                                '#fff0ef',
-                            color:
-                                '#e5483f',
-                        }}
-                    >
-                        <Icon.Alert size={24} />
-                    </div>
-
-                    <p
-                        className="mb-2"
-                        style={{
-                            color:
-                                '#1d1d1f',
-                            fontSize:
-                                '14px',
-                            lineHeight:
-                                1.55,
-                        }}
-                    >
-                        Are you sure you want to
-                        delete{' '}
-                        <strong>
-                            {product.name}
-                        </strong>
-                        ?
-                    </p>
-
-                    <p
-                        className="mb-0"
-                        style={{
-                            color:
-                                '#86868b',
-                            fontSize:
-                                '12px',
-                        }}
-                    >
-                        This product will be
-                        permanently removed from
-                        the catalog.
-                    </p>
-
+                <div
+                    className="d-flex align-items-center justify-content-center mx-auto mb-3"
+                    style={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: 16,
+                        background: '#fff0ef',
+                        color: COLORS.danger,
+                    }}
+                >
+                    <Icon.Alert size={25} />
                 </div>
+
+                <p
+                    className="mb-2"
+                    style={{
+                        color: COLORS.text,
+                        fontSize: 14,
+                        lineHeight: 1.55,
+                    }}
+                >
+                    Delete{' '}
+                    <strong>
+                        {product.name}
+                    </strong>
+                    ?
+                </p>
+
+                <p
+                    className="mb-0"
+                    style={{
+                        color: COLORS.muted,
+                        fontSize: 12,
+                        lineHeight: 1.5,
+                    }}
+                >
+                    This product will be
+                    permanently removed from the
+                    catalog.
+                </p>
             </div>
 
             <div
-                className="d-flex align-items-center justify-content-between"
+                className="d-flex justify-content-between align-items-center"
                 style={{
-                    padding:
-                        '15px 22px',
-                    background:
-                        '#f7f7f8',
+                    padding: '14px 22px',
+                    background: '#f7f7f8',
                     borderTop:
-                        '1px solid #e5e5ea',
+                        `1px solid ${COLORS.border}`,
                 }}
             >
                 <button
@@ -909,18 +861,14 @@ function DeleteModal({
                     className="btn"
                     onClick={onClose}
                     style={{
-                        height: '40px',
-                        padding:
-                            '0 16px',
-                        borderRadius:
-                            '10px',
+                        height: 40,
+                        padding: '0 16px',
+                        borderRadius: 10,
                         border:
                             '1px solid #d2d2d7',
                         background: '#fff',
-                        color:
-                            '#1d1d1f',
-                        fontSize:
-                            '13px',
+                        color: COLORS.text,
+                        fontSize: 12,
                         fontWeight: 600,
                     }}
                 >
@@ -930,26 +878,21 @@ function DeleteModal({
                 <button
                     type="button"
                     className="btn d-flex align-items-center gap-2"
-                    onClick={
-                        confirmDelete
-                    }
+                    onClick={confirmDelete}
                     style={{
-                        height: '40px',
-                        padding:
-                            '0 16px',
-                        borderRadius:
-                            '10px',
+                        height: 40,
+                        padding: '0 16px',
+                        borderRadius: 10,
                         border:
-                            '1px solid #e5483f',
+                            `1px solid ${COLORS.danger}`,
                         background:
-                            '#e5483f',
+                            COLORS.danger,
                         color: '#fff',
-                        fontSize:
-                            '13px',
+                        fontSize: 12,
                         fontWeight: 600,
                     }}
                 >
-                    <Icon.Trash size={16} />
+                    <Icon.Trash size={15} />
                     Delete Product
                 </button>
             </div>
@@ -967,99 +910,84 @@ function ReviewCard({ review }) {
             ? `/storage/${review.user.profile_image}`
             : null;
 
+    const userName =
+        review.user?.name ||
+        'Anonymous';
+
     return (
         <div
             className="d-flex gap-3"
             style={{
-                padding: '16px 0',
+                padding: '15px 0',
                 borderBottom:
-                    '1px solid #f0f0f2',
+                    `1px solid #f0f0f2`,
             }}
         >
             {avatarSrc ? (
                 <img
                     src={avatarSrc}
-                    alt={
-                        review.user?.name ||
-                        'User'
-                    }
-                    className="flex-shrink-0"
+                    alt={userName}
                     style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius:
-                            '11px',
-                        objectFit:
-                            'cover',
+                        width: 38,
+                        height: 38,
+                        borderRadius: 11,
+                        objectFit: 'cover',
+                        flexShrink: 0,
                     }}
                 />
             ) : (
                 <div
-                    className="d-flex align-items-center justify-content-center flex-shrink-0"
+                    className="d-flex align-items-center justify-content-center"
                     style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius:
-                            '11px',
+                        width: 38,
+                        height: 38,
+                        borderRadius: 11,
                         background:
-                            '#f2f2f7',
-                        color:
-                            '#1d1d1f',
-                        fontSize:
-                            '12px',
+                            COLORS.soft,
+                        color: COLORS.text,
+                        fontSize: 11,
                         fontWeight: 700,
+                        flexShrink: 0,
                     }}
                 >
-                    {initialsFor(
-                        review.user?.name ||
-                            'User'
-                    )}
+                    {initialsFor(userName)}
                 </div>
             )}
 
-            <div className="flex-grow-1">
-
-                <div className="d-flex align-items-center justify-content-between gap-2 flex-wrap">
-
+            <div className="flex-grow-1 min-w-0">
+                <div className="d-flex justify-content-between align-items-center gap-2">
                     <div
+                        className="text-truncate"
                         style={{
-                            fontSize:
-                                '13px',
-                            fontWeight:
-                                650,
-                            color:
-                                '#1d1d1f',
+                            color: COLORS.text,
+                            fontSize: 12,
+                            fontWeight: 650,
                         }}
                     >
-                        {review.user?.name ||
-                            'Anonymous'}
+                        {userName}
                     </div>
 
                     <StarRating
                         rating={
                             review.rating || 0
                         }
-                        size={12}
+                        size={11}
                     />
-
                 </div>
 
                 {review.comment && (
                     <p
                         className="mb-0 mt-2"
                         style={{
-                            fontSize:
-                                '12px',
                             color:
-                                '#6e6e73',
-                            lineHeight:
-                                1.55,
+                                COLORS.secondary,
+                            fontSize: 11,
+                            lineHeight: 1.6,
                         }}
                     >
                         {review.comment}
                     </p>
                 )}
-
             </div>
         </div>
     );
@@ -1076,48 +1004,88 @@ function InfoItem({
 }) {
     return (
         <div
+            className="h-100"
             style={{
-                padding:
-                    '14px',
+                padding: 14,
                 border:
-                    '1px solid #e5e5ea',
-                borderRadius:
-                    '12px',
-                height: '100%',
-                background:
-                    '#fff',
+                    `1px solid ${COLORS.border}`,
+                borderRadius: 12,
+                background: '#fff',
             }}
         >
             <div
                 className="d-flex align-items-center gap-2 mb-2"
                 style={{
-                    color:
-                        '#86868b',
-                    fontSize:
-                        '11px',
-                    fontWeight:
-                        650,
+                    color: COLORS.muted,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: '.2px',
                 }}
             >
                 {icon}
-
-                <span>
-                    {label}
-                </span>
+                {label}
             </div>
 
             <div
+                className="text-truncate"
                 style={{
-                    color:
-                        '#1d1d1f',
-                    fontSize:
-                        '13px',
-                    fontWeight:
-                        650,
+                    color: COLORS.text,
+                    fontSize: 12,
+                    fontWeight: 650,
                 }}
+                title={value || '—'}
             >
                 {value || '—'}
             </div>
+        </div>
+    );
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+function SectionHeader({
+    title,
+    description,
+    right,
+}) {
+    return (
+        <div
+            className="d-flex align-items-start justify-content-between gap-3"
+            style={{
+                padding: '19px 21px',
+                borderBottom:
+                    `1px solid ${COLORS.border}`,
+            }}
+        >
+            <div>
+                <h3
+                    className="mb-1"
+                    style={{
+                        color: COLORS.text,
+                        fontSize: 16,
+                        fontWeight: 700,
+                        letterSpacing: '-.2px',
+                    }}
+                >
+                    {title}
+                </h3>
+
+                {description && (
+                    <p
+                        className="mb-0"
+                        style={{
+                            color: COLORS.muted,
+                            fontSize: 11,
+                        }}
+                    >
+                        {description}
+                    </p>
+                )}
+            </div>
+
+            {right}
         </div>
     );
 }
@@ -1135,25 +1103,16 @@ export default function Show({
     const [deleteOpen, setDeleteOpen] =
         useState(false);
 
-    /*
-     * Normalize product in case the controller
-     * returns an API resource.
-     */
     const actualProduct =
-        product?.data &&
-        !product.id
+        product?.data && !product.id
             ? product.data
             : product;
 
-    /*
-     * Keep hooks before any early return.
-     */
-    const reviews =
-        Array.isArray(
-            actualProduct?.reviews
-        )
-            ? actualProduct.reviews
-            : [];
+    const reviews = Array.isArray(
+        actualProduct?.reviews
+    )
+        ? actualProduct.reviews
+        : [];
 
     const reviewsCount =
         Number(
@@ -1174,19 +1133,14 @@ export default function Show({
             );
         }
 
-        if (!reviews.length) {
-            return 0;
-        }
+        if (!reviews.length) return 0;
 
-        const total =
-            reviews.reduce(
-                (sum, review) =>
-                    sum +
-                    (Number(
-                        review.rating
-                    ) || 0),
-                0
-            );
+        const total = reviews.reduce(
+            (sum, review) =>
+                sum +
+                (Number(review.rating) || 0),
+            0
+        );
 
         return total / reviews.length;
     }, [
@@ -1199,63 +1153,61 @@ export default function Show({
             ? `/storage/${actualProduct.image}`
             : null;
 
-    /*
-     * Missing product guard.
-     */
+    const sellerName =
+        actualProduct?.seller
+            ?.company_name ||
+        actualProduct?.seller?.name ||
+        'N/A';
+
+    const categoryName =
+        actualProduct?.category?.name ||
+        'Uncategorized';
+
     if (!actualProduct?.id) {
         return (
             <AppLayout>
                 <Head title="Product not found" />
 
                 <div
-                    className="container-fluid py-4 px-3 px-md-4 px-xl-5"
+                    className="container-fluid d-flex align-items-center justify-content-center"
                     style={{
-                        fontFamily:
-                            '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                        background:
-                            '#f5f5f7',
-                        minHeight:
-                            '100vh',
+                        minHeight: '80vh',
+                        fontFamily: FONT_STACK,
+                        background: COLORS.page,
                     }}
                 >
                     <div
-                        className="mx-auto bg-white text-center"
+                        className="bg-white text-center w-100"
                         style={{
-                            maxWidth:
-                                '620px',
-                            padding:
-                                '50px 30px',
-                            borderRadius:
-                                '18px',
+                            maxWidth: 520,
+                            padding: '45px 30px',
+                            borderRadius: 18,
                             border:
-                                '1px solid #e5e5ea',
+                                `1px solid ${COLORS.border}`,
                         }}
                     >
                         <div
                             className="d-flex align-items-center justify-content-center mx-auto mb-3"
                             style={{
-                                width: '58px',
-                                height: '58px',
-                                borderRadius:
-                                    '16px',
+                                width: 58,
+                                height: 58,
+                                borderRadius: 16,
                                 background:
-                                    '#f2f2f7',
+                                    COLORS.soft,
                                 color:
-                                    '#86868b',
+                                    COLORS.muted,
                             }}
                         >
-                            <Icon.Box
-                                size={25}
-                            />
+                            <Icon.Box size={25} />
                         </div>
 
                         <h4
                             className="mb-2"
                             style={{
-                                fontSize:
-                                    '19px',
-                                fontWeight:
-                                    700,
+                                color:
+                                    COLORS.text,
+                                fontSize: 19,
+                                fontWeight: 700,
                             }}
                         >
                             Product not found
@@ -1265,19 +1217,13 @@ export default function Show({
                             className="mb-4"
                             style={{
                                 color:
-                                    '#6e6e73',
-                                fontSize:
-                                    '13px',
-                                lineHeight:
-                                    1.6,
+                                    COLORS.secondary,
+                                fontSize: 12,
+                                lineHeight: 1.6,
                             }}
                         >
-                            The product data sent
-                            to this page is missing
-                            a valid ID. Check that
-                            your controller returns
-                            the product model with
-                            its ID.
+                            The requested product
+                            could not be found.
                         </p>
 
                         <Link
@@ -1286,25 +1232,22 @@ export default function Show({
                             )}
                             className="btn d-inline-flex align-items-center gap-2"
                             style={{
-                                height: '40px',
-                                padding:
-                                    '0 16px',
-                                borderRadius:
-                                    '10px',
+                                height: 40,
+                                padding: '0 16px',
+                                borderRadius: 10,
                                 background:
-                                    '#1d1d1f',
+                                    COLORS.dark,
                                 border:
-                                    '1px solid #1d1d1f',
+                                    `1px solid ${COLORS.dark}`,
                                 color: '#fff',
-                                fontSize:
-                                    '13px',
+                                fontSize: 12,
                                 fontWeight: 600,
                                 textDecoration:
                                     'none',
                             }}
                         >
                             <Icon.ArrowLeft
-                                size={16}
+                                size={15}
                             />
                             Back to Products
                         </Link>
@@ -1325,59 +1268,50 @@ export default function Show({
 
             <div
                 style={{
-                    fontFamily:
-                        '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-                    background:
-                        '#f5f5f7',
-                    minHeight:
-                        '100vh',
+                    fontFamily: FONT_STACK,
+                    background: COLORS.page,
+                    minHeight: '100vh',
                 }}
             >
                 <div className="container-fluid px-3 px-md-4 px-xl-5 py-4">
 
                     {/* =================================================
-                        HEADER
+                        PAGE HEADER
                     ================================================= */}
 
-                    <div className="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+                    <div className="d-flex flex-column flex-xl-row justify-content-between align-items-xl-end gap-3 mb-4">
 
                         <div>
                             <Link
                                 href={route(
                                     'admin.products.index'
                                 )}
-                                className="d-inline-flex align-items-center gap-2 text-decoration-none mb-2"
+                                className="d-inline-flex align-items-center gap-1 text-decoration-none mb-2"
                                 style={{
                                     color:
-                                        '#86868b',
-                                    fontSize:
-                                        '12px',
-                                    fontWeight:
-                                        600,
+                                        COLORS.muted,
+                                    fontSize: 11,
+                                    fontWeight: 600,
                                 }}
                             >
                                 <Icon.ArrowLeft
-                                    size={15}
+                                    size={14}
                                 />
-
-                                Back to Products
+                                Products
                             </Link>
 
-                            <div className="d-flex align-items-center gap-2">
-
+                            <div className="d-flex align-items-center gap-2 flex-wrap">
                                 <h1
                                     className="mb-0"
                                     style={{
                                         color:
-                                            '#1d1d1f',
-                                        fontSize:
-                                            '29px',
+                                            COLORS.text,
+                                        fontSize: 27,
                                         lineHeight:
                                             1.15,
-                                        fontWeight:
-                                            700,
+                                        fontWeight: 700,
                                         letterSpacing:
-                                            '-0.7px',
+                                            '-.7px',
                                     }}
                                 >
                                     Product Details
@@ -1388,21 +1322,19 @@ export default function Show({
                                         actualProduct.status
                                     }
                                 />
-
                             </div>
 
                             <p
                                 className="mb-0 mt-1"
                                 style={{
                                     color:
-                                        '#6e6e73',
-                                    fontSize:
-                                        '13px',
+                                        COLORS.secondary,
+                                    fontSize: 12,
                                 }}
                             >
-                                Review product information,
-                                status, seller and customer
-                                feedback.
+                                View product information,
+                                seller details and
+                                customer feedback.
                             </p>
                         </div>
 
@@ -1417,29 +1349,24 @@ export default function Show({
                                     )
                                 }
                                 style={{
-                                    height:
-                                        '40px',
+                                    height: 38,
                                     padding:
-                                        '0 14px',
-                                    borderRadius:
-                                        '10px',
+                                        '0 13px',
+                                    borderRadius: 9,
                                     border:
-                                        '1px solid #d2d2d7',
+                                        `1px solid #d2d2d7`,
                                     background:
                                         '#fff',
                                     color:
-                                        '#1d1d1f',
-                                    fontSize:
-                                        '13px',
-                                    fontWeight:
-                                        600,
+                                        COLORS.text,
+                                    fontSize: 12,
+                                    fontWeight: 600,
                                 }}
                             >
                                 <Icon.Refresh
-                                    size={16}
+                                    size={15}
                                 />
-
-                                Update Status
+                                Status
                             </button>
 
                             <Link
@@ -1449,31 +1376,25 @@ export default function Show({
                                 )}
                                 className="btn d-flex align-items-center gap-2"
                                 style={{
-                                    height:
-                                        '40px',
+                                    height: 38,
                                     padding:
-                                        '0 15px',
-                                    borderRadius:
-                                        '10px',
+                                        '0 14px',
+                                    borderRadius: 9,
                                     border:
-                                        '1px solid #1d1d1f',
+                                        `1px solid ${COLORS.dark}`,
                                     background:
-                                        '#1d1d1f',
-                                    color:
-                                        '#fff',
-                                    fontSize:
-                                        '13px',
-                                    fontWeight:
-                                        600,
+                                        COLORS.dark,
+                                    color: '#fff',
+                                    fontSize: 12,
+                                    fontWeight: 600,
                                     textDecoration:
                                         'none',
                                 }}
                             >
                                 <Icon.Pencil
-                                    size={16}
+                                    size={15}
                                 />
-
-                                Edit
+                                Edit Product
                             </Link>
 
                             <button
@@ -1485,184 +1406,174 @@ export default function Show({
                                     )
                                 }
                                 style={{
-                                    height:
-                                        '40px',
+                                    height: 38,
                                     padding:
-                                        '0 14px',
-                                    borderRadius:
-                                        '10px',
+                                        '0 13px',
+                                    borderRadius: 9,
                                     border:
-                                        '1px solid #e5483f',
+                                        `1px solid #f0c2be`,
                                     background:
                                         '#fff',
                                     color:
-                                        '#d13c34',
-                                    fontSize:
-                                        '13px',
-                                    fontWeight:
-                                        600,
+                                        COLORS.danger,
+                                    fontSize: 12,
+                                    fontWeight: 600,
                                 }}
                             >
                                 <Icon.Trash
-                                    size={16}
+                                    size={15}
                                 />
-
                                 Delete
                             </button>
-
                         </div>
                     </div>
 
                     {/* =================================================
-                        PRODUCT HERO
+                        PRODUCT CARD
                     ================================================= */}
 
                     <div
                         className="bg-white mb-4"
                         style={{
-                            borderRadius:
-                                '18px',
+                            borderRadius: 18,
                             border:
-                                '1px solid #e5e5ea',
-                            overflow:
-                                'hidden',
+                                `1px solid ${COLORS.border}`,
+                            overflow: 'hidden',
                         }}
                     >
                         <div className="row g-0">
 
-                            {/* IMAGE */}
+                            {/* PRODUCT IMAGE */}
 
-                            <div className="col-lg-5">
-
+                            <div className="col-lg-4">
                                 <div
                                     className="h-100"
                                     style={{
-                                        minHeight:
-                                            '470px',
+                                        minHeight: 430,
                                         background:
-                                            '#f2f2f7',
+                                            COLORS.soft,
                                     }}
                                 >
                                     {imageSrc ? (
                                         <img
-                                            src={
-                                                imageSrc
-                                            }
+                                            src={imageSrc}
                                             alt={
                                                 actualProduct.name
                                             }
                                             className="w-100 h-100"
                                             style={{
+                                                minHeight:
+                                                    430,
                                                 objectFit:
                                                     'cover',
-                                                minHeight:
-                                                    '470px',
                                                 display:
                                                     'block',
                                             }}
                                         />
                                     ) : (
                                         <div
-                                            className="w-100 h-100 d-flex align-items-center justify-content-center"
+                                            className="h-100 d-flex align-items-center justify-content-center"
                                             style={{
                                                 minHeight:
-                                                    '470px',
-                                                color:
-                                                    '#86868b',
+                                                    430,
                                             }}
                                         >
                                             <div className="text-center">
-
                                                 <div
                                                     className="d-flex align-items-center justify-content-center mx-auto mb-2"
                                                     style={{
-                                                        width:
-                                                            '64px',
-                                                        height:
-                                                            '64px',
+                                                        width: 62,
+                                                        height: 62,
                                                         borderRadius:
-                                                            '18px',
+                                                            17,
                                                         background:
-                                                            '#e9e9ee',
+                                                            '#e8e8ed',
+                                                        color:
+                                                            COLORS.muted,
                                                     }}
                                                 >
                                                     <Icon.Box
                                                         size={
-                                                            30
+                                                            29
                                                         }
                                                     />
                                                 </div>
 
                                                 <div
                                                     style={{
-                                                        fontSize:
-                                                            '12px',
-                                                        fontWeight:
-                                                            600,
+                                                        color:
+                                                            COLORS.muted,
+                                                        fontSize: 11,
+                                                        fontWeight: 600,
                                                     }}
                                                 >
                                                     No product
                                                     image
                                                 </div>
-
                                             </div>
                                         </div>
                                     )}
                                 </div>
-
                             </div>
 
-                            {/* INFORMATION */}
+                            {/* PRODUCT INFORMATION */}
 
-                            <div className="col-lg-7">
-
+                            <div className="col-lg-8">
                                 <div
                                     className="h-100"
                                     style={{
                                         padding:
-                                            '30px',
+                                            '28px 30px',
                                     }}
                                 >
+                                    <div className="d-flex align-items-center justify-content-between gap-3 mb-3">
+                                        <div className="d-flex align-items-center gap-2">
+                                            <StatusBadge
+                                                status={
+                                                    actualProduct.status
+                                                }
+                                            />
 
-                                    <div className="d-flex align-items-center gap-2 mb-3">
-
-                                        <StatusBadge
-                                            status={
-                                                actualProduct.status
-                                            }
-                                        />
+                                            <span
+                                                style={{
+                                                    color:
+                                                        COLORS.muted,
+                                                    fontSize: 10,
+                                                    fontWeight: 600,
+                                                }}
+                                            >
+                                                ID #
+                                                {
+                                                    actualProduct.id
+                                                }
+                                            </span>
+                                        </div>
 
                                         <span
                                             style={{
-                                                fontSize:
-                                                    '11px',
                                                 color:
-                                                    '#86868b',
-                                                fontWeight:
-                                                    600,
+                                                    COLORS.muted,
+                                                fontSize: 10,
                                             }}
                                         >
-                                            Product #
-                                            {
-                                                actualProduct.id
-                                            }
+                                            Listed{' '}
+                                            {formatDate(
+                                                actualProduct.created_at
+                                            )}
                                         </span>
-
                                     </div>
 
                                     <h2
                                         className="mb-2"
                                         style={{
                                             color:
-                                                '#1d1d1f',
-                                            fontSize:
-                                                '30px',
+                                                COLORS.text,
+                                            fontSize: 28,
                                             lineHeight:
                                                 1.15,
-                                            fontWeight:
-                                                700,
+                                            fontWeight: 700,
                                             letterSpacing:
-                                                '-0.7px',
+                                                '-.6px',
                                         }}
                                     >
                                         {
@@ -1670,8 +1581,7 @@ export default function Show({
                                         }
                                     </h2>
 
-                                    <div className="d-flex align-items-center gap-3 mb-4">
-
+                                    <div className="d-flex align-items-center gap-3 mb-3">
                                         <StarRating
                                             rating={
                                                 averageRating
@@ -1682,9 +1592,8 @@ export default function Show({
                                         <span
                                             style={{
                                                 color:
-                                                    '#86868b',
-                                                fontSize:
-                                                    '12px',
+                                                    COLORS.muted,
+                                                fontSize: 11,
                                             }}
                                         >
                                             {reviewsCount}{' '}
@@ -1693,20 +1602,17 @@ export default function Show({
                                                 ? 'review'
                                                 : 'reviews'}
                                         </span>
-
                                     </div>
 
                                     <div
                                         className="mb-4"
                                         style={{
-                                            fontSize:
-                                                '30px',
-                                            fontWeight:
-                                                750,
                                             color:
-                                                '#1d1d1f',
+                                                COLORS.text,
+                                            fontSize: 29,
+                                            fontWeight: 750,
                                             letterSpacing:
-                                                '-0.7px',
+                                                '-.7px',
                                         }}
                                     >
                                         {formatPrice(
@@ -1717,44 +1623,37 @@ export default function Show({
                                     <div
                                         style={{
                                             borderTop:
-                                                '1px solid #e5e5ea',
-                                            paddingTop:
-                                                '20px',
+                                                `1px solid ${COLORS.border}`,
+                                            paddingTop: 20,
                                         }}
                                     >
-
                                         <p
                                             className="mb-4"
                                             style={{
                                                 color:
-                                                    '#6e6e73',
-                                                fontSize:
-                                                    '13px',
+                                                    COLORS.secondary,
+                                                fontSize: 12,
                                                 lineHeight:
-                                                    1.7,
+                                                    1.75,
                                             }}
                                         >
                                             {actualProduct.description ||
                                                 'No description has been provided for this product.'}
                                         </p>
 
-                                        <div className="row g-3">
-
+                                        <div className="row g-2">
                                             <div className="col-12 col-sm-6">
                                                 <InfoItem
                                                     icon={
                                                         <Icon.Layers
                                                             size={
-                                                                15
+                                                                14
                                                             }
                                                         />
                                                     }
                                                     label="CATEGORY"
                                                     value={
-                                                        actualProduct
-                                                            .category
-                                                            ?.name ||
-                                                        'Uncategorized'
+                                                        categoryName
                                                     }
                                                 />
                                             </div>
@@ -1764,19 +1663,13 @@ export default function Show({
                                                     icon={
                                                         <Icon.Building
                                                             size={
-                                                                15
+                                                                14
                                                             }
                                                         />
                                                     }
                                                     label="SELLER"
                                                     value={
-                                                        actualProduct
-                                                            .seller
-                                                            ?.company_name ||
-                                                        actualProduct
-                                                            .seller
-                                                            ?.name ||
-                                                        'N/A'
+                                                        sellerName
                                                     }
                                                 />
                                             </div>
@@ -1786,7 +1679,7 @@ export default function Show({
                                                     icon={
                                                         <Icon.Stack
                                                             size={
-                                                                15
+                                                                14
                                                             }
                                                         />
                                                     }
@@ -1806,20 +1699,16 @@ export default function Show({
                                                     )}
                                                 />
                                             </div>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
 
                         </div>
                     </div>
 
                     {/* =================================================
-                        LOWER CONTENT
+                        LOWER GRID
                     ================================================= */}
 
                     <div className="row g-4">
@@ -1827,54 +1716,20 @@ export default function Show({
                         {/* DESCRIPTION */}
 
                         <div className="col-lg-7">
-
                             <div
                                 className="bg-white h-100"
                                 style={{
-                                    borderRadius:
-                                        '18px',
+                                    borderRadius: 18,
                                     border:
-                                        '1px solid #e5e5ea',
+                                        `1px solid ${COLORS.border}`,
                                     overflow:
                                         'hidden',
                                 }}
                             >
-                                <div
-                                    style={{
-                                        padding:
-                                            '20px 22px',
-                                        borderBottom:
-                                            '1px solid #e5e5ea',
-                                    }}
-                                >
-                                    <h3
-                                        className="mb-1"
-                                        style={{
-                                            fontSize:
-                                                '17px',
-                                            fontWeight:
-                                                700,
-                                            color:
-                                                '#1d1d1f',
-                                        }}
-                                    >
-                                        Full Description
-                                    </h3>
-
-                                    <p
-                                        className="mb-0"
-                                        style={{
-                                            fontSize:
-                                                '12px',
-                                            color:
-                                                '#86868b',
-                                        }}
-                                    >
-                                        Complete information
-                                        provided for this
-                                        product.
-                                    </p>
-                                </div>
+                                <SectionHeader
+                                    title="Product Description"
+                                    description="Complete information provided for this listing."
+                                />
 
                                 <div
                                     style={{
@@ -1886,11 +1741,10 @@ export default function Show({
                                         className="mb-0"
                                         style={{
                                             color:
-                                                '#6e6e73',
-                                            fontSize:
-                                                '13px',
+                                                COLORS.secondary,
+                                            fontSize: 12,
                                             lineHeight:
-                                                1.8,
+                                                1.85,
                                             whiteSpace:
                                                 'pre-line',
                                         }}
@@ -1900,80 +1754,46 @@ export default function Show({
                                     </p>
                                 </div>
                             </div>
-
                         </div>
 
                         {/* REVIEWS */}
 
                         <div className="col-lg-5">
-
                             <div
-                                className="bg-white"
+                                className="bg-white h-100"
                                 style={{
-                                    borderRadius:
-                                        '18px',
+                                    borderRadius: 18,
                                     border:
-                                        '1px solid #e5e5ea',
+                                        `1px solid ${COLORS.border}`,
                                     overflow:
                                         'hidden',
                                 }}
                             >
-
-                                <div
-                                    className="d-flex align-items-center justify-content-between"
-                                    style={{
-                                        padding:
-                                            '20px 22px',
-                                        borderBottom:
-                                            '1px solid #e5e5ea',
-                                    }}
-                                >
-                                    <div>
-                                        <h3
-                                            className="mb-1"
-                                            style={{
-                                                fontSize:
-                                                    '17px',
-                                                fontWeight:
-                                                    700,
-                                                color:
-                                                    '#1d1d1f',
-                                            }}
-                                        >
-                                            Customer Reviews
-                                        </h3>
-
-                                        <div
-                                            style={{
-                                                fontSize:
-                                                    '12px',
-                                                color:
-                                                    '#86868b',
-                                            }}
-                                        >
-                                            {reviewsCount}{' '}
-                                            {reviewsCount ===
-                                            1
-                                                ? 'review'
-                                                : 'reviews'}
-                                        </div>
-                                    </div>
-
-                                    {reviews.length >
-                                        0 && (
-                                        <StarRating
-                                            rating={
-                                                averageRating
-                                            }
-                                            showValue
-                                        />
-                                    )}
-                                </div>
+                                <SectionHeader
+                                    title="Customer Reviews"
+                                    description={`${reviewsCount} ${
+                                        reviewsCount ===
+                                        1
+                                            ? 'review'
+                                            : 'reviews'
+                                    }`}
+                                    right={
+                                        reviews.length >
+                                        0 ? (
+                                            <StarRating
+                                                rating={
+                                                    averageRating
+                                                }
+                                                showValue
+                                            />
+                                        ) : null
+                                    }
+                                />
 
                                 <div
                                     style={{
                                         padding:
-                                            '0 22px',
+                                            '0 21px',
                                     }}
                                 >
                                     {reviews.length ===
@@ -1982,39 +1802,35 @@ export default function Show({
                                             className="text-center"
                                             style={{
                                                 padding:
-                                                    '55px 10px',
+                                                    '50px 10px',
                                             }}
                                         >
                                             <div
                                                 className="d-flex align-items-center justify-content-center mx-auto mb-3"
                                                 style={{
-                                                    width:
-                                                        '50px',
-                                                    height:
-                                                        '50px',
+                                                    width: 48,
+                                                    height: 48,
                                                     borderRadius:
-                                                        '15px',
+                                                        14,
                                                     background:
-                                                        '#f2f2f7',
+                                                        COLORS.soft,
                                                     color:
-                                                        '#86868b',
+                                                        COLORS.muted,
                                                 }}
                                             >
                                                 <Icon.Star
                                                     size={
-                                                        21
+                                                        20
                                                     }
                                                 />
                                             </div>
 
                                             <div
                                                 style={{
-                                                    fontSize:
-                                                        '14px',
-                                                    fontWeight:
-                                                        650,
                                                     color:
-                                                        '#1d1d1f',
+                                                        COLORS.text,
+                                                    fontSize: 13,
+                                                    fontWeight: 650,
                                                 }}
                                             >
                                                 No reviews yet
@@ -2022,16 +1838,15 @@ export default function Show({
 
                                             <div
                                                 style={{
-                                                    fontSize:
-                                                        '12px',
                                                     color:
-                                                        '#86868b',
-                                                    marginTop:
-                                                        '4px',
+                                                        COLORS.muted,
+                                                    fontSize: 11,
+                                                    marginTop: 4,
                                                 }}
                                             >
-                                                Customer feedback
-                                                will appear here.
+                                                Customer
+                                                feedback will
+                                                appear here.
                                             </div>
                                         </div>
                                     ) : (
@@ -2051,13 +1866,9 @@ export default function Show({
                                         )
                                     )}
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
 

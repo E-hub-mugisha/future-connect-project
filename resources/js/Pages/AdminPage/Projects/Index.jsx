@@ -1,311 +1,1320 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 
 function initials(name) {
     if (!name) return '—';
+
     return name
         .split(' ')
         .filter(Boolean)
         .slice(0, 2)
-        .map((w) => w[0]?.toUpperCase())
+        .map((word) => word[0]?.toUpperCase())
         .join('');
 }
 
 function formatBudget(project) {
-    if (project.budget_amount == null) return '—';
+    if (project?.budget_amount == null) return '—';
+
     const currency = project.budget_currency ?? '';
     const amount = Number(project.budget_amount).toLocaleString();
+
     return currency ? `${currency} ${amount}` : amount;
 }
 
+function truncate(text, length = 65) {
+    if (!text) return 'No description provided';
+
+    return text.length > length
+        ? `${text.slice(0, length)}…`
+        : text;
+}
+
+function formatDate(date) {
+    if (!date) return '—';
+
+    const parsed = new Date(date);
+
+    if (Number.isNaN(parsed.getTime())) return '—';
+
+    return parsed.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
+}
+
 function StatusBadge({ status }) {
-    const s = (status ?? '').toLowerCase();
-    const map = {
-        open: { cls: 'badge-success', label: 'Open' },
-        in_progress: { cls: 'badge-info', label: 'In Progress' },
-        completed: { cls: 'badge-muted', label: 'Completed' },
-        cancelled: { cls: 'badge-danger', label: 'Cancelled' },
-        closed: { cls: 'badge-danger', label: 'Closed' },
+    const value = (status ?? '').toLowerCase();
+
+    const statuses = {
+        open: {
+            label: 'Open',
+            className: 'pm-status-open',
+            dot: 'pm-dot-success',
+        },
+        in_progress: {
+            label: 'In Progress',
+            className: 'pm-status-progress',
+            dot: 'pm-dot-info',
+        },
+        completed: {
+            label: 'Completed',
+            className: 'pm-status-completed',
+            dot: 'pm-dot-success',
+        },
+        cancelled: {
+            label: 'Cancelled',
+            className: 'pm-status-danger',
+            dot: 'pm-dot-danger',
+        },
+        closed: {
+            label: 'Closed',
+            className: 'pm-status-danger',
+            dot: 'pm-dot-danger',
+        },
     };
-    const meta = map[s] ?? { cls: 'badge-muted', label: status ? status.charAt(0).toUpperCase() + status.slice(1) : '—' };
-    return <span className={`badge ${meta.cls}`}>{meta.label}</span>;
+
+    const meta = statuses[value] ?? {
+        label: status
+            ? status.charAt(0).toUpperCase() + status.slice(1)
+            : 'Unknown',
+        className: 'pm-status-neutral',
+        dot: 'pm-dot-neutral',
+    };
+
+    return (
+        <span className={`pm-status ${meta.className}`}>
+            <span className={`pm-status-dot ${meta.dot}`} />
+            {meta.label}
+        </span>
+    );
+}
+
+function VerificationBadge({ verified }) {
+    return verified ? (
+        <span className="pm-verification verified">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M20 6 9 17l-5-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                />
+            </svg>
+            Verified
+        </span>
+    ) : (
+        <span className="pm-verification pending">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                />
+                <path
+                    d="M12 8v4l2.5 2"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                />
+            </svg>
+            Pending
+        </span>
+    );
+}
+
+function Icon({ name, size = 17 }) {
+    const common = {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        fill: 'none',
+        stroke: 'currentColor',
+        strokeWidth: 1.8,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        'aria-hidden': true,
+    };
+
+    const icons = {
+        plus: (
+            <>
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+            </>
+        ),
+
+        folder: (
+            <>
+                <path d="M3.5 7.5A2.5 2.5 0 0 1 6 5h4l2 2h6a2.5 2.5 0 0 1 2.5 2.5v7A2.5 2.5 0 0 1 18 19H6a2.5 2.5 0 0 1-2.5-2.5v-9Z" />
+            </>
+        ),
+
+        check: (
+            <path d="m5 12 4 4L19 6" />
+        ),
+
+        clock: (
+            <>
+                <circle cx="12" cy="12" r="8.5" />
+                <path d="M12 7v5l3 2" />
+            </>
+        ),
+
+        users: (
+            <>
+                <path d="M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20" />
+                <circle cx="9.5" cy="7.5" r="3" />
+                <path d="M17 11a3 3 0 1 0 0-6" />
+                <path d="M21 20v-1.5a4 4 0 0 0-3-3.87" />
+            </>
+        ),
+
+        eye: (
+            <>
+                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+                <circle cx="12" cy="12" r="2.5" />
+            </>
+        ),
+
+        edit: (
+            <>
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4L16.5 3.5Z" />
+            </>
+        ),
+
+        trash: (
+            <>
+                <path d="M4 7h16" />
+                <path d="M10 11v5M14 11v5" />
+                <path d="M6 7l1 13h10l1-13" />
+                <path d="M9 7V4h6v3" />
+            </>
+        ),
+
+        verify: (
+            <>
+                <path d="M12 3 19 6v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" />
+                <path d="m9 12 2 2 4-4" />
+            </>
+        ),
+
+        calendar: (
+            <>
+                <rect x="3.5" y="5" width="17" height="15" rx="2" />
+                <path d="M7 3v4M17 3v4M3.5 9h17" />
+            </>
+        ),
+
+        location: (
+            <>
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+            </>
+        ),
+
+        chevronRight: (
+            <path d="m9 18 6-6-6-6" />
+        ),
+
+        search: (
+            <>
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m16 16 4.5 4.5" />
+            </>
+        ),
+    };
+
+    return (
+        <svg {...common}>
+            {icons[name]}
+        </svg>
+    );
 }
 
 export default function Index({ projects }) {
     const tableRef = useRef(null);
-    const projectList = Array.isArray(projects) ? projects : (projects?.data ?? []);
-    const [openMenuId, setOpenMenuId] = useState(null);
+
+    const projectList = Array.isArray(projects)
+        ? projects
+        : (projects?.data ?? []);
 
     useEffect(() => {
         let instance;
-        if (window.$ && window.$.fn && window.$.fn.DataTable && tableRef.current) {
+
+        if (
+            window.$ &&
+            window.$.fn &&
+            window.$.fn.DataTable &&
+            tableRef.current
+        ) {
             instance = window.$(tableRef.current).DataTable({
                 destroy: true,
                 autoWidth: false,
+                responsive: false,
+                pageLength: 10,
+                searching: false,
+                lengthChange: false,
+                info: false,
             });
         }
+
         return () => {
             instance?.destroy();
         };
     }, [projectList]);
 
-    useEffect(() => {
-        function onDocClick() {
-            setOpenMenuId(null);
-        }
-        document.addEventListener('click', onDocClick);
-        return () => document.removeEventListener('click', onDocClick);
-    }, []);
+    const stats = useMemo(() => {
+        const total = projects?.total ?? projectList.length;
+
+        const verified = projectList.filter(
+            (project) => Boolean(project.verified)
+        ).length;
+
+        const pending = projectList.filter(
+            (project) => !project.verified
+        ).length;
+
+        const active = projectList.filter((project) =>
+            ['open', 'in_progress'].includes(
+                (project.status ?? '').toLowerCase()
+            )
+        ).length;
+
+        return {
+            total,
+            verified,
+            pending,
+            active,
+        };
+    }, [projects, projectList]);
 
     function handleVerify(project) {
-        router.post(route('admin.projects.verify', project.id));
+        router.post(
+            route('admin.projects.verify', project.id),
+            {},
+            {
+                preserveScroll: true,
+            }
+        );
     }
 
     function handleDelete(project) {
-        if (confirm('Delete this project?')) {
-            router.delete(route('admin.projects.destroy', project.id));
-        }
-    }
+        if (!confirm(`Delete "${project.title}"?`)) return;
 
-    const stats = {
-        total: projects?.total ?? projectList.length,
-        verified: projectList.filter((p) => p.verified).length,
-        pending: projectList.filter((p) => !p.verified).length,
-    };
+        router.delete(
+            route('admin.projects.destroy', project.id),
+            {
+                preserveScroll: true,
+            }
+        );
+    }
 
     return (
         <AppLayout>
             <Head title="Manage Projects" />
 
-            <link
-                href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-                rel="stylesheet"
-            />
-
             <style>{`
-                :root {
-                    --bg-deep:    #f6faf8;
-                    --bg-card:    #F5f5f7;
-                    --bg-glass:   rgba(0,100,60,0.035);
-                    --bg-glass2:  rgba(0,166,103,0.08);
-                    --accent:     #00a667;
-                    --accent-dim: #00854f;
-                    --accent-glow:rgba(0,166,103,0.2);
-                    --text-primary:   #10201b;
-                    --text-secondary: #4c6b62;
-                    --text-muted:     #7f958d;
-                    --border:     rgba(0,100,60,0.1);
-                    --border-accent: rgba(0,166,103,0.3);
-                    --radius-lg:  16px;
-                    --radius-pill:50px;
-                    --font-head:  'Syne', sans-serif;
-                    --font-body:  'DM Sans', sans-serif;
-                    --warn:       #b3820f;
-                    --danger:     #c94a3f;
-                    --info:       #2f7dbd;
+                .talent-projects-page,
+                .talent-projects-page * {
+                    box-sizing: border-box;
                 }
 
-                .fc-proj-page, .fc-proj-page * { box-sizing: border-box; }
-                .fc-proj-page { background: var(--bg-deep); color: var(--text-primary); font-family: var(--font-body); padding: 32px; min-height: 100%; }
-                @media(max-width: 768px) { .fc-proj-page { padding: 20px 16px; } }
+                .talent-projects-page {
+                    --pm-bg: #f7f8fa;
+                    --pm-card: #ffffff;
+                    --pm-text: #1d1d1f;
+                    --pm-secondary: #6e6e73;
+                    --pm-muted: #8e8e93;
+                    --pm-border: #e5e5ea;
+                    --pm-primary: #1677ff;
+                    --pm-primary-dark: #0d63d8;
+                    --pm-green: #16845b;
+                    --pm-red: #d9485f;
+                    --pm-orange: #b7791f;
+                    --pm-blue: #3178c6;
 
-                .proj-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
-                .proj-header h2 { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; margin: 0 0 4px; }
-                .proj-header p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+                    min-height: 100%;
+                    padding: 28px;
+                    background: var(--pm-bg);
+                    color: var(--pm-text);
 
-                .btn-pill { display: inline-flex; align-items: center; gap: 8px; border-radius: var(--radius-pill); padding: 11px 22px; font-family: var(--font-head); font-size: 0.85rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s, box-shadow 0.2s, color 0.2s, border-color 0.2s; white-space: nowrap; border: none; }
-                .btn-pill.primary { background: var(--accent); color: #fff; box-shadow: 0 4px 18px var(--accent-glow); }
-                .btn-pill.primary:hover { background: var(--accent-dim); transform: translateY(-1px); }
+                    font-family:
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "SF Pro Text",
+                        "SF Pro Display",
+                        "Helvetica Neue",
+                        Arial,
+                        sans-serif;
 
-                .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-                @media(max-width: 900px) { .stat-row { grid-template-columns: repeat(2, 1fr); } }
-                .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-                .stat-icon { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-glass2); color: var(--accent); font-size: 1.1rem; }
-                .stat-card.pending .stat-icon { background: rgba(232,185,74,0.12); color: var(--warn); }
-                .stat-meta p { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0 0 4px; }
-                .stat-meta h4 { font-family: var(--font-head); font-size: 1.25rem; font-weight: 800; margin: 0; }
+                    -webkit-font-smoothing: antialiased;
+                }
 
-                .table-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: visible; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+                .pm-container {
+                    width: 100%;
+                    max-width: 1500px;
+                    margin: 0 auto;
+                }
 
-                .fc-proj-page table.proj-table { width: 100% !important; border-collapse: collapse; margin: 0 !important; }
-                .fc-proj-page table.proj-table thead th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; padding: 14px 22px; border-bottom: 1px solid var(--border); white-space: nowrap; background: transparent !important; }
-                .fc-proj-page table.proj-table tbody tr td { background-color: var(--bg-card) !important; padding: 16px 22px; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: var(--text-secondary); vertical-align: middle; }
-                .fc-proj-page table.proj-table tbody tr:last-child td { border-bottom: none; }
-                .fc-proj-page table.proj-table tbody tr:hover td { background-color: var(--bg-glass) !important; }
+                /* Header */
 
-                .cell-title h6 { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin: 0 0 3px; }
-                .cell-title p { font-size: 0.78rem; color: var(--text-muted); margin: 0; max-width: 260px; }
+                .pm-header {
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    gap: 24px;
+                    margin-bottom: 24px;
+                }
 
-                .cell-person { display: flex; align-items: center; gap: 12px; }
-                .cell-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; background: var(--bg-glass2); border: 1px solid var(--border-accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 700; font-size: 0.74rem; }
-                .cell-person h6 { font-size: 0.83rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px; }
-                .cell-person p { font-size: 0.74rem; color: var(--text-muted); margin: 0; }
+                .pm-heading {
+                    min-width: 0;
+                }
 
-                .cell-meta h6 { font-size: 0.83rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px; }
-                .cell-meta p { font-size: 0.74rem; color: var(--text-muted); margin: 0; }
+                .pm-eyebrow {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 7px;
+                    color: var(--pm-primary);
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: .08em;
+                    text-transform: uppercase;
+                    margin-bottom: 7px;
+                }
 
-                .badge { display: inline-flex; align-items: center; gap: 5px; border-radius: var(--radius-pill); padding: 4px 12px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
-                .badge-success { background: rgba(0,166,103,0.12); color: var(--accent); }
-                .badge-info { background: rgba(47,125,189,0.12); color: var(--info); }
-                .badge-warn { background: rgba(179,130,15,0.12); color: var(--warn); }
-                .badge-danger { background: rgba(201,74,63,0.12); color: var(--danger); }
-                .badge-muted { background: rgba(127,149,141,0.14); color: var(--text-muted); }
+                .pm-eyebrow-line {
+                    width: 20px;
+                    height: 1px;
+                    background: currentColor;
+                }
 
-                .action-menu-wrap { position: relative; display: inline-block; }
-                .btn-actions { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); border-radius: var(--radius-pill); padding: 7px 16px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s; }
-                .btn-actions:hover { border-color: var(--border-accent); color: var(--accent); background: var(--bg-glass2); }
-                .action-menu { position: absolute; right: 0; top: calc(100% + 6px); background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,0.12); min-width: 150px; padding: 6px; z-index: 20; }
-                .action-menu button, .action-menu a { display: flex; align-items: center; gap: 8px; width: 100%; background: transparent; border: none; text-align: left; padding: 9px 10px; border-radius: 8px; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: background 0.15s, color 0.15s; }
-                .action-menu button:hover, .action-menu a:hover { background: var(--bg-glass2); color: var(--accent); }
-                .action-menu button.danger:hover { background: rgba(201,74,63,0.1); color: var(--danger); }
+                .pm-title {
+                    margin: 0;
+                    font-size: 25px;
+                    line-height: 1.2;
+                    letter-spacing: -.035em;
+                    font-weight: 700;
+                }
 
-                .table-footer { padding: 18px 22px; display: flex; justify-content: flex-end; border-top: 1px solid var(--border); }
-                .pagination-nav { display: flex; gap: 6px; flex-wrap: wrap; }
-                .page-link { min-width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: border-color 0.2s, color 0.2s, background 0.2s; }
-                .page-link:hover { border-color: var(--border-accent); color: var(--accent); }
-                .page-link.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-                .page-link.disabled { opacity: 0.35; pointer-events: none; }
+                .pm-subtitle {
+                    margin: 7px 0 0;
+                    color: var(--pm-secondary);
+                    font-size: 13px;
+                    line-height: 1.5;
+                }
 
-                @media(max-width: 768px) {
-                    .proj-table-wrap { overflow-x: auto; }
-                    .fc-proj-page table.proj-table { white-space: nowrap; }
+                .pm-add-button {
+                    flex-shrink: 0;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    height: 40px;
+                    padding: 0 17px;
+                    border: 0;
+                    border-radius: 9px;
+                    background: var(--pm-primary);
+                    color: #fff;
+                    text-decoration: none;
+                    font-size: 13px;
+                    font-weight: 600;
+                    box-shadow: 0 3px 10px rgba(22,119,255,.18);
+                    transition:
+                        background .18s ease,
+                        transform .18s ease,
+                        box-shadow .18s ease;
+                }
+
+                .pm-add-button:hover {
+                    background: var(--pm-primary-dark);
+                    color: #fff;
+                    transform: translateY(-1px);
+                    box-shadow: 0 5px 15px rgba(22,119,255,.22);
+                }
+
+                /* Stats */
+
+                .pm-stat-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                    gap: 13px;
+                    margin-bottom: 20px;
+                }
+
+                .pm-stat {
+                    min-width: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 13px;
+                    padding: 16px;
+                    background: var(--pm-card);
+                    border: 1px solid var(--pm-border);
+                    border-radius: 12px;
+                }
+
+                .pm-stat-icon {
+                    width: 39px;
+                    height: 39px;
+                    flex: 0 0 39px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px;
+                    background: #eef5ff;
+                    color: var(--pm-primary);
+                }
+
+                .pm-stat:nth-child(2) .pm-stat-icon {
+                    background: #eef9f4;
+                    color: var(--pm-green);
+                }
+
+                .pm-stat:nth-child(3) .pm-stat-icon {
+                    background: #fff7e8;
+                    color: var(--pm-orange);
+                }
+
+                .pm-stat:nth-child(4) .pm-stat-icon {
+                    background: #f0f5ff;
+                    color: var(--pm-blue);
+                }
+
+                .pm-stat-label {
+                    margin: 0 0 2px;
+                    color: var(--pm-muted);
+                    font-size: 11px;
+                    font-weight: 500;
+                }
+
+                .pm-stat-value {
+                    margin: 0;
+                    color: var(--pm-text);
+                    font-size: 20px;
+                    line-height: 1.15;
+                    letter-spacing: -.025em;
+                    font-weight: 700;
+                }
+
+                /* Table card */
+
+                .pm-table-card {
+                    background: var(--pm-card);
+                    border: 1px solid var(--pm-border);
+                    border-radius: 14px;
+                    overflow: hidden;
+                    box-shadow:
+                        0 1px 2px rgba(0,0,0,.025),
+                        0 5px 18px rgba(0,0,0,.025);
+                }
+
+                .pm-table-toolbar {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 15px;
+                    padding: 15px 18px;
+                    border-bottom: 1px solid var(--pm-border);
+                }
+
+                .pm-toolbar-title {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin: 0;
+                    font-size: 13px;
+                    font-weight: 600;
+                }
+
+                .pm-toolbar-count {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 24px;
+                    height: 21px;
+                    padding: 0 7px;
+                    border-radius: 20px;
+                    background: #f2f2f7;
+                    color: var(--pm-secondary);
+                    font-size: 11px;
+                    font-weight: 600;
+                }
+
+                .pm-table-scroll {
+                    width: 100%;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+
+                .talent-projects-page table.pm-table {
+                    width: 100% !important;
+                    min-width: 900px;
+                    margin: 0 !important;
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                }
+
+                .talent-projects-page table.pm-table thead th {
+                    height: 42px;
+                    padding: 0 18px;
+                    background: #fafafa !important;
+                    border-bottom: 1px solid var(--pm-border);
+                    color: #86868b;
+                    text-align: left;
+                    white-space: nowrap;
+                    font-size: 10px;
+                    line-height: 1;
+                    font-weight: 600;
+                    letter-spacing: .055em;
+                    text-transform: uppercase;
+                }
+
+                .talent-projects-page table.pm-table tbody td {
+                    padding: 15px 18px;
+                    background: #fff !important;
+                    border-bottom: 1px solid #f0f0f2;
+                    color: var(--pm-secondary);
+                    font-size: 12.5px;
+                    vertical-align: middle;
+                }
+
+                .talent-projects-page table.pm-table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
+
+                .talent-projects-page table.pm-table tbody tr:hover td {
+                    background: #fbfcfe !important;
+                }
+
+                /* Project */
+
+                .pm-project {
+                    min-width: 210px;
+                    max-width: 320px;
+                }
+
+                .pm-project-title {
+                    margin: 0 0 4px;
+                    color: var(--pm-text);
+                    font-size: 13px;
+                    font-weight: 600;
+                    line-height: 1.35;
+                }
+
+                .pm-project-description {
+                    max-width: 300px;
+                    margin: 0;
+                    overflow: hidden;
+                    color: var(--pm-muted);
+                    font-size: 11.5px;
+                    line-height: 1.45;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                }
+
+                /* Person */
+
+                .pm-person {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    min-width: 170px;
+                }
+
+                .pm-avatar {
+                    width: 34px;
+                    height: 34px;
+                    flex: 0 0 34px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    background: #eef5ff;
+                    color: var(--pm-primary);
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: -.01em;
+                }
+
+                .pm-person-name {
+                    margin: 0 0 2px;
+                    color: var(--pm-text);
+                    font-size: 12px;
+                    font-weight: 600;
+                }
+
+                .pm-person-email {
+                    max-width: 150px;
+                    margin: 0;
+                    overflow: hidden;
+                    color: var(--pm-muted);
+                    font-size: 10.5px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                /* Meta */
+
+                .pm-meta-title {
+                    margin: 0 0 3px;
+                    color: var(--pm-text);
+                    font-size: 12px;
+                    font-weight: 600;
+                }
+
+                .pm-meta-sub {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin: 0;
+                    color: var(--pm-muted);
+                    font-size: 10.5px;
+                }
+
+                .pm-budget {
+                    color: var(--pm-text);
+                    font-size: 12px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                }
+
+                /* Status */
+
+                .pm-status {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    min-height: 25px;
+                    padding: 0 9px;
+                    border-radius: 20px;
+                    font-size: 10.5px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                }
+
+                .pm-status-dot {
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: currentColor;
+                }
+
+                .pm-dot-success { color: #16845b; }
+                .pm-dot-info { color: #3178c6; }
+                .pm-dot-danger { color: #d9485f; }
+                .pm-dot-neutral { color: #8e8e93; }
+
+                .pm-status-open,
+                .pm-status-completed {
+                    background: #edf8f3;
+                    color: #16845b;
+                }
+
+                .pm-status-progress {
+                    background: #eef5ff;
+                    color: #3178c6;
+                }
+
+                .pm-status-danger {
+                    background: #fff0f2;
+                    color: #d9485f;
+                }
+
+                .pm-status-neutral {
+                    background: #f2f2f7;
+                    color: #6e6e73;
+                }
+
+                /* Verification */
+
+                .pm-verification {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 5px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    white-space: nowrap;
+                }
+
+                .pm-verification svg {
+                    width: 14px;
+                    height: 14px;
+                }
+
+                .pm-verification.verified {
+                    color: var(--pm-green);
+                }
+
+                .pm-verification.pending {
+                    color: var(--pm-orange);
+                }
+
+                /* Inline actions */
+
+                .pm-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    white-space: nowrap;
+                }
+
+                .pm-action {
+                    width: 31px;
+                    height: 31px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0;
+                    border: 1px solid transparent;
+                    border-radius: 8px;
+                    background: transparent;
+                    color: #6e6e73;
+                    cursor: pointer;
+                    text-decoration: none;
+                    transition:
+                        background .15s ease,
+                        border-color .15s ease,
+                        color .15s ease;
+                }
+
+                .pm-action:hover {
+                    background: #f2f5f9;
+                    border-color: #e2e7ee;
+                    color: var(--pm-primary);
+                }
+
+                .pm-action.verify:hover {
+                    background: #edf8f3;
+                    border-color: #d7eee3;
+                    color: var(--pm-green);
+                }
+
+                .pm-action.delete:hover {
+                    background: #fff0f2;
+                    border-color: #f7d9de;
+                    color: var(--pm-red);
+                }
+
+                .pm-action[title] {
+                    position: relative;
+                }
+
+                /* Empty state */
+
+                .pm-empty {
+                    padding: 65px 25px;
+                    text-align: center;
+                }
+
+                .pm-empty-icon {
+                    width: 48px;
+                    height: 48px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 13px;
+                    border-radius: 13px;
+                    background: #eef5ff;
+                    color: var(--pm-primary);
+                }
+
+                .pm-empty-title {
+                    margin: 0 0 5px;
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+
+                .pm-empty-text {
+                    margin: 0;
+                    color: var(--pm-muted);
+                    font-size: 12px;
+                }
+
+                /* Pagination */
+
+                .pm-pagination {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 5px;
+                    padding: 14px 18px;
+                    border-top: 1px solid var(--pm-border);
+                    flex-wrap: wrap;
+                }
+
+                .pm-page-link {
+                    min-width: 32px;
+                    height: 32px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 9px;
+                    border: 1px solid var(--pm-border);
+                    border-radius: 7px;
+                    background: #fff;
+                    color: var(--pm-secondary);
+                    font-size: 11px;
+                    font-weight: 600;
+                    text-decoration: none;
+                    transition: all .15s ease;
+                }
+
+                .pm-page-link:hover {
+                    border-color: #c9d9ef;
+                    background: #f7faff;
+                    color: var(--pm-primary);
+                }
+
+                .pm-page-link.active {
+                    border-color: var(--pm-primary);
+                    background: var(--pm-primary);
+                    color: #fff;
+                }
+
+                .pm-page-link.disabled {
+                    opacity: .35;
+                    pointer-events: none;
+                }
+
+                /* Tablet */
+
+                @media (max-width: 1100px) {
+                    .pm-stat-grid {
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
+                    }
+
+                    .pm-header {
+                        align-items: flex-start;
+                    }
+                }
+
+                /* Mobile */
+
+                @media (max-width: 700px) {
+                    .talent-projects-page {
+                        padding: 20px 14px;
+                    }
+
+                    .pm-header {
+                        display: block;
+                        margin-bottom: 20px;
+                    }
+
+                    .pm-add-button {
+                        width: 100%;
+                        margin-top: 15px;
+                    }
+
+                    .pm-title {
+                        font-size: 22px;
+                    }
+
+                    .pm-subtitle {
+                        font-size: 12px;
+                    }
+
+                    .pm-stat-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 9px;
+                    }
+
+                    .pm-stat {
+                        padding: 13px;
+                        gap: 9px;
+                    }
+
+                    .pm-stat-icon {
+                        width: 34px;
+                        height: 34px;
+                        flex-basis: 34px;
+                    }
+
+                    .pm-stat-label {
+                        font-size: 9px;
+                    }
+
+                    .pm-stat-value {
+                        font-size: 17px;
+                    }
+
+                    .pm-table-toolbar {
+                        padding: 13px 14px;
+                    }
+
+                    .pm-pagination {
+                        justify-content: center;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .pm-stat-grid {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .pm-stat {
+                        min-height: 62px;
+                    }
+
+                    .pm-table-card {
+                        border-radius: 11px;
+                    }
                 }
             `}</style>
 
-            <div className="fc-proj-page">
-                <div className="proj-header">
-                    <div>
-                        <h2>Manage Projects</h2>
-                        <p>Review submitted projects, verify listings, and manage their status.</p>
-                    </div>
-                    <Link href={route('admin.projects.create')} className="btn-pill primary">
-                        <i className="bi bi-plus-circle"></i> Add Project
-                    </Link>
-                </div>
+            <div className="talent-projects-page">
+                <div className="pm-container">
 
-                <div className="stat-row">
-                    <div className="stat-card">
-                        <div className="stat-icon"><i className="bi bi-kanban"></i></div>
-                        <div className="stat-meta"><p>Total Projects</p><h4>{stats.total}</h4></div>
-                    </div>
-                    <div className="stat-card">
-                        <div className="stat-icon"><i className="bi bi-patch-check"></i></div>
-                        <div className="stat-meta"><p>Verified</p><h4>{stats.verified}</h4></div>
-                    </div>
-                    <div className="stat-card pending">
-                        <div className="stat-icon"><i className="bi bi-hourglass-split"></i></div>
-                        <div className="stat-meta"><p>Pending Verification</p><h4>{stats.pending}</h4></div>
-                    </div>
-                </div>
+                    {/* Header */}
+                    <div className="pm-header">
+                        <div className="pm-heading">
+                            <div className="pm-eyebrow">
+                                <span className="pm-eyebrow-line" />
+                                Talent Platform
+                            </div>
 
-                <div className="table-card">
-                    <div className="proj-table-wrap">
-                        <table className="datatable-init nowrap proj-table" ref={tableRef}>
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Owner</th>
-                                    <th>Category</th>
-                                    <th>Budget</th>
-                                    <th>Status</th>
-                                    <th>Verified</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {projectList.map((project) => (
-                                    <tr key={project.id}>
-                                        <td>
-                                            <div className="cell-title">
-                                                <h6>{project.title}</h6>
-                                                <p>
-                                                    {project.description
-                                                        ? (project.description.length > 40
-                                                            ? `${project.description.slice(0, 40)}…`
-                                                            : project.description)
-                                                        : ''}
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="cell-person">
-                                                <div className="cell-avatar">{initials(project.user?.name)}</div>
-                                                <div>
-                                                    <h6>{project.user?.name ?? '—'}</h6>
-                                                    <p>{project.user?.email ?? ''}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="cell-meta">
-                                                <h6>{project.category ?? '—'}</h6>
-                                                <p>{project.location ?? 'Remote'}</p>
-                                            </div>
-                                        </td>
-                                        <td>{formatBudget(project)}</td>
-                                        <td><StatusBadge status={project.status} /></td>
-                                        <td>
-                                            {project.verified ? (
-                                                <span className="badge badge-success">Yes</span>
-                                            ) : (
-                                                <span className="badge badge-warn">No</span>
-                                            )}
-                                        </td>
-                                        <td>
-                                            <div className="action-menu-wrap" onClick={(e) => e.stopPropagation()}>
-                                                <button
-                                                    className="btn-actions"
-                                                    onClick={() => setOpenMenuId(openMenuId === project.id ? null : project.id)}
-                                                >
-                                                    Actions <i className="bi bi-chevron-down"></i>
-                                                </button>
-                                                {openMenuId === project.id && (
-                                                    <div className="action-menu">
-                                                        <Link href={route('admin.projects.show', project.id)}>
-                                                            <i className="bi bi-eye"></i> View
-                                                        </Link>
-                                                        <Link href={route('admin.projects.edit', project.id)}>
-                                                            <i className="bi bi-pencil"></i> Edit
-                                                        </Link>
-                                                        {!project.verified && (
-                                                            <button type="button" onClick={() => handleVerify(project)}>
-                                                                <i className="bi bi-patch-check"></i> Verify
-                                                            </button>
-                                                        )}
-                                                        <button type="button" className="danger" onClick={() => handleDelete(project)}>
-                                                            <i className="bi bi-trash"></i> Delete
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                            <h1 className="pm-title">
+                                Project Management
+                            </h1>
+
+                            <p className="pm-subtitle">
+                                Review, verify and manage projects submitted by
+                                clients and talent.
+                            </p>
+                        </div>
+
+                        <Link
+                            href={route('admin.projects.create')}
+                            className="pm-add-button"
+                        >
+                            <Icon name="plus" size={16} />
+                            Add Project
+                        </Link>
                     </div>
 
-                    {projects?.links && projects.links.length > 3 && (
-                        <div className="table-footer">
-                            <div className="pagination-nav">
-                                {projects.links.map((link, i) => (
-                                    link.url ? (
-                                        <Link
-                                            key={i}
-                                            href={link.url}
-                                            preserveState
-                                            className={`page-link ${link.active ? 'active' : ''}`}
-                                        >
-                                            <span dangerouslySetInnerHTML={{ __html: link.label }} />
-                                        </Link>
-                                    ) : (
-                                        <span key={i} className="page-link disabled" dangerouslySetInnerHTML={{ __html: link.label }} />
-                                    )
-                                ))}
+                    {/* Statistics */}
+                    <div className="pm-stat-grid">
+
+                        <div className="pm-stat">
+                            <div className="pm-stat-icon">
+                                <Icon name="folder" size={18} />
+                            </div>
+
+                            <div>
+                                <p className="pm-stat-label">
+                                    Total Projects
+                                </p>
+
+                                <h3 className="pm-stat-value">
+                                    {stats.total}
+                                </h3>
                             </div>
                         </div>
-                    )}
+
+                        <div className="pm-stat">
+                            <div className="pm-stat-icon">
+                                <Icon name="check" size={18} />
+                            </div>
+
+                            <div>
+                                <p className="pm-stat-label">
+                                    Verified
+                                </p>
+
+                                <h3 className="pm-stat-value">
+                                    {stats.verified}
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div className="pm-stat">
+                            <div className="pm-stat-icon">
+                                <Icon name="clock" size={18} />
+                            </div>
+
+                            <div>
+                                <p className="pm-stat-label">
+                                    Pending Review
+                                </p>
+
+                                <h3 className="pm-stat-value">
+                                    {stats.pending}
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div className="pm-stat">
+                            <div className="pm-stat-icon">
+                                <Icon name="users" size={18} />
+                            </div>
+
+                            <div>
+                                <p className="pm-stat-label">
+                                    Active Projects
+                                </p>
+
+                                <h3 className="pm-stat-value">
+                                    {stats.active}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Projects */}
+                    <div className="pm-table-card">
+
+                        <div className="pm-table-toolbar">
+                            <h2 className="pm-toolbar-title">
+                                Projects
+                                <span className="pm-toolbar-count">
+                                    {stats.total}
+                                </span>
+                            </h2>
+                        </div>
+
+                        {projectList.length === 0 ? (
+                            <div className="pm-empty">
+                                <div className="pm-empty-icon">
+                                    <Icon name="folder" size={21} />
+                                </div>
+
+                                <h3 className="pm-empty-title">
+                                    No projects found
+                                </h3>
+
+                                <p className="pm-empty-text">
+                                    Projects submitted to the platform will
+                                    appear here.
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="pm-table-scroll">
+                                    <table
+                                        className="pm-table"
+                                        ref={tableRef}
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th>Project</th>
+                                                <th>Owner</th>
+                                                <th>Category</th>
+                                                <th>Budget</th>
+                                                <th>Status</th>
+                                                <th>Verification</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {projectList.map((project) => (
+                                                <tr key={project.id}>
+
+                                                    {/* Project */}
+                                                    <td>
+                                                        <div className="pm-project">
+                                                            <h3 className="pm-project-title">
+                                                                {project.title}
+                                                            </h3>
+
+                                                            <p className="pm-project-description">
+                                                                {truncate(
+                                                                    project.description
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+
+                                                    {/* Owner */}
+                                                    <td>
+                                                        <div className="pm-person">
+                                                            <div className="pm-avatar">
+                                                                {initials(
+                                                                    project.user?.name
+                                                                )}
+                                                            </div>
+
+                                                            <div>
+                                                                <p className="pm-person-name">
+                                                                    {project.user?.name ?? 'Unknown'}
+                                                                </p>
+
+                                                                <p className="pm-person-email">
+                                                                    {project.user?.email ?? 'No email'}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    {/* Category */}
+                                                    <td>
+                                                        <div>
+                                                            <p className="pm-meta-title">
+                                                                {project.category?.name ?? '—'}
+                                                            </p>
+
+                                                            <p className="pm-meta-sub">
+                                                                <Icon
+                                                                    name="location"
+                                                                    size={11}
+                                                                />
+
+                                                                {project.location ?? 'Remote'}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+
+                                                    {/* Budget */}
+                                                    <td>
+                                                        <span className="pm-budget">
+                                                            {formatBudget(project)}
+                                                        </span>
+                                                    </td>
+
+                                                    {/* Status */}
+                                                    <td>
+                                                        <StatusBadge
+                                                            status={project.status}
+                                                        />
+                                                    </td>
+
+                                                    {/* Verification */}
+                                                    <td>
+                                                        <VerificationBadge
+                                                            verified={
+                                                                project.verified
+                                                            }
+                                                        />
+                                                    </td>
+
+                                                    {/* Actions */}
+                                                    <td>
+                                                        <div className="pm-actions">
+
+                                                            {/* View */}
+                                                            <Link
+                                                                href={route(
+                                                                    'admin.projects.show',
+                                                                    project.id
+                                                                )}
+                                                                className="pm-action"
+                                                                title="View project"
+                                                                aria-label="View project"
+                                                            >
+                                                                <Icon
+                                                                    name="eye"
+                                                                    size={15}
+                                                                />
+                                                            </Link>
+
+                                                            {/* Edit */}
+                                                            <Link
+                                                                href={route(
+                                                                    'admin.projects.edit',
+                                                                    project.id
+                                                                )}
+                                                                className="pm-action"
+                                                                title="Edit project"
+                                                                aria-label="Edit project"
+                                                            >
+                                                                <Icon
+                                                                    name="edit"
+                                                                    size={15}
+                                                                />
+                                                            </Link>
+
+                                                            {/* Verify */}
+                                                            {!project.verified && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="pm-action verify"
+                                                                    title="Verify project"
+                                                                    aria-label="Verify project"
+                                                                    onClick={() =>
+                                                                        handleVerify(
+                                                                            project
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <Icon
+                                                                        name="verify"
+                                                                        size={15}
+                                                                    />
+                                                                </button>
+                                                            )}
+
+                                                            {/* Delete */}
+                                                            <button
+                                                                type="button"
+                                                                className="pm-action delete"
+                                                                title="Delete project"
+                                                                aria-label="Delete project"
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        project
+                                                                    )
+                                                                }
+                                                            >
+                                                                <Icon
+                                                                    name="trash"
+                                                                    size={15}
+                                                                />
+                                                            </button>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Pagination */}
+                                {projects?.links &&
+                                    projects.links.length > 3 && (
+                                        <div className="pm-pagination">
+                                            {projects.links.map(
+                                                (link, index) =>
+                                                    link.url ? (
+                                                        <Link
+                                                            key={index}
+                                                            href={link.url}
+                                                            preserveState
+                                                            className={`pm-page-link ${
+                                                                link.active
+                                                                    ? 'active'
+                                                                    : ''
+                                                            }`}
+                                                        >
+                                                            <span
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: link.label,
+                                                                }}
+                                                            />
+                                                        </Link>
+                                                    ) : (
+                                                        <span
+                                                            key={index}
+                                                            className="pm-page-link disabled"
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: link.label,
+                                                            }}
+                                                        />
+                                                    )
+                                            )}
+                                        </div>
+                                    )}
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
         </AppLayout>

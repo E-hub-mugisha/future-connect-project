@@ -35,44 +35,24 @@ function Icon({
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
             </>
         ),
-
-        wallet: (
-            <>
-                <path d="M20 7V5a2 2 0 0 0-2-2H5a3 3 0 0 0 0 6h15v10a2 2 0 0 1-2 2H5a3 3 0 0 1-3-3V6" />
-                <path d="M16 15h.01" />
-            </>
-        ),
-
         plus: (
             <>
                 <path d="M12 5v14" />
                 <path d="M5 12h14" />
             </>
         ),
-
-        file: (
-            <>
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
-                <path d="M14 2v6h6" />
-                <path d="M8 13h8" />
-                <path d="M8 17h6" />
-            </>
-        ),
-
         checkCircle: (
             <>
                 <circle cx="12" cy="12" r="9" />
                 <path d="m8 12 2.5 2.5L16 9" />
             </>
         ),
-
         clock: (
             <>
                 <circle cx="12" cy="12" r="9" />
                 <path d="M12 7v5l3 2" />
             </>
         ),
-
         xCircle: (
             <>
                 <circle cx="12" cy="12" r="9" />
@@ -80,44 +60,30 @@ function Icon({
                 <path d="m15 9-6 6" />
             </>
         ),
-
-        grid: (
-            <>
-                <rect x="4" y="4" width="6" height="6" rx="1" />
-                <rect x="14" y="4" width="6" height="6" rx="1" />
-                <rect x="4" y="14" width="6" height="6" rx="1" />
-                <rect x="14" y="14" width="6" height="6" rx="1" />
-            </>
-        ),
-
         search: (
             <>
                 <circle cx="11" cy="11" r="6.5" />
                 <path d="m16 16 4 4" />
             </>
         ),
-
         tag: (
             <>
                 <path d="M20.5 13.5 13.5 20.5a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 11.9V5a2 2 0 0 1 2-2h6.9a2 2 0 0 1 1.4.6l7.2 7.1a2 2 0 0 1 0 2.8Z" />
                 <circle cx="7.5" cy="7.5" r="1" />
             </>
         ),
-
         eye: (
             <>
                 <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
                 <circle cx="12" cy="12" r="2.5" />
             </>
         ),
-
         edit: (
             <>
                 <path d="M12 20h9" />
                 <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z" />
             </>
         ),
-
         trash: (
             <>
                 <path d="M4 7h16" />
@@ -127,52 +93,17 @@ function Icon({
                 <path d="M9 7V4h6v3" />
             </>
         ),
-
         close: (
             <>
                 <path d="m6 6 12 12" />
                 <path d="m18 6-12 12" />
             </>
         ),
-
-        chevronDown: (
-            <>
-                <path d="m6 9 6 6 6-6" />
-            </>
-        ),
-
-        chevronLeft: (
-            <>
-                <path d="m15 18-6-6 6-6" />
-            </>
-        ),
-
-        chevronRight: (
-            <>
-                <path d="m9 18 6-6-6-6" />
-            </>
-        ),
-
-        alert: (
-            <>
-                <path d="M10.3 3.3 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0Z" />
-                <path d="M12 9v4" />
-                <path d="M12 17h.01" />
-            </>
-        ),
-
-        layers: (
-            <>
-                <path d="m12 3-9 5 9 5 9-5-9-5Z" />
-                <path d="m3 12 9 5 9-5" />
-                <path d="m3 16 9 5 9-5" />
-            </>
-        ),
     };
 
     return (
         <svg {...commonProps}>
-            {icons[name] || icons.file}
+            {icons[name] || icons.book}
         </svg>
     );
 }
@@ -203,32 +134,21 @@ export default function Index({
 
     const computedStats = useMemo(() => {
         return {
-            total:
-                stats?.total ??
-                storyList.length,
-
+            total: stats?.total ?? storyList.length,
             approved:
                 stats?.approved ??
                 storyList.filter(
-                    (story) =>
-                        String(story?.status || '').toLowerCase() ===
-                        'approved'
+                    (s) => String(s?.status || '').toLowerCase() === 'approved'
                 ).length,
-
             pending:
                 stats?.pending ??
                 storyList.filter(
-                    (story) =>
-                        String(story?.status || '').toLowerCase() ===
-                        'pending'
+                    (s) => String(s?.status || '').toLowerCase() === 'pending'
                 ).length,
-
             rejected:
                 stats?.rejected ??
                 storyList.filter(
-                    (story) =>
-                        String(story?.status || '').toLowerCase() ===
-                        'rejected'
+                    (s) => String(s?.status || '').toLowerCase() === 'rejected'
                 ).length,
         };
     }, [stats, storyList]);
@@ -244,22 +164,13 @@ export default function Index({
 
         return storyList.filter((story) => {
             const title = String(story?.title || '').toLowerCase();
-
             const talent = String(
-                story?.talent?.name ||
-                    story?.talent_name ||
-                    ''
+                story?.talent?.name || story?.talent_name || ''
             ).toLowerCase();
-
             const category = String(
-                story?.category?.name ||
-                    story?.category_name ||
-                    ''
+                story?.category?.name || story?.category_name || ''
             ).toLowerCase();
-
-            const status = String(
-                story?.status || ''
-            ).toLowerCase();
+            const status = String(story?.status || '').toLowerCase();
 
             const matchesSearch =
                 !query ||
@@ -268,8 +179,7 @@ export default function Index({
                 category.includes(query);
 
             const matchesStatus =
-                statusFilter === 'all' ||
-                status === statusFilter;
+                statusFilter === 'all' || status === statusFilter;
 
             return matchesSearch && matchesStatus;
         });
@@ -283,71 +193,37 @@ export default function Index({
 
     const getStatusClass = (status) => {
         const value = String(status || 'pending').toLowerCase();
-
-        if (value === 'approved') {
-            return 'approved';
-        }
-
-        if (value === 'published') {
-            return 'published';
-        }
-
-        if (value === 'rejected') {
-            return 'rejected';
-        }
-
+        if (value === 'approved') return 'approved';
+        if (value === 'published') return 'published';
+        if (value === 'rejected') return 'rejected';
         return 'pending';
     };
 
     const getStatusLabel = (status) => {
         const value = String(status || 'pending').toLowerCase();
-
         return value.charAt(0).toUpperCase() + value.slice(1);
     };
 
     const getInitial = (name) => {
-        if (!name) {
-            return '?';
-        }
-
-        return String(name)
-            .trim()
-            .charAt(0)
-            .toUpperCase();
+        if (!name) return '?';
+        return String(name).trim().charAt(0).toUpperCase();
     };
 
     const getExcerpt = (content) => {
-        if (!content) {
-            return 'No story description available.';
-        }
-
+        if (!content) return 'No story description available.';
         const text = String(content)
             .replace(/<[^>]*>/g, '')
             .replace(/\s+/g, ' ')
             .trim();
-
-        if (text.length <= 100) {
-            return text;
-        }
-
-        return text.substring(0, 100) + '…';
+        if (text.length <= 130) return text;
+        return text.substring(0, 130) + '…';
     };
 
     const assetUrl = (value) => {
-        if (!value) {
-            return '/images/placeholder-story.png';
-        }
-
+        if (!value) return '/images/placeholder-story.png';
         const stringValue = String(value);
-
-        if (/^https?:\/\//i.test(stringValue)) {
-            return stringValue;
-        }
-
-        if (stringValue.charAt(0) === '/') {
-            return stringValue;
-        }
-
+        if (/^https?:\/\//i.test(stringValue)) return stringValue;
+        if (stringValue.charAt(0) === '/') return stringValue;
         return '/' + stringValue;
     };
 
@@ -358,819 +234,239 @@ export default function Index({
     */
 
     const deleteStory = () => {
-        if (!selectedStory?.id) {
-            return;
-        }
+        if (!selectedStory?.id) return;
 
-        router.delete(
-            route(
-                'admin.stories.destroy',
-                selectedStory.id
-            ),
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setSelectedStory(null);
-                },
-            }
-        );
+        router.delete(route('admin.stories.destroy', selectedStory.id), {
+            preserveScroll: true,
+            onSuccess: () => setSelectedStory(null),
+        });
     };
+
+    const filterChips = [
+        { key: 'all', label: 'All', count: computedStats.total },
+        { key: 'pending', label: 'Pending', count: computedStats.pending },
+        { key: 'approved', label: 'Approved', count: computedStats.approved },
+        { key: 'rejected', label: 'Rejected', count: computedStats.rejected },
+    ];
 
     return (
         <AppLayout>
             <Head title="Stories" />
 
-            <div className="stories-page">
+            <div data-h-scope="stories-index" className="stories-index">
 
                 {/* =========================================================
-                    HEADER
+                    MASTHEAD
                 ========================================================= */}
 
-                <header className="stories-header">
-
-                    <div className="header-left">
-
-                        <div className="header-icon">
-                            <Icon
-                                name="book"
-                                size={24}
-                            />
-                        </div>
-
-                        <div>
-                            <div className="breadcrumb">
-                                Admin
-                                <span>/</span>
-                                Stories
-                            </div>
-
-                            <h1>Stories</h1>
-
-                            <p>
-                                Manage and moderate talent stories
-                            </p>
-                        </div>
-
+                <header className="masthead">
+                    <div className="masthead-text">
+                        <p className="kicker">Admin — Story desk</p>
+                        <h1>Talent stories</h1>
+                        <p className="dek">
+                            Read, verify and publish the stories talent submit about their work.
+                        </p>
                     </div>
 
-                    <div className="header-actions">
-
-                        <Link
-                            href={route(
-                                'admin.stories.create'
-                            )}
-                            className="btn btn-primary"
-                        >
-                            <Icon
-                                name="plus"
-                                size={18}
-                            />
-
-                            <span>
-                                Create Story
-                            </span>
-                        </Link>
-
-                    </div>
-
+                    <Link
+                        href={route('admin.stories.create')}
+                        className="btn btn-primary"
+                    >
+                        <Icon name="plus" size={17} />
+                        <span>New story</span>
+                    </Link>
                 </header>
 
-
                 {/* =========================================================
-                    STATS
+                    TALLY — the numbers that matter for moderation
                 ========================================================= */}
 
-                <section className="stats-grid">
-
-                    <div className="stat-card">
-
-                        <div className="stat-content">
-                            <span className="stat-label">
-                                Total Stories
-                            </span>
-
-                            <strong className="stat-value">
-                                {computedStats.total}
-                            </strong>
-
-                            <span className="stat-description">
-                                All submitted stories
-                            </span>
-                        </div>
-
-                        <div className="stat-icon blue">
-                            <Icon
-                                name="file"
-                                size={22}
-                            />
-                        </div>
-
+                <section className="tally" aria-label="Story counts">
+                    <div className="tally-item tally-item--lead">
+                        <strong>{computedStats.pending}</strong>
+                        <span>Waiting on you</span>
                     </div>
-
-
-                    <div className="stat-card">
-
-                        <div className="stat-content">
-                            <span className="stat-label">
-                                Approved
-                            </span>
-
-                            <strong className="stat-value">
-                                {computedStats.approved}
-                            </strong>
-
-                            <span className="stat-description">
-                                Approved stories
-                            </span>
-                        </div>
-
-                        <div className="stat-icon green">
-                            <Icon
-                                name="checkCircle"
-                                size={22}
-                            />
-                        </div>
-
+                    <div className="tally-item">
+                        <strong>{computedStats.approved}</strong>
+                        <span>Approved</span>
                     </div>
-
-
-                    <div className="stat-card">
-
-                        <div className="stat-content">
-                            <span className="stat-label">
-                                Pending
-                            </span>
-
-                            <strong className="stat-value">
-                                {computedStats.pending}
-                            </strong>
-
-                            <span className="stat-description">
-                                Awaiting moderation
-                            </span>
-                        </div>
-
-                        <div className="stat-icon orange">
-                            <Icon
-                                name="clock"
-                                size={22}
-                            />
-                        </div>
-
+                    <div className="tally-item">
+                        <strong>{computedStats.rejected}</strong>
+                        <span>Rejected</span>
                     </div>
-
-
-                    <div className="stat-card">
-
-                        <div className="stat-content">
-                            <span className="stat-label">
-                                Rejected
-                            </span>
-
-                            <strong className="stat-value">
-                                {computedStats.rejected}
-                            </strong>
-
-                            <span className="stat-description">
-                                Rejected stories
-                            </span>
-                        </div>
-
-                        <div className="stat-icon red">
-                            <Icon
-                                name="xCircle"
-                                size={22}
-                            />
-                        </div>
-
+                    <div className="tally-item">
+                        <strong>{computedStats.total}</strong>
+                        <span>Submitted in total</span>
                     </div>
-
                 </section>
 
-
                 {/* =========================================================
-                    MAIN CARD
+                    TOOLBAR
                 ========================================================= */}
 
-                <section className="stories-card">
-
-                    <div className="stories-card-header">
-
-                        <div>
-                            <div className="section-eyebrow">
-                                <Icon
-                                    name="layers"
-                                    size={15}
-                                />
-
-                                STORY LIBRARY
-                            </div>
-
-                            <h2>
-                                All Stories
-                            </h2>
-
-                            <p>
-                                Browse, review and manage submitted stories.
-                            </p>
-                        </div>
-
-                        <div className="stories-count">
-                            {filteredStories.length}
-                            <span>
-                                stories
-                            </span>
-                        </div>
-
+                <section className="toolbar">
+                    <div className="search-field">
+                        <Icon name="search" size={18} />
+                        <input
+                            type="text"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search by title, talent or category"
+                        />
+                        {search && (
+                            <button
+                                type="button"
+                                className="clear-search"
+                                onClick={() => setSearch('')}
+                                aria-label="Clear search"
+                            >
+                                <Icon name="close" size={14} />
+                            </button>
+                        )}
                     </div>
 
-
-                    {/* =====================================================
-                        TOOLBAR
-                    ===================================================== */}
-
-                    <div className="stories-toolbar">
-
-                        <div className="search-box">
-
-                            <Icon
-                                name="search"
-                                size={19}
-                            />
-
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) =>
-                                    setSearch(e.target.value)
+                    <div className="chip-row" role="group" aria-label="Filter by status">
+                        {filterChips.map((chip) => (
+                            <button
+                                key={chip.key}
+                                type="button"
+                                className={
+                                    'chip' +
+                                    (statusFilter === chip.key ? ' is-active' : '')
                                 }
-                                placeholder="Search stories, talents or categories..."
-                            />
+                                onClick={() => setStatusFilter(chip.key)}
+                            >
+                                {chip.label}
+                                <span className="chip-count">{chip.count}</span>
+                            </button>
+                        ))}
+                    </div>
+                </section>
 
-                            {search && (
+                {/* =========================================================
+                    INDEX — one fluid layout for every screen size
+                ========================================================= */}
+
+                <section className="index-list">
+
+                    <div className="index-list-head">
+                        <span>{filteredStories.length} of {storyList.length} stories</span>
+                    </div>
+
+                    {filteredStories.length > 0 ? (
+
+                        <ul className="entries">
+                            {filteredStories.map((story) => {
+                                const statusClass = getStatusClass(story?.status);
+                                const talentName =
+                                    story?.talent?.name || story?.talent_name || 'Unknown talent';
+                                const categoryName =
+                                    story?.category?.name || story?.category_name || 'Uncategorized';
+
+                                return (
+                                    <li key={story.id} className="entry">
+
+                                        <Link
+                                            href={route('admin.stories.show', story.id)}
+                                            className="entry-thumb"
+                                        >
+                                            <img
+                                                src={assetUrl(story?.thumbnail)}
+                                                alt={story?.title || 'Story'}
+                                                onError={(e) => {
+                                                    e.currentTarget.src = '/images/placeholder-story.png';
+                                                }}
+                                            />
+                                        </Link>
+
+                                        <div className="entry-body">
+                                            <div className="entry-top">
+                                                <Link
+                                                    href={route('admin.stories.show', story.id)}
+                                                    className="entry-title"
+                                                >
+                                                    {story?.title || 'Untitled story'}
+                                                </Link>
+                                                <span className={'status-pill ' + statusClass}>
+                                                    <span className="status-dot" />
+                                                    {getStatusLabel(story?.status)}
+                                                </span>
+                                            </div>
+
+                                            <p className="entry-excerpt">{getExcerpt(story?.content)}</p>
+
+                                            <div className="entry-meta">
+                                                <span className="byline">
+                                                    <span className="byline-avatar">
+                                                        {getInitial(talentName)}
+                                                    </span>
+                                                    By {talentName}
+                                                </span>
+                                                <span className="entry-category">
+                                                    <Icon name="tag" size={13} />
+                                                    {categoryName}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="entry-actions">
+                                            <Link
+                                                href={route('admin.stories.show', story.id)}
+                                                className="icon-button"
+                                                title="View story"
+                                            >
+                                                <Icon name="eye" size={16} />
+                                            </Link>
+                                            <Link
+                                                href={route('admin.stories.edit', story.id)}
+                                                className="icon-button"
+                                                title="Edit story"
+                                            >
+                                                <Icon name="edit" size={16} />
+                                            </Link>
+                                            <button
+                                                type="button"
+                                                className="icon-button danger"
+                                                title="Delete story"
+                                                onClick={() => setSelectedStory(story)}
+                                            >
+                                                <Icon name="trash" size={16} />
+                                            </button>
+                                        </div>
+
+                                    </li>
+                                );
+                            })}
+                        </ul>
+
+                    ) : (
+
+                        <div className="empty-state">
+                            <div className="empty-icon">
+                                <Icon name="book" size={26} />
+                            </div>
+                            <h3>
+                                {search || statusFilter !== 'all'
+                                    ? 'No stories match'
+                                    : 'No stories yet'}
+                            </h3>
+                            <p>
+                                {search || statusFilter !== 'all'
+                                    ? 'Try a different search term or filter.'
+                                    : 'Stories talent submit will appear here for review.'}
+                            </p>
+                            {(search || statusFilter !== 'all') && (
                                 <button
                                     type="button"
-                                    className="clear-search"
-                                    onClick={() => setSearch('')}
-                                    aria-label="Clear search"
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        setSearch('');
+                                        setStatusFilter('all');
+                                    }}
                                 >
-                                    <Icon
-                                        name="close"
-                                        size={15}
-                                    />
+                                    Clear filters
                                 </button>
                             )}
-
-                        </div>
-
-
-                        <div className="filter-wrapper">
-
-                            <Icon
-                                name="grid"
-                                size={17}
-                            />
-
-                            <select
-                                value={statusFilter}
-                                onChange={(e) =>
-                                    setStatusFilter(
-                                        e.target.value
-                                    )
-                                }
-                                aria-label="Filter by status"
-                            >
-                                <option value="all">
-                                    All statuses
-                                </option>
-
-                                <option value="pending">
-                                    Pending
-                                </option>
-
-                                <option value="approved">
-                                    Approved
-                                </option>
-
-                                <option value="published">
-                                    Published
-                                </option>
-
-                                <option value="rejected">
-                                    Rejected
-                                </option>
-                            </select>
-
-                            <Icon
-                                name="chevronDown"
-                                size={16}
-                            />
-
-                        </div>
-
-                    </div>
-
-
-                    {/* =====================================================
-                        DESKTOP TABLE
-                    ===================================================== */}
-
-                    <div className="table-wrapper">
-
-                        {filteredStories.length > 0 ? (
-
-                            <table className="stories-table">
-
-                                <thead>
-                                    <tr>
-
-                                        <th>
-                                            Story
-                                        </th>
-
-                                        <th>
-                                            Talent
-                                        </th>
-
-                                        <th>
-                                            Category
-                                        </th>
-
-                                        <th>
-                                            Status
-                                        </th>
-
-                                        <th className="actions-column">
-                                            Actions
-                                        </th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    {filteredStories.map(
-                                        (story) => {
-
-                                            const statusClass =
-                                                getStatusClass(
-                                                    story?.status
-                                                );
-
-                                            const talentName =
-                                                story?.talent?.name ||
-                                                story?.talent_name ||
-                                                'Unknown talent';
-
-                                            const categoryName =
-                                                story?.category?.name ||
-                                                story?.category_name ||
-                                                'Uncategorized';
-
-                                            return (
-                                                <tr
-                                                    key={story.id}
-                                                >
-
-                                                    {/* Story */}
-
-                                                    <td>
-
-                                                        <div className="story-cell">
-
-                                                            <div className="story-thumbnail">
-
-                                                                <img
-                                                                    src={assetUrl(
-                                                                        story?.thumbnail
-                                                                    )}
-                                                                    alt={
-                                                                        story?.title ||
-                                                                        'Story'
-                                                                    }
-                                                                    onError={(
-                                                                        e
-                                                                    ) => {
-                                                                        e.currentTarget.src =
-                                                                            '/images/placeholder-story.png';
-                                                                    }}
-                                                                />
-
-                                                            </div>
-
-                                                            <div className="story-information">
-
-                                                                <Link
-                                                                    href={route(
-                                                                        'admin.stories.show',
-                                                                        story.id
-                                                                    )}
-                                                                    className="story-title"
-                                                                >
-                                                                    {story?.title ||
-                                                                        'Untitled Story'}
-                                                                </Link>
-
-                                                                <p>
-                                                                    {getExcerpt(
-                                                                        story?.content
-                                                                    )}
-                                                                </p>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </td>
-
-
-                                                    {/* Talent */}
-
-                                                    <td>
-
-                                                        <div className="talent-cell">
-
-                                                            <div className="talent-avatar">
-                                                                {getInitial(
-                                                                    talentName
-                                                                )}
-                                                            </div>
-
-                                                            <div>
-
-                                                                <span className="talent-name">
-                                                                    {talentName}
-                                                                </span>
-
-                                                                {story?.talent?.email && (
-                                                                    <span className="talent-email">
-                                                                        {
-                                                                            story
-                                                                                .talent
-                                                                                .email
-                                                                        }
-                                                                    </span>
-                                                                )}
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </td>
-
-
-                                                    {/* Category */}
-
-                                                    <td>
-
-                                                        <span className="category-badge">
-
-                                                            <Icon
-                                                                name="tag"
-                                                                size={14}
-                                                            />
-
-                                                            {categoryName}
-
-                                                        </span>
-
-                                                    </td>
-
-
-                                                    {/* Status */}
-
-                                                    <td>
-
-                                                        <span
-                                                            className={
-                                                                'status-badge ' +
-                                                                statusClass
-                                                            }
-                                                        >
-
-                                                            <span className="status-dot" />
-
-                                                            {getStatusLabel(
-                                                                story?.status
-                                                            )}
-
-                                                        </span>
-
-                                                    </td>
-
-
-                                                    {/* Actions */}
-
-                                                    <td>
-
-                                                        <div className="table-actions">
-
-                                                            <Link
-                                                                href={route(
-                                                                    'admin.stories.show',
-                                                                    story.id
-                                                                )}
-                                                                className="icon-button"
-                                                                title="View story"
-                                                            >
-                                                                <Icon
-                                                                    name="eye"
-                                                                    size={17}
-                                                                />
-                                                            </Link>
-
-
-                                                            <Link
-                                                                href={route(
-                                                                    'admin.stories.edit',
-                                                                    story.id
-                                                                )}
-                                                                className="icon-button"
-                                                                title="Edit story"
-                                                            >
-                                                                <Icon
-                                                                    name="edit"
-                                                                    size={17}
-                                                                />
-                                                            </Link>
-
-
-                                                            <button
-                                                                type="button"
-                                                                className="icon-button danger"
-                                                                title="Delete story"
-                                                                onClick={() =>
-                                                                    setSelectedStory(
-                                                                        story
-                                                                    )
-                                                                }
-                                                            >
-                                                                <Icon
-                                                                    name="trash"
-                                                                    size={17}
-                                                                />
-                                                            </button>
-
-                                                        </div>
-
-                                                    </td>
-
-                                                </tr>
-                                            );
-                                        }
-                                    )}
-
-                                </tbody>
-
-                            </table>
-
-                        ) : (
-
-                            <div className="empty-state">
-
-                                <div className="empty-icon">
-                                    <Icon
-                                        name="file"
-                                        size={30}
-                                    />
-                                </div>
-
-                                <h3>
-                                    {search ||
-                                    statusFilter !== 'all'
-                                        ? 'No stories found'
-                                        : 'No stories yet'}
-                                </h3>
-
-                                <p>
-                                    {search ||
-                                    statusFilter !== 'all'
-                                        ? 'Try changing your search or filter.'
-                                        : 'Create your first story to get started.'}
-                                </p>
-
-                                {search ||
-                                statusFilter !== 'all' ? (
-
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        onClick={() => {
-                                            setSearch('');
-                                            setStatusFilter(
-                                                'all'
-                                            );
-                                        }}
-                                    >
-                                        Clear Filters
-                                    </button>
-
-                                ) : (
-
-                                    <Link
-                                        href={route(
-                                            'admin.stories.create'
-                                        )}
-                                        className="btn btn-primary"
-                                    >
-                                        <Icon
-                                            name="plus"
-                                            size={17}
-                                        />
-
-                                        Create Story
-                                    </Link>
-
-                                )}
-
-                            </div>
-
-                        )}
-
-                    </div>
-
-
-                    {/* =====================================================
-                        MOBILE CARDS
-                    ===================================================== */}
-
-                    {filteredStories.length > 0 && (
-
-                        <div className="mobile-story-list">
-
-                            {filteredStories.map(
-                                (story) => {
-
-                                    const statusClass =
-                                        getStatusClass(
-                                            story?.status
-                                        );
-
-                                    const talentName =
-                                        story?.talent?.name ||
-                                        story?.talent_name ||
-                                        'Unknown talent';
-
-                                    const categoryName =
-                                        story?.category?.name ||
-                                        story?.category_name ||
-                                        'Uncategorized';
-
-                                    return (
-                                        <article
-                                            key={story.id}
-                                            className="mobile-story-card"
-                                        >
-
-                                            <div className="mobile-story-top">
-
-                                                <div className="mobile-story-image">
-
-                                                    <img
-                                                        src={assetUrl(
-                                                            story?.thumbnail
-                                                        )}
-                                                        alt={
-                                                            story?.title ||
-                                                            'Story'
-                                                        }
-                                                        onError={(
-                                                            e
-                                                        ) => {
-                                                            e.currentTarget.src =
-                                                                '/images/placeholder-story.png';
-                                                        }}
-                                                    />
-
-                                                </div>
-
-                                                <div className="mobile-story-info">
-
-                                                    <Link
-                                                        href={route(
-                                                            'admin.stories.show',
-                                                            story.id
-                                                        )}
-                                                        className="story-title"
-                                                    >
-                                                        {story?.title ||
-                                                            'Untitled Story'}
-                                                    </Link>
-
-                                                    <p>
-                                                        {getExcerpt(
-                                                            story?.content
-                                                        )}
-                                                    </p>
-
-                                                </div>
-
-                                            </div>
-
-
-                                            <div className="mobile-story-meta">
-
-                                                <div className="mobile-meta-item">
-
-                                                    <div className="talent-avatar small">
-                                                        {getInitial(
-                                                            talentName
-                                                        )}
-                                                    </div>
-
-                                                    <span>
-                                                        {talentName}
-                                                    </span>
-
-                                                </div>
-
-
-                                                <span className="category-badge">
-
-                                                    <Icon
-                                                        name="tag"
-                                                        size={13}
-                                                    />
-
-                                                    {categoryName}
-
-                                                </span>
-
-
-                                                <span
-                                                    className={
-                                                        'status-badge ' +
-                                                        statusClass
-                                                    }
-                                                >
-
-                                                    <span className="status-dot" />
-
-                                                    {getStatusLabel(
-                                                        story?.status
-                                                    )}
-
-                                                </span>
-
-                                            </div>
-
-
-                                            <div className="mobile-story-actions">
-
-                                                <Link
-                                                    href={route(
-                                                        'admin.stories.show',
-                                                        story.id
-                                                    )}
-                                                    className="mobile-action"
-                                                >
-                                                    <Icon
-                                                        name="eye"
-                                                        size={16}
-                                                    />
-
-                                                    View
-                                                </Link>
-
-                                                <Link
-                                                    href={route(
-                                                        'admin.stories.edit',
-                                                        story.id
-                                                    )}
-                                                    className="mobile-action"
-                                                >
-                                                    <Icon
-                                                        name="edit"
-                                                        size={16}
-                                                    />
-
-                                                    Edit
-                                                </Link>
-
-                                                <button
-                                                    type="button"
-                                                    className="mobile-action danger"
-                                                    onClick={() =>
-                                                        setSelectedStory(
-                                                            story
-                                                        )
-                                                    }
-                                                >
-                                                    <Icon
-                                                        name="trash"
-                                                        size={16}
-                                                    />
-
-                                                    Delete
-                                                </button>
-
-                                            </div>
-
-                                        </article>
-                                    );
-                                }
-                            )}
-
                         </div>
 
                     )}
@@ -1179,99 +475,54 @@ export default function Index({
 
             </div>
 
-
             {/* =============================================================
                 DELETE MODAL
             ============================================================= */}
 
             {selectedStory && (
-
                 <div
                     className="modal-backdrop"
+                    data-h-scope="stories-index"
                     onMouseDown={(e) => {
-                        if (
-                            e.target ===
-                            e.currentTarget
-                        ) {
-                            setSelectedStory(null);
-                        }
+                        if (e.target === e.currentTarget) setSelectedStory(null);
                     }}
                 >
-
                     <div className="delete-modal">
-
                         <button
                             type="button"
                             className="modal-close"
-                            onClick={() =>
-                                setSelectedStory(null)
-                            }
+                            onClick={() => setSelectedStory(null)}
                             aria-label="Close"
                         >
-                            <Icon
-                                name="close"
-                                size={19}
-                            />
+                            <Icon name="close" size={18} />
                         </button>
 
-
                         <div className="delete-modal-icon">
-                            <Icon
-                                name="trash"
-                                size={25}
-                            />
+                            <Icon name="trash" size={22} />
                         </div>
 
-
-                        <h3>
-                            Delete story?
-                        </h3>
-
+                        <h3>Delete this story?</h3>
                         <p>
-                            You are about to permanently delete
-                            <strong>
-                                {' "'}
-                                {selectedStory?.title ||
-                                    'this story'}
-                                {'"'}
-                            </strong>
-                            . This action cannot be undone.
+                            "{selectedStory?.title || 'This story'}" will be permanently removed.
+                            This can't be undone.
                         </p>
 
-
                         <div className="modal-actions">
-
                             <button
                                 type="button"
                                 className="btn btn-secondary"
-                                onClick={() =>
-                                    setSelectedStory(null)
-                                }
+                                onClick={() => setSelectedStory(null)}
                             >
                                 Cancel
                             </button>
-
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                onClick={deleteStory}
-                            >
-                                <Icon
-                                    name="trash"
-                                    size={17}
-                                />
-
-                                Delete Story
+                            <button type="button" className="btn btn-danger" onClick={deleteStory}>
+                                <Icon name="trash" size={16} />
+                                Delete story
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             )}
-
 
             {/* =============================================================
                 STYLES
@@ -1279,107 +530,98 @@ export default function Index({
 
             <style>{`
 
-                * {
+                [data-h-scope="stories-index"] {
+                    --ink: #1d1d1f;
+                    --ink-soft: #6e6e73;
+                    --ink-faint: #a1a1a6;
+                    --paper: #ffffff;
+                    --surface: #ffffff;
+                    --line: #e5e5e7;
+                    --brand: #48d597;
+                    --brand-ink: #157a4e;
+                    --brand-wash: #eaf9f1;
+                    --amber: #b8790f;
+                    --amber-wash: #fbf1de;
+                    --clay: #b5433a;
+                    --clay-wash: #faeae8;
+
+                    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+                    color: var(--ink);
+                }
+
+                [data-h-scope="stories-index"] * {
                     box-sizing: border-box;
                 }
 
-                .stories-page {
+                .stories-index {
+                    background: var(--paper);
                     min-height: 100vh;
-                    background: #f7f9fc;
-                    color: #172033;
-                    padding: 28px;
+                    padding: 40px clamp(18px, 4vw, 56px) 64px;
                 }
 
-                /* ---------------------------------------------------------
-                   HEADER
-                --------------------------------------------------------- */
+                .stories-index > * {
+                    max-width: 1080px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
 
-                .stories-header {
-                    max-width: 1440px;
-                    margin: 0 auto 28px;
+                /* -----------------------------------------------------------
+                   MASTHEAD
+                ----------------------------------------------------------- */
+
+                .masthead {
                     display: flex;
-                    align-items: center;
+                    align-items: flex-end;
                     justify-content: space-between;
-                    gap: 24px;
+                    gap: 20px;
+                    padding-bottom: 22px;
+                    border-bottom: 2px solid var(--ink);
+                    margin-bottom: 30px;
+                    flex-wrap: wrap;
                 }
 
-                .header-left {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                }
-
-                .header-icon {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 14px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: #ecfdf5;
-                    color: #059669;
-                    border: 1px solid #d1fae5;
-                    flex-shrink: 0;
-                }
-
-                .breadcrumb {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    font-size: 12px;
+                .kicker {
+                    margin: 0 0 5px;
+                    font-size: 11px;
                     font-weight: 600;
-                    color: #98a2b3;
-                    margin-bottom: 5px;
+                    color: var(--brand-ink);
+                    letter-spacing: 0.01em;
                 }
 
-                .breadcrumb span {
-                    color: #cbd5e1;
-                }
-
-                .stories-header h1 {
+                .masthead h1 {
                     margin: 0;
-                    font-size: 28px;
-                    line-height: 1.2;
-                    font-weight: 750;
-                    letter-spacing: -0.6px;
-                    color: #101828;
+                    font-weight: 700;
+                    font-size: clamp(20px, 2.4vw, 26px);
+                    line-height: 1.15;
+                    letter-spacing: -0.01em;
                 }
 
-                .stories-header p {
-                    margin: 5px 0 0;
-                    font-size: 14px;
-                    color: #667085;
+                .dek {
+                    margin: 6px 0 0;
+                    font-size: 12.5px;
+                    color: var(--ink-soft);
+                    max-width: 46ch;
                 }
 
-                .header-actions {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                }
-
-                /* ---------------------------------------------------------
+                /* -----------------------------------------------------------
                    BUTTONS
-                --------------------------------------------------------- */
+                ----------------------------------------------------------- */
 
                 .btn {
-                    height: 42px;
-                    padding: 0 16px;
-                    border-radius: 10px;
-                    border: 1px solid transparent;
+                    height: 36px;
+                    padding: 0 15px;
+                    border-radius: 7px;
+                    border: 1.5px solid transparent;
                     display: inline-flex;
                     align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    font-size: 13px;
-                    font-weight: 650;
+                    gap: 7px;
+                    font-family: inherit;
+                    font-size: 12.5px;
+                    font-weight: 600;
                     text-decoration: none;
                     cursor: pointer;
-                    transition:
-                        transform 0.15s ease,
-                        box-shadow 0.15s ease,
-                        background 0.15s ease,
-                        border-color 0.15s ease;
                     white-space: nowrap;
+                    transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
                 }
 
                 .btn:hover {
@@ -1387,475 +629,310 @@ export default function Index({
                 }
 
                 .btn-primary {
-                    background: #059669;
-                    color: #ffffff;
-                    border-color: #059669;
-                    box-shadow: 0 2px 5px rgba(5, 150, 105, 0.18);
+                    background: var(--ink);
+                    color: #fff;
+                    border-color: var(--ink);
                 }
 
                 .btn-primary:hover {
-                    background: #047857;
-                    border-color: #047857;
+                    background: var(--brand-ink);
+                    border-color: var(--brand-ink);
                 }
 
                 .btn-secondary {
-                    background: #ffffff;
-                    color: #344054;
-                    border-color: #d0d5dd;
+                    background: transparent;
+                    color: var(--ink);
+                    border-color: var(--line);
                 }
 
                 .btn-secondary:hover {
-                    background: #f9fafb;
-                    border-color: #98a2b3;
+                    border-color: var(--ink-faint);
                 }
 
                 .btn-danger {
-                    background: #dc2626;
-                    color: white;
-                    border-color: #dc2626;
+                    background: var(--clay);
+                    color: #fff;
+                    border-color: var(--clay);
                 }
 
                 .btn-danger:hover {
-                    background: #b91c1c;
+                    background: #983630;
+                    border-color: #983630;
                 }
 
-                /* ---------------------------------------------------------
-                   STATS
-                --------------------------------------------------------- */
+                /* -----------------------------------------------------------
+                   TALLY
+                ----------------------------------------------------------- */
 
-                .stats-grid {
-                    max-width: 1440px;
-                    margin: 0 auto 24px;
-                    display: grid;
-                    grid-template-columns: repeat(4, minmax(0, 1fr));
-                    gap: 16px;
-                }
-
-                .stat-card {
-                    background: #ffffff;
-                    border: 1px solid #e6eaf0;
-                    border-radius: 15px;
-                    padding: 20px;
-                    min-height: 130px;
+                .tally {
                     display: flex;
-                    align-items: flex-start;
-                    justify-content: space-between;
-                    gap: 14px;
-                    box-shadow: 0 2px 5px rgba(16, 24, 40, 0.025);
+                    gap: clamp(16px, 3vw, 32px);
+                    padding: 4px 0 24px;
+                    flex-wrap: wrap;
                 }
 
-                .stat-content {
-                    min-width: 0;
-                }
-
-                .stat-label {
-                    display: block;
-                    color: #667085;
-                    font-size: 12px;
-                    font-weight: 650;
-                    margin-bottom: 8px;
-                }
-
-                .stat-value {
-                    display: block;
-                    color: #101828;
-                    font-size: 28px;
-                    line-height: 1;
-                    letter-spacing: -0.5px;
-                }
-
-                .stat-description {
-                    display: block;
-                    color: #98a2b3;
-                    font-size: 11px;
-                    margin-top: 9px;
-                }
-
-                .stat-icon {
-                    width: 43px;
-                    height: 43px;
-                    border-radius: 12px;
+                .tally-item {
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-shrink: 0;
+                    flex-direction: column;
+                    gap: 3px;
+                    padding-left: clamp(16px, 3vw, 32px);
+                    border-left: 1px solid var(--line);
                 }
 
-                .stat-icon.blue {
-                    color: #2563eb;
-                    background: #eff6ff;
+                .tally-item:first-child {
+                    padding-left: 0;
+                    border-left: 0;
                 }
 
-                .stat-icon.green {
-                    color: #059669;
-                    background: #ecfdf5;
-                }
-
-                .stat-icon.orange {
-                    color: #d97706;
-                    background: #fffbeb;
-                }
-
-                .stat-icon.red {
-                    color: #dc2626;
-                    background: #fef2f2;
-                }
-
-                /* ---------------------------------------------------------
-                   MAIN CARD
-                --------------------------------------------------------- */
-
-                .stories-card {
-                    max-width: 1440px;
-                    margin: 0 auto;
-                    background: #ffffff;
-                    border: 1px solid #e6eaf0;
-                    border-radius: 16px;
-                    box-shadow: 0 3px 10px rgba(16, 24, 40, 0.035);
-                    overflow: hidden;
-                }
-
-                .stories-card-header {
-                    padding: 22px 24px 18px;
-                    display: flex;
-                    align-items: flex-end;
-                    justify-content: space-between;
-                    gap: 20px;
-                    border-bottom: 1px solid #eef1f5;
-                }
-
-                .section-eyebrow {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    color: #059669;
-                    font-size: 10px;
-                    font-weight: 800;
-                    letter-spacing: 1px;
-                    margin-bottom: 7px;
-                }
-
-                .stories-card-header h2 {
-                    margin: 0;
+                .tally-item strong {
+                    font-weight: 700;
                     font-size: 19px;
-                    font-weight: 750;
-                    color: #101828;
+                    line-height: 1;
                 }
 
-                .stories-card-header p {
-                    margin: 5px 0 0;
-                    font-size: 13px;
-                    color: #667085;
+                .tally-item--lead strong {
+                    font-size: 26px;
+                    color: var(--brand-ink);
                 }
 
-                .stories-count {
-                    color: #101828;
-                    font-size: 16px;
-                    font-weight: 750;
-                    white-space: nowrap;
+                .tally-item span {
+                    font-size: 11px;
+                    color: var(--ink-soft);
                 }
 
-                .stories-count span {
-                    color: #98a2b3;
-                    font-size: 12px;
-                    font-weight: 500;
-                    margin-left: 4px;
-                }
-
-                /* ---------------------------------------------------------
+                /* -----------------------------------------------------------
                    TOOLBAR
-                --------------------------------------------------------- */
+                ----------------------------------------------------------- */
 
-                .stories-toolbar {
-                    padding: 16px 24px;
+                .toolbar {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    gap: 12px;
-                    border-bottom: 1px solid #eef1f5;
-                    background: #fcfdfe;
+                    gap: 16px;
+                    flex-wrap: wrap;
+                    padding: 16px 0;
+                    border-top: 1px solid var(--line);
+                    border-bottom: 1px solid var(--line);
+                    margin-bottom: 22px;
                 }
 
-                .search-box {
-                    width: min(480px, 100%);
-                    height: 42px;
-                    position: relative;
+                .search-field {
                     display: flex;
                     align-items: center;
-                    color: #98a2b3;
+                    gap: 9px;
+                    color: var(--ink-faint);
+                    min-width: 220px;
+                    flex: 1 1 260px;
+                    max-width: 380px;
+                    border-bottom: 1.5px solid var(--line);
+                    padding-bottom: 7px;
                 }
 
-                .search-box > svg {
-                    position: absolute;
-                    left: 13px;
-                    pointer-events: none;
-                }
-
-                .search-box input {
-                    width: 100%;
-                    height: 100%;
-                    border: 1px solid #dfe3e8;
-                    background: #ffffff;
-                    border-radius: 9px;
-                    padding: 0 40px;
-                    color: #101828;
-                    font-size: 13px;
-                    outline: none;
-                    transition:
-                        border-color 0.15s ease,
-                        box-shadow 0.15s ease;
-                }
-
-                .search-box input::placeholder {
-                    color: #a0a8b5;
-                }
-
-                .search-box input:focus {
-                    border-color: #10b981;
-                    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-                }
-
-                .clear-search {
-                    position: absolute;
-                    right: 10px;
-                    width: 25px;
-                    height: 25px;
-                    border: 0;
-                    border-radius: 6px;
-                    background: #f2f4f7;
-                    color: #667085;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                }
-
-                .clear-search:hover {
-                    background: #e4e7ec;
-                }
-
-                .filter-wrapper {
-                    height: 42px;
-                    min-width: 175px;
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 0 12px;
-                    border: 1px solid #dfe3e8;
-                    border-radius: 9px;
-                    background: #ffffff;
-                    color: #667085;
-                }
-
-                .filter-wrapper select {
-                    appearance: none;
-                    -webkit-appearance: none;
+                .search-field input {
+                    flex: 1;
                     border: 0;
                     outline: 0;
                     background: transparent;
-                    width: 100%;
-                    color: #344054;
+                    font-family: inherit;
                     font-size: 13px;
+                    color: var(--ink);
+                }
+
+                .search-field input::placeholder {
+                    color: var(--ink-faint);
+                }
+
+                .search-field:has(input:focus) {
+                    border-color: var(--brand-ink);
+                }
+
+                .clear-search {
+                    border: 0;
+                    background: transparent;
+                    color: var(--ink-faint);
                     cursor: pointer;
-                }
-
-                .filter-wrapper > svg:last-child {
-                    pointer-events: none;
-                    flex-shrink: 0;
-                }
-
-                /* ---------------------------------------------------------
-                   TABLE
-                --------------------------------------------------------- */
-
-                .table-wrapper {
-                    width: 100%;
-                    overflow-x: auto;
-                }
-
-                .stories-table {
-                    width: 100%;
-                    min-width: 950px;
-                    border-collapse: collapse;
-                }
-
-                .stories-table thead {
-                    background: #fafbfc;
-                }
-
-                .stories-table th {
-                    padding: 12px 20px;
-                    text-align: left;
-                    color: #667085;
-                    font-size: 10px;
-                    font-weight: 800;
-                    letter-spacing: 0.7px;
-                    text-transform: uppercase;
-                    border-bottom: 1px solid #eef1f5;
-                    white-space: nowrap;
-                }
-
-                .stories-table td {
-                    padding: 15px 20px;
-                    border-bottom: 1px solid #f0f2f5;
-                    vertical-align: middle;
-                }
-
-                .stories-table tbody tr {
-                    transition: background 0.15s ease;
-                }
-
-                .stories-table tbody tr:hover {
-                    background: #fcfdfd;
-                }
-
-                .stories-table tbody tr:last-child td {
-                    border-bottom: 0;
-                }
-
-                .actions-column {
-                    width: 130px;
-                    text-align: right !important;
-                }
-
-                /* ---------------------------------------------------------
-                   STORY CELL
-                --------------------------------------------------------- */
-
-                .story-cell {
                     display: flex;
+                    padding: 2px;
+                }
+
+                .clear-search:hover {
+                    color: var(--ink);
+                }
+
+                .chip-row {
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                }
+
+                .chip {
+                    height: 30px;
+                    padding: 0 12px;
+                    border-radius: 999px;
+                    border: 1px solid var(--line);
+                    background: var(--surface);
+                    color: var(--ink-soft);
+                    font-family: inherit;
+                    font-size: 11.5px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: inline-flex;
                     align-items: center;
-                    gap: 13px;
-                    min-width: 330px;
+                    gap: 7px;
                 }
 
-                .story-thumbnail {
-                    width: 58px;
-                    height: 58px;
-                    flex-shrink: 0;
-                    overflow: hidden;
+                .chip:hover {
+                    border-color: var(--ink-faint);
+                    color: var(--ink);
+                }
+
+                .chip.is-active {
+                    background: var(--ink);
+                    border-color: var(--ink);
+                    color: #fff;
+                }
+
+                .chip-count {
+                    font-size: 11px;
+                    opacity: 0.7;
+                }
+
+                /* -----------------------------------------------------------
+                   INDEX LIST
+                ----------------------------------------------------------- */
+
+                .index-list-head {
+                    font-size: 12px;
+                    color: var(--ink-faint);
+                    margin-bottom: 10px;
+                }
+
+                .entries {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+                    gap: 14px;
+                }
+
+                .entry {
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid var(--line);
                     border-radius: 10px;
-                    background: #f2f4f7;
-                    border: 1px solid #eaecf0;
+                    overflow: hidden;
+                    background: var(--surface);
+                    transition: border-color 0.12s ease, box-shadow 0.12s ease;
                 }
 
-                .story-thumbnail img {
+                .entry:hover {
+                    border-color: var(--ink-faint);
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                }
+
+                .entry-thumb {
+                    width: 100%;
+                    height: 120px;
+                    flex-shrink: 0;
+                    background: var(--line);
+                    display: block;
+                }
+
+                .entry-thumb img {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                     display: block;
                 }
 
-                .story-information {
+                .entry-body {
+                    flex: 1;
                     min-width: 0;
+                    padding: 12px 14px 6px;
                 }
 
-                .story-title {
-                    display: block;
-                    max-width: 320px;
-                    color: #101828;
+                .entry-top {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 8px;
+                }
+
+                .entry-title {
+                    font-weight: 600;
                     font-size: 13px;
-                    font-weight: 700;
-                    line-height: 1.35;
+                    color: var(--ink);
                     text-decoration: none;
+                    line-height: 1.35;
+                }
+
+                .entry-title:hover {
+                    color: var(--brand-ink);
+                }
+
+                .entry-excerpt {
+                    margin: 5px 0 9px;
+                    font-size: 11.5px;
+                    color: var(--ink-soft);
+                    line-height: 1.5;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    white-space: nowrap;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
                 }
 
-                .story-title:hover {
-                    color: #059669;
-                }
-
-                .story-information p {
-                    max-width: 340px;
-                    margin: 5px 0 0;
-                    color: #98a2b3;
-                    font-size: 11px;
-                    line-height: 1.45;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-
-                /* ---------------------------------------------------------
-                   TALENT
-                --------------------------------------------------------- */
-
-                .talent-cell {
+                .entry-meta {
                     display: flex;
                     align-items: center;
-                    gap: 9px;
+                    justify-content: space-between;
+                    gap: 8px;
+                    flex-wrap: wrap;
                 }
 
-                .talent-avatar {
-                    width: 34px;
-                    height: 34px;
-                    flex-shrink: 0;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: #ecfdf5;
-                    color: #047857;
-                    border: 1px solid #d1fae5;
-                    font-size: 12px;
-                    font-weight: 800;
-                }
-
-                .talent-avatar.small {
-                    width: 28px;
-                    height: 28px;
-                    font-size: 10px;
-                }
-
-                .talent-name {
-                    display: block;
-                    max-width: 150px;
-                    color: #344054;
-                    font-size: 12px;
-                    font-weight: 650;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-
-                .talent-email {
-                    display: block;
-                    max-width: 170px;
-                    color: #98a2b3;
-                    font-size: 10px;
-                    margin-top: 2px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-
-                /* ---------------------------------------------------------
-                   BADGES
-                --------------------------------------------------------- */
-
-                .category-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 5px;
-                    padding: 5px 8px;
-                    border-radius: 7px;
-                    background: #f2f4f7;
-                    color: #475467;
-                    font-size: 10px;
-                    font-weight: 650;
-                    white-space: nowrap;
-                }
-
-                .status-badge {
+                .byline {
                     display: inline-flex;
                     align-items: center;
                     gap: 6px;
-                    padding: 5px 9px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: var(--ink-soft);
+                }
+
+                .byline-avatar {
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: var(--brand-wash);
+                    color: var(--brand-ink);
+                    font-size: 9px;
+                    font-weight: 800;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .entry-category {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 10.5px;
+                    color: var(--ink-faint);
+                }
+
+                /* -----------------------------------------------------------
+                   STATUS PILL
+                ----------------------------------------------------------- */
+
+                .status-pill {
+                    flex-shrink: 0;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 5px;
+                    padding: 3px 8px;
                     border-radius: 999px;
-                    font-size: 10px;
+                    font-size: 9.5px;
                     font-weight: 700;
                     white-space: nowrap;
                 }
@@ -1866,128 +943,109 @@ export default function Index({
                     border-radius: 50%;
                 }
 
-                .status-badge.approved,
-                .status-badge.published {
-                    color: #047857;
-                    background: #ecfdf5;
+                .status-pill.approved,
+                .status-pill.published {
+                    color: var(--brand-ink);
+                    background: var(--brand-wash);
                 }
 
-                .status-badge.approved .status-dot,
-                .status-badge.published .status-dot {
-                    background: #10b981;
+                .status-pill.approved .status-dot,
+                .status-pill.published .status-dot {
+                    background: var(--brand);
                 }
 
-                .status-badge.pending {
-                    color: #b45309;
-                    background: #fffbeb;
+                .status-pill.pending {
+                    color: var(--amber);
+                    background: var(--amber-wash);
                 }
 
-                .status-badge.pending .status-dot {
-                    background: #f59e0b;
+                .status-pill.pending .status-dot {
+                    background: var(--amber);
                 }
 
-                .status-badge.rejected {
-                    color: #b91c1c;
-                    background: #fef2f2;
+                .status-pill.rejected {
+                    color: var(--clay);
+                    background: var(--clay-wash);
                 }
 
-                .status-badge.rejected .status-dot {
-                    background: #ef4444;
+                .status-pill.rejected .status-dot {
+                    background: var(--clay);
                 }
 
-                /* ---------------------------------------------------------
+                /* -----------------------------------------------------------
                    ACTIONS
-                --------------------------------------------------------- */
+                ----------------------------------------------------------- */
 
-                .table-actions {
+                .entry-actions {
                     display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                    gap: 5px;
+                    gap: 6px;
+                    padding: 8px 14px 12px;
+                    border-top: 1px solid var(--line);
+                    margin-top: 8px;
                 }
 
                 .icon-button {
-                    width: 34px;
-                    height: 34px;
-                    border: 1px solid #e4e7ec;
-                    border-radius: 8px;
+                    width: 28px;
+                    height: 28px;
+                    border: 1px solid var(--line);
+                    border-radius: 6px;
+                    background: var(--surface);
+                    color: var(--ink-soft);
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    background: #ffffff;
-                    color: #667085;
                     text-decoration: none;
                     cursor: pointer;
-                    transition:
-                        color 0.15s ease,
-                        background 0.15s ease,
-                        border-color 0.15s ease;
                 }
 
                 .icon-button:hover {
-                    color: #059669;
-                    border-color: #a7f3d0;
-                    background: #ecfdf5;
+                    color: var(--brand-ink);
+                    border-color: var(--brand);
+                    background: var(--brand-wash);
                 }
 
                 .icon-button.danger:hover {
-                    color: #dc2626;
-                    border-color: #fecaca;
-                    background: #fef2f2;
+                    color: var(--clay);
+                    border-color: var(--clay);
+                    background: var(--clay-wash);
                 }
 
-                /* ---------------------------------------------------------
-                   EMPTY
-                --------------------------------------------------------- */
+                /* -----------------------------------------------------------
+                   EMPTY STATE
+                ----------------------------------------------------------- */
 
                 .empty-state {
-                    min-height: 330px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: column;
                     text-align: center;
-                    padding: 50px 20px;
+                    padding: 70px 20px;
                 }
 
                 .empty-icon {
-                    width: 64px;
-                    height: 64px;
-                    margin-bottom: 16px;
-                    border-radius: 16px;
+                    width: 56px;
+                    height: 56px;
+                    margin: 0 auto 16px;
+                    border-radius: 14px;
+                    background: var(--brand-wash);
+                    color: var(--brand-ink);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background: #f2f4f7;
-                    color: #98a2b3;
                 }
 
                 .empty-state h3 {
                     margin: 0;
-                    color: #101828;
-                    font-size: 17px;
-                    font-weight: 700;
+                    font-size: 15px;
+                    font-weight: 600;
                 }
 
                 .empty-state p {
-                    max-width: 390px;
-                    margin: 7px 0 18px;
-                    color: #98a2b3;
-                    font-size: 13px;
-                    line-height: 1.5;
+                    margin: 6px 0 16px;
+                    color: var(--ink-soft);
+                    font-size: 12.5px;
                 }
 
-                /* ---------------------------------------------------------
-                   MOBILE
-                --------------------------------------------------------- */
-
-                .mobile-story-list {
-                    display: none;
-                }
-
-                /* ---------------------------------------------------------
+                /* -----------------------------------------------------------
                    DELETE MODAL
-                --------------------------------------------------------- */
+                ----------------------------------------------------------- */
 
                 .modal-backdrop {
                     position: fixed;
@@ -1997,284 +1055,109 @@ export default function Index({
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background: rgba(15, 23, 42, 0.45);
-                    backdrop-filter: blur(3px);
+                    background: rgba(23, 27, 31, 0.5);
                 }
 
                 .delete-modal {
                     position: relative;
-                    width: min(430px, 100%);
-                    background: #ffffff;
-                    border-radius: 18px;
-                    padding: 28px;
+                    width: min(400px, 100%);
+                    background: var(--surface);
+                    border-radius: 14px;
+                    padding: 26px;
                     text-align: center;
-                    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);
                 }
 
                 .modal-close {
                     position: absolute;
-                    top: 14px;
-                    right: 14px;
-                    width: 34px;
-                    height: 34px;
+                    top: 12px;
+                    right: 12px;
+                    width: 30px;
+                    height: 30px;
                     border: 0;
-                    border-radius: 8px;
-                    background: #f2f4f7;
-                    color: #667085;
+                    border-radius: 7px;
+                    background: var(--paper);
+                    color: var(--ink-soft);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
                 }
 
-                .modal-close:hover {
-                    background: #e4e7ec;
-                }
-
                 .delete-modal-icon {
-                    width: 58px;
-                    height: 58px;
-                    margin: 2px auto 17px;
+                    width: 50px;
+                    height: 50px;
+                    margin: 4px auto 14px;
                     border-radius: 50%;
+                    background: var(--clay-wash);
+                    color: var(--clay);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    color: #dc2626;
-                    background: #fef2f2;
-                    border: 1px solid #fee2e2;
                 }
 
                 .delete-modal h3 {
                     margin: 0;
-                    color: #101828;
-                    font-size: 19px;
-                    font-weight: 750;
+                    font-size: 15px;
+                    font-weight: 600;
                 }
 
                 .delete-modal p {
-                    margin: 9px 0 22px;
-                    color: #667085;
-                    font-size: 13px;
-                    line-height: 1.6;
-                }
-
-                .delete-modal p strong {
-                    color: #344054;
+                    margin: 7px 0 18px;
+                    color: var(--ink-soft);
+                    font-size: 12px;
+                    line-height: 1.55;
                 }
 
                 .modal-actions {
                     display: flex;
                     justify-content: center;
-                    gap: 9px;
+                    gap: 8px;
                 }
 
-                /* ---------------------------------------------------------
-                   RESPONSIVE
-                --------------------------------------------------------- */
+                /* -----------------------------------------------------------
+                   RESPONSIVE — one entry layout, no duplicate markup
+                ----------------------------------------------------------- */
 
-                @media (max-width: 1100px) {
+                @media (max-width: 720px) {
 
-                    .stats-grid {
-                        grid-template-columns: repeat(2, minmax(0, 1fr));
-                    }
-
-                }
-
-                @media (max-width: 800px) {
-
-                    .stories-page {
-                        padding: 20px 15px;
-                    }
-
-                    .stories-header {
+                    .masthead {
+                        flex-direction: column;
                         align-items: flex-start;
-                        flex-direction: column;
                     }
 
-                    .header-actions {
+                    .masthead .btn {
                         width: 100%;
-                    }
-
-                    .header-actions .btn {
-                        flex: 1;
-                    }
-
-                    .stories-toolbar {
-                        align-items: stretch;
-                        flex-direction: column;
-                    }
-
-                    .search-box {
-                        width: 100%;
-                    }
-
-                    .filter-wrapper {
-                        width: 100%;
-                    }
-
-                    .stories-table {
-                        display: none;
-                    }
-
-                    .mobile-story-list {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 12px;
-                        padding: 14px;
-                    }
-
-                    .mobile-story-card {
-                        padding: 14px;
-                        border: 1px solid #e8ebef;
-                        border-radius: 13px;
-                        background: #ffffff;
-                    }
-
-                    .mobile-story-top {
-                        display: flex;
-                        gap: 12px;
-                    }
-
-                    .mobile-story-image {
-                        width: 70px;
-                        height: 70px;
-                        flex-shrink: 0;
-                        overflow: hidden;
-                        border-radius: 10px;
-                        background: #f2f4f7;
-                    }
-
-                    .mobile-story-image img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-
-                    .mobile-story-info {
-                        min-width: 0;
-                    }
-
-                    .mobile-story-info .story-title {
-                        max-width: none;
-                        white-space: normal;
-                    }
-
-                    .mobile-story-info p {
-                        margin: 5px 0 0;
-                        color: #98a2b3;
-                        font-size: 11px;
-                        line-height: 1.45;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 2;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                    }
-
-                    .mobile-story-meta {
-                        display: flex;
-                        align-items: center;
-                        flex-wrap: wrap;
-                        gap: 8px;
-                        margin-top: 14px;
-                        padding-top: 12px;
-                        border-top: 1px solid #f0f2f5;
-                    }
-
-                    .mobile-meta-item {
-                        display: flex;
-                        align-items: center;
-                        gap: 7px;
-                        color: #475467;
-                        font-size: 11px;
-                        font-weight: 650;
-                    }
-
-                    .mobile-story-actions {
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: 7px;
-                        margin-top: 12px;
-                    }
-
-                    .mobile-action {
-                        height: 35px;
-                        border: 1px solid #e4e7ec;
-                        border-radius: 8px;
-                        display: flex;
-                        align-items: center;
                         justify-content: center;
-                        gap: 5px;
-                        background: #ffffff;
-                        color: #475467;
-                        font-size: 11px;
-                        font-weight: 650;
-                        text-decoration: none;
-                        cursor: pointer;
                     }
 
-                    .mobile-action:hover {
-                        color: #059669;
-                        background: #ecfdf5;
-                        border-color: #a7f3d0;
+                    .toolbar {
+                        flex-direction: column;
+                        align-items: stretch;
                     }
 
-                    .mobile-action.danger:hover {
-                        color: #dc2626;
-                        background: #fef2f2;
-                        border-color: #fecaca;
+                    .search-field {
+                        max-width: none;
                     }
 
+                    .entries {
+                        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                    }
                 }
 
-                @media (max-width: 560px) {
+                @media (max-width: 460px) {
 
-                    .stats-grid {
-                        grid-template-columns: 1fr 1fr;
+                    .entries {
+                        grid-template-columns: repeat(2, 1fr);
                         gap: 10px;
                     }
 
-                    .stat-card {
-                        min-height: 115px;
-                        padding: 15px;
+                    .entry-body {
+                        padding: 10px 10px 4px;
                     }
 
-                    .stat-value {
-                        font-size: 23px;
+                    .entry-actions {
+                        padding: 6px 10px 10px;
                     }
-
-                    .stat-icon {
-                        width: 36px;
-                        height: 36px;
-                    }
-
-                    .stories-header h1 {
-                        font-size: 24px;
-                    }
-
-                    .stories-card-header {
-                        padding: 18px 16px;
-                    }
-
-                    .stories-toolbar {
-                        padding: 13px 16px;
-                    }
-
-                    .header-actions {
-                        flex-direction: column;
-                    }
-
-                    .header-actions .btn {
-                        width: 100%;
-                    }
-
-                    .modal-actions {
-                        flex-direction: column-reverse;
-                    }
-
-                    .modal-actions .btn {
-                        width: 100%;
-                    }
-
                 }
 
             `}</style>

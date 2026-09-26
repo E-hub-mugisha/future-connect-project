@@ -1,55 +1,113 @@
-import React, { useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
-import AppLayout from '@/Layouts/AppLayout';
+import React, { useState } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
+import AppLayout from "@/Layouts/AppLayout";
 
-export default function Form({ course = null, categories = [], talents = [] }) {
+export default function Form({
+    course = null,
+    categories = [],
+    talents = [],
+}) {
     const isEdit = !!course;
 
+    const initialPreviewDuration =
+        Number(course?.preview_duration ?? 300) > 0
+            ? Number(course?.preview_duration ?? 300)
+            : 300;
+
     const { data, setData, post, put, processing, errors } = useForm({
-        title: course?.title ?? '',
-        description: course?.description ?? '',
-        category_id: course?.category_id ?? '',
-        talent_id: course?.talent_id ?? '',
-        level: course?.level ?? 'Beginner',
-        status: course?.status ?? 'draft',
-        video: course?.video ?? '',
-        is_free: course?.is_free ?? false,
-        price: course?.price ?? 0,
+        title: course?.title ?? "",
+        description: course?.description ?? "",
+        category_id: course?.category_id ?? "",
+        talent_id: course?.talent_id ?? "",
+        level: course?.level ?? "Beginner",
+        status: course?.status ?? "draft",
+        video: course?.video ?? "",
+        is_free: Boolean(course?.is_free ?? false),
+        price: course?.is_free ? 0 : course?.price ?? 0,
+        preview_duration: course?.is_free
+            ? 0
+            : initialPreviewDuration,
         thumbnail: null,
     });
 
     const [thumbPreview, setThumbPreview] = useState(
         course?.thumbnail
             ? `/images/thumbnails/${course.thumbnail}`
-            : '/images/placeholder-course.png'
+            : "/images/placeholder-course.png",
     );
 
     function handleThumbChange(e) {
-        const file = e.target.files[0];
+        const file = e.target.files?.[0];
 
-        if (file) {
-            setData('thumbnail', file);
-            setThumbPreview(URL.createObjectURL(file));
+        if (!file) return;
+
+        setData("thumbnail", file);
+        setThumbPreview(URL.createObjectURL(file));
+    }
+
+    function handleFreeToggle(e) {
+        const isFree = e.target.checked;
+
+        setData({
+            ...data,
+            is_free: isFree,
+            price: isFree ? 0 : data.price || 0,
+            preview_duration: isFree
+                ? 0
+                : Number(data.preview_duration || 300),
+        });
+    }
+
+    function handlePreviewDurationChange(e) {
+        const value = Number(e.target.value);
+
+        if (!value) {
+            setData("preview_duration", 60);
+            return;
         }
+
+        const minutes = Math.max(1, Math.min(120, value));
+
+        setData("preview_duration", minutes * 60);
     }
 
     function handleSubmit(e) {
         e.preventDefault();
 
         if (isEdit) {
-            put(route('admin.courses.update', course.id), {
+            put(route("admin.courses.update", course.id), {
                 forceFormData: true,
             });
         } else {
-            post(route('admin.courses.store'), {
+            post(route("admin.courses.store"), {
                 forceFormData: true,
             });
         }
     }
 
+    const selectedTalent = talents.find(
+        (talent) =>
+            String(talent.id) === String(data.talent_id),
+    );
+
+    const previewMinutes = data.is_free
+        ? 0
+        : Math.max(
+              1,
+              Math.floor(
+                  Number(data.preview_duration || 300) / 60,
+              ),
+          );
+
     return (
         <AppLayout>
-            <Head title={isEdit ? 'Edit Course' : 'Create Course'} />
+            <Head
+                title={
+                    isEdit
+                        ? "Edit Course"
+                        : "Create Course"
+                }
+            />
 
             <style>{`
                 :root {
@@ -79,8 +137,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     margin: 0 auto;
                     padding: 0 24px;
                 }
-
-                /* Header */
 
                 .course-header {
                     display: flex;
@@ -144,8 +200,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     background: var(--course-primary-light);
                 }
 
-                /* Layout */
-
                 .editor-layout {
                     display: grid;
                     grid-template-columns: minmax(0, 1fr) 370px;
@@ -157,8 +211,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                 .editor-sidebar {
                     min-width: 0;
                 }
-
-                /* Cards */
 
                 .editor-card {
                     background: var(--course-card);
@@ -207,8 +259,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     padding: 24px;
                 }
 
-                /* Form */
-
                 .field {
                     margin-bottom: 21px;
                 }
@@ -221,6 +271,7 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    gap: 10px;
                     margin-bottom: 8px;
                     color: #374151;
                     font-size: 13px;
@@ -292,8 +343,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     gap: 18px;
                 }
 
-                /* Thumbnail */
-
                 .thumbnail-preview {
                     position: relative;
                     width: 100%;
@@ -337,6 +386,7 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                 .upload-zone {
                     position: relative;
+                    display: block;
                     border: 1.5px dashed #cbd5e1;
                     border-radius: 13px;
                     padding: 20px;
@@ -376,8 +426,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     color: #9ca3af;
                     font-size: 10px;
                 }
-
-                /* Pricing */
 
                 .free-toggle {
                     display: flex;
@@ -451,8 +499,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     opacity: .45;
                 }
 
-                /* Publish Status */
-
                 .status-options {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
@@ -502,8 +548,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                 .status-dot.published {
                     background: var(--course-success);
                 }
-
-                /* Sidebar */
 
                 .sidebar-card {
                     position: sticky;
@@ -566,7 +610,24 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     font-size: 10px;
                 }
 
-                /* Buttons */
+                .preview-access {
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+                    margin-top: 12px;
+                    padding: 9px 10px;
+                    border-radius: 9px;
+                    background: #f8fafc;
+                    border: 1px solid #edf0f4;
+                    color: #64748b;
+                    font-size: 10px;
+                    line-height: 1.4;
+                }
+
+                .preview-access i {
+                    color: var(--course-primary);
+                    font-size: 13px;
+                }
 
                 .action-bar {
                     display: flex;
@@ -613,8 +674,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     color: #111827;
                 }
 
-                /* Progress */
-
                 .completion-box {
                     padding: 16px;
                     border-radius: 13px;
@@ -655,8 +714,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     border-radius: inherit;
                     background: var(--course-primary);
                 }
-
-                /* Responsive */
 
                 @media (max-width: 1100px) {
                     .editor-layout {
@@ -727,30 +784,40 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     <div className="course-header">
                         <div>
                             <div className="breadcrumb-area">
-                                <Link href={route('admin.courses.index')}>
+                                <Link
+                                    href={route(
+                                        "admin.courses.index",
+                                    )}
+                                >
                                     Courses
                                 </Link>
 
                                 <i className="bi bi-chevron-right"></i>
 
                                 <span>
-                                    {isEdit ? 'Edit Course' : 'Create Course'}
+                                    {isEdit
+                                        ? "Edit Course"
+                                        : "Create Course"}
                                 </span>
                             </div>
 
                             <h1 className="course-header-title">
-                                {isEdit ? 'Edit Course' : 'Create New Course'}
+                                {isEdit
+                                    ? "Edit Course"
+                                    : "Create New Course"}
                             </h1>
 
                             <p className="course-header-subtitle">
                                 {isEdit
-                                    ? 'Update your course information and publishing settings.'
-                                    : 'Build a professional course for your learners.'}
+                                    ? "Update your course information and publishing settings."
+                                    : "Build a professional course for your learners."}
                             </p>
                         </div>
 
                         <Link
-                            href={route('admin.courses.index')}
+                            href={route(
+                                "admin.courses.index",
+                            )}
                             className="back-btn"
                         >
                             <i className="bi bi-arrow-left"></i>
@@ -764,14 +831,11 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                     >
                         <div className="editor-layout">
 
-                            {/* =========================
-                                MAIN CONTENT
-                            ========================== */}
+                            {/* MAIN CONTENT */}
                             <div className="editor-main">
 
                                 {/* Basic Information */}
                                 <div className="editor-card">
-
                                     <div className="card-header">
                                         <div className="card-icon">
                                             <i className="bi bi-journal-text"></i>
@@ -783,7 +847,8 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                             </h2>
 
                                             <p className="card-description">
-                                                Give your course a clear identity.
+                                                Give your course a clear
+                                                identity.
                                             </p>
                                         </div>
                                     </div>
@@ -793,7 +858,7 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                         <div className="field">
                                             <label className="field-label">
                                                 <span>
-                                                    Course Title{' '}
+                                                    Course Title{" "}
                                                     <span className="required">
                                                         *
                                                     </span>
@@ -807,16 +872,16 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                             <input
                                                 type="text"
                                                 value={data.title}
-                                                onChange={e =>
+                                                onChange={(e) =>
                                                     setData(
-                                                        'title',
-                                                        e.target.value
+                                                        "title",
+                                                        e.target.value,
                                                     )
                                                 }
                                                 className={`course-input ${
                                                     errors.title
-                                                        ? 'is-invalid'
-                                                        : ''
+                                                        ? "is-invalid"
+                                                        : ""
                                                 }`}
                                                 placeholder="e.g. Introduction to Web Development"
                                             />
@@ -834,24 +899,28 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                             </label>
 
                                             <textarea
-                                                value={data.description}
-                                                onChange={e =>
+                                                value={
+                                                    data.description
+                                                }
+                                                onChange={(e) =>
                                                     setData(
-                                                        'description',
-                                                        e.target.value
+                                                        "description",
+                                                        e.target.value,
                                                     )
                                                 }
                                                 className={`course-textarea ${
                                                     errors.description
-                                                        ? 'is-invalid'
-                                                        : ''
+                                                        ? "is-invalid"
+                                                        : ""
                                                 }`}
                                                 placeholder="Describe what students will learn from this course..."
                                             />
 
                                             {errors.description && (
                                                 <div className="error-message">
-                                                    {errors.description}
+                                                    {
+                                                        errors.description
+                                                    }
                                                 </div>
                                             )}
                                         </div>
@@ -860,24 +929,26 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                             <div className="field">
                                                 <label className="field-label">
-                                                    Category{' '}
+                                                    Category{" "}
                                                     <span className="required">
                                                         *
                                                     </span>
                                                 </label>
 
                                                 <select
-                                                    value={data.category_id}
-                                                    onChange={e =>
+                                                    value={
+                                                        data.category_id
+                                                    }
+                                                    onChange={(e) =>
                                                         setData(
-                                                            'category_id',
-                                                            e.target.value
+                                                            "category_id",
+                                                            e.target.value,
                                                         )
                                                     }
                                                     className={`course-select ${
                                                         errors.category_id
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                            ? "is-invalid"
+                                                            : ""
                                                     }`}
                                                 >
                                                     <option value="">
@@ -885,7 +956,7 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                     </option>
 
                                                     {categories.map(
-                                                        category => (
+                                                        (category) => (
                                                             <option
                                                                 key={
                                                                     category.id
@@ -894,9 +965,11 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                                     category.id
                                                                 }
                                                             >
-                                                                {category.name}
+                                                                {
+                                                                    category.name
+                                                                }
                                                             </option>
-                                                        )
+                                                        ),
                                                     )}
                                                 </select>
 
@@ -911,55 +984,65 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                             <div className="field">
                                                 <label className="field-label">
-                                                    Instructor / Talent{' '}
+                                                    Instructor / Talent{" "}
                                                     <span className="required">
                                                         *
                                                     </span>
                                                 </label>
 
                                                 <select
-                                                    value={data.talent_id}
-                                                    onChange={e =>
+                                                    value={
+                                                        data.talent_id
+                                                    }
+                                                    onChange={(e) =>
                                                         setData(
-                                                            'talent_id',
-                                                            e.target.value
+                                                            "talent_id",
+                                                            e.target.value,
                                                         )
                                                     }
                                                     className={`course-select ${
                                                         errors.talent_id
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                            ? "is-invalid"
+                                                            : ""
                                                     }`}
                                                 >
                                                     <option value="">
                                                         Select instructor
                                                     </option>
 
-                                                    {talents.map(talent => (
-                                                        <option
-                                                            key={talent.id}
-                                                            value={talent.id}
-                                                        >
-                                                            {talent.name}
-                                                        </option>
-                                                    ))}
+                                                    {talents.map(
+                                                        (talent) => (
+                                                            <option
+                                                                key={
+                                                                    talent.id
+                                                                }
+                                                                value={
+                                                                    talent.id
+                                                                }
+                                                            >
+                                                                {
+                                                                    talent.name
+                                                                }
+                                                            </option>
+                                                        ),
+                                                    )}
                                                 </select>
 
                                                 {errors.talent_id && (
                                                     <div className="error-message">
-                                                        {errors.talent_id}
+                                                        {
+                                                            errors.talent_id
+                                                        }
                                                     </div>
                                                 )}
                                             </div>
 
                                         </div>
-
                                     </div>
                                 </div>
 
                                 {/* Course Configuration */}
                                 <div className="editor-card">
-
                                     <div className="card-header">
                                         <div className="card-icon">
                                             <i className="bi bi-sliders"></i>
@@ -971,7 +1054,8 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                             </h2>
 
                                             <p className="card-description">
-                                                Define the learning level and course content.
+                                                Define the learning level and
+                                                course content.
                                             </p>
                                         </div>
                                     </div>
@@ -987,16 +1071,16 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                                 <select
                                                     value={data.level}
-                                                    onChange={e =>
+                                                    onChange={(e) =>
                                                         setData(
-                                                            'level',
-                                                            e.target.value
+                                                            "level",
+                                                            e.target.value,
                                                         )
                                                     }
                                                     className={`course-select ${
                                                         errors.level
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                            ? "is-invalid"
+                                                            : ""
                                                     }`}
                                                 >
                                                     <option value="Beginner">
@@ -1011,6 +1095,12 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                         Advanced
                                                     </option>
                                                 </select>
+
+                                                {errors.level && (
+                                                    <div className="error-message">
+                                                        {errors.level}
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="field">
@@ -1027,12 +1117,12 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                             name="courseStatus"
                                                             checked={
                                                                 data.status ===
-                                                                'draft'
+                                                                "draft"
                                                             }
                                                             onChange={() =>
                                                                 setData(
-                                                                    'status',
-                                                                    'draft'
+                                                                    "status",
+                                                                    "draft",
                                                                 )
                                                             }
                                                         />
@@ -1053,12 +1143,12 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                             name="courseStatus"
                                                             checked={
                                                                 data.status ===
-                                                                'published'
+                                                                "published"
                                                             }
                                                             onChange={() =>
                                                                 setData(
-                                                                    'status',
-                                                                    'published'
+                                                                    "status",
+                                                                    "published",
                                                                 )
                                                             }
                                                         />
@@ -1080,35 +1170,43 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                         <div className="field">
                                             <label className="field-label">
                                                 Video URL
+
                                                 <span className="field-hint">
-                                                    YouTube, Vimeo, or hosted video
+                                                    YouTube, Vimeo, or hosted
+                                                    video
                                                 </span>
                                             </label>
 
-                                            <div style={{ position: 'relative' }}>
+                                            <div
+                                                style={{
+                                                    position: "relative",
+                                                }}
+                                            >
                                                 <i
                                                     className="bi bi-play-circle"
                                                     style={{
-                                                        position: 'absolute',
+                                                        position:
+                                                            "absolute",
                                                         left: 14,
                                                         top: 14,
-                                                        color: '#94a3b8',
+                                                        color: "#94a3b8",
+                                                        zIndex: 2,
                                                     }}
                                                 ></i>
 
                                                 <input
                                                     type="url"
                                                     value={data.video}
-                                                    onChange={e =>
+                                                    onChange={(e) =>
                                                         setData(
-                                                            'video',
-                                                            e.target.value
+                                                            "video",
+                                                            e.target.value,
                                                         )
                                                     }
                                                     className={`course-input ${
                                                         errors.video
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                            ? "is-invalid"
+                                                            : ""
                                                     }`}
                                                     style={{
                                                         paddingLeft: 40,
@@ -1123,13 +1221,11 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                 </div>
                                             )}
                                         </div>
-
                                     </div>
                                 </div>
 
                                 {/* Pricing */}
                                 <div className="editor-card">
-
                                     <div className="card-header">
                                         <div className="card-icon">
                                             <i className="bi bi-wallet2"></i>
@@ -1137,17 +1233,19 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                         <div>
                                             <h2 className="card-title">
-                                                Pricing
+                                                Pricing & Preview Access
                                             </h2>
 
                                             <p className="card-description">
-                                                Choose how learners will access this course.
+                                                Set the course price and free
+                                                preview duration.
                                             </p>
                                         </div>
                                     </div>
 
                                     <div className="card-body">
 
+                                        {/* Free Course */}
                                         <div className="free-toggle">
 
                                             <div className="toggle-text">
@@ -1156,19 +1254,19 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                 </strong>
 
                                                 <span>
-                                                    Allow learners to access this course without payment.
+                                                    Learners get full access
+                                                    without payment.
                                                 </span>
                                             </div>
 
                                             <label className="custom-switch">
                                                 <input
                                                     type="checkbox"
-                                                    checked={data.is_free}
-                                                    onChange={e =>
-                                                        setData(
-                                                            'is_free',
-                                                            e.target.checked
-                                                        )
+                                                    checked={
+                                                        data.is_free
+                                                    }
+                                                    onChange={
+                                                        handleFreeToggle
                                                     }
                                                 />
 
@@ -1177,29 +1275,37 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                         </div>
 
+                                        {/* Price */}
                                         <div
                                             className={
                                                 data.is_free
-                                                    ? 'price-disabled'
-                                                    : ''
+                                                    ? "price-disabled"
+                                                    : ""
                                             }
                                         >
                                             <label className="field-label">
                                                 Course Price
+
                                                 <span className="field-hint">
                                                     RWF
                                                 </span>
                                             </label>
 
-                                            <div style={{ position: 'relative' }}>
+                                            <div
+                                                style={{
+                                                    position: "relative",
+                                                }}
+                                            >
                                                 <span
                                                     style={{
-                                                        position: 'absolute',
+                                                        position:
+                                                            "absolute",
                                                         left: 14,
                                                         top: 13,
                                                         fontSize: 12,
                                                         fontWeight: 700,
-                                                        color: '#64748b',
+                                                        color: "#64748b",
+                                                        zIndex: 2,
                                                     }}
                                                 >
                                                     RWF
@@ -1207,25 +1313,29 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                                 <input
                                                     type="number"
-                                                    step="0.01"
+                                                    step="1"
                                                     min="0"
-                                                    value={data.price}
-                                                    onChange={e =>
+                                                    value={
+                                                        data.price
+                                                    }
+                                                    onChange={(e) =>
                                                         setData(
-                                                            'price',
-                                                            e.target.value
+                                                            "price",
+                                                            e.target.value,
                                                         )
                                                     }
                                                     className={`course-input ${
                                                         errors.price
-                                                            ? 'is-invalid'
-                                                            : ''
+                                                            ? "is-invalid"
+                                                            : ""
                                                     }`}
                                                     style={{
                                                         paddingLeft: 58,
                                                     }}
-                                                    placeholder="0.00"
-                                                    disabled={data.is_free}
+                                                    placeholder="0"
+                                                    disabled={
+                                                        data.is_free
+                                                    }
                                                 />
                                             </div>
 
@@ -1236,14 +1346,168 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                             )}
                                         </div>
 
+                                        {/* Preview Duration */}
+                                        {!data.is_free && (
+                                            <div className="field mt-4">
+
+                                                <label className="field-label">
+                                                    <span>
+                                                        Free Preview Duration
+                                                        <span className="required ms-1">
+                                                            *
+                                                        </span>
+                                                    </span>
+
+                                                    <span className="field-hint">
+                                                        Minutes
+                                                    </span>
+                                                </label>
+
+                                                <div
+                                                    style={{
+                                                        position:
+                                                            "relative",
+                                                    }}
+                                                >
+                                                    <i
+                                                        className="bi bi-clock"
+                                                        style={{
+                                                            position:
+                                                                "absolute",
+                                                            left: 14,
+                                                            top: 14,
+                                                            color: "#94a3b8",
+                                                            zIndex: 2,
+                                                        }}
+                                                    ></i>
+
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max="120"
+                                                        step="1"
+                                                        value={
+                                                            Math.max(
+                                                                1,
+                                                                Math.floor(
+                                                                    Number(
+                                                                        data.preview_duration ||
+                                                                            300,
+                                                                    ) / 60,
+                                                                ),
+                                                            )
+                                                        }
+                                                        onChange={
+                                                            handlePreviewDurationChange
+                                                        }
+                                                        className={`course-input ${
+                                                            errors.preview_duration
+                                                                ? "is-invalid"
+                                                                : ""
+                                                        }`}
+                                                        style={{
+                                                            paddingLeft: 40,
+                                                        }}
+                                                        placeholder="5"
+                                                    />
+                                                </div>
+
+                                                <div
+                                                    style={{
+                                                        marginTop: 7,
+                                                        display:
+                                                            "flex",
+                                                        alignItems:
+                                                            "flex-start",
+                                                        gap: 6,
+                                                        color: "#64748b",
+                                                        fontSize: 11,
+                                                        lineHeight: 1.5,
+                                                    }}
+                                                >
+                                                    <i
+                                                        className="bi bi-info-circle"
+                                                        style={{
+                                                            color:
+                                                                "#2563eb",
+                                                            marginTop: 1,
+                                                        }}
+                                                    ></i>
+
+                                                    <span>
+                                                        Learners can watch{" "}
+                                                        <strong
+                                                            style={{
+                                                                color:
+                                                                    "#2563eb",
+                                                            }}
+                                                        >
+                                                            {
+                                                                previewMinutes
+                                                            }{" "}
+                                                            minute
+                                                            {previewMinutes !==
+                                                            1
+                                                                ? "s"
+                                                                : ""}
+                                                        </strong>{" "}
+                                                        before payment is
+                                                        required.
+                                                    </span>
+                                                </div>
+
+                                                {errors.preview_duration && (
+                                                    <div className="error-message">
+                                                        {
+                                                            errors.preview_duration
+                                                        }
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* Free course information */}
+                                        {data.is_free && (
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems:
+                                                        "flex-start",
+                                                    gap: 10,
+                                                    padding: 13,
+                                                    marginTop: 18,
+                                                    border:
+                                                        "1px solid #dcfce7",
+                                                    borderRadius: 11,
+                                                    background:
+                                                        "#f0fdf4",
+                                                    color: "#166534",
+                                                    fontSize: 11,
+                                                    lineHeight: 1.5,
+                                                }}
+                                            >
+                                                <i
+                                                    className="bi bi-check-circle-fill"
+                                                    style={{
+                                                        marginTop: 1,
+                                                    }}
+                                                ></i>
+
+                                                <span>
+                                                    This course is free.
+                                                    Learners will have full
+                                                    access and no preview
+                                                    restriction will be
+                                                    applied.
+                                                </span>
+                                            </div>
+                                        )}
+
                                     </div>
                                 </div>
-
                             </div>
 
-                            {/* =========================
-                                SIDEBAR
-                            ========================== */}
+                            {/* SIDEBAR */}
                             <div className="editor-sidebar">
 
                                 <div className="sidebar-card">
@@ -1298,21 +1562,21 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                                 <input
                                                     type="file"
-                                                    accept="image/*"
+                                                    accept="image/jpeg,image/png,image/jpg,image/webp"
                                                     className="d-none"
                                                     onChange={
                                                         handleThumbChange
                                                     }
                                                 />
-
                                             </label>
 
                                             {errors.thumbnail && (
                                                 <div className="error-message">
-                                                    {errors.thumbnail}
+                                                    {
+                                                        errors.thumbnail
+                                                    }
                                                 </div>
                                             )}
-
                                         </div>
                                     </div>
 
@@ -1353,49 +1617,107 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                                     <h3 className="preview-title">
                                                         {data.title ||
-                                                            'Your course title'}
+                                                            "Your course title"}
                                                     </h3>
 
                                                     <p className="preview-description">
                                                         {data.description ||
-                                                            'Your course description will appear here.'}
+                                                            "Your course description will appear here."}
                                                     </p>
 
                                                     <div className="preview-meta">
+
                                                         <span>
                                                             <i className="bi bi-person me-1"></i>
-                                                            {talents.find(
-                                                                t =>
-                                                                    String(
-                                                                        t.id
-                                                                    ) ===
-                                                                    String(
-                                                                        data.talent_id
-                                                                    )
-                                                            )?.name ||
-                                                                'Instructor'}
+
+                                                            {selectedTalent?.name ||
+                                                                "Instructor"}
                                                         </span>
+
+                                                        <span
+                                                            style={{
+                                                                textAlign:
+                                                                    "right",
+                                                            }}
+                                                        >
+                                                            {data.is_free ? (
+                                                                <strong
+                                                                    style={{
+                                                                        color:
+                                                                            "#16a34a",
+                                                                        fontSize:
+                                                                            11,
+                                                                    }}
+                                                                >
+                                                                    Free
+                                                                </strong>
+                                                            ) : (
+                                                                <>
+                                                                    <strong
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            color:
+                                                                                "#111827",
+                                                                            fontSize:
+                                                                                11,
+                                                                        }}
+                                                                    >
+                                                                        {Number(
+                                                                            data.price ||
+                                                                                0,
+                                                                        ).toLocaleString()}{" "}
+                                                                        RWF
+                                                                    </strong>
+
+                                                                    <small
+                                                                        style={{
+                                                                            display:
+                                                                                "block",
+                                                                            marginTop:
+                                                                                2,
+                                                                            color:
+                                                                                "#64748b",
+                                                                            fontSize:
+                                                                                9,
+                                                                        }}
+                                                                    >
+                                                                        <i className="bi bi-play-circle me-1"></i>
+                                                                        {
+                                                                            previewMinutes
+                                                                        }{" "}
+                                                                        min
+                                                                        preview
+                                                                    </small>
+                                                                </>
+                                                            )}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <div className="preview-access">
+                                                        <i
+                                                            className={
+                                                                data.is_free
+                                                                    ? "bi bi-unlock-fill"
+                                                                    : "bi bi-clock-history"
+                                                            }
+                                                        ></i>
 
                                                         <span>
                                                             {data.is_free
-                                                                ? 'Free'
-                                                                : `${Number(
-                                                                      data.price ||
-                                                                          0
-                                                                  ).toLocaleString()} RWF`}
+                                                                ? "Full course access included"
+                                                                : `${previewMinutes} minute${previewMinutes !== 1 ? "s" : ""} free preview, then payment is required`}
                                                         </span>
                                                     </div>
 
                                                 </div>
-
                                             </div>
-
                                         </div>
                                     </div>
 
                                     {/* Completion */}
                                     <div className="editor-card">
-
                                         <div className="card-body">
 
                                             <div className="completion-box">
@@ -1432,6 +1754,7 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                     <span
                                                         className="spinner-border spinner-border-sm me-2"
                                                         role="status"
+                                                        aria-hidden="true"
                                                     ></span>
 
                                                     Saving...
@@ -1441,15 +1764,15 @@ export default function Form({ course = null, categories = [], talents = [] }) {
                                                     <i className="bi bi-check2-circle me-2"></i>
 
                                                     {isEdit
-                                                        ? 'Update Course'
-                                                        : 'Create Course'}
+                                                        ? "Update Course"
+                                                        : "Create Course"}
                                                 </>
                                             )}
                                         </button>
 
                                         <Link
                                             href={route(
-                                                'admin.courses.index'
+                                                "admin.courses.index",
                                             )}
                                             className="btn-cancel"
                                         >
@@ -1460,7 +1783,6 @@ export default function Form({ course = null, categories = [], talents = [] }) {
 
                                 </div>
                             </div>
-
                         </div>
                     </form>
                 </div>

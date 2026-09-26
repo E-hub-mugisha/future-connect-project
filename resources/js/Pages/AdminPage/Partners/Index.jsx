@@ -2,17 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Head, router, useForm } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AppLayout";
 
-/*
-|--------------------------------------------------------------------------
-| Partners Management
-|--------------------------------------------------------------------------
-| Existing backend routes preserved:
-| - admin.partners.store
-| - admin.partners.update
-| - admin.partners.destroy
-|--------------------------------------------------------------------------
-*/
-
 const routes = {
     store: () => route("admin.partners.store"),
     update: (id) => route("admin.partners.update", id),
@@ -1144,7 +1133,6 @@ function ModalShell({
 }) {
     useEffect(() => {
         const originalOverflow = document.body.style.overflow;
-
         document.body.style.overflow = "hidden";
 
         const handleKeyDown = (event) => {
@@ -1161,46 +1149,68 @@ function ModalShell({
         };
     }, [onClose]);
 
+    const modalSize =
+        size === "small"
+            ? "modal-sm"
+            : size === "large"
+              ? "modal-lg"
+              : "";
+
     return (
-        <div
-            className="modal-overlay"
-            onMouseDown={(event) => {
-                if (event.target === event.currentTarget) {
-                    onClose();
-                }
-            }}
-        >
+        <>
             <div
-                className={`modal modal-${size}`}
+                className="modal fade show d-block"
+                tabIndex="-1"
                 role="dialog"
                 aria-modal="true"
-                aria-labelledby="modal-title"
-                onMouseDown={(event) => event.stopPropagation()}
+                aria-labelledby="partner-modal-title"
+                onMouseDown={(event) => {
+                    if (event.target === event.currentTarget) {
+                        onClose();
+                    }
+                }}
             >
-                <div className="modal-header">
-                    <div>
-                        <span className="modal-eyebrow">
-                            PARTNER MANAGEMENT
-                        </span>
+                <div
+                    className={`modal-dialog modal-dialog-centered ${modalSize}`}
+                    onMouseDown={(event) => event.stopPropagation()}
+                >
+                    <div className="modal-content partner-bootstrap-modal">
+                        <div className="modal-header">
+                            <div className="pe-3">
+                                <span className="modal-eyebrow">
+                                    PARTNER MANAGEMENT
+                                </span>
 
-                        <h2 id="modal-title">{title}</h2>
+                                <h2 id="partner-modal-title" className="modal-title">
+                                    {title}
+                                </h2>
 
-                        {subtitle && <p>{subtitle}</p>}
+                                {subtitle && (
+                                    <p className="mb-0 modal-subtitle">
+                                        {subtitle}
+                                    </p>
+                                )}
+                            </div>
+
+                            <button
+                                type="button"
+                                className="btn-close flex-shrink-0"
+                                onClick={onClose}
+                                aria-label="Close modal"
+                            />
+                        </div>
+
+                        {children}
                     </div>
-
-                    <button
-                        type="button"
-                        className="modal-close"
-                        onClick={onClose}
-                        aria-label="Close modal"
-                    >
-                        <CloseIcon />
-                    </button>
                 </div>
-
-                {children}
             </div>
-        </div>
+
+            <div
+                className="modal-backdrop fade show"
+                onClick={onClose}
+                aria-hidden="true"
+            />
+        </>
     );
 }
 
@@ -2209,122 +2219,75 @@ const styles = `
 }
 
 /* ================================================================
-   MODAL
+   BOOTSTRAP MODAL OVERRIDES
 ================================================================ */
 
-[data-h-scope="partners"] .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(15, 23, 42, .48);
-    backdrop-filter: blur(4px);
-}
-
-[data-h-scope="partners"] .modal {
-    width: 100%;
-    max-height: min(860px, calc(100vh - 40px));
-    display: flex;
-    flex-direction: column;
+[data-h-scope="partners"] .partner-bootstrap-modal {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .20);
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,.7);
-    border-radius: 17px;
-    background: #fff;
-    box-shadow: 0 25px 70px rgba(15, 23, 42, .2);
-    animation: partnerModalIn .18s ease-out;
 }
 
-[data-h-scope="partners"] .modal-small {
-    max-width: 470px;
-}
-
-[data-h-scope="partners"] .modal-medium {
-    max-width: 650px;
-}
-
-[data-h-scope="partners"] .modal-large {
-    max-width: 760px;
-}
-
-@keyframes partnerModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px) scale(.99);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-[data-h-scope="partners"] .modal-header {
+[data-h-scope="partners"] .partner-bootstrap-modal .modal-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
-    padding: 22px 24px 19px;
+    padding: 20px 24px;
     border-bottom: 1px solid var(--partner-border);
+    background: #fff;
 }
 
-[data-h-scope="partners"] .modal-eyebrow {
+[data-h-scope="partners"] .partner-bootstrap-modal .modal-eyebrow {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     color: var(--partner-blue-dark);
     font-size: 9px;
     font-weight: 800;
     letter-spacing: .12em;
 }
 
-[data-h-scope="partners"] .modal-header h2 {
+[data-h-scope="partners"] .partner-bootstrap-modal .modal-title {
     margin: 0;
     color: var(--partner-text);
     font-size: 19px;
     line-height: 1.3;
-    font-weight: 760;
+    font-weight: 700;
     letter-spacing: -.02em;
 }
 
-[data-h-scope="partners"] .modal-header p {
-    margin: 5px 0 0;
+[data-h-scope="partners"] .partner-bootstrap-modal .modal-subtitle {
+    margin-top: 5px;
     color: var(--partner-text-secondary);
     font-size: 12px;
     line-height: 1.5;
 }
 
-[data-h-scope="partners"] .modal-close {
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    flex: 0 0 34px;
-    border: 1px solid var(--partner-border);
+[data-h-scope="partners"] .partner-bootstrap-modal .btn-close {
+    margin: 2px 0 0;
+    padding: 10px;
     border-radius: 8px;
-    color: #727C8B;
-    background: #fff;
+    opacity: .55;
 }
 
-[data-h-scope="partners"] .modal-close:hover {
-    color: var(--partner-text);
-    background: #F7F8FA;
+[data-h-scope="partners"] .partner-bootstrap-modal .btn-close:hover {
+    opacity: .85;
+    background-color: #F3F5F7;
 }
 
-[data-h-scope="partners"] .modal-close svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.7;
-}
-
-[data-h-scope="partners"] .modal > form,
-[data-h-scope="partners"] .modal > .partner-profile,
-[data-h-scope="partners"] .modal > .delete-content {
+[data-h-scope="partners"] .partner-bootstrap-modal > form {
     min-height: 0;
-    overflow-y: auto;
+}
+
+[data-h-scope="partners"] .partner-bootstrap-modal .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+    padding: 14px 24px;
+    border-top: 1px solid var(--partner-border);
+    background: #FCFDFE;
 }
 
 /* ================================================================
@@ -2662,20 +2625,6 @@ const styles = `
 [data-h-scope="partners"] .visibility-content span {
     color: var(--partner-text-secondary);
     font-size: 10px;
-}
-
-/* ================================================================
-   MODAL FOOTER
-================================================================ */
-
-[data-h-scope="partners"] .modal-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 9px;
-    padding: 14px 24px;
-    border-top: 1px solid var(--partner-border);
-    background: #FCFDFE;
 }
 
 /* ================================================================
