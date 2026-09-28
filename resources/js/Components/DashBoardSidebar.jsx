@@ -72,16 +72,10 @@ export default function Sidebar({
             ? "Talent"
             : "Member";
 
-    /*
-     * Close mobile drawer whenever navigation changes.
-     */
     useEffect(() => {
         onClose?.();
     }, [current]);
 
-    /*
-     * Prevent body scrolling while mobile sidebar is open.
-     */
     useEffect(() => {
         if (!mobileOpen) return;
 
@@ -97,15 +91,23 @@ export default function Sidebar({
     return (
         <>
             <style>{`
+                /* =====================================================
+                   FUTURE CONNECT SIDEBAR
+                   Primary: #00A667
+                ===================================================== */
+
                 .tp-sidebar {
-                    --tp-primary: #5D89C8;
-                    --tp-primary-dark: #4675B7;
-                    --tp-primary-soft: rgba(93, 137, 200, .10);
-                    --tp-primary-soft-2: rgba(93, 137, 200, .16);
+                    --tp-primary: #00a667;
+                    --tp-primary-dark: #008c58;
+                    --tp-primary-deep: #007a4d;
+
+                    --tp-primary-soft: rgba(0, 166, 103, .08);
+                    --tp-primary-soft-2: rgba(0, 166, 103, .14);
+                    --tp-primary-border: rgba(0, 166, 103, .20);
 
                     --tp-bg: #ffffff;
                     --tp-surface: #f8fafc;
-                    --tp-border: #e8edf3;
+                    --tp-border: #e7ecef;
 
                     --tp-text: #172033;
                     --tp-text-secondary: #667085;
@@ -124,7 +126,7 @@ export default function Sidebar({
                         linear-gradient(
                             180deg,
                             #ffffff 0%,
-                            #fbfcfe 100%
+                            #fbfdfc 100%
                         );
 
                     border-right: 1px solid var(--tp-border);
@@ -138,15 +140,17 @@ export default function Sidebar({
                     overflow: hidden;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    MOBILE OVERLAY
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-sidebar-overlay {
                     position: fixed;
                     inset: 0;
+
                     background: rgba(15, 23, 42, .42);
                     backdrop-filter: blur(3px);
+
                     z-index: 1040;
 
                     opacity: 0;
@@ -162,9 +166,9 @@ export default function Sidebar({
                     visibility: visible;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    HEADER / BRAND
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-sidebar-header {
                     min-height: 74px;
@@ -192,6 +196,7 @@ export default function Sidebar({
                     width: auto;
                     height: 34px;
                     max-width: 155px;
+
                     object-fit: contain;
                 }
 
@@ -209,15 +214,16 @@ export default function Sidebar({
                         linear-gradient(
                             135deg,
                             var(--tp-primary),
-                            #7ca5db
+                            #28c889
                         );
 
                     color: #fff;
+
                     font-size: 14px;
                     font-weight: 800;
 
                     box-shadow:
-                        0 8px 20px rgba(93, 137, 200, .22);
+                        0 8px 20px rgba(0, 166, 103, .20);
                 }
 
                 .tp-mobile-close {
@@ -243,12 +249,12 @@ export default function Sidebar({
                 .tp-mobile-close:hover {
                     color: var(--tp-primary);
                     background: var(--tp-primary-soft);
-                    border-color: rgba(93, 137, 200, .2);
+                    border-color: var(--tp-primary-border);
                 }
 
-                /* -----------------------------------------
-                   PROFILE CARD
-                ----------------------------------------- */
+                /* =====================================================
+                   PROFILE
+                ===================================================== */
 
                 .tp-profile {
                     margin: 14px 14px 8px;
@@ -257,11 +263,11 @@ export default function Sidebar({
                     background:
                         linear-gradient(
                             135deg,
-                            #f8fbff,
-                            #f5f8fc
+                            #f4fcf8,
+                            #f7faf9
                         );
 
-                    border: 1px solid #e7eef7;
+                    border: 1px solid #e1eee8;
 
                     border-radius: 16px;
 
@@ -292,8 +298,8 @@ export default function Sidebar({
                     background:
                         linear-gradient(
                             135deg,
-                            #5D89C8,
-                            #7ba4d7
+                            #00a667,
+                            #22c486
                         );
 
                     color: #fff;
@@ -302,7 +308,7 @@ export default function Sidebar({
                     font-weight: 800;
 
                     box-shadow:
-                        0 6px 14px rgba(93, 137, 200, .20);
+                        0 6px 14px rgba(0, 166, 103, .20);
                 }
 
                 .tp-online {
@@ -370,9 +376,9 @@ export default function Sidebar({
                     background: #fff;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    PROFILE COMPLETION
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-completion {
                     margin-top: 12px;
@@ -405,7 +411,7 @@ export default function Sidebar({
 
                     overflow: hidden;
 
-                    background: #e7edf4;
+                    background: #e5ebe8;
 
                     border-radius: 999px;
                 }
@@ -418,7 +424,7 @@ export default function Sidebar({
                         linear-gradient(
                             90deg,
                             var(--tp-primary),
-                            #82a9dc
+                            #37cf91
                         );
 
                     border-radius: inherit;
@@ -443,9 +449,9 @@ export default function Sidebar({
                     color: var(--tp-primary-dark);
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    QUICK INFO
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-quick-info {
                     display: grid;
@@ -471,8 +477,11 @@ export default function Sidebar({
 
                 .tp-quick-card:hover {
                     transform: translateY(-1px);
-                    border-color: rgba(93, 137, 200, .25);
-                    box-shadow: 0 5px 14px rgba(15, 23, 42, .05);
+
+                    border-color: var(--tp-primary-border);
+
+                    box-shadow:
+                        0 5px 14px rgba(15, 23, 42, .05);
                 }
 
                 .tp-quick-label {
@@ -497,6 +506,10 @@ export default function Sidebar({
                     font-weight: 800;
                 }
 
+                .tp-quick-value svg {
+                    color: var(--tp-primary);
+                }
+
                 .tp-coin {
                     width: 15px;
                     height: 15px;
@@ -508,16 +521,15 @@ export default function Sidebar({
                     border-radius: 50%;
 
                     background: #f3c969;
-
                     color: #735600;
 
                     font-size: 8px;
                     font-weight: 900;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    NAVIGATION
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-nav {
                     flex: 1;
@@ -527,7 +539,7 @@ export default function Sidebar({
                     padding: 6px 10px 20px;
 
                     scrollbar-width: thin;
-                    scrollbar-color: #dce3eb transparent;
+                    scrollbar-color: #dce3e0 transparent;
                 }
 
                 .tp-nav::-webkit-scrollbar {
@@ -539,14 +551,14 @@ export default function Sidebar({
                 }
 
                 .tp-nav::-webkit-scrollbar-thumb {
-                    background: #dce3eb;
+                    background: #dce3e0;
                     border-radius: 999px;
                 }
 
                 .tp-section {
                     padding: 15px 9px 7px;
 
-                    color: #a0a9b7;
+                    color: #9aa5a0;
 
                     font-size: 9px;
                     font-weight: 800;
@@ -562,7 +574,6 @@ export default function Sidebar({
                     align-items: center;
 
                     width: 100%;
-
                     min-height: 43px;
 
                     padding: 0 11px;
@@ -593,7 +604,7 @@ export default function Sidebar({
                 .tp-nav-item:hover {
                     color: var(--tp-text);
 
-                    background: #f5f8fc;
+                    background: #f3f8f6;
 
                     transform: translateX(2px);
                 }
@@ -604,8 +615,8 @@ export default function Sidebar({
                     background:
                         linear-gradient(
                             90deg,
-                            rgba(93, 137, 200, .13),
-                            rgba(93, 137, 200, .06)
+                            rgba(0, 166, 103, .13),
+                            rgba(0, 166, 103, .055)
                         );
 
                     font-weight: 700;
@@ -657,7 +668,7 @@ export default function Sidebar({
                     display: flex;
                     align-items: center;
 
-                    color: #aab3c0;
+                    color: #aab3b0;
 
                     transition: transform .2s ease;
                 }
@@ -666,9 +677,9 @@ export default function Sidebar({
                     transform: rotate(90deg);
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    BADGES
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-badge {
                     min-width: 18px;
@@ -682,7 +693,7 @@ export default function Sidebar({
 
                     border-radius: 999px;
 
-                    background: #eef3f9;
+                    background: rgba(0, 166, 103, .10);
 
                     color: var(--tp-primary);
 
@@ -695,16 +706,16 @@ export default function Sidebar({
                     color: #e05252;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    SUB NAVIGATION
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-subnav {
                     margin: 0 0 4px 30px;
 
                     padding: 3px 0 4px 10px;
 
-                    border-left: 1px solid #e6ebf1;
+                    border-left: 1px solid #e1e9e5;
                 }
 
                 .tp-subnav .tp-nav-item {
@@ -723,9 +734,9 @@ export default function Sidebar({
                     bottom: 8px;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    BOTTOM
-                ----------------------------------------- */
+                ===================================================== */
 
                 .tp-sidebar-bottom {
                     flex-shrink: 0;
@@ -734,7 +745,7 @@ export default function Sidebar({
 
                     border-top: 1px solid var(--tp-border);
 
-                    background: rgba(255,255,255,.96);
+                    background: rgba(255, 255, 255, .96);
                 }
 
                 .tp-help {
@@ -773,7 +784,7 @@ export default function Sidebar({
 
                     border-radius: 8px;
 
-                    background: #f3f6fa;
+                    background: #f0f7f4;
 
                     color: var(--tp-primary);
                 }
@@ -807,9 +818,9 @@ export default function Sidebar({
                     color: #dc4d4d;
                 }
 
-                /* -----------------------------------------
+                /* =====================================================
                    TABLET / MOBILE
-                ----------------------------------------- */
+                ===================================================== */
 
                 @media (max-width: 991.98px) {
                     .tp-sidebar {
@@ -848,7 +859,7 @@ export default function Sidebar({
                 }
             `}</style>
 
-            {/* Mobile backdrop */}
+            {/* MOBILE BACKDROP */}
             <div
                 className={`tp-sidebar-overlay ${
                     mobileOpen ? "show" : ""
@@ -863,7 +874,10 @@ export default function Sidebar({
                 }`}
                 aria-label="Main navigation"
             >
-                {/* BRAND */}
+                {/* =====================================================
+                    BRAND
+                ===================================================== */}
+
                 <div className="tp-sidebar-header">
                     <Link
                         href={
@@ -878,7 +892,7 @@ export default function Sidebar({
                         <img
                             className="tp-brand-logo"
                             src="/assets/img/WORDMARK.png"
-                            alt="Talent Platform"
+                            alt="Future Connect"
                             onError={(e) => {
                                 e.currentTarget.style.display = "none";
                                 e.currentTarget.nextElementSibling.style.display =
@@ -890,7 +904,7 @@ export default function Sidebar({
                             className="tp-brand-fallback"
                             style={{ display: "none" }}
                         >
-                            TP
+                            FC
                         </span>
                     </Link>
 
@@ -915,7 +929,10 @@ export default function Sidebar({
                     </button>
                 </div>
 
-                {/* PROFILE */}
+                {/* =====================================================
+                    PROFILE
+                ===================================================== */}
+
                 <div className="tp-profile">
                     <div className="tp-profile-top">
                         <div className="tp-avatar-wrapper">
@@ -987,7 +1004,10 @@ export default function Sidebar({
                     )}
                 </div>
 
-                {/* QUICK CARDS */}
+                {/* =====================================================
+                    QUICK CARDS
+                ===================================================== */}
+
                 {role === "talent" && (
                     <div className="tp-quick-info">
                         <Link
@@ -1000,6 +1020,7 @@ export default function Sidebar({
 
                             <span className="tp-quick-value">
                                 Explore
+
                                 <svg
                                     width="11"
                                     height="11"
@@ -1022,13 +1043,17 @@ export default function Sidebar({
                                 <span className="tp-coin">
                                     C
                                 </span>
+
                                 0 Coins
                             </span>
                         </div>
                     </div>
                 )}
 
-                {/* NAVIGATION */}
+                {/* =====================================================
+                    NAVIGATION
+                ===================================================== */}
+
                 <div className="tp-nav">
                     {role === "admin" && (
                         <AdminNav isActive={isActive} />
@@ -1048,7 +1073,10 @@ export default function Sidebar({
                     )}
                 </div>
 
-                {/* BOTTOM */}
+                {/* =====================================================
+                    BOTTOM
+                ===================================================== */}
+
                 <div className="tp-sidebar-bottom">
                     <Link
                         href={
@@ -1070,8 +1098,14 @@ export default function Sidebar({
                                 strokeWidth="1.8"
                                 strokeLinecap="round"
                             >
-                                <circle cx="12" cy="12" r="9" />
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                />
+
                                 <path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4" />
+
                                 <line
                                     x1="12"
                                     y1="17"
@@ -1208,7 +1242,9 @@ function Collapsible({
 function AdminNav({ isActive }) {
     return (
         <>
-            <NavSection>Overview</NavSection>
+            <NavSection>
+                Overview
+            </NavSection>
 
             <NavItem
                 href="/admin/dashboard"
@@ -1218,7 +1254,9 @@ function AdminNav({ isActive }) {
                 Dashboard
             </NavItem>
 
-            <NavSection>Users & Access</NavSection>
+            <NavSection>
+                Users & Access
+            </NavSection>
 
             <NavItem
                 href="/admin/users"
@@ -1244,7 +1282,9 @@ function AdminNav({ isActive }) {
                 Partners
             </NavItem>
 
-            <NavSection>Content</NavSection>
+            <NavSection>
+                Content
+            </NavSection>
 
             <NavItem
                 href="/admin/categories"
@@ -1286,7 +1326,9 @@ function AdminNav({ isActive }) {
                 Announcements
             </NavItem>
 
-            <NavSection>Platform</NavSection>
+            <NavSection>
+                Platform
+            </NavSection>
 
             <NavItem
                 href="/admin/jobs"
@@ -1312,7 +1354,9 @@ function AdminNav({ isActive }) {
                 Connections
             </NavItem>
 
-            <NavSection>Commerce</NavSection>
+            <NavSection>
+                Commerce
+            </NavSection>
 
             <NavItem
                 href="/admin/products"
@@ -1354,7 +1398,9 @@ function AdminNav({ isActive }) {
                 Pricing Plans
             </NavItem>
 
-            <NavSection>System</NavSection>
+            <NavSection>
+                System
+            </NavSection>
 
             <NavItem
                 href="/admin/demo-requests"
@@ -1370,14 +1416,6 @@ function AdminNav({ isActive }) {
                 icon={icons.activity}
             >
                 Login Activity
-            </NavItem>
-
-            <NavItem
-                href="/admin/settings"
-                active={isActive("/admin/settings")}
-                icon={icons.settings}
-            >
-                Settings
             </NavItem>
         </>
     );
@@ -1395,7 +1433,9 @@ function TalentNav({
 }) {
     return (
         <>
-            <NavSection>Workspace</NavSection>
+            <NavSection>
+                Workspace
+            </NavSection>
 
             <NavItem
                 href={route("talent.dashboard")}
@@ -1413,7 +1453,9 @@ function TalentNav({
                 My Profile
             </NavItem>
 
-            <NavSection>Career & Learning</NavSection>
+            <NavSection>
+                Career & Learning
+            </NavSection>
 
             <NavItem
                 href={route("talent.courses.index")}
@@ -1423,7 +1465,9 @@ function TalentNav({
                 Courses
             </NavItem>
 
-            <NavSection>Professional Network</NavSection>
+            <NavSection>
+                Professional Network
+            </NavSection>
 
             <NavItem
                 href={route(
@@ -1439,32 +1483,33 @@ function TalentNav({
                 Connections
             </NavItem>
 
+            <NavSection>
+                Marketplace
+            </NavSection>
 
-            <NavSection>Marketplace</NavSection>
-
-                <NavItem
-                    href={route("talent.products.index")}
-                    active={route().current(
-                        "talent.products.index"
-                    )}
-                    icon={icons.grid}
-                >
-                    All Products
-                </NavItem>
-
-                {!user?.seller && (
-                    <NavItem
-                        href={route(
-                            "talent.products.seller"
-                        )}
-                        active={route().current(
-                            "talent.products.seller"
-                        )}
-                        icon={icons.seller}
-                    >
-                        Become a Seller
-                    </NavItem>
+            <NavItem
+                href={route("talent.products.index")}
+                active={route().current(
+                    "talent.products.index"
                 )}
+                icon={icons.grid}
+            >
+                All Products
+            </NavItem>
+
+            {!user?.seller && (
+                <NavItem
+                    href={route(
+                        "talent.products.seller"
+                    )}
+                    active={route().current(
+                        "talent.products.seller"
+                    )}
+                    icon={icons.seller}
+                >
+                    Become a Seller
+                </NavItem>
+            )}
         </>
     );
 }
@@ -1476,7 +1521,9 @@ function TalentNav({
 function UserNav({ isActive }) {
     return (
         <>
-            <NavSection>Workspace</NavSection>
+            <NavSection>
+                Workspace
+            </NavSection>
 
             <NavItem
                 href={route("user.dashboard")}
@@ -1486,7 +1533,9 @@ function UserNav({ isActive }) {
                 Dashboard
             </NavItem>
 
-            <NavSection>Talent Network</NavSection>
+            <NavSection>
+                Talent Network
+            </NavSection>
 
             <NavItem
                 href={route("user.talents.connected")}
@@ -1509,7 +1558,9 @@ function UserNav({ isActive }) {
                 Connection Requests
             </NavItem>
 
-            <NavSection>Learning</NavSection>
+            <NavSection>
+                Learning
+            </NavSection>
 
             <NavItem
                 href="/user/courses"
@@ -1519,7 +1570,9 @@ function UserNav({ isActive }) {
                 Courses
             </NavItem>
 
-            <NavSection>Discover</NavSection>
+            <NavSection>
+                Discover
+            </NavSection>
 
             <NavItem
                 href="/announcements"
@@ -1545,7 +1598,9 @@ function UserNav({ isActive }) {
                 Testimonials
             </NavItem>
 
-            <NavSection>Account</NavSection>
+            <NavSection>
+                Account
+            </NavSection>
 
             <NavItem
                 href="/user/payments"

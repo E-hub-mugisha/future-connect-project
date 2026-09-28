@@ -157,13 +157,6 @@ export default function Topbar({
 
         if (!search.trim()) return;
 
-        /*
-         * Keep this UI-only for now.
-         *
-         * You can later connect this to:
-         * /search?q=
-         * or a dedicated global search route.
-         */
         console.log("Global search:", search);
 
         setMobileSearchOpen(false);
@@ -184,14 +177,17 @@ export default function Topbar({
         <>
             <style>{`
                 /* =========================================================
-                   TALENT PLATFORM TOPBAR
+                   FUTURE CONNECT TOPBAR
+                   Brand: #00a667
                 ========================================================= */
 
                 .tp-topbar {
-                    --tp-primary: #5D89C8;
-                    --tp-primary-dark: #4675B7;
-                    --tp-primary-soft: rgba(93, 137, 200, .09);
-                    --tp-primary-soft-2: rgba(93, 137, 200, .15);
+                    --tp-primary: #00a667;
+                    --tp-primary-dark: #008653;
+                    --tp-primary-light: #55d6a2;
+
+                    --tp-primary-soft: rgba(0, 166, 103, .09);
+                    --tp-primary-soft-2: rgba(0, 166, 103, .15);
 
                     --tp-bg: #ffffff;
                     --tp-surface: #ffffff;
@@ -271,7 +267,7 @@ export default function Topbar({
                 .tp-menu-button:hover {
                     color: var(--tp-primary);
                     background: var(--tp-primary-soft);
-                    border-color: rgba(93, 137, 200, .25);
+                    border-color: rgba(0, 166, 103, .25);
                 }
 
                 /* =========================================================
@@ -312,8 +308,7 @@ export default function Topbar({
                     width: 100%;
                     height: 42px;
 
-                    padding:
-                        0 76px 0 42px;
+                    padding: 0 76px 0 42px;
 
                     border-radius: 12px;
 
@@ -347,11 +342,11 @@ export default function Topbar({
                     background: #fff;
 
                     border-color:
-                        rgba(93, 137, 200, .45);
+                        rgba(0, 166, 103, .45);
 
                     box-shadow:
                         0 0 0 4px
-                        rgba(93, 137, 200, .08);
+                        rgba(0, 166, 103, .08);
                 }
 
                 .tp-search-shortcut {
@@ -442,6 +437,10 @@ export default function Topbar({
                     height: 18px;
                 }
 
+                /* =========================================================
+                   NOTIFICATION BADGE
+                ========================================================= */
+
                 .tp-notification-badge {
                     position: absolute;
 
@@ -483,15 +482,15 @@ export default function Topbar({
                     padding: 0 13px;
 
                     border: 1px solid
-                        rgba(93, 137, 200, .20);
+                        rgba(0, 166, 103, .20);
 
                     border-radius: 11px;
 
                     background:
                         linear-gradient(
                             135deg,
-                            rgba(93, 137, 200, .10),
-                            rgba(93, 137, 200, .05)
+                            rgba(0, 166, 103, .10),
+                            rgba(0, 166, 103, .05)
                         );
 
                     color: var(--tp-primary);
@@ -508,12 +507,14 @@ export default function Topbar({
                     background:
                         linear-gradient(
                             135deg,
-                            rgba(93, 137, 200, .16),
-                            rgba(93, 137, 200, .09)
+                            rgba(0, 166, 103, .16),
+                            rgba(0, 166, 103, .09)
                         );
 
                     border-color:
-                        rgba(93, 137, 200, .30);
+                        rgba(0, 166, 103, .30);
+
+                    color: var(--tp-primary-dark);
 
                     transform: translateY(-1px);
                 }
@@ -581,8 +582,8 @@ export default function Topbar({
                     background:
                         linear-gradient(
                             135deg,
-                            #5D89C8,
-                            #83a9d9
+                            #00a667,
+                            #55d6a2
                         );
 
                     color: #fff;
@@ -592,7 +593,7 @@ export default function Topbar({
 
                     box-shadow:
                         0 5px 13px
-                        rgba(93, 137, 200, .18);
+                        rgba(0, 166, 103, .18);
                 }
 
                 .tp-user-online {
@@ -755,6 +756,7 @@ export default function Topbar({
                 }
 
                 .tp-dropdown-action:hover {
+                    color: var(--tp-primary-dark);
                     text-decoration: underline;
                 }
 
@@ -793,7 +795,7 @@ export default function Topbar({
 
                 .tp-notification-item.unread {
                     background:
-                        rgba(93, 137, 200, .045);
+                        rgba(0, 166, 103, .045);
                 }
 
                 .tp-notification-icon {
@@ -809,7 +811,7 @@ export default function Topbar({
                     border-radius: 10px;
 
                     background:
-                        rgba(93, 137, 200, .10);
+                        rgba(0, 166, 103, .10);
 
                     color: var(--tp-primary);
                 }
@@ -867,7 +869,7 @@ export default function Topbar({
                     border-radius: 999px;
 
                     background:
-                        rgba(93, 137, 200, .10);
+                        rgba(0, 166, 103, .10);
 
                     color: var(--tp-primary);
 
@@ -902,6 +904,13 @@ export default function Topbar({
                     color: #98a2b3;
 
                     font-size: 11px;
+                }
+
+                .tp-empty svg {
+                    width: 25px;
+                    height: 25px;
+
+                    color: #c5cdd7;
                 }
 
                 .tp-notification-footer {
@@ -1024,7 +1033,7 @@ export default function Topbar({
                     background:
                         linear-gradient(
                             135deg,
-                            #f7faff,
+                            #f4fcf8,
                             #f4f7fb
                         );
 
@@ -1051,14 +1060,18 @@ export default function Topbar({
                     background:
                         linear-gradient(
                             135deg,
-                            #5D89C8,
-                            #82a7d8
+                            #00a667,
+                            #4fd09a
                         );
 
                     color: #fff;
 
                     font-size: 12px;
                     font-weight: 800;
+
+                    box-shadow:
+                        0 6px 16px
+                        rgba(0, 166, 103, .15);
                 }
 
                 .tp-profile-header-info {
@@ -1128,8 +1141,8 @@ export default function Topbar({
                     background:
                         linear-gradient(
                             90deg,
-                            #5D89C8,
-                            #83a8d8
+                            #00a667,
+                            #55d6a2
                         );
 
                     border-radius: inherit;
@@ -1206,7 +1219,7 @@ export default function Topbar({
 
                     z-index: 2000;
 
-                    background: rgba(255,255,255,.98);
+                    background: rgba(255, 255, 255, .98);
 
                     backdrop-filter: blur(15px);
 
@@ -1243,17 +1256,22 @@ export default function Topbar({
                     color: var(--tp-text);
 
                     font-size: 13px;
+
+                    transition:
+                        border-color .18s ease,
+                        box-shadow .18s ease,
+                        background .18s ease;
                 }
 
                 .tp-mobile-search-input:focus {
                     background: #fff;
 
                     border-color:
-                        rgba(93, 137, 200, .4);
+                        rgba(0, 166, 103, .40);
 
                     box-shadow:
                         0 0 0 4px
-                        rgba(93, 137, 200, .08);
+                        rgba(0, 166, 103, .08);
                 }
 
                 .tp-mobile-search-icon {
@@ -1286,6 +1304,10 @@ export default function Topbar({
                     cursor: pointer;
                 }
 
+                .tp-mobile-search-cancel:hover {
+                    color: var(--tp-primary-dark);
+                }
+
                 /* =========================================================
                    RESPONSIVE
                 ========================================================= */
@@ -1316,8 +1338,7 @@ export default function Topbar({
 
                         height: 68px;
 
-                        padding:
-                            0 16px;
+                        padding: 0 16px;
                     }
 
                     .tp-menu-button {
@@ -1494,13 +1515,17 @@ export default function Topbar({
 
                                     setNotifOpen(false);
                                     setProfileOpen(false);
+
                                     setQuickOpen(
                                         (value) => !value
                                     );
                                 }}
                             >
                                 <PlusIcon />
-                                <span>Quick action</span>
+
+                                <span>
+                                    Quick action
+                                </span>
                             </button>
 
                             <div
@@ -1891,22 +1916,6 @@ export default function Topbar({
                                     </>
                                 )}
 
-                                {role === "admin" && (
-                                    <Link
-                                        href="/admin/settings"
-                                        className="tp-profile-link"
-                                        onClick={() =>
-                                            setProfileOpen(false)
-                                        }
-                                    >
-                                        <SettingsIcon />
-
-                                        <span>
-                                            Platform Settings
-                                        </span>
-                                    </Link>
-                                )}
-
                                 <div className="tp-profile-divider" />
 
                                 <button
@@ -2096,6 +2105,7 @@ function SettingsIcon() {
     return (
         <Icon>
             <circle cx="12" cy="12" r="3" />
+
             <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5v.2h-4v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1-2.8-2.8.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3v-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2.8-2.8.1.1a1.7 1.7 0 0 0 1.8.3 1.7 1.7 0 0 0 1-1.5V3h4v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1 2.8 2.8-.1.1a1.7 1.7 0 0 0-.3 1.8 1.7 1.7 0 0 0 .5.8" />
         </Icon>
     );

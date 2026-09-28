@@ -629,7 +629,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/invoice/{id}/print', [AdminPaymentController::class, 'print'])->name('invoice.print');
 
     // Settings
-    Route::get('/settings', [AdminDashboardController::class, 'index'])->name('settings.index');
+    Route::get('/settings', [AdminDashboardController::class, 'indexSettings'])->name('settings.index');
     Route::put('/settings', [AdminDashboardController::class, 'update'])->name('settings.update');
 
     // Login activity

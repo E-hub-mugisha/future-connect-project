@@ -1,100 +1,171 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
+
 import { Head, Link, useForm } from "@inertiajs/react";
 
 const THEME_KEY = "fc-theme";
 
+const roleOptions = [
+    {
+        value: "talent",
+        title: "I’m a Talent",
+        description: "Showcase your skills and get discovered.",
+        icon: (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                />
+            </svg>
+        ),
+    },
+    {
+        value: "seller",
+        title: "I’m a Seller",
+        description: "List products or services and reach buyers.",
+        icon: (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="m4 9 2-5h12l2 5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinejoin="round"
+                />
+                <path
+                    d="M4 9h16v10H4z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                />
+                <path
+                    d="M9 19v-5h6v5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                />
+            </svg>
+        ),
+    },
+    {
+        value: "user",
+        title: "I’m a Member",
+        description: "Browse, connect, and explore the platform.",
+        icon: (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                />
+                <path
+                    d="M8 8h8M8 12h8M8 16h5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                />
+            </svg>
+        ),
+    },
+];
+
 function initTheme() {
-    if (typeof window === "undefined") return "dark";
-    const stored = localStorage.getItem(THEME_KEY);
-    if (stored === "light" || stored === "dark") return stored;
-    const prefersLight = window.matchMedia(
-        "(prefers-color-scheme: light)",
-    ).matches;
-    return prefersLight ? "light" : "dark";
+    if (typeof window === "undefined") {
+        return "light";
+    }
+
+    const savedTheme = localStorage.getItem(THEME_KEY);
+
+    if (savedTheme === "dark" || savedTheme === "light") {
+        return savedTheme;
+    }
+
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
 }
 
-const STRENGTH_LABELS = [
-    "Use 8+ chars, numbers & symbols",
-    "Weak — keep going",
-    "Fair — add numbers or symbols",
-    "Good — add a special character",
-    "Strong password ✓",
-];
-const STRENGTH_CLASSES = ["", "weak", "fair", "good", "strong"];
-
-function scorePassword(val) {
-    let score = 0;
-    if (val.length >= 8) score++;
-    if (/[A-Z]/.test(val)) score++;
-    if (/[0-9]/.test(val)) score++;
-    if (/[^A-Za-z0-9]/.test(val)) score++;
-    return score;
+function FieldIcon({ children }) {
+    return <span className="fc-field-icon">{children}</span>;
 }
 
-const ROLES = [
-    {
-        key: "talent",
-        title: "Talent",
-        subtitle: "Showcase your skills & get discovered",
-        icon: (
-            <svg
-                viewBox="0 0 24 24"
+function EyeIcon({ visible }) {
+    return visible ? (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+            />
+            <circle
+                cx="12"
+                cy="12"
+                r="2.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+            />
+        </svg>
+    ) : (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M3 3l18 18"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.8"
                 strokeLinecap="round"
-                strokeLinejoin="round"
-            >
-                <path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2L12 2z" />
-            </svg>
-        ),
-    },
-    {
-        key: "seller",
-        title: "Seller",
-        subtitle: "List products or services & reach buyers",
-        icon: (
-            <svg
-                viewBox="0 0 24 24"
+            />
+            <path
+                d="M10.6 6.2A10.6 10.6 0 0 1 12 6c6 0 9.5 6 9.5 6a17.8 17.8 0 0 1-3.1 3.7M6.1 6.9C3.8 8.4 2.5 12 2.5 12s3.5 6 9.5 6c1.3 0 2.5-.3 3.5-.7"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="1.7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-            >
-                <path d="M3 3h18l-1.5 9h-15L3 3z" />
-                <circle cx="9" cy="20" r="1.5" />
-                <circle cx="17" cy="20" r="1.5" />
-            </svg>
-        ),
-    },
-    {
-        key: "user",
-        title: "Regular User",
-        subtitle: "Browse, connect, and explore the platform",
-        icon: (
-            <svg
-                viewBox="0 0 24 24"
+            />
+        </svg>
+    );
+}
+
+function CheckIcon() {
+    return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="m5 12 4 4L19 6"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-            >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-            </svg>
-        ),
-    },
-];
+            />
+        </svg>
+    );
+}
 
 export default function Register({ categories = [] }) {
     const [theme, setTheme] = useState(initTheme);
+    const [step, setStep] = useState("role");
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirm, setShowConfirm] = useState(false);
-    const [step, setStep] = useState("role"); // 'role' | 'form'
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+    } = useForm({
         role: "",
         name: "",
         email: "",
@@ -103,982 +174,1217 @@ export default function Register({ categories = [] }) {
         password_confirmation: "",
         terms: false,
 
-        // talent-only
         talent_address: "",
         talent_language: "",
         category_id: "",
         talent_description: "",
 
-        // seller-only
         company_name: "",
         seller_address: "",
         seller_description: "",
     });
 
     useEffect(() => {
-        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.dataset.fcTheme = theme;
         localStorage.setItem(THEME_KEY, theme);
     }, [theme]);
 
-    const fcToggleTheme = useCallback(() => {
-        setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-    }, []);
-
-    const strength = useMemo(
-        () => scorePassword(data.password),
-        [data.password],
+    const selectedRole = useMemo(
+        () => roleOptions.find((item) => item.value === data.role),
+        [data.role]
     );
-    const strengthLabel =
-        data.password.length === 0
-            ? STRENGTH_LABELS[0]
-            : STRENGTH_LABELS[strength];
 
-    const selectRole = (roleKey) => {
-        setData("role", roleKey);
-        setStep("form");
-    };
+    const passwordScore = useMemo(() => {
+        const password = data.password || "";
 
-    const backToRoles = () => setStep("role");
+        if (!password) return 0;
 
-    const submit = (e) => {
-        e.preventDefault();
+        let score = 0;
+
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+
+        return score;
+    }, [data.password]);
+
+    const passwordLabel = useMemo(() => {
+        if (!data.password) return "";
+        if (passwordScore <= 1) return "Weak";
+        if (passwordScore === 2) return "Fair";
+        if (passwordScore === 3) return "Good";
+        return "Strong";
+    }, [data.password, passwordScore]);
+
+    const chooseRole = useCallback(
+        (role) => {
+            setData("role", role);
+            setStep("form");
+        },
+        [setData]
+    );
+
+    const submit = (event) => {
+        event.preventDefault();
+
         post(route("register"), {
-            onFinish: () => reset("password", "password_confirmation"),
+            onFinish: () => {
+                reset("password", "password_confirmation");
+            },
         });
     };
 
-    const selectedRole = ROLES.find((r) => r.key === data.role);
+    const goBack = () => {
+        setStep("role");
+    };
 
     return (
         <>
-            <Head title="Register | Future Connect" />
+            <Head title="Create your account | Future Connect" />
 
-            <div className="page">
-                <div className="orb orb-1" />
-                <div className="orb orb-2" />
+            <div className="fc-register">
+                <div className="fc-background">
+                    <span className="fc-orb fc-orb-one" />
+                    <span className="fc-orb fc-orb-two" />
+                    <span className="fc-grid" />
+                </div>
 
-                <div className="top-nav">
-                    <button
-                        type="button"
-                        className="theme-btn"
-                        onClick={fcToggleTheme}
-                        aria-label="Toggle light / dark theme"
-                        title={
-                            theme === "dark"
-                                ? "Switch to light mode"
-                                : "Switch to dark mode"
-                        }
+                <header className="fc-topbar">
+                    <Link
+                        href={route("user.home")}
+                        className="fc-logo"
+                        aria-label="Future Connect home"
                     >
-                        {theme === "dark" ? (
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <circle cx="12" cy="12" r="5" />
-                                <line x1="12" y1="1" x2="12" y2="3" />
-                                <line x1="12" y1="21" x2="12" y2="23" />
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                                <line
-                                    x1="18.36"
-                                    y1="18.36"
-                                    x2="19.78"
-                                    y2="19.78"
-                                />
-                                <line x1="1" y1="12" x2="3" y2="12" />
-                                <line x1="21" y1="12" x2="23" y2="12" />
-                                <line
-                                    x1="4.22"
-                                    y1="19.78"
-                                    x2="5.64"
-                                    y2="18.36"
-                                />
-                                <line
-                                    x1="18.36"
-                                    y1="5.64"
-                                    x2="19.78"
-                                    y2="4.22"
-                                />
-                            </svg>
-                        ) : (
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                            </svg>
-                        )}
-                    </button>
-                </div>
+                        <span className="fc-logo-mark">
+                            <span />
+                            <span />
+                            <span />
+                        </span>
 
-                <div className="back-nav">
-                    {step === "form" ? (
-                        <button
-                            type="button"
-                            className="back-btn"
-                            onClick={backToRoles}
-                        >
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2.2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <line x1="19" y1="12" x2="5" y2="12" />
-                                <polyline points="12 19 5 12 12 5" />
-                            </svg>
-                            <span>Change role</span>
-                        </button>
-                    ) : (
-                        <Link href="/" className="back-btn">
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2.2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <line x1="19" y1="12" x2="5" y2="12" />
-                                <polyline points="12 19 5 12 12 5" />
-                            </svg>
-                            <span>Back</span>
-                        </Link>
-                    )}
-                </div>
+                        <span className="fc-logo-text">
+                            <strong>Future</strong>
+                            <b>Connect</b>
+                        </span>
+                    </Link>
 
-                <div className="card">
-                    {/* ── Left Branding Panel ── */}
-                    <div className="panel-left">
-                        <div className="dots">
-                            {Array.from({ length: 20 }).map((_, i) => (
-                                <span key={i} />
-                            ))}
-                        </div>
+                    <div className="fc-topbar-right">
+                        <span className="fc-login-copy">
+                            Already have an account?
+                        </span>
 
                         <Link
-                            href={route("user.home")}
-                            className="fc-logo-lockup"
+                            href={route("login")}
+                            className="fc-login-link"
                         >
-                            <div className="fc-logo-mark">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className="fc-logo-wordmark">
-                                    Future Connect
-                                </p>
-                                <p className="fc-logo-tagline">
-                                    Empowering Stories. Real Impact.
-                                </p>
-                            </div>
+                            Sign in
                         </Link>
 
-                        <div>
-                            <div className="pill">Join 8K+ Professionals</div>
-                            <div className="tagline">
-                                <h2>
-                                    Start your
-                                    <br />
-                                    <em>journey</em>
-                                    <br />
-                                    today.
-                                </h2>
-                                <p>
-                                    Create your free account and get discovered
-                                    by verified employers across Rwanda.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="features">
-                            <div className="feat">
-                                <div className="feat-icon">
-                                    <svg
-                                        viewBox="0 0 24 24"
+                        <button
+                            type="button"
+                            className="fc-theme-button"
+                            onClick={() =>
+                                setTheme((current) =>
+                                    current === "dark" ? "light" : "dark"
+                                )
+                            }
+                            aria-label="Toggle theme"
+                        >
+                            {theme === "dark" ? (
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="4"
                                         fill="none"
                                         stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                        <polyline points="22 4 12 14.01 9 11.01" />
-                                    </svg>
-                                </div>
-                                <div className="feat-text">
-                                    <strong>Verified Profiles</strong>
-                                    <span>Stand out to employers</span>
-                                </div>
-                            </div>
-                            <div className="feat">
-                                <div className="feat-icon">
-                                    <svg
-                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.7"
+                                    />
+                                    <path
+                                        d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
                                         fill="none"
                                         stroke="currentColor"
-                                        strokeWidth="2"
+                                        strokeWidth="1.7"
                                         strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="2" y1="12" x2="22" y2="12" />
-                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                                    </svg>
-                                </div>
-                                <div className="feat-text">
-                                    <strong>Rwanda-Wide</strong>
-                                    <span>Opportunities nationwide</span>
-                                </div>
-                            </div>
-                            <div className="feat">
-                                <div className="feat-icon">
-                                    <svg
-                                        viewBox="0 0 24 24"
+                                    />
+                                </svg>
+                            ) : (
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"
                                         fill="none"
                                         stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
+                                        strokeWidth="1.8"
                                         strokeLinejoin="round"
-                                    >
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                                    </svg>
-                                </div>
-                                <div className="feat-text">
-                                    <strong>Secure Platform</strong>
-                                    <span>Your data, protected</span>
-                                </div>
-                            </div>
-                            <div className="feat">
-                                <div className="feat-icon">
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                                        <polyline points="17 6 23 6 23 12" />
-                                    </svg>
-                                </div>
-                                <div className="feat-text">
-                                    <strong>Career Growth</strong>
-                                    <span>Courses &amp; mentorship</span>
-                                </div>
-                            </div>
-                        </div>
+                                    />
+                                </svg>
+                            )}
+                        </button>
                     </div>
+                </header>
 
-                    {/* ── Right Panel ── */}
-                    <div className="panel-right">
-                        {step === "role" ? (
-                            <>
-                                <div className="form-head">
-                                    <div className="eyebrow">
-                                        Create Account
-                                    </div>
-                                    <h1>How will you use Future Connect?</h1>
-                                    <p>
-                                        Pick the option that fits you best — you
-                                        can always update this later.
+                <main className="fc-register-shell">
+                    <section className="fc-register-card">
+                        <aside className="fc-brand-panel">
+                            <div className="fc-brand-inner">
+                                <div className="fc-brand-badge">
+                                    <span className="fc-status-dot" />
+                                    A platform built for growth
+                                </div>
+
+                                <div className="fc-brand-content">
+                                    <p className="fc-eyebrow">
+                                        FUTURE CONNECT
                                     </p>
-                                </div>
 
-                                <div className="role-grid">
-                                    {ROLES.map((r) => (
-                                        <button
-                                            type="button"
-                                            key={r.key}
-                                            className="role-card"
-                                            onClick={() => selectRole(r.key)}
-                                        >
-                                            <div className="role-icon">
-                                                {r.icon}
-                                            </div>
-                                            <div className="role-text">
-                                                <strong>{r.title}</strong>
-                                                <span>{r.subtitle}</span>
-                                            </div>
-                                            <svg
-                                                className="role-arrow"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2.2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <line
-                                                    x1="5"
-                                                    y1="12"
-                                                    x2="19"
-                                                    y2="12"
-                                                />
-                                                <polyline points="12 5 19 12 12 19" />
-                                            </svg>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                <div className="role-note">
-                                    Not a talent or seller? Apart from those two
-                                    options, everyone else registers as a{" "}
-                                    <strong>Regular User</strong> — you can
-                                    browse, connect, and use the platform
-                                    freely.
-                                </div>
-
-                                <div className="login-row">
-                                    Already have an account?{" "}
-                                    <Link href={route("login")}>Sign In</Link>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="form-head">
-                                    <div className="eyebrow">
-                                        {selectedRole?.title} Account
-                                    </div>
                                     <h1>
-                                        {data.role === "talent" &&
-                                            "Set up your Talent profile"}
-                                        {data.role === "seller" &&
-                                            "Set up your Seller account"}
-                                        {data.role === "user" &&
-                                            "Create your account"}
+                                        Your talent.
+                                        <br />
+                                        Your future.
+                                        <br />
+                                        <span>Connected.</span>
                                     </h1>
-                                    <p>
-                                        Fill in your details to get started for
-                                        free
+
+                                    <p className="fc-brand-description">
+                                        Discover inspiring stories, impactful
+                                        skills, and creative talent across
+                                        Africa.
                                     </p>
                                 </div>
 
-                                <form onSubmit={submit}>
-                                    <div className="fields-grid">
-                                        {/* Name */}
-                                        <div className="field field-full">
-                                            <label htmlFor="name">
-                                                Your Name
-                                            </label>
-                                            <div className="input-wrap">
-                                                <svg
-                                                    className="ico"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                                    <circle
-                                                        cx="12"
-                                                        cy="7"
-                                                        r="4"
-                                                    />
-                                                </svg>
-                                                <input
-                                                    id="name"
-                                                    className={`fc-input ${errors.name ? "is-invalid" : ""}`}
-                                                    type="text"
-                                                    name="name"
-                                                    value={data.name}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "name",
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="Jean Mugisha"
-                                                    required
-                                                    autoComplete="given-name"
-                                                />
-                                            </div>
-                                            {errors.name && (
-                                                <div className="field-error">
-                                                    {errors.name}
-                                                </div>
+                                <div className="fc-brand-features">
+                                    <div className="fc-brand-feature">
+                                        <span className="fc-feature-icon">
+                                            <CheckIcon />
+                                        </span>
+
+                                        <div>
+                                            <strong>Showcase your skills</strong>
+                                            <span>
+                                                Create a profile that gets
+                                                noticed.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="fc-brand-feature">
+                                        <span className="fc-feature-icon">
+                                            <CheckIcon />
+                                        </span>
+
+                                        <div>
+                                            <strong>Build connections</strong>
+                                            <span>
+                                                Connect with people and
+                                                opportunities.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="fc-brand-feature">
+                                        <span className="fc-feature-icon">
+                                            <CheckIcon />
+                                        </span>
+
+                                        <div>
+                                            <strong>Grow your opportunities</strong>
+                                            <span>
+                                                Turn your skills into new
+                                                possibilities.
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="fc-brand-footer">
+                                    <div className="fc-mini-avatars">
+                                        <span>F</span>
+                                        <span>C</span>
+                                        <span>A</span>
+                                        <span>+</span>
+                                    </div>
+
+                                    <p>
+                                        One platform.
+                                        <br />
+                                        Many possibilities.
+                                    </p>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <section className="fc-form-panel">
+                            <div className="fc-form-container">
+                                <div className="fc-mobile-logo">
+                                    <span className="fc-logo-mark">
+                                        <span />
+                                        <span />
+                                        <span />
+                                    </span>
+
+                                    <span className="fc-logo-text">
+                                        <strong>Future</strong>
+                                        <b>Connect</b>
+                                    </span>
+                                </div>
+
+                                <div className="fc-progress">
+                                    <div
+                                        className={`fc-progress-item ${
+                                            step === "role" ? "active" : "done"
+                                        }`}
+                                    >
+                                        <span className="fc-progress-number">
+                                            {step === "form" ? (
+                                                <CheckIcon />
+                                            ) : (
+                                                "01"
                                             )}
+                                        </span>
+
+                                        <span>Account type</span>
+                                    </div>
+
+                                    <div className="fc-progress-line">
+                                        <span
+                                            className={
+                                                step === "form"
+                                                    ? "filled"
+                                                    : ""
+                                            }
+                                        />
+                                    </div>
+
+                                    <div
+                                        className={`fc-progress-item ${
+                                            step === "form" ? "active" : ""
+                                        }`}
+                                    >
+                                        <span className="fc-progress-number">
+                                            02
+                                        </span>
+
+                                        <span>Your details</span>
+                                    </div>
+                                </div>
+
+                                {step === "role" ? (
+                                    <div className="fc-step-content">
+                                        <div className="fc-heading">
+                                            <span className="fc-heading-label">
+                                                GET STARTED
+                                            </span>
+
+                                            <h2>
+                                                How will you use
+                                                <br />
+                                                Future Connect?
+                                            </h2>
+
+                                            <p>
+                                                Select the account type that
+                                                best describes you.
+                                            </p>
                                         </div>
 
-                                        {/* Email */}
-                                        <div className="field">
-                                            <label htmlFor="email">
-                                                Email Address
-                                            </label>
-                                            <div className="input-wrap">
-                                                <svg
-                                                    className="ico"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                                    <polyline points="22,6 12,13 2,6" />
-                                                </svg>
-                                                <input
-                                                    id="email"
-                                                    className={`fc-input ${errors.email ? "is-invalid" : ""}`}
-                                                    type="email"
-                                                    name="email"
-                                                    value={data.email}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "email",
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="you@example.com"
-                                                    required
-                                                    autoComplete="email"
-                                                />
-                                            </div>
-                                            {errors.email && (
-                                                <div className="field-error">
-                                                    {errors.email}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Phone */}
-                                        <div className="field">
-                                            <label htmlFor="phone">
-                                                Phone Number
-                                            </label>
-                                            <div className="input-wrap">
-                                                <svg
-                                                    className="ico"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.85a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                                                </svg>
-                                                <input
-                                                    id="phone"
-                                                    className={`fc-input ${errors.phone ? "is-invalid" : ""}`}
-                                                    type="tel"
-                                                    name="phone"
-                                                    value={data.phone}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "phone",
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="+250 7XX XXX XXX"
-                                                    autoComplete="tel"
-                                                />
-                                            </div>
-                                            {errors.phone && (
-                                                <div className="field-error">
-                                                    {errors.phone}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Password */}
-                                        <div className="field">
-                                            <label htmlFor="password">
-                                                Password
-                                            </label>
-                                            <div className="input-wrap">
-                                                <svg
-                                                    className="ico"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <rect
-                                                        x="3"
-                                                        y="11"
-                                                        width="18"
-                                                        height="11"
-                                                        rx="2"
-                                                        ry="2"
-                                                    />
-                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                                </svg>
-                                                <input
-                                                    id="password"
-                                                    className={`fc-input ${errors.password ? "is-invalid" : ""}`}
-                                                    type={
-                                                        showPassword
-                                                            ? "text"
-                                                            : "password"
-                                                    }
-                                                    name="password"
-                                                    value={data.password}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "password",
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="••••••••"
-                                                    required
-                                                    autoComplete="new-password"
-                                                />
+                                        <div className="fc-role-list">
+                                            {roleOptions.map((role) => (
                                                 <button
                                                     type="button"
-                                                    className="eye-btn"
+                                                    key={role.value}
+                                                    className={`fc-role-card ${
+                                                        data.role ===
+                                                        role.value
+                                                            ? "selected"
+                                                            : ""
+                                                    }`}
                                                     onClick={() =>
-                                                        setShowPassword(
-                                                            (s) => !s,
+                                                        chooseRole(
+                                                            role.value
                                                         )
                                                     }
-                                                    aria-label="Toggle password"
                                                 >
-                                                    {showPassword ? (
-                                                        <svg
-                                                            width="15"
-                                                            height="15"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        >
-                                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                            <circle
-                                                                cx="12"
-                                                                cy="12"
-                                                                r="3"
-                                                            />
-                                                        </svg>
-                                                    ) : (
-                                                        <svg
-                                                            width="15"
-                                                            height="15"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        >
-                                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                                            <line
-                                                                x1="1"
-                                                                y1="1"
-                                                                x2="23"
-                                                                y2="23"
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                </button>
-                                            </div>
+                                                    <span className="fc-role-icon">
+                                                        {role.icon}
+                                                    </span>
 
-                                            <div className="strength-bar">
-                                                {[0, 1, 2, 3].map((i) => (
-                                                    <span
-                                                        key={i}
-                                                        className={`strength-seg ${i < strength ? STRENGTH_CLASSES[strength] : ""}`}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <div
-                                                className="strength-label"
-                                                style={{
-                                                    color:
-                                                        data.password.length ===
-                                                        0
-                                                            ? "var(--muted)"
-                                                            : [
-                                                                  "",
-                                                                  "#e07070",
-                                                                  "#e0a045",
-                                                                  "#5ab4e0",
-                                                                  "var(--green)",
-                                                              ][strength],
-                                                }}
+                                                    <span className="fc-role-copy">
+                                                        <strong>
+                                                            {role.title}
+                                                        </strong>
+
+                                                        <span>
+                                                            {role.description}
+                                                        </span>
+                                                    </span>
+
+                                                    <span className="fc-role-arrow">
+                                                        <svg
+                                                            viewBox="0 0 24 24"
+                                                            aria-hidden="true"
+                                                        >
+                                                            <path
+                                                                d="M5 12h14M13 6l6 6-6 6"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeWidth="1.8"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            />
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        <p className="fc-security-note">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                aria-hidden="true"
                                             >
-                                                {strengthLabel}
-                                            </div>
-                                            {errors.password && (
-                                                <div className="field-error">
-                                                    {errors.password}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Confirm Password */}
-                                        <div className="field">
-                                            <label htmlFor="password_confirmation">
-                                                Confirm Password
-                                            </label>
-                                            <div className="input-wrap">
-                                                <svg
-                                                    className="ico"
-                                                    viewBox="0 0 24 24"
+                                                <path
+                                                    d="M7 10V7a5 5 0 0 1 10 0v3"
                                                     fill="none"
                                                     stroke="currentColor"
-                                                    strokeWidth="1.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                >
-                                                    <rect
-                                                        x="3"
-                                                        y="11"
-                                                        width="18"
-                                                        height="11"
-                                                        rx="2"
-                                                        ry="2"
-                                                    />
-                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                                </svg>
-                                                <input
-                                                    id="password_confirmation"
-                                                    className="fc-input"
-                                                    type={
-                                                        showConfirm
-                                                            ? "text"
-                                                            : "password"
-                                                    }
-                                                    name="password_confirmation"
-                                                    value={
-                                                        data.password_confirmation
-                                                    }
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "password_confirmation",
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="••••••••"
-                                                    required
-                                                    autoComplete="new-password"
+                                                    strokeWidth="1.7"
                                                 />
-                                                <button
-                                                    type="button"
-                                                    className="eye-btn"
-                                                    onClick={() =>
-                                                        setShowConfirm(
-                                                            (s) => !s,
-                                                        )
-                                                    }
-                                                    aria-label="Toggle confirm password"
-                                                >
-                                                    {showConfirm ? (
-                                                        <svg
-                                                            width="15"
-                                                            height="15"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        >
-                                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                            <circle
-                                                                cx="12"
-                                                                cy="12"
-                                                                r="3"
-                                                            />
-                                                        </svg>
-                                                    ) : (
-                                                        <svg
-                                                            width="15"
-                                                            height="15"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        >
-                                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                                            <line
-                                                                x1="1"
-                                                                y1="1"
-                                                                x2="23"
-                                                                y2="23"
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                </button>
+                                                <rect
+                                                    x="5"
+                                                    y="10"
+                                                    width="14"
+                                                    height="10"
+                                                    rx="2"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="1.7"
+                                                />
+                                            </svg>
+
+                                            Your information is securely
+                                            handled.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <form
+                                        onSubmit={submit}
+                                        className="fc-step-content"
+                                    >
+                                        <div className="fc-form-heading-row">
+                                            <div className="fc-heading">
+                                                <span className="fc-heading-label">
+                                                    CREATE ACCOUNT
+                                                </span>
+
+                                                <h2>
+                                                    Tell us about
+                                                    <br />
+                                                    yourself.
+                                                </h2>
+
+                                                <p>
+                                                    You’re joining as{" "}
+                                                    <strong>
+                                                        {selectedRole?.title ||
+                                                            data.role}
+                                                    </strong>
+                                                    .
+                                                </p>
                                             </div>
-                                            {errors.password_confirmation && (
-                                                <div className="field-error">
-                                                    {
-                                                        errors.password_confirmation
-                                                    }
-                                                </div>
-                                            )}
+
+                                            <button
+                                                type="button"
+                                                className="fc-change-role"
+                                                onClick={goBack}
+                                            >
+                                                Change
+                                            </button>
                                         </div>
 
-                                        {/* ── Talent-only fields ── */}
-                                        {data.role === "talent" && (
-                                            <>
-                                                <div className="field-full role-section-label">
-                                                    Talent Details
-                                                </div>
+                                        {Object.keys(errors).length > 0 && (
+                                            <div className="fc-error-summary">
+                                                <strong>
+                                                    Please check your details
+                                                </strong>
 
-                                                <div className="field">
-                                                    <label htmlFor="talent_address">
-                                                        Address
-                                                    </label>
-                                                    <input
-                                                        id="talent_address"
-                                                        className={`fc-input fc-input--plain ${errors.talent_address ? "is-invalid" : ""}`}
-                                                        type="text"
-                                                        value={
-                                                            data.talent_address
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "talent_address",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Kigali, Gasabo"
-                                                        required
-                                                    />
-                                                    {errors.talent_address && (
-                                                        <div className="field-error">
-                                                            {
-                                                                errors.talent_address
-                                                            }
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <span>
+                                                    Some fields need your
+                                                    attention before you can
+                                                    continue.
+                                                </span>
+                                            </div>
+                                        )}
 
-                                                <div className="field">
-                                                    <label htmlFor="talent_language">
-                                                        Language
-                                                    </label>
-                                                    <input
-                                                        id="talent_language"
-                                                        className={`fc-input fc-input--plain ${errors.talent_language ? "is-invalid" : ""}`}
-                                                        type="text"
-                                                        value={
-                                                            data.talent_language
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "talent_language",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Kinyarwanda, English"
-                                                        required
-                                                    />
-                                                    {errors.talent_language && (
-                                                        <div className="field-error">
-                                                            {
-                                                                errors.talent_language
-                                                            }
-                                                        </div>
-                                                    )}
-                                                </div>
+                                        <div className="fc-form-section">
+                                            <div className="fc-section-title">
+                                                <span>01</span>
+                                                Account information
+                                            </div>
 
-                                                <div className="field field-full">
-                                                    <label htmlFor="category_id">
-                                                        Category
+                                            <div className="fc-form-grid">
+                                                <div className="fc-field">
+                                                    <label htmlFor="name">
+                                                        Full name
                                                     </label>
-                                                    <select
-                                                        id="category_id"
-                                                        className={`fc-input fc-input--plain ${errors.category_id ? "is-invalid" : ""}`}
-                                                        value={data.category_id}
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "category_id",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        required
-                                                    >
-                                                        <option value="">
-                                                            Select a category
-                                                        </option>
-                                                        {categories.map((c) => (
-                                                            <option
-                                                                key={c.id}
-                                                                value={c.id}
+
+                                                    <div className="fc-input-wrap">
+                                                        <FieldIcon>
+                                                            <svg
+                                                                viewBox="0 0 24 24"
+                                                                aria-hidden="true"
                                                             >
-                                                                {c.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    {errors.category_id && (
-                                                        <div className="field-error">
-                                                            {errors.category_id}
-                                                        </div>
+                                                                <circle
+                                                                    cx="12"
+                                                                    cy="8"
+                                                                    r="3.5"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                />
+                                                                <path
+                                                                    d="M5 20a7 7 0 0 1 14 0"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                    strokeLinecap="round"
+                                                                />
+                                                            </svg>
+                                                        </FieldIcon>
+
+                                                        <input
+                                                            id="name"
+                                                            type="text"
+                                                            value={data.name}
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "name",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="Your full name"
+                                                            autoComplete="name"
+                                                            required
+                                                        />
+                                                    </div>
+
+                                                    {errors.name && (
+                                                        <span className="fc-field-error">
+                                                            {errors.name}
+                                                        </span>
                                                     )}
                                                 </div>
 
-                                                <div className="field field-full">
-                                                    <label htmlFor="talent_description">
-                                                        Short Bio
+                                                <div className="fc-field">
+                                                    <label htmlFor="phone">
+                                                        Phone number
                                                     </label>
-                                                    <textarea
-                                                        id="talent_description"
-                                                        className={`fc-input fc-input--plain fc-textarea ${errors.talent_description ? "is-invalid" : ""}`}
-                                                        value={
-                                                            data.talent_description
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "talent_description",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Tell employers a bit about your skills and experience..."
-                                                        rows={3}
-                                                    />
-                                                    {errors.talent_description && (
-                                                        <div className="field-error">
-                                                            {
-                                                                errors.talent_description
+
+                                                    <div className="fc-input-wrap">
+                                                        <FieldIcon>
+                                                            <svg
+                                                                viewBox="0 0 24 24"
+                                                                aria-hidden="true"
+                                                            >
+                                                                <path
+                                                                    d="M7 3h3l1.2 4-2 1.5a15 15 0 0 0 6.3 6.3L17 13l4 1.2v3a3 3 0 0 1-3 3C10.3 20.2 3.8 13.7 3.8 6A3 3 0 0 1 7 3Z"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                            </svg>
+                                                        </FieldIcon>
+
+                                                        <input
+                                                            id="phone"
+                                                            type="tel"
+                                                            value={data.phone}
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "phone",
+                                                                    e.target
+                                                                        .value
+                                                                )
                                                             }
-                                                        </div>
+                                                            placeholder="+250 7XX XXX XXX"
+                                                            autoComplete="tel"
+                                                            required
+                                                        />
+                                                    </div>
+
+                                                    {errors.phone && (
+                                                        <span className="fc-field-error">
+                                                            {errors.phone}
+                                                        </span>
                                                     )}
                                                 </div>
-                                            </>
+
+                                                <div className="fc-field fc-field-full">
+                                                    <label htmlFor="email">
+                                                        Email address
+                                                    </label>
+
+                                                    <div className="fc-input-wrap">
+                                                        <FieldIcon>
+                                                            <svg
+                                                                viewBox="0 0 24 24"
+                                                                aria-hidden="true"
+                                                            >
+                                                                <rect
+                                                                    x="3"
+                                                                    y="5"
+                                                                    width="18"
+                                                                    height="14"
+                                                                    rx="2"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                />
+                                                                <path
+                                                                    d="m4 7 8 6 8-6"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                            </svg>
+                                                        </FieldIcon>
+
+                                                        <input
+                                                            id="email"
+                                                            type="email"
+                                                            value={data.email}
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "email",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="you@example.com"
+                                                            autoComplete="email"
+                                                            required
+                                                        />
+                                                    </div>
+
+                                                    {errors.email && (
+                                                        <span className="fc-field-error">
+                                                            {errors.email}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="fc-field">
+                                                    <label htmlFor="password">
+                                                        Password
+                                                    </label>
+
+                                                    <div className="fc-input-wrap">
+                                                        <FieldIcon>
+                                                            <svg
+                                                                viewBox="0 0 24 24"
+                                                                aria-hidden="true"
+                                                            >
+                                                                <rect
+                                                                    x="5"
+                                                                    y="10"
+                                                                    width="14"
+                                                                    height="10"
+                                                                    rx="2"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                />
+                                                                <path
+                                                                    d="M8 10V7a4 4 0 0 1 8 0v3"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.7"
+                                                                />
+                                                            </svg>
+                                                        </FieldIcon>
+
+                                                        <input
+                                                            id="password"
+                                                            type={
+                                                                showPassword
+                                                                    ? "text"
+                                                                    : "password"
+                                                            }
+                                                            value={
+                                                                data.password
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "password",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="Create a password"
+                                                            autoComplete="new-password"
+                                                            required
+                                                        />
+
+                                                        <button
+                                                            type="button"
+                                                            className="fc-password-toggle"
+                                                            onClick={() =>
+                                                                setShowPassword(
+                                                                    (current) =>
+                                                                        !current
+                                                                )
+                                                            }
+                                                            aria-label={
+                                                                showPassword
+                                                                    ? "Hide password"
+                                                                    : "Show password"
+                                                            }
+                                                        >
+                                                            <EyeIcon
+                                                                visible={
+                                                                    showPassword
+                                                                }
+                                                            />
+                                                        </button>
+                                                    </div>
+
+                                                    {data.password && (
+                                                        <div className="fc-password-strength">
+                                                            <div className="fc-strength-bars">
+                                                                {[1, 2, 3, 4].map(
+                                                                    (bar) => (
+                                                                        <span
+                                                                            key={
+                                                                                bar
+                                                                            }
+                                                                            className={
+                                                                                bar <=
+                                                                                passwordScore
+                                                                                    ? `active strength-${passwordScore}`
+                                                                                    : ""
+                                                                            }
+                                                                        />
+                                                                    )
+                                                                )}
+                                                            </div>
+
+                                                            <span>
+                                                                {passwordLabel}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {errors.password && (
+                                                        <span className="fc-field-error">
+                                                            {errors.password}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="fc-field">
+                                                    <label htmlFor="password_confirmation">
+                                                        Confirm password
+                                                    </label>
+
+                                                    <div className="fc-input-wrap">
+                                                        <FieldIcon>
+                                                            <svg
+                                                                viewBox="0 0 24 24"
+                                                                aria-hidden="true"
+                                                            >
+                                                                <path
+                                                                    d="m5 12 4 4L19 6"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="1.8"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                            </svg>
+                                                        </FieldIcon>
+
+                                                        <input
+                                                            id="password_confirmation"
+                                                            type={
+                                                                showConfirmation
+                                                                    ? "text"
+                                                                    : "password"
+                                                            }
+                                                            value={
+                                                                data.password_confirmation
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "password_confirmation",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="Repeat your password"
+                                                            autoComplete="new-password"
+                                                            required
+                                                        />
+
+                                                        <button
+                                                            type="button"
+                                                            className="fc-password-toggle"
+                                                            onClick={() =>
+                                                                setShowConfirmation(
+                                                                    (current) =>
+                                                                        !current
+                                                                )
+                                                            }
+                                                            aria-label={
+                                                                showConfirmation
+                                                                    ? "Hide confirmation password"
+                                                                    : "Show confirmation password"
+                                                            }
+                                                        >
+                                                            <EyeIcon
+                                                                visible={
+                                                                    showConfirmation
+                                                                }
+                                                            />
+                                                        </button>
+                                                    </div>
+
+                                                    {errors.password_confirmation && (
+                                                        <span className="fc-field-error">
+                                                            {
+                                                                errors.password_confirmation
+                                                            }
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {data.role === "talent" && (
+                                            <div className="fc-form-section">
+                                                <div className="fc-section-title">
+                                                    <span>02</span>
+                                                    Talent profile
+                                                </div>
+
+                                                <div className="fc-form-grid">
+                                                    <div className="fc-field">
+                                                        <label htmlFor="talent_address">
+                                                            Location
+                                                        </label>
+
+                                                        <div className="fc-input-wrap">
+                                                            <FieldIcon>
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                    />
+                                                                    <circle
+                                                                        cx="12"
+                                                                        cy="9"
+                                                                        r="2.2"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                    />
+                                                                </svg>
+                                                            </FieldIcon>
+
+                                                            <input
+                                                                id="talent_address"
+                                                                type="text"
+                                                                value={
+                                                                    data.talent_address
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "talent_address",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                placeholder="City / District"
+                                                            />
+                                                        </div>
+
+                                                        {errors.talent_address && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.talent_address
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="fc-field">
+                                                        <label htmlFor="talent_language">
+                                                            Preferred language
+                                                        </label>
+
+                                                        <div className="fc-input-wrap fc-select-wrap">
+                                                            <FieldIcon>
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="M4 5h10M9 5c0 5-2 8-5 10M6 10c2 2 4 3 7 4M15 12h6M18 8l-4 10M16 15h5"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                </svg>
+                                                            </FieldIcon>
+
+                                                            <select
+                                                                id="talent_language"
+                                                                value={
+                                                                    data.talent_language
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "talent_language",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            >
+                                                                <option value="">
+                                                                    Select language
+                                                                </option>
+                                                                <option value="English">
+                                                                    English
+                                                                </option>
+                                                                <option value="Kinyarwanda">
+                                                                    Kinyarwanda
+                                                                </option>
+                                                                <option value="French">
+                                                                    French
+                                                                </option>
+                                                                <option value="Other">
+                                                                    Other
+                                                                </option>
+                                                            </select>
+
+                                                            <span className="fc-select-arrow">
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="m6 9 6 6 6-6"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.8"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+
+                                                        {errors.talent_language && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.talent_language
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="fc-field fc-field-full">
+                                                        <label htmlFor="category_id">
+                                                            Skill category
+                                                        </label>
+
+                                                        <div className="fc-input-wrap fc-select-wrap">
+                                                            <FieldIcon>
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                    />
+                                                                </svg>
+                                                            </FieldIcon>
+
+                                                            <select
+                                                                id="category_id"
+                                                                value={
+                                                                    data.category_id
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "category_id",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            >
+                                                                <option value="">
+                                                                    Select your main
+                                                                    category
+                                                                </option>
+
+                                                                {categories.map(
+                                                                    (
+                                                                        category
+                                                                    ) => (
+                                                                        <option
+                                                                            key={
+                                                                                category.id
+                                                                            }
+                                                                            value={
+                                                                                category.id
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                category.name
+                                                                            }
+                                                                        </option>
+                                                                    )
+                                                                )}
+                                                            </select>
+
+                                                            <span className="fc-select-arrow">
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="m6 9 6 6 6-6"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.8"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+
+                                                        {errors.category_id && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.category_id
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="fc-field fc-field-full">
+                                                        <label htmlFor="talent_description">
+                                                            Short bio
+                                                        </label>
+
+                                                        <textarea
+                                                            id="talent_description"
+                                                            value={
+                                                                data.talent_description
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "talent_description",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="Tell people briefly about your skills, experience, or what you do..."
+                                                            rows="4"
+                                                        />
+
+                                                        {errors.talent_description && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.talent_description
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         )}
 
-                                        {/* ── Seller-only fields ── */}
                                         {data.role === "seller" && (
-                                            <>
-                                                <div className="field-full role-section-label">
-                                                    Seller Details
+                                            <div className="fc-form-section">
+                                                <div className="fc-section-title">
+                                                    <span>02</span>
+                                                    Business information
                                                 </div>
 
-                                                <div className="field field-full">
-                                                    <label htmlFor="company_name">
-                                                        Company / Business Name
-                                                    </label>
-                                                    <input
-                                                        id="company_name"
-                                                        className={`fc-input fc-input--plain ${errors.company_name ? "is-invalid" : ""}`}
-                                                        type="text"
-                                                        value={
-                                                            data.company_name
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "company_name",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Terra Real Estate Ltd"
-                                                        required
-                                                    />
-                                                    {errors.company_name && (
-                                                        <div className="field-error">
-                                                            {
-                                                                errors.company_name
-                                                            }
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <div className="fc-form-grid">
+                                                    <div className="fc-field fc-field-full">
+                                                        <label htmlFor="company_name">
+                                                            Business / company
+                                                            name
+                                                        </label>
 
-                                                <div className="field field-full">
-                                                    <label htmlFor="seller_address">
-                                                        Business Address
-                                                    </label>
-                                                    <input
-                                                        id="seller_address"
-                                                        className={`fc-input fc-input--plain ${errors.seller_address ? "is-invalid" : ""}`}
-                                                        type="text"
-                                                        value={
-                                                            data.seller_address
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "seller_address",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Kigali, Nyarugenge"
-                                                        required
-                                                    />
-                                                    {errors.seller_address && (
-                                                        <div className="field-error">
-                                                            {
-                                                                errors.seller_address
-                                                            }
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                        <div className="fc-input-wrap">
+                                                            <FieldIcon>
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="M4 20V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                    />
+                                                                    <path
+                                                                        d="M2 20h20M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                        strokeLinecap="round"
+                                                                    />
+                                                                </svg>
+                                                            </FieldIcon>
 
-                                                <div className="field field-full">
-                                                    <label htmlFor="seller_description">
-                                                        Business Description
-                                                    </label>
-                                                    <textarea
-                                                        id="seller_description"
-                                                        className={`fc-input fc-input--plain fc-textarea ${errors.seller_description ? "is-invalid" : ""}`}
-                                                        value={
-                                                            data.seller_description
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "seller_description",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="What does your business sell or offer?"
-                                                        rows={3}
-                                                    />
-                                                    {errors.seller_description && (
-                                                        <div className="field-error">
-                                                            {
-                                                                errors.seller_description
-                                                            }
+                                                            <input
+                                                                id="company_name"
+                                                                type="text"
+                                                                value={
+                                                                    data.company_name
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "company_name",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                placeholder="Business or company name"
+                                                            />
                                                         </div>
-                                                    )}
+
+                                                        {errors.company_name && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.company_name
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="fc-field fc-field-full">
+                                                        <label htmlFor="seller_address">
+                                                            Business location
+                                                        </label>
+
+                                                        <div className="fc-input-wrap">
+                                                            <FieldIcon>
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <path
+                                                                        d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                    />
+                                                                    <circle
+                                                                        cx="12"
+                                                                        cy="9"
+                                                                        r="2.2"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="1.7"
+                                                                    />
+                                                                </svg>
+                                                            </FieldIcon>
+
+                                                            <input
+                                                                id="seller_address"
+                                                                type="text"
+                                                                value={
+                                                                    data.seller_address
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        "seller_address",
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                placeholder="City / District"
+                                                            />
+                                                        </div>
+
+                                                        {errors.seller_address && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.seller_address
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="fc-field fc-field-full">
+                                                        <label htmlFor="seller_description">
+                                                            Business description
+                                                        </label>
+
+                                                        <textarea
+                                                            id="seller_description"
+                                                            value={
+                                                                data.seller_description
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    "seller_description",
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            placeholder="Tell us about the products or services you offer..."
+                                                            rows="4"
+                                                        />
+
+                                                        {errors.seller_description && (
+                                                            <span className="fc-field-error">
+                                                                {
+                                                                    errors.seller_description
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </>
+                                            </div>
                                         )}
 
-                                        {/* Terms */}
-                                        <div className="field field-full">
-                                            <div className="terms-row">
+                                        <div className="fc-terms">
+                                            <label className="fc-checkbox">
                                                 <input
                                                     type="checkbox"
-                                                    id="terms"
-                                                    name="terms"
                                                     checked={data.terms}
                                                     onChange={(e) =>
                                                         setData(
                                                             "terms",
-                                                            e.target.checked,
+                                                            e.target.checked
                                                         )
                                                     }
                                                     required
                                                 />
-                                                <label htmlFor="terms">
+
+                                                <span className="fc-checkmark">
+                                                    <CheckIcon />
+                                                </span>
+
+                                                <span>
                                                     I agree to the{" "}
                                                     <a href="#">
                                                         Terms of Service
@@ -1086,312 +1392,1215 @@ export default function Register({ categories = [] }) {
                                                     and{" "}
                                                     <a href="#">
                                                         Privacy Policy
-                                                    </a>{" "}
-                                                    of Future Connect
-                                                </label>
-                                            </div>
+                                                    </a>
+                                                    .
+                                                </span>
+                                            </label>
+
                                             {errors.terms && (
-                                                <div className="field-error">
+                                                <span className="fc-field-error">
                                                     {errors.terms}
-                                                </div>
+                                                </span>
                                             )}
                                         </div>
-                                    </div>
 
-                                    <button
-                                        className="btn"
-                                        type="submit"
-                                        disabled={processing}
-                                    >
-                                        <span className="btn-inner">
-                                            {processing
-                                                ? "Creating account…"
-                                                : "Create Account"}
-                                            {!processing && (
+                                        <div className="fc-form-actions">
+                                            <button
+                                                type="button"
+                                                className="fc-back-button"
+                                                onClick={goBack}
+                                                disabled={processing}
+                                            >
                                                 <svg
-                                                    width="16"
-                                                    height="16"
                                                     viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2.5"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
+                                                    aria-hidden="true"
                                                 >
-                                                    <line
-                                                        x1="5"
-                                                        y1="12"
-                                                        x2="19"
-                                                        y2="12"
+                                                    <path
+                                                        d="M19 12H5M11 18l-6-6 6-6"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="1.8"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
                                                     />
-                                                    <polyline points="12 5 19 12 12 19" />
                                                 </svg>
-                                            )}
-                                        </span>
-                                    </button>
-                                </form>
 
-                                <div className="login-row">
-                                    Already have an account?{" "}
-                                    <Link href={route("login")}>Sign In</Link>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
+                                                Back
+                                            </button>
+
+                                            <button
+                                                type="submit"
+                                                className="fc-submit-button"
+                                                disabled={processing}
+                                            >
+                                                {processing ? (
+                                                    <>
+                                                        <span className="fc-spinner" />
+                                                        Creating account...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        Create account
+
+                                                        <svg
+                                                            viewBox="0 0 24 24"
+                                                            aria-hidden="true"
+                                                        >
+                                                            <path
+                                                                d="M5 12h14M13 6l6 6-6 6"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeWidth="1.8"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            />
+                                                        </svg>
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    </form>
+                                )}
+                            </div>
+                        </section>
+                    </section>
+                </main>
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap');
 
-                *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-                :root, [data-theme="dark"] {
-                    --bg: #0e1618; --surface: #131e21; --border: #1f2f33;
-                    --green: #48d597; --green-hover: #00bd76;
-                    --green-dim: rgba(0, 166, 103, .12); --green-glow: rgba(0, 166, 103, .28);
-                    --text: #e8f0ef; --muted: #6a8a85; --input-bg: #0b1315;
-                    --card-shadow: rgba(0, 0, 0, .4);
-                    --grid-line: rgba(0, 166, 103, .04);
-                    --orb-1: rgba(0,166,103,.1);
-                    --orb-2: rgba(0,166,103,.07);
-                    --left-grad: linear-gradient(145deg, #091315 0%, #0c1e21 55%, #081213 100%);
-                    --panel-white-overlay: rgba(255,255,255,.09);
-                    --field-error: #e07070;
+                :root {
+                    --fc-primary: #48d597;
+                    --fc-primary-dark: #2fba7b;
+                    --fc-primary-soft: rgba(72, 213, 151, .10);
+                    --fc-black: #101714;
+                    --fc-text: #18211d;
+                    --fc-muted: #718078;
+                    --fc-border: #e3e9e5;
+                    --fc-background: #f5f8f6;
+                    --fc-card: #ffffff;
+                    --fc-input: #fbfcfb;
+                    --fc-danger: #dc4f5c;
+                    --fc-shadow: 0 24px 80px rgba(18, 39, 29, .10);
                 }
 
-                [data-theme="light"] {
-                    --bg: #f4f9f7; --surface: #F5f5f7; --border: #dde8e4;
-                    --green: #00a65e; --green-hover: #00bd76;
-                    --green-dim: rgba(0, 166, 94, .10); --green-glow: rgba(0, 166, 94, .22);
-                    --text: #0e1618; --muted: #5c7570; --input-bg: #f3f8f6;
-                    --card-shadow: rgba(20, 50, 40, .12);
-                    --grid-line: rgba(0, 166, 94, .05);
-                    --orb-1: rgba(0,166,94,.08);
-                    --orb-2: rgba(0,166,94,.06);
-                    --left-grad: linear-gradient(145deg, #e6f5ef 0%, #d9f0e6 55%, #eefaf5 100%);
-                    --panel-white-overlay: rgba(255,255,255,.4);
-                    --field-error: #c9463f;
+                [data-fc-theme="dark"] {
+                    --fc-black: #f4faf7;
+                    --fc-text: #eef7f2;
+                    --fc-muted: #91a39a;
+                    --fc-border: #26352e;
+                    --fc-background: #0d1310;
+                    --fc-card: #131b17;
+                    --fc-input: #101814;
+                    --fc-shadow: 0 24px 80px rgba(0, 0, 0, .35);
                 }
 
-                html, body { min-height: 100%; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); transition: background .25s, color .25s; }
+                * {
+                    box-sizing: border-box;
+                }
 
-                .page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; position: relative; overflow: hidden; }
+                .fc-register {
+                    min-height: 100vh;
+                    background: var(--fc-background);
+                    color: var(--fc-text);
+                    font-family: "DM Sans", sans-serif;
+                    position: relative;
+                    overflow-x: hidden;
+                }
 
-                .page::before {
-                    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+                .fc-background {
+                    position: fixed;
+                    inset: 0;
+                    pointer-events: none;
+                    overflow: hidden;
+                }
+
+                .fc-grid {
+                    position: absolute;
+                    inset: 0;
+                    opacity: .35;
                     background-image:
-                        linear-gradient(var(--grid-line) 1px, transparent 1px),
-                        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-                    background-size: 40px 40px;
+                        linear-gradient(
+                            rgba(72, 213, 151, .04) 1px,
+                            transparent 1px
+                        ),
+                        linear-gradient(
+                            90deg,
+                            rgba(72, 213, 151, .04) 1px,
+                            transparent 1px
+                        );
+                    background-size: 44px 44px;
                 }
 
-                .orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(60px); z-index: 0; }
-                .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, var(--orb-1) 0%, transparent 70%); top: -120px; right: -120px; }
-                .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, var(--orb-2) 0%, transparent 70%); bottom: -100px; left: -80px; }
-
-                .top-nav { position: fixed; top: 24px; right: 24px; z-index: 5; }
-                .theme-btn {
-                    display: inline-flex; align-items: center; justify-content: center;
-                    width: 38px; height: 38px;
-                    background: rgba(19, 30, 33, .1); backdrop-filter: blur(8px);
-                    border: 1.5px solid var(--border); border-radius: 50%;
-                    color: var(--muted); cursor: pointer;
-                    transition: border-color .2s, color .2s, background .2s, transform .15s;
-                }
-                .theme-btn:hover { color: var(--green); border-color: rgba(0,166,103,.35); transform: rotate(15deg); }
-
-                .back-nav { position: fixed; top: 24px; left: 24px; z-index: 5; }
-                .back-btn {
-                    display: inline-flex; align-items: center; gap: 8px;
-                    background: rgba(19, 30, 33, .07); backdrop-filter: blur(8px);
-                    border: 1.5px solid var(--border); border-radius: 99px;
-                    padding: 9px 16px 9px 12px;
-                    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-                    color: var(--muted); text-decoration: none; cursor: pointer;
-                    transition: border-color .2s, color .2s, background .2s, transform .15s;
-                }
-                .back-btn svg { width: 15px; height: 15px; flex-shrink: 0; transition: transform .2s; }
-                .back-btn:hover { color: var(--green); border-color: rgba(0,166,103,.35); transform: translateX(-2px); }
-                .back-btn:hover svg { transform: translateX(-2px); }
-
-                @media (max-width: 480px) {
-                    .back-nav { top: 14px; left: 14px; }
-                    .top-nav { top: 14px; right: 14px; }
-                    .back-btn span { display: none; }
-                    .back-btn { padding: 10px; }
+                .fc-orb {
+                    position: absolute;
+                    width: 480px;
+                    height: 480px;
+                    border-radius: 50%;
+                    filter: blur(80px);
+                    opacity: .12;
                 }
 
-                .card {
-                    display: grid; grid-template-columns: 450px minmax(0, 1fr);
-                    width: 100%; max-width: 1020px;
-                    border-radius: 20px; overflow: hidden;
-                    border: 1px solid var(--border); position: relative; z-index: 1;
-                    animation: fadeUp .65s cubic-bezier(.22, 1, .36, 1) both;
-                    box-shadow: 0 40px 80px var(--card-shadow);
+                .fc-orb-one {
+                    background: var(--fc-primary);
+                    top: -250px;
+                    right: -100px;
                 }
 
-                @keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
-
-                .panel-left {
-                    background: var(--left-grad); padding: 52px 40px;
-                    display: flex; flex-direction: column; justify-content: space-between;
-                    position: relative; overflow-y: auto; min-height: 0;
-                    border-right: 1px solid var(--border);
+                .fc-orb-two {
+                    background: #5a8cff;
+                    bottom: -300px;
+                    left: -160px;
+                    opacity: .06;
                 }
 
-                .panel-left::before, .panel-left::after { content: ''; position: absolute; border-radius: 50%; border: 1px solid; }
-                .panel-left::before { width: 340px; height: 340px; bottom: -60px; left: -60px; border-color: rgba(0,166,103,.14); }
-                .panel-left::after  { width: 500px; height: 500px; bottom: -120px; left: -120px; border-color: rgba(0,166,103,.07); }
-
-                .dots { position: absolute; top: 44px; right: 32px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; opacity: .25; }
-                .dots span { width: 3px; height: 3px; border-radius: 50%; background: var(--green); display: block; }
-
-                .fc-logo-lockup { display: flex; align-items: center; gap: 10px; text-decoration: none; position: relative; z-index: 1; }
-                .fc-logo-mark { width: 36px; height: 36px; background: var(--green); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-                .fc-logo-mark svg { width: 18px; height: 18px; fill: var(--bg); }
-                .fc-logo-wordmark { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: .3px; line-height: 1.2; margin: 0; }
-                .fc-logo-tagline { font-size: 11px; color: var(--muted); letter-spacing: .3px; margin: 0; line-height: 1; }
-
-                .pill { display: inline-flex; align-items: center; gap: 6px; background: var(--green-dim); border: 1px solid rgba(0,166,103,.2); border-radius: 99px; padding: 5px 12px; font-size: 11px; color: var(--green); font-weight: 500; margin-bottom: 22px; margin-top: 24px; width: fit-content; position: relative; z-index: 1; }
-                .pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s ease infinite; }
-                @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-
-                .tagline { position: relative; z-index: 1; }
-                .tagline h2 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; line-height: 1.15; letter-spacing: -1px; color: var(--text); margin-bottom: 16px; }
-                .tagline h2 em { font-style: normal; color: var(--green); }
-                .tagline p { color: var(--muted); font-size: 13.5px; line-height: 1.65; }
-
-                .features { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1; }
-                .feat { display: flex; align-items: flex-start; gap: 12px; }
-                .feat-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--green-dim); border: 1px solid rgba(0,166,103,.2); display: grid; place-items: center; flex-shrink: 0; }
-                .feat-icon svg { width: 15px; height: 15px; color: var(--green); }
-                .feat-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-                .feat-text span { font-size: 12px; color: var(--muted); }
-
-                .panel-right {
-                    background: var(--surface); padding: 48px 48px;
-                    display: flex; flex-direction: column; justify-content: center;
-                    position: relative; overflow-y: auto; min-height: 0; min-width: 0;
-                }
-                .panel-right::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); opacity: .6; }
-
-                .form-head { margin-bottom: 28px; }
-                .eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 10.5px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 1.8px; margin-bottom: 10px; }
-                .eyebrow::before { content: ''; width: 18px; height: 2px; background: var(--green); border-radius: 2px; display: inline-block; }
-                .form-head h1 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -.8px; line-height: 1.1; }
-                .form-head p { margin-top: 8px; font-size: 13px; color: var(--muted); }
-
-                /* Role selection */
-                .role-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-                .role-card {
-                    display: flex; align-items: center; gap: 14px; text-align: left;
-                    background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 14px;
-                    padding: 16px 18px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-                    transition: border-color .2s, box-shadow .2s, transform .15s;
-                }
-                .role-card:hover { border-color: var(--green); box-shadow: 0 0 0 4px var(--green-dim); transform: translateY(-1px); }
-                .role-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--green-dim); border: 1px solid rgba(0,166,103,.2); display: grid; place-items: center; flex-shrink: 0; color: var(--green); }
-                .role-icon svg { width: 19px; height: 19px; }
-                .role-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
-                .role-text strong { font-size: 14.5px; font-weight: 700; color: var(--text); }
-                .role-text span { font-size: 12px; color: var(--muted); }
-                .role-arrow { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; transition: transform .2s, color .2s; }
-                .role-card:hover .role-arrow { color: var(--green); transform: translateX(3px); }
-
-                .role-note {
-                    font-size: 12.5px; color: var(--muted); line-height: 1.6;
-                    background: var(--green-dim); border: 1px solid rgba(0,166,103,.18);
-                    border-radius: 10px; padding: 12px 14px; margin-bottom: 24px;
-                }
-                .role-note strong { color: var(--green); }
-
-                .role-section-label {
-                    font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase;
-                    letter-spacing: 1px; margin-top: 6px; padding-top: 14px; border-top: 1px dashed var(--border);
+                .fc-topbar {
+                    position: relative;
+                    z-index: 2;
+                    width: min(1440px, calc(100% - 56px));
+                    margin: 0 auto;
+                    height: 88px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                 }
 
-                .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-                .field-full { grid-column: 1 / -1; }
-
-                .field { display: flex; flex-direction: column; }
-                .field label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .9px; margin-bottom: 7px; }
-
-                .input-wrap { position: relative; }
-                .input-wrap .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--muted); pointer-events: none; transition: color .2s; }
-                .input-wrap:focus-within .ico { color: var(--green); }
-
-                .fc-input {
-                    width: 100%; background: var(--input-bg); border: 1.5px solid var(--border); border-radius: 10px;
-                    padding: 12px 14px 12px 42px; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--text); outline: none;
-                    transition: border-color .2s, box-shadow .2s, background .2s;
-                }
-                .fc-input--plain { padding: 12px 14px; }
-                .fc-textarea { resize: vertical; min-height: 80px; }
-                select.fc-input { appearance: none; cursor: pointer; }
-                .fc-input::placeholder { color: var(--muted); opacity: .5; }
-                .fc-input:focus { border-color: var(--green); box-shadow: 0 0 0 4px var(--green-dim); }
-                .fc-input.is-invalid { border-color: var(--field-error); }
-
-                .field-error { font-size: 11.5px; color: var(--field-error); margin-top: 5px; }
-
-                .strength-bar { display: flex; gap: 4px; margin-top: 8px; }
-                .strength-seg { height: 3px; flex: 1; border-radius: 2px; background: var(--border); transition: background .3s; }
-                .strength-seg.weak   { background: #e05a5a; }
-                .strength-seg.fair   { background: #e0a045; }
-                .strength-seg.good   { background: #5ab4e0; }
-                .strength-seg.strong { background: var(--green); }
-                .strength-label { font-size: 11px; color: var(--muted); margin-top: 5px; }
-
-                .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; padding: 4px; color: var(--muted); cursor: pointer; display: flex; border-radius: 4px; transition: color .2s, background .2s; }
-                .eye-btn:hover { color: var(--green); background: var(--green-dim); }
-
-                .terms-row { display: flex; align-items: flex-start; gap: 10px; }
-                .terms-row input[type="checkbox"] { appearance: none; width: 17px; height: 17px; border-radius: 5px; border: 1.5px solid var(--border); background: var(--input-bg); cursor: pointer; display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; transition: border-color .2s, background .2s; }
-                .terms-row input[type="checkbox"]:checked { background: var(--green); border-color: var(--green); }
-                .terms-row input[type="checkbox"]:checked::after { content: ''; display: block; width: 9px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translateY(-1px); }
-                .terms-row label { font-size: 12.5px; color: var(--muted); line-height: 1.5; cursor: pointer; }
-                .terms-row label a { color: var(--green); text-decoration: none; font-weight: 500; }
-                .terms-row label a:hover { text-decoration: underline; }
-
-                .btn {
-                    width: 100%; padding: 14px; background: linear-gradient(135deg, var(--green), #009a5e);
-                    color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
-                    letter-spacing: .2px; cursor: pointer; position: relative; overflow: hidden;
-                    transition: transform .15s, box-shadow .2s, background .2s; margin-top: 20px;
-                }
-                .btn:disabled { opacity: .7; cursor: not-allowed; }
-                .btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--panel-white-overlay), transparent); pointer-events: none; }
-                .btn:hover:not(:disabled) { background: linear-gradient(135deg, var(--green-hover), #00a65e); box-shadow: 0 12px 32px var(--green-glow); transform: translateY(-2px); }
-                .btn:active:not(:disabled) { transform: translateY(0); }
-                .btn-inner { display: flex; align-items: center; justify-content: center; gap: 8px; }
-
-                .login-row { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
-                .login-row a { color: var(--green); text-decoration: none; font-weight: 600; }
-                .login-row a:hover { text-decoration: underline; }
-
-                @media (max-width: 880px) {
-                    .card { grid-template-columns: 1fr; max-width: 560px; max-height: none; overflow: visible; }
-                    .panel-left { border-right: none; border-bottom: 1px solid var(--border); padding: 32px 28px 28px; overflow: visible; }
-                    .dots { display: none; }
-                    .tagline h2 { font-size: 22px; }
-                    .tagline p { display: none; }
-                    .features { flex-direction: row; flex-wrap: wrap; gap: 10px; }
-                    .feat { flex: 1; min-width: 140px; }
-                    .panel-right { padding: 36px 32px 40px; overflow: visible; }
+                .fc-logo {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 11px;
+                    color: var(--fc-black);
+                    text-decoration: none;
                 }
 
-                @media (max-width: 600px) {
-                    .fields-grid { grid-template-columns: 1fr; }
-                    .field-full { grid-column: unset; }
+                .fc-logo-mark {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 10px;
+                    background: var(--fc-primary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 2px;
+                    box-shadow: 0 7px 20px rgba(72, 213, 151, .20);
                 }
 
-                @media (max-width: 480px) {
-                    .page { padding: 16px; }
-                    .panel-left { padding: 24px 20px; }
-                    .panel-right { padding: 28px 20px 36px; }
-                    .form-head h1 { font-size: 22px; }
-                    .features { display: none; }
+                .fc-logo-mark span {
+                    display: block;
+                    width: 4px;
+                    border-radius: 5px;
+                    background: #0d1712;
+                }
+
+                .fc-logo-mark span:nth-child(1) {
+                    height: 10px;
+                }
+
+                .fc-logo-mark span:nth-child(2) {
+                    height: 17px;
+                }
+
+                .fc-logo-mark span:nth-child(3) {
+                    height: 13px;
+                }
+
+                .fc-logo-text {
+                    display: flex;
+                    align-items: baseline;
+                    gap: 4px;
+                    font-family: "Syne", sans-serif;
+                    font-size: 20px;
+                    letter-spacing: -.7px;
+                }
+
+                .fc-logo-text strong {
+                    font-weight: 700;
+                }
+
+                .fc-logo-text b {
+                    color: var(--fc-primary-dark);
+                    font-weight: 700;
+                }
+
+                .fc-topbar-right {
+                    display: flex;
+                    align-items: center;
+                    gap: 18px;
+                }
+
+                .fc-login-copy {
+                    color: var(--fc-muted);
+                    font-size: 13px;
+                }
+
+                .fc-login-link {
+                    color: var(--fc-text);
+                    font-size: 13px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    padding-bottom: 2px;
+                    border-bottom: 1px solid currentColor;
+                }
+
+                .fc-login-link:hover {
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-theme-button {
+                    width: 38px;
+                    height: 38px;
+                    border: 1px solid var(--fc-border);
+                    background: var(--fc-card);
+                    color: var(--fc-muted);
+                    border-radius: 50%;
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+                    transition: .2s ease;
+                }
+
+                .fc-theme-button:hover {
+                    color: var(--fc-primary-dark);
+                    border-color: rgba(72, 213, 151, .5);
+                    transform: translateY(-1px);
+                }
+
+                .fc-theme-button svg {
+                    width: 17px;
+                    height: 17px;
+                }
+
+                .fc-register-shell {
+                    position: relative;
+                    z-index: 1;
+                    width: min(1180px, calc(100% - 40px));
+                    margin: 10px auto 50px;
+                }
+
+                .fc-register-card {
+                    min-height: 720px;
+                    background: var(--fc-card);
+                    border: 1px solid var(--fc-border);
+                    border-radius: 26px;
+                    overflow: hidden;
+                    display: grid;
+                    grid-template-columns: 38% 62%;
+                    box-shadow: var(--fc-shadow);
+                }
+
+                .fc-brand-panel {
+                    background:
+                        radial-gradient(
+                            circle at 80% 15%,
+                            rgba(72, 213, 151, .18),
+                            transparent 28%
+                        ),
+                        linear-gradient(
+                            150deg,
+                            #102019 0%,
+                            #0b1410 100%
+                        );
+                    color: white;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .fc-brand-panel::after {
+                    content: "";
+                    position: absolute;
+                    width: 360px;
+                    height: 360px;
+                    border: 1px solid rgba(72, 213, 151, .13);
+                    border-radius: 50%;
+                    right: -190px;
+                    bottom: -100px;
+                    box-shadow:
+                        0 0 0 55px rgba(72, 213, 151, .025),
+                        0 0 0 110px rgba(72, 213, 151, .018);
+                }
+
+                .fc-brand-inner {
+                    position: relative;
+                    z-index: 1;
+                    min-height: 100%;
+                    padding: 46px 42px 40px;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .fc-brand-badge {
+                    align-self: flex-start;
+                    border: 1px solid rgba(255,255,255,.12);
+                    background: rgba(255,255,255,.045);
+                    border-radius: 999px;
+                    padding: 8px 12px;
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: .6px;
+                    text-transform: uppercase;
+                    color: rgba(255,255,255,.78);
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .fc-status-dot {
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: var(--fc-primary);
+                    box-shadow: 0 0 0 4px rgba(72, 213, 151, .08);
+                }
+
+                .fc-brand-content {
+                    margin-top: 74px;
+                }
+
+                .fc-eyebrow,
+                .fc-heading-label {
+                    margin: 0 0 14px;
+                    font-size: 10px;
+                    font-weight: 800;
+                    letter-spacing: 2px;
+                    color: var(--fc-primary);
+                }
+
+                .fc-brand-content h1 {
+                    margin: 0;
+                    font-family: "Syne", sans-serif;
+                    font-size: clamp(38px, 4vw, 53px);
+                    line-height: 1.02;
+                    letter-spacing: -2.8px;
+                    font-weight: 700;
+                }
+
+                .fc-brand-content h1 span {
+                    color: var(--fc-primary);
+                }
+
+                .fc-brand-description {
+                    max-width: 360px;
+                    margin: 25px 0 0;
+                    color: rgba(255,255,255,.59);
+                    font-size: 14px;
+                    line-height: 1.75;
+                }
+
+                .fc-brand-features {
+                    margin-top: auto;
+                    display: grid;
+                    gap: 18px;
+                    padding-top: 50px;
+                }
+
+                .fc-brand-feature {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+
+                .fc-feature-icon {
+                    flex: 0 0 25px;
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 8px;
+                    background: rgba(72, 213, 151, .12);
+                    color: var(--fc-primary);
+                    display: grid;
+                    place-items: center;
+                }
+
+                .fc-feature-icon svg {
+                    width: 14px;
+                    height: 14px;
+                }
+
+                .fc-brand-feature div {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                }
+
+                .fc-brand-feature strong {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: rgba(255,255,255,.92);
+                }
+
+                .fc-brand-feature span {
+                    font-size: 11px;
+                    color: rgba(255,255,255,.42);
+                    line-height: 1.45;
+                }
+
+                .fc-brand-footer {
+                    margin-top: 35px;
+                    padding-top: 22px;
+                    border-top: 1px solid rgba(255,255,255,.08);
+                    display: flex;
+                    align-items: center;
+                    gap: 13px;
+                }
+
+                .fc-mini-avatars {
+                    display: flex;
+                    padding-left: 5px;
+                }
+
+                .fc-mini-avatars span {
+                    width: 27px;
+                    height: 27px;
+                    margin-left: -5px;
+                    border: 2px solid #101b15;
+                    border-radius: 50%;
+                    display: grid;
+                    place-items: center;
+                    background: #1e3027;
+                    color: rgba(255,255,255,.7);
+                    font-size: 9px;
+                    font-weight: 800;
+                }
+
+                .fc-mini-avatars span:nth-child(2) {
+                    background: #274238;
+                }
+
+                .fc-mini-avatars span:nth-child(3) {
+                    background: #345446;
+                }
+
+                .fc-mini-avatars span:last-child {
+                    background: var(--fc-primary);
+                    color: #0d1712;
+                }
+
+                .fc-brand-footer p {
+                    margin: 0;
+                    font-size: 10px;
+                    line-height: 1.45;
+                    color: rgba(255,255,255,.42);
+                }
+
+                .fc-form-panel {
+                    background: var(--fc-card);
+                    min-width: 0;
+                }
+
+                .fc-form-container {
+                    width: min(100%, 690px);
+                    margin: 0 auto;
+                    padding: 52px 58px 50px;
+                }
+
+                .fc-mobile-logo {
+                    display: none;
+                }
+
+                .fc-progress {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 48px;
+                }
+
+                .fc-progress-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    color: var(--fc-muted);
+                    font-size: 10px;
+                    font-weight: 700;
+                    white-space: nowrap;
+                }
+
+                .fc-progress-item.active {
+                    color: var(--fc-text);
+                }
+
+                .fc-progress-item.done {
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-progress-number {
+                    width: 27px;
+                    height: 27px;
+                    border: 1px solid var(--fc-border);
+                    border-radius: 50%;
+                    display: grid;
+                    place-items: center;
+                    font-size: 8px;
+                    font-weight: 800;
+                }
+
+                .fc-progress-item.active .fc-progress-number {
+                    border-color: var(--fc-primary);
+                    background: var(--fc-primary-soft);
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-progress-item.done .fc-progress-number {
+                    background: var(--fc-primary);
+                    border-color: var(--fc-primary);
+                    color: #0c1812;
+                }
+
+                .fc-progress-number svg {
+                    width: 12px;
+                    height: 12px;
+                }
+
+                .fc-progress-line {
+                    flex: 1;
+                    height: 1px;
+                    margin: 0 14px;
+                    background: var(--fc-border);
+                    position: relative;
+                }
+
+                .fc-progress-line span {
+                    position: absolute;
+                    inset: 0;
+                    width: 0;
+                    background: var(--fc-primary);
+                    transition: width .35s ease;
+                }
+
+                .fc-progress-line span.filled {
+                    width: 100%;
+                }
+
+                .fc-heading-label {
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-heading h2 {
+                    margin: 0;
+                    font-family: "Syne", sans-serif;
+                    font-size: 31px;
+                    line-height: 1.08;
+                    letter-spacing: -1.4px;
+                    color: var(--fc-black);
+                }
+
+                .fc-heading p {
+                    margin: 12px 0 0;
+                    color: var(--fc-muted);
+                    font-size: 13px;
+                    line-height: 1.65;
+                }
+
+                .fc-heading p strong {
+                    color: var(--fc-text);
+                }
+
+                .fc-role-list {
+                    margin-top: 35px;
+                    display: grid;
+                    gap: 11px;
+                }
+
+                .fc-role-card {
+                    width: 100%;
+                    min-height: 94px;
+                    padding: 17px 18px;
+                    border: 1px solid var(--fc-border);
+                    background: var(--fc-input);
+                    border-radius: 15px;
+                    display: flex;
+                    align-items: center;
+                    text-align: left;
+                    cursor: pointer;
+                    color: var(--fc-text);
+                    transition: .2s ease;
+                }
+
+                .fc-role-card:hover {
+                    border-color: rgba(72, 213, 151, .55);
+                    transform: translateY(-2px);
+                    box-shadow: 0 12px 30px rgba(20, 45, 33, .06);
+                }
+
+                .fc-role-card.selected {
+                    border-color: var(--fc-primary);
+                    background: var(--fc-primary-soft);
+                    box-shadow: 0 0 0 3px rgba(72, 213, 151, .07);
+                }
+
+                .fc-role-icon {
+                    flex: 0 0 52px;
+                    width: 52px;
+                    height: 52px;
+                    border-radius: 13px;
+                    display: grid;
+                    place-items: center;
+                    background: var(--fc-card);
+                    border: 1px solid var(--fc-border);
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-role-card.selected .fc-role-icon {
+                    background: var(--fc-primary);
+                    border-color: var(--fc-primary);
+                    color: #0b1812;
+                }
+
+                .fc-role-icon svg {
+                    width: 23px;
+                    height: 23px;
+                }
+
+                .fc-role-copy {
+                    min-width: 0;
+                    flex: 1;
+                    margin-left: 15px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                }
+
+                .fc-role-copy strong {
+                    color: var(--fc-black);
+                    font-family: "Syne", sans-serif;
+                    font-size: 14px;
+                    font-weight: 700;
+                }
+
+                .fc-role-copy span {
+                    color: var(--fc-muted);
+                    font-size: 11px;
+                }
+
+                .fc-role-arrow {
+                    color: var(--fc-muted);
+                    margin-left: 12px;
+                }
+
+                .fc-role-card:hover .fc-role-arrow,
+                .fc-role-card.selected .fc-role-arrow {
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-role-arrow svg {
+                    width: 19px;
+                    height: 19px;
+                }
+
+                .fc-security-note {
+                    margin: 25px 0 0;
+                    color: var(--fc-muted);
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+                    font-size: 10px;
+                }
+
+                .fc-security-note svg {
+                    width: 14px;
+                    height: 14px;
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-form-heading-row {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 20px;
+                }
+
+                .fc-change-role {
+                    border: 0;
+                    background: transparent;
+                    color: var(--fc-muted);
+                    font-size: 11px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    text-underline-offset: 4px;
+                    padding: 5px 0;
+                }
+
+                .fc-change-role:hover {
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-error-summary {
+                    margin-top: 24px;
+                    padding: 12px 14px;
+                    border: 1px solid rgba(220, 79, 92, .22);
+                    background: rgba(220, 79, 92, .06);
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                }
+
+                .fc-error-summary strong {
+                    color: var(--fc-danger);
+                    font-size: 11px;
+                }
+
+                .fc-error-summary span {
+                    color: var(--fc-muted);
+                    font-size: 10px;
+                }
+
+                .fc-form-section {
+                    margin-top: 35px;
+                    padding-top: 28px;
+                    border-top: 1px solid var(--fc-border);
+                }
+
+                .fc-section-title {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 18px;
+                    color: var(--fc-text);
+                    font-size: 11px;
+                    font-weight: 800;
+                }
+
+                .fc-section-title span {
+                    color: var(--fc-primary-dark);
+                    font-family: "Syne", sans-serif;
+                    font-size: 10px;
+                }
+
+                .fc-form-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 17px 14px;
+                }
+
+                .fc-field {
+                    min-width: 0;
+                }
+
+                .fc-field-full {
+                    grid-column: 1 / -1;
+                }
+
+                .fc-field label {
+                    display: block;
+                    margin-bottom: 7px;
+                    color: var(--fc-text);
+                    font-size: 10px;
+                    font-weight: 700;
+                }
+
+                .fc-input-wrap {
+                    min-height: 46px;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    border: 1px solid var(--fc-border);
+                    background: var(--fc-input);
+                    border-radius: 10px;
+                    transition: .2s ease;
+                }
+
+                .fc-input-wrap:focus-within {
+                    border-color: var(--fc-primary);
+                    box-shadow: 0 0 0 3px rgba(72, 213, 151, .08);
+                }
+
+                .fc-field-icon {
+                    width: 44px;
+                    flex: 0 0 44px;
+                    display: grid;
+                    place-items: center;
+                    color: #91a099;
+                }
+
+                .fc-field-icon svg {
+                    width: 17px;
+                    height: 17px;
+                }
+
+                .fc-input-wrap input,
+                .fc-input-wrap select {
+                    width: 100%;
+                    height: 44px;
+                    min-width: 0;
+                    padding: 0 13px 0 0;
+                    border: 0;
+                    outline: 0;
+                    background: transparent;
+                    color: var(--fc-text);
+                    font: inherit;
+                    font-size: 12px;
+                }
+
+                .fc-input-wrap input::placeholder,
+                .fc-field textarea::placeholder {
+                    color: #a3aea8;
+                }
+
+                .fc-input-wrap select {
+                    cursor: pointer;
+                    appearance: none;
+                    padding-right: 40px;
+                }
+
+                .fc-select-arrow {
+                    position: absolute;
+                    right: 13px;
+                    pointer-events: none;
+                    color: var(--fc-muted);
+                }
+
+                .fc-select-arrow svg {
+                    width: 15px;
+                    height: 15px;
+                }
+
+                .fc-field textarea {
+                    width: 100%;
+                    resize: vertical;
+                    min-height: 100px;
+                    border: 1px solid var(--fc-border);
+                    border-radius: 10px;
+                    background: var(--fc-input);
+                    color: var(--fc-text);
+                    padding: 12px 13px;
+                    outline: 0;
+                    font: inherit;
+                    font-size: 12px;
+                    line-height: 1.6;
+                    transition: .2s ease;
+                }
+
+                .fc-field textarea:focus {
+                    border-color: var(--fc-primary);
+                    box-shadow: 0 0 0 3px rgba(72, 213, 151, .08);
+                }
+
+                .fc-password-toggle {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 3px;
+                    border: 0;
+                    background: transparent;
+                    color: var(--fc-muted);
+                    display: grid;
+                    place-items: center;
+                    cursor: pointer;
+                }
+
+                .fc-password-toggle:hover {
+                    color: var(--fc-primary-dark);
+                }
+
+                .fc-password-toggle svg {
+                    width: 17px;
+                    height: 17px;
+                }
+
+                .fc-password-strength {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-top: 7px;
+                }
+
+                .fc-strength-bars {
+                    flex: 1;
+                    display: flex;
+                    gap: 3px;
+                }
+
+                .fc-strength-bars span {
+                    height: 3px;
+                    flex: 1;
+                    border-radius: 10px;
+                    background: var(--fc-border);
+                }
+
+                .fc-strength-bars span.active {
+                    background: var(--fc-primary);
+                }
+
+                .fc-password-strength > span {
+                    min-width: 35px;
+                    text-align: right;
+                    color: var(--fc-muted);
+                    font-size: 9px;
+                    font-weight: 700;
+                }
+
+                .fc-field-error {
+                    display: block;
+                    margin-top: 5px;
+                    color: var(--fc-danger);
+                    font-size: 10px;
+                    line-height: 1.4;
+                }
+
+                .fc-terms {
+                    margin-top: 26px;
+                }
+
+                .fc-checkbox {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 9px;
+                    cursor: pointer;
+                    color: var(--fc-muted);
+                    font-size: 10px;
+                    line-height: 1.5;
+                }
+
+                .fc-checkbox input {
+                    position: absolute;
+                    opacity: 0;
+                    pointer-events: none;
+                }
+
+                .fc-checkmark {
+                    flex: 0 0 17px;
+                    width: 17px;
+                    height: 17px;
+                    margin-top: -1px;
+                    border: 1px solid var(--fc-border);
+                    border-radius: 5px;
+                    display: grid;
+                    place-items: center;
+                    color: transparent;
+                    transition: .2s ease;
+                }
+
+                .fc-checkbox input:checked + .fc-checkmark {
+                    background: var(--fc-primary);
+                    border-color: var(--fc-primary);
+                    color: #0b1711;
+                }
+
+                .fc-checkmark svg {
+                    width: 11px;
+                    height: 11px;
+                }
+
+                .fc-checkbox a {
+                    color: var(--fc-text);
+                    font-weight: 700;
+                    text-decoration: underline;
+                    text-underline-offset: 2px;
+                }
+
+                .fc-form-actions {
+                    margin-top: 27px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 15px;
+                }
+
+                .fc-back-button,
+                .fc-submit-button {
+                    min-height: 45px;
+                    border-radius: 10px;
+                    font-family: "DM Sans", sans-serif;
+                    font-size: 11px;
+                    font-weight: 800;
+                    cursor: pointer;
+                    transition: .2s ease;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                }
+
+                .fc-back-button {
+                    padding: 0 15px;
+                    color: var(--fc-muted);
+                    background: transparent;
+                    border: 1px solid var(--fc-border);
+                }
+
+                .fc-back-button:hover:not(:disabled) {
+                    color: var(--fc-text);
+                    border-color: var(--fc-muted);
+                }
+
+                .fc-back-button svg,
+                .fc-submit-button svg {
+                    width: 15px;
+                    height: 15px;
+                }
+
+                .fc-submit-button {
+                    flex: 1;
+                    max-width: 260px;
+                    margin-left: auto;
+                    padding: 0 22px;
+                    color: #0a1710;
+                    border: 1px solid var(--fc-primary);
+                    background: var(--fc-primary);
+                    box-shadow: 0 9px 24px rgba(72, 213, 151, .18);
+                }
+
+                .fc-submit-button:hover:not(:disabled) {
+                    background: #61dda6;
+                    border-color: #61dda6;
+                    transform: translateY(-1px);
+                    box-shadow: 0 12px 28px rgba(72, 213, 151, .25);
+                }
+
+                .fc-back-button:disabled,
+                .fc-submit-button:disabled {
+                    opacity: .6;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+                .fc-spinner {
+                    width: 13px;
+                    height: 13px;
+                    border: 2px solid rgba(10,23,16,.25);
+                    border-top-color: #0a1710;
+                    border-radius: 50%;
+                    animation: fc-spin .7s linear infinite;
+                }
+
+                @keyframes fc-spin {
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                @media (max-width: 1000px) {
+                    .fc-register-card {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .fc-brand-panel {
+                        display: none;
+                    }
+
+                    .fc-form-container {
+                        max-width: 700px;
+                    }
+
+                    .fc-mobile-logo {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 10px;
+                        margin-bottom: 36px;
+                    }
+                }
+
+                @media (max-width: 700px) {
+                    .fc-topbar {
+                        width: calc(100% - 30px);
+                        height: 72px;
+                    }
+
+                    .fc-login-copy {
+                        display: none;
+                    }
+
+                    .fc-topbar-right {
+                        gap: 12px;
+                    }
+
+                    .fc-register-shell {
+                        width: calc(100% - 24px);
+                        margin-top: 8px;
+                        margin-bottom: 25px;
+                    }
+
+                    .fc-register-card {
+                        border-radius: 20px;
+                    }
+
+                    .fc-form-container {
+                        padding: 30px 22px 32px;
+                    }
+
+                    .fc-progress {
+                        margin-bottom: 36px;
+                    }
+
+                    .fc-progress-item span:last-child {
+                        display: none;
+                    }
+
+                    .fc-progress-line {
+                        margin: 0 10px;
+                    }
+
+                    .fc-heading h2 {
+                        font-size: 27px;
+                    }
+
+                    .fc-form-grid {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .fc-field-full {
+                        grid-column: auto;
+                    }
+
+                    .fc-form-section {
+                        margin-top: 28px;
+                        padding-top: 24px;
+                    }
+
+                    .fc-form-actions {
+                        flex-direction: column-reverse;
+                        align-items: stretch;
+                    }
+
+                    .fc-submit-button {
+                        width: 100%;
+                        max-width: none;
+                    }
+
+                    .fc-back-button {
+                        width: 100%;
+                    }
+
+                    .fc-form-heading-row {
+                        gap: 12px;
+                    }
+                }
+
+                @media (max-width: 430px) {
+                    .fc-logo-text {
+                        font-size: 18px;
+                    }
+
+                    .fc-theme-button {
+                        width: 35px;
+                        height: 35px;
+                    }
+
+                    .fc-role-card {
+                        min-height: 84px;
+                        padding: 13px;
+                    }
+
+                    .fc-role-icon {
+                        width: 45px;
+                        height: 45px;
+                        flex-basis: 45px;
+                    }
+
+                    .fc-role-copy {
+                        margin-left: 11px;
+                    }
+
+                    .fc-role-copy strong {
+                        font-size: 12px;
+                    }
+
+                    .fc-role-copy span {
+                        font-size: 10px;
+                    }
+
+                    .fc-role-arrow {
+                        margin-left: 6px;
+                    }
                 }
             `}</style>
         </>
