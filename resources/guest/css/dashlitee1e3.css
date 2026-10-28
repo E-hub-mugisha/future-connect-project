@@ -179,7 +179,7 @@
     --bs-form-invalid-border-color: #e85347
 }
 
-[data-bs-theme=dark] {
+/* [data-bs-theme=dark] {
     color-scheme: dark;
     --bs-body-color: #dee2e6;
     --bs-body-color-rgb: 222, 226, 230;
@@ -233,7 +233,7 @@
     --bs-form-valid-border-color: #78eccd;
     --bs-form-invalid-color: #f19891;
     --bs-form-invalid-border-color: #f19891
-}
+} */
 
 *,
 ::after,

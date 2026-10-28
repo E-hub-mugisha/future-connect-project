@@ -1396,6 +1396,7 @@ const styles = `
 ================================================================ */
 
 [data-h-scope="partners"] {
+    color-scheme: light;
     --partner-blue: #5D89C8;
     --partner-blue-dark: #426FAE;
     --partner-blue-soft: #EEF4FB;
